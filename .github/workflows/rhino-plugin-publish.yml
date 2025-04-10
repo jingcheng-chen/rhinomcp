@@ -6,7 +6,7 @@ on:
 
 jobs:
   release-build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     env:
       SOLUTION_PATH: ${{ github.workspace }}/rhino_mcp_plugin/rhinomcp.sln
       PROJECT_PATH: ${{ github.workspace }}/rhino_mcp_plugin/rhinomcp.csproj
@@ -22,14 +22,17 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '7.0.x'
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
     
     - name: Restore NuGet packages
       run: |
-        dotnet restore ${{ env.SOLUTION_PATH }}
+        nuget restore ${{ env.SOLUTION_PATH }}
     
     - name: Build solution
       run: |
-        dotnet msbuild ${{ env.SOLUTION_PATH }} /p:Configuration=Release /p:Platform="Any CPU"
+        msbuild ${{ env.SOLUTION_PATH }} /p:Configuration=Release /p:Platform="Any CPU"
     
     - name: Prepare artifacts
       run: |
@@ -60,16 +63,10 @@ jobs:
     - name: Setup Yak
       run: |
         # Download latest yak
-        $yakUrl = "https://yak.rhino3d.com/yak.zip"
-        Invoke-WebRequest -Uri $yakUrl -OutFile yak.zip
-        Expand-Archive -Path yak.zip -DestinationPath yakfolder
-        # Add yak to PATH
+        $yakUrl = "http://files.mcneel.com/yak/tools/latest/yak.exe"
+        Invoke-WebRequest -Uri $yakUrl -OutFile yak.exe
         echo "${{ github.workspace }}/yakfolder" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
     
-    - name: Login to Yak
-      run: |
-        # Login to Yak using API key stored in secrets
-        echo ${{ secrets.YAK_API_KEY }} | yak login
       
     - name: Pack and Push to Yak
       run: |
