@@ -104,19 +104,12 @@ public partial class RhinoMCPFunctions
         return xform;
     }
     
-    private Transform applyTranslation(JObject parameters, GeometryBase geometry)
+    private Transform applyTranslation(JObject parameters)
     {
         double[] translation = parameters["translation"].ToObject<double[]>();
         var xform = Transform.Identity;
-
-        // Calculate the move transformation
-        BoundingBox bbox = geometry.GetBoundingBox(true);
-        Point3d center = bbox.Center;
-        Point3d target = new Point3d(translation[0], translation[1], translation[2]);
-        Vector3d moveVector = target - center;
-
-        // Apply the transformation
-        xform *= Transform.Translation(moveVector);
+        Vector3d move = new Vector3d(translation[0], translation[1], translation[2]);
+        xform *= Transform.Translation(move);
         
         return xform;
     }
@@ -126,11 +119,11 @@ public partial class RhinoMCPFunctions
         double[] scale = parameters["scale"].ToObject<double[]>();
         var xform = Transform.Identity;
 
-        // Calculate the center for scaling
+        // Calculate the min for scaling
         BoundingBox bbox = geometry.GetBoundingBox(true);
-        Point3d center = bbox.Center;
+        Point3d anchor = bbox.Min;
         Plane plane = Plane.WorldXY;
-        plane.Origin = center;
+        plane.Origin = anchor;
 
         // Create scale transformation
         Transform scaleTransform = Transform.Scale(plane, scale[0], scale[1], scale[2]);
