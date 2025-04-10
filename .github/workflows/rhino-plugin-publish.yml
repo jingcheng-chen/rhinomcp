@@ -5,7 +5,7 @@ on:
     types: [published]
 
 jobs:
-  build:
+  release-build:
     runs-on: ubuntu-latest
     env:
       SOLUTION_PATH: ${{ github.workspace }}/rhino_mcp_plugin/rhinomcp.sln
@@ -46,9 +46,9 @@ jobs:
         path: dist/
         
   publish:
-    needs: build
-    if: github.event_name == 'release' && github.event.action == 'published'
     runs-on: windows-latest
+    needs:
+      - release-build
     
     steps:
     - name: Download build artifacts
