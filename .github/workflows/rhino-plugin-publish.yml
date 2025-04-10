@@ -1,12 +1,10 @@
 name: Build and Publish Rhino Plugin
-
 on:
   release:
     types: [published]
-
 jobs:
   release-build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     env:
       SOLUTION_PATH: ${{ github.workspace }}/rhino_mcp_plugin/rhinomcp.sln
       PROJECT_PATH: ${{ github.workspace }}/rhino_mcp_plugin/rhinomcp.csproj
@@ -22,24 +20,21 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '7.0.x'
-
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
     
     - name: Restore NuGet packages
       run: |
-        nuget restore ${{ env.SOLUTION_PATH }}
+        dotnet restore ${{ env.SOLUTION_PATH }}
     
-    - name: Build solution
+    - name: Build solution with MSBuild
       run: |
-        msbuild ${{ env.SOLUTION_PATH }} /p:Configuration=Release /p:Platform="Any CPU"
+        dotnet msbuild ${{ env.SOLUTION_PATH }} /p:Configuration=Release /p:Platform="Any CPU"
     
     - name: Prepare artifacts
       run: |
         mkdir -p dist/net7.0
         # Copy DLL, RHP, and any other necessary files to the dist folder
-        cp ${{ github.workspace }}/rhino_mcp_plugin/bin/Release/net7.0/*.dll dist/net7.0
-        cp ${{ github.workspace }}/rhino_mcp_plugin/bin/Release/net7.0/*.rhp dist/net7.0
+        cp ${{ github.workspace }}/rhino_mcp_plugin/bin/Release/net7.0/*.dll dist/net7.0/
+        cp ${{ github.workspace }}/rhino_mcp_plugin/bin/Release/net7.0/*.rhp dist/net7.0/
         cp ${{ github.workspace }}/rhino_mcp_plugin/manifest.yml dist/
     
     - name: Upload build artifacts
@@ -49,9 +44,11 @@ jobs:
         path: dist/
         
   publish:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs:
       - release-build
+    env:
+      ARTIFACT_NAME: rhinomcp
     
     steps:
     - name: Download build artifacts
@@ -59,32 +56,41 @@ jobs:
       with:
         name: ${{ env.ARTIFACT_NAME }}
         path: dist
-
+    
     - name: Setup Yak
       run: |
         # Create a directory for yak
-        mkdir yakfolder
+        mkdir -p yakfolder
         
-        # Download latest yak
-        $yakUrl = "https://files.mcneel.com/yak/tools/latest/yak.exe"
-        Invoke-WebRequest -Uri $yakUrl -OutFile yakfolder\yak.exe
+        # Download Linux version of yak
+        curl -L "https://files.mcneel.com/yak/tools/0.13.0/linux-x64/yak" -o yakfolder/yak
+        
+        # Make it executable
+        chmod +x yakfolder/yak
         
         # Add to path and verify
-        $env:PATH = "$env:PATH;${{ github.workspace }}\yakfolder"
-        Write-Host "PATH is now: $env:PATH"
-        Write-Host "Looking for yak.exe..."
-        Get-ChildItem yakfolder -Recurse
+        echo "${{ github.workspace }}/yakfolder" >> $GITHUB_PATH
+        echo "PATH is now: $PATH:${{ github.workspace }}/yakfolder"
+        echo "Looking for yak..."
+        ls -la yakfolder
+        
       
     - name: Pack and Push to Yak
       run: |
         cd dist
-
-        # Get the full path to yak.exe
-        $yakPath = "${{ github.workspace }}\yakfolder\yak.exe"
-
-        # Build yak package with version (use full path)
-        & $yakPath build
+        
+        # Build yak package
+        yak build
+        
+        # List files to verify the .yak file was created
+        ls -la
         
         # Push to yak server
-        $yakPackage = Get-ChildItem -Filter "*.yak" | Select-Object -First 1
-        & $yakPath push $yakPackage.Name
+        yakPackage=$(find . -name "*.yak" -type f | head -1)
+        if [ -n "$yakPackage" ]; then
+          echo "Found package: $yakPackage"
+          yak push "$yakPackage"
+        else
+          echo "Error: No .yak package was created"
+          exit 1
+        fi
