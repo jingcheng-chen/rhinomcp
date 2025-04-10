@@ -8,8 +8,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      SOLUTION_PATH: ${{ github.workspace }}/src/rhino_mcp_plugin/rhinomcp.sln
-      PROJECT_PATH: ${{ github.workspace }}/src/rhino_mcp_plugin/rhinomcp.csproj
+      SOLUTION_PATH: ${{ github.workspace }}/rhino_mcp_plugin/rhinomcp.sln
+      PROJECT_PATH: ${{ github.workspace }}/rhino_mcp_plugin/rhinomcp.csproj
       ARTIFACT_NAME: rhinomcp
       
     steps:
