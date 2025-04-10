@@ -61,6 +61,7 @@ jobs:
       run: |
         # Create a directory for yak
         mkdir -p yakfolder
+        mkdir -p ~/.mcneel
         
         # Download Linux version of yak
         curl -L "https://files.mcneel.com/yak/tools/0.13.0/linux-x64/yak" -o yakfolder/yak
@@ -71,8 +72,10 @@ jobs:
         # Add to path and verify
         echo "${{ github.workspace }}/yakfolder" >> $GITHUB_PATH
         echo "PATH is now: $PATH:${{ github.workspace }}/yakfolder"
-        echo "Looking for yak..."
-        ls -la yakfolder
+
+        # Create yak.yml file with API key
+        echo "${{ secrets.YAK_API_KEY }}" > ~/.mcneel/yak.yml
+        echo "Created yak.yml configuration file"
         
       
     - name: Pack and Push to Yak
