@@ -1,21 +1,31 @@
 using System;
+using Rhino;
 
-namespace RhinoMCPPlugin.Chat
+namespace RhinoMCPPlugin.Chat;
+
+public class ApiKeyManager
 {
-    public class ApiKeyManager
+    private const string KEY_NAME = "ClaudeApiKey";
+
+    public string GetApiKey()
     {
-        // Default API key
-        private string _apiKey = "";
 
-        public string GetApiKey()
-        {
-            return _apiKey;
-        }
+        return RhinoMCPPlugin.Instance.Settings.GetString(KEY_NAME, string.Empty);
 
-        public void SaveApiKey(string apiKey)
+    }
+
+    public void SaveApiKey(string apiKey)
+    {
+        if (!string.IsNullOrEmpty(apiKey))
         {
-            if (!string.IsNullOrEmpty(apiKey))
-                _apiKey = apiKey;
+            try
+            {
+                RhinoMCPPlugin.Instance.Settings.SetString(KEY_NAME, apiKey);
+            }
+            catch (Exception ex)
+            {
+                RhinoApp.WriteLine($"Error saving API key: {ex.Message}");
+            }
         }
     }
 }

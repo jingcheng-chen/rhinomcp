@@ -15,6 +15,7 @@ public class ChatEtoPanel : Panel, IPanel
     private readonly TextArea _inputArea;
     private readonly Button _sendButton;
     private readonly Button _settingsButton;
+    private readonly Button _clearButton;
     private readonly Label _statusLabel;
     private bool _isStreaming = false;
 
@@ -68,6 +69,15 @@ public class ChatEtoPanel : Panel, IPanel
         };
         _settingsButton.Click += SettingsButton_Click;
 
+        // Clear button
+        _clearButton = new Button
+        {
+            Text = "Clear",
+            Width = 60,
+            ToolTip = "Clear conversation"
+        };
+        _clearButton.Click += ClearButton_Click;
+
         // Status label
         _statusLabel = new Label { Text = "Ready", TextColor = Colors.Gray };
 
@@ -91,6 +101,7 @@ public class ChatEtoPanel : Panel, IPanel
         var bottomLayout = new DynamicLayout { DefaultSpacing = new Size(5, 5) };
         bottomLayout.BeginHorizontal();
         bottomLayout.Add(_statusLabel, true);
+        bottomLayout.Add(_clearButton);
         bottomLayout.Add(_settingsButton);
         bottomLayout.Add(_sendButton);
         bottomLayout.EndHorizontal();
@@ -193,37 +204,10 @@ public class ChatEtoPanel : Panel, IPanel
             _statusLabel.Text = "Claude is thinking...";
             _statusLabel.TextColor = Colors.Orange;
 
-            // Prepare for streaming response
-            string responsePrefix = string.Empty;
-            if (_conversationArea.Text.Length > 0)
-                responsePrefix = Environment.NewLine + Environment.NewLine;
+            var response = await _claudeClient.MessageAsync(userInput);
 
-            responsePrefix += "Claude: ";
-
-            Application.Instance.Invoke(() =>
-            {
-                _conversationArea.Text += responsePrefix;
-                _conversationArea.ScrollToEnd();
-            });
-
-            string fullResponse = "";
-
-            // Stream the response from Claude
-            await _claudeClient.StreamMessageAsync(userInput, chunk =>
-            {
-                fullResponse += chunk;
-
-                Application.Instance.Invoke(() =>
-                {
-                    var currentText = _conversationArea.Text;
-                    int prefixLength = currentText.Length - fullResponse.Length + chunk.Length;
-                    if (prefixLength >= 0 && prefixLength <= currentText.Length)
-                    {
-                        _conversationArea.Text = currentText.Substring(0, prefixLength) + fullResponse;
-                        _conversationArea.ScrollToEnd();
-                    }
-                });
-            });
+            // Use the AddAssistantMessage method instead of direct text manipulation
+            AddAssistantMessage(response);
 
             _statusLabel.Text = "Ready";
             _statusLabel.TextColor = Colors.Gray;
@@ -233,19 +217,21 @@ public class ChatEtoPanel : Panel, IPanel
             _statusLabel.Text = "Error: " + ex.Message;
             _statusLabel.TextColor = Colors.Red;
 
-            // Add error message to conversation
-            Application.Instance.Invoke(() =>
-            {
-                var currentText = _conversationArea.Text;
-                _conversationArea.Text = currentText + $"\nError: {ex.Message}";
-                _conversationArea.ScrollToEnd();
-            });
+            // Add error message to conversation with proper line breaks
+            AddSystemMessage($"Error: {ex.Message}");
         }
         finally
         {
             _isStreaming = false;
             _sendButton.Enabled = true;
         }
+    }
+
+    private void ClearButton_Click(object sender, EventArgs e)
+    {
+        _conversationArea.Text = string.Empty;
+        _claudeClient.ClearHistory();
+        AddSystemMessage("Conversation history cleared.");
     }
 
     public string Title { get; }
