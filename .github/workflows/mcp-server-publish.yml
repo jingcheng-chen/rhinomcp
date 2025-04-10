@@ -28,7 +28,7 @@ jobs:
 
       - name: Build release distributions
         run: |
-          cd src/rhino_mcp_server
+          cd rhino_mcp_server
           python -m pip install build
           python -m build
 
