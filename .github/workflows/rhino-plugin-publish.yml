@@ -25,7 +25,7 @@ jobs:
     
     - name: Restore NuGet packages
       run: |
-        nuget restore ${{ env.SOLUTION_PATH }}
+        dotnet restore ${{ env.SOLUTION_PATH }}
     
     - name: Build solution
       run: |
