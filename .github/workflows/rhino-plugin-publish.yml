@@ -59,18 +59,32 @@ jobs:
       with:
         name: ${{ env.ARTIFACT_NAME }}
         path: dist
+
+    - name: Setup Yak
+      run: |
+        # Create a directory for yak
+        mkdir yakfolder
+        
+        # Download latest yak
+        $yakUrl = "https://files.mcneel.com/yak/tools/latest/yak.exe"
+        Invoke-WebRequest -Uri $yakUrl -OutFile yakfolder\yak.exe
+        
+        # Add to path and verify
+        $env:PATH = "$env:PATH;${{ github.workspace }}\yakfolder"
+        Write-Host "PATH is now: $env:PATH"
+        Write-Host "Looking for yak.exe..."
+        Get-ChildItem yakfolder -Recurse
       
     - name: Pack and Push to Yak
       run: |
         cd dist
 
-        # Download latest yak
-        $yakUrl = "http://files.mcneel.com/yak/tools/latest/yak.exe"
-        Invoke-WebRequest -Uri $yakUrl -OutFile yak.exe
+        # Get the full path to yak.exe
+        $yakPath = "${{ github.workspace }}\yakfolder\yak.exe"
 
-        # Build yak package
-        yak.exe build
+        # Build yak package with version (use full path)
+        & $yakPath build
         
         # Push to yak server
         $yakPackage = Get-ChildItem -Filter "*.yak" | Select-Object -First 1
-        yak.exe push $yakPackage.Name
+        & $yakPath push $yakPackage.Name
