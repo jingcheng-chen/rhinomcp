@@ -14,8 +14,12 @@ public class ChatEtoPanel : Panel, IPanel
     private readonly RichTextArea _conversationArea;
     private readonly TextArea _inputArea;
     private readonly Button _sendButton;
+    private readonly Button _settingsButton;
     private readonly Label _statusLabel;
     private bool _isStreaming = false;
+
+    private readonly ApiKeyManager _apiKeyManager;
+    private Claude _claudeClient;
 
     /// <summary>
     /// Provide easy access to the ChatEtoPanel.GUID
@@ -28,6 +32,8 @@ public class ChatEtoPanel : Panel, IPanel
     public ChatEtoPanel(uint documentSerialNumber)
     {
         m_document_sn = documentSerialNumber;
+        _apiKeyManager = new ApiKeyManager();
+        _claudeClient = new Claude(_apiKeyManager.GetApiKey());
 
         Title = "Rhino Chat";
 
@@ -53,6 +59,15 @@ public class ChatEtoPanel : Panel, IPanel
         _sendButton = new Button { Text = "Send", Width = 80 };
         _sendButton.Click += SendButton_Click;
 
+        // Settings button (gear icon)
+        _settingsButton = new Button
+        {
+            Text = "⚙", // Gear icon Unicode
+            Width = 30,
+            ToolTip = "API Settings"
+        };
+        _settingsButton.Click += SettingsButton_Click;
+
         // Status label
         _statusLabel = new Label { Text = "Ready", TextColor = Colors.Gray };
 
@@ -76,6 +91,7 @@ public class ChatEtoPanel : Panel, IPanel
         var bottomLayout = new DynamicLayout { DefaultSpacing = new Size(5, 5) };
         bottomLayout.BeginHorizontal();
         bottomLayout.Add(_statusLabel, true);
+        bottomLayout.Add(_settingsButton);
         bottomLayout.Add(_sendButton);
         bottomLayout.EndHorizontal();
 
@@ -87,7 +103,20 @@ public class ChatEtoPanel : Panel, IPanel
         Content = mainLayout;
 
         // Add welcome message
-        AddSystemMessage("Welcome to Rhino Chat. Type a message and press Send to start a conversation.");
+        AddSystemMessage("Welcome to Rhino Chat. Type a message and press Send to start a conversation with Claude.");
+    }
+
+    private void SettingsButton_Click(object sender, EventArgs e)
+    {
+        var settingsDialog = new SettingsDialog(_apiKeyManager);
+        var result = settingsDialog.ShowModal(this);
+
+        if (result)
+        {
+            // Re-initialize Claude client with the new API key
+            _claudeClient = new Claude(_apiKeyManager.GetApiKey());
+            AddSystemMessage("API settings updated.");
+        }
     }
 
     private void InputArea_KeyDown(object sender, KeyEventArgs e)
@@ -114,8 +143,8 @@ public class ChatEtoPanel : Panel, IPanel
         AddUserMessage(userMessage);
         _inputArea.Text = string.Empty;
 
-        // Simulate LLM streaming response
-        SimulateStreamingResponse(userMessage);
+        // Use Claude API to get a response
+        SendToClaudeAsync(userMessage);
     }
 
     private void AddUserMessage(string message)
@@ -137,7 +166,7 @@ public class ChatEtoPanel : Panel, IPanel
             if (_conversationArea.Text.Length > 0)
                 _conversationArea.Text += Environment.NewLine + Environment.NewLine;
 
-            _conversationArea.Text += "Assistant: " + message;
+            _conversationArea.Text += "Claude: " + message;
             _conversationArea.ScrollToEnd();
         });
     }
@@ -155,13 +184,13 @@ public class ChatEtoPanel : Panel, IPanel
         });
     }
 
-    private async void SimulateStreamingResponse(string userInput)
+    private async void SendToClaudeAsync(string userInput)
     {
         try
         {
             _isStreaming = true;
             _sendButton.Enabled = false;
-            _statusLabel.Text = "Assistant is thinking...";
+            _statusLabel.Text = "Claude is thinking...";
             _statusLabel.TextColor = Colors.Orange;
 
             // Prepare for streaming response
@@ -169,7 +198,7 @@ public class ChatEtoPanel : Panel, IPanel
             if (_conversationArea.Text.Length > 0)
                 responsePrefix = Environment.NewLine + Environment.NewLine;
 
-            responsePrefix += "Assistant: ";
+            responsePrefix += "Claude: ";
 
             Application.Instance.Invoke(() =>
             {
@@ -177,23 +206,24 @@ public class ChatEtoPanel : Panel, IPanel
                 _conversationArea.ScrollToEnd();
             });
 
-            // This is just a placeholder - in a real implementation, 
-            // you would connect to an actual LLM service
-            string[] responseParts = GenerateDummyResponse(userInput);
-            string fullResponse = string.Empty;
+            string fullResponse = "";
 
-            foreach (var part in responseParts)
+            // Stream the response from Claude
+            await _claudeClient.StreamMessageAsync(userInput, chunk =>
             {
-                await Task.Delay(100); // Simulate network delay
-                fullResponse += part;
+                fullResponse += chunk;
 
                 Application.Instance.Invoke(() =>
                 {
                     var currentText = _conversationArea.Text;
-                    _conversationArea.Text = currentText.Substring(0, currentText.Length - fullResponse.Length) + fullResponse;
-                    _conversationArea.ScrollToEnd();
+                    int prefixLength = currentText.Length - fullResponse.Length + chunk.Length;
+                    if (prefixLength >= 0 && prefixLength <= currentText.Length)
+                    {
+                        _conversationArea.Text = currentText.Substring(0, prefixLength) + fullResponse;
+                        _conversationArea.ScrollToEnd();
+                    }
                 });
-            }
+            });
 
             _statusLabel.Text = "Ready";
             _statusLabel.TextColor = Colors.Gray;
@@ -202,30 +232,20 @@ public class ChatEtoPanel : Panel, IPanel
         {
             _statusLabel.Text = "Error: " + ex.Message;
             _statusLabel.TextColor = Colors.Red;
+
+            // Add error message to conversation
+            Application.Instance.Invoke(() =>
+            {
+                var currentText = _conversationArea.Text;
+                _conversationArea.Text = currentText + $"\nError: {ex.Message}";
+                _conversationArea.ScrollToEnd();
+            });
         }
         finally
         {
             _isStreaming = false;
             _sendButton.Enabled = true;
         }
-    }
-
-    private string[] GenerateDummyResponse(string userInput)
-    {
-        // For testing/demonstration purposes only
-        // This would be replaced with actual LLM integration
-        string response = "I received your message. This is a simulated response to demonstrate the streaming functionality. In a real implementation, this would be connected to an LLM service.";
-
-        // Split the response into small chunks to simulate streaming
-        List<string> chunks = new List<string>();
-        string[] words = response.Split(' ');
-
-        for (int i = 0; i < words.Length; i++)
-        {
-            chunks.Add(words[i] + " ");
-        }
-
-        return chunks.ToArray();
     }
 
     public string Title { get; }
