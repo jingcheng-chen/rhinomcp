@@ -1,0 +1,87 @@
+name: Build and Publish Rhino Plugin
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      SOLUTION_PATH: ${{ github.workspace }}/src/rhino_mcp_plugin/rhinomcp.sln
+      PROJECT_PATH: ${{ github.workspace }}/src/rhino_mcp_plugin/rhinomcp.csproj
+      ARTIFACT_NAME: rhinomcp
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '7.0.x'
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+    
+    - name: Restore NuGet packages
+      run: |
+        nuget restore ${{ env.SOLUTION_PATH }}
+    
+    - name: Build solution
+      run: |
+        msbuild ${{ env.SOLUTION_PATH }} /p:Configuration=Release /p:Platform="Any CPU"
+    
+    - name: Prepare artifacts
+      run: |
+        mkdir dist
+        mkdir dist/net7.0
+        # Copy DLL, GHA, and any other necessary files to the dist folder
+        cp ${{ github.workspace }}/rhino_mcp_plugin/bin/Release/*.dll dist/net7.0
+        cp ${{ github.workspace }}/rhino_mcp_plugin/bin/Release/*.rhp dist/net7.0
+        cp ${{ github.workspace }}/rhino_mcp_plugin/manifest.yml dist/
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.ARTIFACT_NAME }}
+        path: dist/
+        
+  publish:
+    needs: build
+    if: github.event_name == 'release' && github.event.action == 'published'
+    runs-on: windows-latest
+    
+    steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ env.ARTIFACT_NAME }}
+        path: dist
+    
+    - name: Setup Yak
+      run: |
+        # Download latest yak
+        $yakUrl = "https://yak.rhino3d.com/yak.zip"
+        Invoke-WebRequest -Uri $yakUrl -OutFile yak.zip
+        Expand-Archive -Path yak.zip -DestinationPath yakfolder
+        # Add yak to PATH
+        echo "${{ github.workspace }}/yakfolder" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+    
+    - name: Login to Yak
+      run: |
+        # Login to Yak using API key stored in secrets
+        echo ${{ secrets.YAK_API_KEY }} | yak login
+      
+    - name: Pack and Push to Yak
+      run: |
+        cd dist
+
+        # Build yak package
+        yak build
+        
+        # Push to yak server
+        $yakPackage = Get-ChildItem -Filter "*.yak" | Select-Object -First 1
+        yak push $yakPackage.Name
