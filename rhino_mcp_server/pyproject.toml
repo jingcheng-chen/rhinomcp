@@ -1,6 +1,6 @@
 [project]
 name = "rhinomcp"
-version = "0.1.2.0"
+version = "0.1.2.1"
 description = "Rhino integration through the Model Context Protocol"
 readme = "README.md"
 requires-python = ">=3.10"
