@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     env:
       SOLUTION_PATH: ${{ github.workspace }}/src/rhino_mcp_plugin/rhinomcp.sln
       PROJECT_PATH: ${{ github.workspace }}/src/rhino_mcp_plugin/rhinomcp.csproj
@@ -23,24 +23,20 @@ jobs:
       with:
         dotnet-version: '7.0.x'
     
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
-    
     - name: Restore NuGet packages
       run: |
         nuget restore ${{ env.SOLUTION_PATH }}
     
     - name: Build solution
       run: |
-        msbuild ${{ env.SOLUTION_PATH }} /p:Configuration=Release /p:Platform="Any CPU"
+        dotnet msbuild ${{ env.SOLUTION_PATH }} /p:Configuration=Release /p:Platform="Any CPU"
     
     - name: Prepare artifacts
       run: |
-        mkdir dist
-        mkdir dist/net7.0
-        # Copy DLL, GHA, and any other necessary files to the dist folder
-        cp ${{ github.workspace }}/rhino_mcp_plugin/bin/Release/*.dll dist/net7.0
-        cp ${{ github.workspace }}/rhino_mcp_plugin/bin/Release/*.rhp dist/net7.0
+        mkdir -p dist/net7.0
+        # Copy DLL, RHP, and any other necessary files to the dist folder
+        cp ${{ github.workspace }}/rhino_mcp_plugin/bin/Release/net7.0/*.dll dist/net7.0
+        cp ${{ github.workspace }}/rhino_mcp_plugin/bin/Release/net7.0/*.rhp dist/net7.0
         cp ${{ github.workspace }}/rhino_mcp_plugin/manifest.yml dist/
     
     - name: Upload build artifacts
