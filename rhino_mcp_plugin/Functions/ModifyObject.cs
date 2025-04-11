@@ -41,7 +41,7 @@ public partial class RhinoMCPFunctions
         // Change translation if provided
         if (parameters["translation"] != null)
         {
-            xform *= applyTranslation(parameters, geometry);
+            xform *= applyTranslation(parameters);
             geometryModified = true;
         }
 

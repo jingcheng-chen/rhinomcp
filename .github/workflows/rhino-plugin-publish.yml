@@ -1,0 +1,96 @@
+name: Build and Publish Rhino Plugin
+on:
+  release:
+    types: [published]
+jobs:
+  release-build:
+    runs-on: ubuntu-latest
+    env:
+      SOLUTION_PATH: ${{ github.workspace }}/rhino_mcp_plugin/rhinomcp.sln
+      PROJECT_PATH: ${{ github.workspace }}/rhino_mcp_plugin/rhinomcp.csproj
+      ARTIFACT_NAME: rhinomcp
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '7.0.x'
+    
+    - name: Restore NuGet packages
+      run: |
+        dotnet restore ${{ env.SOLUTION_PATH }}
+    
+    - name: Build solution with MSBuild
+      run: |
+        dotnet msbuild ${{ env.SOLUTION_PATH }} /p:Configuration=Release /p:Platform="Any CPU"
+    
+    - name: Prepare artifacts
+      run: |
+        mkdir -p dist/net7.0
+        # Copy DLL, RHP, and any other necessary files to the dist folder
+        cp ${{ github.workspace }}/rhino_mcp_plugin/bin/Release/net7.0/*.dll dist/net7.0/
+        cp ${{ github.workspace }}/rhino_mcp_plugin/bin/Release/net7.0/*.rhp dist/net7.0/
+        cp ${{ github.workspace }}/rhino_mcp_plugin/manifest.yml dist/
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.ARTIFACT_NAME }}
+        path: dist/
+        
+  publish:
+    runs-on: ubuntu-latest
+    needs:
+      - release-build
+    env:
+      ARTIFACT_NAME: rhinomcp
+    
+    steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ env.ARTIFACT_NAME }}
+        path: dist
+    
+    - name: Setup Yak
+      run: |
+        # Create a directory for yak
+        mkdir -p yakfolder
+        
+        # Download Linux version of yak
+        curl -L "https://files.mcneel.com/yak/tools/0.13.0/linux-x64/yak" -o yakfolder/yak
+        
+        # Make it executable
+        chmod +x yakfolder/yak
+        
+        # Add to path and verify
+        echo "${{ github.workspace }}/yakfolder" >> $GITHUB_PATH
+        echo "PATH is now: $PATH:${{ github.workspace }}/yakfolder"
+        
+      
+    - name: Pack and Push to Yak
+      run: |
+        cd dist
+
+        export YAK_TOKEN=${{ secrets.YAK_API_KEY }}
+        
+        # Build yak package
+        yak build
+        
+        # List files to verify the .yak file was created
+        ls -la
+        
+        # Push to yak server
+        yakPackage=$(find . -name "*.yak" -type f | head -1)
+        if [ -n "$yakPackage" ]; then
+          echo "Found package: $yakPackage"
+          yak push "$yakPackage"
+        else
+          echo "Error: No .yak package was created"
+          exit 1
+        fi
