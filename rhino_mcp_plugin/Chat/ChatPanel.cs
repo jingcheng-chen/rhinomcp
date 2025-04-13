@@ -18,9 +18,8 @@ public class ChatEtoPanel : Panel, IPanel
     private readonly Button _clearButton;
     private readonly Label _statusLabel;
     private bool _isStreaming = false;
-
+    private ClaudeConnector _claudeConnector;
     private readonly ApiKeyManager _apiKeyManager;
-    private Claude _claudeClient;
 
     /// <summary>
     /// Provide easy access to the ChatEtoPanel.GUID
@@ -34,7 +33,7 @@ public class ChatEtoPanel : Panel, IPanel
     {
         m_document_sn = documentSerialNumber;
         _apiKeyManager = new ApiKeyManager();
-        _claudeClient = new Claude(_apiKeyManager.GetApiKey());
+        _claudeConnector = new ClaudeConnector(_apiKeyManager.GetApiKey());
 
         Title = "Rhino Chat";
 
@@ -67,7 +66,7 @@ public class ChatEtoPanel : Panel, IPanel
             Width = 30,
             ToolTip = "API Settings"
         };
-        _settingsButton.Click += SettingsButton_Click;
+        _settingsButton.Click += async (sender, e) => await SettingsButton_Click(sender, e);
 
         // Clear button
         _clearButton = new Button
@@ -76,7 +75,7 @@ public class ChatEtoPanel : Panel, IPanel
             Width = 60,
             ToolTip = "Clear conversation"
         };
-        _clearButton.Click += ClearButton_Click;
+        _clearButton.Click += async (sender, e) => await ClearButton_Click(sender, e);
 
         // Status label
         _statusLabel = new Label { Text = "Ready", TextColor = Colors.Gray };
@@ -117,16 +116,16 @@ public class ChatEtoPanel : Panel, IPanel
         AddSystemMessage("Welcome to Rhino Chat. Type a message and press Send to start a conversation with Claude.");
     }
 
-    private void SettingsButton_Click(object sender, EventArgs e)
+    private async Task SettingsButton_Click(object sender, EventArgs e)
     {
         var settingsDialog = new SettingsDialog(_apiKeyManager);
-        var result = settingsDialog.ShowModal(this);
+        var result = await settingsDialog.ShowModalAsync(this);
 
         if (result)
         {
             // Re-initialize Claude client with the new API key
-            _claudeClient = new Claude(_apiKeyManager.GetApiKey());
-            AddSystemMessage("API settings updated.");
+            var response = await _claudeConnector.SetApiKey(_apiKeyManager.GetApiKey());
+            AddSystemMessage(response);
         }
     }
 
@@ -204,7 +203,7 @@ public class ChatEtoPanel : Panel, IPanel
             _statusLabel.Text = "Claude is thinking...";
             _statusLabel.TextColor = Colors.Orange;
 
-            var response = await _claudeClient.MessageAsync(userInput);
+            var response = await _claudeConnector.SendMessage(userInput);
 
             // Use the AddAssistantMessage method instead of direct text manipulation
             AddAssistantMessage(response);
@@ -227,11 +226,11 @@ public class ChatEtoPanel : Panel, IPanel
         }
     }
 
-    private void ClearButton_Click(object sender, EventArgs e)
+    private async Task ClearButton_Click(object sender, EventArgs e)
     {
         _conversationArea.Text = string.Empty;
-        _claudeClient.ClearHistory();
-        AddSystemMessage("Conversation history cleared.");
+        var response = await _claudeConnector.ClearHistory();
+        AddSystemMessage(response);
     }
 
     public string Title { get; }

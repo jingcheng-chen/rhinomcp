@@ -1,24 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <OutputType>WinExe</OutputType>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-        <ApplicationManifest>app.manifest</ApplicationManifest>
-        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <PublishSingleFile>true</PublishSingleFile>
+        <SelfContained>true</SelfContained>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Anthropic.SDK" Version="5.1.1" />
-        <PackageReference Include="ModelContextProtocol" Version="0.1.0-preview.8" />
-        <PackageReference Include="Avalonia" Version="11.2.7"/>
-        <PackageReference Include="Avalonia.Desktop" Version="11.2.7"/>
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.7"/>
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.7"/>
-        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.7">
-            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
-            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
-        </PackageReference>
+        <PackageReference Include="ModelContextProtocol" Version="0.1.0-preview.8" />        
     </ItemGroup>
 </Project>
