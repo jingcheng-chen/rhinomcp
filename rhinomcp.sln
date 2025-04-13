@@ -2,7 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rhinomcp", "rhinomcp.csproj", "{70E85AA5-1E98-4F4E-B8B5-BAF50E01DCDC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rhinomcp", "rhino_mcp_plugin/rhinomcp.csproj", "{70E85AA5-1E98-4F4E-B8B5-BAF50E01DCDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rhino_mcp_client", "rhino_mcp_client\rhino_mcp_client.csproj", "{E6ACE138-7022-4664-BEDF-9379B1E978C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,6 +16,10 @@ Global
 		{70E85AA5-1E98-4F4E-B8B5-BAF50E01DCDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70E85AA5-1E98-4F4E-B8B5-BAF50E01DCDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70E85AA5-1E98-4F4E-B8B5-BAF50E01DCDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6ACE138-7022-4664-BEDF-9379B1E978C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6ACE138-7022-4664-BEDF-9379B1E978C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6ACE138-7022-4664-BEDF-9379B1E978C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6ACE138-7022-4664-BEDF-9379B1E978C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
