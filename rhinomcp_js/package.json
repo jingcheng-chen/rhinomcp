@@ -1,0 +1,26 @@
+{
+  "name": "rhinomcp",
+  "version": "0.0.1",
+  "description": "RhinoMCP connects Rhino 3D to AI Agent through the Model Context Protocol (MCP)",
+  "keywords": [
+    "rhino",
+    "rhino3d",
+    "mcp",
+    "rhinomcp",
+    "ai",
+    "prompt",
+    "modelcontextprotocol"
+  ],
+  "homepage": "https://github.com/jingcheng-chen/rhinomcp#readme",
+  "bugs": {
+    "url": "https://github.com/jingcheng-chen/rhinomcp/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jingcheng-chen/rhinomcp.git"
+  },
+  "license": "MIT",
+  "author": "Jingcheng Chen",
+  "type": "commonjs",
+  "main": "index.js"
+}
