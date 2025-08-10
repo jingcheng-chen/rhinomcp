@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/jingcheng-chen-rhinomcp-badge.png)](https://mseep.ai/app/jingcheng-chen-rhinomcp)
+
 # RhinoMCP - Rhino Model Context Protocol Integration
 
 <img src="assets/rhinomcp_logo.svg" alt="RhinoMCP Logo" width="130">
