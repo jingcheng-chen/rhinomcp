@@ -1,5 +1,9 @@
 name: Build and Publish Rhino Plugin
 
+permissions:
+  contents: write
+  releases: write
+
 on:
   release:
     types: [published]
