@@ -923,7 +923,7 @@ wheels = [
 
 [[package]]
 name = "rhinomcp"
-version = "0.1.3.5"
+version = "0.1.3.6"
 source = { editable = "." }
 dependencies = [
     { name = "fastmcp" },
