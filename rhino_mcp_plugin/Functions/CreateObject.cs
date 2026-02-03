@@ -11,6 +11,21 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    /// <summary>
+    /// Creates a new geometric object in the Rhino document.
+    /// </summary>
+    /// <param name="parameters">
+    /// JSON object containing:
+    /// - type: Object type (POINT, LINE, POLYLINE, CIRCLE, ARC, ELLIPSE, CURVE, BOX, SPHERE, CONE, CYLINDER, SURFACE)
+    /// - name: Optional name for the object
+    /// - color: Optional [r, g, b] color array (0-255)
+    /// - params: Type-specific geometry parameters
+    /// - translation: Optional [x, y, z] translation vector
+    /// - rotation: Optional [x, y, z] rotation in radians
+    /// - scale: Optional [x, y, z] scale factors
+    /// </param>
+    /// <returns>JSON object with created object info (id, name, type, etc.)</returns>
+    /// <exception cref="InvalidOperationException">Thrown when object type is invalid or creation fails</exception>
     public JObject CreateObject(JObject parameters)
     {
         // parse meta data

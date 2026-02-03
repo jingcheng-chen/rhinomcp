@@ -4,14 +4,30 @@ import socket
 import json
 import asyncio
 import logging
+import os
+import threading
 from dataclasses import dataclass
 from contextlib import asynccontextmanager
 from typing import AsyncIterator, Dict, Any, List
 
+# Configuration from environment variables
+RHINO_HOST = os.getenv("RHINO_MCP_HOST", "127.0.0.1")
+RHINO_PORT = int(os.getenv("RHINO_MCP_PORT", "1999"))
+RHINO_TIMEOUT = float(os.getenv("RHINO_MCP_TIMEOUT", "15.0"))
+RHINO_DEBUG = os.getenv("RHINO_MCP_DEBUG", "").lower() in ("1", "true", "yes")
+RHINO_LOG_LEVEL = os.getenv("RHINO_MCP_LOG_LEVEL", "DEBUG" if RHINO_DEBUG else "INFO")
+
 # Configure logging
-logging.basicConfig(level=logging.INFO, 
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+log_level = getattr(logging, RHINO_LOG_LEVEL.upper(), logging.INFO)
+logging.basicConfig(
+    level=log_level,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger("RhinoMCPServer")
+logger.setLevel(log_level)
+
+if RHINO_DEBUG:
+    logger.info("Debug mode enabled")
 
 @dataclass
 class RhinoConnection:
@@ -45,57 +61,54 @@ class RhinoConnection:
                 self.sock = None
 
     def receive_full_response(self, sock, buffer_size=8192):
-        """Receive the complete response, potentially in multiple chunks"""
-        chunks = []
-        # Use a consistent timeout value that matches the addon's timeout
-        sock.settimeout(15.0)  # Match the addon's timeout
-        
+        """Receive the complete response, potentially in multiple chunks.
+
+        Uses incremental parsing to avoid O(n^2) JSON parsing overhead.
+        """
+        accumulated = ""
+        decoder = json.JSONDecoder()
+        sock.settimeout(RHINO_TIMEOUT)
+
         try:
             while True:
                 try:
                     chunk = sock.recv(buffer_size)
                     if not chunk:
-                        # If we get an empty chunk, the connection might be closed
-                        if not chunks:  # If we haven't received anything yet, this is an error
+                        if not accumulated:
                             raise Exception("Connection closed before receiving any data")
                         break
-                    
-                    chunks.append(chunk)
-                    
-                    # Check if we've received a complete JSON object
-                    try:
-                        data = b''.join(chunks)
-                        json.loads(data.decode('utf-8'))
-                        # If we get here, it parsed successfully
-                        logger.info(f"Received complete response ({len(data)} bytes)")
-                        return data
-                    except json.JSONDecodeError:
-                        # Incomplete JSON, continue receiving
-                        continue
+
+                    accumulated += chunk.decode('utf-8')
+
+                    # Only attempt parsing when we see a closing brace (optimization)
+                    if accumulated.rstrip().endswith('}'):
+                        try:
+                            # raw_decode returns (obj, end_index) - more efficient for streaming
+                            decoder.raw_decode(accumulated)
+                            logger.info(f"Received complete response ({len(accumulated)} bytes)")
+                            return accumulated.encode('utf-8')
+                        except json.JSONDecodeError:
+                            # Incomplete JSON, continue receiving
+                            continue
                 except socket.timeout:
-                    # If we hit a timeout during receiving, break the loop and try to use what we have
                     logger.warning("Socket timeout during chunked receive")
                     break
                 except (ConnectionError, BrokenPipeError, ConnectionResetError) as e:
                     logger.error(f"Socket connection error during receive: {str(e)}")
-                    raise  # Re-raise to be handled by the caller
+                    raise
         except socket.timeout:
             logger.warning("Socket timeout during chunked receive")
         except Exception as e:
             logger.error(f"Error during receive: {str(e)}")
             raise
-            
-        # If we get here, we either timed out or broke out of the loop
+
         # Try to use what we have
-        if chunks:
-            data = b''.join(chunks)
-            logger.info(f"Returning data after receive completion ({len(data)} bytes)")
+        if accumulated:
+            logger.info(f"Returning data after receive completion ({len(accumulated)} bytes)")
             try:
-                # Try to parse what we have
-                json.loads(data.decode('utf-8'))
-                return data
+                decoder.raw_decode(accumulated)
+                return accumulated.encode('utf-8')
             except json.JSONDecodeError:
-                # If we can't parse it, it's incomplete
                 raise Exception("Incomplete JSON response received")
         else:
             raise Exception("No data received")
@@ -112,24 +125,28 @@ class RhinoConnection:
         
         try:
             # Log the command being sent
-            logger.info(f"Sending command: {command_type} with params: {params}")
+            logger.info(f"Sending command: {command_type}")
+            logger.debug(f"Command params: {json.dumps(params, indent=2)}")
 
             if self.sock is None:
                 raise Exception("Socket is not connected")
-            
+
             # Send the command
-            self.sock.sendall(json.dumps(command).encode('utf-8'))
-            logger.info(f"Command sent, waiting for response...")
-            
-            # Set a timeout for receiving - use the same timeout as in receive_full_response
-            self.sock.settimeout(15.0)  # Match the addon's timeout
-            
+            command_json = json.dumps(command)
+            logger.debug(f"Raw command JSON ({len(command_json)} bytes): {command_json[:500]}...")
+            self.sock.sendall(command_json.encode('utf-8'))
+            logger.debug("Command sent, waiting for response...")
+
+            # Set a timeout for receiving
+            self.sock.settimeout(RHINO_TIMEOUT)
+
             # Receive the response using the improved receive_full_response method
             response_data = self.receive_full_response(self.sock)
-            logger.info(f"Received {len(response_data)} bytes of data")
-            
+            logger.debug(f"Received {len(response_data)} bytes of data")
+
             response = json.loads(response_data.decode('utf-8'))
-            logger.info(f"Response parsed, status: {response.get('status', 'unknown')}")
+            logger.info(f"Response status: {response.get('status', 'unknown')}")
+            logger.debug(f"Full response: {json.dumps(response, indent=2)[:1000]}...")
             
             if response.get("status") == "error":
                 logger.error(f"Rhino error: {response.get('message')}")
@@ -198,21 +215,23 @@ mcp = FastMCP(
 
 # Global connection for resources (since resources can't access context)
 _rhino_connection = None
+_connection_lock = threading.Lock()
 
 def get_rhino_connection():
-    """Get or create a persistent Rhino connection"""
+    """Get or create a persistent Rhino connection (thread-safe)"""
     global _rhino_connection
-    
-    # Create a new connection if needed
-    if _rhino_connection is None:
-        _rhino_connection = RhinoConnection(host="127.0.0.1", port=1999)
-        if not _rhino_connection.connect():
-            logger.error("Failed to connect to Rhino")
-            _rhino_connection = None
-            raise Exception("Could not connect to Rhino. Make sure the Rhino addon is running.")
-        logger.info("Created new persistent connection to Rhino")
-    
-    return _rhino_connection
+
+    with _connection_lock:
+        # Create a new connection if needed
+        if _rhino_connection is None:
+            _rhino_connection = RhinoConnection(host=RHINO_HOST, port=RHINO_PORT)
+            if not _rhino_connection.connect():
+                logger.error("Failed to connect to Rhino")
+                _rhino_connection = None
+                raise Exception("Could not connect to Rhino. Make sure the Rhino addon is running.")
+            logger.info("Created new persistent connection to Rhino")
+
+        return _rhino_connection
 
 # Main execution
 def main():

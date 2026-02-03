@@ -320,8 +320,12 @@ namespace RhinoMCPPlugin
                 ["select_objects"] = this.handler.SelectObjects,
                 ["create_layer"] = this.handler.CreateLayer,
                 ["get_or_set_current_layer"] = this.handler.GetOrSetCurrentLayer,
-                ["delete_layer"] = this.handler.DeleteLayer
-                // Add more handlers as needed
+                ["delete_layer"] = this.handler.DeleteLayer,
+                ["undo"] = this.handler.Undo,
+                ["redo"] = this.handler.Redo,
+                ["boolean_union"] = this.handler.BooleanUnion,
+                ["boolean_difference"] = this.handler.BooleanDifference,
+                ["boolean_intersection"] = this.handler.BooleanIntersection
             };
 
             if (handlers.TryGetValue(cmdType, out var handler))

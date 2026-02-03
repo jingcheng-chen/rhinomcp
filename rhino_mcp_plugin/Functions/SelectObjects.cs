@@ -47,7 +47,7 @@ public partial class RhinoMCPFunctions
             {
                 var attributeMatch = true;
                 if (hasName && obj.Name != name) continue;
-                if (hasColor && obj.Attributes.ObjectColor.R != color[0] && obj.Attributes.ObjectColor.G != color[1] && obj.Attributes.ObjectColor.B != color[2]) continue;
+                if (hasColor && (obj.Attributes.ObjectColor.R != color[0] || obj.Attributes.ObjectColor.G != color[1] || obj.Attributes.ObjectColor.B != color[2])) continue;
                 foreach (var customAttribute in customAttributes)
                 {
                     foreach (var value in customAttribute.Value)

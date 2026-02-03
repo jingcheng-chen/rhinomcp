@@ -1,18 +1,17 @@
 from mcp.server.fastmcp import Context
-import json
 from rhinomcp.server import get_rhino_connection, mcp, logger
-from typing import Any, List, Dict
+from typing import Any, List, Dict, Optional
 
 @mcp.tool()
 def create_object(
     ctx: Context,
     type: str = "BOX",
-    name: str = None,
-    color: List[int]= None,
-    params: Dict[str, Any] = {},
-    translation: List[float]= None,
-    rotation: List[float]= None,
-    scale: List[float]= None,
+    name: Optional[str] = None,
+    color: Optional[List[int]] = None,
+    params: Optional[Dict[str, Any]] = None,
+    translation: Optional[List[float]] = None,
+    rotation: Optional[List[float]] = None,
+    scale: Optional[List[float]] = None,
 ) -> str:
     """
     Create a new object in the Rhino document.
@@ -103,7 +102,7 @@ def create_object(
 
         command_params = {
             "type": type,
-            "params": params
+            "params": params or {}
         }
 
         if translation is not None: command_params["translation"] = translation
@@ -114,7 +113,7 @@ def create_object(
         if color: command_params["color"] = color
 
         # Create the object
-        result = result = rhino.send_command("create_object", command_params)  
+        result = rhino.send_command("create_object", command_params)  
         
         return f"Created {type} object: {result['name']}"
     except Exception as e:

@@ -13,7 +13,38 @@ namespace rhinomcp.Serializers
 {
     public static class Serializer
     {
-        public static RhinoDoc doc = RhinoDoc.ActiveDoc;
+        // Layer name cache to avoid repeated lookups during batch serialization
+        private static Dictionary<(Guid docId, int layerIndex), string> _layerCache = new();
+        private static Guid _cachedDocId = Guid.Empty;
+
+        /// <summary>
+        /// Get layer name with caching. Cache is automatically invalidated when document changes.
+        /// </summary>
+        private static string GetLayerName(RhinoDoc doc, int layerIndex)
+        {
+            // Invalidate cache if document changed
+            if (doc.RuntimeSerialNumber != _cachedDocId.GetHashCode())
+            {
+                _layerCache.Clear();
+                _cachedDocId = new Guid(doc.RuntimeSerialNumber, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            }
+
+            var key = (doc.DocumentId, layerIndex);
+            if (!_layerCache.TryGetValue(key, out var layerName))
+            {
+                layerName = doc.Layers[layerIndex].Name;
+                _layerCache[key] = layerName;
+            }
+            return layerName;
+        }
+
+        /// <summary>
+        /// Clear the layer cache. Call this if layers are modified.
+        /// </summary>
+        public static void ClearLayerCache()
+        {
+            _layerCache.Clear();
+        }
 
         public static JObject SerializeColor(Color color)
         {
@@ -89,12 +120,13 @@ namespace rhinomcp.Serializers
 
         public static JObject RhinoObject(RhinoObject obj)
         {
+            var doc = obj.Document ?? RhinoDoc.ActiveDoc;
             var objInfo = new JObject
             {
                 ["id"] = obj.Id.ToString(),
                 ["name"] = obj.Name ?? "(unnamed)",
                 ["type"] = obj.ObjectType.ToString(),
-                ["layer"] = doc.Layers[obj.Attributes.LayerIndex].Name,
+                ["layer"] = GetLayerName(doc, obj.Attributes.LayerIndex),
                 ["material"] = obj.Attributes.MaterialIndex.ToString(),
                 ["color"] = SerializeColor(obj.Attributes.ObjectColor)
             };

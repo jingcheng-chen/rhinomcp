@@ -1,13 +1,12 @@
 from mcp.server.fastmcp import Context
-import json
 from rhinomcp.server import get_rhino_connection, mcp, logger
-from typing import Any, List, Dict
+from typing import Any, List, Dict, Optional
 
 
 @mcp.tool()
 def select_objects(
     ctx: Context,
-    filters: Dict[str, List[Any]] = {},
+    filters: Optional[Dict[str, List[Any]]] = None,
     filters_type: str = "and",
 ) -> str:
     """
@@ -43,7 +42,7 @@ def select_objects(
         # Get the global connection
         rhino = get_rhino_connection()
         command_params = {
-            "filters": filters,
+            "filters": filters or {},
             "filters_type": filters_type
         }
 

@@ -15,15 +15,15 @@ public partial class RhinoMCPFunctions
     {
         bool all = parameters.ContainsKey("all");
         JArray objectParameters = (JArray)parameters["objects"];
-        
+
         var doc = RhinoDoc.ActiveDoc;
         var objects = doc.Objects.ToList();
-        
+
         if (all && objectParameters.Count == 1)
         {
             // Get the first modification parameters (excluding the "all" property)
             JObject firstModification = (JObject)objectParameters.FirstOrDefault()!;
-            
+
             // Create new parameters object with all object IDs
             foreach (var obj in objects)
             {
@@ -33,16 +33,40 @@ public partial class RhinoMCPFunctions
             }
         }
 
-        var i = 0;
+        int successCount = 0;
+        int failureCount = 0;
+        var errors = new JArray();
+
         foreach (JObject parameter in objectParameters)
         {
-            if (parameter.ContainsKey("id"))
+            if (parameter.ContainsKey("id") || parameter.ContainsKey("name"))
             {
-                ModifyObject(parameter);
-                i++;
+                try
+                {
+                    ModifyObject(parameter);
+                    successCount++;
+                }
+                catch (Exception ex)
+                {
+                    var identifier = parameter["id"]?.ToString() ?? parameter["name"]?.ToString() ?? "unknown";
+                    errors.Add(new JObject
+                    {
+                        ["id"] = identifier,
+                        ["error"] = ex.Message
+                    });
+                    failureCount++;
+                }
             }
         }
+
         doc.Views.Redraw();
-        return new JObject() { ["modified"] = i };
+
+        return new JObject
+        {
+            ["success_count"] = successCount,
+            ["failure_count"] = failureCount,
+            ["total"] = successCount + failureCount,
+            ["errors"] = errors
+        };
     }
 }

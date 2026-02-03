@@ -9,8 +9,13 @@ using rhinomcp.Serializers;
 
 namespace RhinoMCPPlugin.Functions;
 
+/// <summary>
+/// Partial class containing utility methods for RhinoMCP functions.
+/// Provides JSON parsing helpers and transformation utilities.
+/// </summary>
 public partial class RhinoMCPFunctions
 {
+    /// <summary>Casts a JSON token to double, defaulting to 0 if null.</summary>
     private double castToDouble(JToken token)
     {
         return token?.ToObject<double>() ?? 0;
@@ -55,7 +60,7 @@ public partial class RhinoMCPFunctions
 
     private string castToString(JToken token)
     {
-        return token?.ToString();
+        return token?.ToString() ?? string.Empty;
     }
 
     private Guid castToGuid(JToken token)

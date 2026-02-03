@@ -10,6 +10,21 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    /// <summary>
+    /// Modifies an existing object in the Rhino document.
+    /// </summary>
+    /// <param name="parameters">
+    /// JSON object containing:
+    /// - id: GUID of the object to modify (required if name not provided)
+    /// - name: Name of the object to modify (required if id not provided)
+    /// - new_name: Optional new name for the object
+    /// - new_color: Optional [r, g, b] color array (0-255)
+    /// - translation: Optional [x, y, z] translation vector
+    /// - rotation: Optional [x, y, z] rotation in radians (applied around object center)
+    /// - scale: Optional [x, y, z] scale factors (applied from bounding box min)
+    /// </param>
+    /// <returns>JSON object with updated object info</returns>
+    /// <exception cref="InvalidOperationException">Thrown when object is not found</exception>
     public JObject ModifyObject(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;

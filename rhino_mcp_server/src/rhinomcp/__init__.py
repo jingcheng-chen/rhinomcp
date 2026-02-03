@@ -23,3 +23,5 @@ from .tools.select_objects import select_objects
 from .tools.create_layer import create_layer
 from .tools.get_or_set_current_layer import get_or_set_current_layer
 from .tools.delete_layer import delete_layer
+from .tools.undo import undo, redo
+from .tools.boolean_operations import boolean_union, boolean_difference, boolean_intersection

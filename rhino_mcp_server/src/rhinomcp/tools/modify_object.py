@@ -1,20 +1,19 @@
 from mcp.server.fastmcp import Context
-import json
 from rhinomcp.server import get_rhino_connection, mcp, logger
-from typing import Any, List, Dict
+from typing import Any, List, Dict, Optional
 
 
 @mcp.tool()
 def modify_object(
     ctx: Context,
-    id: str = None,
-    name: str = None,
-    new_name: str = None,
-    new_color: List[int] = None,
-    translation: List[float] = None,
-    rotation: List[float] = None,
-    scale: List[float] = None,
-    visible: bool = None
+    id: Optional[str] = None,
+    name: Optional[str] = None,
+    new_name: Optional[str] = None,
+    new_color: Optional[List[int]] = None,
+    translation: Optional[List[float]] = None,
+    rotation: Optional[List[float]] = None,
+    scale: Optional[List[float]] = None,
+    visible: Optional[bool] = None
 ) -> str:
     """
     Modify an existing object in the Rhino document.

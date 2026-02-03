@@ -73,13 +73,29 @@ def create_objects(
         # Get the global connection
         rhino = get_rhino_connection()
         command_params = {}
-        for obj in objects:
-            command_params[obj["name"]] = obj
+        for i, obj in enumerate(objects):
+            # Use name as key if provided, otherwise use index
+            key = obj.get("name", f"object_{i}")
+            command_params[key] = obj
+
         result = rhino.send_command("create_objects", command_params)
-  
-        
-        return f"Created {len(result)} objects"
+
+        success_count = result.get("success_count", 0)
+        failure_count = result.get("failure_count", 0)
+        total = result.get("total", len(objects))
+
+        # Build response message
+        if failure_count == 0:
+            return f"Successfully created {success_count} object(s)"
+        elif success_count == 0:
+            errors = result.get("errors", [])
+            error_details = "; ".join([f"{e['name']}: {e['error']}" for e in errors])
+            return f"Failed to create any objects. Errors: {error_details}"
+        else:
+            errors = result.get("errors", [])
+            error_details = "; ".join([f"{e['name']}: {e['error']}" for e in errors])
+            return f"Partial success: Created {success_count}/{total} objects. {failure_count} failed: {error_details}"
     except Exception as e:
-        logger.error(f"Error creating object: {str(e)}")
-        return f"Error creating object: {str(e)}"
+        logger.error(f"Error creating objects: {str(e)}")
+        return f"Error creating objects: {str(e)}"
 
