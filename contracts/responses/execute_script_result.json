@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "execute_script_result.json",
+  "title": "ExecuteScriptResult Response",
+  "description": "Result of script execution",
+  "type": "object",
+  "properties": {
+    "success": {
+      "type": "boolean",
+      "description": "Whether execution succeeded"
+    },
+    "message": {
+      "type": "string",
+      "description": "Output or error message"
+    },
+    "output": {
+      "type": "string",
+      "description": "Script stdout output"
+    }
+  },
+  "required": ["success"]
+}

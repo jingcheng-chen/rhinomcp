@@ -18,6 +18,15 @@ dependencies = [
     "mcp[cli]>=1.12.4",
 ]
 
+[project.optional-dependencies]
+validation = [
+    "jsonschema>=4.20.0",
+]
+dev = [
+    "jsonschema>=4.20.0",
+    "pytest>=7.0.0",
+]
+
 [project.scripts]
 rhinomcp = "rhinomcp.server:main"
 

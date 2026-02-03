@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "protocol.json",
+  "title": "RhinoMCP Protocol",
+  "description": "TCP socket protocol envelope",
+
+  "$defs": {
+    "command": {
+      "type": "object",
+      "description": "Command sent from MCP server to Rhino plugin",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Command type",
+          "enum": [
+            "create_object",
+            "create_objects",
+            "modify_object",
+            "modify_objects",
+            "delete_object",
+            "get_object_info",
+            "get_selected_objects_info",
+            "get_document_info",
+            "select_objects",
+            "create_layer",
+            "delete_layer",
+            "get_or_set_current_layer",
+            "execute_rhinoscript_python_code"
+          ]
+        },
+        "params": {
+          "type": "object",
+          "description": "Command-specific parameters"
+        }
+      },
+      "required": ["type", "params"]
+    },
+
+    "successResponse": {
+      "type": "object",
+      "description": "Successful response from Rhino plugin",
+      "properties": {
+        "status": {
+          "type": "string",
+          "const": "success"
+        },
+        "result": {
+          "type": ["object", "array", "string", "number", "boolean", "null"],
+          "description": "Command-specific result"
+        }
+      },
+      "required": ["status", "result"]
+    },
+
+    "errorResponse": {
+      "type": "object",
+      "description": "Error response from Rhino plugin",
+      "properties": {
+        "status": {
+          "type": "string",
+          "const": "error"
+        },
+        "message": {
+          "type": "string",
+          "description": "Error message"
+        }
+      },
+      "required": ["status", "message"]
+    },
+
+    "response": {
+      "oneOf": [
+        { "$ref": "#/$defs/successResponse" },
+        { "$ref": "#/$defs/errorResponse" }
+      ]
+    }
+  }
+}

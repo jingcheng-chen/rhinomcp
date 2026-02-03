@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "get_document_info.json",
+  "title": "GetDocumentInfo Command",
+  "description": "Get information about the current Rhino document",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}

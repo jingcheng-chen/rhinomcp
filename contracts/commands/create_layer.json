@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "create_layer.json",
+  "title": "CreateLayer Command",
+  "description": "Create a new layer in Rhino",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name for the new layer (auto-generated if omitted)"
+    },
+    "color": {
+      "$ref": "../common/definitions.json#/$defs/color",
+      "description": "RGB color for the layer"
+    },
+    "parent": {
+      "type": "string",
+      "description": "Name of parent layer"
+    }
+  }
+}

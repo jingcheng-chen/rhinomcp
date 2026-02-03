@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "select_result.json",
+  "title": "SelectResult Response",
+  "description": "Result of a select operation",
+  "type": "object",
+  "properties": {
+    "count": {
+      "type": "integer",
+      "description": "Number of objects selected",
+      "minimum": 0
+    }
+  },
+  "required": ["count"]
+}

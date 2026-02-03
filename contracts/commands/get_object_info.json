@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "get_object_info.json",
+  "title": "GetObjectInfo Command",
+  "description": "Get detailed information about a specific object",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../common/definitions.json#/$defs/guid",
+      "description": "GUID of the object"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the object (alternative to id)"
+    }
+  },
+  "anyOf": [
+    { "required": ["id"] },
+    { "required": ["name"] }
+  ]
+}

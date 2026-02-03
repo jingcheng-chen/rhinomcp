@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "delete_layer.json",
+  "title": "DeleteLayer Command",
+  "description": "Delete a layer from Rhino",
+  "type": "object",
+  "properties": {
+    "guid": {
+      "$ref": "../common/definitions.json#/$defs/guid",
+      "description": "GUID of the layer to delete"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the layer to delete"
+    }
+  },
+  "anyOf": [
+    { "required": ["guid"] },
+    { "required": ["name"] }
+  ]
+}

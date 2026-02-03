@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "create_object.json",
+  "title": "CreateObject Command",
+  "description": "Create a new geometric object in Rhino",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "Object type to create",
+      "enum": ["POINT", "LINE", "POLYLINE", "CIRCLE", "ARC", "ELLIPSE", "CURVE", "BOX", "SPHERE", "CONE", "CYLINDER", "PIPE", "SURFACE"]
+    },
+    "name": {
+      "type": "string",
+      "description": "Optional name for the object"
+    },
+    "color": {
+      "$ref": "../common/definitions.json#/$defs/color",
+      "description": "Optional RGB color [r, g, b]"
+    },
+    "params": {
+      "type": "object",
+      "description": "Type-specific geometry parameters. See $defs for type-specific schemas."
+    },
+    "translation": {
+      "$ref": "../common/definitions.json#/$defs/vector3d",
+      "description": "Optional translation [x, y, z]"
+    },
+    "rotation": {
+      "$ref": "../common/definitions.json#/$defs/vector3d",
+      "description": "Optional rotation [x, y, z] in radians"
+    },
+    "scale": {
+      "$ref": "../common/definitions.json#/$defs/vector3d",
+      "description": "Optional scale factors [x, y, z]"
+    }
+  },
+  "required": ["type", "params"],
+
+  "$defs": {
+    "pointParams": {
+      "type": "object",
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "z": { "type": "number" }
+      },
+      "required": ["x", "y", "z"],
+      "additionalProperties": false
+    },
+    "lineParams": {
+      "type": "object",
+      "properties": {
+        "start": { "$ref": "../common/definitions.json#/$defs/point3d" },
+        "end": { "$ref": "../common/definitions.json#/$defs/point3d" }
+      },
+      "required": ["start", "end"],
+      "additionalProperties": false
+    },
+    "polylineParams": {
+      "type": "object",
+      "properties": {
+        "points": { "$ref": "../common/definitions.json#/$defs/point3dList" }
+      },
+      "required": ["points"],
+      "additionalProperties": false
+    },
+    "circleParams": {
+      "type": "object",
+      "properties": {
+        "center": { "$ref": "../common/definitions.json#/$defs/point3d" },
+        "radius": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "required": ["center", "radius"],
+      "additionalProperties": false
+    },
+    "arcParams": {
+      "type": "object",
+      "properties": {
+        "center": { "$ref": "../common/definitions.json#/$defs/point3d" },
+        "radius": { "type": "number", "exclusiveMinimum": 0 },
+        "angle": { "type": "number", "description": "Angle in degrees" }
+      },
+      "required": ["center", "radius", "angle"],
+      "additionalProperties": false
+    },
+    "ellipseParams": {
+      "type": "object",
+      "properties": {
+        "center": { "$ref": "../common/definitions.json#/$defs/point3d" },
+        "radius_x": { "type": "number", "exclusiveMinimum": 0 },
+        "radius_y": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "required": ["center", "radius_x", "radius_y"],
+      "additionalProperties": false
+    },
+    "curveParams": {
+      "type": "object",
+      "properties": {
+        "points": { "$ref": "../common/definitions.json#/$defs/point3dList" },
+        "degree": { "type": "integer", "minimum": 1, "default": 3 }
+      },
+      "required": ["points", "degree"],
+      "additionalProperties": false
+    },
+    "boxParams": {
+      "type": "object",
+      "properties": {
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "length": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "required": ["width", "length", "height"],
+      "additionalProperties": false
+    },
+    "sphereParams": {
+      "type": "object",
+      "properties": {
+        "radius": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "required": ["radius"],
+      "additionalProperties": false
+    },
+    "coneParams": {
+      "type": "object",
+      "properties": {
+        "radius": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 },
+        "cap": { "type": "boolean", "default": true }
+      },
+      "required": ["radius", "height"],
+      "additionalProperties": false
+    },
+    "cylinderParams": {
+      "type": "object",
+      "properties": {
+        "radius": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 },
+        "cap": { "type": "boolean", "default": true }
+      },
+      "required": ["radius", "height"],
+      "additionalProperties": false
+    },
+    "surfaceParams": {
+      "type": "object",
+      "properties": {
+        "count": { "$ref": "../common/definitions.json#/$defs/intPair" },
+        "points": { "$ref": "../common/definitions.json#/$defs/point3dList" },
+        "degree": { "$ref": "../common/definitions.json#/$defs/intPair" },
+        "closed": { "$ref": "../common/definitions.json#/$defs/boolPair" }
+      },
+      "required": ["count", "points"],
+      "additionalProperties": false
+    }
+  }
+}

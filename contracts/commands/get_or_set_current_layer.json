@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "get_or_set_current_layer.json",
+  "title": "GetOrSetCurrentLayer Command",
+  "description": "Get or set the current active layer",
+  "type": "object",
+  "properties": {
+    "guid": {
+      "$ref": "../common/definitions.json#/$defs/guid",
+      "description": "GUID of layer to set as current"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of layer to set as current"
+    }
+  },
+  "additionalProperties": false
+}

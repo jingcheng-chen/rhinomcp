@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "delete_result.json",
+  "title": "DeleteResult Response",
+  "description": "Result of a delete operation",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../common/definitions.json#/$defs/guid",
+      "description": "GUID of deleted object"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of deleted object"
+    },
+    "deleted": {
+      "type": "boolean",
+      "description": "Whether deletion was successful"
+    }
+  },
+  "required": ["deleted"]
+}

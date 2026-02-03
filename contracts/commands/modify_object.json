@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modify_object.json",
+  "title": "ModifyObject Command",
+  "description": "Modify an existing object in Rhino",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../common/definitions.json#/$defs/guid",
+      "description": "GUID of the object to modify"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the object to modify (alternative to id)"
+    },
+    "new_name": {
+      "type": "string",
+      "description": "New name for the object"
+    },
+    "new_color": {
+      "$ref": "../common/definitions.json#/$defs/color",
+      "description": "New RGB color [r, g, b]"
+    },
+    "translation": {
+      "$ref": "../common/definitions.json#/$defs/vector3d",
+      "description": "Translation vector [x, y, z]"
+    },
+    "rotation": {
+      "$ref": "../common/definitions.json#/$defs/vector3d",
+      "description": "Rotation [x, y, z] in radians"
+    },
+    "scale": {
+      "$ref": "../common/definitions.json#/$defs/vector3d",
+      "description": "Scale factors [x, y, z]"
+    },
+    "visible": {
+      "type": "boolean",
+      "description": "Set object visibility"
+    }
+  },
+  "anyOf": [
+    { "required": ["id"] },
+    { "required": ["name"] }
+  ]
+}

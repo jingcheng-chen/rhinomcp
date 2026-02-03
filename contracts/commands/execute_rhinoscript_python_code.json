@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "execute_rhinoscript_python_code.json",
+  "title": "ExecuteRhinoscriptPythonCode Command",
+  "description": "Execute Python code in Rhino",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "Python code to execute",
+      "minLength": 1
+    }
+  },
+  "required": ["code"]
+}

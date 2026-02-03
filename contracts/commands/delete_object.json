@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "delete_object.json",
+  "title": "DeleteObject Command",
+  "description": "Delete an object from Rhino",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../common/definitions.json#/$defs/guid",
+      "description": "GUID of the object to delete"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the object to delete (alternative to id)"
+    },
+    "all": {
+      "type": "boolean",
+      "description": "Delete all objects in the document"
+    }
+  },
+  "anyOf": [
+    { "required": ["id"] },
+    { "required": ["name"] },
+    { "required": ["all"] }
+  ]
+}

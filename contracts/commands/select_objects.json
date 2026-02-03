@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "select_objects.json",
+  "title": "SelectObjects Command",
+  "description": "Select objects by filters",
+  "type": "object",
+  "properties": {
+    "filters": {
+      "type": "object",
+      "description": "Filter criteria (name, color, or custom attributes)",
+      "properties": {
+        "name": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Filter by object names"
+        },
+        "color": {
+          "$ref": "../common/definitions.json#/$defs/color",
+          "description": "Filter by RGB color"
+        }
+      },
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Custom attribute filter values"
+      }
+    },
+    "filters_type": {
+      "type": "string",
+      "enum": ["and", "or"],
+      "default": "and",
+      "description": "How to combine multiple filters"
+    }
+  },
+  "required": ["filters"]
+}

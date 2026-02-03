@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "object_info.json",
+  "title": "ObjectInfo Response",
+  "description": "Information about a Rhino object",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../common/definitions.json#/$defs/guid",
+      "description": "Object GUID"
+    },
+    "name": {
+      "type": "string",
+      "description": "Object name or '(unnamed)'"
+    },
+    "type": {
+      "type": "string",
+      "description": "Object type (POINT, LINE, CURVE, BREP, etc.)"
+    },
+    "layer": {
+      "type": "string",
+      "description": "Layer name"
+    },
+    "material": {
+      "type": "string",
+      "description": "Material index"
+    },
+    "color": {
+      "$ref": "../common/definitions.json#/$defs/colorObject",
+      "description": "Object color"
+    },
+    "bounding_box": {
+      "$ref": "../common/definitions.json#/$defs/boundingBox",
+      "description": "Axis-aligned bounding box"
+    },
+    "geometry": {
+      "type": "object",
+      "description": "Type-specific geometry data"
+    },
+    "attributes": {
+      "type": "object",
+      "description": "Custom user attributes",
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "required": ["id", "name", "type", "layer", "color", "bounding_box"]
+}

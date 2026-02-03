@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "definitions.json",
+  "title": "RhinoMCP Common Definitions",
+  "description": "Shared type definitions for RhinoMCP protocol",
+
+  "$defs": {
+    "color": {
+      "type": "array",
+      "description": "RGB color values [r, g, b] where each value is 0-255",
+      "items": { "type": "integer", "minimum": 0, "maximum": 255 },
+      "minItems": 3,
+      "maxItems": 3
+    },
+
+    "colorObject": {
+      "type": "object",
+      "description": "RGB color as object",
+      "properties": {
+        "r": { "type": "integer", "minimum": 0, "maximum": 255 },
+        "g": { "type": "integer", "minimum": 0, "maximum": 255 },
+        "b": { "type": "integer", "minimum": 0, "maximum": 255 }
+      },
+      "required": ["r", "g", "b"]
+    },
+
+    "point3d": {
+      "type": "array",
+      "description": "3D point as [x, y, z]",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3
+    },
+
+    "point3dList": {
+      "type": "array",
+      "description": "Array of 3D points",
+      "items": {
+        "type": "array",
+        "items": { "type": "number" },
+        "minItems": 3,
+        "maxItems": 3
+      },
+      "minItems": 1
+    },
+
+    "vector3d": {
+      "type": "array",
+      "description": "3D vector as [x, y, z]",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3
+    },
+
+    "boundingBox": {
+      "type": "array",
+      "description": "Bounding box as [[min_x, min_y, min_z], [max_x, max_y, max_z]]",
+      "items": {
+        "type": "array",
+        "items": { "type": "number" },
+        "minItems": 3,
+        "maxItems": 3
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+
+    "guid": {
+      "type": "string",
+      "description": "GUID string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+
+    "objectType": {
+      "type": "string",
+      "description": "Geometry object type",
+      "enum": ["POINT", "LINE", "POLYLINE", "CIRCLE", "ARC", "ELLIPSE", "CURVE", "BOX", "SPHERE", "CONE", "CYLINDER", "PIPE", "SURFACE", "BREP", "EXTRUSION"]
+    },
+
+    "intPair": {
+      "type": "array",
+      "description": "Pair of integers [a, b]",
+      "items": { "type": "integer" },
+      "minItems": 2,
+      "maxItems": 2
+    },
+
+    "boolPair": {
+      "type": "array",
+      "description": "Pair of booleans [a, b]",
+      "items": { "type": "boolean" },
+      "minItems": 2,
+      "maxItems": 2
+    }
+  }
+}
