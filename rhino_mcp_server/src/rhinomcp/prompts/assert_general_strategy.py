@@ -3,21 +3,76 @@ from rhinomcp.server import mcp
 
 @mcp.prompt()
 def asset_general_strategy() -> str:
-    """Defines the preferred strategy for creating assets in Rhino"""
+    """Defines the preferred strategy for working with Rhino objects"""
     return """
+    ============================================================
+    RHINO MCP STRATEGY GUIDE
+    ============================================================
 
-    QUERY STRATEGY:
-    - if the id of the object is known, use the id to query the object.
-    - if the id is not known, use the name of the object to query the object.
+    STEP 1: UNDERSTAND THE DOCUMENT
+    -------------------------------
+    Always start by calling get_document_summary() to understand:
+    - What objects already exist
+    - Available layers
+    - Current document state
 
 
-    CREATION STRATEGY:
+    STEP 2: CHOOSE THE RIGHT TOOL
+    -----------------------------
+    Use this decision tree:
 
-    0. Before anything, always check the document from get_document_summary().
-    1. If the execute_rhinoscript_python_code() function is not able to create the objects, use the create_objects() function.
-    2. If there are multiple objects, use the method create_objects() to create multiple objects at once. Do not attempt to create them one by one if they are more than 10.
-    3. When including an object into document, ALWAYS make sure that the name of the object is meanful.
-    4. Try to include as many objects as possible accurately and efficiently. If the command is not able to include so many data, try to create the objects in batches.
+    Creating geometry:
+    ├─ Simple primitives (box, sphere, cylinder, cone, point, line, circle, arc)?
+    │   └─ YES → Use create_object() or create_objects()
+    │
+    ├─ Multiple similar objects (>3)?
+    │   └─ YES → Use create_objects() in batches of 50 max
+    │
+    ├─ Complex geometry (loft, sweep, extrude, NURBS surface)?
+    │   └─ YES → Use execute_rhinoscript_python_code()
+    │            (MUST call get_rhinoscript_docs() first!)
+    │
+    └─ Boolean operations (union, difference, intersection)?
+        └─ YES → Use boolean_union(), boolean_difference(), boolean_intersection()
+
+    Modifying geometry:
+    ├─ Simple changes (rename, color, transform)?
+    │   └─ YES → Use modify_object() or modify_objects()
+    │
+    └─ Complex modifications (rebuild, edit points, trim)?
+        └─ YES → Use execute_rhinoscript_python_code()
+
+    Querying:
+    ├─ Know the object ID?
+    │   └─ YES → Use get_object_info(id=...)
+    │
+    ├─ Know the object name?
+    │   └─ YES → Use get_object_info(name=...)
+    │
+    ├─ Need objects by criteria (type, layer, color)?
+    │   └─ YES → Use get_objects(filters=...)
+    │
+    └─ Need selected objects?
+        └─ YES → Use get_selected_objects_info()
+
+
+    STEP 3: BEST PRACTICES
+    ----------------------
+    1. NAMING: Always give objects meaningful names for future reference
+
+    2. BATCHING: For many objects, use create_objects() with max 50 per call
+
+    3. LAYERS: Organize objects on appropriate layers using create_layer()
+       and set layer with modify_object()
+
+    4. UNDO SAFETY: Complex operations can be undone with undo()
+
+    5. VERIFICATION: After creation, use get_object_info() to verify success
+
+    6. RHINOSCRIPT: When using execute_rhinoscript_python_code():
+       - ALWAYS call get_rhinoscript_docs() first to verify syntax
+       - See rhinoscript_workflow prompt for detailed steps
+       - Never guess function names or parameters
     """
 
 
