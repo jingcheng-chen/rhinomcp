@@ -304,7 +304,6 @@ namespace RhinoMCPPlugin
 
         private JObject ExecuteCommandInternal(string cmdType, JObject parameters)
         {
-
             // Dictionary to map command types to handler methods
             Dictionary<string, Func<JObject, JObject>> handlers = new Dictionary<string, Func<JObject, JObject>>
             {
@@ -328,10 +327,27 @@ namespace RhinoMCPPlugin
                 ["boolean_intersection"] = this.handler.BooleanIntersection
             };
 
+            // Commands that don't modify the document - no undo record needed
+            HashSet<string> readOnlyCommands = new HashSet<string>
+            {
+                "get_document_info",
+                "get_object_info",
+                "get_selected_objects_info",
+                "undo",
+                "redo"
+            };
+
             if (handlers.TryGetValue(cmdType, out var handler))
             {
                 var doc = RhinoDoc.ActiveDoc;
-                var record = doc.BeginUndoRecord("Run MCP command");
+                bool needsUndo = !readOnlyCommands.Contains(cmdType);
+                uint record = 0;
+
+                if (needsUndo)
+                {
+                    record = doc.BeginUndoRecord($"MCP: {cmdType}");
+                }
+
                 try
                 {
                     JObject result = handler(parameters);
@@ -352,7 +368,10 @@ namespace RhinoMCPPlugin
                 }
                 finally
                 {
-                    doc.EndUndoRecord(record);
+                    if (needsUndo)
+                    {
+                        doc.EndUndoRecord(record);
+                    }
                 }
             }
             else

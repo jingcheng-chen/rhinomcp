@@ -21,51 +21,27 @@ public partial class RhinoMCPFunctions
             throw new Exception("Code is required");
         }
 
-        // register undo
-        var undoRecordSerialNumber = doc.BeginUndoRecord("ExecuteRhinoScript");
+        var output = new StringBuilder();
 
-        JObject result = new JObject();
+        // Create a new Python script instance
+        PythonScript pythonScript = PythonScript.Create();
 
-        try
+        pythonScript.Output += (message) =>
         {
-            var output = new StringBuilder();
-            // Create a new Python script instance
-            PythonScript pythonScript = PythonScript.Create();
+            output.Append(message);
+        };
 
-            pythonScript.Output += (message) =>
-            {
-                output.Append(message);
-            };
+        // Setup the script context with the current document
+        if (doc != null)
+            pythonScript.SetupScriptContext(doc);
 
-            // Setup the script context with the current document
-            if (doc != null)
-                pythonScript.SetupScriptContext(doc);
+        // Execute the Python code
+        pythonScript.ExecuteScript(code);
 
-            // Execute the Python code
-            pythonScript.ExecuteScript(code);
-
-
-            result["success"] = true;
-            result["result"] = $"Script successfully executed! Print output: {output}";
-        }
-        catch (Exception ex)
+        return new JObject
         {
-
-            result["success"] = false;
-            result["message"] = $"Error executing rhinoscript: {ex}";
-        }
-        finally
-        {
-            // undo
-            doc.EndUndoRecord(undoRecordSerialNumber);
-        }
-
-        // if the script failed, undo the changes
-        if (!result["success"].ToObject<bool>())
-        {
-            doc.Undo();
-        }
-
-        return result;
+            ["success"] = true,
+            ["result"] = $"Script successfully executed! Print output: {output}"
+        };
     }
 }

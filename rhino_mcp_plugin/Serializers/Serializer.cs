@@ -14,7 +14,7 @@ namespace rhinomcp.Serializers
     public static class Serializer
     {
         // Layer name cache to avoid repeated lookups during batch serialization
-        private static Dictionary<(Guid docId, int layerIndex), string> _layerCache = new();
+        private static Dictionary<(uint docId, int layerIndex), string> _layerCache = new();
         private static Guid _cachedDocId = Guid.Empty;
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace rhinomcp.Serializers
                 _cachedDocId = new Guid(doc.RuntimeSerialNumber, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
             }
 
-            var key = (doc.DocumentId, layerIndex);
+            var key = (doc.RuntimeSerialNumber, layerIndex);
             if (!_layerCache.TryGetValue(key, out var layerName))
             {
                 layerName = doc.Layers[layerIndex].Name;
