@@ -1,5 +1,7 @@
 using Rhino;
 using Rhino.Commands;
+using Rhino.Input;
+using Rhino.Input.Custom;
 
 namespace RhinoMCPPlugin.Commands
 {
@@ -16,11 +18,40 @@ namespace RhinoMCPPlugin.Commands
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
-            RhinoApp.WriteLine("Running MCP function tests...");
+            // Parse options
+            var visualOption = new OptionToggle(false, "Off", "On");
+            var delayOption = new OptionInteger(500, 0, 5000);
+
+            var go = new GetOption();
+            go.SetCommandPrompt("MCP Test options (press Enter to run with defaults)");
+            go.AddOptionToggle("Visual", ref visualOption);
+            go.AddOptionInteger("Delay", ref delayOption);
+            go.AcceptNothing(true);
+
+            while (true)
+            {
+                var result = go.Get();
+                if (result == GetResult.Nothing || result == GetResult.Cancel)
+                    break;
+                if (result != GetResult.Option)
+                    break;
+            }
+
+            bool visualMode = visualOption.CurrentValue;
+            int delayMs = delayOption.CurrentValue;
+
+            if (visualMode)
+            {
+                RhinoApp.WriteLine($"Running MCP function tests in VISUAL MODE (delay: {delayMs}ms)...");
+            }
+            else
+            {
+                RhinoApp.WriteLine("Running MCP function tests...");
+            }
             RhinoApp.WriteLine("========================================");
 
             var functions = new Functions.RhinoMCPFunctions();
-            var results = functions.TestAllFunctions();
+            var results = functions.TestAllFunctions(visualMode, delayMs);
 
             // Print summary
             RhinoApp.WriteLine("========================================");
@@ -35,7 +66,11 @@ namespace RhinoMCPPlugin.Commands
                 if (status == "pass")
                 {
                     passed++;
-                    RhinoApp.WriteLine($"  [PASS] {prop.Name}");
+                    var note = prop.Value["note"]?.ToString();
+                    if (!string.IsNullOrEmpty(note))
+                        RhinoApp.WriteLine($"  [PASS] {prop.Name} ({note})");
+                    else
+                        RhinoApp.WriteLine($"  [PASS] {prop.Name}");
                 }
                 else
                 {
