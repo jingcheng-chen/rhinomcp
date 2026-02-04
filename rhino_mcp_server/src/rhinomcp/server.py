@@ -211,6 +211,93 @@ mcp = FastMCP(
     lifespan=server_lifespan
 )
 
+
+# ============================================================================
+# MCP Resources - Browsable RhinoScript Documentation
+# ============================================================================
+
+# Import rhinoscriptsyntax_json for resources
+from rhinomcp.static.rhinoscriptsyntax import rhinoscriptsyntax_json
+
+
+@mcp.resource("rhinoscript://modules")
+def resource_list_modules() -> str:
+    """
+    List all RhinoScript modules with function counts.
+    Browse this to discover what's available.
+    """
+    lines = ["# RhinoScript Modules\n"]
+    lines.append("| Module | Functions |")
+    lines.append("|--------|-----------|")
+
+    for module in sorted(rhinoscriptsyntax_json, key=lambda m: m["ModuleName"]):
+        name = module["ModuleName"]
+        count = len(module["functions"])
+        lines.append(f"| {name} | {count} |")
+
+    lines.append("\n\nUse `rhinoscript://module/<name>` to browse a specific module.")
+    return "\n".join(lines)
+
+
+@mcp.resource("rhinoscript://module/{module_name}")
+def resource_get_module(module_name: str) -> str:
+    """
+    Get all functions in a specific module with signatures.
+    """
+    for module in rhinoscriptsyntax_json:
+        if module["ModuleName"].lower() == module_name.lower():
+            lines = [f"# RhinoScript Module: {module['ModuleName']}\n"]
+            lines.append(f"Total functions: {len(module['functions'])}\n")
+
+            for func in module["functions"]:
+                sig = func.get("Signature", func["Name"] + "()")
+                desc = func.get("Description", "")[:100]
+                lines.append(f"## {func['Name']}")
+                lines.append(f"```python\nrs.{sig}\n```")
+                lines.append(f"{desc}\n")
+
+            return "\n".join(lines)
+
+    available = ", ".join(sorted(m["ModuleName"] for m in rhinoscriptsyntax_json))
+    return f"Module '{module_name}' not found.\n\nAvailable modules: {available}"
+
+
+@mcp.resource("rhinoscript://function/{function_name}")
+def resource_get_function(function_name: str) -> str:
+    """
+    Get complete documentation for a specific function.
+    """
+    for module in rhinoscriptsyntax_json:
+        for func in module["functions"]:
+            if func["Name"].lower() == function_name.lower():
+                lines = [f"# {func['Name']}\n"]
+                lines.append(f"**Module:** {module['ModuleName']}\n")
+
+                sig = func.get("Signature", func["Name"] + "()")
+                lines.append(f"## Signature\n```python\nrs.{sig}\n```\n")
+
+                if func.get("Description"):
+                    lines.append(f"## Description\n{func['Description']}\n")
+
+                if func.get("ArgumentDesc"):
+                    lines.append(f"## Parameters\n{func['ArgumentDesc']}\n")
+
+                if func.get("Returns"):
+                    lines.append(f"## Returns\n{func['Returns']}\n")
+
+                if func.get("Example"):
+                    examples = func["Example"]
+                    if isinstance(examples, list):
+                        example_code = "\n".join(examples)
+                    else:
+                        example_code = examples
+                    lines.append(f"## Example\n```python\n{example_code}\n```\n")
+
+                return "\n".join(lines)
+
+    return f"Function '{function_name}' not found. Use search_rhinoscript_functions() to find functions."
+
+
 # Resource endpoints
 
 # Global connection for resources (since resources can't access context)

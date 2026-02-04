@@ -611,50 +611,92 @@ class TestExecuteRhinoscriptTool:
         assert result.get("success") is False
 
 
-class TestGetRhinoscriptFunctionNamesTool:
-    """Tests for get_rhinoscript_python_function_names tool."""
+class TestSearchRhinoscriptFunctionsTool:
+    """Tests for search_rhinoscript_functions tool."""
 
-    def test_get_function_names(self):
-        from rhinomcp.tools.get_rhinoscript_python_function_names import get_rhinoscript_python_function_names
+    def test_search_functions(self):
+        from rhinomcp.tools.rhinoscript_docs import search_rhinoscript_functions
 
         # This tool doesn't use the connection, it reads static data
-        # Requires categories parameter
-        result = get_rhinoscript_python_function_names(ctx=None, categories=["geometry"])
+        result = search_rhinoscript_functions(ctx=None, query="loft surface")
 
-        # Should return a list of function names
+        # Should return a list of matching functions
         assert isinstance(result, list)
+        assert len(result) > 0
+        # Each result should have name, signature, description, module
+        assert "name" in result[0]
+        assert "signature" in result[0]
 
-    def test_get_function_names_multiple_categories(self):
-        from rhinomcp.tools.get_rhinoscript_python_function_names import get_rhinoscript_python_function_names
+    def test_search_functions_with_limit(self):
+        from rhinomcp.tools.rhinoscript_docs import search_rhinoscript_functions
 
-        result = get_rhinoscript_python_function_names(ctx=None, categories=["surface", "curve"])
+        result = search_rhinoscript_functions(ctx=None, query="curve", limit=3)
 
         assert isinstance(result, list)
+        assert len(result) <= 3
 
 
-class TestGetRhinoscriptCodeGuideTool:
-    """Tests for get_rhinoscript_python_code_guide tool."""
+class TestGetRhinoscriptDocsTool:
+    """Tests for get_rhinoscript_docs tool."""
 
-    def test_get_code_guide(self):
-        from rhinomcp.tools.get_rhinoscript_python_code_guide import get_rhinoscript_python_code_guide
+    def test_get_docs(self):
+        from rhinomcp.tools.rhinoscript_docs import get_rhinoscript_docs
 
         # This tool reads static data
-        result = get_rhinoscript_python_code_guide(
+        result = get_rhinoscript_docs(
             ctx=None,
-            function_name="AddPoint"
+            topic="add point"
         )
 
-        # Should return a Dict with function documentation or error message
+        # Should return a Dict with documentation
         assert isinstance(result, dict)
+        assert result.get("success") is True
+        assert "documentation" in result
+        assert len(result["documentation"]) > 0
 
-    def test_get_code_guide_not_found(self):
-        from rhinomcp.tools.get_rhinoscript_python_code_guide import get_rhinoscript_python_code_guide
+    def test_get_docs_not_found(self):
+        from rhinomcp.tools.rhinoscript_docs import get_rhinoscript_docs
 
-        result = get_rhinoscript_python_code_guide(
+        result = get_rhinoscript_docs(
             ctx=None,
-            function_name="NonExistentFunction"
+            topic="xyznonexistentfunction123"
         )
 
         # Should return a Dict with success=False
         assert isinstance(result, dict)
         assert result.get("success") is False
+
+
+class TestListRhinoscriptModulesTool:
+    """Tests for list_rhinoscript_modules tool."""
+
+    def test_list_modules(self):
+        from rhinomcp.tools.rhinoscript_docs import list_rhinoscript_modules
+
+        result = list_rhinoscript_modules(ctx=None)
+
+        assert isinstance(result, dict)
+        assert "modules" in result
+        assert "total_modules" in result
+        assert result["total_modules"] > 0
+
+
+class TestGetModuleFunctionsTool:
+    """Tests for get_module_functions tool."""
+
+    def test_get_module_functions(self):
+        from rhinomcp.tools.rhinoscript_docs import get_module_functions
+
+        result = get_module_functions(ctx=None, module_name="curve")
+
+        assert isinstance(result, dict)
+        assert "functions" in result
+        assert len(result["functions"]) > 0
+
+    def test_get_module_functions_not_found(self):
+        from rhinomcp.tools.rhinoscript_docs import get_module_functions
+
+        result = get_module_functions(ctx=None, module_name="nonexistentmodule")
+
+        assert isinstance(result, dict)
+        assert "error" in result
