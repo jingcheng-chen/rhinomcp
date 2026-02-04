@@ -14,8 +14,8 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "fastmcp>=2.11.2",
-    "mcp[cli]>=1.12.4",
+    "fastmcp>=2.14.5",
+    "mcp[cli]>=1.16.0",
 ]
 
 [project.optional-dependencies]

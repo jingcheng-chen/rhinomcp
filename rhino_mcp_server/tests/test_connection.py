@@ -181,7 +181,8 @@ class TestSendCommand:
         conn = RhinoConnection(host="127.0.0.1", port=1999)
         conn.connect()
 
-        with pytest.raises(Exception, match="Timeout"):
+        # Socket timeout leads to "No data received" which is wrapped as communication error
+        with pytest.raises(Exception, match="Communication error with Rhino"):
             conn.send_command("create_object", {"type": "BOX"})
 
         # Socket should be invalidated after timeout
