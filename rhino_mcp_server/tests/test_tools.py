@@ -700,3 +700,222 @@ class TestGetModuleFunctionsTool:
 
         assert isinstance(result, dict)
         assert "error" in result
+
+
+# =============================================================================
+# Advanced Geometry Tools Tests
+# =============================================================================
+
+class TestLoftTool:
+    """Tests for loft tool."""
+
+    @patch('rhinomcp.tools.advanced_geometry.get_rhino_connection')
+    def test_loft_success(self, mock_get_conn):
+        from rhinomcp.tools.advanced_geometry import loft
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "result_ids": ["guid-1", "guid-2"],
+            "count": 2,
+            "message": "Loft created 2 surface(s)"
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = loft(
+            ctx=None,
+            curve_ids=["curve-1", "curve-2", "curve-3"],
+            name="test_loft",
+            closed=False,
+            loft_type=0
+        )
+
+        assert result["success"] is True
+        assert "result_ids" in result
+        mock_conn.send_command.assert_called_once()
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][0] == "loft"
+        assert call_args[0][1]["curve_ids"] == ["curve-1", "curve-2", "curve-3"]
+
+    def test_loft_insufficient_curves(self):
+        from rhinomcp.tools.advanced_geometry import loft
+
+        result = loft(ctx=None, curve_ids=["only-one"])
+
+        assert result["success"] is False
+        assert "at least 2 curves" in result["message"]
+
+
+class TestExtrudeCurveTool:
+    """Tests for extrude_curve tool."""
+
+    @patch('rhinomcp.tools.advanced_geometry.get_rhino_connection')
+    def test_extrude_curve_success(self, mock_get_conn):
+        from rhinomcp.tools.advanced_geometry import extrude_curve
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "result_id": "extruded-guid",
+            "message": "Extrusion created successfully"
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = extrude_curve(
+            ctx=None,
+            curve_id="curve-guid",
+            direction=[0, 0, 10],
+            name="test_extrusion",
+            cap=True
+        )
+
+        assert result["success"] is True
+        assert result["result_id"] == "extruded-guid"
+        mock_conn.send_command.assert_called_once()
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][0] == "extrude_curve"
+        assert call_args[0][1]["direction"] == [0, 0, 10]
+
+    def test_extrude_curve_invalid_direction(self):
+        from rhinomcp.tools.advanced_geometry import extrude_curve
+
+        result = extrude_curve(ctx=None, curve_id="curve-guid", direction=[0, 0])
+
+        assert result["success"] is False
+        assert "direction" in result["message"].lower()
+
+
+class TestSweep1Tool:
+    """Tests for sweep1 tool."""
+
+    @patch('rhinomcp.tools.advanced_geometry.get_rhino_connection')
+    def test_sweep1_success(self, mock_get_conn):
+        from rhinomcp.tools.advanced_geometry import sweep1
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "result_ids": ["swept-guid"],
+            "count": 1,
+            "message": "Sweep created 1 surface(s)"
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = sweep1(
+            ctx=None,
+            rail_id="rail-guid",
+            profile_ids=["profile-1", "profile-2"],
+            name="test_sweep"
+        )
+
+        assert result["success"] is True
+        assert "result_ids" in result
+        mock_conn.send_command.assert_called_once()
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][0] == "sweep1"
+        assert call_args[0][1]["rail_id"] == "rail-guid"
+
+    def test_sweep1_no_profiles(self):
+        from rhinomcp.tools.advanced_geometry import sweep1
+
+        result = sweep1(ctx=None, rail_id="rail-guid", profile_ids=[])
+
+        assert result["success"] is False
+        assert "profile" in result["message"].lower()
+
+
+class TestOffsetCurveTool:
+    """Tests for offset_curve tool."""
+
+    @patch('rhinomcp.tools.advanced_geometry.get_rhino_connection')
+    def test_offset_curve_success(self, mock_get_conn):
+        from rhinomcp.tools.advanced_geometry import offset_curve
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "result_ids": ["offset-guid"],
+            "count": 1,
+            "message": "Offset created 1 curve(s)"
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = offset_curve(
+            ctx=None,
+            curve_id="curve-guid",
+            distance=2.5,
+            name="test_offset"
+        )
+
+        assert result["success"] is True
+        assert "result_ids" in result
+        mock_conn.send_command.assert_called_once()
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][0] == "offset_curve"
+        assert call_args[0][1]["distance"] == 2.5
+
+    @patch('rhinomcp.tools.advanced_geometry.get_rhino_connection')
+    def test_offset_curve_with_plane(self, mock_get_conn):
+        from rhinomcp.tools.advanced_geometry import offset_curve
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "result_ids": ["offset-guid"],
+            "count": 1,
+            "message": "Offset created 1 curve(s)"
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = offset_curve(
+            ctx=None,
+            curve_id="curve-guid",
+            distance=1.0,
+            plane=[0, 0, 1]
+        )
+
+        assert result["success"] is True
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][1]["plane"] == [0, 0, 1]
+
+
+class TestPipeTool:
+    """Tests for pipe tool."""
+
+    @patch('rhinomcp.tools.advanced_geometry.get_rhino_connection')
+    def test_pipe_success(self, mock_get_conn):
+        from rhinomcp.tools.advanced_geometry import pipe
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "result_ids": ["pipe-guid"],
+            "count": 1,
+            "message": "Pipe created 1 object(s)"
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = pipe(
+            ctx=None,
+            curve_id="curve-guid",
+            radius=0.5,
+            name="test_pipe",
+            cap=True
+        )
+
+        assert result["success"] is True
+        assert "result_ids" in result
+        mock_conn.send_command.assert_called_once()
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][0] == "pipe"
+        assert call_args[0][1]["radius"] == 0.5
+
+    def test_pipe_invalid_radius(self):
+        from rhinomcp.tools.advanced_geometry import pipe
+
+        result = pipe(ctx=None, curve_id="curve-guid", radius=0)
+
+        assert result["success"] is False
+        assert "radius" in result["message"].lower()
+
+    def test_pipe_negative_radius(self):
+        from rhinomcp.tools.advanced_geometry import pipe
+
+        result = pipe(ctx=None, curve_id="curve-guid", radius=-1.0)
+
+        assert result["success"] is False
+        assert "radius" in result["message"].lower()

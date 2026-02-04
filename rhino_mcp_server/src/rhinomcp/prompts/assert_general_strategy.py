@@ -28,12 +28,27 @@ def asset_general_strategy() -> str:
     ├─ Multiple similar objects (>3)?
     │   └─ YES → Use create_objects() in batches of 50 max
     │
-    ├─ Complex geometry (loft, sweep, extrude, NURBS surface)?
-    │   └─ YES → Use execute_rhinoscript_python_code()
-    │            (MUST call get_rhinoscript_docs() first!)
+    ├─ Loft surface through curves?
+    │   └─ YES → Use loft(curve_ids=[...])
     │
-    └─ Boolean operations (union, difference, intersection)?
-        └─ YES → Use boolean_union(), boolean_difference(), boolean_intersection()
+    ├─ Extrude a curve along a direction?
+    │   └─ YES → Use extrude_curve(curve_id, direction=[x,y,z])
+    │
+    ├─ Sweep profiles along a rail?
+    │   └─ YES → Use sweep1(rail_id, profile_ids=[...])
+    │
+    ├─ Offset a curve?
+    │   └─ YES → Use offset_curve(curve_id, distance)
+    │
+    ├─ Create a pipe/tube along a curve?
+    │   └─ YES → Use pipe(curve_id, radius)
+    │
+    ├─ Boolean operations (union, difference, intersection)?
+    │   └─ YES → Use boolean_union(), boolean_difference(), boolean_intersection()
+    │
+    └─ Other complex geometry (NURBS editing, mesh operations)?
+        └─ YES → Use execute_rhinoscript_python_code()
+                 (MUST call get_rhinoscript_docs() first!)
 
     Modifying geometry:
     ├─ Simple changes (rename, color, transform)?

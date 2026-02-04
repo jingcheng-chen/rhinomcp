@@ -326,7 +326,13 @@ namespace RhinoMCPPlugin
                 ["boolean_union"] = this.handler.BooleanUnion,
                 ["boolean_difference"] = this.handler.BooleanDifference,
                 ["boolean_intersection"] = this.handler.BooleanIntersection,
-                ["capture_viewport"] = this.handler.CaptureViewport
+                ["capture_viewport"] = this.handler.CaptureViewport,
+                // Advanced geometry operations
+                ["loft"] = this.handler.Loft,
+                ["extrude_curve"] = this.handler.ExtrudeCurve,
+                ["sweep1"] = this.handler.Sweep1,
+                ["offset_curve"] = this.handler.OffsetCurve,
+                ["pipe"] = this.handler.Pipe
             };
 
             // Commands that don't modify the document - no undo record needed
