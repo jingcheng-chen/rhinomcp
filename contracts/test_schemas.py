@@ -220,9 +220,18 @@ def test_other_commands():
     if not validate("commands/execute_rhinoscript_python_code.json", {"code": "print('hello')"}):
         all_passed = False
 
-    # get_document_info
-    print("  get_document_info:")
-    if not validate("commands/get_document_info.json", {}):
+    # get_document_summary
+    print("  get_document_summary:")
+    if not validate("commands/get_document_summary.json", {}):
+        all_passed = False
+
+    # get_objects
+    print("  get_objects:")
+    if not validate("commands/get_objects.json", {}):
+        all_passed = False
+    if not validate("commands/get_objects.json", {"limit": 100, "offset": 0}):
+        all_passed = False
+    if not validate("commands/get_objects.json", {"layer_filter": "Default", "type_filter": "CURVE"}):
         all_passed = False
 
     # get_selected_objects_info

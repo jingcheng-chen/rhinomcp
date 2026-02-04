@@ -275,26 +275,27 @@ class TestGetObjectInfoTool:
         assert call_args[0][1]["id"] == "abc-123"
 
 
-class TestGetDocumentInfoTool:
-    """Tests for get_document_info tool."""
+class TestGetDocumentSummaryTool:
+    """Tests for get_document_summary tool."""
 
-    @patch('rhinomcp.tools.get_document_info.get_rhino_connection')
-    def test_get_document_info(self, mock_get_conn):
-        from rhinomcp.tools.get_document_info import get_document_info
+    @patch('rhinomcp.tools.get_document_summary.get_rhino_connection')
+    def test_get_document_summary(self, mock_get_conn):
+        from rhinomcp.tools.get_document_summary import get_document_summary
 
         mock_conn = MagicMock()
         mock_conn.send_command.return_value = {
-            "objects": [{"id": "1", "name": "Obj1"}],
-            "layers": [{"id": "1", "name": "Default"}],
-            "object_count": 1,
-            "layer_count": 1
+            "meta_data": {"name": "test.3dm", "units": "Millimeters"},
+            "object_count": 10,
+            "objects_by_type": {"CURVE": 5, "BREP": 3, "POINT": 2},
+            "objects_by_layer": {"Default": 10},
+            "layer_count": 1,
+            "layer_hierarchy": []
         }
         mock_get_conn.return_value = mock_conn
 
-        result = get_document_info(ctx=None)
+        result = get_document_summary(ctx=None)
 
-        # get_document_info calls send_command with no params argument
-        mock_conn.send_command.assert_called_once_with("get_document_info")
+        mock_conn.send_command.assert_called_once_with("get_document_summary")
 
 
 class TestGetSelectedObjectsInfoTool:

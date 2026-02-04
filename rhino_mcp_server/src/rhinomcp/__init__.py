@@ -11,7 +11,8 @@ from .prompts.assert_general_strategy import asset_general_strategy
 from .tools.create_object import create_object
 from .tools.create_objects import create_objects
 from .tools.delete_object import delete_object
-from .tools.get_document_info import get_document_info
+from .tools.get_document_summary import get_document_summary
+from .tools.get_objects import get_objects
 from .tools.get_object_info import get_object_info
 from .tools.get_selected_objects_info import get_selected_objects_info
 from .tools.modify_object import modify_object

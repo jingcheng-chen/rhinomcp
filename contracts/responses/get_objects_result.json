@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "get_objects_result.json",
+  "title": "GetObjects Response",
+  "description": "Paginated list of filtered objects",
+  "type": "object",
+  "properties": {
+    "objects": {
+      "type": "array",
+      "items": { "$ref": "object_info.json" },
+      "description": "Array of matching objects"
+    },
+    "total_matching": {
+      "type": "integer",
+      "description": "Total count of objects matching the filters"
+    },
+    "offset": {
+      "type": "integer",
+      "description": "Current offset"
+    },
+    "limit": {
+      "type": "integer",
+      "description": "Applied limit"
+    },
+    "has_more": {
+      "type": "boolean",
+      "description": "Whether more objects are available beyond this page"
+    },
+    "filters": {
+      "type": "object",
+      "description": "Filters that were applied",
+      "properties": {
+        "layer": { "type": "string" },
+        "type": { "type": "string" },
+        "bbox": { "$ref": "../common/definitions.json#/$defs/boundingBox" }
+      }
+    }
+  },
+  "required": ["objects", "total_matching", "offset", "limit", "has_more"]
+}

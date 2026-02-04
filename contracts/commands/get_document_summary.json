@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "get_document_summary.json",
+  "title": "GetDocumentSummary Command",
+  "description": "Get a lightweight summary of the Rhino document (counts, types, layers, bounds) without individual objects",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}

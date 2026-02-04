@@ -107,7 +107,8 @@ class MockRhinoServer:
         params = command.get("params", {})
 
         handlers = {
-            "get_document_info": self._get_document_info,
+            "get_document_summary": self._get_document_summary,
+            "get_objects": self._get_objects,
             "create_object": self._create_object,
             "create_objects": self._create_objects,
             "get_object_info": self._get_object_info,
@@ -134,13 +135,54 @@ class MockRhinoServer:
         else:
             return {"status": "error", "message": f"Unknown command: {cmd_type}"}
 
-    def _get_document_info(self, params: Dict) -> Dict:
-        """Return document info."""
+    def _get_document_summary(self, params: Dict) -> Dict:
+        """Return document summary."""
+        # Count objects by type
+        type_counts = {}
+        layer_counts = {}
+        for obj in self.objects.values():
+            obj_type = obj.get("type", "UNKNOWN")
+            type_counts[obj_type] = type_counts.get(obj_type, 0) + 1
+            layer = obj.get("layer", "Default")
+            layer_counts[layer] = layer_counts.get(layer, 0) + 1
+
         return {
-            "objects": list(self.objects.values())[:30],
-            "layers": list(self.layers.values())[:30],
+            "meta_data": {"name": "mock.3dm", "units": "Millimeters", "tolerance": 0.001},
             "object_count": len(self.objects),
-            "layer_count": len(self.layers)
+            "objects_by_type": type_counts,
+            "objects_by_layer": layer_counts,
+            "model_bounding_box": [[0, 0, 0], [100, 100, 100]] if self.objects else None,
+            "layer_count": len(self.layers),
+            "layer_hierarchy": [
+                {"id": layer["id"], "name": layer["name"], "full_path": layer["name"],
+                 "object_count": layer_counts.get(layer["name"], 0), "children": []}
+                for layer in self.layers.values()
+            ]
+        }
+
+    def _get_objects(self, params: Dict) -> Dict:
+        """Return objects with filtering and pagination."""
+        offset = params.get("offset", 0)
+        limit = params.get("limit", 50)
+        layer_filter = params.get("layer_filter")
+        type_filter = params.get("type_filter")
+
+        # Filter objects
+        filtered = list(self.objects.values())
+        if layer_filter:
+            filtered = [o for o in filtered if o.get("layer") == layer_filter]
+        if type_filter:
+            filtered = [o for o in filtered if o.get("type", "").upper() == type_filter.upper()]
+
+        total = len(filtered)
+        paged = filtered[offset:offset + limit]
+
+        return {
+            "objects": paged,
+            "total_matching": total,
+            "offset": offset,
+            "limit": limit,
+            "has_more": offset + len(paged) < total
         }
 
     def _create_object(self, params: Dict) -> Dict:

@@ -145,7 +145,8 @@ def validate_response(command_type: str, response: Dict[str, Any], raise_on_erro
         "modify_object": "object_info.json",
         "get_object_info": "object_info.json",
         "get_selected_objects_info": "object_info.json",  # Returns array
-        "get_document_info": "document_info.json",
+        "get_document_summary": "document_summary.json",
+        "get_objects": "get_objects_result.json",
         "delete_object": "delete_result.json",
         "select_objects": "select_result.json",
         "create_layer": "layer_info.json",

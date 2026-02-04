@@ -170,20 +170,20 @@ public partial class RhinoMCPFunctions
             results["create_objects"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
-        // Test 4: GetDocumentInfo
+        // Test 4: GetDocumentSummary
         try
         {
-            var docInfo = GetDocumentInfo(new JObject());
-            var objectCount = docInfo["object_count"]?.ToObject<int>() ?? 0;
-            var layerCount = docInfo["layer_count"]?.ToObject<int>() ?? 0;
+            var docSummary = GetDocumentSummary(new JObject());
+            var objectCount = docSummary["object_count"]?.ToObject<int>() ?? 0;
+            var layerCount = docSummary["layer_count"]?.ToObject<int>() ?? 0;
             if (objectCount < 1)
                 throw new Exception($"Expected at least 1 object, got {objectCount}");
-            results["get_document_info"] = new JObject { ["status"] = "pass", ["object_count"] = objectCount, ["layer_count"] = layerCount };
-            VisualUpdate($"Got document info: {objectCount} objects");
+            results["get_document_summary"] = new JObject { ["status"] = "pass", ["object_count"] = objectCount, ["layer_count"] = layerCount };
+            VisualUpdate($"Got document summary: {objectCount} objects");
         }
         catch (Exception e)
         {
-            results["get_document_info"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+            results["get_document_summary"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
         // Test 5: GetObjectInfo

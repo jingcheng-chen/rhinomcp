@@ -13,7 +13,7 @@ def asset_general_strategy() -> str:
 
     CREATION STRATEGY:
 
-    0. Before anything, always check the document from get_document_info().
+    0. Before anything, always check the document from get_document_summary().
     1. If the execute_rhinoscript_python_code() function is not able to create the objects, use the create_objects() function.
     2. If there are multiple objects, use the method create_objects() to create multiple objects at once. Do not attempt to create them one by one if they are more than 10.
     3. When including an object into document, ALWAYS make sure that the name of the object is meanful.

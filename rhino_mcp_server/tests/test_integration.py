@@ -300,10 +300,10 @@ class TestLayers:
 
 
 class TestDocumentInfo:
-    """Integration tests for document info."""
+    """Integration tests for document summary."""
 
-    def test_get_document_info(self, mock_server):
-        """Test getting document info."""
+    def test_get_document_summary(self, mock_server):
+        """Test getting document summary."""
         from rhinomcp.server import get_rhino_connection
 
         conn = get_rhino_connection()
@@ -311,8 +311,9 @@ class TestDocumentInfo:
         # Create some objects
         conn.send_command("create_object", {"type": "BOX", "name": "DocInfoBox", "params": {}})
 
-        result = conn.send_command("get_document_info", {})
+        result = conn.send_command("get_document_summary", {})
 
-        assert "objects" in result
-        assert "layers" in result
+        assert "objects_by_type" in result
+        assert "objects_by_layer" in result
+        assert "layer_hierarchy" in result
         assert result["object_count"] >= 1

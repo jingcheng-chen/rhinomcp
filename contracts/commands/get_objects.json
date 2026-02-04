@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "get_objects.json",
+  "title": "GetObjects Command",
+  "description": "Query objects with filtering and pagination",
+  "type": "object",
+  "properties": {
+    "offset": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0,
+      "description": "Number of objects to skip (for pagination)"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 200,
+      "default": 50,
+      "description": "Maximum number of objects to return"
+    },
+    "layer_filter": {
+      "type": "string",
+      "description": "Filter to objects on this layer (by name or full path)"
+    },
+    "type_filter": {
+      "$ref": "../common/definitions.json#/$defs/objectType",
+      "description": "Filter to objects of this type (POINT, LINE, CURVE, BREP, etc.)"
+    },
+    "bbox_filter": {
+      "$ref": "../common/definitions.json#/$defs/boundingBox",
+      "description": "Filter to objects within or intersecting this bounding box"
+    },
+    "include_geometry": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to include detailed geometry data (false for lightweight listing)"
+    }
+  },
+  "additionalProperties": false
+}

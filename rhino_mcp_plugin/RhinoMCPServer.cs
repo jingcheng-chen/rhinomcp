@@ -307,7 +307,8 @@ namespace RhinoMCPPlugin
             // Dictionary to map command types to handler methods
             Dictionary<string, Func<JObject, JObject>> handlers = new Dictionary<string, Func<JObject, JObject>>
             {
-                ["get_document_info"] = this.handler.GetDocumentInfo,
+                ["get_document_summary"] = this.handler.GetDocumentSummary,
+                ["get_objects"] = this.handler.GetObjects,
                 ["create_object"] = this.handler.CreateObject,
                 ["create_objects"] = this.handler.CreateObjects,
                 ["get_object_info"] = this.handler.GetObjectInfo,
@@ -330,7 +331,8 @@ namespace RhinoMCPPlugin
             // Commands that don't modify the document - no undo record needed
             HashSet<string> readOnlyCommands = new HashSet<string>
             {
-                "get_document_info",
+                "get_document_summary",
+                "get_objects",
                 "get_object_info",
                 "get_selected_objects_info",
                 "undo",
