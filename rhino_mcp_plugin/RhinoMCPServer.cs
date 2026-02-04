@@ -325,7 +325,8 @@ namespace RhinoMCPPlugin
                 ["redo"] = this.handler.Redo,
                 ["boolean_union"] = this.handler.BooleanUnion,
                 ["boolean_difference"] = this.handler.BooleanDifference,
-                ["boolean_intersection"] = this.handler.BooleanIntersection
+                ["boolean_intersection"] = this.handler.BooleanIntersection,
+                ["capture_viewport"] = this.handler.CaptureViewport
             };
 
             // Commands that don't modify the document - no undo record needed
@@ -336,7 +337,8 @@ namespace RhinoMCPPlugin
                 "get_object_info",
                 "get_selected_objects_info",
                 "undo",
-                "redo"
+                "redo",
+                "capture_viewport"
             };
 
             if (handlers.TryGetValue(cmdType, out var handler))

@@ -26,7 +26,8 @@
             "create_layer",
             "delete_layer",
             "get_or_set_current_layer",
-            "execute_rhinoscript_python_code"
+            "execute_rhinoscript_python_code",
+            "capture_viewport"
           ]
         },
         "params": {

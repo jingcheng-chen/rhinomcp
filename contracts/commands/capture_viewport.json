@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "capture_viewport.json",
+  "title": "CaptureViewport Command",
+  "description": "Capture a viewport screenshot for visual analysis",
+  "type": "object",
+  "properties": {
+    "viewport": {
+      "type": "string",
+      "description": "Target viewport identifier: active, perspective, top, front, right, back, left, bottom, or custom name",
+      "default": "active"
+    },
+    "width": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 4096,
+      "default": 800,
+      "description": "Output image width in pixels"
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 4096,
+      "default": 600,
+      "description": "Output image height in pixels"
+    },
+    "show_grid": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to show the viewport grid"
+    },
+    "show_axes": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to show world axes indicator"
+    },
+    "show_cplane_axes": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to show construction plane axes"
+    },
+    "zoom_to_fit": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to zoom viewport to fit all objects before capture"
+    }
+  },
+  "additionalProperties": false
+}

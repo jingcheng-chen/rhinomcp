@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "capture_viewport_result.json",
+  "title": "CaptureViewport Response",
+  "description": "Captured viewport image with metadata",
+  "type": "object",
+  "properties": {
+    "image_data": {
+      "type": "string",
+      "description": "Base64-encoded PNG image data"
+    },
+    "mime_type": {
+      "type": "string",
+      "const": "image/png",
+      "description": "MIME type of the image"
+    },
+    "width": {
+      "type": "integer",
+      "description": "Actual image width in pixels"
+    },
+    "height": {
+      "type": "integer",
+      "description": "Actual image height in pixels"
+    },
+    "viewport_name": {
+      "type": "string",
+      "description": "Name of the captured viewport"
+    },
+    "viewport_target": {
+      "type": "string",
+      "description": "Original viewport target parameter"
+    },
+    "show_grid": {
+      "type": "boolean",
+      "description": "Whether grid was shown"
+    },
+    "show_axes": {
+      "type": "boolean",
+      "description": "Whether axes were shown"
+    },
+    "object_count": {
+      "type": "integer",
+      "description": "Number of objects in the document"
+    }
+  },
+  "required": ["image_data", "mime_type", "width", "height", "viewport_name"]
+}
