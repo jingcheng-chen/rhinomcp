@@ -37,38 +37,36 @@ public partial class GrasshopperMCPFunctions
         // Get optional nickname
         var nickname = parameters["nickname"]?.ToString();
 
-        // Find the component proxy
-        IGH_ObjectProxy? proxy = null;
+        IGH_DocumentObject? obj = null;
 
-        if (!string.IsNullOrEmpty(componentGuid) && Guid.TryParse(componentGuid, out var guid))
+        // First try to create special components directly (sliders, toggles, panels, etc.)
+        if (!string.IsNullOrEmpty(componentName))
         {
-            proxy = Instances.ComponentServer.FindObjectByName(componentName, true, true)
-                ?? Instances.ComponentServer.ObjectProxies.FirstOrDefault(p => p.Guid == guid);
+            obj = TryCreateSpecialComponent(componentName, parameters);
         }
 
-        if (proxy == null && !string.IsNullOrEmpty(componentName))
-        {
-            // Search by name (case-insensitive)
-            proxy = Instances.ComponentServer.FindObjectByName(componentName, true, true);
-
-            // If not found, try partial match
-            if (proxy == null)
-            {
-                proxy = Instances.ComponentServer.ObjectProxies
-                    .FirstOrDefault(p => p.Desc.Name.Contains(componentName, StringComparison.OrdinalIgnoreCase));
-            }
-        }
-
-        if (proxy == null)
-        {
-            throw new InvalidOperationException($"Component '{componentName ?? componentGuid}' not found. Use search_gh_components to find valid component names.");
-        }
-
-        // Create the component instance
-        var obj = proxy.CreateInstance();
+        // If not a special component, use proxy lookup
         if (obj == null)
         {
-            throw new InvalidOperationException($"Failed to create instance of component '{proxy.Desc.Name}'");
+            var proxy = FindComponentProxy(componentName ?? "", componentGuid);
+
+            if (proxy == null)
+            {
+                var suggestions = FindSimilarComponents(componentName ?? "", 3);
+                var suggestionText = suggestions.Any()
+                    ? $". Did you mean: {string.Join(", ", suggestions)}?"
+                    : ". Use search_components tool to find valid component names.";
+                throw new InvalidOperationException($"Component '{componentName ?? componentGuid}' not found{suggestionText}");
+            }
+
+            obj = proxy.CreateInstance();
+            if (obj == null)
+            {
+                throw new InvalidOperationException($"Failed to create instance of component '{proxy.Desc.Name}'");
+            }
+
+            // Initialize special components that were found via proxy
+            InitializeSpecialComponent(obj, parameters);
         }
 
         // Set nickname if provided

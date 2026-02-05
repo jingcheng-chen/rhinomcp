@@ -24,9 +24,32 @@ def gh_general_strategy() -> str:
     - Groups and their contents
 
 
-    STEP 2: CHOOSE THE RIGHT TOOL
+    STEP 2: FIND COMPONENT NAMES
+    ----------------------------
+    Before creating components, find the correct names:
+
+    Search for components:
+    └─ Use search_components(query="slider") to find matching components
+       Returns: name, nickname, category, subcategory, description, guid
+
+    List all categories:
+    └─ Use list_component_categories() to see available categories
+
+    Common component names:
+    - "Number Slider" (not just "Slider")
+    - "Point" (Params category for point input)
+    - "Construct Point" (for creating points from X,Y,Z)
+    - "Circle" (for circle geometry)
+
+
+    STEP 3: CHOOSE THE RIGHT TOOL
     -----------------------------
     Use this decision tree:
+
+    Creating a complete definition (RECOMMENDED for multiple components):
+    └─ Use create_definition() to batch create components, connections, and values
+       This is the most efficient way to create complex definitions.
+       For sliders, you can specify: min, max, value, decimals
 
     Adding components:
     ├─ Need to add a component?
@@ -70,7 +93,7 @@ def gh_general_strategy() -> str:
         └─ YES → Use list_components(category=..., name=...)
 
 
-    STEP 3: BEST PRACTICES
+    STEP 4: BEST PRACTICES
     ----------------------
     1. NICKNAMES: Always give components meaningful nicknames for easy reference
        - Use add_component(..., nickname="MyCircle")
@@ -99,18 +122,35 @@ def gh_general_strategy() -> str:
        - "Error" = Must fix before proceeding
 
 
-    EXAMPLE WORKFLOW: Create a circle and extrude it
-    ================================================
+    EXAMPLE WORKFLOW: Create a circle and extrude it (using create_definition)
+    ==========================================================================
+    create_definition(
+        components=[
+            {"name": "Point", "nickname": "BasePoint", "position": [0, 0]},
+            {"name": "Number Slider", "nickname": "RadiusSlider", "position": [0, 100],
+             "min": 1, "max": 50, "value": 10, "decimals": 1},
+            {"name": "Circle", "nickname": "MyCircle", "position": [200, 0]},
+            {"name": "Unit Z", "nickname": "ZVector", "position": [200, 100]},
+            {"name": "Extrude", "nickname": "MyExtrude", "position": [400, 50]}
+        ],
+        connections=[
+            {"source": "BasePoint", "target": "MyCircle", "target_input": 0},
+            {"source": "RadiusSlider", "target": "MyCircle", "target_input": 1},
+            {"source": "MyCircle", "target": "MyExtrude", "target_input": 0},
+            {"source": "ZVector", "target": "MyExtrude", "target_input": 1}
+        ]
+    )
+    # Then bake the result
+    bake_component(nickname="MyExtrude", layer_name="Extruded Circles")
+
+    ALTERNATIVE: Step-by-step approach (use when debugging or modifying existing definitions)
+    =======================================================================================
     1. add_component("Point", [0, 0], "BasePoint")
     2. add_component("Circle", [200, 0], "MyCircle")
-    3. add_component("Unit Z", [200, 100], "ZVector")
-    4. add_component("Extrude", [400, 50], "MyExtrude")
-    5. connect_components(source_nickname="BasePoint", target_nickname="MyCircle", target_input=0)
-    6. connect_components(source_nickname="MyCircle", target_nickname="MyExtrude", target_input=0)
-    7. connect_components(source_nickname="ZVector", target_nickname="MyExtrude", target_input=1)
-    8. set_parameter_value(nickname="MyCircle", input_name="Radius", value=10.0)
-    9. run_solution()
-    10. bake_component(nickname="MyExtrude", layer_name="Extruded Circles")
+    3. connect_components(source_nickname="BasePoint", target_nickname="MyCircle", target_input=0)
+    4. set_parameter_value(nickname="MyCircle", input_name="Radius", value=10.0)
+    5. get_component_info(nickname="MyCircle")  # Check for errors
+    6. bake_component(nickname="MyCircle")
     """
 
 

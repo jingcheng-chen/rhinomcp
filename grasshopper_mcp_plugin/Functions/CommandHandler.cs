@@ -41,7 +41,14 @@ public partial class GrasshopperMCPFunctions : ICommandHandler
 
             // Utility operations
             ["bake_component"] = BakeComponent,
-            ["get_canvas_state"] = GetCanvasState
+            ["get_canvas_state"] = GetCanvasState,
+
+            // Batch operations
+            ["create_definition"] = CreateDefinition,
+
+            // Search operations
+            ["search_components"] = SearchComponents,
+            ["list_component_categories"] = ListComponentCategories
         };
     }
 
@@ -56,7 +63,9 @@ public partial class GrasshopperMCPFunctions : ICommandHandler
             "list_components",
             "get_component_info",
             "get_parameter_value",
-            "get_canvas_state"
+            "get_canvas_state",
+            "search_components",
+            "list_component_categories"
         };
     }
 }

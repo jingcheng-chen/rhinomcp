@@ -32,6 +32,13 @@ from .tools.bake_component import bake_component
 # Canvas tools
 from .tools.get_canvas_state import get_canvas_state
 
+# Batch tools
+from .tools.create_definition import create_definition
+
+# Search tools
+from .tools.search_components import search_components
+from .tools.list_component_categories import list_component_categories
+
 
 def main():
     """Run the MCP server."""
