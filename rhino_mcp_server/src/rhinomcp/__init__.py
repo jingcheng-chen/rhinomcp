@@ -28,6 +28,7 @@ from .tools.delete_layer import delete_layer
 
 # RhinoScript execution and documentation tools
 from .tools.execute_rhinoscript_python_code import execute_rhinoscript_python_code
+from .tools.execute_rhinocommon_csharp_code import execute_rhinocommon_csharp_code
 from .tools.rhinoscript_docs import (
     search_rhinoscript_functions,
     get_rhinoscript_docs,

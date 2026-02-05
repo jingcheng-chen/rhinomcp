@@ -317,6 +317,7 @@ namespace RhinoMCPPlugin
                 ["modify_object"] = this.handler.ModifyObject,
                 ["modify_objects"] = this.handler.ModifyObjects,
                 ["execute_rhinoscript_python_code"] = this.handler.ExecuteRhinoscript,
+                ["execute_rhinocommon_csharp_code"] = this.handler.ExecuteRhinoCommonCSharp,
                 ["select_objects"] = this.handler.SelectObjects,
                 ["create_layer"] = this.handler.CreateLayer,
                 ["get_or_set_current_layer"] = this.handler.GetOrSetCurrentLayer,
