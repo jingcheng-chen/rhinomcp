@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-    <Exec Command="mkdir -p ~/Library/Application\ Support/McNeel/Rhinoceros/8.0/Plug-ins/Grasshopper\ \(b45a29b1-4343-4035-989e-c6b99f0a0a77\)/Libraries/ &amp;&amp; cp $(TargetDir)grasshopper_mcp.gha ~/Library/Application\ Support/McNeel/Rhinoceros/8.0/Plug-ins/Grasshopper\ \(b45a29b1-4343-4035-989e-c6b99f0a0a77\)/Libraries/" />
+    <Exec Command="cp $(TargetDir)grasshopper_mcp.gha ~/Library/Application\ Support/McNeel/Rhinoceros/8.0/Plug-ins/Grasshopper\ \(b45a29b1-4343-4035-989e-044e8580d9cf\)/Libraries/" />
   </Target>
 
 </Project>
