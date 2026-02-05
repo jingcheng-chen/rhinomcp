@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
+using Grasshopper.Kernel.Special;
 using Grasshopper.Kernel.Types;
 using Newtonsoft.Json.Linq;
 using Rhino.Geometry;
@@ -15,6 +16,7 @@ public partial class GrasshopperMCPFunctions
     /// Set the value of a component's input parameter.
     /// Supports both Python naming (instance_id, nickname, input_index, input_name)
     /// and C# naming (component_id, param_index, param_name).
+    /// Also handles special components like Number Sliders, Boolean Toggles, and Panels.
     /// </summary>
     public JObject SetParameterValue(JObject parameters)
     {
@@ -35,7 +37,14 @@ public partial class GrasshopperMCPFunctions
         // Find component - supports instance_id, nickname, or component_id
         var obj = ComponentHelper.FindComponent(doc, parameters);
 
-        // Get input parameter
+        // Handle special components that have their own value storage
+        if (TrySetSpecialComponentValue(obj, value, parameters, out var specialResult))
+        {
+            doc.NewSolution(false);
+            return specialResult;
+        }
+
+        // Get input parameter for regular components
         var paramIndex = ComponentHelper.GetParamIndex(parameters, isOutput: false);
         var paramName = ComponentHelper.GetParamName(parameters, isOutput: false);
 
@@ -59,6 +68,104 @@ public partial class GrasshopperMCPFunctions
             ["param_name"] = inputParam.Name,
             ["message"] = $"Set value on {obj.NickName}.{inputParam.Name}"
         };
+    }
+
+    /// <summary>
+    /// Try to set value on special components (sliders, toggles, panels).
+    /// Returns true if the component was a special type and was handled.
+    /// </summary>
+    private bool TrySetSpecialComponentValue(IGH_DocumentObject obj, JToken value, JObject parameters, out JObject result)
+    {
+        result = new JObject();
+
+        // Handle Number Slider
+        if (obj is GH_NumberSlider slider)
+        {
+            var numValue = value.ToObject<decimal>();
+
+            // Optionally update min/max if provided
+            if (parameters["min"] != null)
+                slider.Slider.Minimum = parameters["min"].ToObject<decimal>();
+            if (parameters["max"] != null)
+                slider.Slider.Maximum = parameters["max"].ToObject<decimal>();
+
+            // Clamp value to slider range
+            if (numValue < slider.Slider.Minimum)
+                numValue = slider.Slider.Minimum;
+            if (numValue > slider.Slider.Maximum)
+                numValue = slider.Slider.Maximum;
+
+            slider.Slider.Value = numValue;
+            slider.ExpireSolution(true);
+
+            result = new JObject
+            {
+                ["instance_id"] = obj.InstanceGuid.ToString(),
+                ["nickname"] = obj.NickName,
+                ["value"] = (double)numValue,
+                ["min"] = (double)slider.Slider.Minimum,
+                ["max"] = (double)slider.Slider.Maximum,
+                ["message"] = $"Set slider '{obj.NickName}' to {numValue}"
+            };
+            return true;
+        }
+
+        // Handle Boolean Toggle
+        if (obj is GH_BooleanToggle toggle)
+        {
+            toggle.Value = value.ToObject<bool>();
+            toggle.ExpireSolution(true);
+
+            result = new JObject
+            {
+                ["instance_id"] = obj.InstanceGuid.ToString(),
+                ["nickname"] = obj.NickName,
+                ["value"] = toggle.Value,
+                ["message"] = $"Set toggle '{obj.NickName}' to {toggle.Value}"
+            };
+            return true;
+        }
+
+        // Handle Panel
+        if (obj is GH_Panel panel)
+        {
+            panel.SetUserText(value.ToString());
+            panel.ExpireSolution(true);
+
+            result = new JObject
+            {
+                ["instance_id"] = obj.InstanceGuid.ToString(),
+                ["nickname"] = obj.NickName,
+                ["value"] = value.ToString(),
+                ["message"] = $"Set panel '{obj.NickName}' content"
+            };
+            return true;
+        }
+
+        // Handle Value List
+        if (obj is GH_ValueList valueList)
+        {
+            // Try to select item by index or by value
+            if (value.Type == JTokenType.Integer)
+            {
+                var index = value.ToObject<int>();
+                if (index >= 0 && index < valueList.ListItems.Count)
+                {
+                    valueList.SelectItem(index);
+                }
+            }
+            valueList.ExpireSolution(true);
+
+            result = new JObject
+            {
+                ["instance_id"] = obj.InstanceGuid.ToString(),
+                ["nickname"] = obj.NickName,
+                ["message"] = $"Set value list '{obj.NickName}' selection"
+            };
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>

@@ -69,6 +69,12 @@ public partial class GrasshopperMCPFunctions
             InitializeSpecialComponent(obj, parameters);
         }
 
+        // Ensure attributes are created (required for newly instantiated special components)
+        if (obj.Attributes == null)
+        {
+            obj.CreateAttributes();
+        }
+
         // Set nickname if provided
         if (!string.IsNullOrEmpty(nickname))
         {

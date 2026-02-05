@@ -353,6 +353,12 @@ public partial class GrasshopperMCPFunctions
             InitializeSpecialComponent(obj, spec);
         }
 
+        // Ensure attributes are created (required for newly instantiated special components)
+        if (obj.Attributes == null)
+        {
+            obj.CreateAttributes();
+        }
+
         // Set position
         obj.Attributes.Pivot = new PointF(x, y);
 
