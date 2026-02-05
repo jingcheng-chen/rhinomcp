@@ -6,13 +6,25 @@ RhinoMCP connects Rhino to AI agents through the Model Context Protocol (MCP), a
 
 ## Features
 
+### Rhino MCP
+
 - **Two-way communication**: Connect AI agents to Rhino through a socket-based server
 - **Object manipulation**: Create, modify, and delete 3D objects in Rhino
 - **Document inspection**: Get detailed information about the current Rhino document
-- **Script execution**: Execute Rhinos python scripts in Rhino (experimental, may not work every time)
-- **Get Script Documentation**: Get the documentation of a specific RhinoScript python function
-- **Object selection**: Select objects based on filters, e.g. name, color, category, etc. with "and" or "or" logic
-- **Set/Create/Delete Layers**: Get or set the current layer, create new layers, or delete layers
+- **Script execution**: Execute RhinoScript Python code in Rhino
+- **Advanced geometry**: Loft, extrude, sweep, offset, and pipe operations
+- **Boolean operations**: Union, difference, and intersection
+- **Object selection**: Select objects based on filters (name, color, layer, type) with "and" or "or" logic
+- **Layer management**: Get/set current layer, create and delete layers
+
+### Grasshopper MCP (New!)
+
+- **Component management**: Add, delete, and inspect Grasshopper components
+- **Connection control**: Connect and disconnect component inputs/outputs
+- **Parameter control**: Set and get parameter values on components
+- **Solution management**: Run and expire solutions
+- **Baking**: Bake component outputs to Rhino
+- **Canvas state**: Get full canvas state with all components and connections
 
 > [!NOTE]  
 > So far the tool only supports creating primitive objects for proof of concept. More geometries will be added in the future.
@@ -77,12 +89,29 @@ powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 
 ### Config file
 
+**Rhino MCP only:**
 ```json
 {
   "mcpServers": {
     "rhino": {
       "command": "uvx",
       "args": ["rhinomcp"]
+    }
+  }
+}
+```
+
+**Rhino + Grasshopper MCP:**
+```json
+{
+  "mcpServers": {
+    "rhino": {
+      "command": "uvx",
+      "args": ["rhinomcp"]
+    },
+    "grasshopper": {
+      "command": "uvx",
+      "args": ["grasshoppermcp"]
     }
   }
 }
@@ -104,12 +133,18 @@ Go to Cursor Settings > MCP and check if it's enabled.
 
 ## Usage
 
-### Starting the Connection
+### Starting Rhino MCP
 
 ![RhinoMCP in the command line](assets/rhino_plugin_instruction.jpg)
 
-1. In Rhino, type `mcpstart` in the command line
-2. Make sure the MCP server is running in the rhino terminal
+1. In Rhino, type `MCPStart` in the command line to start the socket server (port 1999)
+2. The MCP server will connect automatically when you use Claude or Cursor
+
+### Starting Grasshopper MCP
+
+1. Open Grasshopper in Rhino
+2. In Rhino, type `GHMCPStart` in the command line to start the socket server (port 2000)
+3. The MCP server will connect automatically when you use Claude or Cursor
 
 ### Using with Claude
 
@@ -138,32 +173,132 @@ The system uses a simple JSON-based protocol over TCP sockets:
 - **Commands** are sent as JSON objects with a `type` and optional `params`
 - **Responses** are JSON objects with a `status` and `result` or `message`
 
-## Run the tool locally
+## Local Development
 
-```bash
-cd rhino_mcp_server
-uv run pytest tests/ -v # run tests
-uv run mcp dev main.py:mcp # run the tool
+### Project Structure
+
+```
+rhinomcp/
+├── RhinoMCP.sln                 # Solution file (includes both plugins)
+├── rhino_mcp_plugin/            # Rhino C# plugin
+├── rhino_mcp_server/            # Rhino Python MCP server
+├── grasshopper_mcp_plugin/      # Grasshopper C# plugin
+├── grasshopper_mcp_server/      # Grasshopper Python MCP server
+└── shared/csharp/               # Shared C# code (linked into both plugins)
 ```
 
-Then you can use the tool in Cursor or Claude Desktop.
+### Prerequisites
 
-## Building the tool and publishing
+- .NET 8.0 SDK
+- Python 3.10+
+- uv package manager
+- Rhino 8
 
-### Building and publishing the server
+### Building the C# Plugins
+
+Build both Rhino and Grasshopper plugins:
+
+```bash
+# From the root directory
+dotnet build RhinoMCP.sln
+
+# Or build in Release mode
+dotnet build RhinoMCP.sln -c Release
+```
+
+The build automatically copies:
+- `rhinomcp.rhp` → `/Applications/Rhino 8.app/Contents/PlugIns/` (macOS)
+- `grasshopper_mcp.gha` → `~/Library/Application Support/McNeel/Rhinoceros/8.0/Plug-ins/Grasshopper .../Libraries/` (macOS)
+
+After building, restart Rhino to load the updated plugins.
+
+### Running the MCP Servers Locally
+
+#### Rhino MCP Server
 
 ```bash
 cd rhino_mcp_server
+
+# Install dependencies
+uv sync
+
+# Run tests
+uv run pytest tests/ -v
+
+# Run the MCP server in dev mode (with MCP Inspector)
+uv run mcp dev main.py:mcp
+```
+
+In Rhino, run `MCPStart` to start the plugin socket server (port 1999).
+
+#### Grasshopper MCP Server
+
+```bash
+cd grasshopper_mcp_server
+
+# Install dependencies
+uv sync
+
+# Run tests
+uv run pytest tests/ -v
+
+# Run the MCP server in dev mode (with MCP Inspector)
+uv run mcp dev main.py:mcp
+```
+
+In Rhino, run `GHMCPStart` to start the Grasshopper plugin socket server (port 2000).
+
+### Testing
+
+```bash
+# Run all Rhino MCP tests
+cd rhino_mcp_server && uv run pytest tests/ -v
+
+# Run all Grasshopper MCP tests
+cd grasshopper_mcp_server && uv run pytest tests/ -v
+```
+
+### Local MCP Configuration
+
+For local development, update your MCP config to use the local servers:
+
+```json
+{
+  "mcpServers": {
+    "rhino": {
+      "command": "uv",
+      "args": ["--directory", "/path/to/rhinomcp/rhino_mcp_server", "run", "main.py"]
+    },
+    "grasshopper": {
+      "command": "uv",
+      "args": ["--directory", "/path/to/rhinomcp/grasshopper_mcp_server", "run", "main.py"]
+    }
+  }
+}
+```
+
+## Building and Publishing
+
+### Publishing the MCP Servers
+
+```bash
+# Rhino MCP Server
+cd rhino_mcp_server
+uv build
+uv publish
+
+# Grasshopper MCP Server
+cd grasshopper_mcp_server
 uv build
 uv publish
 ```
 
-### Building and publishing the plugin
+### Publishing the Rhino Plugin
 
-1. build the tool in Release mode
-2. copy the "manifest.yml" file to the "bin/Release" folder
-3. run `yak build` in the Release folder
-4. run `yak push rhino_mcp_plugin_xxxx.yak` to publish the plugin
+1. Build in Release mode: `dotnet build RhinoMCP.sln -c Release`
+2. Copy `manifest.yml` to the `rhino_mcp_plugin/bin/Release/net8.0` folder
+3. Run `yak build` in the Release folder
+4. Run `yak push rhinomcp-x.x.x-rh8-any.yak` to publish
 
 ## Contributing
 

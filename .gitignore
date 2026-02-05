@@ -2,3 +2,6 @@
 .vscode
 .cursor
 node_modules/
+.claude
+CLAUDE.md
+.idea
