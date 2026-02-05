@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 using Rhino;
 using Rhino.DocObjects;
 using Rhino.Geometry;
-using rhinomcp.Serializers;
+using RhinoMCP.Shared.Serializers;
 
 namespace RhinoMCPPlugin.Functions;
 

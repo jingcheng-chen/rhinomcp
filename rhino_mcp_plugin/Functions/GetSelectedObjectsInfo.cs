@@ -1,6 +1,6 @@
 using Newtonsoft.Json.Linq;
 using Rhino;
-using rhinomcp.Serializers;
+using RhinoMCP.Shared.Serializers;
 
 namespace RhinoMCPPlugin.Functions;
 
