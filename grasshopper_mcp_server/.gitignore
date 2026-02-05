@@ -1,0 +1,74 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env/
+.venv/
+env/
+pip-wheel-metadata/
+pip-log.txt
+
+# Package metadata
+*.egg-info/
+*.dist-info/
+.installed.cfg
+
+# Build artifacts
+build/
+dist/
+wheelhouse/
+
+# Testing & coverage
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+
+# Documentation
+docs/_build/
+*.rST~
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# MyPy & type-checking
+.mypy_cache/
+.dmypy.json
+pyre-check/
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Logs & Debugging
+logs/
+*.log
+*.out
+*.err
+debug.log
+
+# Local environment settings
+.env
+.envrc
+*.local
+*.secret
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Rye, Poetry, and Pipenv lock files
+.poetry/
+rye.lock
+Pipfile
+Pipfile.lock

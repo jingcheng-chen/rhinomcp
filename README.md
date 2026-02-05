@@ -138,10 +138,15 @@ The system uses a simple JSON-based protocol over TCP sockets:
 - **Commands** are sent as JSON objects with a `type` and optional `params`
 - **Responses** are JSON objects with a `status` and `result` or `message`
 
-## Limitations & Security Considerations
+## Run the tool locally
 
-- The `get_document_info` only fetches max 30 objects, layers, material etc. to avoid huge dataset that overwhelms Claude.
-- Complex operations might need to be broken down into smaller steps
+```bash
+cd rhino_mcp_server
+uv run pytest tests/ -v # run tests
+uv run mcp dev main.py:mcp # run the tool
+```
+
+Then you can use the tool in Cursor or Claude Desktop.
 
 ## Building the tool and publishing
 
