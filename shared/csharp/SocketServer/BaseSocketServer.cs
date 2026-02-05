@@ -50,6 +50,14 @@ public abstract class BaseSocketServer
     /// </summary>
     public abstract void EndUndoRecord(uint recordId);
 
+    /// <summary>
+    /// Log a message. Override to customize logging behavior.
+    /// </summary>
+    protected virtual void Log(string message)
+    {
+        Log($": {message}");
+    }
+
     protected BaseSocketServer(string host = "127.0.0.1", int port = 1999)
     {
         this.host = host;
@@ -65,7 +73,7 @@ public abstract class BaseSocketServer
         {
             if (running)
             {
-                RhinoApp.WriteLine($"{ServerName} server is already running");
+                Log($" server is already running");
                 return;
             }
 
@@ -82,7 +90,7 @@ public abstract class BaseSocketServer
             serverThread.IsBackground = true;
             serverThread.Start();
 
-            RhinoApp.WriteLine($"{ServerName} server started on {host}:{port}");
+            Log($" server started on {host}:{port}");
         }
         catch (Exception e)
         {
@@ -124,7 +132,7 @@ public abstract class BaseSocketServer
             serverThread = null;
         }
 
-        RhinoApp.WriteLine($"{ServerName} server stopped");
+        Log($" server stopped");
     }
 
     public bool IsRunning()
@@ -137,7 +145,7 @@ public abstract class BaseSocketServer
 
     private void ServerLoop()
     {
-        RhinoApp.WriteLine($"{ServerName} server thread started");
+        Log($" server thread started");
 
         while (IsRunning())
         {
@@ -151,7 +159,7 @@ public abstract class BaseSocketServer
                 if (listener.Pending())
                 {
                     TcpClient client = listener.AcceptTcpClient();
-                    RhinoApp.WriteLine($"{ServerName}: Connected to client: {client.Client.RemoteEndPoint}");
+                    Log($": Connected to client: {client.Client.RemoteEndPoint}");
 
                     Thread clientThread = new Thread(() => HandleClient(client));
                     clientThread.IsBackground = true;
@@ -164,7 +172,7 @@ public abstract class BaseSocketServer
             }
             catch (Exception e)
             {
-                RhinoApp.WriteLine($"{ServerName}: Error in server loop: {e.Message}");
+                Log($": Error in server loop: {e.Message}");
 
                 if (!IsRunning())
                     break;
@@ -173,12 +181,12 @@ public abstract class BaseSocketServer
             }
         }
 
-        RhinoApp.WriteLine($"{ServerName} server thread stopped");
+        Log($" server thread stopped");
     }
 
     private void HandleClient(TcpClient client)
     {
-        RhinoApp.WriteLine($"{ServerName}: Client handler started");
+        Log($": Client handler started");
 
         byte[] buffer = new byte[8192];
         string incompleteData = string.Empty;
@@ -196,7 +204,7 @@ public abstract class BaseSocketServer
                         int bytesRead = stream.Read(buffer, 0, buffer.Length);
                         if (bytesRead == 0)
                         {
-                            RhinoApp.WriteLine($"{ServerName}: Client disconnected");
+                            Log($": Client disconnected");
                             break;
                         }
 
@@ -222,12 +230,12 @@ public abstract class BaseSocketServer
                                     }
                                     catch
                                     {
-                                        RhinoApp.WriteLine($"{ServerName}: Failed to send response - client disconnected");
+                                        Log($": Failed to send response - client disconnected");
                                     }
                                 }
                                 catch (Exception e)
                                 {
-                                    RhinoApp.WriteLine($"{ServerName}: Error executing command: {e.Message}");
+                                    Log($": Error executing command: {e.Message}");
                                     try
                                     {
                                         JObject errorResponse = new JObject
@@ -258,14 +266,14 @@ public abstract class BaseSocketServer
                 }
                 catch (Exception e)
                 {
-                    RhinoApp.WriteLine($"{ServerName}: Error receiving data: {e.Message}");
+                    Log($": Error receiving data: {e.Message}");
                     break;
                 }
             }
         }
         catch (Exception e)
         {
-            RhinoApp.WriteLine($"{ServerName}: Error in client handler: {e.Message}");
+            Log($": Error in client handler: {e.Message}");
         }
         finally
         {
@@ -277,7 +285,7 @@ public abstract class BaseSocketServer
             {
                 // Ignore errors on close
             }
-            RhinoApp.WriteLine($"{ServerName}: Client handler stopped");
+            Log($": Client handler stopped");
         }
     }
 
@@ -297,7 +305,7 @@ public abstract class BaseSocketServer
                 };
             }
 
-            RhinoApp.WriteLine($"{ServerName}: Executing command: {cmdType}");
+            Log($": Executing command: {cmdType}");
 
             var handler = GetHandler();
             var handlers = handler.GetHandlers();
@@ -316,7 +324,7 @@ public abstract class BaseSocketServer
                 try
                 {
                     JObject result = handlerFunc(parameters);
-                    RhinoApp.WriteLine($"{ServerName}: Command execution complete");
+                    Log($": Command execution complete");
                     return new JObject
                     {
                         ["status"] = "success",
@@ -325,7 +333,7 @@ public abstract class BaseSocketServer
                 }
                 catch (Exception e)
                 {
-                    RhinoApp.WriteLine($"{ServerName}: Error in handler: {e.Message}");
+                    Log($": Error in handler: {e.Message}");
                     return new JObject
                     {
                         ["status"] = "error",
@@ -351,7 +359,7 @@ public abstract class BaseSocketServer
         }
         catch (Exception e)
         {
-            RhinoApp.WriteLine($"{ServerName}: Error executing command: {e.Message}");
+            Log($": Error executing command: {e.Message}");
             return new JObject
             {
                 ["status"] = "error",

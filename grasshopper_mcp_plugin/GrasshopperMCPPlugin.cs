@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Grasshopper;
 using Grasshopper.Kernel;
 
@@ -19,6 +20,67 @@ public class GrasshopperMCPPluginInfo : GH_AssemblyInfo
 }
 
 /// <summary>
+/// Static class to manage logs from the MCP server.
+/// </summary>
+public static class MCPLogger
+{
+    private static readonly object _lock = new object();
+    private static readonly Queue<string> _logs = new Queue<string>();
+    private const int MaxLogEntries = 100;
+
+    /// <summary>
+    /// Event fired when a new log entry is added.
+    /// </summary>
+    public static event Action? OnLogAdded;
+
+    /// <summary>
+    /// Add a log entry with timestamp.
+    /// </summary>
+    public static void Log(string message)
+    {
+        lock (_lock)
+        {
+            string entry = $"[{DateTime.Now:HH:mm:ss}] {message}";
+            _logs.Enqueue(entry);
+
+            // Keep only the last N entries
+            while (_logs.Count > MaxLogEntries)
+            {
+                _logs.Dequeue();
+            }
+        }
+
+        // Also write to Rhino command line
+        Rhino.RhinoApp.WriteLine($"GrasshopperMCP: {message}");
+
+        // Notify listeners
+        OnLogAdded?.Invoke();
+    }
+
+    /// <summary>
+    /// Get all current log entries.
+    /// </summary>
+    public static List<string> GetLogs()
+    {
+        lock (_lock)
+        {
+            return new List<string>(_logs);
+        }
+    }
+
+    /// <summary>
+    /// Clear all logs.
+    /// </summary>
+    public static void Clear()
+    {
+        lock (_lock)
+        {
+            _logs.Clear();
+        }
+    }
+}
+
+/// <summary>
 /// Static class to manage the GrasshopperMCP server instance.
 /// </summary>
 public static class GrasshopperMCPServerController
@@ -35,7 +97,7 @@ public static class GrasshopperMCPServerController
         {
             if (_server != null && _server.IsRunning())
             {
-                Rhino.RhinoApp.WriteLine("GrasshopperMCP server is already running");
+                MCPLogger.Log("Server is already running");
                 return;
             }
 

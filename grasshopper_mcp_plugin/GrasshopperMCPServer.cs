@@ -39,4 +39,12 @@ public class GrasshopperMCPServer : BaseSocketServer
     {
         RhinoDoc.ActiveDoc.EndUndoRecord(recordId);
     }
+
+    /// <summary>
+    /// Override logging to use MCPLogger for Grasshopper component output.
+    /// </summary>
+    protected override void Log(string message)
+    {
+        MCPLogger.Log(message);
+    }
 }
