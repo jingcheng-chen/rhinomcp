@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Grasshopper;
 using Grasshopper.Kernel;
 using Newtonsoft.Json.Linq;
@@ -10,6 +9,7 @@ public partial class GrasshopperMCPFunctions
 {
     /// <summary>
     /// Get detailed information about a specific component.
+    /// Supports instance_id, nickname, or component_id.
     /// </summary>
     public JObject GetComponentInfo(JObject parameters)
     {
@@ -20,33 +20,8 @@ public partial class GrasshopperMCPFunctions
             throw new InvalidOperationException("No active Grasshopper document");
         }
 
-        // Get component identifier
-        var instanceId = parameters["instance_id"]?.ToString();
-        var nickname = parameters["nickname"]?.ToString();
-
-        if (string.IsNullOrEmpty(instanceId) && string.IsNullOrEmpty(nickname))
-        {
-            throw new ArgumentException("Either instance_id or nickname is required");
-        }
-
-        IGH_DocumentObject? obj = null;
-
-        // Find by instance ID
-        if (!string.IsNullOrEmpty(instanceId) && Guid.TryParse(instanceId, out var guid))
-        {
-            obj = doc.FindObject(guid, true);
-        }
-
-        // Find by nickname
-        if (obj == null && !string.IsNullOrEmpty(nickname))
-        {
-            obj = doc.Objects.FirstOrDefault(o => o.NickName == nickname);
-        }
-
-        if (obj == null)
-        {
-            throw new InvalidOperationException($"Component with ID '{instanceId}' or nickname '{nickname}' not found");
-        }
+        // Find component - supports instance_id, nickname, or component_id
+        var obj = ComponentHelper.FindComponent(doc, parameters);
 
         var result = new JObject
         {
@@ -72,6 +47,7 @@ public partial class GrasshopperMCPFunctions
             {
                 var inputInfo = new JObject
                 {
+                    ["index"] = component.Params.Input.IndexOf(input),
                     ["name"] = input.Name,
                     ["nickname"] = input.NickName,
                     ["description"] = input.Description,
@@ -91,6 +67,7 @@ public partial class GrasshopperMCPFunctions
             {
                 var outputInfo = new JObject
                 {
+                    ["index"] = component.Params.Output.IndexOf(output),
                     ["name"] = output.Name,
                     ["nickname"] = output.NickName,
                     ["description"] = output.Description,

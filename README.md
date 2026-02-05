@@ -143,8 +143,10 @@ Go to Cursor Settings > MCP and check if it's enabled.
 ### Starting Grasshopper MCP
 
 1. Open Grasshopper in Rhino
-2. In Rhino, type `GHMCPStart` in the command line to start the socket server (port 2000)
-3. The MCP server will connect automatically when you use Claude or Cursor
+2. Find the **MCP Server** component in **Params → Util → MCP Server**
+3. Place it on the canvas - it starts automatically (default port: 2000)
+4. Connect a Panel to the **Logs** output to see server activity
+5. The MCP server will connect automatically when you use Claude or Cursor
 
 ### Using with Claude
 

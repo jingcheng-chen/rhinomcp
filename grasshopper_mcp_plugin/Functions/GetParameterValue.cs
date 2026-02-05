@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Grasshopper;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Newtonsoft.Json.Linq;
-using Rhino.Geometry;
 
 namespace GrasshopperMCPPlugin.Functions;
 
@@ -14,6 +10,8 @@ public partial class GrasshopperMCPFunctions
 {
     /// <summary>
     /// Get the value of a component's output parameter.
+    /// Supports both Python naming (instance_id, nickname, output_index, output_name)
+    /// and C# naming (component_id, param_index, param_name).
     /// </summary>
     public JObject GetParameterValue(JObject parameters)
     {
@@ -24,62 +22,28 @@ public partial class GrasshopperMCPFunctions
             throw new InvalidOperationException("No active Grasshopper document");
         }
 
-        var componentId = parameters["component_id"]?.ToString();
-        var paramName = parameters["param_name"]?.ToString();
-        var paramIndex = parameters["param_index"]?.ToObject<int?>() ?? null;
         var maxItems = parameters["max_items"]?.ToObject<int>() ?? 100;
 
-        if (string.IsNullOrEmpty(componentId))
-        {
-            throw new ArgumentException("component_id is required");
-        }
+        // Find component - supports instance_id, nickname, or component_id
+        var obj = ComponentHelper.FindComponent(doc, parameters);
 
-        // Find component
-        if (!Guid.TryParse(componentId, out var guid))
-        {
-            throw new ArgumentException($"Invalid component_id GUID: {componentId}");
-        }
-        var obj = doc.FindObject(guid, true);
-        if (obj == null)
-        {
-            throw new InvalidOperationException($"Component '{componentId}' not found");
-        }
+        // Get output parameter
+        var paramIndex = ComponentHelper.GetParamIndex(parameters, isOutput: true);
+        var paramName = ComponentHelper.GetParamName(parameters, isOutput: true);
 
-        // Get the output parameter
-        IGH_Param? outputParam = null;
-
-        if (obj is IGH_Component component)
-        {
-            if (paramIndex.HasValue && paramIndex.Value < component.Params.Output.Count)
-            {
-                outputParam = component.Params.Output[paramIndex.Value];
-            }
-            else if (!string.IsNullOrEmpty(paramName))
-            {
-                outputParam = component.Params.Output
-                    .FirstOrDefault(p => p.Name.Equals(paramName, StringComparison.OrdinalIgnoreCase)
-                                      || p.NickName.Equals(paramName, StringComparison.OrdinalIgnoreCase));
-            }
-            else if (component.Params.Output.Count == 1)
-            {
-                outputParam = component.Params.Output[0];
-            }
-        }
-        else if (obj is IGH_Param param)
-        {
-            outputParam = param;
-        }
+        var outputParam = ComponentHelper.FindOutputParam(obj, paramIndex, paramName);
 
         if (outputParam == null)
         {
-            throw new InvalidOperationException($"Could not find output parameter '{paramName}' on component");
+            throw new InvalidOperationException($"Could not find output parameter on component '{obj.NickName}'");
         }
 
         // Get the data
         var data = outputParam.VolatileData;
         var result = new JObject
         {
-            ["component_id"] = componentId,
+            ["instance_id"] = obj.InstanceGuid.ToString(),
+            ["nickname"] = obj.NickName,
             ["param_name"] = outputParam.Name,
             ["type_name"] = outputParam.TypeName,
             ["data_count"] = data.DataCount,

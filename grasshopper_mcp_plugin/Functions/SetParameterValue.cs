@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
@@ -14,6 +13,8 @@ public partial class GrasshopperMCPFunctions
 {
     /// <summary>
     /// Set the value of a component's input parameter.
+    /// Supports both Python naming (instance_id, nickname, input_index, input_name)
+    /// and C# naming (component_id, param_index, param_name).
     /// </summary>
     public JObject SetParameterValue(JObject parameters)
     {
@@ -24,60 +25,25 @@ public partial class GrasshopperMCPFunctions
             throw new InvalidOperationException("No active Grasshopper document");
         }
 
-        var componentId = parameters["component_id"]?.ToString();
-        var paramName = parameters["param_name"]?.ToString();
-        var paramIndex = parameters["param_index"]?.ToObject<int?>() ?? null;
         var value = parameters["value"];
-
-        if (string.IsNullOrEmpty(componentId))
-        {
-            throw new ArgumentException("component_id is required");
-        }
 
         if (value == null)
         {
             throw new ArgumentException("value is required");
         }
 
-        // Find component
-        if (!Guid.TryParse(componentId, out var guid))
-        {
-            throw new ArgumentException($"Invalid component_id GUID: {componentId}");
-        }
-        var obj = doc.FindObject(guid, true);
-        if (obj == null)
-        {
-            throw new InvalidOperationException($"Component '{componentId}' not found");
-        }
+        // Find component - supports instance_id, nickname, or component_id
+        var obj = ComponentHelper.FindComponent(doc, parameters);
 
-        // Get the input parameter
-        IGH_Param? inputParam = null;
+        // Get input parameter
+        var paramIndex = ComponentHelper.GetParamIndex(parameters, isOutput: false);
+        var paramName = ComponentHelper.GetParamName(parameters, isOutput: false);
 
-        if (obj is IGH_Component component)
-        {
-            if (paramIndex.HasValue && paramIndex.Value < component.Params.Input.Count)
-            {
-                inputParam = component.Params.Input[paramIndex.Value];
-            }
-            else if (!string.IsNullOrEmpty(paramName))
-            {
-                inputParam = component.Params.Input
-                    .FirstOrDefault(p => p.Name.Equals(paramName, StringComparison.OrdinalIgnoreCase)
-                                      || p.NickName.Equals(paramName, StringComparison.OrdinalIgnoreCase));
-            }
-            else if (component.Params.Input.Count == 1)
-            {
-                inputParam = component.Params.Input[0];
-            }
-        }
-        else if (obj is IGH_Param param)
-        {
-            inputParam = param;
-        }
+        var inputParam = ComponentHelper.FindInputParam(obj, paramIndex, paramName);
 
         if (inputParam == null)
         {
-            throw new InvalidOperationException($"Could not find input parameter '{paramName}' on component");
+            throw new InvalidOperationException($"Could not find input parameter on component '{obj.NickName}'");
         }
 
         // Set the value based on parameter type
@@ -88,9 +54,10 @@ public partial class GrasshopperMCPFunctions
 
         return new JObject
         {
-            ["component_id"] = componentId,
+            ["instance_id"] = obj.InstanceGuid.ToString(),
+            ["nickname"] = obj.NickName,
             ["param_name"] = inputParam.Name,
-            ["message"] = $"Set value on {obj.Name}.{inputParam.Name}"
+            ["message"] = $"Set value on {obj.NickName}.{inputParam.Name}"
         };
     }
 

@@ -13,6 +13,8 @@ public partial class GrasshopperMCPFunctions
 {
     /// <summary>
     /// Bake geometry from a component to the Rhino document.
+    /// Supports both Python naming (instance_id, nickname, output_index)
+    /// and C# naming (component_id, param_index).
     /// </summary>
     public JObject BakeComponent(JObject parameters)
     {
@@ -29,60 +31,32 @@ public partial class GrasshopperMCPFunctions
             throw new InvalidOperationException("No active Rhino document");
         }
 
-        var componentId = parameters["component_id"]?.ToString();
-        var paramName = parameters["param_name"]?.ToString();
-        var paramIndex = parameters["param_index"]?.ToObject<int?>() ?? null;
-        var layerName = parameters["layer"]?.ToString();
+        // Find component - supports instance_id, nickname, or component_id
+        var obj = ComponentHelper.FindComponent(ghDoc, parameters);
 
-        if (string.IsNullOrEmpty(componentId))
-        {
-            throw new ArgumentException("component_id is required");
-        }
+        // Get layer name (support both layer_name and layer)
+        var layerName = parameters["layer_name"]?.ToString()
+                     ?? parameters["layer"]?.ToString();
 
-        // Find component
-        if (!Guid.TryParse(componentId, out var guid))
-        {
-            throw new ArgumentException($"Invalid component_id GUID: {componentId}");
-        }
-        var obj = ghDoc.FindObject(guid, true);
-        if (obj == null)
-        {
-            throw new InvalidOperationException($"Component '{componentId}' not found");
-        }
+        // Get output parameter
+        var paramIndex = ComponentHelper.GetParamIndex(parameters, isOutput: true);
+        var paramName = ComponentHelper.GetParamName(parameters, isOutput: true);
 
-        // Get the output parameter to bake
-        IGH_Param? outputParam = null;
+        var outputParam = ComponentHelper.FindOutputParam(obj, paramIndex, paramName);
 
-        if (obj is IGH_Component component)
+        // If no specific output found, try to find first geometry output
+        if (outputParam == null && obj is IGH_Component component)
         {
-            if (paramIndex.HasValue && paramIndex.Value < component.Params.Output.Count)
-            {
-                outputParam = component.Params.Output[paramIndex.Value];
-            }
-            else if (!string.IsNullOrEmpty(paramName))
-            {
-                outputParam = component.Params.Output
-                    .FirstOrDefault(p => p.Name.Equals(paramName, StringComparison.OrdinalIgnoreCase)
-                                      || p.NickName.Equals(paramName, StringComparison.OrdinalIgnoreCase));
-            }
-            else if (component.Params.Output.Count >= 1)
-            {
-                // Find first geometry output
-                outputParam = component.Params.Output.FirstOrDefault(p =>
-                    p.TypeName.Contains("Geometry") ||
-                    p.TypeName.Contains("Curve") ||
-                    p.TypeName.Contains("Surface") ||
-                    p.TypeName.Contains("Brep") ||
-                    p.TypeName.Contains("Mesh") ||
-                    p.TypeName.Contains("Point"));
+            outputParam = component.Params.Output.FirstOrDefault(p =>
+                p.TypeName.Contains("Geometry") ||
+                p.TypeName.Contains("Curve") ||
+                p.TypeName.Contains("Surface") ||
+                p.TypeName.Contains("Brep") ||
+                p.TypeName.Contains("Mesh") ||
+                p.TypeName.Contains("Point"));
 
-                if (outputParam == null)
-                    outputParam = component.Params.Output[0];
-            }
-        }
-        else if (obj is IGH_Param param)
-        {
-            outputParam = param;
+            if (outputParam == null && component.Params.Output.Count > 0)
+                outputParam = component.Params.Output[0];
         }
 
         if (outputParam == null)
@@ -128,12 +102,13 @@ public partial class GrasshopperMCPFunctions
 
         return new JObject
         {
-            ["component_id"] = componentId,
+            ["instance_id"] = obj.InstanceGuid.ToString(),
+            ["nickname"] = obj.NickName,
             ["param_name"] = outputParam.Name,
             ["baked_count"] = bakedIds.Count,
-            ["baked_ids"] = resultIds,
+            ["object_ids"] = resultIds,
             ["layer"] = layerName ?? "Default",
-            ["message"] = $"Baked {bakedIds.Count} object(s) from {obj.Name}.{outputParam.Name}"
+            ["message"] = $"Baked {bakedIds.Count} object(s) from {obj.NickName}.{outputParam.Name}"
         };
     }
 }

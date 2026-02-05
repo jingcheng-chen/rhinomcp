@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Grasshopper;
 using Grasshopper.Kernel;
 using Newtonsoft.Json.Linq;
@@ -10,6 +9,8 @@ public partial class GrasshopperMCPFunctions
 {
     /// <summary>
     /// Connect two components by wiring an output to an input.
+    /// Supports both Python naming (source_instance_id, source_nickname, source_output)
+    /// and C# naming (source_id, source_param_index).
     /// </summary>
     public JObject ConnectComponents(JObject parameters)
     {
@@ -20,101 +21,32 @@ public partial class GrasshopperMCPFunctions
             throw new InvalidOperationException("No active Grasshopper document");
         }
 
-        // Get source component and parameter
-        var sourceId = parameters["source_id"]?.ToString();
-        var sourceParam = parameters["source_param"]?.ToString();
-        var sourceParamIndex = parameters["source_param_index"]?.ToObject<int?>() ?? null;
-
-        // Get target component and parameter
-        var targetId = parameters["target_id"]?.ToString();
-        var targetParam = parameters["target_param"]?.ToString();
-        var targetParamIndex = parameters["target_param_index"]?.ToObject<int?>() ?? null;
-
-        if (string.IsNullOrEmpty(sourceId) || string.IsNullOrEmpty(targetId))
-        {
-            throw new ArgumentException("Both source_id and target_id are required");
-        }
-
-        // Find source component
-        if (!Guid.TryParse(sourceId, out var sourceGuid))
-        {
-            throw new ArgumentException($"Invalid source_id GUID: {sourceId}");
-        }
-        var sourceObj = doc.FindObject(sourceGuid, true);
-        if (sourceObj == null)
-        {
-            throw new InvalidOperationException($"Source component '{sourceId}' not found");
-        }
+        // Find source component - supports instance_id, nickname, or id
+        var sourceObj = ComponentHelper.FindComponent(doc, parameters, "source_");
 
         // Find target component
-        if (!Guid.TryParse(targetId, out var targetGuid))
-        {
-            throw new ArgumentException($"Invalid target_id GUID: {targetId}");
-        }
-        var targetObj = doc.FindObject(targetGuid, true);
-        if (targetObj == null)
-        {
-            throw new InvalidOperationException($"Target component '{targetId}' not found");
-        }
+        var targetObj = ComponentHelper.FindComponent(doc, parameters, "target_");
 
-        // Get output parameter from source
-        IGH_Param? outputParam = null;
+        // Get source output parameter index/name
+        var sourceParamIndex = ComponentHelper.GetParamIndex(parameters, isOutput: true, "source_");
+        var sourceParamName = ComponentHelper.GetParamName(parameters, isOutput: true, "source_");
 
-        if (sourceObj is IGH_Component sourceComp)
-        {
-            if (sourceParamIndex.HasValue && sourceParamIndex.Value < sourceComp.Params.Output.Count)
-            {
-                outputParam = sourceComp.Params.Output[sourceParamIndex.Value];
-            }
-            else if (!string.IsNullOrEmpty(sourceParam))
-            {
-                outputParam = sourceComp.Params.Output
-                    .FirstOrDefault(p => p.Name.Equals(sourceParam, StringComparison.OrdinalIgnoreCase)
-                                      || p.NickName.Equals(sourceParam, StringComparison.OrdinalIgnoreCase));
-            }
-            else if (sourceComp.Params.Output.Count == 1)
-            {
-                outputParam = sourceComp.Params.Output[0];
-            }
-        }
-        else if (sourceObj is IGH_Param sourceP)
-        {
-            outputParam = sourceP;
-        }
+        // Get target input parameter index/name
+        var targetParamIndex = ComponentHelper.GetParamIndex(parameters, isOutput: false, "target_");
+        var targetParamName = ComponentHelper.GetParamName(parameters, isOutput: false, "target_");
 
+        // Find the output parameter
+        var outputParam = ComponentHelper.FindOutputParam(sourceObj, sourceParamIndex, sourceParamName);
         if (outputParam == null)
         {
-            throw new InvalidOperationException($"Could not find output parameter '{sourceParam}' on source component");
+            throw new InvalidOperationException($"Could not find output parameter on source component '{sourceObj.NickName}'");
         }
 
-        // Get input parameter from target
-        IGH_Param? inputParam = null;
-
-        if (targetObj is IGH_Component targetComp)
-        {
-            if (targetParamIndex.HasValue && targetParamIndex.Value < targetComp.Params.Input.Count)
-            {
-                inputParam = targetComp.Params.Input[targetParamIndex.Value];
-            }
-            else if (!string.IsNullOrEmpty(targetParam))
-            {
-                inputParam = targetComp.Params.Input
-                    .FirstOrDefault(p => p.Name.Equals(targetParam, StringComparison.OrdinalIgnoreCase)
-                                      || p.NickName.Equals(targetParam, StringComparison.OrdinalIgnoreCase));
-            }
-            else if (targetComp.Params.Input.Count == 1)
-            {
-                inputParam = targetComp.Params.Input[0];
-            }
-        }
-        else if (targetObj is IGH_Param targetP)
-        {
-            inputParam = targetP;
-        }
-
+        // Find the input parameter
+        var inputParam = ComponentHelper.FindInputParam(targetObj, targetParamIndex, targetParamName);
         if (inputParam == null)
         {
-            throw new InvalidOperationException($"Could not find input parameter '{targetParam}' on target component");
+            throw new InvalidOperationException($"Could not find input parameter on target component '{targetObj.NickName}'");
         }
 
         // Create the connection
@@ -125,11 +57,13 @@ public partial class GrasshopperMCPFunctions
 
         return new JObject
         {
-            ["source_id"] = sourceId,
+            ["source_id"] = sourceObj.InstanceGuid.ToString(),
+            ["source_nickname"] = sourceObj.NickName,
             ["source_param"] = outputParam.Name,
-            ["target_id"] = targetId,
+            ["target_id"] = targetObj.InstanceGuid.ToString(),
+            ["target_nickname"] = targetObj.NickName,
             ["target_param"] = inputParam.Name,
-            ["message"] = $"Connected {sourceObj.Name}.{outputParam.Name} to {targetObj.Name}.{inputParam.Name}"
+            ["message"] = $"Connected {sourceObj.NickName}.{outputParam.Name} to {targetObj.NickName}.{inputParam.Name}"
         };
     }
 }
