@@ -1,8 +1,8 @@
-from rhinomcp.server import main as server_main
-from rhinomcp.server import mcp
+from grasshoppermcp import main as server_main
+from grasshoppermcp import mcp
 
 def main():
-    """Entry point for the rhinomcp package"""
+    """Entry point for the grasshoppermcp package"""
     server_main()
 
 if __name__ == "__main__":
