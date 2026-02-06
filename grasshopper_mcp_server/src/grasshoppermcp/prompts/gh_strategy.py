@@ -24,33 +24,66 @@ def gh_general_strategy() -> str:
     - Groups and their contents
 
 
-    STEP 2: FIND COMPONENT NAMES
-    ----------------------------
-    Before creating components, find the correct names:
+    STEP 2: FIND COMPONENT NAMES (EFFICIENT APPROACH)
+    ------------------------------------------------
+    IMPORTANT: Do NOT call search_components multiple times for each component!
 
-    RESOURCES AVAILABLE:
-    └─ Read grasshopper://components/reference for full component list
-    └─ Read grasshopper://components/special for slider/toggle/panel details
+    RECOMMENDED WORKFLOW:
+    1. Use common component names directly (listed below) - they are verified to work
+    2. For uncommon components, use batch_search_components(queries=["A", "B", "C"])
+       to search multiple at once
 
-    TOOLS FOR DISCOVERY:
-    └─ search_components(query="slider") - find components by name/description
-    └─ list_component_categories() - see all available categories
+    COMMON COMPONENT NAMES (use exactly as shown - no search needed):
 
-    COMMON COMPONENT NAMES (use exactly as shown):
-    - "Number Slider" - numeric input (NOT just "Slider")
+    Inputs:
+    - "Number Slider" - numeric input (with min/max/value/decimals)
     - "Boolean Toggle" - true/false input
     - "Panel" - text display/input
-    - "Point" - point parameter (in Params category)
-    - "Construct Point" - create point from X,Y,Z coordinates
-    - "Circle" - circle from plane and radius
+    - "Point" - point parameter
+
+    Primitives:
+    - "Construct Point" - point from X,Y,Z
     - "Line" - line from two points
+    - "Circle" - circle from plane and radius
+    - "Rectangle" - rectangle from plane and size
+    - "Arc" - arc from plane, radius, angle
+    - "Polyline" - polyline from points
+
+    Surfaces:
     - "Extrude" - extrude curve along vector
     - "Loft" - surface from curves
+    - "Sweep1" - sweep along one rail
+    - "Pipe" - pipe along curve
+    - "Boundary Surfaces" - surface from closed curves
+
+    Transforms:
     - "Move" - translate geometry
+    - "Rotate" - rotate around axis
+    - "Scale" - scale geometry
+    - "Mirror" - mirror across plane
+
+    Math:
+    - "Addition" - add values
+    - "Multiplication" - multiply values
+    - "Division" - divide values
     - "Series" - generate number sequence
     - "Range" - numbers in domain
+    - "Random" - random numbers
+
+    Lists:
     - "List Item" - get item by index
     - "Merge" - combine data streams
+    - "Flatten" - flatten tree
+    - "Graft" - graft to branches
+
+    Vectors:
+    - "Unit X" / "Unit Y" / "Unit Z" - unit vectors
+    - "Vector XYZ" - vector from components
+    - "Amplitude" - set vector length
+
+    ONLY USE SEARCH FOR UNCOMMON COMPONENTS:
+    └─ batch_search_components(queries=["ComponentA", "ComponentB"]) - search multiple at once
+    └─ search_components(query="specific") - only for single unusual component
 
 
     STEP 3: CHOOSE THE RIGHT TOOL

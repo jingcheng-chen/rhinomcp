@@ -137,6 +137,84 @@ public partial class GrasshopperMCPFunctions
     }
 
     /// <summary>
+    /// Batch search for multiple components at once.
+    /// More efficient than multiple individual searches.
+    /// </summary>
+    public JObject BatchSearchComponents(JObject parameters)
+    {
+        var queries = parameters["queries"]?.ToObject<List<string>>() ?? new List<string>();
+
+        if (queries.Count == 0)
+        {
+            return new JObject
+            {
+                ["results"] = new JObject(),
+                ["found_count"] = 0,
+                ["not_found"] = new JArray(),
+                ["message"] = "No queries provided"
+            };
+        }
+
+        var results = new JObject();
+        var notFound = new JArray();
+        var foundCount = 0;
+
+        var proxies = Instances.ComponentServer.ObjectProxies.ToList();
+
+        foreach (var query in queries)
+        {
+            if (string.IsNullOrWhiteSpace(query)) continue;
+
+            // Try exact match first
+            var match = proxies.FirstOrDefault(p =>
+                p.Desc.Name.Equals(query, StringComparison.OrdinalIgnoreCase));
+
+            // Try nickname match
+            if (match == null)
+            {
+                match = proxies.FirstOrDefault(p =>
+                    p.Desc.NickName?.Equals(query, StringComparison.OrdinalIgnoreCase) == true);
+            }
+
+            // Try contains match
+            if (match == null)
+            {
+                match = proxies.FirstOrDefault(p =>
+                    p.Desc.Name.Contains(query, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (match != null)
+            {
+                results[query] = new JObject
+                {
+                    ["name"] = match.Desc.Name,
+                    ["nickname"] = match.Desc.NickName,
+                    ["category"] = match.Desc.Category,
+                    ["subcategory"] = match.Desc.SubCategory,
+                    ["guid"] = match.Guid.ToString()
+                };
+                foundCount++;
+            }
+            else
+            {
+                results[query] = null;
+                notFound.Add(query);
+            }
+        }
+
+        return new JObject
+        {
+            ["results"] = results,
+            ["found_count"] = foundCount,
+            ["total_queries"] = queries.Count,
+            ["not_found"] = notFound,
+            ["message"] = notFound.Count == 0
+                ? $"Found all {foundCount} components"
+                : $"Found {foundCount}/{queries.Count} components. Not found: {string.Join(", ", notFound)}"
+        };
+    }
+
+    /// <summary>
     /// List all component categories in Grasshopper.
     /// </summary>
     public JObject ListComponentCategories(JObject parameters)

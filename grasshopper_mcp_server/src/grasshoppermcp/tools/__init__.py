@@ -17,6 +17,7 @@ from grasshoppermcp.tools.create_definition import create_definition
 from grasshoppermcp.tools.search_components import search_components
 from grasshoppermcp.tools.list_component_categories import list_component_categories
 from grasshoppermcp.tools.get_available_components import get_available_components
+from grasshoppermcp.tools.batch_search_components import batch_search_components
 
 __all__ = [
     "get_gh_document_info",
@@ -34,6 +35,7 @@ __all__ = [
     "get_canvas_state",
     "create_definition",
     "search_components",
+    "batch_search_components",
     "list_component_categories",
     "get_available_components",
 ]
