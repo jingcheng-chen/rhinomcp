@@ -185,6 +185,61 @@ public partial class GrasshopperMCPFunctions
             return group;
         }
 
+        // Integer Slider
+        if (normalizedName.Equals("Integer Slider", StringComparison.OrdinalIgnoreCase) ||
+            normalizedName.Equals("Int Slider", StringComparison.OrdinalIgnoreCase))
+        {
+            var slider = new GH_NumberSlider();
+            var min = spec["min"]?.ToObject<decimal>() ?? 0;
+            var max = spec["max"]?.ToObject<decimal>() ?? 100;
+            var value = spec["value"]?.ToObject<decimal>() ?? Math.Round((min + max) / 2);
+
+            slider.Slider.Minimum = min;
+            slider.Slider.Maximum = max;
+            slider.Slider.Value = value;
+            slider.Slider.DecimalPlaces = 0; // Integer mode
+            return slider;
+        }
+
+        // Gradient
+        if (normalizedName.Equals("Gradient", StringComparison.OrdinalIgnoreCase) ||
+            normalizedName.Equals("Gradient Control", StringComparison.OrdinalIgnoreCase))
+        {
+            var gradient = new GH_GradientControl();
+            return gradient;
+        }
+
+        // Clock/Timer
+        if (normalizedName.Equals("Timer", StringComparison.OrdinalIgnoreCase))
+        {
+            var timer = new GH_Timer();
+            return timer;
+        }
+
+        // Graph Mapper
+        if (normalizedName.Equals("Graph Mapper", StringComparison.OrdinalIgnoreCase) ||
+            normalizedName.Equals("GraphMapper", StringComparison.OrdinalIgnoreCase))
+        {
+            var mapper = new GH_GraphMapper();
+            return mapper;
+        }
+
+        // MD Slider (multi-dimensional)
+        if (normalizedName.Equals("MD Slider", StringComparison.OrdinalIgnoreCase) ||
+            normalizedName.Equals("Multidimensional Slider", StringComparison.OrdinalIgnoreCase))
+        {
+            var mdslider = new GH_MultiDimensionalSlider();
+            return mdslider;
+        }
+
+        // Data Recorder
+        if (normalizedName.Equals("Data Recorder", StringComparison.OrdinalIgnoreCase) ||
+            normalizedName.Equals("Recorder", StringComparison.OrdinalIgnoreCase))
+        {
+            var recorder = new GH_DataRecorder();
+            return recorder;
+        }
+
         // Not a known special component
         return null;
     }
@@ -293,9 +348,39 @@ public partial class GrasshopperMCPFunctions
             results["errors"] = errors;
         }
 
-        results["message"] = errors.Count == 0
-            ? $"Successfully created definition with {componentResults.Count} components, {connectionResults.Count} connections, {valueResults.Count} values"
-            : $"Created definition with {errors.Count} error(s)";
+        // Build detailed message
+        if (errors.Count == 0)
+        {
+            results["message"] = $"Successfully created definition with {componentResults.Count} components, {connectionResults.Count} connections, {valueResults.Count} values";
+        }
+        else
+        {
+            // Summarize errors by phase
+            var componentErrors = errors.Where(e => e["phase"]?.ToString() == "component_creation").ToList();
+            var connectionErrors = errors.Where(e => e["phase"]?.ToString() == "connection").ToList();
+            var valueErrors = errors.Where(e => e["phase"]?.ToString() == "set_value").ToList();
+
+            var errorSummary = new List<string>();
+
+            if (componentErrors.Any())
+            {
+                var failedNames = componentErrors.Select(e => e["spec"]?["name"]?.ToString() ?? "unknown").Take(3);
+                errorSummary.Add($"Failed components: {string.Join(", ", failedNames)}");
+            }
+            if (connectionErrors.Any())
+            {
+                var failedConns = connectionErrors.Select(e =>
+                    $"{e["spec"]?["source"]}->{e["spec"]?["target"]}").Take(3);
+                errorSummary.Add($"Failed connections: {string.Join(", ", failedConns)}");
+            }
+            if (valueErrors.Any())
+            {
+                var failedVals = valueErrors.Select(e => e["spec"]?["component"]?.ToString() ?? "unknown").Take(3);
+                errorSummary.Add($"Failed values: {string.Join(", ", failedVals)}");
+            }
+
+            results["message"] = $"Created {componentResults.Count} components with {errors.Count} error(s). {string.Join("; ", errorSummary)}";
+        }
 
         return results;
     }

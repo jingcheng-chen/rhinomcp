@@ -28,18 +28,29 @@ def gh_general_strategy() -> str:
     ----------------------------
     Before creating components, find the correct names:
 
-    Search for components:
-    └─ Use search_components(query="slider") to find matching components
-       Returns: name, nickname, category, subcategory, description, guid
+    RESOURCES AVAILABLE:
+    └─ Read grasshopper://components/reference for full component list
+    └─ Read grasshopper://components/special for slider/toggle/panel details
 
-    List all categories:
-    └─ Use list_component_categories() to see available categories
+    TOOLS FOR DISCOVERY:
+    └─ search_components(query="slider") - find components by name/description
+    └─ list_component_categories() - see all available categories
 
-    Common component names:
-    - "Number Slider" (not just "Slider")
-    - "Point" (Params category for point input)
-    - "Construct Point" (for creating points from X,Y,Z)
-    - "Circle" (for circle geometry)
+    COMMON COMPONENT NAMES (use exactly as shown):
+    - "Number Slider" - numeric input (NOT just "Slider")
+    - "Boolean Toggle" - true/false input
+    - "Panel" - text display/input
+    - "Point" - point parameter (in Params category)
+    - "Construct Point" - create point from X,Y,Z coordinates
+    - "Circle" - circle from plane and radius
+    - "Line" - line from two points
+    - "Extrude" - extrude curve along vector
+    - "Loft" - surface from curves
+    - "Move" - translate geometry
+    - "Series" - generate number sequence
+    - "Range" - numbers in domain
+    - "List Item" - get item by index
+    - "Merge" - combine data streams
 
 
     STEP 3: CHOOSE THE RIGHT TOOL

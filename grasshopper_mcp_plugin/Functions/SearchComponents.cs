@@ -76,6 +76,67 @@ public partial class GrasshopperMCPFunctions
     }
 
     /// <summary>
+    /// Get all available components from the Grasshopper library.
+    /// Returns everything installed, including third-party plugins.
+    /// </summary>
+    public JObject GetAvailableComponents(JObject parameters)
+    {
+        var category = parameters["category"]?.ToString();
+        var limit = parameters["limit"]?.ToObject<int>() ?? 500;
+        var includeDescription = parameters["include_description"]?.ToObject<bool>() ?? false;
+
+        var results = new JArray();
+        var proxies = Instances.ComponentServer.ObjectProxies;
+        var categories = new HashSet<string>();
+
+        IEnumerable<IGH_ObjectProxy> filtered = proxies;
+
+        // Filter by category if specified
+        if (!string.IsNullOrEmpty(category))
+        {
+            filtered = filtered.Where(p =>
+                p.Desc.Category?.Contains(category, StringComparison.OrdinalIgnoreCase) == true);
+        }
+
+        // Order by category then name
+        filtered = filtered.OrderBy(p => p.Desc.Category).ThenBy(p => p.Desc.Name);
+
+        foreach (var proxy in filtered.Take(limit))
+        {
+            if (!string.IsNullOrEmpty(proxy.Desc.Category))
+            {
+                categories.Add(proxy.Desc.Category);
+            }
+
+            var comp = new JObject
+            {
+                ["name"] = proxy.Desc.Name,
+                ["nickname"] = proxy.Desc.NickName,
+                ["category"] = proxy.Desc.Category,
+                ["subcategory"] = proxy.Desc.SubCategory,
+                ["guid"] = proxy.Guid.ToString()
+            };
+
+            if (includeDescription)
+            {
+                comp["description"] = proxy.Desc.Description;
+            }
+
+            results.Add(comp);
+        }
+
+        return new JObject
+        {
+            ["count"] = results.Count,
+            ["total_available"] = proxies.Count(),
+            ["category_filter"] = category,
+            ["categories"] = new JArray(categories.OrderBy(c => c)),
+            ["components"] = results,
+            ["message"] = $"Found {results.Count} components" + (category != null ? $" in category '{category}'" : "")
+        };
+    }
+
+    /// <summary>
     /// List all component categories in Grasshopper.
     /// </summary>
     public JObject ListComponentCategories(JObject parameters)

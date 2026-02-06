@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Grasshopper;
 using Grasshopper.Kernel;
 using Newtonsoft.Json.Linq;
@@ -51,30 +52,86 @@ public partial class GrasshopperMCPFunctions
             }
         }
 
-        // Get solution statistics
+        // Get solution statistics and collect error/warning details
         var errorCount = 0;
         var warningCount = 0;
+        var errors = new JArray();
+        var warnings = new JArray();
 
         foreach (var obj in doc.Objects)
         {
             if (obj is IGH_ActiveObject activeObj)
             {
-                if (activeObj.RuntimeMessageLevel == GH_RuntimeMessageLevel.Error)
-                    errorCount++;
-                else if (activeObj.RuntimeMessageLevel == GH_RuntimeMessageLevel.Warning)
-                    warningCount++;
+                var level = activeObj.RuntimeMessageLevel;
+
+                if (level == GH_RuntimeMessageLevel.Error || level == GH_RuntimeMessageLevel.Warning)
+                {
+                    // Collect all runtime messages from this component
+                    var messages = new JArray();
+                    foreach (var msg in activeObj.RuntimeMessages(level))
+                    {
+                        messages.Add(msg);
+                    }
+
+                    var componentInfo = new JObject
+                    {
+                        ["instance_id"] = obj.InstanceGuid.ToString(),
+                        ["name"] = obj.Name,
+                        ["nickname"] = obj.NickName,
+                        ["category"] = obj.Category,
+                        ["messages"] = messages
+                    };
+
+                    if (level == GH_RuntimeMessageLevel.Error)
+                    {
+                        errorCount++;
+                        errors.Add(componentInfo);
+                    }
+                    else
+                    {
+                        warningCount++;
+                        warnings.Add(componentInfo);
+                    }
+                }
             }
         }
 
-        return new JObject
+        var result = new JObject
         {
-            ["success"] = true,
+            ["success"] = errorCount == 0,
             ["solution_state"] = doc.SolutionState.ToString(),
             ["error_count"] = errorCount,
-            ["warning_count"] = warningCount,
-            ["message"] = errorCount > 0
-                ? $"Solution completed with {errorCount} error(s) and {warningCount} warning(s)"
-                : "Solution completed successfully"
+            ["warning_count"] = warningCount
         };
+
+        // Include detailed error information
+        if (errors.Count > 0)
+        {
+            result["errors"] = errors;
+        }
+
+        // Include warnings if present
+        if (warnings.Count > 0)
+        {
+            result["warnings"] = warnings;
+        }
+
+        // Build helpful message
+        if (errorCount > 0)
+        {
+            var errorSummary = string.Join("; ", errors.Take(3).Select(e =>
+                $"{e["nickname"]}: {string.Join(", ", ((JArray)e["messages"]).Take(1))}"));
+            result["message"] = $"Solution has {errorCount} error(s): {errorSummary}";
+        }
+        else if (warningCount > 0)
+        {
+            result["message"] = $"Solution completed with {warningCount} warning(s)";
+        }
+        else
+        {
+            result["message"] = "Solution completed successfully";
+        }
+
+        return result;
     }
 }

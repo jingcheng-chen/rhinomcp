@@ -38,6 +38,13 @@ from .tools.create_definition import create_definition
 # Search tools
 from .tools.search_components import search_components
 from .tools.list_component_categories import list_component_categories
+from .tools.get_available_components import get_available_components
+
+# Resources
+from .resources.component_reference import (
+    component_reference_resource,
+    special_components_resource,
+)
 
 
 def main():
