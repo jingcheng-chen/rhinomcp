@@ -18,6 +18,7 @@
     <PackageReference Include="Grasshopper" Version="8.17.25066.7001" ExcludeAssets="runtime" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RhinoCommon" Version="8.17.25066.7001" ExcludeAssets="runtime" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
   </ItemGroup>
 
   <!-- Shared library files (linked, not copied) -->
