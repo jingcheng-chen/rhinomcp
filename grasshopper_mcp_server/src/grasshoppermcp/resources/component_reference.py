@@ -347,3 +347,338 @@ These components are in Grasshopper.Kernel.Special namespace and require direct 
 - **Properties**: group_name
 - **Description**: Visual grouping of components
 """
+
+
+# Use-case organized guide - helps AI understand WHAT to use for specific tasks
+USE_CASE_GUIDE = """
+# Grasshopper Component Guide by Use Case
+
+This guide helps you choose the right components for common tasks.
+Use get_component_type_info(name="ComponentName") to check inputs before creating.
+
+## CREATING WAVE/SINUSOIDAL PATTERNS
+
+### Simple Approach (RECOMMENDED)
+Use dedicated trig components instead of Expression:
+- "Sine" - Takes angle, outputs sine value
+- "Cosine" - Takes angle, outputs cosine value
+- "Tangent" - Takes angle, outputs tangent value
+
+Example workflow for a sine wave:
+```
+Series (0 to 2*Pi) → Sine → Construct Point (use result as Y or Z)
+```
+
+Components needed:
+1. "Series" - generates values from 0 to n (inputs: Start, Step, Count)
+2. "Sine" - calculates sine (input: Value in radians)
+3. "Multiplication" - scale the result (inputs: A, B)
+4. "Construct Point" - create points from X, Y, Z values
+
+### DO NOT use Expression for simple trig!
+Expression has DYNAMIC inputs (only x, y by default). It's complex and error-prone.
+
+---
+
+## CREATING GRIDS OF POINTS
+
+### Rectangular Grid
+- "Square Grid" - uniform grid (inputs: Plane, Size, ExtX, ExtY)
+- "Rectangular Grid" - non-uniform (inputs: Plane, SizeX, SizeY, ExtX, ExtY)
+
+### Custom Grid
+Use nested Series:
+1. "Series" for X coordinates
+2. "Series" for Y coordinates
+3. "Cross Reference" to combine
+4. "Construct Point" from the coordinates
+
+---
+
+## CREATING PARAMETRIC FACADES
+
+Typical component flow:
+1. Grid of points: "Rectangular Grid" or "Square Grid"
+2. Displacement: "Move" with vectors from "Sine"/"Cosine" calculations
+3. Curves through points: "Interpolate" (creates smooth curve through points)
+4. Surface from curves: "Loft" or "Sweep1"
+5. Thickness: "Extrude" with "Unit X/Y/Z" vector
+
+Key components:
+- "Divide Surface" - get points on a surface (inputs: Surface, U count, V count)
+- "Interpolate" - smooth curve through points (inputs: Vertices, Degree, Periodic)
+- "Loft" - surface from multiple curves (inputs: Curves, Options)
+
+---
+
+## MATHEMATICAL OPERATIONS
+
+### Basic Math (use these, not Expression!)
+- "Addition" - A + B (can chain multiple inputs)
+- "Subtraction" - A - B
+- "Multiplication" - A * B
+- "Division" - A / B
+- "Power" - base^exponent
+- "Modulus" - remainder of division
+
+### Trigonometry (use these, not Expression!)
+- "Sine" - sin(x) where x is in radians
+- "Cosine" - cos(x)
+- "Tangent" - tan(x)
+- "Pi" - multiply factor by Pi
+
+### Number Sequences
+- "Series" - start, step, count → list of numbers
+- "Range" - domain, steps → evenly spaced numbers
+- "Random" - random numbers in domain
+
+### Remapping Values
+- "Remap Numbers" - map value from source domain to target domain
+- "Construct Domain" - create domain from min/max
+
+---
+
+## CREATING CURVES
+
+### Straight Lines
+- "Line" - from Start point to End point
+- "Line SDL" - from Start, Direction vector, Length
+
+### Circles and Arcs
+- "Circle" - from Plane and Radius (input 0: Plane, input 1: Radius)
+- "Arc" - from Plane, Radius, and Angle
+- "Arc 3Pt" - through three points
+
+### Curves Through Points
+- "Polyline" - straight segments through points
+- "Interpolate" - smooth curve through points (NURBS)
+- "Nurbs Curve" - control point curve
+
+### Rectangles
+- "Rectangle" - from Plane, X size, Y size
+  IMPORTANT: X and Y inputs expect NUMBER values, not Domains!
+  Input 0: Plane, Input 1: X size, Input 2: Y size
+
+---
+
+## CREATING SURFACES
+
+### From Curves
+- "Loft" - surface through multiple curves
+- "Sweep1" - sweep section along one rail
+- "Sweep2" - sweep between two rails
+- "Boundary Surfaces" - fill closed planar curves
+
+### From Points/Curves
+- "Extrude" - extend curve along vector (inputs: Base, Direction)
+- "Pipe" - tube along curve (inputs: Curve, Radius)
+- "Revolution" - rotate curve around axis
+
+### Primitives
+- "Sphere" - from base plane and radius
+- "Box" - from base plane and X, Y, Z sizes
+- "Cylinder" - from base, radius, length
+
+---
+
+## TRANSFORMATIONS
+
+### Move/Translate
+- "Move" - geometry + translation vector
+  Create vectors with: "Unit X", "Unit Y", "Unit Z", "Vector XYZ"
+
+### Rotate
+- "Rotate" - geometry + angle + plane (rotates around plane Z axis)
+- "Rotate Axis" - geometry + angle + specific axis
+
+### Scale
+- "Scale" - uniform scale from center point
+- "Scale NU" - non-uniform scale (different X, Y, Z factors)
+
+### Arrays/Patterns
+- "Linear Array" - repeat along direction
+- "Polar Array" - repeat around center
+- "Rectangular Array" - 2D grid of copies
+
+---
+
+## GOTCHAS AND WARNINGS
+
+### Expression Component - AVOID for simple math!
+- Only has "x" and "y" inputs by default
+- Additional inputs must be added manually in GH UI
+- Use dedicated math components instead (Sine, Cosine, Addition, etc.)
+
+### Rectangle Component
+- Inputs expect NUMBER values for X and Y sizes, NOT domains
+- Common error: "Data conversion failed from Domain to Rectangle"
+- Correct: connect Number Slider directly to X and Y inputs
+
+### Circle Component
+- Input 0 is Plane (optional, defaults to XY plane)
+- Input 1 is Radius (required)
+
+### Interpolate vs Polyline
+- Interpolate creates SMOOTH curves (NURBS)
+- Polyline creates STRAIGHT segments between points
+
+### Domain vs Number
+- Some components expect Domains (min/max range): "Remap Numbers"
+- Most expect Numbers: "Rectangle", "Circle", etc.
+- Use "Construct Domain" to create domains from numbers
+
+---
+
+## QUICK COMPONENT LOOKUP
+
+Inputs: "Number Slider", "Panel", "Boolean Toggle", "Point"
+Math: "Addition", "Multiplication", "Division", "Sine", "Cosine", "Series", "Range"
+Points: "Construct Point", "Deconstruct Point", "Distance"
+Vectors: "Unit X", "Unit Y", "Unit Z", "Vector XYZ", "Amplitude"
+Curves: "Line", "Circle", "Rectangle", "Arc", "Polyline", "Interpolate"
+Surfaces: "Extrude", "Loft", "Sweep1", "Pipe", "Boundary Surfaces"
+Transform: "Move", "Rotate", "Scale", "Mirror"
+Lists: "List Item", "Merge", "Flatten", "Graft", "Reverse List"
+"""
+
+
+@mcp.resource("grasshopper://components/guide")
+def component_guide_resource() -> str:
+    """
+    Use-case organized guide for Grasshopper components.
+    Helps you choose the right components for common tasks.
+    Includes warnings about problematic components.
+    """
+    return USE_CASE_GUIDE
+
+
+@mcp.resource("grasshopper://components/gotchas")
+def component_gotchas_resource() -> str:
+    """
+    Known issues and warnings for Grasshopper components.
+    Check this before using unfamiliar components.
+    """
+    return """# Grasshopper Component Gotchas
+
+## Expression Component - AVOID for simple math!
+**Problem**: Expression only has "x" and "y" inputs by default. You cannot add more inputs via MCP.
+
+**Solution**: Use dedicated math components instead:
+- For sin(x): Use "Sine" component
+- For cos(x): Use "Cosine" component
+- For x + y: Use "Addition" component
+- For x * y: Use "Multiplication" component
+- For x^n: Use "Power" component
+
+**If you must use Expression**:
+1. Create it with just x, y variables
+2. Set formula with: set_parameter_value(nickname="Expr", value="x*sin(y)")
+
+---
+
+## Rectangle Component
+**Problem**: "Data conversion failed from Domain to Rectangle"
+
+**Cause**: Rectangle expects NUMBER inputs for X and Y sizes, not Domains.
+
+**Wrong**:
+```json
+{"source": "DomainComponent", "target": "Rect", "target_input": 1}
+```
+
+**Correct**:
+```json
+{"source": "NumberSlider", "target": "Rect", "target_input": 1}
+```
+
+Input mapping:
+- Input 0: Plane (optional)
+- Input 1: X Size (Number)
+- Input 2: Y Size (Number)
+- Input 3: Radius (Number, for rounded corners)
+
+---
+
+## Circle Component
+**Problem**: Circle not appearing or wrong position
+
+**Cause**: Input order confusion
+
+Input mapping:
+- Input 0: Plane (defines center and orientation)
+- Input 1: Radius (Number)
+
+To place at a point, connect point to the Plane input or create plane at point.
+
+---
+
+## Loft Component
+**Problem**: Loft creates twisted or incorrect surface
+
+**Cause**: Curves not in correct order or orientations flipped
+
+**Solutions**:
+1. Ensure curves are ordered from bottom to top (or start to end)
+2. Use "Flip Curve" if curves have inconsistent directions
+3. Check "Loft Options" for alignment settings
+
+---
+
+## Divide Curve vs Divide Surface
+**Divide Curve**: Creates points ALONG a curve
+- Inputs: Curve, Count (number of segments)
+- Outputs: Points, Tangents, Parameters
+
+**Divide Surface**: Creates grid of points ON a surface
+- Inputs: Surface, U count, V count
+- Outputs: Points, Normals, Parameters
+
+---
+
+## Series vs Range
+**Series**: Start + Step × n
+- Series(0, 1, 5) → [0, 1, 2, 3, 4]
+- Inputs: Start, Step, Count
+
+**Range**: Evenly divide a domain
+- Range(0 to 10, 5) → [0, 2.5, 5, 7.5, 10]
+- Inputs: Domain, Steps
+
+---
+
+## Move Component
+**Problem**: Geometry doesn't move or moves wrong direction
+
+**Cause**: Motion vector not correctly defined
+
+Input mapping:
+- Input 0: Geometry
+- Input 1: Motion (Vector)
+
+Create vectors with:
+- "Unit X/Y/Z" for axis-aligned motion
+- "Vector XYZ" for custom direction
+- Multiply vector by number for distance
+
+---
+
+## Script Components (C#, Python, VB)
+**Problem**: Wrong number of inputs/outputs
+
+**Cause**: Script components have CONFIGURABLE inputs/outputs that can only be set in the GH UI.
+
+**Solution**: For complex logic, use multiple standard components chained together, or use the execute_csharp_code tool for procedural operations.
+
+---
+
+## Data Tree Mismatches
+**Problem**: Component produces unexpected results or "1 item" when expecting many
+
+**Cause**: Data tree structure mismatch between inputs
+
+**Solutions**:
+- "Flatten" - collapse tree to single list
+- "Graft" - wrap each item in its own branch
+- "Simplify" - remove redundant tree levels
+- "Cross Reference" - combine lists in specific patterns
+"""

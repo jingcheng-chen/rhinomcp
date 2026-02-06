@@ -242,4 +242,177 @@ public partial class GrasshopperMCPFunctions
             ["categories"] = new JArray(categories)
         };
     }
+
+    /// <summary>
+    /// Get detailed type information about a component BEFORE creating it.
+    /// This helps understand what inputs/outputs a component has.
+    /// </summary>
+    public JObject GetComponentTypeInfo(JObject parameters)
+    {
+        var componentName = parameters["name"]?.ToString();
+        var componentGuid = parameters["guid"]?.ToString();
+
+        if (string.IsNullOrEmpty(componentName) && string.IsNullOrEmpty(componentGuid))
+        {
+            return new JObject
+            {
+                ["success"] = false,
+                ["message"] = "Either 'name' or 'guid' is required"
+            };
+        }
+
+        // Find the component proxy
+        IGH_ObjectProxy? proxy = null;
+        var proxies = Instances.ComponentServer.ObjectProxies;
+
+        // Try by GUID first
+        if (!string.IsNullOrEmpty(componentGuid) && Guid.TryParse(componentGuid, out var guid))
+        {
+            proxy = proxies.FirstOrDefault(p => p.Guid == guid);
+        }
+
+        // Try by name
+        if (proxy == null && !string.IsNullOrEmpty(componentName))
+        {
+            // Exact match first
+            proxy = proxies.FirstOrDefault(p =>
+                p.Desc.Name.Equals(componentName, StringComparison.OrdinalIgnoreCase));
+
+            // Try nickname
+            if (proxy == null)
+            {
+                proxy = proxies.FirstOrDefault(p =>
+                    p.Desc.NickName?.Equals(componentName, StringComparison.OrdinalIgnoreCase) == true);
+            }
+
+            // Try contains
+            if (proxy == null)
+            {
+                proxy = proxies.FirstOrDefault(p =>
+                    p.Desc.Name.Contains(componentName, StringComparison.OrdinalIgnoreCase));
+            }
+        }
+
+        if (proxy == null)
+        {
+            // Try to find similar components for suggestions
+            var suggestions = proxies
+                .Where(p => p.Desc.Name.Contains(componentName?.Substring(0, Math.Min(3, componentName?.Length ?? 0)) ?? "", StringComparison.OrdinalIgnoreCase))
+                .Take(5)
+                .Select(p => p.Desc.Name)
+                .ToList();
+
+            return new JObject
+            {
+                ["success"] = false,
+                ["message"] = $"Component '{componentName}' not found",
+                ["suggestions"] = suggestions.Count > 0 ? new JArray(suggestions) : null
+            };
+        }
+
+        // Create a temporary instance to get input/output information
+        var result = new JObject
+        {
+            ["success"] = true,
+            ["name"] = proxy.Desc.Name,
+            ["nickname"] = proxy.Desc.NickName,
+            ["category"] = proxy.Desc.Category,
+            ["subcategory"] = proxy.Desc.SubCategory,
+            ["description"] = proxy.Desc.Description,
+            ["guid"] = proxy.Guid.ToString()
+        };
+
+        // Try to create an instance to get detailed parameter info
+        try
+        {
+            var instance = proxy.CreateInstance();
+            if (instance is IGH_Component component)
+            {
+                // Get inputs
+                var inputs = new JArray();
+                foreach (var input in component.Params.Input)
+                {
+                    inputs.Add(new JObject
+                    {
+                        ["index"] = component.Params.Input.IndexOf(input),
+                        ["name"] = input.Name,
+                        ["nickname"] = input.NickName,
+                        ["description"] = input.Description,
+                        ["type"] = input.TypeName,
+                        ["access"] = input.Access.ToString(),
+                        ["optional"] = input.Optional
+                    });
+                }
+                result["inputs"] = inputs;
+                result["input_count"] = inputs.Count;
+
+                // Get outputs
+                var outputs = new JArray();
+                foreach (var output in component.Params.Output)
+                {
+                    outputs.Add(new JObject
+                    {
+                        ["index"] = component.Params.Output.IndexOf(output),
+                        ["name"] = output.Name,
+                        ["nickname"] = output.NickName,
+                        ["description"] = output.Description,
+                        ["type"] = output.TypeName
+                    });
+                }
+                result["outputs"] = outputs;
+                result["output_count"] = outputs.Count;
+
+                // Add warnings for special components
+                AddComponentWarnings(result, proxy.Desc.Name);
+            }
+            else if (instance is IGH_Param param)
+            {
+                result["is_parameter"] = true;
+                result["type_name"] = param.TypeName;
+                result["inputs"] = new JArray { new JObject { ["index"] = 0, ["name"] = "Input", ["type"] = param.TypeName } };
+                result["outputs"] = new JArray { new JObject { ["index"] = 0, ["name"] = "Output", ["type"] = param.TypeName } };
+                result["input_count"] = 1;
+                result["output_count"] = 1;
+            }
+        }
+        catch (Exception ex)
+        {
+            result["warning"] = $"Could not create instance for detailed info: {ex.Message}";
+            // Still return basic info from proxy
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Add warnings about known problematic components.
+    /// </summary>
+    private void AddComponentWarnings(JObject result, string componentName)
+    {
+        var warnings = new JArray();
+
+        if (componentName.Equals("Expression", StringComparison.OrdinalIgnoreCase) ||
+            componentName.Equals("Evaluate", StringComparison.OrdinalIgnoreCase))
+        {
+            warnings.Add("Expression has DYNAMIC inputs (x, y by default). Additional inputs must be added manually in GH UI.");
+            warnings.Add("Consider using dedicated math components instead: 'Sine', 'Cosine', 'Tangent', 'Addition', 'Multiplication'");
+            result["dynamic_inputs"] = true;
+        }
+
+        if (componentName.Equals("Python", StringComparison.OrdinalIgnoreCase) ||
+            componentName.Contains("Script", StringComparison.OrdinalIgnoreCase))
+        {
+            warnings.Add("Script components have configurable inputs/outputs. Default inputs may differ from what you expect.");
+        }
+
+        if (componentName.Equals("Cluster", StringComparison.OrdinalIgnoreCase))
+        {
+            warnings.Add("Cluster inputs/outputs depend on cluster definition.");
+        }
+
+        if (warnings.Count > 0)
+        {
+            result["warnings"] = warnings;
+        }
+    }
 }

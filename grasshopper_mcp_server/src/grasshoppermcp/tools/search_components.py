@@ -15,10 +15,12 @@ def search_components(
     """
     Search for a component by name. Only needed for UNCOMMON components!
 
-    MOST COMPONENTS DON'T NEED SEARCH - use these names directly in create_definition:
+    MOST COMPONENTS DON'T NEED SEARCH - use directly in create_definition:
     "Number Slider", "Panel", "Point", "Line", "Circle", "Rectangle",
     "Extrude", "Loft", "Move", "Rotate", "Scale", "Series", "Range",
-    "Addition", "Multiplication", "Unit X", "Unit Y", "Unit Z", etc.
+    "Addition", "Multiplication", "Sine", "Cosine", "Tangent",
+    "Unit X", "Unit Y", "Unit Z", "Construct Point", "Interpolate",
+    "Cross Reference", "Graft", "Flatten", "Merge", etc.
 
     Only use search for unusual or third-party components.
 

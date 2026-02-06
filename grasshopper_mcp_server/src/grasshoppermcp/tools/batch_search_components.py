@@ -13,15 +13,16 @@ def batch_search_components(
     """
     Search for multiple components at once. Only use for UNCOMMON components!
 
-    STOP! These common components DON'T need searching - use directly:
+    These common components DON'T need searching - use directly in create_definition:
     - Inputs: "Number Slider", "Panel", "Boolean Toggle"
     - Points: "Point", "Construct Point", "Deconstruct Point"
     - Curves: "Line", "Circle", "Arc", "Rectangle", "Polyline", "Interpolate"
     - Surfaces: "Extrude", "Loft", "Sweep1", "Pipe", "Boundary Surfaces"
-    - Math: "Addition", "Multiplication", "Division", "Series", "Range", "Expression"
+    - Math: "Addition", "Multiplication", "Division", "Series", "Range"
+    - Trig: "Sine", "Cosine", "Tangent"
     - Vectors: "Unit X", "Unit Y", "Unit Z", "Vector XYZ", "Amplitude"
     - Transform: "Move", "Rotate", "Scale", "Mirror"
-    - Lists: "List Item", "Merge", "Flatten", "Graft", "Reverse List"
+    - Data: "Cross Reference", "Merge", "Flatten", "Graft", "List Item"
     - Analysis: "Area", "Volume", "Evaluate Curve", "Divide Curve"
     - Boolean: "Solid Union", "Solid Difference", "Solid Intersection"
 

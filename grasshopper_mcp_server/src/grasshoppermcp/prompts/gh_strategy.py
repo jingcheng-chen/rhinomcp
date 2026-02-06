@@ -69,6 +69,9 @@ def gh_general_strategy() -> str:
     - "Series" - generate number sequence
     - "Range" - numbers in domain
     - "Random" - random numbers
+    - "Sine" - sine of angle (USE THIS for trig, not Expression!)
+    - "Cosine" - cosine of angle
+    - "Tangent" - tangent of angle
 
     Lists:
     - "List Item" - get item by index
@@ -85,15 +88,22 @@ def gh_general_strategy() -> str:
     └─ batch_search_components(queries=["ComponentA", "ComponentB"]) - search multiple at once
     └─ search_components(query="specific") - only for single unusual component
 
+    TIP: For trigonometry, use "Sine", "Cosine", "Tangent" components (not Expression)
+
 
     STEP 3: CHOOSE THE RIGHT TOOL
     -----------------------------
     Use this decision tree:
 
-    Creating a complete definition (RECOMMENDED for multiple components):
-    └─ Use create_definition() to batch create components, connections, and values
-       This is the most efficient way to create complex definitions.
-       For sliders, you can specify: min, max, value, decimals
+    Creating a complete definition (RECOMMENDED - ALWAYS USE THIS):
+    └─ Use create_definition() to create EVERYTHING in ONE call:
+       - ALL sliders
+       - ALL processing components (Series, Sine, Multiplication, etc.)
+       - ALL geometry (Construct Point, Interpolate, Extrude, etc.)
+       - ALL connections between them
+
+       DO NOT split into multiple calls! Build the entire definition at once.
+       Native GH components CAN handle complex patterns - no scripts needed!
 
     Adding components:
     ├─ Need to add a component?
@@ -153,10 +163,10 @@ def gh_general_strategy() -> str:
 
     After creation, adjust with: set_parameter_value(nickname="Amp", value=7.5)
 
-    Expression component - set formula AFTER creation:
-    1. Create: {"name": "Expression", "nickname": "Expr", "position": [200,0]}
-    2. Set formula: set_parameter_value(nickname="Expr", value="x*sin(y)")
-       Variables x, y, z correspond to inputs in order
+    For trigonometry, use dedicated components:
+    - "Sine" for sin(x), "Cosine" for cos(x), "Tangent" for tan(x)
+    - Chain with "Multiplication", "Addition" for complex formulas
+    - These are easier than Expression and work reliably via MCP
 
     Panel - set content during creation OR after:
     {"name": "Panel", "nickname": "Info", "position": [0,0], "content": "Hello"}
@@ -191,26 +201,42 @@ def gh_general_strategy() -> str:
        - "Error" = Must fix before proceeding
 
 
-    EXAMPLE WORKFLOW: Create a circle and extrude it (using create_definition)
-    ==========================================================================
+    EXAMPLE: PARAMETRIC SINE WAVE (complete in ONE call!)
+    =====================================================
     create_definition(
+        clear_canvas=True,
         components=[
-            {"name": "Point", "nickname": "BasePoint", "position": [0, 0]},
-            {"name": "Number Slider", "nickname": "RadiusSlider", "position": [0, 100],
-             "min": 1, "max": 50, "value": 10, "decimals": 1},
-            {"name": "Circle", "nickname": "MyCircle", "position": [200, 0]},
-            {"name": "Unit Z", "nickname": "ZVector", "position": [200, 100]},
-            {"name": "Extrude", "nickname": "MyExtrude", "position": [400, 50]}
+            # All sliders
+            {"name": "Number Slider", "nickname": "Count", "min": 10, "max": 100, "value": 50},
+            {"name": "Number Slider", "nickname": "Amplitude", "min": 1, "max": 10, "value": 3},
+            {"name": "Number Slider", "nickname": "Frequency", "min": 0.1, "max": 1, "value": 0.2},
+            # All processing components
+            {"name": "Series", "nickname": "XValues", "position": [200, 0]},
+            {"name": "Multiplication", "nickname": "FreqX", "position": [350, 30]},
+            {"name": "Sine", "nickname": "SineWave", "position": [500, 30]},
+            {"name": "Multiplication", "nickname": "AmpY", "position": [650, 30]},
+            # Geometry
+            {"name": "Construct Point", "nickname": "Points", "position": [800, 0]},
+            {"name": "Interpolate", "nickname": "Curve", "position": [950, 0]},
+            {"name": "Unit Z", "nickname": "ExtVec", "position": [950, 80]},
+            {"name": "Extrude", "nickname": "Surface", "position": [1100, 40]}
         ],
         connections=[
-            {"source": "BasePoint", "target": "MyCircle", "target_input": 0},
-            {"source": "RadiusSlider", "target": "MyCircle", "target_input": 1},
-            {"source": "MyCircle", "target": "MyExtrude", "target_input": 0},
-            {"source": "ZVector", "target": "MyExtrude", "target_input": 1}
+            {"source": "Count", "target": "XValues", "target_input": 2},
+            {"source": "XValues", "target": "FreqX", "target_input": 0},
+            {"source": "Frequency", "target": "FreqX", "target_input": 1},
+            {"source": "FreqX", "target": "SineWave", "target_input": 0},
+            {"source": "SineWave", "target": "AmpY", "target_input": 0},
+            {"source": "Amplitude", "target": "AmpY", "target_input": 1},
+            {"source": "XValues", "target": "Points", "target_input": 0},
+            {"source": "AmpY", "target": "Points", "target_input": 1},
+            {"source": "Points", "target": "Curve", "target_input": 0},
+            {"source": "Curve", "target": "Surface", "target_input": 0},
+            {"source": "ExtVec", "target": "Surface", "target_input": 1}
         ]
     )
-    # Then bake the result
-    bake_component(nickname="MyExtrude", layer_name="Extruded Circles")
+    # Bake result
+    bake_component(nickname="Surface", layer_name="Sine Wave")
 
     ALTERNATIVE: Step-by-step approach (use when debugging or modifying existing definitions)
     =======================================================================================

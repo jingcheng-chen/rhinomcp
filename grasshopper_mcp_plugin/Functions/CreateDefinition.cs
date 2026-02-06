@@ -657,15 +657,25 @@ public partial class GrasshopperMCPFunctions
         if (targetObj == null)
             throw new InvalidOperationException($"Target component '{targetRef}' not found");
 
-        // Get output parameter
+        // Get output parameter with detailed error message
         var outputParam = ComponentHelper.FindOutputParam(sourceObj, sourceOutput, null);
         if (outputParam == null)
-            throw new InvalidOperationException($"Output parameter {sourceOutput} not found on '{sourceRef}'");
+        {
+            var availableOutputs = GetAvailableOutputs(sourceObj);
+            throw new InvalidOperationException(
+                $"Output index {sourceOutput} not found on '{sourceRef}' ({sourceObj.Name}). " +
+                $"Available outputs: {availableOutputs}");
+        }
 
-        // Get input parameter
+        // Get input parameter with detailed error message
         var inputParam = ComponentHelper.FindInputParam(targetObj, targetInput, null);
         if (inputParam == null)
-            throw new InvalidOperationException($"Input parameter {targetInput} not found on '{targetRef}'");
+        {
+            var availableInputs = GetAvailableInputs(targetObj);
+            throw new InvalidOperationException(
+                $"Input index {targetInput} not found on '{targetRef}' ({targetObj.Name}). " +
+                $"Available inputs: {availableInputs}");
+        }
 
         // Create connection
         inputParam.AddSource(outputParam);
@@ -677,6 +687,44 @@ public partial class GrasshopperMCPFunctions
             ["target"] = targetObj.NickName,
             ["target_input"] = inputParam.Name
         };
+    }
+
+    /// <summary>
+    /// Get a formatted string of available inputs on a component.
+    /// </summary>
+    private string GetAvailableInputs(IGH_DocumentObject obj)
+    {
+        if (obj is IGH_Component component)
+        {
+            var inputs = component.Params.Input
+                .Select((p, i) => $"[{i}] {p.Name}")
+                .ToList();
+            return inputs.Count > 0 ? string.Join(", ", inputs) : "none";
+        }
+        else if (obj is IGH_Param param)
+        {
+            return "[0] (single input)";
+        }
+        return "unknown";
+    }
+
+    /// <summary>
+    /// Get a formatted string of available outputs on a component.
+    /// </summary>
+    private string GetAvailableOutputs(IGH_DocumentObject obj)
+    {
+        if (obj is IGH_Component component)
+        {
+            var outputs = component.Params.Output
+                .Select((p, i) => $"[{i}] {p.Name}")
+                .ToList();
+            return outputs.Count > 0 ? string.Join(", ", outputs) : "none";
+        }
+        else if (obj is IGH_Param param)
+        {
+            return "[0] (single output)";
+        }
+        return "unknown";
     }
 
     /// <summary>
