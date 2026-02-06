@@ -15,32 +15,38 @@ def set_parameter_value(
     input_name: Optional[str] = None
 ) -> Dict[str, Any]:
     """
-    Set a value on a component's input parameter.
+    Set a value on a component. Works with sliders, panels, expressions, and regular inputs.
+
+    SUPPORTED COMPONENTS:
+    - Number Slider: set_parameter_value(nickname="Slider", value=50)
+      Optional: min, max to adjust range
+    - Panel: set_parameter_value(nickname="Panel", value="text")
+    - Boolean Toggle: set_parameter_value(nickname="Toggle", value=True)
+    - Expression: set_parameter_value(nickname="Expr", value="x*sin(y)")
+    - Regular inputs: set_parameter_value(nickname="Circle", input_name="Radius", value=10)
 
     Parameters:
-    - value: The value to set (number, string, boolean, or list)
-    - instance_id: GUID of the component
-    - nickname: Nickname of the component (alternative to instance_id)
-    - input_index: Index of the input parameter (default: 0)
-    - input_name: Name of the input parameter (alternative to input_index)
+    - value: The value (number for sliders, string for panels/expressions)
+    - nickname: Component nickname (recommended)
+    - instance_id: Component GUID (alternative to nickname)
+    - input_index: Input parameter index (default: 0)
+    - input_name: Input parameter name (alternative to index)
 
-    At least one of instance_id or nickname must be provided.
+    Examples:
+        # Slider - just set value
+        set_parameter_value(nickname="RadiusSlider", value=25.5)
 
-    Returns:
-    - component_id: GUID of the component
-    - input_name: Name of the input parameter that was set
-    - value: The value that was set
-    - message: Confirmation message
+        # Slider - also change range
+        set_parameter_value(nickname="RadiusSlider", value=75, min=0, max=100)
 
-    Example:
-        # Set a number slider value
-        set_parameter_value(nickname="MySlider", value=42.5)
+        # Panel text
+        set_parameter_value(nickname="InfoPanel", value="Facade Design v1")
 
-        # Set panel text
-        set_parameter_value(nickname="MyPanel", value="Hello World")
+        # Expression formula
+        set_parameter_value(nickname="WaveExpr", value="amplitude*sin(x*freq)")
 
-        # Set by input name
-        set_parameter_value(nickname="MyCircle", input_name="Radius", value=10.0)
+        # Regular component input by name
+        set_parameter_value(nickname="MyCircle", input_name="Radius", value=10)
     """
     try:
         if not instance_id and not nickname:

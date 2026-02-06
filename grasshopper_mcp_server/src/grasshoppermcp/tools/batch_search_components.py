@@ -11,23 +11,28 @@ def batch_search_components(
     queries: List[str]
 ) -> Dict[str, Any]:
     """
-    Search for multiple components at once. Much more efficient than calling
-    search_components multiple times.
+    Search for multiple components at once. Only use for UNCOMMON components!
 
-    IMPORTANT: Before using this, read the grasshopper://components/reference resource
-    which contains most common component names. Only search for components not in that list.
+    STOP! These common components DON'T need searching - use directly:
+    - Inputs: "Number Slider", "Panel", "Boolean Toggle"
+    - Points: "Point", "Construct Point", "Deconstruct Point"
+    - Curves: "Line", "Circle", "Arc", "Rectangle", "Polyline", "Interpolate"
+    - Surfaces: "Extrude", "Loft", "Sweep1", "Pipe", "Boundary Surfaces"
+    - Math: "Addition", "Multiplication", "Division", "Series", "Range", "Expression"
+    - Vectors: "Unit X", "Unit Y", "Unit Z", "Vector XYZ", "Amplitude"
+    - Transform: "Move", "Rotate", "Scale", "Mirror"
+    - Lists: "List Item", "Merge", "Flatten", "Graft", "Reverse List"
+    - Analysis: "Area", "Volume", "Evaluate Curve", "Divide Curve"
+    - Boolean: "Solid Union", "Solid Difference", "Solid Intersection"
+
+    Only search for unusual components like third-party plugins.
 
     Parameters:
-    - queries: List of component names to search for (e.g., ["Circle", "Loft", "Move"])
+    - queries: List of UNCOMMON component names to search for
 
     Returns:
-    - results: Dict mapping each query to its best match (or null if not found)
-    - found_count: Number of queries that found matches
+    - results: Dict mapping each query to its best match
     - not_found: List of queries that had no matches
-
-    Example:
-        result = batch_search_components(queries=["Circle", "Loft", "Move", "Extrude"])
-        # Returns: {"results": {"Circle": {...}, "Loft": {...}, ...}, "found_count": 4}
     """
     try:
         gh = get_grasshopper_connection()

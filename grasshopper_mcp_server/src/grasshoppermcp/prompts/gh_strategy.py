@@ -113,8 +113,16 @@ def gh_general_strategy() -> str:
         └─ YES → Use disconnect_components() with same parameters
 
     Setting values:
-    ├─ Set a slider or parameter value?
+    ├─ Set a slider value?
     │   └─ YES → Use set_parameter_value(nickname, value)
+    │            Also supports: min, max to adjust range
+    │
+    ├─ Set panel content?
+    │   └─ YES → Use set_parameter_value(nickname, "text content")
+    │
+    ├─ Set expression formula?
+    │   └─ YES → Use set_parameter_value(nickname, "x*sin(y)")
+    │            The expression uses variable names from inputs (x, y, z, etc.)
     │
     └─ Read current values?
         └─ YES → Use get_parameter_value(nickname)
@@ -137,7 +145,24 @@ def gh_general_strategy() -> str:
         └─ YES → Use list_components(category=..., name=...)
 
 
-    STEP 4: BEST PRACTICES
+    STEP 4: CONFIGURING SPECIAL COMPONENTS
+    --------------------------------------
+    Number Sliders - FULLY SUPPORTED in create_definition:
+    {"name": "Number Slider", "nickname": "Amp", "position": [0,0],
+     "min": 0, "max": 10, "value": 5, "decimals": 2}
+
+    After creation, adjust with: set_parameter_value(nickname="Amp", value=7.5)
+
+    Expression component - set formula AFTER creation:
+    1. Create: {"name": "Expression", "nickname": "Expr", "position": [200,0]}
+    2. Set formula: set_parameter_value(nickname="Expr", value="x*sin(y)")
+       Variables x, y, z correspond to inputs in order
+
+    Panel - set content during creation OR after:
+    {"name": "Panel", "nickname": "Info", "position": [0,0], "content": "Hello"}
+
+
+    STEP 5: BEST PRACTICES
     ----------------------
     1. NICKNAMES: Always give components meaningful nicknames for easy reference
        - Use add_component(..., nickname="MyCircle")

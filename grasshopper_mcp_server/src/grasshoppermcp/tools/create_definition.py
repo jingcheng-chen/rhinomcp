@@ -14,88 +14,69 @@ def create_definition(
     clear_canvas: bool = False
 ) -> Dict[str, Any]:
     """
-    Create a complete Grasshopper definition with components, connections, and values in one batch operation.
+    Create a complete Grasshopper definition with components, connections, and values.
 
-    This is the recommended way to create complex definitions as it:
-    - Creates everything in a single atomic operation
-    - Automatically resolves component references by nickname
-    - Provides detailed error reporting for each step
+    IMPORTANT - NO SEARCH NEEDED for common components! Use these names directly:
+    - Inputs: "Number Slider", "Panel", "Boolean Toggle"
+    - Geometry: "Point", "Line", "Circle", "Rectangle", "Arc", "Polyline"
+    - Surfaces: "Extrude", "Loft", "Sweep1", "Pipe", "Boundary Surfaces"
+    - Math: "Addition", "Multiplication", "Division", "Series", "Range", "Expression"
+    - Vectors: "Unit X", "Unit Y", "Unit Z", "Construct Point"
+    - Transform: "Move", "Rotate", "Scale", "Mirror"
+    - Lists: "List Item", "Merge", "Flatten", "Graft"
+
+    NUMBER SLIDERS - Fully supported with initial values:
+    {"name": "Number Slider", "nickname": "MySlider", "position": [0,0],
+     "min": 0, "max": 100, "value": 50, "decimals": 2}
+
+    PANELS - Can set initial content:
+    {"name": "Panel", "nickname": "Info", "position": [0,0], "content": "text"}
 
     Parameters:
-    - components: List of components to create. Each component should have:
-        - name: Component name (e.g., "Circle", "Extrude", "Number Slider")
-        - nickname: Unique nickname for referencing (required for connections)
-        - position: [x, y] position on canvas (optional, default: [0, 0])
+    - components: List of components. Each needs:
+        - name: Component name (use names above, no search needed)
+        - nickname: Unique name for connections
+        - position: [x, y] optional
+        - For sliders: min, max, value, decimals
+        - For panels: content
 
-    - connections: List of connections to create. Each connection should have:
-        - source: Nickname of source component
-        - source_output: Output parameter index (default: 0)
-        - target: Nickname of target component
-        - target_input: Input parameter index (default: 0)
+    - connections: List of wires:
+        - source: Source nickname
+        - target: Target nickname
+        - source_output: Output index (default: 0)
+        - target_input: Input index (default: 0)
 
-    - values: List of values to set. Each value should have:
-        - component: Nickname of the component
-        - input: Input parameter index or name
-        - value: The value to set (number, string, boolean, array, or point [x,y,z])
+    - values: Set input values on components (for non-slider components):
+        - component: Nickname
+        - input: Input index or name
+        - value: The value
 
-    - clear_canvas: If true, clear all existing components before creating new ones
+    Returns (IMPORTANT - check for errors!):
+    - has_errors: True if any errors occurred - CHECK THIS FIRST
+    - runtime_errors: List of component errors with messages - FIX THESE
+    - runtime_warnings: List of warnings
+    - message: Summary including any error details
 
-    Returns:
-    - components_created: Number of components created
-    - connections_created: Number of connections made
-    - values_set: Number of values set
-    - error_count: Number of errors encountered
-    - components: Details of created components with instance_ids
-    - connections: Details of created connections
-    - values: Details of set values
-    - errors: List of errors (if any)
+    If has_errors is True, the response includes runtime_errors like:
+    {"nickname": "FacadeRect", "name": "Rectangle",
+     "messages": ["Data conversion failed from Domain to Rectangle"]}
 
-    Example - Create a circle and extrude it:
-        create_definition(
+    Example with sliders:
+        result = create_definition(
             components=[
-                {"name": "Circle", "nickname": "MyCircle", "position": [0, 0]},
-                {"name": "Unit Z", "nickname": "ZDir", "position": [0, 100]},
-                {"name": "Extrude", "nickname": "MyExtrude", "position": [200, 50]}
+                {"name": "Number Slider", "nickname": "Radius", "position": [0,0],
+                 "min": 1, "max": 50, "value": 10},
+                {"name": "Circle", "nickname": "Circ", "position": [200,0]},
+                {"name": "Extrude", "nickname": "Ext", "position": [400,40]}
             ],
             connections=[
-                {"source": "MyCircle", "source_output": 0, "target": "MyExtrude", "target_input": 0},
-                {"source": "ZDir", "source_output": 0, "target": "MyExtrude", "target_input": 1}
-            ],
-            values=[
-                {"component": "MyCircle", "input": "Radius", "value": 10.0}
+                {"source": "Radius", "target": "Circ", "target_input": 1}
             ]
         )
-
-    Example - Create a point grid:
-        create_definition(
-            components=[
-                {"name": "Series", "nickname": "XSeries", "position": [0, 0]},
-                {"name": "Series", "nickname": "YSeries", "position": [0, 100]},
-                {"name": "Cross Reference", "nickname": "CrossRef", "position": [200, 50]},
-                {"name": "Point", "nickname": "Points", "position": [400, 50]}
-            ],
-            connections=[
-                {"source": "XSeries", "target": "CrossRef", "target_input": 0},
-                {"source": "YSeries", "target": "CrossRef", "target_input": 1},
-                {"source": "CrossRef", "source_output": 0, "target": "Points", "target_input": 0},
-                {"source": "CrossRef", "source_output": 1, "target": "Points", "target_input": 1}
-            ],
-            values=[
-                {"component": "XSeries", "input": "Count", "value": 10},
-                {"component": "XSeries", "input": "Step", "value": 5.0},
-                {"component": "YSeries", "input": "Count", "value": 10},
-                {"component": "YSeries", "input": "Step", "value": 5.0}
-            ]
-        )
-
-    Common component names:
-    - Primitives: "Point", "Line", "Circle", "Rectangle", "Arc", "Polygon"
-    - Surfaces: "Extrude", "Loft", "Sweep1", "Revolution", "Boundary Surfaces"
-    - Parameters: "Number Slider", "Panel", "Boolean Toggle", "Point" (Params)
-    - Math: "Addition", "Subtraction", "Multiplication", "Division", "Series", "Range"
-    - Vectors: "Unit X", "Unit Y", "Unit Z", "Vector XYZ"
-    - Lists: "List Item", "List Length", "Merge", "Flatten", "Graft"
-    - Transforms: "Move", "Rotate", "Scale", "Mirror", "Orient"
+        # ALWAYS check for errors:
+        if result.get("has_errors"):
+            # Fix the runtime_errors before proceeding
+            print(result["runtime_errors"])
     """
     try:
         if not components:

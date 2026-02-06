@@ -13,26 +13,22 @@ def search_components(
     limit: int = 50
 ) -> Dict[str, Any]:
     """
-    Search for components in the Grasshopper library.
-    Use this to find the correct component names and GUIDs before creating definitions.
+    Search for a component by name. Only needed for UNCOMMON components!
+
+    MOST COMPONENTS DON'T NEED SEARCH - use these names directly in create_definition:
+    "Number Slider", "Panel", "Point", "Line", "Circle", "Rectangle",
+    "Extrude", "Loft", "Move", "Rotate", "Scale", "Series", "Range",
+    "Addition", "Multiplication", "Unit X", "Unit Y", "Unit Z", etc.
+
+    Only use search for unusual or third-party components.
 
     Parameters:
-    - query: Search term to match against component name, nickname, or description
-    - category: Filter by component category (e.g., "Params", "Curve", "Surface", "Maths")
-    - limit: Maximum number of results to return (default: 50)
+    - query: Search term (only for uncommon components)
+    - category: Filter by category
+    - limit: Max results (default: 50)
 
     Returns:
-    - count: Number of components found
-    - components: List with name, nickname, category, subcategory, description, and guid
-
-    Example:
-        # Find all slider-related components
-        result = search_components(query="slider")
-        for comp in result["components"]:
-            print(f"{comp['name']} ({comp['guid']})")
-
-        # Find components in the Params category
-        result = search_components(category="Params")
+    - components: List with name, nickname, category, guid
     """
     try:
         gh = get_grasshopper_connection()

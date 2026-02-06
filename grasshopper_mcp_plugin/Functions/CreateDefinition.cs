@@ -240,6 +240,15 @@ public partial class GrasshopperMCPFunctions
             return recorder;
         }
 
+        // Expression component (Evaluate)
+        if (normalizedName.Equals("Expression", StringComparison.OrdinalIgnoreCase) ||
+            normalizedName.Equals("Evaluate", StringComparison.OrdinalIgnoreCase) ||
+            normalizedName.Equals("Expr", StringComparison.OrdinalIgnoreCase))
+        {
+            // Expression is found via proxy, but we handle initialization here
+            return null; // Let proxy handle creation, we'll set expression after
+        }
+
         // Not a known special component
         return null;
     }
@@ -332,55 +341,93 @@ public partial class GrasshopperMCPFunctions
             }
         }
 
-        // Trigger solution
-        doc.NewSolution(false);
+        // Trigger solution and wait for completion
+        doc.NewSolution(true);
+
+        // Collect runtime errors and warnings from all components
+        var runtimeErrors = new JArray();
+        var runtimeWarnings = new JArray();
+
+        foreach (var obj in doc.Objects)
+        {
+            if (obj is IGH_ActiveObject activeObj)
+            {
+                var level = activeObj.RuntimeMessageLevel;
+
+                if (level == GH_RuntimeMessageLevel.Error || level == GH_RuntimeMessageLevel.Warning)
+                {
+                    var messages = new JArray();
+                    foreach (var msg in activeObj.RuntimeMessages(level))
+                    {
+                        messages.Add(msg);
+                    }
+
+                    var errorInfo = new JObject
+                    {
+                        ["nickname"] = obj.NickName,
+                        ["name"] = obj.Name,
+                        ["messages"] = messages
+                    };
+
+                    if (level == GH_RuntimeMessageLevel.Error)
+                        runtimeErrors.Add(errorInfo);
+                    else
+                        runtimeWarnings.Add(errorInfo);
+                }
+            }
+        }
 
         results["components_created"] = componentResults.Count;
         results["connections_created"] = connectionResults.Count;
         results["values_set"] = valueResults.Count;
-        results["error_count"] = errors.Count;
+        results["creation_error_count"] = errors.Count;
+        results["runtime_error_count"] = runtimeErrors.Count;
+        results["runtime_warning_count"] = runtimeWarnings.Count;
         results["components"] = componentResults;
         results["connections"] = connectionResults;
         results["values"] = valueResults;
 
         if (errors.Count > 0)
         {
-            results["errors"] = errors;
+            results["creation_errors"] = errors;
+        }
+
+        // Include runtime errors - these are the important ones!
+        if (runtimeErrors.Count > 0)
+        {
+            results["runtime_errors"] = runtimeErrors;
+        }
+
+        if (runtimeWarnings.Count > 0)
+        {
+            results["runtime_warnings"] = runtimeWarnings;
         }
 
         // Build detailed message
-        if (errors.Count == 0)
+        var messageParts = new List<string>();
+        messageParts.Add($"Created {componentResults.Count} components, {connectionResults.Count} connections");
+
+        if (errors.Count > 0)
         {
-            results["message"] = $"Successfully created definition with {componentResults.Count} components, {connectionResults.Count} connections, {valueResults.Count} values";
+            messageParts.Add($"{errors.Count} creation error(s)");
         }
-        else
+
+        if (runtimeErrors.Count > 0)
         {
-            // Summarize errors by phase
-            var componentErrors = errors.Where(e => e["phase"]?.ToString() == "component_creation").ToList();
-            var connectionErrors = errors.Where(e => e["phase"]?.ToString() == "connection").ToList();
-            var valueErrors = errors.Where(e => e["phase"]?.ToString() == "set_value").ToList();
-
-            var errorSummary = new List<string>();
-
-            if (componentErrors.Any())
-            {
-                var failedNames = componentErrors.Select(e => e["spec"]?["name"]?.ToString() ?? "unknown").Take(3);
-                errorSummary.Add($"Failed components: {string.Join(", ", failedNames)}");
-            }
-            if (connectionErrors.Any())
-            {
-                var failedConns = connectionErrors.Select(e =>
-                    $"{e["spec"]?["source"]}->{e["spec"]?["target"]}").Take(3);
-                errorSummary.Add($"Failed connections: {string.Join(", ", failedConns)}");
-            }
-            if (valueErrors.Any())
-            {
-                var failedVals = valueErrors.Select(e => e["spec"]?["component"]?.ToString() ?? "unknown").Take(3);
-                errorSummary.Add($"Failed values: {string.Join(", ", failedVals)}");
-            }
-
-            results["message"] = $"Created {componentResults.Count} components with {errors.Count} error(s). {string.Join("; ", errorSummary)}";
+            // Summarize runtime errors - these need immediate attention
+            var errorSummary = runtimeErrors.Take(3).Select(e =>
+                $"{e["nickname"]}: {((JArray)e["messages"]).FirstOrDefault()}"
+            );
+            messageParts.Add($"RUNTIME ERRORS: {string.Join("; ", errorSummary)}");
         }
+
+        if (runtimeWarnings.Count > 0)
+        {
+            messageParts.Add($"{runtimeWarnings.Count} warning(s)");
+        }
+
+        results["has_errors"] = errors.Count > 0 || runtimeErrors.Count > 0;
+        results["message"] = string.Join(". ", messageParts);
 
         return results;
     }

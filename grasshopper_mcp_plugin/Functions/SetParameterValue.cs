@@ -165,6 +165,54 @@ public partial class GrasshopperMCPFunctions
             return true;
         }
 
+        // Handle Expression component - set the expression formula
+        // Check if it's an expression component by name/type
+        if (obj.Name == "Expression" || obj.Name == "Evaluate" ||
+            obj.GetType().Name.Contains("Expression"))
+        {
+            // Try to set expression via reflection since the type may vary
+            var expressionProp = obj.GetType().GetProperty("Expression");
+            if (expressionProp != null)
+            {
+                try
+                {
+                    expressionProp.SetValue(obj, value.ToString());
+                    obj.ExpireSolution(true);
+
+                    result = new JObject
+                    {
+                        ["instance_id"] = obj.InstanceGuid.ToString(),
+                        ["nickname"] = obj.NickName,
+                        ["expression"] = value.ToString(),
+                        ["message"] = $"Set expression on '{obj.NickName}' to: {value}"
+                    };
+                    return true;
+                }
+                catch { }
+            }
+
+            // Alternative: try SetExpression method
+            var setExprMethod = obj.GetType().GetMethod("SetExpression");
+            if (setExprMethod != null)
+            {
+                try
+                {
+                    setExprMethod.Invoke(obj, new object[] { value.ToString() });
+                    obj.ExpireSolution(true);
+
+                    result = new JObject
+                    {
+                        ["instance_id"] = obj.InstanceGuid.ToString(),
+                        ["nickname"] = obj.NickName,
+                        ["expression"] = value.ToString(),
+                        ["message"] = $"Set expression on '{obj.NickName}' to: {value}"
+                    };
+                    return true;
+                }
+                catch { }
+            }
+        }
+
         return false;
     }
 
