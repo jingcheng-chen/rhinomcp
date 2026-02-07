@@ -163,7 +163,7 @@ public class MCPServerAttributes : GH_ComponentAttributes
     private const int BUTTON_WIDTH = 80;
     private const int BUTTON_HEIGHT = 22;
     private const int PADDING = 8;
-    private const int BORDER_GAP = 3;
+    private const int BORDER_GAP = 6;
     private const int RESIZE_GRIP_SIZE = 12;
     private const int SCROLLBAR_WIDTH = 12;
     private const float LINE_HEIGHT = 15f;
@@ -228,7 +228,7 @@ public class MCPServerAttributes : GH_ComponentAttributes
         Bounds = new RectangleF(Pivot.X, Pivot.Y, _customWidth, _customHeight);
 
         // Button on the right side of status row
-        float statusRowY = Bounds.Y + HEADER_HEIGHT + 4;
+        float statusRowY = Bounds.Y + BORDER_GAP + HEADER_HEIGHT + 4;
         _buttonBounds = new RectangleF(
             Bounds.Right - PADDING - BUTTON_WIDTH - BORDER_GAP,
             statusRowY + (STATUS_ROW_HEIGHT - BUTTON_HEIGHT) / 2,
@@ -299,7 +299,15 @@ public class MCPServerAttributes : GH_ComponentAttributes
 
         bool isRunning = Owner.IsServerRunning;
 
-        // Outer border (thick black line)
+        // Fill border gap area with background color first
+        using (var gapBrush = new SolidBrush(BgColorDark))
+        {
+            var gapPath = CreateRoundedRect(Bounds, 5);
+            graphics.FillPath(gapBrush, gapPath);
+            gapPath.Dispose();
+        }
+
+        // Outer border (black line)
         var outerBorderRect = new RectangleF(Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height);
         using (var outerBorderPen = new Pen(Selected ? Color.FromArgb(80, 120, 180) : OuterBorderColor, 1f))
         {
@@ -326,7 +334,7 @@ public class MCPServerAttributes : GH_ComponentAttributes
             }
         }
 
-        // Inner border (thin black line)
+        // Inner border (black line)
         using (var innerBorderPen = new Pen(InnerBorderColor, 1f))
         {
             var innerPath = CreateRoundedRect(innerRect, 3);
@@ -343,6 +351,12 @@ public class MCPServerAttributes : GH_ComponentAttributes
             headerPath.Dispose();
         }
 
+        // Header bottom border (black line)
+        using (var headerBorderPen = new Pen(OuterBorderColor, 1f))
+        {
+            graphics.DrawLine(headerBorderPen, headerBounds.X, headerBounds.Bottom, headerBounds.Right, headerBounds.Bottom);
+        }
+
         // Header text
         using (var headerFormat = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
         {
@@ -350,7 +364,7 @@ public class MCPServerAttributes : GH_ComponentAttributes
         }
 
         // Status row area
-        float statusRowY = Bounds.Y + HEADER_HEIGHT + BORDER_GAP + 4;
+        float statusRowY = Bounds.Y + BORDER_GAP + HEADER_HEIGHT + 4;
         var statusBounds = new RectangleF(Bounds.X + PADDING + BORDER_GAP, statusRowY, Bounds.Width - PADDING * 2 - BORDER_GAP * 2, STATUS_ROW_HEIGHT);
 
         // Status indicator dot
