@@ -99,13 +99,9 @@ public class MCPServerComponent : GH_Component
 
     public override void RemovedFromDocument(GH_Document document)
     {
-        // Stop server when component is removed
-        if (GrasshopperMCPServerController.IsRunning())
-        {
-            GrasshopperMCPServerController.Stop();
-            MCPLogger.Log("MCP Server stopped (component removed)");
-        }
-
+        // Don't stop the server when component is removed
+        // This allows the server to keep running even when AI clears the canvas
+        // User can explicitly stop the server using the Stop button if needed
         base.RemovedFromDocument(document);
     }
 
