@@ -19,6 +19,7 @@ public class MCPServerComponent : GH_Component
 {
     private const int DEFAULT_PORT = 2000;
     private bool _autoStarted = false;
+    private static bool _welcomeLogged = false;
 
     public MCPServerComponent()
         : base(
@@ -30,6 +31,17 @@ public class MCPServerComponent : GH_Component
     {
         // Subscribe to log updates to refresh display
         MCPLogger.OnLogAdded += OnLogUpdated;
+
+        // Log welcome message once
+        if (!_welcomeLogged)
+        {
+            _welcomeLogged = true;
+            MCPLogger.Log("==============================");
+            MCPLogger.Log("RhinoMCP - Grasshopper");
+            MCPLogger.Log("Author: Jingcheng Chen");
+            MCPLogger.Log("github.com/jingcheng-chen/rhinomcp");
+            MCPLogger.Log("==============================");
+        }
     }
 
     ~MCPServerComponent()
@@ -140,25 +152,30 @@ public class MCPServerComponent : GH_Component
 public class MCPServerAttributes : GH_ComponentAttributes
 {
     // Size constraints
-    private const int MIN_WIDTH = 220;
+    private const int MIN_WIDTH = 260;
     private const int MAX_WIDTH = 500;
     private const int MIN_HEIGHT = 140;
     private const int MAX_HEIGHT = 400;
 
     // Layout constants
     private const int HEADER_HEIGHT = 28;
-    private const int STATUS_HEIGHT = 24;
-    private const int BUTTON_HEIGHT = 26;
+    private const int STATUS_ROW_HEIGHT = 30;
+    private const int BUTTON_WIDTH = 80;
+    private const int BUTTON_HEIGHT = 22;
     private const int PADDING = 8;
+    private const int BORDER_GAP = 3;
     private const int RESIZE_GRIP_SIZE = 12;
     private const int SCROLLBAR_WIDTH = 12;
     private const float LINE_HEIGHT = 15f;
 
-    // Colors - Calendar-like scheme
-    private static readonly Color BgColor = Color.FromArgb(245, 245, 245);
-    private static readonly Color HeaderBgColor = Color.FromArgb(70, 70, 70);
-    private static readonly Color BorderColor = Color.FromArgb(180, 180, 180);
+    // Colors - Calendar-like scheme with gradient
+    private static readonly Color BgColorLight = Color.FromArgb(252, 252, 252);
+    private static readonly Color BgColorDark = Color.FromArgb(220, 220, 220);
+    private static readonly Color HeaderBgColor = Color.FromArgb(200, 200, 200);
+    private static readonly Color OuterBorderColor = Color.FromArgb(40, 40, 40);
+    private static readonly Color InnerBorderColor = Color.FromArgb(60, 60, 60);
     private static readonly Color LogsBgColor = Color.FromArgb(255, 255, 255);
+    private static readonly Color LogsBorderColor = Color.FromArgb(180, 180, 180);
     private static readonly Color LogsTextColor = Color.FromArgb(60, 60, 60);
     private static readonly Color ScrollbarBgColor = Color.FromArgb(230, 230, 230);
     private static readonly Color ScrollbarThumbColor = Color.FromArgb(180, 180, 180);
@@ -167,9 +184,7 @@ public class MCPServerAttributes : GH_ComponentAttributes
     private static readonly Color StatusStoppedColor = Color.FromArgb(180, 80, 50);
 
     // Button colors
-    private static readonly Color ButtonBgColor = Color.FromArgb(240, 240, 240);
-    private static readonly Color ButtonBorderColor = Color.FromArgb(160, 160, 160);
-    private static readonly Color ButtonPressedColor = Color.FromArgb(200, 200, 200);
+    private static readonly Color ButtonBorderColor = Color.FromArgb(140, 140, 140);
     private static readonly Color ButtonTextColor = Color.FromArgb(40, 40, 40);
 
     // Bounds
@@ -195,7 +210,7 @@ public class MCPServerAttributes : GH_ComponentAttributes
 
     // Custom size
     private float _customWidth = MIN_WIDTH;
-    private float _customHeight = 180;
+    private float _customHeight = 200;
 
     public MCPServerAttributes(MCPServerComponent owner) : base(owner)
     {
@@ -212,11 +227,12 @@ public class MCPServerAttributes : GH_ComponentAttributes
         // Set bounds with custom size
         Bounds = new RectangleF(Pivot.X, Pivot.Y, _customWidth, _customHeight);
 
-        // Button at bottom
+        // Button on the right side of status row
+        float statusRowY = Bounds.Y + HEADER_HEIGHT + 4;
         _buttonBounds = new RectangleF(
-            Bounds.X + PADDING,
-            Bounds.Bottom - BUTTON_HEIGHT - PADDING,
-            Bounds.Width - PADDING * 2,
+            Bounds.Right - PADDING - BUTTON_WIDTH - BORDER_GAP,
+            statusRowY + (STATUS_ROW_HEIGHT - BUTTON_HEIGHT) / 2,
+            BUTTON_WIDTH,
             BUTTON_HEIGHT);
 
         // Resize grip in bottom-right corner
@@ -226,11 +242,11 @@ public class MCPServerAttributes : GH_ComponentAttributes
             RESIZE_GRIP_SIZE,
             RESIZE_GRIP_SIZE);
 
-        // Logs area (between status and button)
-        float logsTop = Bounds.Y + HEADER_HEIGHT + STATUS_HEIGHT + 4;
-        float logsBottom = _buttonBounds.Y - 6;
+        // Logs area (below status row)
+        float logsTop = statusRowY + STATUS_ROW_HEIGHT + 4;
+        float logsBottom = Bounds.Bottom - PADDING - BORDER_GAP;
         float logsHeight = logsBottom - logsTop;
-        _logsBounds = new RectangleF(Bounds.X + PADDING, logsTop, Bounds.Width - PADDING * 2, logsHeight);
+        _logsBounds = new RectangleF(Bounds.X + PADDING + BORDER_GAP, logsTop, Bounds.Width - PADDING * 2 - BORDER_GAP * 2, logsHeight);
 
         // Calculate visible lines
         _visibleLines = Math.Max(1, (int)((logsHeight - 6) / LINE_HEIGHT));
@@ -283,27 +299,46 @@ public class MCPServerAttributes : GH_ComponentAttributes
 
         bool isRunning = Owner.IsServerRunning;
 
-        // Main background - light grey like calendar
-        using (var bgBrush = new SolidBrush(BgColor))
+        // Outer border (thick black line)
+        var outerBorderRect = new RectangleF(Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height);
+        using (var outerBorderPen = new Pen(Selected ? Color.FromArgb(80, 120, 180) : OuterBorderColor, 1f))
         {
-            var bgPath = CreateRoundedRect(Bounds, 4);
-            graphics.FillPath(bgBrush, bgPath);
-            bgPath.Dispose();
+            var outerPath = CreateRoundedRect(outerBorderRect, 5);
+            graphics.DrawPath(outerBorderPen, outerPath);
+            outerPath.Dispose();
         }
 
-        // Border - subtle like calendar
-        using (var borderPen = new Pen(Selected ? Color.FromArgb(100, 150, 200) : BorderColor, Selected ? 2f : 1f))
+        // Inner area with gradient background
+        var innerRect = new RectangleF(Bounds.X + BORDER_GAP, Bounds.Y + BORDER_GAP, Bounds.Width - BORDER_GAP * 2, Bounds.Height - BORDER_GAP * 2);
+
+        // Gradient background - subtle radial-like effect using path gradient
+        using (var bgPath = CreateRoundedRect(innerRect, 3))
         {
-            var borderPath = CreateRoundedRect(Bounds, 4);
-            graphics.DrawPath(borderPen, borderPath);
-            borderPath.Dispose();
+            // Create a linear gradient from corners (darker) to center (lighter)
+            using (var gradientBrush = new LinearGradientBrush(innerRect, BgColorDark, BgColorLight, LinearGradientMode.ForwardDiagonal))
+            {
+                // Add color blend for more subtle effect
+                var blend = new ColorBlend(3);
+                blend.Colors = new[] { BgColorDark, BgColorLight, BgColorDark };
+                blend.Positions = new[] { 0f, 0.5f, 1f };
+                gradientBrush.InterpolationColors = blend;
+                graphics.FillPath(gradientBrush, bgPath);
+            }
         }
 
-        // Header bar - dark like calendar footer
-        var headerBounds = new RectangleF(Bounds.X + 1, Bounds.Y + 1, Bounds.Width - 2, HEADER_HEIGHT);
+        // Inner border (thin black line)
+        using (var innerBorderPen = new Pen(InnerBorderColor, 1f))
+        {
+            var innerPath = CreateRoundedRect(innerRect, 3);
+            graphics.DrawPath(innerBorderPen, innerPath);
+            innerPath.Dispose();
+        }
+
+        // Header bar
+        var headerBounds = new RectangleF(innerRect.X + 1, innerRect.Y + 1, innerRect.Width - 2, HEADER_HEIGHT);
         using (var headerBrush = new SolidBrush(HeaderBgColor))
         {
-            var headerPath = CreateRoundedRect(headerBounds, 3, true, true, false, false);
+            var headerPath = CreateRoundedRect(headerBounds, 2, true, true, false, false);
             graphics.FillPath(headerBrush, headerPath);
             headerPath.Dispose();
         }
@@ -311,17 +346,17 @@ public class MCPServerAttributes : GH_ComponentAttributes
         // Header text
         using (var headerFormat = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
         {
-            graphics.DrawString("MCP Server", GH_FontServer.StandardBold, Brushes.White, headerBounds, headerFormat);
+            graphics.DrawString("RhinoMCP - Grasshopper", GH_FontServer.StandardBold, Brushes.Black, headerBounds, headerFormat);
         }
 
-        // Status area with indicator dot
-        float statusY = Bounds.Y + HEADER_HEIGHT + 4;
-        var statusBounds = new RectangleF(Bounds.X + PADDING, statusY, Bounds.Width - PADDING * 2, STATUS_HEIGHT);
+        // Status row area
+        float statusRowY = Bounds.Y + HEADER_HEIGHT + BORDER_GAP + 4;
+        var statusBounds = new RectangleF(Bounds.X + PADDING + BORDER_GAP, statusRowY, Bounds.Width - PADDING * 2 - BORDER_GAP * 2, STATUS_ROW_HEIGHT);
 
         // Status indicator dot
-        float dotSize = 10;
-        float dotX = statusBounds.X + 8;
-        float dotY = statusBounds.Y + (STATUS_HEIGHT - dotSize) / 2;
+        float dotSize = 12;
+        float dotX = statusBounds.X + 4;
+        float dotY = statusBounds.Y + (STATUS_ROW_HEIGHT - dotSize) / 2;
         Color statusColor = isRunning ? StatusRunningColor : StatusStoppedColor;
 
         using (var dotBrush = new SolidBrush(statusColor))
@@ -331,12 +366,15 @@ public class MCPServerAttributes : GH_ComponentAttributes
 
         // Status text
         string statusText = isRunning ? "Running" : "Stopped";
-        var statusTextBounds = new RectangleF(dotX + dotSize + 6, statusBounds.Y, statusBounds.Width - dotSize - 20, STATUS_HEIGHT);
-        using (var statusBrush = new SolidBrush(Color.FromArgb(60, 60, 60)))
+        var statusTextBounds = new RectangleF(dotX + dotSize + 8, statusBounds.Y, _buttonBounds.X - dotX - dotSize - 16, STATUS_ROW_HEIGHT);
+        using (var statusBrush = new SolidBrush(Color.FromArgb(50, 50, 50)))
         using (var statusFormat = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
         {
-            graphics.DrawString(statusText, GH_FontServer.Standard, statusBrush, statusTextBounds, statusFormat);
+            graphics.DrawString(statusText, GH_FontServer.StandardBold, statusBrush, statusTextBounds, statusFormat);
         }
+
+        // Button next to status
+        DrawButton(graphics, _buttonBounds, isRunning ? "Stop" : "Start", _buttonPressed);
 
         // Logs area
         if (_logsBounds.Height > 20)
@@ -350,7 +388,7 @@ public class MCPServerAttributes : GH_ComponentAttributes
             }
 
             // Logs border
-            using (var logsBorderPen = new Pen(BorderColor, 1))
+            using (var logsBorderPen = new Pen(LogsBorderColor, 1))
             {
                 var logsPath = CreateRoundedRect(_logsBounds, 3);
                 graphics.DrawPath(logsBorderPen, logsPath);
@@ -422,17 +460,14 @@ public class MCPServerAttributes : GH_ComponentAttributes
             }
         }
 
-        // Button - Grasshopper style with 3D effect
-        DrawButton(graphics, _buttonBounds, isRunning ? "Stop Server" : "Start Server", _buttonPressed);
-
         // Resize grip indicator
-        using (var gripPen = new Pen(Color.FromArgb(160, 160, 160), 1))
+        using (var gripPen = new Pen(Color.FromArgb(140, 140, 140), 1))
         {
-            float gx = Bounds.Right - 4;
-            float gy = Bounds.Bottom - 4;
-            graphics.DrawLine(gripPen, gx - 8, gy, gx, gy - 8);
-            graphics.DrawLine(gripPen, gx - 5, gy, gx, gy - 5);
-            graphics.DrawLine(gripPen, gx - 2, gy, gx, gy - 2);
+            float gx = Bounds.Right - 5;
+            float gy = Bounds.Bottom - 5;
+            graphics.DrawLine(gripPen, gx - 7, gy, gx, gy - 7);
+            graphics.DrawLine(gripPen, gx - 4, gy, gx, gy - 4);
+            graphics.DrawLine(gripPen, gx - 1, gy, gx, gy - 1);
         }
     }
 
@@ -442,13 +477,13 @@ public class MCPServerAttributes : GH_ComponentAttributes
         Color topColor, bottomColor;
         if (pressed)
         {
-            topColor = Color.FromArgb(200, 200, 200);
-            bottomColor = Color.FromArgb(220, 220, 220);
+            topColor = Color.FromArgb(210, 210, 210);
+            bottomColor = Color.FromArgb(225, 225, 225);
         }
         else
         {
-            topColor = Color.FromArgb(250, 250, 250);
-            bottomColor = Color.FromArgb(230, 230, 230);
+            topColor = Color.FromArgb(255, 255, 255);
+            bottomColor = Color.FromArgb(235, 235, 235);
         }
 
         using (var gradientBrush = new LinearGradientBrush(bounds, topColor, bottomColor, LinearGradientMode.Vertical))
@@ -469,9 +504,9 @@ public class MCPServerAttributes : GH_ComponentAttributes
         // Inner highlight (top edge) when not pressed
         if (!pressed)
         {
-            using (var highlightPen = new Pen(Color.FromArgb(100, 255, 255, 255), 1))
+            using (var highlightPen = new Pen(Color.FromArgb(80, 255, 255, 255), 1))
             {
-                graphics.DrawLine(highlightPen, bounds.X + 4, bounds.Y + 1, bounds.Right - 4, bounds.Y + 1);
+                graphics.DrawLine(highlightPen, bounds.X + 3, bounds.Y + 1, bounds.Right - 3, bounds.Y + 1);
             }
         }
 
