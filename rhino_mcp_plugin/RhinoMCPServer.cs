@@ -14,8 +14,6 @@ using Rhino.Input.Custom;
 using Rhino.UI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Text.Json;
 using Rhino.DocObjects;
 using rhinomcp.Serializers;
 using JsonException = Newtonsoft.Json.JsonException;

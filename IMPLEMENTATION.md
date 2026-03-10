@@ -6,7 +6,7 @@
 
 **RhinoMCP** is a Model Context Protocol (MCP) integration that connects Rhino 3D (the CAD software) to AI agents (Claude, Claude Desktop, and Cursor). It enables prompt-assisted 3D modeling by allowing AI to directly interact with and control Rhino through a standardized protocol.
 
-- **Version:** 0.1.3.6
+- **Version:** 0.2.1
 - **Author:** Jingcheng Chen
 - **License:** MIT
 - **Repository:** https://github.com/jingcheng-chen/rhinomcp
@@ -460,6 +460,7 @@ cd rhino_mcp_server
 
 ## Version History (Recent)
 
+- **0.2.1** - Added Curve related features
 - **0.1.3.6** - Latest release
 - **0.1.3.5** - Bug fixes
 - **0.1.3.4** - Added Arc, Ellipse, Cone, Cylinder, Surface geometry types

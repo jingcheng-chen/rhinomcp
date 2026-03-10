@@ -162,7 +162,7 @@ public partial class RhinoMCPFunctions
             else if (eventItem.IsOverlap)
             {
                 // For overlaps, we can extract the overlapping segment from curve A
-                var overlapCurve = curveA.Trim(eventItem.ParameterA0, eventItem.ParameterA1);
+                var overlapCurve = curveA.Trim(eventItem.OverlapA.T0, eventItem.OverlapA.T1);
                 if (overlapCurve != null)
                 {
                     var attr = new ObjectAttributes();
@@ -227,8 +227,8 @@ public partial class RhinoMCPFunctions
                 Point3d pt;
                 if (obj.Geometry is Point point)
                     pt = point.Location;
-                else if (obj.Geometry is Point3d dot) // Dot is different, but usually we deal with Point
-                    pt = dot;
+                else if (obj.Geometry is TextDot dot) // Dot is different, but usually we deal with Point
+                    pt = dot.Point;
                 else
                     continue;
 
