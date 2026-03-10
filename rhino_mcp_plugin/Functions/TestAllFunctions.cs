@@ -578,7 +578,128 @@ public partial class RhinoMCPFunctions
             results["delete_layer"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
-        // Cleanup: Delete remaining test objects (skip in visual mode to keep objects visible)
+        // Test 21: ProjectCurve
+        string projCurveId = null;
+        try
+        {
+            var pos = visualMode ? GetNextPosition() : new JArray { 110, 0, 0 };
+            
+            // Create a target surface
+            var surface = CreateObject(new JObject
+            {
+                ["type"] = "BOX",
+                ["name"] = "ProjTarget",
+                ["color"] = new JArray { 200, 200, 200 },
+                ["params"] = new JObject { ["width"] = 10, ["length"] = 10, ["height"] = 2 },
+                ["translation"] = pos
+            });
+            var targetId = surface["id"]?.ToString();
+
+            // Create a curve above it
+            var curvePos = new JArray { ((JArray)pos)[0].ToObject<double>() + 2, ((JArray)pos)[1].ToObject<double>() + 2, 10 };
+            var curve = CreateObject(new JObject
+            {
+                ["type"] = "CIRCLE",
+                ["name"] = "ProjSource",
+                ["params"] = new JObject { ["center"] = new JArray { 0, 0, 0 }, ["radius"] = 3 },
+                ["translation"] = curvePos
+            });
+            var sourceId = curve["id"]?.ToString();
+
+            var projResult = ProjectCurve(new JObject
+            {
+                ["curve_id"] = sourceId,
+                ["target_ids"] = new JArray { targetId },
+                ["direction"] = new JArray { 0, 0, -1 },
+                ["name"] = "ProjectedCurve"
+            });
+            var projIds = projResult["result_ids"] as JArray;
+            if (projIds == null || projIds.Count == 0)
+                throw new Exception("No curves projected");
+            
+            projCurveId = projIds[0].ToString();
+            results["project_curve"] = new JObject { ["status"] = "pass", ["count"] = projIds.Count };
+            VisualUpdate("Projected circle onto box");
+        }
+        catch (Exception e)
+        {
+            results["project_curve"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
+        // Test 22: IntersectCurves
+        try
+        {
+            var pos = visualMode ? GetNextPosition() : new JArray { 130, 0, 0 };
+            
+            // Create two intersecting lines
+            var line1 = CreateObject(new JObject
+            {
+                ["type"] = "LINE",
+                ["name"] = "IntLine1",
+                ["params"] = new JObject { ["start"] = new JArray { 0, 0, 0 }, ["end"] = new JArray { 10, 10, 0 } },
+                ["translation"] = pos
+            });
+            var line2 = CreateObject(new JObject
+            {
+                ["type"] = "LINE",
+                ["name"] = "IntLine2",
+                ["params"] = new JObject { ["start"] = new JArray { 0, 10, 0 }, ["end"] = new JArray { 10, 0, 0 } },
+                ["translation"] = pos
+            });
+
+            var intResult = IntersectCurves(new JObject
+            {
+                ["curve_id_a"] = line1["id"]?.ToString(),
+                ["curve_id_b"] = line2["id"]?.ToString(),
+                ["name"] = "IntersectionPoint"
+            });
+            var ptIds = intResult["point_ids"] as JArray;
+            if (ptIds == null || ptIds.Count == 0)
+                throw new Exception("No intersection points found");
+            
+            results["intersect_curves"] = new JObject { ["status"] = "pass", ["count"] = ptIds.Count };
+            VisualUpdate("Found intersection between two lines");
+        }
+        catch (Exception e)
+        {
+            results["intersect_curves"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
+        // Test 23: SplitCurve
+        try
+        {
+            var pos = visualMode ? GetNextPosition() : new JArray { 150, 0, 0 };
+            
+            // Create a line to split
+            var line = CreateObject(new JObject
+            {
+                ["type"] = "LINE",
+                ["name"] = "SplitLine",
+                ["params"] = new JObject { ["start"] = new JArray { 0, 0, 0 }, ["end"] = new JArray { 10, 0, 0 } },
+                ["translation"] = pos
+            });
+            
+            // Split at mid-parameter (0.5 for a line)
+            var splitResult = SplitCurve(new JObject
+            {
+                ["curve_id"] = line["id"]?.ToString(),
+                ["parameters"] = new JArray { 0.5 },
+                ["name"] = "SplitSegment",
+                ["delete_source"] = true
+            });
+            var segIds = splitResult["result_ids"] as JArray;
+            if (segIds == null || segIds.Count != 2)
+                throw new Exception($"Expected 2 segments, got {segIds?.Count ?? 0}");
+            
+            results["split_curve"] = new JObject { ["status"] = "pass", ["count"] = segIds.Count };
+            VisualUpdate("Split line into two segments");
+        }
+        catch (Exception e)
+        {
+            results["split_curve"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
+        // Cleanup
         if (!visualMode)
         {
             try
@@ -590,6 +711,13 @@ public partial class RhinoMCPFunctions
                 DeleteObject(new JObject { ["name"] = "BooleanDiffResult" });
                 DeleteObject(new JObject { ["name"] = "BooleanIntersectResult" });
                 DeleteObject(new JObject { ["name"] = "UndoTestBox" });
+                DeleteObject(new JObject { ["name"] = "ProjTarget" });
+                DeleteObject(new JObject { ["name"] = "ProjSource" });
+                DeleteObject(new JObject { ["name"] = "ProjectedCurve" });
+                DeleteObject(new JObject { ["name"] = "IntLine1" });
+                DeleteObject(new JObject { ["name"] = "IntLine2" });
+                DeleteObject(new JObject { ["name"] = "IntersectionPoint_point" });
+                DeleteObject(new JObject { ["name"] = "SplitSegment" });
             }
             catch
             {

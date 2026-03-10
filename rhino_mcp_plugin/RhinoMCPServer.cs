@@ -333,7 +333,10 @@ namespace RhinoMCPPlugin
                 ["extrude_curve"] = this.handler.ExtrudeCurve,
                 ["sweep1"] = this.handler.Sweep1,
                 ["offset_curve"] = this.handler.OffsetCurve,
-                ["pipe"] = this.handler.Pipe
+                ["pipe"] = this.handler.Pipe,
+                ["project_curve"] = this.handler.ProjectCurve,
+                ["intersect_curves"] = this.handler.IntersectCurves,
+                ["split_curve"] = this.handler.SplitCurve
             };
 
             // Commands that don't modify the document - no undo record needed
