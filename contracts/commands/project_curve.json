@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "project_curve.json",
+  "title": "ProjectCurve Command",
+  "description": "Project a curve onto surfaces, polysurfaces, or meshes",
+  "type": "object",
+  "properties": {
+    "curve_id": {
+      "type": "string",
+      "description": "The curve ID (GUID) to project"
+    },
+    "target_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of surface, polysurface, or mesh IDs to project onto",
+      "minItems": 1
+    },
+    "direction": {
+      "$ref": "../common/definitions.json#/$defs/vector3d",
+      "description": "Projection direction as [x, y, z] vector"
+    },
+    "name": {
+      "type": "string",
+      "description": "Optional name for the resulting curves"
+    }
+  },
+  "required": ["curve_id", "target_ids", "direction"]
+}

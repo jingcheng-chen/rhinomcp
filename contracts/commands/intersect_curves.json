@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "intersect_curves.json",
+  "title": "IntersectCurves Command",
+  "description": "Find intersection points or curves between two curves",
+  "type": "object",
+  "properties": {
+    "curve_id_a": {
+      "type": "string",
+      "description": "The first curve ID"
+    },
+    "curve_id_b": {
+      "type": "string",
+      "description": "The second curve ID"
+    },
+    "tolerance": {
+      "type": "number",
+      "description": "Optional intersection tolerance (defaults to document tolerance)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Optional base name for created intersection objects"
+    }
+  },
+  "required": ["curve_id_a", "curve_id_b"]
+}
