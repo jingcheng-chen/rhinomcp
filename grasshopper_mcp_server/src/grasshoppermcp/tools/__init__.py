@@ -19,6 +19,7 @@ from grasshoppermcp.tools.list_component_categories import list_component_catego
 from grasshoppermcp.tools.get_available_components import get_available_components
 from grasshoppermcp.tools.batch_search_components import batch_search_components
 from grasshoppermcp.tools.get_component_type_info import get_component_type_info
+from grasshoppermcp.tools.analyze_and_group_definition import analyze_and_group_definition
 
 __all__ = [
     "get_gh_document_info",
@@ -40,4 +41,5 @@ __all__ = [
     "list_component_categories",
     "get_available_components",
     "get_component_type_info",
+    "analyze_and_group_definition",
 ]

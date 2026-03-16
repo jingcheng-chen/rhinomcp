@@ -51,7 +51,10 @@ public partial class GrasshopperMCPFunctions : ICommandHandler
             ["batch_search_components"] = BatchSearchComponents,
             ["list_component_categories"] = ListComponentCategories,
             ["get_available_components"] = GetAvailableComponents,
-            ["get_component_type_info"] = GetComponentTypeInfo
+            ["get_component_type_info"] = GetComponentTypeInfo,
+
+            // Analysis operations
+            ["analyze_and_group_definition"] = AnalyzeAndGroupDefinition
         };
     }
 

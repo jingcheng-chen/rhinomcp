@@ -35,6 +35,9 @@ from .tools.get_canvas_state import get_canvas_state
 # Batch tools
 from .tools.create_definition import create_definition
 
+# Analysis tools
+from .tools.analyze_and_group_definition import analyze_and_group_definition
+
 # Search tools
 from .tools.search_components import search_components
 from .tools.list_component_categories import list_component_categories
