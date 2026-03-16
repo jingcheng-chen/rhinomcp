@@ -14,8 +14,6 @@ using Rhino.Input.Custom;
 using Rhino.UI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Text.Json;
 using Rhino.DocObjects;
 using rhinomcp.Serializers;
 using JsonException = Newtonsoft.Json.JsonException;
@@ -333,7 +331,10 @@ namespace RhinoMCPPlugin
                 ["extrude_curve"] = this.handler.ExtrudeCurve,
                 ["sweep1"] = this.handler.Sweep1,
                 ["offset_curve"] = this.handler.OffsetCurve,
-                ["pipe"] = this.handler.Pipe
+                ["pipe"] = this.handler.Pipe,
+                ["project_curve"] = this.handler.ProjectCurve,
+                ["intersect_curves"] = this.handler.IntersectCurves,
+                ["split_curve"] = this.handler.SplitCurve
             };
 
             // Commands that don't modify the document - no undo record needed

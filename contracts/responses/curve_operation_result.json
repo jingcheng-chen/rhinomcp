@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "curve_operation_result.json",
+  "title": "CurveOperationResult",
+  "description": "Result of curve operations (project, intersect, split)",
+  "type": "object",
+  "properties": {
+    "result_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs of created curve segments or projected curves"
+    },
+    "point_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs of created intersection points"
+    },
+    "curve_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs of created intersection curves/overlaps"
+    },
+    "points": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": { "type": "number" },
+        "minItems": 3,
+        "maxItems": 3
+      },
+      "description": "Intersection point coordinates [x, y, z]"
+    },
+    "count": {
+      "type": "integer",
+      "description": "Number of operations performed or items created"
+    },
+    "message": {
+      "type": "string",
+      "description": "Success or status message"
+    }
+  }
+}

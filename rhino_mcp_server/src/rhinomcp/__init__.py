@@ -43,3 +43,4 @@ from .tools.capture_viewport import capture_viewport
 
 # Advanced geometry tools
 from .tools.advanced_geometry import loft, extrude_curve, sweep1, offset_curve, pipe
+from .tools.curve_operations import project_curve, intersect_curves, split_curve

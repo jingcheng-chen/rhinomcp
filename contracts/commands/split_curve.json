@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "split_curve.json",
+  "title": "SplitCurve Command",
+  "description": "Split a curve at specified parameters or points",
+  "type": "object",
+  "properties": {
+    "curve_id": {
+      "type": "string",
+      "description": "The curve ID to split"
+    },
+    "parameters": {
+      "type": "array",
+      "items": { "type": "number" },
+      "description": "Optional list of curve parameters to split at"
+    },
+    "point_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional list of point object IDs to split at"
+    },
+    "delete_source": {
+      "type": "boolean",
+      "description": "Whether to delete the original curve",
+      "default": true
+    },
+    "name": {
+      "type": "string",
+      "description": "Optional name for the resulting curve segments"
+    }
+  },
+  "required": ["curve_id"]
+}

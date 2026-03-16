@@ -27,7 +27,15 @@
             "delete_layer",
             "get_or_set_current_layer",
             "execute_rhinoscript_python_code",
-            "capture_viewport"
+            "capture_viewport",
+            "loft",
+            "extrude_curve",
+            "sweep1",
+            "offset_curve",
+            "pipe",
+            "project_curve",
+            "intersect_curves",
+            "split_curve"
           ]
         },
         "params": {
