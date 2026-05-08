@@ -40,6 +40,8 @@ from .tools.rhinoscript_docs import (
 from .tools.undo import undo, redo
 from .tools.boolean_operations import boolean_union, boolean_difference, boolean_intersection
 from .tools.capture_viewport import capture_viewport
+from .tools.run_command import run_command
+from .tools.get_commands import get_commands
 
 # Advanced geometry tools
 from .tools.advanced_geometry import loft, extrude_curve, sweep1, offset_curve, pipe

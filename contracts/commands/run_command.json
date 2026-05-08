@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "run_command.json",
+  "title": "RunCommand Command",
+  "description": "Execute an arbitrary Rhino command string and return captured command-window output. Escape hatch for commands not yet wrapped by typed MCP tools.",
+  "type": "object",
+  "properties": {
+    "command": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Rhino command string to execute, e.g. \"_Box 0,0,0 10,10,10\". Prefix with underscore to force English command names."
+    },
+    "echo": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, echo the command in the Rhino command window as it runs."
+    }
+  },
+  "required": ["command"],
+  "additionalProperties": false
+}

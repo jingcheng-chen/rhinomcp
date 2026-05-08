@@ -246,6 +246,20 @@ def test_other_commands():
     if not validate("commands/get_object_info.json", {"name": "MyObject"}):
         all_passed = False
 
+    # run_command
+    print("  run_command:")
+    if not validate("commands/run_command.json", {"command": "_Box 0,0,0 10,10,10"}):
+        all_passed = False
+    if not validate("commands/run_command.json", {"command": "_SelAll", "echo": True}):
+        all_passed = False
+
+    # get_commands
+    print("  get_commands:")
+    if not validate("commands/get_commands.json", {}):
+        all_passed = False
+    if not validate("commands/get_commands.json", {"filter": "boolean", "loaded_only": False}):
+        all_passed = False
+
     return all_passed
 
 
@@ -314,6 +328,11 @@ def test_invalid_examples():
         ("commands/create_object.json", {"type": "INVALID", "params": {}}, "Invalid type"),
         # Missing code
         ("commands/execute_rhinoscript_python_code.json", {}, "Missing code"),
+        # Missing run_command.command
+        ("commands/run_command.json", {}, "run_command missing command"),
+        ("commands/run_command.json", {"command": ""}, "run_command empty command"),
+        # Unknown property on get_commands
+        ("commands/get_commands.json", {"bogus": 1}, "get_commands unknown field"),
     ]
 
     all_rejected = True
@@ -335,6 +354,53 @@ def test_invalid_examples():
     return all_rejected
 
 
+def test_protocol_envelope():
+    """Test the {type, params} envelope from protocol.json against the dispatch table."""
+    print("\n=== Testing protocol envelope ===")
+
+    with open(CONTRACTS_DIR / "protocol.json") as f:
+        protocol = json.load(f)
+    envelope = protocol["$defs"]["command"]
+    validator = Draft202012Validator(envelope)
+
+    # Mirrors the C# dispatch table in rhino_mcp_plugin/RhinoMCPServer.cs.
+    # Update both sides together when adding a command.
+    expected_commands = [
+        "create_object", "create_objects", "modify_object", "modify_objects",
+        "delete_object", "get_object_info", "get_selected_objects_info",
+        "get_document_summary", "get_objects", "select_objects",
+        "create_layer", "delete_layer", "get_or_set_current_layer",
+        "execute_rhinoscript_python_code", "execute_rhinocommon_csharp_code",
+        "capture_viewport", "undo", "redo",
+        "boolean_union", "boolean_difference", "boolean_intersection",
+        "loft", "extrude_curve", "sweep1", "offset_curve", "pipe",
+        "project_curve", "intersect_curves", "split_curve",
+        "run_command", "get_commands",
+    ]
+
+    all_passed = True
+
+    for cmd in expected_commands:
+        envelope_msg = {"type": cmd, "params": {}}
+        errors = list(validator.iter_errors(envelope_msg))
+        if errors:
+            print(f"  FAIL: '{cmd}' rejected by envelope ({errors[0].message})")
+            all_passed = False
+        else:
+            print(f"  PASS: '{cmd}'")
+
+    # Negative: unknown command type must be rejected
+    unknown = {"type": "totally_made_up_command", "params": {}}
+    errors = list(validator.iter_errors(unknown))
+    if not errors:
+        print("  FAIL: envelope accepted an unknown command type")
+        all_passed = False
+    else:
+        print("  CORRECTLY REJECTED: unknown command type")
+
+    return all_passed
+
+
 def main():
     """Run all tests."""
     print("RhinoMCP Schema Validation Tests")
@@ -349,6 +415,7 @@ def main():
     results.append(("other commands", test_other_commands()))
     results.append(("responses", test_responses()))
     results.append(("invalid rejection", test_invalid_examples()))
+    results.append(("protocol envelope", test_protocol_envelope()))
 
     print("\n" + "=" * 40)
     print("SUMMARY")

@@ -123,6 +123,8 @@ class MockRhinoServer:
             "boolean_union": self._boolean_union,
             "boolean_difference": self._boolean_difference,
             "boolean_intersection": self._boolean_intersection,
+            "run_command": self._run_command,
+            "get_commands": self._get_commands,
         }
 
         handler = handlers.get(cmd_type)
@@ -441,6 +443,29 @@ class MockRhinoServer:
 
         self.objects[result_id] = result
         return {"result_ids": [result_id], "count": 1, "message": "Boolean intersection created 1 object(s)"}
+
+
+    def _run_command(self, params: Dict) -> Dict:
+        """Mock Rhino command execution. Returns a fake captured output."""
+        command = params.get("command", "")
+        if not command:
+            raise Exception("command is required")
+        return {
+            "success": True,
+            "command": command,
+            "output": f"Mock executed: {command}"
+        }
+
+    def _get_commands(self, params: Dict) -> Dict:
+        """Mock listing of Rhino command names."""
+        all_commands = ["Box", "Circle", "Sphere", "BooleanUnion", "BooleanDifference", "Line"]
+        filter_str = (params.get("filter") or "").lower()
+        if filter_str:
+            matched = [c for c in all_commands if filter_str in c.lower()]
+        else:
+            matched = list(all_commands)
+        matched.sort(key=str.lower)
+        return {"count": len(matched), "commands": matched}
 
 
 if __name__ == "__main__":

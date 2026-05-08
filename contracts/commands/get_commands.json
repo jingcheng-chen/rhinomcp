@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "get_commands.json",
+  "title": "GetCommands Command",
+  "description": "List Rhino command names available in the current session. Pair with run_command to discover invokable commands.",
+  "type": "object",
+  "properties": {
+    "filter": {
+      "type": "string",
+      "default": "",
+      "description": "Optional case-insensitive substring to match against command names. Empty string returns all commands."
+    },
+    "loaded_only": {
+      "type": "boolean",
+      "default": true,
+      "description": "If true (default), only commands from currently loaded plugins are returned. If false, also include commands from unloaded plugins."
+    }
+  },
+  "additionalProperties": false
+}

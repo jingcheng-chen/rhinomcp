@@ -334,7 +334,10 @@ namespace RhinoMCPPlugin
                 ["pipe"] = this.handler.Pipe,
                 ["project_curve"] = this.handler.ProjectCurve,
                 ["intersect_curves"] = this.handler.IntersectCurves,
-                ["split_curve"] = this.handler.SplitCurve
+                ["split_curve"] = this.handler.SplitCurve,
+                // Generic Rhino command access
+                ["run_command"] = this.handler.RunCommand,
+                ["get_commands"] = this.handler.GetCommands
             };
 
             // Commands that don't modify the document - no undo record needed
@@ -346,7 +349,8 @@ namespace RhinoMCPPlugin
                 "get_selected_objects_info",
                 "undo",
                 "redo",
-                "capture_viewport"
+                "capture_viewport",
+                "get_commands"
             };
 
             if (handlers.TryGetValue(cmdType, out var handler))

@@ -919,3 +919,134 @@ class TestPipeTool:
 
         assert result["success"] is False
         assert "radius" in result["message"].lower()
+
+
+class TestRunCommandTool:
+    """Tests for run_command tool (Rhino command escape hatch)."""
+
+    @patch('rhinomcp.tools.run_command.get_rhino_connection')
+    def test_run_command_returns_output(self, mock_get_conn):
+        from rhinomcp.tools.run_command import run_command
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "success": True,
+            "command": "_Box 0,0,0 10,10,10",
+            "output": "Box command completed."
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = run_command(ctx=None, command="_Box 0,0,0 10,10,10")
+
+        mock_conn.send_command.assert_called_once()
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][0] == "run_command"
+        assert call_args[0][1]["command"] == "_Box 0,0,0 10,10,10"
+        assert call_args[0][1]["echo"] is False
+        assert "Box command completed" in result
+
+    @patch('rhinomcp.tools.run_command.get_rhino_connection')
+    def test_run_command_passes_echo_flag(self, mock_get_conn):
+        from rhinomcp.tools.run_command import run_command
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"success": True, "command": "_Box", "output": ""}
+        mock_get_conn.return_value = mock_conn
+
+        run_command(ctx=None, command="_Box", echo=True)
+
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][1]["echo"] is True
+
+    @patch('rhinomcp.tools.run_command.get_rhino_connection')
+    def test_run_command_empty_output_returns_done(self, mock_get_conn):
+        from rhinomcp.tools.run_command import run_command
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"success": True, "command": "_NoOp", "output": ""}
+        mock_get_conn.return_value = mock_conn
+
+        result = run_command(ctx=None, command="_NoOp")
+        assert result == "Done."
+
+    @patch('rhinomcp.tools.run_command.get_rhino_connection')
+    def test_run_command_handles_connection_error(self, mock_get_conn):
+        from rhinomcp.tools.run_command import run_command
+
+        mock_get_conn.side_effect = Exception("Connection refused")
+
+        result = run_command(ctx=None, command="_Box")
+        assert "Error running Rhino command" in result
+        assert "Connection refused" in result
+
+    @patch('rhinomcp.tools.run_command.get_rhino_connection')
+    def test_run_command_failure_is_flagged(self, mock_get_conn):
+        from rhinomcp.tools.run_command import run_command
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "success": False,
+            "command": "_NotARealCommand",
+            "output": "Unknown command: _NotARealCommand"
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = run_command(ctx=None, command="_NotARealCommand")
+        assert result.startswith("Command failed:")
+        assert "Unknown command" in result
+
+    @patch('rhinomcp.tools.run_command.get_rhino_connection')
+    def test_run_command_failure_no_output(self, mock_get_conn):
+        from rhinomcp.tools.run_command import run_command
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "success": False,
+            "command": "_X",
+            "output": ""
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = run_command(ctx=None, command="_X")
+        assert result.startswith("Command failed:")
+
+
+class TestGetCommandsTool:
+    """Tests for get_commands tool (Rhino command discovery)."""
+
+    @patch('rhinomcp.tools.get_commands.get_rhino_connection')
+    def test_get_commands_no_filter(self, mock_get_conn):
+        from rhinomcp.tools.get_commands import get_commands
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "count": 3,
+            "commands": ["Box", "Circle", "Sphere"]
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = get_commands(ctx=None)
+
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][0] == "get_commands"
+        assert call_args[0][1]["filter"] == ""
+        assert call_args[0][1]["loaded_only"] is True
+        assert "Box" in result
+        assert "Sphere" in result
+
+    @patch('rhinomcp.tools.get_commands.get_rhino_connection')
+    def test_get_commands_with_filter(self, mock_get_conn):
+        from rhinomcp.tools.get_commands import get_commands
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "count": 2,
+            "commands": ["BooleanDifference", "BooleanUnion"]
+        }
+        mock_get_conn.return_value = mock_conn
+
+        get_commands(ctx=None, filter="boolean", loaded_only=False)
+
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][1]["filter"] == "boolean"
+        assert call_args[0][1]["loaded_only"] is False
