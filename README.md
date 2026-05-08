@@ -87,6 +87,31 @@ powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
   }
 }
 ```
+or if you want your rhinomcp process to be stopped with your AI Agent (mac & linux):
+
+```json
+{
+  "mcpServers": {
+      "rhino": {
+        "command": "sh",
+        "args": ["-c", "killall rhinomcp 2>/dev/null; uvx rhinomcp"]
+      }
+    }
+}
+```
+
+and for Windows:
+
+```json
+{
+  "mcpServers": {
+      "rhino": {
+        "command": "cmd",
+        "args": ["/c", "taskkill /F /IM rhinomcp.exe 2>nul & uvx rhinomcp"]
+      }
+    }
+}
+```
 
 ### Claude for Desktop Integration
 
