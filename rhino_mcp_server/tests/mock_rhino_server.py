@@ -125,6 +125,7 @@ class MockRhinoServer:
             "boolean_intersection": self._boolean_intersection,
             "run_command": self._run_command,
             "get_commands": self._get_commands,
+            "execute_rhinoscript_python_code": self._execute_script,
         }
 
         handler = handlers.get(cmd_type)
@@ -454,6 +455,24 @@ class MockRhinoServer:
             "success": True,
             "command": command,
             "output": f"Mock executed: {command}"
+        }
+
+    def _execute_script(self, params: Dict) -> Dict:
+        """Mock Python script execution. Returns the new {success, output, message} shape."""
+        code = params.get("code", "")
+        if not code:
+            raise Exception("code is required")
+        # Mock heuristic: code containing "raise" or "syntax error" simulates a failure.
+        lowered = code.lower()
+        if "raise" in lowered or "syntax error" in lowered:
+            return {
+                "success": False,
+                "output": "partial output before error\n",
+                "message": "ScriptError: simulated failure"
+            }
+        return {
+            "success": True,
+            "output": "Mock script ran.\n"
         }
 
     def _get_commands(self, params: Dict) -> Dict:

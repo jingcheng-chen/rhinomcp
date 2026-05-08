@@ -610,6 +610,61 @@ class TestExecuteRhinoscriptTool:
         assert isinstance(result, dict)
         assert result.get("success") is False
 
+    @patch('rhinomcp.tools.execute_rhinoscript_python_code.get_rhino_connection')
+    def test_execute_script_success_returns_output(self, mock_get_conn):
+        """Successful execution surfaces captured output (Python print + Rhino lines)."""
+        from rhinomcp.tools.execute_rhinoscript_python_code import execute_rhinoscript_python_code
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "success": True,
+            "output": "Hello from print()\nRhino: Box created."
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = execute_rhinoscript_python_code(ctx=None, code="print('Hello from print()')")
+        assert result["success"] is True
+        assert "Hello from print()" in result["output"]
+        assert "Rhino: Box created." in result["output"]
+
+    @patch('rhinomcp.tools.execute_rhinoscript_python_code.get_rhino_connection')
+    def test_execute_script_failure_preserves_partial_output(self, mock_get_conn):
+        """When the script raises, captured output up to the exception is preserved."""
+        from rhinomcp.tools.execute_rhinoscript_python_code import execute_rhinoscript_python_code
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "success": False,
+            "output": "Step 1 done\nStep 2 done\n",
+            "message": "ZeroDivisionError: division by zero"
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = execute_rhinoscript_python_code(ctx=None, code="raise ZeroDivisionError()")
+        assert result["success"] is False
+        # Partial output must survive — that's the whole point of the slice.
+        assert "Step 1 done" in result["output"]
+        assert "Step 2 done" in result["output"]
+        assert "ZeroDivisionError" in result["message"]
+
+    @patch('rhinomcp.tools.execute_rhinoscript_python_code.get_rhino_connection')
+    def test_execute_script_failure_without_exception_has_message(self, mock_get_conn):
+        """ExecuteScript may return false without throwing; a message must still be set."""
+        from rhinomcp.tools.execute_rhinoscript_python_code import execute_rhinoscript_python_code
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "success": False,
+            "output": "",
+            "message": "Script execution returned false (no exception raised)."
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = execute_rhinoscript_python_code(ctx=None, code="# triggers ExecuteScript false")
+        assert result["success"] is False
+        assert result.get("message"), "failure response must include a non-empty message"
+        assert "returned false" in result["message"]
+
 
 class TestSearchRhinoscriptFunctionsTool:
     """Tests for search_rhinoscript_functions tool."""
