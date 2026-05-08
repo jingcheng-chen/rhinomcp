@@ -14,6 +14,7 @@ public partial class RhinoMCPFunctions
     /// <summary>
     /// Perform a boolean union on multiple objects.
     /// </summary>
+    [McpCommand("boolean_union")]
     public JObject BooleanUnion(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;
@@ -79,6 +80,7 @@ public partial class RhinoMCPFunctions
     /// <summary>
     /// Perform a boolean difference (subtraction) operation.
     /// </summary>
+    [McpCommand("boolean_difference")]
     public JObject BooleanDifference(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;
@@ -160,6 +162,7 @@ public partial class RhinoMCPFunctions
     /// <summary>
     /// Perform a boolean intersection operation.
     /// </summary>
+    [McpCommand("boolean_intersection")]
     public JObject BooleanIntersection(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;

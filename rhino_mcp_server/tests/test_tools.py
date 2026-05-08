@@ -1105,3 +1105,41 @@ class TestGetCommandsTool:
         call_args = mock_conn.send_command.call_args
         assert call_args[0][1]["filter"] == "boolean"
         assert call_args[0][1]["loaded_only"] is False
+
+
+class TestPackageApi:
+    """Lock in that the rhinomcp package re-exports tool functions at the top level.
+
+    Slice 3 replaced the manual import list in __init__.py with auto-discovery.
+    We preserve the pre-existing package API (`from rhinomcp import <tool>`) by
+    re-exporting tool-module callables during discovery; these tests guard that.
+    """
+
+    def test_classic_tools_are_top_level_attrs(self):
+        import rhinomcp
+        # A representative sample across tool categories — covers single-method
+        # modules and modules that export multiple functions.
+        for name in [
+            "create_object",
+            "delete_object",
+            "create_layer",
+            "boolean_union",
+            "boolean_intersection",
+            "loft",
+            "pipe",
+            "undo",
+            "redo",
+        ]:
+            assert hasattr(rhinomcp, name), f"rhinomcp.{name} missing — re-export regression"
+            assert callable(getattr(rhinomcp, name))
+
+    def test_new_slice1_tools_are_top_level_attrs(self):
+        import rhinomcp
+        assert callable(getattr(rhinomcp, "run_command", None))
+        assert callable(getattr(rhinomcp, "get_commands", None))
+
+    def test_private_names_are_not_exported(self):
+        import rhinomcp
+        # The discovery loop skips names starting with "_"; verify nothing internal leaked.
+        leaked = [n for n in dir(rhinomcp) if n in {"_TOOLS_DIR", "_info", "_mod", "_attr", "_value"}]
+        assert not leaked, f"loop locals leaked into package namespace: {leaked}"

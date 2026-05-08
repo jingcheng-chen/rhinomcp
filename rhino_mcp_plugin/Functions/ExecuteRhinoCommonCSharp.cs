@@ -75,6 +75,7 @@ public partial class RhinoMCPFunctions
         }
     }
 
+    [McpCommand("execute_rhinocommon_csharp_code")]
     public JObject ExecuteRhinoCommonCSharp(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;

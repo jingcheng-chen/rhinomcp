@@ -6,6 +6,7 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("run_command")]
     public JObject RunCommand(JObject parameters)
     {
         string command = parameters["command"]?.ToString();

@@ -10,6 +10,7 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("create_objects")]
     public JObject CreateObjects(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;

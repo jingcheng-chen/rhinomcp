@@ -11,6 +11,7 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("delete_layer")]
     public JObject DeleteLayer(JObject parameters)
     {
         // parse meta data

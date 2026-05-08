@@ -8,6 +8,7 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("execute_rhinoscript_python_code")]
     public JObject ExecuteRhinoscript(JObject parameters)
     {
         string code = parameters["code"]?.ToString();

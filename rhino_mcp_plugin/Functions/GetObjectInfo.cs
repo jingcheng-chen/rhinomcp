@@ -7,6 +7,7 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("get_object_info", ReadOnly = true)]
     public JObject GetObjectInfo(JObject parameters)
     {
         var obj = getObjectByIdOrName(parameters);

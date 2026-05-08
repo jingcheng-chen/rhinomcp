@@ -1,48 +1,42 @@
 """Rhino integration through the Model Context Protocol."""
 
+import importlib
+import pkgutil
+from pathlib import Path
+
 __version__ = "0.1.0"
 
-# Expose key classes and functions for easier imports
+# Expose key classes and functions for easier imports.
+# IMPORTANT: server (mcp, get_rhino_connection, logger) must be imported BEFORE
+# tool auto-discovery below — tool modules import from this package's namespace.
 from .static.rhinoscriptsyntax import rhinoscriptsyntax_json
 from .server import RhinoConnection, get_rhino_connection, mcp, logger
 
 # Prompts
 from .prompts.assert_general_strategy import asset_general_strategy, rhinoscript_workflow
 
-# Object tools
-from .tools.create_object import create_object
-from .tools.create_objects import create_objects
-from .tools.delete_object import delete_object
-from .tools.get_document_summary import get_document_summary
-from .tools.get_objects import get_objects
-from .tools.get_object_info import get_object_info
-from .tools.get_selected_objects_info import get_selected_objects_info
-from .tools.modify_object import modify_object
-from .tools.modify_objects import modify_objects
-from .tools.select_objects import select_objects
+# Auto-discover and register tool modules.
+# Each module under tools/ uses @mcp.tool() to register on import. To add a new
+# tool, drop a file `tools/<command>.py` — no edits to this file required.
+# Modules whose name starts with "_" are skipped (treat them as private helpers).
+#
+# We also re-export each module's public callables at the package level so that
+# `from rhinomcp import create_object` keeps working — preserving the pre-3.x
+# package API without re-introducing the manual import list.
+def _discover_and_register_tools() -> None:
+    tools_dir = Path(__file__).parent / "tools"
+    package_globals = globals()
+    for info in pkgutil.iter_modules([str(tools_dir)]):
+        if info.name.startswith("_"):
+            continue
+        mod = importlib.import_module(f"{__name__}.tools.{info.name}")
+        for attr in dir(mod):
+            if attr.startswith("_"):
+                continue
+            value = getattr(mod, attr)
+            if callable(value) and getattr(value, "__module__", None) == mod.__name__:
+                package_globals[attr] = value
 
-# Layer tools
-from .tools.create_layer import create_layer
-from .tools.get_or_set_current_layer import get_or_set_current_layer
-from .tools.delete_layer import delete_layer
 
-# RhinoScript execution and documentation tools
-from .tools.execute_rhinoscript_python_code import execute_rhinoscript_python_code
-from .tools.execute_rhinocommon_csharp_code import execute_rhinocommon_csharp_code
-from .tools.rhinoscript_docs import (
-    search_rhinoscript_functions,
-    get_rhinoscript_docs,
-    list_rhinoscript_modules,
-    get_module_functions,
-)
-
-# Utility tools
-from .tools.undo import undo, redo
-from .tools.boolean_operations import boolean_union, boolean_difference, boolean_intersection
-from .tools.capture_viewport import capture_viewport
-from .tools.run_command import run_command
-from .tools.get_commands import get_commands
-
-# Advanced geometry tools
-from .tools.advanced_geometry import loft, extrude_curve, sweep1, offset_curve, pipe
-from .tools.curve_operations import project_curve, intersect_curves, split_curve
+_discover_and_register_tools()
+del _discover_and_register_tools

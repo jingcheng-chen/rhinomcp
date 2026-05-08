@@ -11,6 +11,7 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("get_objects", ReadOnly = true)]
     public JObject GetObjects(JObject parameters)
     {
         const int DEFAULT_LIMIT = 50;

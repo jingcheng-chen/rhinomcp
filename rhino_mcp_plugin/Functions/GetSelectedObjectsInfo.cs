@@ -6,6 +6,7 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("get_selected_objects_info", ReadOnly = true)]
     public JObject GetSelectedObjectsInfo(JObject parameters)
     {
         var includeAttributes = parameters["include_attributes"]?.ToObject<bool>() ?? false;

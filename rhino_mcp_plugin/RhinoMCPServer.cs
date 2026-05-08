@@ -302,101 +302,52 @@ namespace RhinoMCPPlugin
 
         private JObject ExecuteCommandInternal(string cmdType, JObject parameters)
         {
-            // Dictionary to map command types to handler methods
-            Dictionary<string, Func<JObject, JObject>> handlers = new Dictionary<string, Func<JObject, JObject>>
-            {
-                ["get_document_summary"] = this.handler.GetDocumentSummary,
-                ["get_objects"] = this.handler.GetObjects,
-                ["create_object"] = this.handler.CreateObject,
-                ["create_objects"] = this.handler.CreateObjects,
-                ["get_object_info"] = this.handler.GetObjectInfo,
-                ["get_selected_objects_info"] = this.handler.GetSelectedObjectsInfo,
-                ["delete_object"] = this.handler.DeleteObject,
-                ["modify_object"] = this.handler.ModifyObject,
-                ["modify_objects"] = this.handler.ModifyObjects,
-                ["execute_rhinoscript_python_code"] = this.handler.ExecuteRhinoscript,
-                ["execute_rhinocommon_csharp_code"] = this.handler.ExecuteRhinoCommonCSharp,
-                ["select_objects"] = this.handler.SelectObjects,
-                ["create_layer"] = this.handler.CreateLayer,
-                ["get_or_set_current_layer"] = this.handler.GetOrSetCurrentLayer,
-                ["delete_layer"] = this.handler.DeleteLayer,
-                ["undo"] = this.handler.Undo,
-                ["redo"] = this.handler.Redo,
-                ["boolean_union"] = this.handler.BooleanUnion,
-                ["boolean_difference"] = this.handler.BooleanDifference,
-                ["boolean_intersection"] = this.handler.BooleanIntersection,
-                ["capture_viewport"] = this.handler.CaptureViewport,
-                // Advanced geometry operations
-                ["loft"] = this.handler.Loft,
-                ["extrude_curve"] = this.handler.ExtrudeCurve,
-                ["sweep1"] = this.handler.Sweep1,
-                ["offset_curve"] = this.handler.OffsetCurve,
-                ["pipe"] = this.handler.Pipe,
-                ["project_curve"] = this.handler.ProjectCurve,
-                ["intersect_curves"] = this.handler.IntersectCurves,
-                ["split_curve"] = this.handler.SplitCurve,
-                // Generic Rhino command access
-                ["run_command"] = this.handler.RunCommand,
-                ["get_commands"] = this.handler.GetCommands
-            };
+            // Reflection-discovered dispatch table — see Functions/_Registry.cs.
+            // Adding a new command means adding a [McpCommand("name")] method on
+            // RhinoMCPFunctions; no edits to this file are required.
+            var dispatch = this.handler.GetDispatchTable();
 
-            // Commands that don't modify the document - no undo record needed
-            HashSet<string> readOnlyCommands = new HashSet<string>
-            {
-                "get_document_summary",
-                "get_objects",
-                "get_object_info",
-                "get_selected_objects_info",
-                "undo",
-                "redo",
-                "capture_viewport",
-                "get_commands"
-            };
-
-            if (handlers.TryGetValue(cmdType, out var handler))
-            {
-                var doc = RhinoDoc.ActiveDoc;
-                bool needsUndo = !readOnlyCommands.Contains(cmdType);
-                uint record = 0;
-
-                if (needsUndo)
-                {
-                    record = doc.BeginUndoRecord($"MCP: {cmdType}");
-                }
-
-                try
-                {
-                    JObject result = handler(parameters);
-                    return new JObject
-                    {
-                        ["status"] = "success",
-                        ["result"] = result
-                    };
-                }
-                catch (Exception e)
-                {
-                    RhinoApp.WriteLine($"Error in handler: {e.Message}");
-                    return new JObject
-                    {
-                        ["status"] = "error",
-                        ["message"] = e.Message
-                    };
-                }
-                finally
-                {
-                    if (needsUndo)
-                    {
-                        doc.EndUndoRecord(record);
-                    }
-                }
-            }
-            else
+            if (!dispatch.TryGetValue(cmdType, out var entry))
             {
                 return new JObject
                 {
                     ["status"] = "error",
                     ["message"] = $"Unknown command type: {cmdType}"
                 };
+            }
+
+            var doc = RhinoDoc.ActiveDoc;
+            bool needsUndo = !entry.ReadOnly;
+            uint record = 0;
+            if (needsUndo)
+            {
+                record = doc.BeginUndoRecord($"MCP: {cmdType}");
+            }
+
+            try
+            {
+                JObject result = entry.Handler(parameters);
+                return new JObject
+                {
+                    ["status"] = "success",
+                    ["result"] = result
+                };
+            }
+            catch (Exception e)
+            {
+                RhinoApp.WriteLine($"Error in handler: {e.Message}");
+                return new JObject
+                {
+                    ["status"] = "error",
+                    ["message"] = e.Message
+                };
+            }
+            finally
+            {
+                if (needsUndo)
+                {
+                    doc.EndUndoRecord(record);
+                }
             }
         }
     }

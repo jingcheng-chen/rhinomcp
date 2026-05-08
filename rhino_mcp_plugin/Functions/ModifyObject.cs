@@ -25,6 +25,7 @@ public partial class RhinoMCPFunctions
     /// </param>
     /// <returns>JSON object with updated object info</returns>
     /// <exception cref="InvalidOperationException">Thrown when object is not found</exception>
+    [McpCommand("modify_object")]
     public JObject ModifyObject(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;

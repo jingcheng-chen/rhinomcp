@@ -16,6 +16,7 @@ public partial class RhinoMCPFunctions
     /// <summary>
     /// Create a loft surface through multiple curves.
     /// </summary>
+    [McpCommand("loft")]
     public JObject Loft(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;
@@ -81,6 +82,7 @@ public partial class RhinoMCPFunctions
     /// <summary>
     /// Extrude a curve along a direction vector.
     /// </summary>
+    [McpCommand("extrude_curve")]
     public JObject ExtrudeCurve(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;
@@ -153,6 +155,7 @@ public partial class RhinoMCPFunctions
     /// <summary>
     /// Sweep profile curves along a rail curve.
     /// </summary>
+    [McpCommand("sweep1")]
     public JObject Sweep1(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;
@@ -223,6 +226,7 @@ public partial class RhinoMCPFunctions
     /// <summary>
     /// Offset a curve by a specified distance.
     /// </summary>
+    [McpCommand("offset_curve")]
     public JObject OffsetCurve(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;
@@ -303,6 +307,7 @@ public partial class RhinoMCPFunctions
     /// <summary>
     /// Create a pipe along a curve.
     /// </summary>
+    [McpCommand("pipe")]
     public JObject Pipe(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;

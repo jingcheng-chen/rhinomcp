@@ -11,6 +11,7 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("create_layer")]
     public JObject CreateLayer(JObject parameters)
     {
         // parse meta data

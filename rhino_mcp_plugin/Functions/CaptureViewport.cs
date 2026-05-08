@@ -13,6 +13,7 @@ public partial class RhinoMCPFunctions
     /// <summary>
     /// Captures a viewport screenshot and returns it as base64-encoded PNG data.
     /// </summary>
+    [McpCommand("capture_viewport", ReadOnly = true)]
     public JObject CaptureViewport(JObject parameters)
     {
         RhinoApp.WriteLine("Capturing viewport...");

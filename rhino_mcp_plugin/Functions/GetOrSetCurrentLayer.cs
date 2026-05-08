@@ -11,6 +11,7 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("get_or_set_current_layer")]
     public JObject GetOrSetCurrentLayer(JObject parameters)
     {
         // parse meta data

@@ -8,6 +8,7 @@ public partial class RhinoMCPFunctions
     /// <summary>
     /// Undo the last operation in the Rhino document.
     /// </summary>
+    [McpCommand("undo", ReadOnly = true)]
     public JObject Undo(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;
@@ -43,6 +44,7 @@ public partial class RhinoMCPFunctions
     /// <summary>
     /// Redo the last undone operation in the Rhino document.
     /// </summary>
+    [McpCommand("redo", ReadOnly = true)]
     public JObject Redo(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;

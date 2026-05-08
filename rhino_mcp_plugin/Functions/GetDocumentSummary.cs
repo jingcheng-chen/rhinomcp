@@ -11,6 +11,7 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("get_document_summary", ReadOnly = true)]
     public JObject GetDocumentSummary(JObject parameters)
     {
         RhinoApp.WriteLine("Getting document summary...");

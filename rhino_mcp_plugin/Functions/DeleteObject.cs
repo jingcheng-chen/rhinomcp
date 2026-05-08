@@ -7,6 +7,7 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("delete_object")]
     public JObject DeleteObject(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;

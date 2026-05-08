@@ -11,6 +11,7 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("modify_objects")]
     public JObject ModifyObjects(JObject parameters)
     {
         bool all = parameters.ContainsKey("all");

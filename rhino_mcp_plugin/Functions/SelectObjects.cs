@@ -9,6 +9,7 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("select_objects")]
     public JObject SelectObjects(JObject parameters)
     {
         JObject filters = (JObject)parameters["filters"];

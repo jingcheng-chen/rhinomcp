@@ -7,6 +7,7 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("get_commands", ReadOnly = true)]
     public JObject GetCommands(JObject parameters)
     {
         bool loadedOnly = parameters["loaded_only"]?.ToObject<bool>() ?? true;
