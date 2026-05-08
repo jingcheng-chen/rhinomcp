@@ -2,3 +2,7 @@
 .vscode
 .cursor
 node_modules/FUTURE_FEATURES.md
+grasshopper_mcp_plugin/
+grasshopper_mcp_server/
+.codex/
+.idea/
