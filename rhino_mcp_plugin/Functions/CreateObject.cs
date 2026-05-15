@@ -81,7 +81,22 @@ public partial class RhinoMCPFunctions
                 break;
             case "CURVE":
                 List<Point3d> controlPoints = castToPoint3dList(geoParams.SelectToken("points"));
-                int degree = castToInt(geoParams.SelectToken("degree"));
+                if (controlPoints.Count < 2)
+                    throw new InvalidOperationException("CURVE requires at least 2 control points.");
+                // If degree is omitted, default to 3 but clamp down for short curves so a
+                // 2- or 3-point call doesn't fail. If degree is explicit, validate it.
+                JToken degreeTok = geoParams.SelectToken("degree");
+                int degree;
+                if (degreeTok != null)
+                {
+                    degree = degreeTok.ToObject<int>();
+                    if (degree < 1 || degree >= controlPoints.Count)
+                        throw new InvalidOperationException($"CURVE 'degree' ({degree}) must satisfy 1 <= degree < point count ({controlPoints.Count}).");
+                }
+                else
+                {
+                    degree = Math.Min(3, controlPoints.Count - 1);
+                }
                 var curve = Curve.CreateControlPointCurve(controlPoints, degree) ?? throw new InvalidOperationException("unable to create control point curve from given points");
                 objectId = doc.Objects.AddCurve(curve);
                 break;
@@ -111,7 +126,8 @@ public partial class RhinoMCPFunctions
             case "CONE":
                 double coneRadius = castToDouble(geoParams.SelectToken("radius"));
                 double coneHeight = castToDouble(geoParams.SelectToken("height"));
-                bool coneCap = castToBool(geoParams.SelectToken("cap"));
+                // cap defaults to true to match the schema and docs.
+                bool coneCap = geoParams.SelectToken("cap")?.ToObject<bool>() ?? true;
                 Cone cone = new Cone(Plane.WorldXY, coneHeight, coneRadius);
                 Brep brep = Brep.CreateFromCone(cone, coneCap);
                 objectId = doc.Objects.AddBrep(brep);
@@ -119,7 +135,7 @@ public partial class RhinoMCPFunctions
             case "CYLINDER":
                 double cylinderRadius = castToDouble(geoParams.SelectToken("radius"));
                 double cylinderHeight = castToDouble(geoParams.SelectToken("height"));
-                bool cylinderCap = castToBool(geoParams.SelectToken("cap"));
+                bool cylinderCap = geoParams.SelectToken("cap")?.ToObject<bool>() ?? true;
                 Circle cylinderCircle = new Circle(Plane.WorldXY, cylinderRadius);
                 Cylinder cylinder = new Cylinder(cylinderCircle, cylinderHeight);
                 objectId = doc.Objects.AddBrep(cylinder.ToBrep(cylinderCap, cylinderCap));
@@ -127,8 +143,14 @@ public partial class RhinoMCPFunctions
             case "SURFACE":
                 int[] surfaceCount = castToIntArray(geoParams.SelectToken("count"));
                 List<Point3d> surfacePoints = castToPoint3dList(geoParams.SelectToken("points"));
-                int[] surfaceDegree = castToIntArray(geoParams.SelectToken("degree"));
-                bool[] surfaceClosed = castToBoolArray(geoParams.SelectToken("closed"));
+                // degree defaults to [3,3]; closed defaults to [false,false]. castToIntArray /
+                // castToBoolArray would default to [0,0] / [false,false] which is an invalid degree.
+                int[] surfaceDegree = geoParams.SelectToken("degree")?.ToObject<int[]>() ?? new[] { 3, 3 };
+                bool[] surfaceClosed = geoParams.SelectToken("closed")?.ToObject<bool[]>() ?? new[] { false, false };
+                if (surfaceDegree.Length != 2 || surfaceDegree[0] < 1 || surfaceDegree[1] < 1)
+                    throw new InvalidOperationException("SURFACE 'degree' must be two integers >= 1.");
+                if (surfaceCount.Length != 2 || surfaceCount[0] <= surfaceDegree[0] || surfaceCount[1] <= surfaceDegree[1])
+                    throw new InvalidOperationException("SURFACE 'count' must exceed 'degree' in each direction.");
                 var surf = NurbsSurface.CreateThroughPoints(surfacePoints, surfaceCount[0], surfaceCount[1], surfaceDegree[0], surfaceDegree[1], surfaceClosed[0], surfaceClosed[1]);
                 objectId = doc.Objects.AddSurface(surf);
                 break;

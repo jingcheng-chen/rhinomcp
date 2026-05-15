@@ -90,10 +90,16 @@ def test_create_object_commands():
         {"type": "SPHERE", "params": {"radius": 5.0}},
         # CIRCLE
         {"type": "CIRCLE", "params": {"center": [0, 0, 0], "radius": 2.5}},
-        # CURVE
+        # CURVE with explicit degree
         {"type": "CURVE", "params": {"points": [[0, 0, 0], [1, 1, 0], [2, 0, 0]], "degree": 2}},
+        # CURVE relying on default degree (3 points -> handler clamps to degree 2)
+        {"type": "CURVE", "params": {"points": [[0, 0, 0], [1, 1, 0], [2, 0, 0]]}},
+        # CURVE with 4 points and default degree (-> 3)
+        {"type": "CURVE", "params": {"points": [[0, 0, 0], [1, 1, 0], [2, 0, 0], [3, 0, 0]]}},
         # CYLINDER
         {"type": "CYLINDER", "params": {"radius": 1.0, "height": 5.0, "cap": True}},
+        # CYLINDER without cap (defaults to true)
+        {"type": "CYLINDER", "params": {"radius": 1.0, "height": 5.0}},
         # CONE
         {"type": "CONE", "params": {"radius": 2.0, "height": 4.0}},
     ]
@@ -340,6 +346,12 @@ def test_invalid_examples():
         # delete_object: mixed selectors (id + all) — ambiguous, would silently delete-all
         ("commands/delete_object.json", {"id": "12345678-1234-1234-1234-123456789012", "all": True}, "delete_object mixed id+all"),
         ("commands/delete_object.json", {"name": "Box1", "all": True}, "delete_object mixed name+all"),
+        # create_object: params discriminated by type — sphere params on a BOX must fail
+        ("commands/create_object.json", {"type": "BOX", "params": {"radius": 1}}, "create_object BOX with sphere params"),
+        # create_object: PIPE removed from enum (use the dedicated `pipe` tool instead)
+        ("commands/create_object.json", {"type": "PIPE", "params": {"curve_id": "x", "radius": 1}}, "create_object PIPE removed"),
+        # create_object: top-level additionalProperties: false
+        ("commands/create_object.json", {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}, "bogus": 1}, "create_object unknown top-level field"),
     ]
 
     all_rejected = True

@@ -17,7 +17,7 @@ def create_object(
     Create a new object in the Rhino document.
     
     Parameters:
-    - type: Object type ("POINT", "LINE", "POLYLINE", "CIRCLE", "ARC", "ELLIPSE", "CURVE", "BOX", "SPHERE", "CONE", "CYLINDER", "PIPE", "SURFACE")
+    - type: Object type ("POINT", "LINE", "POLYLINE", "CIRCLE", "ARC", "ELLIPSE", "CURVE", "BOX", "SPHERE", "CONE", "CYLINDER", "SURFACE"). For pipes, use the dedicated `pipe` tool.
     - name: Optional name for the object
     - color: Optional [r, g, b] color values (0-255) for the object
     - params: Type-specific parameters dictionary (see documentation for each type)

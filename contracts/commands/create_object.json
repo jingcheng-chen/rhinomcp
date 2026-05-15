@@ -8,7 +8,7 @@
     "type": {
       "type": "string",
       "description": "Object type to create",
-      "enum": ["POINT", "LINE", "POLYLINE", "CIRCLE", "ARC", "ELLIPSE", "CURVE", "BOX", "SPHERE", "CONE", "CYLINDER", "PIPE", "SURFACE"]
+      "enum": ["POINT", "LINE", "POLYLINE", "CIRCLE", "ARC", "ELLIPSE", "CURVE", "BOX", "SPHERE", "CONE", "CYLINDER", "SURFACE"]
     },
     "name": {
       "type": "string",
@@ -20,7 +20,7 @@
     },
     "params": {
       "type": "object",
-      "description": "Type-specific geometry parameters. See $defs for type-specific schemas."
+      "description": "Type-specific geometry parameters. Constrained by `type` via allOf branches below."
     },
     "translation": {
       "$ref": "../common/definitions.json#/$defs/vector3d",
@@ -36,6 +36,22 @@
     }
   },
   "required": ["type", "params"],
+  "additionalProperties": false,
+
+  "allOf": [
+    { "if": { "properties": { "type": { "const": "POINT"    } }, "required": ["type"] }, "then": { "properties": { "params": { "$ref": "#/$defs/pointParams"    } } } },
+    { "if": { "properties": { "type": { "const": "LINE"     } }, "required": ["type"] }, "then": { "properties": { "params": { "$ref": "#/$defs/lineParams"     } } } },
+    { "if": { "properties": { "type": { "const": "POLYLINE" } }, "required": ["type"] }, "then": { "properties": { "params": { "$ref": "#/$defs/polylineParams" } } } },
+    { "if": { "properties": { "type": { "const": "CIRCLE"   } }, "required": ["type"] }, "then": { "properties": { "params": { "$ref": "#/$defs/circleParams"   } } } },
+    { "if": { "properties": { "type": { "const": "ARC"      } }, "required": ["type"] }, "then": { "properties": { "params": { "$ref": "#/$defs/arcParams"      } } } },
+    { "if": { "properties": { "type": { "const": "ELLIPSE"  } }, "required": ["type"] }, "then": { "properties": { "params": { "$ref": "#/$defs/ellipseParams"  } } } },
+    { "if": { "properties": { "type": { "const": "CURVE"    } }, "required": ["type"] }, "then": { "properties": { "params": { "$ref": "#/$defs/curveParams"    } } } },
+    { "if": { "properties": { "type": { "const": "BOX"      } }, "required": ["type"] }, "then": { "properties": { "params": { "$ref": "#/$defs/boxParams"      } } } },
+    { "if": { "properties": { "type": { "const": "SPHERE"   } }, "required": ["type"] }, "then": { "properties": { "params": { "$ref": "#/$defs/sphereParams"   } } } },
+    { "if": { "properties": { "type": { "const": "CONE"     } }, "required": ["type"] }, "then": { "properties": { "params": { "$ref": "#/$defs/coneParams"     } } } },
+    { "if": { "properties": { "type": { "const": "CYLINDER" } }, "required": ["type"] }, "then": { "properties": { "params": { "$ref": "#/$defs/cylinderParams" } } } },
+    { "if": { "properties": { "type": { "const": "SURFACE"  } }, "required": ["type"] }, "then": { "properties": { "params": { "$ref": "#/$defs/surfaceParams"  } } } }
+  ],
 
   "$defs": {
     "pointParams": {
@@ -97,10 +113,15 @@
     "curveParams": {
       "type": "object",
       "properties": {
-        "points": { "$ref": "../common/definitions.json#/$defs/point3dList" },
+        "points": {
+          "allOf": [
+            { "$ref": "../common/definitions.json#/$defs/point3dList" },
+            { "minItems": 2 }
+          ]
+        },
         "degree": { "type": "integer", "minimum": 1, "default": 3 }
       },
-      "required": ["points", "degree"],
+      "required": ["points"],
       "additionalProperties": false
     },
     "boxParams": {

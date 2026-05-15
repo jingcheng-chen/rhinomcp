@@ -7,6 +7,7 @@ Ensures type safety between Python MCP server and C# Rhino plugin.
 
 import json
 import logging
+import os
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -64,20 +65,49 @@ def _load_schema(schema_path: str) -> Dict[str, Any]:
     return schema
 
 
-def _get_resolver() -> Optional["RefResolver"]:
-    """Create a resolver for $ref resolution."""
+def _get_resolver(schema: Optional[Dict[str, Any]] = None, schema_rel_path: Optional[str] = None) -> Optional["RefResolver"]:
+    """Create a resolver for $ref resolution.
+
+    The base URI is set to the directory holding the schema being validated
+    (e.g. contracts/commands/ for command schemas), so:
+      - the schema's bare `$id` (e.g. "create_object.json") resolves to the
+        actual file location, and local `#/$defs/...` refs work,
+      - relative cross-directory refs like `../common/definitions.json` resolve
+        against the same directory hierarchy on disk.
+
+    The schema and the common definitions are pre-registered in the store so
+    no filesystem lookup is required at validation time.
+    """
     if not HAS_JSONSCHEMA:
         return None
 
     contracts_dir = _get_contracts_dir()
-    base_uri = f"file://{contracts_dir}/"
 
-    # Load common definitions
+    # Pick a base_uri co-located with the schema so its $id and relative refs
+    # both resolve consistently.
+    if schema_rel_path is not None:
+        rel_dir = Path(schema_rel_path).parent.as_posix()
+        if rel_dir and rel_dir != ".":
+            base_uri = f"file://{contracts_dir}/{rel_dir}/"
+        else:
+            base_uri = f"file://{contracts_dir}/"
+    else:
+        base_uri = f"file://{contracts_dir}/"
+
+    # Pre-register common definitions under the URI relative refs will produce.
     common_schema = _load_schema("common/definitions.json")
+    common_uri_from_base = f"{base_uri}../common/definitions.json" if schema_rel_path else f"{base_uri}common/definitions.json"
 
-    store = {
-        f"{base_uri}common/definitions.json": common_schema,
+    store: Dict[str, Any] = {
+        f"file://{contracts_dir}/common/definitions.json": common_schema,
+        common_uri_from_base: common_schema,
     }
+    if schema is not None and schema_rel_path is not None:
+        schema_filename = Path(schema_rel_path).name
+        store[f"{base_uri}{schema_filename}"] = schema
+        schema_id = schema.get("$id")
+        if isinstance(schema_id, str) and schema_id:
+            store[f"{base_uri}{schema_id}"] = schema
 
     return RefResolver(base_uri, {}, store=store)
 
@@ -106,7 +136,7 @@ def validate_command(command_type: str, params: Dict[str, Any], raise_on_error: 
 
     try:
         schema = _load_schema(schema_path)
-        resolver = _get_resolver()
+        resolver = _get_resolver(schema=schema, schema_rel_path=schema_path)
 
         validator = Draft202012Validator(schema, resolver=resolver)
         validator.validate(params)
@@ -165,7 +195,7 @@ def validate_response(command_type: str, response: Dict[str, Any], raise_on_erro
 
     try:
         schema = _load_schema(schema_path)
-        resolver = _get_resolver()
+        resolver = _get_resolver(schema=schema, schema_rel_path=schema_path)
 
         validator = Draft202012Validator(schema, resolver=resolver)
         validator.validate(response)
