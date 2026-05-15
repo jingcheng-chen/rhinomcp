@@ -209,6 +209,21 @@ class TestRuntimeValidation:
 
         mock_sock.sendall.assert_called_once()
 
+    def test_unrecognized_validate_value_falls_back_to_warn(self):
+        """Unknown RHINO_MCP_VALIDATE values must not NameError during import:
+        the warning is deferred until after `logger` is constructed."""
+        import importlib
+        import sys
+        sys.modules.pop("rhinomcp.server", None)
+        with patch.dict('os.environ', {'RHINO_MCP_VALIDATE': 'verbose'}, clear=False):
+            try:
+                mod = importlib.import_module("rhinomcp.server")
+                assert mod.RHINO_VALIDATE == "warn"
+            finally:
+                sys.modules.pop("rhinomcp.server", None)
+        # Restore baseline module so later tests see a clean import.
+        importlib.import_module("rhinomcp.server")
+
 
 class TestSendCommand:
     """Tests for the send_command method."""

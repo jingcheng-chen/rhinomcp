@@ -35,8 +35,10 @@ if RHINO_VALIDATE in ("0", "false", "no"):
     RHINO_VALIDATE = "off"
 elif RHINO_VALIDATE in ("1", "true", "yes"):
     RHINO_VALIDATE = "warn"
-if RHINO_VALIDATE not in ("off", "warn", "strict"):
-    logger.warning(f"Unknown RHINO_MCP_VALIDATE={RHINO_VALIDATE!r}; falling back to 'warn'.")
+# Defer the unknown-value warning until after `logger` is defined; emitting it
+# here would NameError before the server even starts.
+_RHINO_VALIDATE_UNKNOWN = RHINO_VALIDATE if RHINO_VALIDATE not in ("off", "warn", "strict") else None
+if _RHINO_VALIDATE_UNKNOWN is not None:
     RHINO_VALIDATE = "warn"
 
 # Configure logging
@@ -47,6 +49,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger("RhinoMCPServer")
 logger.setLevel(log_level)
+
+if _RHINO_VALIDATE_UNKNOWN is not None:
+    logger.warning(f"Unknown RHINO_MCP_VALIDATE={_RHINO_VALIDATE_UNKNOWN!r}; falling back to 'warn'.")
 
 if RHINO_DEBUG:
     logger.info("Debug mode enabled")
@@ -171,9 +176,12 @@ class RhinoConnection:
                 from rhinomcp.validation import validate_command
                 try:
                     validate_command(command_type, command["params"], raise_on_error=True)
-                except ValueError:
-                    raise
                 except Exception as ve:
+                    # validate_command raises jsonschema.ValidationError on schema
+                    # failures (FileNotFoundError is handled internally). We keep
+                    # the broad except so a missing jsonschema install doesn't
+                    # require importing it here — but the only expected type is
+                    # ValidationError.
                     msg = f"Pre-flight validation failed for {command_type}: {ve}"
                     if RHINO_VALIDATE == "strict":
                         raise ValueError(f"Invalid params for '{command_type}': {ve}") from ve
