@@ -1,6 +1,12 @@
+import os
+
 from mcp.server.fastmcp import Context
 from mcp.types import ToolAnnotations
 from rhinomcp import get_rhino_connection, mcp, logger
+
+
+def _enabled() -> bool:
+    return os.getenv("RHINO_MCP_ENABLE_RUN_COMMAND", "1").lower() not in ("0", "false", "no")
 
 
 @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, openWorldHint=True))
@@ -25,7 +31,15 @@ def run_command(ctx: Context, command: str, echo: bool = False) -> str:
     Returns the captured command-window output as a string. Failed commands are
     prefixed with "Command failed:" so the agent can distinguish failure from
     silent success without parsing JSON.
+
+    Safety: this tool is gated by the RHINO_MCP_ENABLE_RUN_COMMAND env var
+    (default on for local dev). Set it to "0" to refuse calls before they
+    reach Rhino — recommended whenever the MCP server is exposed to
+    untrusted clients.
     """
+    if not _enabled():
+        return ("Error running Rhino command: disabled. Set "
+                "RHINO_MCP_ENABLE_RUN_COMMAND=1 to enable.")
     try:
         rhino = get_rhino_connection()
         result = rhino.send_command("run_command", {"command": command, "echo": echo})

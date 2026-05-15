@@ -1132,6 +1132,34 @@ class TestGetCommandsTool:
         assert call_args[0][1]["loaded_only"] is False
 
 
+class TestExecutionSafetyGates:
+    """The arbitrary-code execution tools must refuse calls when their
+    env flag is off, before reaching Rhino."""
+
+    @patch.dict("os.environ", {"RHINO_MCP_ENABLE_RUN_COMMAND": "0"})
+    def test_run_command_disabled(self):
+        from rhinomcp.tools.run_command import run_command
+        result = run_command(ctx=None, command="_Box")
+        assert "disabled" in result.lower()
+        assert "RHINO_MCP_ENABLE_RUN_COMMAND" in result
+
+    @patch.dict("os.environ", {"RHINO_MCP_ENABLE_RHINOSCRIPT": "0"})
+    def test_rhinoscript_disabled(self):
+        from rhinomcp.tools.execute_rhinoscript_python_code import execute_rhinoscript_python_code
+        result = execute_rhinoscript_python_code(ctx=None, code="print('x')")
+        assert result["success"] is False
+        assert "disabled" in result["message"].lower()
+        assert "RHINO_MCP_ENABLE_RHINOSCRIPT" in result["message"]
+
+    @patch.dict("os.environ", {"RHINO_MCP_ENABLE_CSHARP": "0"})
+    def test_csharp_disabled(self):
+        from rhinomcp.tools.execute_rhinocommon_csharp_code import execute_rhinocommon_csharp_code
+        result = execute_rhinocommon_csharp_code(ctx=None, code="// noop")
+        assert result["success"] is False
+        assert "disabled" in result["message"].lower()
+        assert "RHINO_MCP_ENABLE_CSHARP" in result["message"]
+
+
 class TestToolAnnotations:
     """Source-level guard that the readOnly/destructive ToolAnnotations stay attached.
     A live-runtime check is fragile under pytest's import ordering, but the source

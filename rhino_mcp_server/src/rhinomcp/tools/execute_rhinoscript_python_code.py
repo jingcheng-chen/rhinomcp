@@ -1,7 +1,13 @@
+import os
+
 from mcp.server.fastmcp import Context
 from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 from typing import Any, Dict
+
+
+def _enabled() -> bool:
+    return os.getenv("RHINO_MCP_ENABLE_RHINOSCRIPT", "1").lower() not in ("0", "false", "no")
 
 
 @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, openWorldHint=True))
@@ -64,12 +70,21 @@ def execute_rhinoscript_python_code(
     - message: Error message if failed
 
     Any changes made to the document will be undone if the script fails.
+
+    Safety: this tool runs arbitrary Python inside Rhino. Gated by the
+    RHINO_MCP_ENABLE_RHINOSCRIPT env var (default on for local dev). Set to
+    "0" to refuse calls — recommended when the MCP server is exposed to
+    untrusted clients.
     """
+    if not _enabled():
+        return {
+            "success": False,
+            "message": "execute_rhinoscript_python_code is disabled. "
+                       "Set RHINO_MCP_ENABLE_RHINOSCRIPT=1 to enable.",
+        }
     try:
         rhino = get_rhino_connection()
-
         return rhino.send_command("execute_rhinoscript_python_code", {"code": code})
-
     except Exception as e:
         logger.error(f"Error executing code: {str(e)}")
         return {"success": False, "message": str(e)}
