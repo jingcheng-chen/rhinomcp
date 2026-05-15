@@ -14,7 +14,6 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "fastmcp>=2.14.5",
     "mcp[cli]>=1.16.0",
 ]
 
