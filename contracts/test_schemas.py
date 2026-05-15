@@ -333,6 +333,13 @@ def test_invalid_examples():
         ("commands/run_command.json", {"command": ""}, "run_command empty command"),
         # Unknown property on get_commands
         ("commands/get_commands.json", {"bogus": 1}, "get_commands unknown field"),
+        # delete_object: all=false is meaningless and must be rejected
+        ("commands/delete_object.json", {"all": False}, "delete_object all=false"),
+        # delete_object: unknown properties rejected
+        ("commands/delete_object.json", {"id": "12345678-1234-1234-1234-123456789012", "bogus": 1}, "delete_object unknown field"),
+        # delete_object: mixed selectors (id + all) — ambiguous, would silently delete-all
+        ("commands/delete_object.json", {"id": "12345678-1234-1234-1234-123456789012", "all": True}, "delete_object mixed id+all"),
+        ("commands/delete_object.json", {"name": "Box1", "all": True}, "delete_object mixed name+all"),
     ]
 
     all_rejected = True

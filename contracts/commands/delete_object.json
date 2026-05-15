@@ -15,12 +15,14 @@
     },
     "all": {
       "type": "boolean",
-      "description": "Delete all objects in the document"
+      "const": true,
+      "description": "Delete all objects in the document. Must be true if present."
     }
   },
-  "anyOf": [
-    { "required": ["id"] },
-    { "required": ["name"] },
-    { "required": ["all"] }
-  ]
+  "oneOf": [
+    { "required": ["id"], "not": { "anyOf": [ { "required": ["name"] }, { "required": ["all"] } ] } },
+    { "required": ["name"], "not": { "anyOf": [ { "required": ["id"] }, { "required": ["all"] } ] } },
+    { "required": ["all"], "not": { "anyOf": [ { "required": ["id"] }, { "required": ["name"] } ] } }
+  ],
+  "additionalProperties": false
 }

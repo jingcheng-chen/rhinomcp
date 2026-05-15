@@ -11,19 +11,32 @@ public partial class RhinoMCPFunctions
     public JObject DeleteObject(JObject parameters)
     {
         var doc = RhinoDoc.ActiveDoc;
-        bool all = parameters.ContainsKey("all");
-        
+        bool all = parameters["all"]?.ToObject<bool>() == true;
+        bool hasId = parameters["id"] != null;
+        bool hasName = parameters["name"] != null;
+
+        // Defense-in-depth: schema + Python wrapper already reject mixed selectors,
+        // but the TCP path is not currently schema-validated, so guard here too —
+        // an `{id, all: true}` payload would otherwise wipe the document.
+        if (all && (hasId || hasName))
+            throw new InvalidOperationException("delete_object: 'all' cannot be combined with 'id' or 'name'.");
+
         if (all)
         {
+            int count = doc.Objects.Count;
             doc.Objects.Clear();
             doc.Views.Redraw();
             return new JObject()
             {
                 ["deleted"] = true,
+                ["count"] = count,
+                ["scope"] = "all",
             };
         }
-        
-        
+
+        if (!hasId && !hasName)
+            throw new InvalidOperationException("delete_object requires id, name, or all=true.");
+
         var obj = getObjectByIdOrName(parameters);
 
         bool success = doc.Objects.Delete(obj.Id, true);

@@ -243,7 +243,8 @@ class TestDeleteObjectTool:
         mock_conn = MagicMock()
         mock_conn.send_command.return_value = {
             "deleted": True,
-            "count": 5
+            "count": 5,
+            "scope": "all"
         }
         mock_get_conn.return_value = mock_conn
 
@@ -251,6 +252,24 @@ class TestDeleteObjectTool:
 
         call_args = mock_conn.send_command.call_args
         assert call_args[0][1].get("all") is True
+        # Wrapper must not crash on the all=true response (no "name" key) and must report count.
+        assert "5" in result
+        assert "all" in result.lower()
+
+    def test_delete_no_selector_returns_error(self):
+        from rhinomcp.tools.delete_object import delete_object
+
+        result = delete_object(ctx=None)
+        assert result.lower().startswith("error")
+
+    def test_delete_mixed_selector_returns_error(self):
+        """Mixed selectors (e.g. id + all=True) must be rejected before dispatch —
+        otherwise C# prioritizes all and silently wipes the document."""
+        from rhinomcp.tools.delete_object import delete_object
+
+        result = delete_object(ctx=None, id="abc-123", all=True)
+        assert result.lower().startswith("error")
+        assert "exactly one" in result.lower()
 
 
 class TestGetObjectInfoTool:
