@@ -22,8 +22,20 @@
     <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-    <Exec Command="cp $(TargetDir)rhinomcp.rhp '/Applications/Rhino 8.app/Contents/PlugIns/'" />
+  <!--
+    Post-build install into the Rhino app bundle. Disabled by default so a
+    plain `dotnet build` succeeds without write access to /Applications and
+    so CI/release builds don't accidentally try to install. Opt in locally
+    with `dotnet build -p:CopyToRhinoPluginDir=true`.
+  -->
+  <PropertyGroup>
+    <CopyToRhinoPluginDir Condition="'$(CopyToRhinoPluginDir)' == ''">false</CopyToRhinoPluginDir>
+    <RhinoPluginDir Condition="'$(RhinoPluginDir)' == ''">/Applications/Rhino 8.app/Contents/PlugIns/</RhinoPluginDir>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent"
+          Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(CopyToRhinoPluginDir)' == 'true'">
+    <Exec Command="cp $(TargetDir)rhinomcp.rhp '$(RhinoPluginDir)'" />
   </Target>
   
 </Project>
