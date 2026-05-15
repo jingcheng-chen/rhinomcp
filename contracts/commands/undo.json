@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "undo.json",
+  "title": "Undo Command",
+  "description": "Undo the last N operations in the active Rhino document",
+  "type": "object",
+  "properties": {
+    "steps": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1
+    }
+  },
+  "additionalProperties": false
+}

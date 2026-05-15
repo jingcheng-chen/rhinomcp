@@ -215,6 +215,35 @@ def test_layer_commands():
     return all_passed
 
 
+def test_new_commands():
+    """Positive cases for the commands added in the schema-coverage pass."""
+    print("\n=== Testing newly added command schemas ===")
+
+    GUID = "12345678-1234-1234-1234-123456789012"
+    cases = [
+        ("commands/boolean_union.json", {"object_ids": [GUID, GUID]}),
+        ("commands/boolean_difference.json", {"base_id": GUID, "subtract_ids": [GUID]}),
+        ("commands/boolean_intersection.json", {"object_ids": [GUID, GUID]}),
+        ("commands/create_objects.json", {"Box1": {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}}}),
+        ("commands/execute_rhinocommon_csharp_code.json", {"code": "doc.Objects.AddPoint(0,0,0);"}),
+        ("commands/extrude_curve.json", {"curve_id": GUID, "direction": [0, 0, 10]}),
+        ("commands/loft.json", {"curve_ids": [GUID, GUID]}),
+        ("commands/modify_objects.json", {"objects": [{"id": GUID, "new_name": "X"}]}),
+        ("commands/offset_curve.json", {"curve_id": GUID, "distance": 1.5}),
+        ("commands/pipe.json", {"curve_id": GUID, "radius": 0.5}),
+        ("commands/sweep1.json", {"rail_id": GUID, "profile_ids": [GUID]}),
+        ("commands/undo.json", {}),
+        ("commands/undo.json", {"steps": 3}),
+        ("commands/redo.json", {}),
+    ]
+
+    all_passed = True
+    for path, example in cases:
+        if not validate(path, example):
+            all_passed = False
+    return all_passed
+
+
 def test_other_commands():
     """Test other command schemas."""
     print("\n=== Testing other commands ===")
@@ -352,6 +381,15 @@ def test_invalid_examples():
         ("commands/create_object.json", {"type": "PIPE", "params": {"curve_id": "x", "radius": 1}}, "create_object PIPE removed"),
         # create_object: top-level additionalProperties: false
         ("commands/create_object.json", {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}, "bogus": 1}, "create_object unknown top-level field"),
+        # New schemas reject obvious mistakes
+        ("commands/boolean_union.json", {"object_ids": ["only-one"]}, "boolean_union not enough ids (and bad GUID)"),
+        ("commands/extrude_curve.json", {"curve_id": "12345678-1234-1234-1234-123456789012", "direction": [0, 0, 0]}, "extrude_curve zero direction"),
+        ("commands/pipe.json", {"curve_id": "12345678-1234-1234-1234-123456789012", "radius": 0}, "pipe non-positive radius"),
+        ("commands/undo.json", {"steps": 0}, "undo zero steps"),
+        ("commands/loft.json", {"curve_ids": ["12345678-1234-1234-1234-123456789012"]}, "loft single curve"),
+        ("commands/modify_objects.json", {"objects": [{"new_name": "X"}]}, "modify_objects no selector"),
+        ("commands/modify_objects.json", {"objects": [{"id": "12345678-1234-1234-1234-123456789012"}], "all": False}, "modify_objects all=false"),
+        ("commands/offset_curve.json", {"curve_id": "12345678-1234-1234-1234-123456789012", "distance": 0}, "offset_curve zero distance"),
     ]
 
     all_rejected = True
@@ -371,6 +409,32 @@ def test_invalid_examples():
             all_rejected = False
 
     return all_rejected
+
+
+def test_schema_coverage_against_protocol():
+    """Every command in the protocol envelope must have a schema file in commands/."""
+    print("\n=== Testing schema coverage matches protocol enum ===")
+
+    with open(CONTRACTS_DIR / "protocol.json") as f:
+        protocol = json.load(f)
+    commands_in_protocol = set(protocol["$defs"]["command"]["properties"]["type"]["enum"])
+
+    commands_dir = CONTRACTS_DIR / "commands"
+    schema_files = {p.stem for p in commands_dir.glob("*.json")}
+
+    missing_schemas = sorted(commands_in_protocol - schema_files)
+    orphan_schemas = sorted(schema_files - commands_in_protocol)
+    # capture_viewport / get_or_set_current_layer-style fixtures are still valid orphans
+    # only if they sit in the enum — anything left over is genuinely orphaned.
+
+    if missing_schemas:
+        print(f"  FAIL: commands without schemas: {missing_schemas}")
+    if orphan_schemas:
+        print(f"  WARN: schema files without a protocol enum entry: {orphan_schemas}")
+
+    if not missing_schemas:
+        print(f"  PASS: all {len(commands_in_protocol)} protocol commands have schemas")
+    return not missing_schemas
 
 
 def test_protocol_envelope():
@@ -431,9 +495,11 @@ def main():
     results.append(("delete_object", test_delete_object_commands()))
     results.append(("select_objects", test_select_objects_commands()))
     results.append(("layer commands", test_layer_commands()))
+    results.append(("new commands", test_new_commands()))
     results.append(("other commands", test_other_commands()))
     results.append(("responses", test_responses()))
     results.append(("invalid rejection", test_invalid_examples()))
+    results.append(("schema coverage", test_schema_coverage_against_protocol()))
     results.append(("protocol envelope", test_protocol_envelope()))
 
     print("\n" + "=" * 40)

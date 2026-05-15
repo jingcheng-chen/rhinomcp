@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "execute_rhinocommon_csharp_code.json",
+  "title": "ExecuteRhinoCommonCSharpCode Command",
+  "description": "Execute arbitrary RhinoCommon C# code at runtime via Roslyn. Destructive/open-world; gate behind a safety flag in production.",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "minLength": 1,
+      "description": "C# code to compile and execute. Globals: doc (RhinoDoc), output (StringBuilder)."
+    }
+  },
+  "required": ["code"],
+  "additionalProperties": false
+}

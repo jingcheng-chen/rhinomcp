@@ -71,6 +71,16 @@
       "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
     },
 
+    "guidArray": {
+      "type": "array",
+      "description": "Array of GUID strings",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      },
+      "minItems": 1
+    },
+
     "objectType": {
       "type": "string",
       "description": "Geometry object type",

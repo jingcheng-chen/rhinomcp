@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sweep1.json",
+  "title": "Sweep1 Command",
+  "description": "Sweep profile curves along a single rail",
+  "type": "object",
+  "properties": {
+    "rail_id": { "$ref": "../common/definitions.json#/$defs/guid" },
+    "profile_ids": { "$ref": "../common/definitions.json#/$defs/guidArray" },
+    "closed": { "type": "boolean", "default": false },
+    "name": { "type": "string" }
+  },
+  "required": ["rail_id", "profile_ids"],
+  "additionalProperties": false
+}

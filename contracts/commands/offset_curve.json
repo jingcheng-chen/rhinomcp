@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "offset_curve.json",
+  "title": "OffsetCurve Command",
+  "description": "Offset a curve by a distance",
+  "type": "object",
+  "properties": {
+    "curve_id": { "$ref": "../common/definitions.json#/$defs/guid" },
+    "distance": {
+      "type": "number",
+      "not": { "const": 0 },
+      "description": "Offset distance (must be non-zero; sign selects the side)"
+    },
+    "plane": {
+      "$ref": "../common/definitions.json#/$defs/vector3d",
+      "description": "Optional plane normal [x, y, z]"
+    },
+    "corner_style": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4,
+      "description": "0=None, 1=Sharp, 2=Round, 3=Smooth, 4=Chamfer",
+      "default": 1
+    },
+    "name": { "type": "string" }
+  },
+  "required": ["curve_id", "distance"],
+  "additionalProperties": false
+}

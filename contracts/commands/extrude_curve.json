@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "extrude_curve.json",
+  "title": "ExtrudeCurve Command",
+  "description": "Extrude a curve along a direction vector",
+  "type": "object",
+  "properties": {
+    "curve_id": { "$ref": "../common/definitions.json#/$defs/guid" },
+    "direction": {
+      "allOf": [
+        { "$ref": "../common/definitions.json#/$defs/vector3d" },
+        { "not": { "const": [0, 0, 0] } }
+      ],
+      "description": "Extrusion direction [x, y, z] (must be non-zero)"
+    },
+    "cap": { "type": "boolean", "default": true },
+    "name": { "type": "string" }
+  },
+  "required": ["curve_id", "direction"],
+  "additionalProperties": false
+}

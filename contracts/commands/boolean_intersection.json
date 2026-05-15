@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "boolean_intersection.json",
+  "title": "BooleanIntersection Command",
+  "description": "Keep only the overlapping volume of solids",
+  "type": "object",
+  "properties": {
+    "object_ids": {
+      "allOf": [
+        { "$ref": "../common/definitions.json#/$defs/guidArray" },
+        { "minItems": 2 }
+      ],
+      "description": "GUIDs of solids to intersect (at least 2)"
+    },
+    "delete_sources": { "type": "boolean", "default": true },
+    "name": { "type": "string" }
+  },
+  "required": ["object_ids"],
+  "additionalProperties": false
+}

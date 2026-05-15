@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "boolean_difference.json",
+  "title": "BooleanDifference Command",
+  "description": "Subtract one or more solids from a base solid",
+  "type": "object",
+  "properties": {
+    "base_id": {
+      "$ref": "../common/definitions.json#/$defs/guid",
+      "description": "GUID of the base solid"
+    },
+    "subtract_ids": {
+      "$ref": "../common/definitions.json#/$defs/guidArray",
+      "description": "GUIDs of solids to subtract"
+    },
+    "delete_sources": { "type": "boolean", "default": true },
+    "name": { "type": "string" }
+  },
+  "required": ["base_id", "subtract_ids"],
+  "additionalProperties": false
+}

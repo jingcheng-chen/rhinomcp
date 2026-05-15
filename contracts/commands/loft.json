@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "loft.json",
+  "title": "Loft Command",
+  "description": "Create a loft surface through multiple curves",
+  "type": "object",
+  "properties": {
+    "curve_ids": {
+      "allOf": [
+        { "$ref": "../common/definitions.json#/$defs/guidArray" },
+        { "minItems": 2 }
+      ],
+      "description": "Curves to loft through (at least 2)"
+    },
+    "closed": { "type": "boolean", "default": false },
+    "loft_type": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4,
+      "description": "0=Normal, 1=Loose, 2=Tight, 3=Straight, 4=Developable"
+    },
+    "name": { "type": "string" }
+  },
+  "required": ["curve_ids"],
+  "additionalProperties": false
+}

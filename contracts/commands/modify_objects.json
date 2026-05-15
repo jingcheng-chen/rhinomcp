@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modify_objects.json",
+  "title": "ModifyObjects Command",
+  "description": "Batch-modify objects",
+  "type": "object",
+  "properties": {
+    "objects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "../common/definitions.json#/$defs/guid" },
+          "name": { "type": "string" },
+          "new_name": { "type": "string" },
+          "new_color": { "$ref": "../common/definitions.json#/$defs/color" },
+          "translation": { "$ref": "../common/definitions.json#/$defs/vector3d" },
+          "rotation": { "$ref": "../common/definitions.json#/$defs/vector3d" },
+          "scale": { "$ref": "../common/definitions.json#/$defs/vector3d" },
+          "visible": { "type": "boolean" }
+        }
+      }
+    },
+    "all": {
+      "type": "boolean",
+      "const": true,
+      "description": "If present must be true: applies objects[0] to every object in the document."
+    }
+  },
+  "required": ["objects"],
+  "additionalProperties": false,
+  "anyOf": [
+    { "required": ["all"] },
+    {
+      "properties": {
+        "objects": {
+          "items": {
+            "anyOf": [
+              { "required": ["id"] },
+              { "required": ["name"] }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

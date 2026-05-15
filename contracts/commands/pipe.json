@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pipe.json",
+  "title": "Pipe Command",
+  "description": "Create a pipe (tube) along a curve",
+  "type": "object",
+  "properties": {
+    "curve_id": { "$ref": "../common/definitions.json#/$defs/guid" },
+    "radius": { "type": "number", "exclusiveMinimum": 0 },
+    "cap": { "type": "boolean", "default": true },
+    "fit_rail": { "type": "boolean", "default": false },
+    "name": { "type": "string" }
+  },
+  "required": ["curve_id", "radius"],
+  "additionalProperties": false
+}

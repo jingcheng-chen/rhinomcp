@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "create_objects.json",
+  "title": "CreateObjects Command",
+  "description": "Batch create. The Python wrapper passes a list, but on the wire the params are a dict keyed by object name/index, each value matching a single create_object payload.",
+  "type": "object",
+  "minProperties": 1,
+  "additionalProperties": {
+    "type": "object",
+    "description": "A single create_object payload (type, params, optional name/color/transform).",
+    "properties": {
+      "type": { "type": "string" },
+      "name": { "type": "string" },
+      "color": { "$ref": "../common/definitions.json#/$defs/color" },
+      "params": { "type": "object" },
+      "translation": { "$ref": "../common/definitions.json#/$defs/vector3d" },
+      "rotation": { "$ref": "../common/definitions.json#/$defs/vector3d" },
+      "scale": { "$ref": "../common/definitions.json#/$defs/vector3d" }
+    },
+    "required": ["type", "params"]
+  }
+}
