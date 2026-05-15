@@ -47,7 +47,14 @@ class RhinoConnection:
     host: str
     port: int
     sock: socket.socket | None = None  # Changed from 'socket' to 'sock' to avoid naming conflict
-    
+
+    def __post_init__(self):
+        # Serializes the request/response cycle on the persistent socket.
+        # Without this, two MCP tool calls landing on different threads can
+        # interleave their write/read pairs and the wrong response gets attached
+        # to the wrong request.
+        self._send_lock = threading.Lock()
+
     def connect(self) -> bool:
         """Connect to the Rhino addon socket server"""
         if self.sock:
@@ -127,10 +134,15 @@ class RhinoConnection:
             raise Exception("No data received")
 
     def send_command(self, command_type: str, params: Dict[str, Any] = {}) -> Dict[str, Any]:
-        """Send a command to Rhino and return the response"""
+        """Send a command to Rhino and return the response. Thread-safe: serialized
+        across concurrent callers so request/response framing isn't interleaved."""
+        with self._send_lock:
+            return self._send_command_locked(command_type, params)
+
+    def _send_command_locked(self, command_type: str, params: Dict[str, Any] = {}) -> Dict[str, Any]:
         if not self.sock and not self.connect():
             raise ConnectionError("Not connected to Rhino")
-        
+
         command = {
             "type": command_type,
             "params": params or {}

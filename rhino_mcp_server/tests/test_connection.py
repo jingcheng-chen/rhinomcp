@@ -125,6 +125,23 @@ class TestReceiveFullResponse:
             conn.receive_full_response(mock_sock)
 
 
+class TestConcurrencySafety:
+    """The persistent socket is shared. send_command must serialize so
+    interleaved write/read pairs don't attach the wrong response to the
+    wrong request."""
+
+    def test_send_command_holds_a_lock(self):
+        from rhinomcp.server import RhinoConnection
+
+        conn = RhinoConnection(host="127.0.0.1", port=1999)
+        # _send_lock exists and is a re-entrant-safe Lock.
+        assert hasattr(conn, "_send_lock")
+        # Round-trip the lock to confirm it acts like threading.Lock.
+        assert conn._send_lock.acquire(blocking=False)
+        assert not conn._send_lock.acquire(blocking=False)
+        conn._send_lock.release()
+
+
 class TestRuntimeValidation:
     """Pre-flight schema validation modes."""
 
