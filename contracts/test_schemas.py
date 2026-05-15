@@ -411,6 +411,78 @@ def test_invalid_examples():
     return all_rejected
 
 
+def test_contract_synchronization_across_tiers():
+    """All three tiers must agree on the set of command names:
+
+    - protocol.json command.type enum
+    - Python: every send_command("<name>", ...) call in the tool wrappers
+    - C#: every [McpCommand("<name>")] attribute in the plugin
+
+    A mismatch means an LLM client can call a tool that the plugin doesn't
+    understand, or a plugin handler that nothing routes to.
+    """
+    import re
+
+    print("\n=== Testing contract sync across tiers ===")
+    repo_root = CONTRACTS_DIR.parent
+
+    with open(CONTRACTS_DIR / "protocol.json") as f:
+        protocol = json.load(f)
+    protocol_cmds = set(protocol["$defs"]["command"]["properties"]["type"]["enum"])
+
+    # Python tools: scrape send_command("<name>") calls. We accept the
+    # simple positional form because every wrapper uses it.
+    py_pat = re.compile(r"""send_command\(\s*["']([a-z_][a-z0-9_]*)["']""")
+    py_cmds: set[str] = set()
+    tools_dir = repo_root / "rhino_mcp_server" / "src" / "rhinomcp" / "tools"
+    for p in tools_dir.glob("*.py"):
+        if p.name.startswith("_"):
+            continue
+        py_cmds.update(py_pat.findall(p.read_text()))
+
+    # C# handlers: scrape [McpCommand("<name>")] attribute usages.
+    cs_pat = re.compile(r'\[McpCommand\(\s*"([a-z_][a-z0-9_]*)"')
+    cs_cmds: set[str] = set()
+    funcs_dir = repo_root / "rhino_mcp_plugin" / "Functions"
+    for p in funcs_dir.glob("*.cs"):
+        cs_cmds.update(cs_pat.findall(p.read_text()))
+
+    all_passed = True
+
+    py_missing = sorted(py_cmds - protocol_cmds)
+    if py_missing:
+        print(f"  FAIL: Python wraps commands not in protocol enum: {py_missing}")
+        all_passed = False
+
+    cs_missing_in_protocol = sorted(cs_cmds - protocol_cmds)
+    if cs_missing_in_protocol:
+        print(f"  FAIL: C# handles commands not in protocol enum: {cs_missing_in_protocol}")
+        all_passed = False
+
+    protocol_missing_in_cs = sorted(protocol_cmds - cs_cmds)
+    if protocol_missing_in_cs:
+        print(f"  FAIL: protocol commands without a C# [McpCommand] handler: {protocol_missing_in_cs}")
+        all_passed = False
+
+    # Python-vs-C# is implicit (each checked against protocol), but call it
+    # out for the most useful failure message.
+    py_unhandled = sorted(py_cmds - cs_cmds)
+    if py_unhandled:
+        print(f"  FAIL: Python wrappers without a C# handler: {py_unhandled}")
+        all_passed = False
+
+    # Protocol-vs-Python: a command added to protocol.json + C# but missing
+    # a Python wrapper would silently be unreachable from MCP clients.
+    protocol_missing_in_py = sorted(protocol_cmds - py_cmds)
+    if protocol_missing_in_py:
+        print(f"  FAIL: protocol commands without a Python wrapper: {protocol_missing_in_py}")
+        all_passed = False
+
+    if all_passed:
+        print(f"  PASS: {len(protocol_cmds)} commands in sync across protocol, Python, C#")
+    return all_passed
+
+
 def test_schema_coverage_against_protocol():
     """Every command in the protocol envelope must have a schema file in commands/."""
     print("\n=== Testing schema coverage matches protocol enum ===")
@@ -500,6 +572,7 @@ def main():
     results.append(("responses", test_responses()))
     results.append(("invalid rejection", test_invalid_examples()))
     results.append(("schema coverage", test_schema_coverage_against_protocol()))
+    results.append(("contract sync (3 tiers)", test_contract_synchronization_across_tiers()))
     results.append(("protocol envelope", test_protocol_envelope()))
 
     print("\n" + "=" * 40)
