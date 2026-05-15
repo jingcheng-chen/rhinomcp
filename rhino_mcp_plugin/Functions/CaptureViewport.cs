@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -13,7 +14,17 @@ public partial class RhinoMCPFunctions
     /// <summary>
     /// Captures a viewport screenshot and returns it as base64-encoded PNG data.
     /// </summary>
+    /// <remarks>
+    /// System.Drawing.Common encoding APIs are flagged Windows-only by the
+    /// analyzer (CA1416), but RhinoCommon's CaptureToBitmap returns a
+    /// System.Drawing.Bitmap on both Windows and Mac because Rhino ships its
+    /// own GDI+/libgdiplus support. We accept the limitation that this tool
+    /// only works hosted inside the Rhino process — a clear error is returned
+    /// at runtime if encoding fails on a platform without that support.
+    /// </remarks>
     [McpCommand("capture_viewport", ReadOnly = true)]
+    [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility",
+        Justification = "Runs in the Rhino process which provides cross-platform System.Drawing support.")]
     public JObject CaptureViewport(JObject parameters)
     {
         RhinoApp.WriteLine("Capturing viewport...");
@@ -63,7 +74,9 @@ public partial class RhinoMCPFunctions
             throw new InvalidOperationException("Failed to capture viewport bitmap. The viewport may be minimized or hidden.");
         }
 
-        // Convert bitmap to base64 PNG
+        // Convert bitmap to base64 PNG. If the host runtime can't encode (no
+        // System.Drawing.Common / libgdiplus available) we surface a clear,
+        // user-actionable error instead of an opaque exception trace.
         string base64Data;
         try
         {
@@ -73,6 +86,14 @@ public partial class RhinoMCPFunctions
                 byte[] imageBytes = ms.ToArray();
                 base64Data = Convert.ToBase64String(imageBytes);
             }
+        }
+        catch (PlatformNotSupportedException ex)
+        {
+            bitmap.Dispose();
+            throw new InvalidOperationException(
+                "capture_viewport: PNG encoding is not supported on this platform. " +
+                "On macOS/Linux this requires running inside Rhino with its bundled " +
+                "libgdiplus.", ex);
         }
         finally
         {
