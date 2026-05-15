@@ -2,9 +2,15 @@
 
 import importlib
 import pkgutil
+from importlib.metadata import PackageNotFoundError, version as _pkg_version
 from pathlib import Path
 
-__version__ = "0.1.0"
+try:
+    __version__ = _pkg_version("rhinomcp")
+except PackageNotFoundError:
+    # Editable/source checkouts without metadata fall back to "0+unknown" rather
+    # than a hardcoded value that would silently drift from pyproject.toml.
+    __version__ = "0+unknown"
 
 # Expose key classes and functions for easier imports.
 # IMPORTANT: server (mcp, get_rhino_connection, logger) must be imported BEFORE
