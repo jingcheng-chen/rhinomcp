@@ -147,7 +147,9 @@ class TestDeleteObject:
         assert result["deleted"] is True
 
     def test_delete_all(self, mock_server):
-        """Test deleting all objects."""
+        """Test deleting all objects. The mock must return the same shape as
+        C# (deleted, count, scope:'all') — the wrapper relied on `name` and
+        would crash on a successful delete-all before P0.2."""
         from rhinomcp.server import get_rhino_connection
 
         conn = get_rhino_connection()
@@ -159,6 +161,11 @@ class TestDeleteObject:
         result = conn.send_command("delete_object", {"all": True})
 
         assert result["deleted"] is True
+        assert result["scope"] == "all"
+        assert "count" in result
+        # The successful response must NOT include a "name" — confirming the
+        # wrapper has to branch on scope/count rather than assuming `name`.
+        assert "name" not in result
 
 
 class TestUndoRedo:

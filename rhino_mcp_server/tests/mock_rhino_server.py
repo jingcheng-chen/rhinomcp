@@ -268,11 +268,20 @@ class MockRhinoServer:
         return obj
 
     def _delete_object(self, params: Dict) -> Dict:
-        """Delete an object."""
-        if params.get("all"):
+        """Delete an object. Mirrors the C# handler's contract:
+        - all=true returns {deleted, count, scope: "all"} and rejects mixed selectors.
+        - id/name return {id, name, deleted}.
+        """
+        all_flag = params.get("all") is True
+        has_selector = ("id" in params) or ("name" in params)
+        if all_flag and has_selector:
+            raise Exception("delete_object: 'all' cannot be combined with 'id' or 'name'.")
+        if all_flag:
             count = len(self.objects)
             self.objects.clear()
-            return {"deleted": True, "count": count}
+            return {"deleted": True, "count": count, "scope": "all"}
+        if not has_selector:
+            raise Exception("delete_object requires id, name, or all=true.")
 
         obj = self._get_object_info(params)
         obj_id = obj["id"]
@@ -280,15 +289,50 @@ class MockRhinoServer:
         return {"id": obj_id, "name": obj["name"], "deleted": True}
 
     def _select_objects(self, params: Dict) -> Dict:
-        """Select objects (mock - just returns count)."""
+        """Select objects with the same and/or semantics as the C# handler
+        for name and color. Rejects invalid filters_type so wrapper tests
+        catch shape regressions.
+
+        Note: this mock doesn't model Rhino user-string attributes, so
+        custom-attribute filters never match here. Integration tests for
+        custom-attribute selection should target the real plugin instead.
+        """
         filters = params.get("filters", {})
+        filters_type = params.get("filters_type", "and")
+        if filters_type not in ("and", "or"):
+            raise Exception(f"Invalid filters_type '{filters_type}': expected 'and' or 'or'.")
+
         if not filters:
             return {"count": len(self.objects)}
 
-        # Simple mock filtering
+        name_values = filters.get("name")
+        color = filters.get("color")
+        custom = {k: v for k, v in filters.items() if k not in ("name", "color")}
+
+        def color_matches(o):
+            c = o.get("color", {})
+            return [c.get("r"), c.get("g"), c.get("b")] == color
+
         count = 0
         for obj in self.objects.values():
-            if "name" in filters and obj["name"] in filters["name"]:
+            if filters_type == "and":
+                ok = True
+                if name_values is not None and obj.get("name") not in name_values:
+                    ok = False
+                if ok and color is not None and not color_matches(obj):
+                    ok = False
+                # Custom attribute filtering is not modeled in the mock document.
+                # Treat unknown attrs as not-matching to keep AND strict.
+                if ok and custom:
+                    ok = False
+            else:
+                ok = False
+                if name_values is not None and obj.get("name") in name_values:
+                    ok = True
+                if not ok and color is not None and color_matches(obj):
+                    ok = True
+                # custom attrs not modeled — OR ignores them silently
+            if ok:
                 count += 1
         return {"count": count}
 
