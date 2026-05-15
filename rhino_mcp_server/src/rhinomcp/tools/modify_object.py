@@ -14,10 +14,10 @@ def modify_object(
     rotation: Optional[List[float]] = None,
     scale: Optional[List[float]] = None,
     visible: Optional[bool] = None
-) -> str:
+) -> Dict[str, Any]:
     """
     Modify an existing object in the Rhino document.
-    
+
     Parameters:
     - id: The id of the object to modify
     - name: The name of the object to modify
@@ -27,32 +27,25 @@ def modify_object(
     - rotation: Optional [x, y, z] rotation in radians
     - scale: Optional [x, y, z] scale factors
     - visible: Optional boolean to set visibility
+
+    Returns a dict with success/id/name/message. Errors propagate as MCP tool errors.
     """
-    try:
-        # Get the global connection
-        rhino = get_rhino_connection()
-        
-        params : Dict[str, Any] = {}
-        
-        if id is not None:
-            params["id"] = id
-        if name is not None:
-            params["name"] = name
-        if new_name is not None:
-            params["new_name"] = new_name
-        if new_color is not None:
-            params["new_color"] = new_color
-        if translation is not None:
-            params["translation"] = translation
-        if rotation is not None:
-            params["rotation"] = rotation
-        if scale is not None:
-            params["scale"] = scale
-        if visible is not None:
-            params["visible"] = visible
-            
-        result = rhino.send_command("modify_object", params)
-        return f"Modified object: {result['name']}"
-    except Exception as e:
-        logger.error(f"Error modifying object: {str(e)}")
-        return f"Error modifying object: {str(e)}"
+    rhino = get_rhino_connection()
+
+    params: Dict[str, Any] = {}
+    if id is not None: params["id"] = id
+    if name is not None: params["name"] = name
+    if new_name is not None: params["new_name"] = new_name
+    if new_color is not None: params["new_color"] = new_color
+    if translation is not None: params["translation"] = translation
+    if rotation is not None: params["rotation"] = rotation
+    if scale is not None: params["scale"] = scale
+    if visible is not None: params["visible"] = visible
+
+    result = rhino.send_command("modify_object", params)
+    return {
+        "success": True,
+        "id": result.get("id"),
+        "name": result.get("name"),
+        "message": f"Modified object: {result.get('name')}",
+    }

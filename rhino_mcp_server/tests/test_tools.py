@@ -40,7 +40,11 @@ class TestCreateObjectTool:
         assert call_args[0][0] == "create_object"
         assert call_args[0][1]["type"] == "BOX"
         assert call_args[0][1]["name"] == "TestBox"
-        assert "Created BOX object" in result
+        # Structured return: callers need the id for follow-up calls.
+        assert result["success"] is True
+        assert result["id"] == "abc-123"
+        assert result["type"] == "BOX"
+        assert "Created BOX object" in result["message"]
 
     @patch('rhinomcp.tools.create_object.get_rhino_connection')
     def test_create_sphere_with_color(self, mock_get_conn):
@@ -64,7 +68,7 @@ class TestCreateObjectTool:
 
         call_args = mock_conn.send_command.call_args
         assert call_args[0][1]["color"] == [255, 0, 0]
-        assert "RedSphere" in result
+        assert result["name"] == "RedSphere"
 
     @patch('rhinomcp.tools.create_object.get_rhino_connection')
     def test_create_with_transform(self, mock_get_conn):
@@ -94,15 +98,17 @@ class TestCreateObjectTool:
         assert call_args[0][1]["scale"] == [2, 2, 2]
 
     @patch('rhinomcp.tools.create_object.get_rhino_connection')
-    def test_create_object_error(self, mock_get_conn):
+    def test_create_object_error_propagates(self, mock_get_conn):
+        """Connection failures should surface as exceptions, not "Error ..." strings —
+        otherwise MCP clients see a successful tool call with an error message."""
         from rhinomcp.tools.create_object import create_object
 
         mock_conn = MagicMock()
         mock_conn.send_command.side_effect = Exception("Connection failed")
         mock_get_conn.return_value = mock_conn
 
-        result = create_object(ctx=None, type="BOX", params={})
-        assert "Error" in result
+        with pytest.raises(Exception, match="Connection failed"):
+            create_object(ctx=None, type="BOX", params={"width": 1, "length": 1, "height": 1})
 
 
 class TestCreateObjectsTool:
@@ -253,23 +259,23 @@ class TestDeleteObjectTool:
         call_args = mock_conn.send_command.call_args
         assert call_args[0][1].get("all") is True
         # Wrapper must not crash on the all=true response (no "name" key) and must report count.
-        assert "5" in result
-        assert "all" in result.lower()
+        assert result["success"] is True
+        assert result["count"] == 5
+        assert result["scope"] == "all"
 
-    def test_delete_no_selector_returns_error(self):
+    def test_delete_no_selector_raises(self):
         from rhinomcp.tools.delete_object import delete_object
 
-        result = delete_object(ctx=None)
-        assert result.lower().startswith("error")
+        with pytest.raises(ValueError, match="must specify"):
+            delete_object(ctx=None)
 
-    def test_delete_mixed_selector_returns_error(self):
+    def test_delete_mixed_selector_raises(self):
         """Mixed selectors (e.g. id + all=True) must be rejected before dispatch —
         otherwise C# prioritizes all and silently wipes the document."""
         from rhinomcp.tools.delete_object import delete_object
 
-        result = delete_object(ctx=None, id="abc-123", all=True)
-        assert result.lower().startswith("error")
-        assert "exactly one" in result.lower()
+        with pytest.raises(ValueError, match="exactly one"):
+            delete_object(ctx=None, id="abc-123", all=True)
 
 
 class TestGetObjectInfoTool:

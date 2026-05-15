@@ -12,7 +12,7 @@ def create_object(
     translation: Optional[List[float]] = None,
     rotation: Optional[List[float]] = None,
     scale: Optional[List[float]] = None,
-) -> str:
+) -> Dict[str, Any]:
     """
     Create a new object in the Rhino document.
     
@@ -82,7 +82,7 @@ def create_object(
     - closed: ([bool, bool], optional) Two booleans defining if the surface is closed in the u,v directions
     
     Returns:
-    A message indicating the created object name.
+    A dict with success, id, name, type, message — exceptions propagate as MCP tool errors.
     
     Examples of params:
     - POINT: {"x": 0, "y": 0, "z": 0}
@@ -96,27 +96,22 @@ def create_object(
     - CYLINDER: {"radius": 1.0, "height": 1.0, "cap": True}
     - SURFACE: {"count": (3, 3), "points": [[0, 0, 0], [1, 0, 0], [2, 0, 0], [0, 1, 0], [1, 1, 0], [2, 1, 0], [0, 2, 0], [1, 2, 0], [2, 2, 0]], "degree": (3, 3), "closed": (False, False)}
     """
-    try:
-        # Get the global connection
-        rhino = get_rhino_connection()
+    rhino = get_rhino_connection()
 
-        command_params = {
-            "type": type,
-            "params": params or {}
-        }
+    command_params: Dict[str, Any] = {"type": type, "params": params or {}}
+    if translation is not None: command_params["translation"] = translation
+    if rotation is not None: command_params["rotation"] = rotation
+    if scale is not None: command_params["scale"] = scale
+    if name: command_params["name"] = name
+    if color: command_params["color"] = color
 
-        if translation is not None: command_params["translation"] = translation
-        if rotation is not None: command_params["rotation"] = rotation
-        if scale is not None: command_params["scale"] = scale
-
-        if name: command_params["name"] = name
-        if color: command_params["color"] = color
-
-        # Create the object
-        result = rhino.send_command("create_object", command_params)  
-        
-        return f"Created {type} object: {result['name']}"
-    except Exception as e:
-        logger.error(f"Error creating object: {str(e)}")
-        return f"Error creating object: {str(e)}"
- 
+    # Errors propagate so MCP clients see a real tool error instead of a
+    # successful string starting with "Error ...".
+    result = rhino.send_command("create_object", command_params)
+    return {
+        "success": True,
+        "id": result.get("id"),
+        "name": result.get("name"),
+        "type": result.get("type", type),
+        "message": f"Created {type} object: {result.get('name')}",
+    }
