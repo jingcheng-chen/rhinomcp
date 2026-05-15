@@ -123,34 +123,28 @@ namespace RhinoMCPPlugin
             {
                 try
                 {
-                    // Set a timeout to check running condition periodically
-                    listener.Server.ReceiveTimeout = 1000;
-                    listener.Server.SendTimeout = 1000;
+                    // Blocking accept; Stop() calls listener.Stop() which throws
+                    // ObjectDisposedException or a SocketException(Interrupted),
+                    // unblocking us cleanly instead of polling+sleeping.
+                    TcpClient client = listener.AcceptTcpClient();
+                    RhinoApp.WriteLine($"Connected to client: {client.Client.RemoteEndPoint}");
 
-                    // Wait for client connection
-                    if (listener.Pending())
-                    {
-                        TcpClient client = listener.AcceptTcpClient();
-                        RhinoApp.WriteLine($"Connected to client: {client.Client.RemoteEndPoint}");
-
-                        // Handle client in a separate thread
-                        Thread clientThread = new Thread(() => HandleClient(client));
-                        clientThread.IsBackground = true;
-                        clientThread.Start();
-                    }
-                    else
-                    {
-                        // No pending connections, sleep a bit to prevent CPU overuse
-                        Thread.Sleep(100);
-                    }
+                    Thread clientThread = new Thread(() => HandleClient(client));
+                    clientThread.IsBackground = true;
+                    clientThread.Start();
+                }
+                catch (ObjectDisposedException)
+                {
+                    break;
+                }
+                catch (SocketException ex) when (!IsRunning() || ex.SocketErrorCode == SocketError.Interrupted)
+                {
+                    break;
                 }
                 catch (Exception e)
                 {
                     RhinoApp.WriteLine($"Error in server loop: {e.Message}");
-
-                    if (!IsRunning())
-                        break;
-
+                    if (!IsRunning()) break;
                     Thread.Sleep(500);
                 }
             }
@@ -158,7 +152,7 @@ namespace RhinoMCPPlugin
             RhinoApp.WriteLine("Server thread stopped");
         }
 
-        private bool IsRunning()
+        public bool IsRunning()
         {
             lock (lockObject)
             {

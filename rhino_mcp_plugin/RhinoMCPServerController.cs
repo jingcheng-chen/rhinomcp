@@ -34,7 +34,11 @@ namespace RhinoMCPPlugin
 
         public static bool IsServerRunning()
         {
-            return server != null;
+            // Used by mcpversion / status — must reflect actual state, not just
+            // whether the controller has ever started a server. A Stop() leaves
+            // server null, but a server that failed mid-start may have running=false
+            // while server is non-null.
+            return server != null && server.IsRunning();
         }
     }
 }
