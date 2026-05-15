@@ -47,7 +47,7 @@ The system consists of two main components:
 
 ### Prerequisites
 
-- Rhino 7 or newer (Works onWindows and Mac); make sure you Rhino is up to date.
+- Rhino 8 (Windows or macOS). The plugin targets `net8.0` against RhinoCommon 8 and is not built for Rhino 7.
 - Python 3.10 or newer
 - uv package manager
 
