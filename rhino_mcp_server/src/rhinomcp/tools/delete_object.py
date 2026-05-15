@@ -1,10 +1,11 @@
 from typing import Any, Dict
 
 from mcp.server.fastmcp import Context
+from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 
 
-@mcp.tool()
+@mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
 def delete_object(ctx: Context, id: str = None, name: str = None, all: bool = None) -> Dict[str, Any]:
     """
     Delete an object from the Rhino document.

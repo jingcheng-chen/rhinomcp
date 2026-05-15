@@ -1,9 +1,10 @@
 from mcp.server.fastmcp import Context
+from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 from typing import Any, List, Dict, Optional
 
 
-@mcp.tool()
+@mcp.tool(annotations=ToolAnnotations(destructiveHint=True, openWorldHint=True))
 def execute_rhinocommon_csharp_code(
     ctx: Context,
     code: str,

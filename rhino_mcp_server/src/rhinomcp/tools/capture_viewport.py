@@ -4,6 +4,9 @@ import base64
 from rhinomcp.server import get_rhino_connection, mcp, logger
 
 
+# Not marked readOnly: zoom_to_fit=True and projection-view changes mutate the
+# active viewport's camera/projection. Leave the annotation off so MCP clients
+# treating "readOnly" as auto-runnable don't surprise the user.
 @mcp.tool()
 def capture_viewport(
     ctx: Context,

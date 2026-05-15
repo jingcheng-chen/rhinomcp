@@ -1132,6 +1132,40 @@ class TestGetCommandsTool:
         assert call_args[0][1]["loaded_only"] is False
 
 
+class TestToolAnnotations:
+    """Source-level guard that the readOnly/destructive ToolAnnotations stay attached.
+    A live-runtime check is fragile under pytest's import ordering, but the source
+    pattern is what actually drives the annotation, so checking it catches drift."""
+
+    def _module_source(self, rel_path):
+        from pathlib import Path
+        root = Path(__file__).parent.parent / "src" / "rhinomcp"
+        return (root / rel_path).read_text()
+
+    def test_read_only_tools_marked(self):
+        for rel in [
+            "tools/get_document_summary.py",
+            "tools/get_objects.py",
+            "tools/get_object_info.py",
+            "tools/get_selected_objects_info.py",
+            "tools/get_commands.py",
+            "tools/rhinoscript_docs.py",
+        ]:
+            src = self._module_source(rel)
+            assert "readOnlyHint=True" in src, f"{rel} missing readOnlyHint annotation"
+
+    def test_destructive_tools_marked(self):
+        for rel in [
+            "tools/delete_object.py",
+            "tools/delete_layer.py",
+            "tools/run_command.py",
+            "tools/execute_rhinoscript_python_code.py",
+            "tools/execute_rhinocommon_csharp_code.py",
+        ]:
+            src = self._module_source(rel)
+            assert "destructiveHint=True" in src, f"{rel} missing destructiveHint annotation"
+
+
 class TestPackageApi:
     """Lock in that the rhinomcp package re-exports tool functions at the top level.
 

@@ -6,6 +6,7 @@ to prevent AI hallucination when writing RhinoScript Python code.
 """
 
 from mcp.server.fastmcp import Context
+from mcp.types import ToolAnnotations
 from rhinomcp.server import mcp, logger
 from rhinomcp.static.rhinoscriptsyntax import rhinoscriptsyntax_json
 from typing import Any, List, Dict, Optional
@@ -80,7 +81,7 @@ def _get_function_details(function_name: str) -> Optional[Dict[str, Any]]:
     return None
 
 
-@mcp.tool()
+@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
 def search_rhinoscript_functions(ctx: Context, query: str, limit: int = 10) -> List[Dict[str, Any]]:
     """
     Search RhinoScript functions by keyword or description.
@@ -115,7 +116,7 @@ def search_rhinoscript_functions(ctx: Context, query: str, limit: int = 10) -> L
         return [{"error": str(e)}]
 
 
-@mcp.tool()
+@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
 def get_rhinoscript_docs(
     ctx: Context,
     topic: str,
@@ -183,7 +184,7 @@ def get_rhinoscript_docs(
         return {"success": False, "error": str(e)}
 
 
-@mcp.tool()
+@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
 def list_rhinoscript_modules(ctx: Context) -> Dict[str, Any]:
     """
     List all available RhinoScript modules and their function counts.
@@ -222,7 +223,7 @@ def list_rhinoscript_modules(ctx: Context) -> Dict[str, Any]:
         return {"error": str(e)}
 
 
-@mcp.tool()
+@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
 def get_module_functions(ctx: Context, module_name: str) -> Dict[str, Any]:
     """
     Get all functions in a specific RhinoScript module with their signatures.

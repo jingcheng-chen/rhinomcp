@@ -1,9 +1,10 @@
 from mcp.server.fastmcp import Context
+from mcp.types import ToolAnnotations
 import json
 from rhinomcp import get_rhino_connection, mcp, logger
 from typing import Dict, Any
 
-@mcp.tool()
+@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
 def get_object_info(ctx: Context, id: str = None, name: str = None) -> Dict[str, Any]:
     """
     Get detailed information about a specific object in the Rhino document.

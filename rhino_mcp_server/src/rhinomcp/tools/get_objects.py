@@ -1,10 +1,11 @@
 from mcp.server.fastmcp import Context
+from mcp.types import ToolAnnotations
 import json
 from typing import Optional
 from rhinomcp import get_rhino_connection, mcp, logger
 
 
-@mcp.tool()
+@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
 def get_objects(
     ctx: Context,
     offset: int = 0,

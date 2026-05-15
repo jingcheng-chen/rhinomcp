@@ -1,9 +1,10 @@
 from mcp.server.fastmcp import Context
+from mcp.types import ToolAnnotations
 import json
 from rhinomcp import get_rhino_connection, mcp, logger
 
 
-@mcp.tool()
+@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
 def get_commands(ctx: Context, filter: str = "", loaded_only: bool = True) -> str:
     """
     List Rhino command names available in the current session.
