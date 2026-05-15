@@ -93,22 +93,28 @@ public partial class RhinoMCPFunctions
         string objectName = parameters["name"]?.ToString();
 
         var doc = RhinoDoc.ActiveDoc;
-        RhinoObject obj = null;
 
         if (!string.IsNullOrEmpty(objectId))
-            obj = doc.Objects.Find(new Guid(objectId));
-        else if (!string.IsNullOrEmpty(objectName))
         {
-            // we assume there's only one of the object with the given name
-            var objs = doc.Objects.GetObjectList(new ObjectEnumeratorSettings() { NameFilter = objectName }).ToList();
-            if (objs == null) throw new InvalidOperationException($"Object with name {objectName} not found.");
-            if (objs.Count > 1) throw new InvalidOperationException($"Multiple objects with name {objectName} found.");
-            obj = objs[0];
+            if (!Guid.TryParse(objectId, out var guid))
+                throw new InvalidOperationException($"Invalid GUID '{objectId}'.");
+            var obj = doc.Objects.Find(guid);
+            if (obj == null)
+                throw new InvalidOperationException($"Object with id {objectId} not found.");
+            return obj;
         }
 
-        if (obj == null)
-            throw new InvalidOperationException($"Object with ID {objectId} not found");
-        return obj;
+        if (!string.IsNullOrEmpty(objectName))
+        {
+            var objs = doc.Objects.GetObjectList(new ObjectEnumeratorSettings { NameFilter = objectName }).ToList();
+            if (objs.Count == 0)
+                throw new InvalidOperationException($"Object with name '{objectName}' not found.");
+            if (objs.Count > 1)
+                throw new InvalidOperationException($"Multiple objects with name '{objectName}' found.");
+            return objs[0];
+        }
+
+        throw new InvalidOperationException("Object lookup requires 'id' or 'name'.");
     }
 
     private Transform applyRotation(JObject parameters, GeometryBase geometry)
