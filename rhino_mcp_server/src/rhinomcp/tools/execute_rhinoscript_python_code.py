@@ -9,7 +9,6 @@ from typing import Any, List, Dict, Optional
 def execute_rhinoscript_python_code(
     ctx: Context,
     code: str,
-    verified_functions: Optional[List[str]] = None
 ) -> Dict[str, Any]:
     """
     Execute RhinoScript Python code in Rhino.
@@ -27,8 +26,6 @@ def execute_rhinoscript_python_code(
 
     Parameters:
     - code: The RhinoScript Python code to execute
-    - verified_functions: (Optional) List of function names you looked up in documentation.
-                          Providing this helps ensure you've verified the syntax.
 
     Code Requirements:
     - Import rhinoscriptsyntax: `import rhinoscriptsyntax as rs`
@@ -70,13 +67,6 @@ def execute_rhinoscript_python_code(
     Any changes made to the document will be undone if the script fails.
     """
     try:
-        # Log if verified_functions was provided (good practice indicator)
-        if verified_functions:
-            logger.info(f"Executing code with verified functions: {verified_functions}")
-        else:
-            logger.warning("Executing code without verified_functions - ensure docs were checked")
-
-        # Get the global connection
         rhino = get_rhino_connection()
 
         return rhino.send_command("execute_rhinoscript_python_code", {"code": code})

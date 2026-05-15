@@ -64,8 +64,8 @@ def asset_general_strategy() -> str:
     ├─ Know the object name?
     │   └─ YES → Use get_object_info(name=...)
     │
-    ├─ Need objects by criteria (type, layer, color)?
-    │   └─ YES → Use get_objects(filters=...)
+    ├─ Need objects by criteria (type, layer, bbox)?
+    │   └─ YES → Use get_objects(type_filter=..., layer_filter=..., bbox_filter=...)
     │
     └─ Need selected objects?
         └─ YES → Use get_selected_objects_info()
@@ -140,16 +140,16 @@ def rhinoscript_workflow() -> str:
     - Match parameter types exactly
 
 
-    STEP 4: EXECUTE WITH VERIFICATION
-    ---------------------------------
-    Call execute_rhinoscript_python_code() with:
-    - code: Your Python code
-    - verified_functions: List of function names you looked up
+    STEP 4: EXECUTE
+    ---------------
+    Call execute_rhinoscript_python_code() with the verified code. The tool
+    accepts a single `code` argument — there is no separate verified-functions
+    field on the wire. The expectation is that you have already verified the
+    signatures via get_rhinoscript_docs() / search_rhinoscript_functions().
 
     Example:
     execute_rhinoscript_python_code(
         code="import rhinoscriptsyntax as rs\\nrs.AddLine([0,0,0], [10,0,0])",
-        verified_functions=["AddLine"]
     )
 
 
