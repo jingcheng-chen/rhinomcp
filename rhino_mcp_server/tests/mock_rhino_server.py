@@ -113,6 +113,7 @@ class MockRhinoServer:
             "create_objects": self._create_objects,
             "get_object_info": self._get_object_info,
             "modify_object": self._modify_object,
+            "modify_objects": self._modify_objects,
             "delete_object": self._delete_object,
             "select_objects": self._select_objects,
             "create_layer": self._create_layer,
@@ -126,6 +127,13 @@ class MockRhinoServer:
             "run_command": self._run_command,
             "get_commands": self._get_commands,
             "execute_rhinoscript_python_code": self._execute_script,
+            "execute_rhinocommon_csharp_code": self._execute_csharp,
+            "capture_viewport": self._capture_viewport,
+            "loft": self._loft,
+            "extrude_curve": self._extrude_curve,
+            "sweep1": self._sweep1,
+            "offset_curve": self._offset_curve,
+            "pipe": self._pipe,
         }
 
         handler = handlers.get(cmd_type)
@@ -518,6 +526,127 @@ class MockRhinoServer:
             "success": True,
             "output": "Mock script ran.\n"
         }
+
+    def _modify_objects(self, params: Dict) -> Dict:
+        """Mock batch modify. Mirrors the C# return shape:
+        {success_count, failure_count, total, errors}."""
+        objects = params.get("objects", [])
+        all_flag = bool(params.get("all"))
+        success = 0
+        failures: list = []
+
+        targets: list
+        if all_flag and objects:
+            template = objects[0]
+            targets = [{**template, "id": obj_id} for obj_id in list(self.objects.keys())]
+        else:
+            targets = objects
+
+        for item in targets:
+            try:
+                obj_id = item.get("id")
+                if obj_id and obj_id in self.objects:
+                    if "new_color" in item:
+                        c = item["new_color"]
+                        self.objects[obj_id]["color"] = {"r": c[0], "g": c[1], "b": c[2]}
+                    if "new_name" in item:
+                        self.objects[obj_id]["name"] = item["new_name"]
+                    success += 1
+                else:
+                    failures.append({"id": obj_id, "error": "not found"})
+            except Exception as e:
+                failures.append({"id": item.get("id"), "error": str(e)})
+
+        return {
+            "success_count": success,
+            "failure_count": len(failures),
+            "total": success + len(failures),
+            "errors": failures,
+        }
+
+    def _execute_csharp(self, params: Dict) -> Dict:
+        """Mock C# execution. Mirrors the {success, output, message} shape used
+        by execute_rhinoscript_python_code so wrapper tests can share fixtures."""
+        code = params.get("code", "")
+        if not code:
+            raise Exception("code is required")
+        lowered = code.lower()
+        if "throw" in lowered or "syntax error" in lowered:
+            return {
+                "success": False,
+                "output": "partial output before error\n",
+                "message": "CompileError: simulated failure",
+            }
+        return {"success": True, "output": "Mock C# ran.\n"}
+
+    def _capture_viewport(self, params: Dict) -> Dict:
+        """Mock viewport capture. Returns a 1x1 transparent PNG so callers
+        that decode base64 image_data succeed without dragging in real image
+        data. The wrapper logs viewport_name/width/height — surface them."""
+        # 1x1 transparent PNG (precomputed)
+        png_b64 = (
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgAAIAAAUAAeImBZsAAAAASUVORK5CYII="
+        )
+        return {
+            "image_data": png_b64,
+            "viewport_name": params.get("viewport", "active"),
+            "width": params.get("width", 800),
+            "height": params.get("height", 600),
+        }
+
+    def _make_result_object(self, name: str, type_name: str = "BREP") -> str:
+        """Helper: register a placeholder result object and return its id."""
+        rid = str(uuid.uuid4())
+        self.objects[rid] = {
+            "id": rid,
+            "name": name,
+            "type": type_name,
+            "layer": self.current_layer,
+            "color": {"r": 0, "g": 0, "b": 0},
+            "bounding_box": [[0, 0, 0], [1, 1, 1]],
+            "geometry": {},
+        }
+        return rid
+
+    def _loft(self, params: Dict) -> Dict:
+        curves = params.get("curve_ids", [])
+        if len(curves) < 2:
+            raise Exception("Loft requires at least 2 curves")
+        rid = self._make_result_object(params.get("name") or "Loft", "SURFACE")
+        return {"result_ids": [rid], "count": 1, "message": "Loft created 1 object(s)"}
+
+    def _extrude_curve(self, params: Dict) -> Dict:
+        if not params.get("curve_id"):
+            raise Exception("curve_id is required")
+        direction = params.get("direction")
+        if not (isinstance(direction, list) and len(direction) == 3):
+            raise Exception("direction must be [x, y, z]")
+        rid = self._make_result_object(params.get("name") or "Extrusion", "EXTRUSION")
+        return {"result_id": rid, "message": "Extrusion created"}
+
+    def _sweep1(self, params: Dict) -> Dict:
+        if not params.get("rail_id"):
+            raise Exception("rail_id is required")
+        profiles = params.get("profile_ids", [])
+        if not profiles:
+            raise Exception("at least one profile_id required")
+        rid = self._make_result_object(params.get("name") or "Sweep", "SURFACE")
+        return {"result_ids": [rid], "count": 1, "message": "Sweep created 1 object(s)"}
+
+    def _offset_curve(self, params: Dict) -> Dict:
+        if not params.get("curve_id"):
+            raise Exception("curve_id is required")
+        rid = self._make_result_object(params.get("name") or "Offset", "CURVE")
+        return {"result_ids": [rid], "count": 1, "message": "Offset created 1 object(s)"}
+
+    def _pipe(self, params: Dict) -> Dict:
+        if not params.get("curve_id"):
+            raise Exception("curve_id is required")
+        radius = params.get("radius")
+        if not isinstance(radius, (int, float)) or radius <= 0:
+            raise Exception("radius must be a positive number")
+        rid = self._make_result_object(params.get("name") or "Pipe", "BREP")
+        return {"result_ids": [rid], "count": 1, "message": "Pipe created 1 object(s)"}
 
     def _get_commands(self, params: Dict) -> Dict:
         """Mock listing of Rhino command names."""

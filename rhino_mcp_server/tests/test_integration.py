@@ -324,3 +324,58 @@ class TestDocumentInfo:
         assert "objects_by_layer" in result
         assert "layer_hierarchy" in result
         assert result["object_count"] >= 1
+
+
+class TestAdvancedGeometry:
+    """Smoke tests for the geometry commands added with the schema fill-in.
+
+    These exercise the wire path end-to-end against the mock so a shape
+    mismatch between schema / Python wrapper / mock surface is caught by
+    CI instead of silently passing unit tests that mock send_command.
+    """
+
+    def test_loft(self, mock_server):
+        from rhinomcp.server import get_rhino_connection
+        conn = get_rhino_connection()
+        c1 = conn.send_command("create_object", {"type": "LINE", "params": {"start": [0, 0, 0], "end": [1, 0, 0]}})
+        c2 = conn.send_command("create_object", {"type": "LINE", "params": {"start": [0, 1, 0], "end": [1, 1, 0]}})
+        result = conn.send_command("loft", {"curve_ids": [c1["id"], c2["id"]]})
+        assert result["count"] == 1
+        assert result["result_ids"]
+
+    def test_extrude_curve(self, mock_server):
+        from rhinomcp.server import get_rhino_connection
+        conn = get_rhino_connection()
+        c = conn.send_command("create_object", {"type": "LINE", "params": {"start": [0, 0, 0], "end": [1, 0, 0]}})
+        result = conn.send_command("extrude_curve", {"curve_id": c["id"], "direction": [0, 0, 1]})
+        assert result["result_id"]
+
+    def test_pipe_rejects_zero_radius(self, mock_server):
+        from rhinomcp.server import get_rhino_connection
+        conn = get_rhino_connection()
+        c = conn.send_command("create_object", {"type": "LINE", "params": {"start": [0, 0, 0], "end": [1, 0, 0]}})
+        with pytest.raises(Exception, match="radius"):
+            conn.send_command("pipe", {"curve_id": c["id"], "radius": 0})
+
+    def test_modify_objects(self, mock_server):
+        from rhinomcp.server import get_rhino_connection
+        conn = get_rhino_connection()
+        a = conn.send_command("create_object", {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}})
+        b = conn.send_command("create_object", {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}})
+        result = conn.send_command("modify_objects", {
+            "objects": [
+                {"id": a["id"], "new_name": "A2"},
+                {"id": b["id"], "new_color": [255, 0, 0]},
+            ]
+        })
+        assert result["success_count"] == 2
+        assert result["failure_count"] == 0
+
+    def test_capture_viewport_returns_decodable_image(self, mock_server):
+        import base64
+        from rhinomcp.server import get_rhino_connection
+        conn = get_rhino_connection()
+        result = conn.send_command("capture_viewport", {"viewport": "perspective", "width": 100, "height": 100})
+        # image_data must be valid base64 the wrapper can decode.
+        base64.b64decode(result["image_data"])
+        assert result["viewport_name"] == "perspective"
