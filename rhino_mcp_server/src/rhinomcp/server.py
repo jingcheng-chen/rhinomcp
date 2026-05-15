@@ -12,6 +12,16 @@ from typing import AsyncIterator, Dict, Any
 # Configuration from environment variables
 RHINO_HOST = os.getenv("RHINO_MCP_HOST", "127.0.0.1")
 RHINO_PORT = int(os.getenv("RHINO_MCP_PORT", "1999"))
+# Sending arbitrary tool payloads (including run_command / execute_rhinoscript)
+# over a non-loopback link with no authentication is genuinely dangerous.
+# Refuse non-loopback connect targets unless the operator opts in explicitly.
+RHINO_ALLOW_REMOTE = os.getenv("RHINO_MCP_ALLOW_REMOTE", "").lower() in ("1", "true", "yes")
+if RHINO_HOST not in ("127.0.0.1", "::1", "localhost") and not RHINO_ALLOW_REMOTE:
+    raise RuntimeError(
+        f"RHINO_MCP_HOST={RHINO_HOST!r} is non-loopback. The TCP bridge to Rhino "
+        "carries unauthenticated commands including arbitrary-code execution; "
+        "set RHINO_MCP_ALLOW_REMOTE=1 to acknowledge the risk and proceed."
+    )
 RHINO_TIMEOUT = float(os.getenv("RHINO_MCP_TIMEOUT", "15.0"))
 RHINO_DEBUG = os.getenv("RHINO_MCP_DEBUG", "").lower() in ("1", "true", "yes")
 RHINO_LOG_LEVEL = os.getenv("RHINO_MCP_LOG_LEVEL", "DEBUG" if RHINO_DEBUG else "INFO")

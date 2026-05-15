@@ -125,6 +125,26 @@ class TestReceiveFullResponse:
             conn.receive_full_response(mock_sock)
 
 
+class TestRemoteBindingGate:
+    """Non-loopback hosts require an explicit RHINO_MCP_ALLOW_REMOTE opt-in,
+    otherwise importing the server module raises."""
+
+    @patch.dict('os.environ', {'RHINO_MCP_HOST': '10.0.0.5'}, clear=False)
+    def test_remote_host_refused_without_opt_in(self):
+        # Run cleanly whether or not rhinomcp.server is already imported:
+        # we wipe it from sys.modules so the patched env always takes effect.
+        import importlib
+        import sys
+        sys.modules.pop("rhinomcp.server", None)
+        with pytest.raises(RuntimeError, match="non-loopback"):
+            importlib.import_module("rhinomcp.server")
+        # Restore default state so later tests don't inherit the broken module.
+        import os
+        os.environ.pop('RHINO_MCP_HOST', None)
+        sys.modules.pop("rhinomcp.server", None)
+        importlib.import_module("rhinomcp.server")
+
+
 class TestConcurrencySafety:
     """The persistent socket is shared. send_command must serialize so
     interleaved write/read pairs don't attach the wrong response to the
@@ -287,7 +307,9 @@ class TestEnvironmentConfig:
     @patch.dict('os.environ', {
         'RHINO_MCP_HOST': '192.168.1.100',
         'RHINO_MCP_PORT': '2000',
-        'RHINO_MCP_TIMEOUT': '30.0'
+        'RHINO_MCP_TIMEOUT': '30.0',
+        # The non-loopback safety check kicks in here; tell it we know.
+        'RHINO_MCP_ALLOW_REMOTE': '1',
     })
     def test_custom_config(self):
         """Test custom configuration from environment variables."""

@@ -127,6 +127,27 @@ Create a file `mcp.json` in the `.cursor` folder and include the above config fi
 
 Go to Cursor Settings > MCP and check if it's enabled.
 
+## Security posture
+
+The Python MCP server and the Rhino plugin talk over an unauthenticated TCP
+loopback link (default `127.0.0.1:1999`). Tools like `run_command`,
+`execute_rhinoscript_python_code`, and `execute_rhinocommon_csharp_code` hand
+the model a fully open execution surface inside Rhino. Local-only is fine for
+typical agent workflows; do not expose it beyond the loopback interface
+without adding authentication and framing.
+
+Operator switches:
+
+- `RHINO_MCP_HOST` (default `127.0.0.1`). The server now refuses to start on
+  a non-loopback host unless `RHINO_MCP_ALLOW_REMOTE=1` is also set, so
+  accidental remote configuration fails loudly.
+- `RHINO_MCP_ENABLE_RUN_COMMAND`, `RHINO_MCP_ENABLE_RHINOSCRIPT`,
+  `RHINO_MCP_ENABLE_CSHARP` (each default `1`). Set to `0` to refuse the
+  corresponding arbitrary-code tools before they reach Rhino.
+- `RHINO_MCP_VALIDATE` (`off` / `warn` / `strict`, default `warn`).
+  Pre-flight schema validation. `strict` rejects malformed tool params
+  locally instead of round-tripping to Rhino.
+
 ## Usage
 
 ### Starting the Connection
