@@ -1,6 +1,5 @@
 from mcp.server.fastmcp import Context
 from mcp.types import ToolAnnotations
-import json
 from rhinomcp import get_rhino_connection, mcp, logger
 from typing import Dict, Any
 

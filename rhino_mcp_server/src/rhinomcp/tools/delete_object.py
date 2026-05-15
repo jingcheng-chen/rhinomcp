@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 from mcp.server.fastmcp import Context
 from mcp.types import ToolAnnotations
-from rhinomcp.server import get_rhino_connection, mcp, logger
+from rhinomcp.server import get_rhino_connection, mcp
 
 
 @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))

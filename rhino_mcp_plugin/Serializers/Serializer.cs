@@ -13,22 +13,23 @@ namespace rhinomcp.Serializers
 {
     public static class Serializer
     {
-        // Layer name cache to avoid repeated lookups during batch serialization
-        private static Dictionary<(uint docId, int layerIndex), string> _layerCache = new();
-        private static Guid _cachedDocId = Guid.Empty;
+        // Layer name cache to avoid repeated Layers[index] lookups during batch
+        // serialization. Keyed on (doc serial, layer index) so opening a different
+        // document is automatically a cache miss.
+        //
+        // Caveat: the cache is NOT invalidated when a layer is renamed inside the
+        // same document — callers that rename layers should call ClearLayerCache().
+        // (The previous implementation tried to detect doc changes by packing the
+        // doc serial number into a Guid; that wrapper was load-bearing only for
+        // its own GetHashCode and has been removed.)
+        private static readonly Dictionary<(uint docId, int layerIndex), string> _layerCache = new();
 
         /// <summary>
-        /// Get layer name with caching. Cache is automatically invalidated when document changes.
+        /// Get layer name with caching. Cache key includes the document's runtime
+        /// serial so cross-document lookups don't collide.
         /// </summary>
         private static string GetLayerName(RhinoDoc doc, int layerIndex)
         {
-            // Invalidate cache if document changed
-            if (doc.RuntimeSerialNumber != _cachedDocId.GetHashCode())
-            {
-                _layerCache.Clear();
-                _cachedDocId = new Guid(doc.RuntimeSerialNumber, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-            }
-
             var key = (doc.RuntimeSerialNumber, layerIndex);
             if (!_layerCache.TryGetValue(key, out var layerName))
             {
@@ -38,9 +39,7 @@ namespace rhinomcp.Serializers
             return layerName;
         }
 
-        /// <summary>
-        /// Clear the layer cache. Call this if layers are modified.
-        /// </summary>
+        /// <summary>Clear the layer cache. Call after layer rename/delete.</summary>
         public static void ClearLayerCache()
         {
             _layerCache.Clear();

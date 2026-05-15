@@ -15,11 +15,20 @@ except PackageNotFoundError:
 # Expose key classes and functions for easier imports.
 # IMPORTANT: server (mcp, get_rhino_connection, logger) must be imported BEFORE
 # tool auto-discovery below — tool modules import from this package's namespace.
-from .static.rhinoscriptsyntax import rhinoscriptsyntax_json
-from .server import RhinoConnection, get_rhino_connection, mcp, logger
+# These imports look "unused" to ruff but they form the package's public API.
+from .static.rhinoscriptsyntax import rhinoscriptsyntax_json as rhinoscriptsyntax_json
+from .server import (  # noqa: F401  (public re-exports)
+    RhinoConnection,
+    get_rhino_connection,
+    mcp,
+    logger,
+)
 
 # Prompts
-from .prompts.assert_general_strategy import asset_general_strategy, rhinoscript_workflow
+from .prompts.assert_general_strategy import (  # noqa: F401  (public re-exports)
+    asset_general_strategy,
+    rhinoscript_workflow,
+)
 
 # Auto-discover and register tool modules.
 # Each module under tools/ uses @mcp.tool() to register on import. To add a new

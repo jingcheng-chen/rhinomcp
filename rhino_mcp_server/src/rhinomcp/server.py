@@ -1,14 +1,13 @@
 # rhino_mcp_server.py
-from mcp.server.fastmcp import FastMCP, Context, Image
+from mcp.server.fastmcp import FastMCP
 import socket
 import json
-import asyncio
 import logging
 import os
 import threading
 from dataclasses import dataclass
 from contextlib import asynccontextmanager
-from typing import AsyncIterator, Dict, Any, List
+from typing import AsyncIterator, Dict, Any
 
 # Configuration from environment variables
 RHINO_HOST = os.getenv("RHINO_MCP_HOST", "127.0.0.1")

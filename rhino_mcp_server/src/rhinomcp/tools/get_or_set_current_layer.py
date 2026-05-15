@@ -1,7 +1,5 @@
 from mcp.server.fastmcp import Context
-import json
 from rhinomcp.server import get_rhino_connection, mcp, logger
-from typing import Any, List, Dict
 
 @mcp.tool()
 def get_or_set_current_layer(

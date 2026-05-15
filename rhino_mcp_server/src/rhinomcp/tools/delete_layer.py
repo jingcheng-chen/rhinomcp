@@ -1,8 +1,6 @@
 from mcp.server.fastmcp import Context
 from mcp.types import ToolAnnotations
-import json
 from rhinomcp.server import get_rhino_connection, mcp, logger
-from typing import Any, List, Dict
 
 @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
 def delete_layer(

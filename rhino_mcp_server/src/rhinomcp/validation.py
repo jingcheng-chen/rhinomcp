@@ -7,7 +7,6 @@ Ensures type safety between Python MCP server and C# Rhino plugin.
 
 import json
 import logging
-import os
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -278,24 +277,3 @@ def validate_protocol_response(data: Dict[str, Any], raise_on_error: bool = True
     if raise_on_error:
         raise ValueError(f"Invalid status: {data['status']}")
     return False
-
-
-# Convenience function for optional validation
-def with_validation(enabled: bool = True):
-    """
-    Decorator factory for optional validation.
-
-    Usage:
-        @with_validation(enabled=True)
-        def my_command_handler(params):
-            ...
-    """
-    def decorator(func):
-        if not enabled or not HAS_JSONSCHEMA:
-            return func
-
-        def wrapper(*args, **kwargs):
-            # Could add validation logic here
-            return func(*args, **kwargs)
-        return wrapper
-    return decorator
