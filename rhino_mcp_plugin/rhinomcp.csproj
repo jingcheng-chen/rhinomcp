@@ -23,19 +23,35 @@
   </ItemGroup>
 
   <!--
-    Post-build install into the Rhino app bundle. Disabled by default so a
-    plain `dotnet build` succeeds without write access to /Applications and
-    so CI/release builds don't accidentally try to install. Opt in locally
-    with `dotnet build -p:CopyToRhinoPluginDir=true`.
+    Post-build install into the Mac user-level Rhino Plug-ins directory.
+    Disabled by default so a plain `dotnet build` succeeds without touching
+    the user's Rhino config and so CI/release builds don't accidentally try
+    to install. Opt in locally with `dotnet build -p:CopyToRhinoPluginDir=true`.
+
+    Prefer `./install.sh` for day-to-day dev — it also checks Rhino isn't
+    running, uses rsync with the delete flag to clear stale dlls, and prints
+    first-time drag-drop registration instructions. This target exists for
+    IDE-driven build-on-save workflows where invoking a shell script is awkward.
+
+    The .rhp depends on its sibling dlls (Newtonsoft.Json, the Roslyn
+    scripting assemblies, etc.) so the entire $(TargetDir) tree has to ship,
+    not just the .rhp — otherwise the plugin loads but throws
+    FileNotFoundException the first time it deserializes JSON.
   -->
   <PropertyGroup>
     <CopyToRhinoPluginDir Condition="'$(CopyToRhinoPluginDir)' == ''">false</CopyToRhinoPluginDir>
-    <RhinoPluginDir Condition="'$(RhinoPluginDir)' == ''">/Applications/Rhino 8.app/Contents/PlugIns/</RhinoPluginDir>
+    <RhinoVersion Condition="'$(RhinoVersion)' == ''">8.0</RhinoVersion>
+    <RhinoPluginDir Condition="'$(RhinoPluginDir)' == ''">$(HOME)/Library/Application Support/McNeel/Rhinoceros/$(RhinoVersion)/Plug-ins/rhinomcp/</RhinoPluginDir>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent"
           Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(CopyToRhinoPluginDir)' == 'true'">
-    <Exec Command="cp $(TargetDir)rhinomcp.rhp '$(RhinoPluginDir)'" />
+    <ItemGroup>
+      <PluginOutputFiles Include="$(TargetDir)**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(PluginOutputFiles)"
+          DestinationFiles="@(PluginOutputFiles->'$(RhinoPluginDir)%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
   </Target>
   
 </Project>
