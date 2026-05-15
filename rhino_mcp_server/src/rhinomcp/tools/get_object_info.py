@@ -30,7 +30,12 @@ def get_object_info(ctx: Context, id: str = None, name: str = None) -> Dict[str,
     """
     try:
         rhino = get_rhino_connection()
-        return rhino.send_command("get_object_info", {"id": id, "name": name})
+        params = {}
+        if id:
+            params["id"] = id
+        elif name:
+            params["name"] = name
+        return rhino.send_command("get_object_info", params)
 
     except Exception as e:
         logger.error(f"Error getting object info from Rhino: {str(e)}")

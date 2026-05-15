@@ -4,6 +4,12 @@
   "title": "GetSelectedObjectsInfo Command",
   "description": "Get information about currently selected objects",
   "type": "object",
-  "properties": {},
+  "properties": {
+    "include_attributes": {
+      "type": "boolean",
+      "default": false,
+      "description": "Include custom user attributes in the response."
+    }
+  },
   "additionalProperties": false
 }

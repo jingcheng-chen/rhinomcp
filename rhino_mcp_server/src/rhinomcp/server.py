@@ -16,6 +16,19 @@ RHINO_PORT = int(os.getenv("RHINO_MCP_PORT", "1999"))
 RHINO_TIMEOUT = float(os.getenv("RHINO_MCP_TIMEOUT", "15.0"))
 RHINO_DEBUG = os.getenv("RHINO_MCP_DEBUG", "").lower() in ("1", "true", "yes")
 RHINO_LOG_LEVEL = os.getenv("RHINO_MCP_LOG_LEVEL", "DEBUG" if RHINO_DEBUG else "INFO")
+# Pre-flight schema validation. Three modes:
+#   "off"    - skip entirely
+#   "warn"   - log violations but still send (default; safe while wrappers/schemas
+#              converge)
+#   "strict" - raise ValueError before the socket send (recommended in CI)
+RHINO_VALIDATE = os.getenv("RHINO_MCP_VALIDATE", "warn").lower()
+if RHINO_VALIDATE in ("0", "false", "no"):
+    RHINO_VALIDATE = "off"
+elif RHINO_VALIDATE in ("1", "true", "yes"):
+    RHINO_VALIDATE = "warn"
+if RHINO_VALIDATE not in ("off", "warn", "strict"):
+    logger.warning(f"Unknown RHINO_MCP_VALIDATE={RHINO_VALIDATE!r}; falling back to 'warn'.")
+    RHINO_VALIDATE = "warn"
 
 # Configure logging
 log_level = getattr(logging, RHINO_LOG_LEVEL.upper(), logging.INFO)
@@ -128,6 +141,23 @@ class RhinoConnection:
             logger.info(f"Sending command: {command_type}")
             logger.debug(f"Command params: {json.dumps(params, indent=2)}")
 
+            # Pre-flight: validate against the JSON Schema contract before touching
+            # the socket. In 'warn' mode we log and continue (safe default); in
+            # 'strict' we raise so the bad payload never reaches Rhino.
+            # validate_command no-ops if jsonschema is missing or the command has
+            # no schema yet.
+            if RHINO_VALIDATE != "off":
+                from rhinomcp.validation import validate_command
+                try:
+                    validate_command(command_type, command["params"], raise_on_error=True)
+                except ValueError:
+                    raise
+                except Exception as ve:
+                    msg = f"Pre-flight validation failed for {command_type}: {ve}"
+                    if RHINO_VALIDATE == "strict":
+                        raise ValueError(f"Invalid params for '{command_type}': {ve}") from ve
+                    logger.warning(msg)
+
             if self.sock is None:
                 raise Exception("Socket is not connected")
 
@@ -169,6 +199,9 @@ class RhinoConnection:
             if 'response_data' in locals() and response_data: # type: ignore
                 logger.error(f"Raw response (first 200 bytes): {response_data[:200]}")
             raise Exception(f"Invalid response from Rhino: {str(e)}")
+        except ValueError:
+            # Pre-flight validation failures — local, not a transport issue. Propagate.
+            raise
         except Exception as e:
             logger.error(f"Error communicating with Rhino: {str(e)}")
             # Don't try to reconnect here - let the get_rhino_connection handle reconnection

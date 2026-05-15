@@ -125,6 +125,54 @@ class TestReceiveFullResponse:
             conn.receive_full_response(mock_sock)
 
 
+class TestRuntimeValidation:
+    """Pre-flight schema validation modes."""
+
+    @patch('socket.socket')
+    def test_strict_mode_rejects_invalid_payload(self, mock_socket_class):
+        import rhinomcp.server as srv
+        from rhinomcp.server import RhinoConnection
+
+        mock_sock = MagicMock()
+        mock_socket_class.return_value = mock_sock
+
+        conn = RhinoConnection(host="127.0.0.1", port=1999)
+        conn.connect()
+
+        original_mode = srv.RHINO_VALIDATE
+        srv.RHINO_VALIDATE = "strict"
+        try:
+            with pytest.raises(ValueError, match="Invalid params"):
+                conn.send_command("create_object", {"type": "BOX", "params": {"radius": 1}})
+        finally:
+            srv.RHINO_VALIDATE = original_mode
+
+        mock_sock.sendall.assert_not_called()
+
+    @patch('socket.socket')
+    def test_warn_mode_lets_invalid_payload_through(self, mock_socket_class):
+        """The default 'warn' mode logs but still sends — important while
+        wrappers and schemas are still converging."""
+        import rhinomcp.server as srv
+        from rhinomcp.server import RhinoConnection
+
+        mock_sock = MagicMock()
+        mock_socket_class.return_value = mock_sock
+        mock_sock.recv.return_value = json.dumps({"status": "success", "result": {}}).encode("utf-8")
+
+        conn = RhinoConnection(host="127.0.0.1", port=1999)
+        conn.connect()
+
+        original_mode = srv.RHINO_VALIDATE
+        srv.RHINO_VALIDATE = "warn"
+        try:
+            conn.send_command("create_object", {"type": "BOX", "params": {"radius": 1}})
+        finally:
+            srv.RHINO_VALIDATE = original_mode
+
+        mock_sock.sendall.assert_called_once()
+
+
 class TestSendCommand:
     """Tests for the send_command method."""
 
@@ -142,7 +190,10 @@ class TestSendCommand:
         conn = RhinoConnection(host="127.0.0.1", port=1999)
         conn.connect()
 
-        result = conn.send_command("create_object", {"type": "BOX", "params": {}})
+        result = conn.send_command(
+            "create_object",
+            {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}}
+        )
 
         assert result == {"name": "Box1", "id": "abc-123"}
 
@@ -167,7 +218,10 @@ class TestSendCommand:
         conn.connect()
 
         with pytest.raises(Exception, match="Object not found"):
-            conn.send_command("get_object_info", {"id": "nonexistent"})
+            conn.send_command(
+                "get_object_info",
+                {"id": "00000000-0000-0000-0000-000000000000"},
+            )
 
     @patch('socket.socket')
     def test_send_command_timeout(self, mock_socket_class):
@@ -183,7 +237,10 @@ class TestSendCommand:
 
         # Socket timeout leads to "No data received" which is wrapped as communication error
         with pytest.raises(Exception, match="Communication error with Rhino"):
-            conn.send_command("create_object", {"type": "BOX"})
+            conn.send_command(
+                "create_object",
+                {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}},
+            )
 
         # Socket should be invalidated after timeout
         assert conn.sock is None

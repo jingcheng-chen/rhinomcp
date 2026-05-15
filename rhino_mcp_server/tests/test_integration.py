@@ -96,7 +96,7 @@ class TestModifyObject:
         created = conn.send_command("create_object", {
             "type": "BOX",
             "name": "OriginalName",
-            "params": {}
+            "params": {"width": 1, "length": 1, "height": 1}
         })
 
         # Rename it
@@ -116,7 +116,7 @@ class TestModifyObject:
         created = conn.send_command("create_object", {
             "type": "SPHERE",
             "name": "ColorTest",
-            "params": {}
+            "params": {"radius": 1}
         })
 
         result = conn.send_command("modify_object", {
@@ -139,7 +139,7 @@ class TestDeleteObject:
         created = conn.send_command("create_object", {
             "type": "BOX",
             "name": "ToDelete",
-            "params": {}
+            "params": {"width": 1, "length": 1, "height": 1}
         })
 
         result = conn.send_command("delete_object", {"id": created["id"]})
@@ -153,8 +153,8 @@ class TestDeleteObject:
         conn = get_rhino_connection()
 
         # Create some objects
-        conn.send_command("create_object", {"type": "BOX", "params": {}})
-        conn.send_command("create_object", {"type": "SPHERE", "params": {}})
+        conn.send_command("create_object", {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}})
+        conn.send_command("create_object", {"type": "SPHERE", "params": {"radius": 1}})
 
         result = conn.send_command("delete_object", {"all": True})
 
@@ -171,7 +171,7 @@ class TestUndoRedo:
         conn = get_rhino_connection()
 
         # Create an object (pushes to undo stack)
-        conn.send_command("create_object", {"type": "BOX", "params": {}})
+        conn.send_command("create_object", {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}})
 
         result = conn.send_command("undo", {"steps": 1})
 
@@ -184,9 +184,9 @@ class TestUndoRedo:
         conn = get_rhino_connection()
 
         # Create multiple objects
-        conn.send_command("create_object", {"type": "BOX", "params": {}})
-        conn.send_command("create_object", {"type": "SPHERE", "params": {}})
-        conn.send_command("create_object", {"type": "CYLINDER", "params": {}})
+        conn.send_command("create_object", {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}})
+        conn.send_command("create_object", {"type": "SPHERE", "params": {"radius": 1}})
+        conn.send_command("create_object", {"type": "CYLINDER", "params": {"radius": 1, "height": 2}})
 
         result = conn.send_command("undo", {"steps": 2})
 
@@ -198,7 +198,7 @@ class TestUndoRedo:
 
         conn = get_rhino_connection()
 
-        conn.send_command("create_object", {"type": "BOX", "params": {}})
+        conn.send_command("create_object", {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}})
         conn.send_command("undo", {"steps": 1})
 
         result = conn.send_command("redo", {"steps": 1})
@@ -216,8 +216,8 @@ class TestBooleanOperations:
         conn = get_rhino_connection()
 
         # Create two objects
-        obj1 = conn.send_command("create_object", {"type": "BOX", "params": {}})
-        obj2 = conn.send_command("create_object", {"type": "BOX", "params": {}})
+        obj1 = conn.send_command("create_object", {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}})
+        obj2 = conn.send_command("create_object", {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}})
 
         result = conn.send_command("boolean_union", {
             "object_ids": [obj1["id"], obj2["id"]],
@@ -233,8 +233,8 @@ class TestBooleanOperations:
 
         conn = get_rhino_connection()
 
-        base = conn.send_command("create_object", {"type": "BOX", "params": {}})
-        subtract = conn.send_command("create_object", {"type": "SPHERE", "params": {}})
+        base = conn.send_command("create_object", {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}})
+        subtract = conn.send_command("create_object", {"type": "SPHERE", "params": {"radius": 1}})
 
         result = conn.send_command("boolean_difference", {
             "base_id": base["id"],
@@ -249,8 +249,8 @@ class TestBooleanOperations:
 
         conn = get_rhino_connection()
 
-        obj1 = conn.send_command("create_object", {"type": "BOX", "params": {}})
-        obj2 = conn.send_command("create_object", {"type": "SPHERE", "params": {}})
+        obj1 = conn.send_command("create_object", {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}})
+        obj2 = conn.send_command("create_object", {"type": "SPHERE", "params": {"radius": 1}})
 
         result = conn.send_command("boolean_intersection", {
             "object_ids": [obj1["id"], obj2["id"]]
@@ -309,7 +309,7 @@ class TestDocumentInfo:
         conn = get_rhino_connection()
 
         # Create some objects
-        conn.send_command("create_object", {"type": "BOX", "name": "DocInfoBox", "params": {}})
+        conn.send_command("create_object", {"type": "BOX", "name": "DocInfoBox", "params": {"width": 1, "length": 1, "height": 1}})
 
         result = conn.send_command("get_document_summary", {})
 
