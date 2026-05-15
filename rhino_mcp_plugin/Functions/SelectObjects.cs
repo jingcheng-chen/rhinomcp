@@ -17,11 +17,10 @@ public partial class RhinoMCPFunctions
         var doc = RhinoDoc.ActiveDoc;
         var objects = doc.Objects.ToList();
         var selectedObjects = new List<Guid>();
-        var filtersType = (string)parameters["filters_type"];
+        var filtersType = (string)parameters["filters_type"] ?? "and";
 
-        var hasName = false;
-        var hasColor = false;
-        var customAttributes = new Dictionary<string, List<string>>();
+        if (filtersType != "and" && filtersType != "or")
+            throw new InvalidOperationException($"Invalid filters_type '{filtersType}': expected 'and' or 'or'.");
 
         // no filter means all are selected
         if (filters.Count == 0)
@@ -33,51 +32,71 @@ public partial class RhinoMCPFunctions
             return new JObject() { ["count"] = objects.Count };
         }
 
+        // filters.name is documented as a list of strings; custom attributes are also lists.
+        // color stays a single RGB triplet (see contracts/commands/select_objects.json).
+        List<string> nameValues = null;
+        int[] color = null;
+        var customAttributes = new Dictionary<string, List<string>>();
+
         foreach (JProperty f in filters.Properties())
         {
-            if (f.Name == "name") hasName = true;
-            if (f.Name == "color") hasColor = true;
-            if (f.Name != "name" && f.Name != "color") customAttributes.Add(f.Name, castToStringList(f.Value));
+            if (f.Name == "name") nameValues = castToStringList(f.Value);
+            else if (f.Name == "color") color = castToIntArray(f.Value);
+            else customAttributes[f.Name] = castToStringList(f.Value);
         }
 
-        var name = hasName ? castToString(filters.SelectToken("name")) : null;
-        var color = hasColor ? castToIntArray(filters.SelectToken("color")) : null;
+        bool hasName = nameValues != null;
+        bool hasColor = color != null;
 
-        if (filtersType == "and")
-            foreach (var obj in objects)
+        bool ColorMatches(Rhino.DocObjects.RhinoObject obj) =>
+            obj.Attributes.ObjectColor.R == color[0] &&
+            obj.Attributes.ObjectColor.G == color[1] &&
+            obj.Attributes.ObjectColor.B == color[2];
+
+        foreach (var obj in objects)
+        {
+            bool selected;
+            if (filtersType == "and")
             {
-                var attributeMatch = true;
-                if (hasName && obj.Name != name) continue;
-                if (hasColor && (obj.Attributes.ObjectColor.R != color[0] || obj.Attributes.ObjectColor.G != color[1] || obj.Attributes.ObjectColor.B != color[2])) continue;
-                foreach (var customAttribute in customAttributes)
+                // Each present filter key must match at least one of its listed values.
+                selected = true;
+                if (hasName && !nameValues.Contains(obj.Name)) selected = false;
+                if (selected && hasColor && !ColorMatches(obj)) selected = false;
+                if (selected)
                 {
-                    foreach (var value in customAttribute.Value)
+                    foreach (var customAttribute in customAttributes)
                     {
-                        if (obj.Attributes.GetUserString(customAttribute.Key) != value) attributeMatch = false;
+                        var userValue = obj.Attributes.GetUserString(customAttribute.Key);
+                        if (userValue == null || !customAttribute.Value.Contains(userValue))
+                        {
+                            selected = false;
+                            break;
+                        }
                     }
                 }
-                if (!attributeMatch) continue;
-
-                selectedObjects.Add(obj.Id);
             }
-        else if (filtersType == "or")
-            foreach (var obj in objects)
+            else
             {
-                var attributeMatch = false;
-                if (hasName && obj.Name == name) attributeMatch = true;
-                if (hasColor && obj.Attributes.ObjectColor.R == color[0] && obj.Attributes.ObjectColor.G == color[1] && obj.Attributes.ObjectColor.B == color[2]) attributeMatch = true;
-
-                foreach (var customAttribute in customAttributes)
+                // Any present filter key matching any listed value wins.
+                selected = false;
+                if (hasName && nameValues.Contains(obj.Name)) selected = true;
+                if (!selected && hasColor && ColorMatches(obj)) selected = true;
+                if (!selected)
                 {
-                    foreach (var value in customAttribute.Value)
+                    foreach (var customAttribute in customAttributes)
                     {
-                        if (obj.Attributes.GetUserString(customAttribute.Key) == value) attributeMatch = true;
+                        var userValue = obj.Attributes.GetUserString(customAttribute.Key);
+                        if (userValue != null && customAttribute.Value.Contains(userValue))
+                        {
+                            selected = true;
+                            break;
+                        }
                     }
                 }
-                if (!attributeMatch) continue;
-
-                selectedObjects.Add(obj.Id);
             }
+
+            if (selected) selectedObjects.Add(obj.Id);
+        }
 
         doc.Objects.UnselectAll();
         doc.Objects.Select(selectedObjects);

@@ -208,7 +208,7 @@ public partial class RhinoMCPFunctions
         {
             var selectResult = SelectObjects(new JObject
             {
-                ["filters"] = new JObject { ["name"] = "MCPTestBox" },
+                ["filters"] = new JObject { ["name"] = new JArray { "MCPTestBox" } },
                 ["filters_type"] = "or"
             });
             var count = selectResult["count"]?.ToObject<int>() ?? 0;

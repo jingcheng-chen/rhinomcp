@@ -17,15 +17,19 @@ def select_objects(
     - filters_type: The type of the filters, it's "and" or "or", default is "and"
 
     Note:
-    The filter value is always a list, even if it's a single value. The reason is that a filter can contain multiple values, for example when we query by a attribute that has EITHER value1 OR value2.
+    Name and custom attribute filter values are lists of strings (even if there's only one value).
+    `color` is a single RGB triplet (not a list of triplets).
 
-    The filters dictionary can contain the following keys:
-    - name: The name of the object
-    - color: The color of the object, for example [255, 0, 0]
+    Filter semantics:
+    - With filters_type="and", an object matches when every filter key matches at least one
+      of that key's listed values.
+    - With filters_type="or", an object matches when any filter key matches any listed value.
+    - Name and custom-attribute string matches are exact (case-sensitive).
 
-    Additionaly, rhino allows to have user custom attributes, which can be used to filters the objects.
-    For example, if the object has a user custom attribute called "category", the filters dictionary can contain:
-    - category: custom_attribute_value
+    Keys:
+    - name: list of object names, e.g. ["Box1", "Box2"]
+    - color: single RGB triplet, e.g. [255, 0, 0]
+    - any other key is treated as a user custom attribute and the value is a list of strings.
 
     Example:
     filters = {

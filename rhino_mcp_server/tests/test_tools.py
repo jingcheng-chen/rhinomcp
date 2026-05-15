@@ -333,13 +333,13 @@ class TestSelectObjectsTool:
 
         result = select_objects(
             ctx=None,
-            filters={"name": "TestObject"},
+            filters={"name": ["TestObject"]},
             filters_type="or"
         )
 
         call_args = mock_conn.send_command.call_args
         assert call_args[0][0] == "select_objects"
-        assert call_args[0][1]["filters"]["name"] == "TestObject"
+        assert call_args[0][1]["filters"]["name"] == ["TestObject"]
 
 
 class TestCreateLayerTool:
