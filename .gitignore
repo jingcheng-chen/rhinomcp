@@ -6,3 +6,6 @@ grasshopper_mcp_plugin/
 grasshopper_mcp_server/
 .codex/
 .idea/
+.claude/
+AGENTS.md
+CLAUDE.md
