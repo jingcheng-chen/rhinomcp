@@ -6,7 +6,7 @@
 
 **RhinoMCP** is a Model Context Protocol (MCP) integration that connects Rhino 3D (the CAD software) to AI agents (Claude, Claude Desktop, and Cursor). It enables prompt-assisted 3D modeling by allowing AI to directly interact with and control Rhino through a standardized protocol.
 
-- **Version:** 0.2.1
+- **Version:** 0.2.2
 - **Author:** Jingcheng Chen
 - **License:** MIT
 - **Repository:** https://github.com/jingcheng-chen/rhinomcp
@@ -140,7 +140,9 @@ rhinomcp/
 **Key Classes:**
 
 #### `RhinoConnection`
+
 Manages TCP socket connection to Rhino plugin:
+
 - Connects to `127.0.0.1:1999`
 - Sends JSON commands: `{"type": "command_name", "params": {...}}`
 - Receives JSON responses with status and results
@@ -155,6 +157,7 @@ result = conn.send_command("create_object", params)
 ```
 
 #### FastMCP Server
+
 - Registers 16+ tools for AI agents
 - Implements lifespan management (startup/shutdown)
 - Global persistent connection reuse via `rhino_connection` global variable
@@ -164,6 +167,7 @@ result = conn.send_command("create_object", params)
 **Purpose:** Socket server running inside Rhino, executing commands in the main thread
 
 #### `RhinoMCPServer.cs`
+
 - Listens on `127.0.0.1:1999`
 - Handles multi-threaded client connections
 - Routes commands to `RhinoMCPFunctions` handlers
@@ -171,6 +175,7 @@ result = conn.send_command("create_object", params)
 - Wraps operations in Undo records
 
 **Command Dispatch (simplified):**
+
 ```csharp
 Dictionary<string, Func<JObject, JObject>> handlers = {
     ["get_document_info"] = handler.GetDocumentInfo,
@@ -183,10 +188,12 @@ Dictionary<string, Func<JObject, JObject>> handlers = {
 ```
 
 #### `RhinoMCPPlugin.cs`
+
 - Plugin base class extending `Rhino.PlugIns.PlugIn`
 - Registers Rhino commands: `mcpstart`, `mcpstop`, `mcpstatus`
 
 #### `RhinoMCPServerController.cs`
+
 - Singleton controller for server lifecycle
 - Start/Stop/Status management
 
@@ -194,22 +201,22 @@ Dictionary<string, Func<JObject, JObject>> handlers = {
 
 Each file implements a specific Rhino operation:
 
-| File | Purpose |
-|------|---------|
-| `CreateObject.cs` | Create single geometry (13 types supported) |
-| `CreateObjects.cs` | Batch create multiple objects |
-| `ModifyObject.cs` | Modify existing object properties |
-| `ModifyObjects.cs` | Batch modify |
-| `DeleteObject.cs` | Delete by ID or name |
-| `GetDocumentInfo.cs` | Fetch document state (limited to 30 items) |
-| `GetObjectInfo.cs` | Get single object details |
-| `GetSelectedObjectsInfo.cs` | Get currently selected objects |
-| `SelectObjects.cs` | Select by filters (name, color, attributes) |
-| `CreateLayer.cs` | Create new layer |
-| `DeleteLayer.cs` | Delete layer |
-| `GetOrSetCurrentLayer.cs` | Get/set active layer |
-| `ExecuteRhinoscript.cs` | Execute Python code in Rhino |
-| `_utils.cs` | Helper methods for transforms |
+| File                        | Purpose                                     |
+| --------------------------- | ------------------------------------------- |
+| `CreateObject.cs`           | Create single geometry (13 types supported) |
+| `CreateObjects.cs`          | Batch create multiple objects               |
+| `ModifyObject.cs`           | Modify existing object properties           |
+| `ModifyObjects.cs`          | Batch modify                                |
+| `DeleteObject.cs`           | Delete by ID or name                        |
+| `GetDocumentInfo.cs`        | Fetch document state (limited to 30 items)  |
+| `GetObjectInfo.cs`          | Get single object details                   |
+| `GetSelectedObjectsInfo.cs` | Get currently selected objects              |
+| `SelectObjects.cs`          | Select by filters (name, color, attributes) |
+| `CreateLayer.cs`            | Create new layer                            |
+| `DeleteLayer.cs`            | Delete layer                                |
+| `GetOrSetCurrentLayer.cs`   | Get/set active layer                        |
+| `ExecuteRhinoscript.cs`     | Execute Python code in Rhino                |
+| `_utils.cs`                 | Helper methods for transforms               |
 
 ### 4. Serializer (`rhino_mcp_plugin/Serializers/Serializer.cs`)
 
@@ -233,23 +240,23 @@ RhinoObject → JObject {
 
 16 primary tools exposed to AI agents:
 
-| Tool | Purpose | Key Parameters |
-|------|---------|----------------|
-| `create_object` | Create single geometry | type, name, color, params, translation, rotation, scale |
-| `create_objects` | Batch create | List of object specs |
-| `modify_object` | Edit object | id/name, new_name, color, transforms |
-| `modify_objects` | Batch edit | List of modifications |
-| `delete_object` | Remove object | id or name |
-| `get_document_info` | Fetch document state | None (returns up to 30 objects/layers) |
-| `get_object_info` | Get object details | id or name |
-| `get_selected_objects_info` | Get selection | None |
-| `select_objects` | Select by filters | filters (name, color, attributes), filter_type (and/or) |
-| `create_layer` | New layer | name, color, locked |
-| `delete_layer` | Remove layer | name |
-| `get_or_set_current_layer` | Active layer | get_only flag, name (for set) |
-| `execute_rhinoscript_python_code` | Run Python in Rhino | code string |
-| `get_rhinoscript_python_function_names` | List RhinoScript functions | None |
-| `get_rhinoscript_python_code_guide` | Get function documentation | function_name |
+| Tool                                    | Purpose                    | Key Parameters                                          |
+| --------------------------------------- | -------------------------- | ------------------------------------------------------- |
+| `create_object`                         | Create single geometry     | type, name, color, params, translation, rotation, scale |
+| `create_objects`                        | Batch create               | List of object specs                                    |
+| `modify_object`                         | Edit object                | id/name, new_name, color, transforms                    |
+| `modify_objects`                        | Batch edit                 | List of modifications                                   |
+| `delete_object`                         | Remove object              | id or name                                              |
+| `get_document_info`                     | Fetch document state       | None (returns up to 30 objects/layers)                  |
+| `get_object_info`                       | Get object details         | id or name                                              |
+| `get_selected_objects_info`             | Get selection              | None                                                    |
+| `select_objects`                        | Select by filters          | filters (name, color, attributes), filter_type (and/or) |
+| `create_layer`                          | New layer                  | name, color, locked                                     |
+| `delete_layer`                          | Remove layer               | name                                                    |
+| `get_or_set_current_layer`              | Active layer               | get_only flag, name (for set)                           |
+| `execute_rhinoscript_python_code`       | Run Python in Rhino        | code string                                             |
+| `get_rhinoscript_python_function_names` | List RhinoScript functions | None                                                    |
+| `get_rhinoscript_python_code_guide`     | Get function documentation | function_name                                           |
 
 ---
 
@@ -257,21 +264,21 @@ RhinoObject → JObject {
 
 13 geometric primitives (defined in `CreateObject.cs`):
 
-| Type | Parameters | Description |
-|------|------------|-------------|
-| `POINT` | x, y, z | Single point |
-| `LINE` | start [x,y,z], end [x,y,z] | Two endpoints |
-| `POLYLINE` | points [[x,y,z], ...] | Connected points |
-| `CIRCLE` | center [x,y,z], radius | Circle on XY plane |
-| `ARC` | center, radius, start_angle, end_angle (degrees) | Arc segment |
-| `ELLIPSE` | center, radius_x, radius_y | Ellipse on XY plane |
-| `CURVE` | control_points, degree | B-spline curve |
-| `BOX` | width, length, height | Rectangular box |
-| `SPHERE` | radius | Sphere at origin |
-| `CONE` | radius, height, cap (bool) | Cone |
-| `CYLINDER` | radius, height, cap (bool) | Cylinder |
-| `PIPE` | (documented, implementation varies) | Pipe along curve |
-| `SURFACE` | points (grid), u_degree, v_degree, u_closed, v_closed | NURBS surface |
+| Type       | Parameters                                            | Description         |
+| ---------- | ----------------------------------------------------- | ------------------- |
+| `POINT`    | x, y, z                                               | Single point        |
+| `LINE`     | start [x,y,z], end [x,y,z]                            | Two endpoints       |
+| `POLYLINE` | points [[x,y,z], ...]                                 | Connected points    |
+| `CIRCLE`   | center [x,y,z], radius                                | Circle on XY plane  |
+| `ARC`      | center, radius, start_angle, end_angle (degrees)      | Arc segment         |
+| `ELLIPSE`  | center, radius_x, radius_y                            | Ellipse on XY plane |
+| `CURVE`    | control_points, degree                                | B-spline curve      |
+| `BOX`      | width, length, height                                 | Rectangular box     |
+| `SPHERE`   | radius                                                | Sphere at origin    |
+| `CONE`     | radius, height, cap (bool)                            | Cone                |
+| `CYLINDER` | radius, height, cap (bool)                            | Cylinder            |
+| `PIPE`     | (documented, implementation varies)                   | Pipe along curve    |
+| `SURFACE`  | points (grid), u_degree, v_degree, u_closed, v_closed | NURBS surface       |
 
 ---
 
@@ -294,14 +301,18 @@ applyScale(geometry, scale)              // Scale from bounding box min (non-uni
 ### TCP Socket (JSON-based)
 
 **Command (Client → Server):**
+
 ```json
 {
   "type": "command_type",
-  "params": { /* command-specific parameters */ }
+  "params": {
+    /* command-specific parameters */
+  }
 }
 ```
 
 **Response (Server → Client):**
+
 ```json
 {
   "status": "success",
@@ -315,6 +326,7 @@ applyScale(geometry, scale)              // Scale from bounding box min (non-uni
 ```
 
 ### Socket Parameters
+
 - **Host:** `127.0.0.1`
 - **Port:** `1999`
 - **Timeout:** 15 seconds
@@ -327,6 +339,7 @@ applyScale(geometry, scale)              // Scale from bounding box min (non-uni
 ### Claude Desktop
 
 `~/Library/Application Support/Claude/claude_desktop_config.json`:
+
 ```json
 {
   "mcpServers": {
@@ -341,6 +354,7 @@ applyScale(geometry, scale)              // Scale from bounding box min (non-uni
 ### Cursor IDE
 
 `.cursor/mcp.json`:
+
 ```json
 {
   "mcpServers": {
@@ -371,6 +385,7 @@ applyScale(geometry, scale)              // Scale from bounding box min (non-uni
 ### Python MCP Server
 
 **Workflow:** `.github/workflows/mcp-server-publish.yml`
+
 - Triggered on GitHub release
 - Builds Python package with `python -m build`
 - Publishes to PyPI using trusted publishing
@@ -379,6 +394,7 @@ applyScale(geometry, scale)              // Scale from bounding box min (non-uni
 ### Rhino Plugin
 
 **Workflow:** `.github/workflows/rhino-plugin-publish.yml`
+
 - Triggered on GitHub release
 - Builds .NET 7.0 solution with MSBuild
 - Outputs `.rhp` (Rhino plugin) file
@@ -388,12 +404,14 @@ applyScale(geometry, scale)              // Scale from bounding box min (non-uni
 ### Development Commands
 
 **Python:**
+
 ```bash
 cd rhino_mcp_server
 ./dev.sh  # Runs: uv venv && uv run mcp dev main.py:mcp
 ```
 
 **C# Plugin:**
+
 - Built with Visual Studio/Rider targeting net7.0
 - Post-build copies to Rhino applications folder
 
@@ -402,11 +420,13 @@ cd rhino_mcp_server
 ## Dependencies
 
 ### Python (`pyproject.toml`)
+
 - **fastmcp** >= 2.11.2 (MCP server framework)
 - **mcp** >= 1.12.4 (MCP CLI support)
 - Python >= 3.10
 
 ### C# (`.csproj`)
+
 - **RhinoCommon** 8.17.25066.7001 (Rhino SDK)
 - **Newtonsoft.Json** 13.0.3 (JSON serialization)
 - **.NET SDK** 7.0
@@ -416,22 +436,26 @@ cd rhino_mcp_server
 ## Important Implementation Notes
 
 ### Performance Optimizations
+
 1. **Document Info Limiting:** Only fetches first 30 objects/layers to prevent overwhelming AI context
 2. **Global Connection Reuse:** Single persistent TCP connection across tool calls
 3. **Thread Management:** Rhino operations run on main UI thread via `InvokeOnUiThread`
 4. **Chunked JSON Reading:** Handles large responses in multiple TCP packets
 
 ### Threading Model
+
 - Python server: Async/sync hybrid, single connection
 - Rhino plugin: Multi-threaded client handling, UI thread execution
 - All Rhino API calls must be on UI thread (enforced by `InvokeOnUiThread`)
 
 ### Error Handling
+
 - Socket disconnection triggers automatic reconnection
 - Commands wrapped in try-catch with JSON error responses
 - Undo records created for all modifications
 
 ### Limitations
+
 - Single MCP server instance only (one AI client at a time)
 - Document info limited to 30 items (by design)
 - Script execution is experimental
@@ -441,25 +465,26 @@ cd rhino_mcp_server
 
 ## Key Files Quick Reference
 
-| Purpose | Python File | C# File |
-|---------|-------------|---------|
-| Main entry | `main.py` | `RhinoMCPPlugin.cs` |
-| Server/Connection | `server.py` | `RhinoMCPServer.cs` |
-| Create objects | `tools/create_object.py` | `Functions/CreateObject.cs` |
-| Modify objects | `tools/modify_object.py` | `Functions/ModifyObject.cs` |
-| Delete objects | `tools/delete_object.py` | `Functions/DeleteObject.cs` |
-| Document info | `tools/get_document_info.py` | `Functions/GetDocumentInfo.cs` |
-| Object info | `tools/get_object_info.py` | `Functions/GetObjectInfo.cs` |
-| Selection | `tools/select_objects.py` | `Functions/SelectObjects.cs` |
-| Layers | `tools/create_layer.py` | `Functions/CreateLayer.cs` |
-| Scripting | `tools/execute_rhinoscript_python_code.py` | `Functions/ExecuteRhinoscript.cs` |
-| Utilities | - | `Functions/_utils.cs` |
-| Serialization | - | `Serializers/Serializer.cs` |
+| Purpose           | Python File                                | C# File                           |
+| ----------------- | ------------------------------------------ | --------------------------------- |
+| Main entry        | `main.py`                                  | `RhinoMCPPlugin.cs`               |
+| Server/Connection | `server.py`                                | `RhinoMCPServer.cs`               |
+| Create objects    | `tools/create_object.py`                   | `Functions/CreateObject.cs`       |
+| Modify objects    | `tools/modify_object.py`                   | `Functions/ModifyObject.cs`       |
+| Delete objects    | `tools/delete_object.py`                   | `Functions/DeleteObject.cs`       |
+| Document info     | `tools/get_document_info.py`               | `Functions/GetDocumentInfo.cs`    |
+| Object info       | `tools/get_object_info.py`                 | `Functions/GetObjectInfo.cs`      |
+| Selection         | `tools/select_objects.py`                  | `Functions/SelectObjects.cs`      |
+| Layers            | `tools/create_layer.py`                    | `Functions/CreateLayer.cs`        |
+| Scripting         | `tools/execute_rhinoscript_python_code.py` | `Functions/ExecuteRhinoscript.cs` |
+| Utilities         | -                                          | `Functions/_utils.cs`             |
+| Serialization     | -                                          | `Serializers/Serializer.cs`       |
 
 ---
 
 ## Version History (Recent)
 
+- **0.2.2** - see release notes for details
 - **0.2.1** - Added Curve related features
 - **0.1.3.6** - Latest release
 - **0.1.3.5** - Bug fixes
@@ -470,4 +495,4 @@ cd rhino_mcp_server
 
 ---
 
-*Last updated: February 2026*
+_Last updated: May 2026_
