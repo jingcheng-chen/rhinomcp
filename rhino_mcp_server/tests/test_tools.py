@@ -272,6 +272,71 @@ class TestObjectAttributesTools:
         mock_conn.send_command.assert_not_called()
 
 
+class TestAnalyzeObjectsTool:
+    """Tests for analyze_objects tool."""
+
+    @patch('rhinomcp.tools.analyze_objects.get_rhino_connection')
+    def test_analyze_object_by_id(self, mock_get_conn):
+        from rhinomcp.tools.analyze_objects import analyze_objects
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "object_count": 1,
+            "analyses": [
+                {
+                    "id": "abc-123",
+                    "name": "Line1",
+                    "type": "LINE",
+                    "valid": True,
+                    "metrics": {"length": 10},
+                }
+            ],
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = analyze_objects(ctx=None, id="abc-123")
+
+        mock_conn.send_command.assert_called_once_with("analyze_objects", {"id": "abc-123"})
+        assert result["object_count"] == 1
+        assert result["analyses"][0]["metrics"]["length"] == 10
+
+    @patch('rhinomcp.tools.analyze_objects.get_rhino_connection')
+    def test_analyze_objects_by_ids(self, mock_get_conn):
+        from rhinomcp.tools.analyze_objects import analyze_objects
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"object_count": 2, "analyses": []}
+        mock_get_conn.return_value = mock_conn
+
+        analyze_objects(ctx=None, object_ids=["id-1", "id-2"])
+
+        mock_conn.send_command.assert_called_once_with("analyze_objects", {"object_ids": ["id-1", "id-2"]})
+
+    @patch('rhinomcp.tools.analyze_objects.get_rhino_connection')
+    def test_analyze_objects_rejects_mixed_selectors(self, mock_get_conn):
+        from rhinomcp.tools.analyze_objects import analyze_objects
+
+        mock_conn = MagicMock()
+        mock_get_conn.return_value = mock_conn
+
+        with pytest.raises(ValueError, match="exactly one"):
+            analyze_objects(ctx=None, id="abc-123", selected=True)
+
+        mock_conn.send_command.assert_not_called()
+
+    @patch('rhinomcp.tools.analyze_objects.get_rhino_connection')
+    def test_analyze_objects_rejects_empty_object_ids(self, mock_get_conn):
+        from rhinomcp.tools.analyze_objects import analyze_objects
+
+        mock_conn = MagicMock()
+        mock_get_conn.return_value = mock_conn
+
+        with pytest.raises(ValueError, match="at least one id"):
+            analyze_objects(ctx=None, object_ids=[])
+
+        mock_conn.send_command.assert_not_called()
+
+
 class TestModifyObjectsTool:
     """Tests for modify_objects tool."""
 
@@ -1255,6 +1320,8 @@ class TestToolAnnotations:
             "tools/get_document_summary.py",
             "tools/get_objects.py",
             "tools/get_object_info.py",
+            "tools/object_attributes.py",
+            "tools/analyze_objects.py",
             "tools/get_selected_objects_info.py",
             "tools/get_commands.py",
             "tools/rhinoscript_docs.py",
@@ -1296,6 +1363,7 @@ class TestPackageApi:
             "pipe",
             "undo",
             "redo",
+            "analyze_objects",
         ]:
             assert hasattr(rhinomcp, name), f"rhinomcp.{name} missing — re-export regression"
             assert callable(getattr(rhinomcp, name))

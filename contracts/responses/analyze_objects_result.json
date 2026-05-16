@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "analyze_objects_result.json",
+  "title": "AnalyzeObjects Response",
+  "description": "Geometry analysis result for one or more Rhino objects",
+  "type": "object",
+  "properties": {
+    "object_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "analyses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "../common/definitions.json#/$defs/guid" },
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "layer": { "type": "string" },
+          "valid": { "type": "boolean" },
+          "validity_log": { "type": ["string", "null"] },
+          "bounding_box": { "$ref": "../common/definitions.json#/$defs/boundingBox" },
+          "bbox_dimensions": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "metrics": {
+            "type": "object",
+            "additionalProperties": {
+              "type": ["string", "number", "integer", "boolean", "array", "null"]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "layer",
+          "valid",
+          "validity_log",
+          "bounding_box",
+          "bbox_dimensions",
+          "metrics"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["object_count", "analyses"],
+  "additionalProperties": false
+}

@@ -237,6 +237,9 @@ def test_new_commands():
         ("commands/update_object_attributes.json", {"name": "Box1", "layer": "Default", "visible": True}),
         ("commands/update_object_attributes.json", {"id": GUID, "delete_user_strings": ["PartNo"]}),
         ("commands/update_object_attributes.json", {"id": GUID, "material_index": -1}),
+        ("commands/analyze_objects.json", {"id": GUID}),
+        ("commands/analyze_objects.json", {"object_ids": [GUID]}),
+        ("commands/analyze_objects.json", {"selected": True}),
         ("commands/undo.json", {}),
         ("commands/undo.json", {"steps": 3}),
         ("commands/redo.json", {}),
@@ -378,6 +381,32 @@ def test_responses():
     if not validate("responses/object_attributes.json", object_attributes):
         all_passed = False
 
+    # Analyze objects
+    print("  analyze_objects_result:")
+    analyze_result = {
+        "object_count": 1,
+        "analyses": [
+            {
+                "id": "12345678-1234-1234-1234-123456789012",
+                "name": "Line1",
+                "type": "LINE",
+                "layer": "Default",
+                "valid": True,
+                "validity_log": None,
+                "bounding_box": [[0, 0, 0], [10, 0, 0]],
+                "bbox_dimensions": [10, 0, 0],
+                "metrics": {
+                    "length": 10,
+                    "is_closed": False,
+                    "start_point": [0, 0, 0],
+                    "end_point": [10, 0, 0],
+                },
+            }
+        ],
+    }
+    if not validate("responses/analyze_objects_result.json", analyze_result):
+        all_passed = False
+
     return all_passed
 
 
@@ -425,6 +454,10 @@ def test_invalid_examples():
         ("commands/update_object_attributes.json", {"id": "12345678-1234-1234-1234-123456789012", "visible": False, "locked": True}, "update_object_attributes hidden and locked"),
         ("commands/update_object_attributes.json", {"id": "12345678-1234-1234-1234-123456789012", "user_strings": {"": "bad"}}, "update_object_attributes empty user string key"),
         ("commands/update_object_attributes.json", {"id": "12345678-1234-1234-1234-123456789012", "user_strings": {"nested": {"bad": True}}}, "update_object_attributes nested user string value"),
+        ("commands/analyze_objects.json", {}, "analyze_objects no selector"),
+        ("commands/analyze_objects.json", {"object_ids": []}, "analyze_objects empty object_ids"),
+        ("commands/analyze_objects.json", {"id": "12345678-1234-1234-1234-123456789012", "selected": True}, "analyze_objects mixed selectors"),
+        ("commands/analyze_objects.json", {"selected": False}, "analyze_objects selected=false"),
     ]
 
     all_rejected = True
@@ -559,6 +592,7 @@ def test_protocol_envelope():
         "create_object", "create_objects", "modify_object", "modify_objects",
         "delete_object", "get_object_info", "get_selected_objects_info",
         "get_object_attributes", "update_object_attributes",
+        "analyze_objects",
         "get_document_summary", "get_objects", "select_objects",
         "create_layer", "delete_layer", "get_or_set_current_layer",
         "execute_rhinoscript_python_code", "execute_rhinocommon_csharp_code",

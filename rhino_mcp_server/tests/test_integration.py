@@ -210,6 +210,63 @@ class TestObjectAttributes:
         assert updated["material_source"] == "MaterialFromLayer"
 
 
+class TestAnalyzeObjects:
+    """Integration tests for analyze_objects."""
+
+    def test_analyze_line_length(self, mock_server):
+        """Analyze a line and get length/bounding-box feedback."""
+        from rhinomcp.server import get_rhino_connection
+
+        conn = get_rhino_connection()
+
+        created = conn.send_command("create_object", {
+            "type": "LINE",
+            "name": "MeasuredLine",
+            "params": {"start": [0, 0, 0], "end": [3, 4, 0]}
+        })
+
+        result = conn.send_command("analyze_objects", {"id": created["id"]})
+
+        assert result["object_count"] == 1
+        analysis = result["analyses"][0]
+        assert analysis["valid"] is True
+        assert analysis["type"] == "LINE"
+        assert analysis["metrics"]["length"] == 5
+
+    def test_analyze_multiple_objects(self, mock_server):
+        """Analyze multiple objects in one command."""
+        from rhinomcp.server import get_rhino_connection
+
+        conn = get_rhino_connection()
+
+        box = conn.send_command("create_object", {
+            "type": "BOX",
+            "name": "MeasuredBox",
+            "params": {"width": 2, "length": 3, "height": 4}
+        })
+        line = conn.send_command("create_object", {
+            "type": "LINE",
+            "name": "MeasuredLine2",
+            "params": {"start": [0, 0, 0], "end": [1, 0, 0]}
+        })
+
+        result = conn.send_command("analyze_objects", {"object_ids": [box["id"], line["id"]]})
+
+        assert result["object_count"] == 2
+        metrics_by_name = {item["name"]: item["metrics"] for item in result["analyses"]}
+        assert metrics_by_name["MeasuredBox"]["volume"] == 24
+        assert metrics_by_name["MeasuredLine2"]["length"] == 1
+
+    def test_analyze_rejects_empty_object_ids(self, mock_server):
+        """Empty object_ids is invalid even when validation only warns."""
+        from rhinomcp.server import get_rhino_connection
+
+        conn = get_rhino_connection()
+
+        with pytest.raises(Exception, match="at least one id"):
+            conn.send_command("analyze_objects", {"object_ids": []})
+
+
 class TestDeleteObject:
     """Integration tests for delete_object."""
 

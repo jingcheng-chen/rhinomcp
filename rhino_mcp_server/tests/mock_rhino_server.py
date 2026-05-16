@@ -114,6 +114,7 @@ class MockRhinoServer:
             "get_object_info": self._get_object_info,
             "get_object_attributes": self._get_object_attributes,
             "update_object_attributes": self._update_object_attributes,
+            "analyze_objects": self._analyze_objects,
             "modify_object": self._modify_object,
             "modify_objects": self._modify_objects,
             "delete_object": self._delete_object,
@@ -361,6 +362,75 @@ class MockRhinoServer:
 
         self.objects[obj["id"]] = obj
         return self._object_attributes_payload(obj)
+
+    def _analyze_objects(self, params: Dict) -> Dict:
+        """Analyze mock object validity and simple geometry measurements."""
+        selectors = [
+            "id" in params,
+            "name" in params,
+            "object_ids" in params,
+            params.get("selected") is True,
+        ]
+        if sum(1 for selector in selectors if selector) != 1:
+            raise Exception("analyze_objects requires exactly one of id, name, object_ids, or selected=true.")
+
+        if params.get("selected") is True:
+            targets = []
+        elif "object_ids" in params:
+            if len(params["object_ids"]) == 0:
+                raise Exception("analyze_objects object_ids must contain at least one id.")
+            targets = [self._get_object_info({"id": obj_id}) for obj_id in params["object_ids"]]
+        else:
+            targets = [self._get_object_info(params)]
+
+        analyses = [self._analysis_payload(obj) for obj in targets]
+        return {"object_count": len(analyses), "analyses": analyses}
+
+    def _analysis_payload(self, obj: Dict) -> Dict:
+        bbox = obj.get("bounding_box", [[0, 0, 0], [0, 0, 0]])
+        dims = [
+            bbox[1][0] - bbox[0][0],
+            bbox[1][1] - bbox[0][1],
+            bbox[1][2] - bbox[0][2],
+        ]
+        return {
+            "id": obj["id"],
+            "name": obj.get("name", ""),
+            "type": obj.get("type", "UNKNOWN"),
+            "layer": obj.get("layer", "Default"),
+            "valid": True,
+            "validity_log": None,
+            "bounding_box": bbox,
+            "bbox_dimensions": dims,
+            "metrics": self._analysis_metrics(obj),
+        }
+
+    def _analysis_metrics(self, obj: Dict) -> Dict:
+        obj_type = obj.get("type", "UNKNOWN").upper()
+        geometry = obj.get("geometry", {})
+        if obj_type == "LINE":
+            start = geometry.get("start", [0, 0, 0])
+            end = geometry.get("end", [0, 0, 0])
+            length = sum((end[i] - start[i]) ** 2 for i in range(3)) ** 0.5
+            return {
+                "length": length,
+                "is_closed": False,
+                "start_point": start,
+                "end_point": end,
+            }
+        if obj_type == "BOX":
+            width = geometry.get("width", 1)
+            length = geometry.get("length", 1)
+            height = geometry.get("height", 1)
+            return {
+                "is_solid": True,
+                "volume": width * length * height,
+                "face_count": 6,
+                "edge_count": 12,
+                "vertex_count": 8,
+                "naked_edge_count": 0,
+            }
+        return {}
 
     def _modify_object(self, params: Dict) -> Dict:
         """Modify an object."""

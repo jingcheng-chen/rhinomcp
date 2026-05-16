@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "analyze_objects.json",
+  "title": "AnalyzeObjects Command",
+  "description": "Analyze object validity and common geometry measurements",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../common/definitions.json#/$defs/guid",
+      "description": "GUID of one object to analyze"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of one object to analyze"
+    },
+    "object_ids": {
+      "$ref": "../common/definitions.json#/$defs/guidArray",
+      "description": "GUIDs of objects to analyze"
+    },
+    "selected": {
+      "type": "boolean",
+      "const": true,
+      "description": "Analyze the currently selected Rhino objects"
+    }
+  },
+  "oneOf": [
+    { "required": ["id"] },
+    { "required": ["name"] },
+    { "required": ["object_ids"] },
+    { "required": ["selected"] }
+  ],
+  "additionalProperties": false
+}
