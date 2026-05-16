@@ -173,6 +173,8 @@ def validate_response(command_type: str, response: Dict[str, Any], raise_on_erro
         "create_object": "object_info.json",
         "modify_object": "object_info.json",
         "get_object_info": "object_info.json",
+        "get_object_attributes": "object_attributes.json",
+        "update_object_attributes": "object_attributes.json",
         "get_selected_objects_info": "object_info.json",  # Returns array
         "get_document_summary": "document_summary.json",
         "get_objects": "get_objects_result.json",

@@ -232,6 +232,11 @@ def test_new_commands():
         ("commands/offset_curve.json", {"curve_id": GUID, "distance": 1.5}),
         ("commands/pipe.json", {"curve_id": GUID, "radius": 0.5}),
         ("commands/sweep1.json", {"rail_id": GUID, "profile_ids": [GUID]}),
+        ("commands/get_object_attributes.json", {"id": GUID}),
+        ("commands/update_object_attributes.json", {"id": GUID, "user_strings": {"PartNo": "A-100", "Count": 3}}),
+        ("commands/update_object_attributes.json", {"name": "Box1", "layer": "Default", "visible": True}),
+        ("commands/update_object_attributes.json", {"id": GUID, "delete_user_strings": ["PartNo"]}),
+        ("commands/update_object_attributes.json", {"id": GUID, "material_index": -1}),
         ("commands/undo.json", {}),
         ("commands/undo.json", {"steps": 3}),
         ("commands/redo.json", {}),
@@ -348,6 +353,31 @@ def test_responses():
     if not validate("responses/layer_info.json", layer_info):
         all_passed = False
 
+    # Object attributes
+    print("  object_attributes:")
+    object_attributes = {
+        "id": "12345678-1234-1234-1234-123456789012",
+        "name": "MyBox",
+        "type": "BOX",
+        "layer": {
+            "index": 0,
+            "id": "12345678-1234-1234-1234-123456789012",
+            "name": "Default",
+            "full_path": "Default",
+        },
+        "color": {"r": 255, "g": 0, "b": 0},
+        "color_source": "ColorFromObject",
+        "material_index": -1,
+        "material_source": "MaterialFromLayer",
+        "visible": True,
+        "locked": False,
+        "hidden": False,
+        "normal": True,
+        "user_strings": {"PartNo": "A-100"},
+    }
+    if not validate("responses/object_attributes.json", object_attributes):
+        all_passed = False
+
     return all_passed
 
 
@@ -390,6 +420,11 @@ def test_invalid_examples():
         ("commands/modify_objects.json", {"objects": [{"new_name": "X"}]}, "modify_objects no selector"),
         ("commands/modify_objects.json", {"objects": [{"id": "12345678-1234-1234-1234-123456789012"}], "all": False}, "modify_objects all=false"),
         ("commands/offset_curve.json", {"curve_id": "12345678-1234-1234-1234-123456789012", "distance": 0}, "offset_curve zero distance"),
+        ("commands/get_object_attributes.json", {"id": "12345678-1234-1234-1234-123456789012", "bogus": 1}, "get_object_attributes unknown field"),
+        ("commands/update_object_attributes.json", {"id": "12345678-1234-1234-1234-123456789012"}, "update_object_attributes no update fields"),
+        ("commands/update_object_attributes.json", {"id": "12345678-1234-1234-1234-123456789012", "visible": False, "locked": True}, "update_object_attributes hidden and locked"),
+        ("commands/update_object_attributes.json", {"id": "12345678-1234-1234-1234-123456789012", "user_strings": {"": "bad"}}, "update_object_attributes empty user string key"),
+        ("commands/update_object_attributes.json", {"id": "12345678-1234-1234-1234-123456789012", "user_strings": {"nested": {"bad": True}}}, "update_object_attributes nested user string value"),
     ]
 
     all_rejected = True
@@ -523,6 +558,7 @@ def test_protocol_envelope():
     expected_commands = [
         "create_object", "create_objects", "modify_object", "modify_objects",
         "delete_object", "get_object_info", "get_selected_objects_info",
+        "get_object_attributes", "update_object_attributes",
         "get_document_summary", "get_objects", "select_objects",
         "create_layer", "delete_layer", "get_or_set_current_layer",
         "execute_rhinoscript_python_code", "execute_rhinocommon_csharp_code",

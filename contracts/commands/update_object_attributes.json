@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "update_object_attributes.json",
+  "title": "UpdateObjectAttributes Command",
+  "description": "Update lightweight object metadata and custom user strings",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../common/definitions.json#/$defs/guid",
+      "description": "GUID of the object to update"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the object to update (alternative to id)"
+    },
+    "new_name": {
+      "type": "string",
+      "description": "New object name"
+    },
+    "layer": {
+      "type": "string",
+      "description": "Destination layer name or full path"
+    },
+    "color": {
+      "$ref": "../common/definitions.json#/$defs/color",
+      "description": "New RGB object color [r, g, b]"
+    },
+    "material_index": {
+      "type": "integer",
+      "minimum": -1,
+      "description": "Material table index. -1 clears the direct material index."
+    },
+    "visible": {
+      "type": "boolean",
+      "description": "Set object visibility. False hides the object."
+    },
+    "locked": {
+      "type": "boolean",
+      "description": "Set object locked state. Locked objects are visible."
+    },
+    "user_strings": {
+      "type": "object",
+      "description": "User-string key/value updates. Values are stored as strings; null deletes a key.",
+      "propertyNames": { "minLength": 1 },
+      "additionalProperties": {
+        "type": ["string", "number", "integer", "boolean", "null"]
+      }
+    },
+    "delete_user_strings": {
+      "type": "array",
+      "description": "User-string keys to delete",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1
+    },
+    "clear_user_strings": {
+      "type": "boolean",
+      "const": true,
+      "description": "If present, clears all user strings before applying updates."
+    }
+  },
+  "allOf": [
+    {
+      "anyOf": [
+        { "required": ["id"] },
+        { "required": ["name"] }
+      ]
+    },
+    {
+      "anyOf": [
+        { "required": ["new_name"] },
+        { "required": ["layer"] },
+        { "required": ["color"] },
+        { "required": ["material_index"] },
+        { "required": ["visible"] },
+        { "required": ["locked"] },
+        { "required": ["user_strings"] },
+        { "required": ["delete_user_strings"] },
+        { "required": ["clear_user_strings"] }
+      ]
+    },
+    {
+      "not": {
+        "properties": {
+          "visible": { "const": false },
+          "locked": { "const": true }
+        },
+        "required": ["visible", "locked"]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

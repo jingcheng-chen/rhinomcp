@@ -19,6 +19,8 @@
             "modify_objects",
             "delete_object",
             "get_object_info",
+            "get_object_attributes",
+            "update_object_attributes",
             "get_selected_objects_info",
             "get_document_summary",
             "get_objects",

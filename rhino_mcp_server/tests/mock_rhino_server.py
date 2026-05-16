@@ -112,6 +112,8 @@ class MockRhinoServer:
             "create_object": self._create_object,
             "create_objects": self._create_objects,
             "get_object_info": self._get_object_info,
+            "get_object_attributes": self._get_object_attributes,
+            "update_object_attributes": self._update_object_attributes,
             "modify_object": self._modify_object,
             "modify_objects": self._modify_objects,
             "delete_object": self._delete_object,
@@ -208,6 +210,12 @@ class MockRhinoServer:
             "type": obj_type,
             "layer": self.current_layer,
             "color": {"r": 0, "g": 0, "b": 0},
+            "material_index": -1,
+            "material_source": "MaterialFromLayer",
+            "color_source": "ColorFromLayer",
+            "visible": True,
+            "locked": False,
+            "user_strings": {},
             "bounding_box": [[-1, -1, -1], [1, 1, 1]],
             "geometry": params.get("params", {})
         }
@@ -215,6 +223,7 @@ class MockRhinoServer:
         if params.get("color"):
             color = params["color"]
             obj["color"] = {"r": color[0], "g": color[1], "b": color[2]}
+            obj["color_source"] = "ColorFromObject"
 
         self.objects[obj_id] = obj
         self._push_undo(("delete", obj_id))
@@ -260,6 +269,98 @@ class MockRhinoServer:
                     return obj
 
         raise Exception(f"Object not found")
+
+    def _object_attributes_payload(self, obj: Dict) -> Dict:
+        """Return the compact attribute payload used by the real plugin."""
+        layer_name = obj.get("layer", "Default")
+        layer = self.layers.get(layer_name, {"id": "", "name": layer_name})
+        visible = obj.get("visible", True)
+        locked = obj.get("locked", False)
+        return {
+            "id": obj["id"],
+            "name": obj.get("name", ""),
+            "type": obj.get("type", "UNKNOWN"),
+            "layer": {
+                "index": 0,
+                "id": layer.get("id", ""),
+                "name": layer_name,
+                "full_path": layer_name,
+            },
+            "color": obj.get("color", {"r": 0, "g": 0, "b": 0}),
+            "color_source": obj.get("color_source", "ColorFromLayer"),
+            "material_index": obj.get("material_index", -1),
+            "material_source": obj.get("material_source", "MaterialFromLayer"),
+            "visible": visible,
+            "locked": locked,
+            "hidden": not visible,
+            "normal": visible and not locked,
+            "user_strings": obj.get("user_strings", {}),
+        }
+
+    def _get_object_attributes(self, params: Dict) -> Dict:
+        """Get lightweight object attributes."""
+        return self._object_attributes_payload(self._get_object_info(params))
+
+    def _update_object_attributes(self, params: Dict) -> Dict:
+        """Update lightweight object attributes."""
+        update_keys = {
+            "new_name",
+            "layer",
+            "color",
+            "material_index",
+            "visible",
+            "locked",
+            "user_strings",
+            "delete_user_strings",
+            "clear_user_strings",
+        }
+        if not any(key in params for key in update_keys):
+            raise Exception("update_object_attributes requires at least one attribute update.")
+        if params.get("visible") is False and params.get("locked") is True:
+            raise Exception("Object cannot be hidden and locked at the same time.")
+
+        obj = self._get_object_info(params)
+        if params.get("visible") is False and obj.get("locked") is True and params.get("locked") is not False:
+            raise Exception("Locked objects cannot be hidden; set locked=false in the same update.")
+
+        if "new_name" in params:
+            obj["name"] = params["new_name"]
+        if "layer" in params:
+            layer = params["layer"]
+            if layer not in self.layers:
+                raise Exception(f"Layer '{layer}' not found.")
+            obj["layer"] = layer
+        if "color" in params:
+            color = params["color"]
+            obj["color"] = {"r": color[0], "g": color[1], "b": color[2]}
+            obj["color_source"] = "ColorFromObject"
+        if "material_index" in params:
+            obj["material_index"] = params["material_index"]
+            obj["material_source"] = "MaterialFromLayer" if params["material_index"] == -1 else "MaterialFromObject"
+
+        user_strings = obj.setdefault("user_strings", {})
+        if params.get("clear_user_strings"):
+            user_strings.clear()
+        for key in params.get("delete_user_strings", []):
+            user_strings.pop(key, None)
+        for key, value in params.get("user_strings", {}).items():
+            if value is None:
+                user_strings.pop(key, None)
+            elif isinstance(value, (dict, list)):
+                raise Exception("User string values must be strings, numbers, booleans, or null.")
+            else:
+                user_strings[key] = str(value).lower() if isinstance(value, bool) else str(value)
+
+        if "locked" in params and params["locked"] is False:
+            obj["locked"] = False
+        if "visible" in params:
+            obj["visible"] = params["visible"]
+        if "locked" in params and params["locked"] is True:
+            obj["visible"] = True
+            obj["locked"] = True
+
+        self.objects[obj["id"]] = obj
+        return self._object_attributes_payload(obj)
 
     def _modify_object(self, params: Dict) -> Dict:
         """Modify an object."""

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "get_object_attributes.json",
+  "title": "GetObjectAttributes Command",
+  "description": "Get lightweight object metadata and custom user strings",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../common/definitions.json#/$defs/guid",
+      "description": "GUID of the object"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the object (alternative to id)"
+    }
+  },
+  "anyOf": [
+    { "required": ["id"] },
+    { "required": ["name"] }
+  ],
+  "additionalProperties": false
+}

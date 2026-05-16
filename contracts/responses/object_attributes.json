@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "object_attributes.json",
+  "title": "ObjectAttributes Response",
+  "description": "Lightweight object metadata and custom user strings",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../common/definitions.json#/$defs/guid"
+    },
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "layer": {
+      "type": "object",
+      "properties": {
+        "index": { "type": "integer" },
+        "id": { "$ref": "../common/definitions.json#/$defs/guid" },
+        "name": { "type": "string" },
+        "full_path": { "type": "string" }
+      },
+      "required": ["index", "id", "name", "full_path"],
+      "additionalProperties": false
+    },
+    "color": {
+      "$ref": "../common/definitions.json#/$defs/colorObject"
+    },
+    "color_source": {
+      "type": "string"
+    },
+    "material_index": {
+      "type": "integer"
+    },
+    "material_source": {
+      "type": "string"
+    },
+    "visible": {
+      "type": "boolean"
+    },
+    "locked": {
+      "type": "boolean"
+    },
+    "hidden": {
+      "type": "boolean"
+    },
+    "normal": {
+      "type": "boolean"
+    },
+    "user_strings": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "type",
+    "layer",
+    "color",
+    "color_source",
+    "material_index",
+    "material_source",
+    "visible",
+    "locked",
+    "hidden",
+    "normal",
+    "user_strings"
+  ],
+  "additionalProperties": false
+}

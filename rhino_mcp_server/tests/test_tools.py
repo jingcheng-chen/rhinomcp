@@ -192,6 +192,86 @@ class TestModifyObjectTool:
         assert call_args[0][1]["new_color"] == [255, 128, 0]
 
 
+class TestObjectAttributesTools:
+    """Tests for object attribute read/update tools."""
+
+    @patch('rhinomcp.tools.object_attributes.get_rhino_connection')
+    def test_get_object_attributes_by_id(self, mock_get_conn):
+        from rhinomcp.tools.object_attributes import get_object_attributes
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "id": "abc-123",
+            "name": "Box1",
+            "user_strings": {"PartNo": "A-100"}
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = get_object_attributes(ctx=None, id="abc-123")
+
+        mock_conn.send_command.assert_called_once_with("get_object_attributes", {"id": "abc-123"})
+        assert result["user_strings"]["PartNo"] == "A-100"
+
+    @patch('rhinomcp.tools.object_attributes.get_rhino_connection')
+    def test_update_object_attributes(self, mock_get_conn):
+        from rhinomcp.tools.object_attributes import update_object_attributes
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "id": "abc-123",
+            "name": "Panel",
+            "layer": {"name": "Parts"},
+            "visible": True,
+            "locked": False,
+            "user_strings": {"PartNo": "A-100", "Count": "3"}
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = update_object_attributes(
+            ctx=None,
+            id="abc-123",
+            new_name="Panel",
+            layer="Parts",
+            color=[10, 20, 30],
+            user_strings={"PartNo": "A-100", "Count": 3},
+            delete_user_strings=["OldKey"],
+        )
+
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][0] == "update_object_attributes"
+        assert call_args[0][1]["id"] == "abc-123"
+        assert call_args[0][1]["new_name"] == "Panel"
+        assert call_args[0][1]["layer"] == "Parts"
+        assert call_args[0][1]["color"] == [10, 20, 30]
+        assert call_args[0][1]["user_strings"]["Count"] == 3
+        assert call_args[0][1]["delete_user_strings"] == ["OldKey"]
+        assert result["user_strings"]["Count"] == "3"
+
+    @patch('rhinomcp.tools.object_attributes.get_rhino_connection')
+    def test_update_object_attributes_rejects_noop(self, mock_get_conn):
+        from rhinomcp.tools.object_attributes import update_object_attributes
+
+        mock_conn = MagicMock()
+        mock_get_conn.return_value = mock_conn
+
+        with pytest.raises(ValueError, match="at least one attribute update"):
+            update_object_attributes(ctx=None, id="abc-123")
+
+        mock_conn.send_command.assert_not_called()
+
+    @patch('rhinomcp.tools.object_attributes.get_rhino_connection')
+    def test_update_object_attributes_rejects_nested_user_strings(self, mock_get_conn):
+        from rhinomcp.tools.object_attributes import update_object_attributes
+
+        mock_conn = MagicMock()
+        mock_get_conn.return_value = mock_conn
+
+        with pytest.raises(ValueError, match="User string values"):
+            update_object_attributes(ctx=None, id="abc-123", user_strings={"nested": {"bad": True}})
+
+        mock_conn.send_command.assert_not_called()
+
+
 class TestModifyObjectsTool:
     """Tests for modify_objects tool."""
 

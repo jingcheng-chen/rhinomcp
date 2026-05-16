@@ -127,6 +127,89 @@ class TestModifyObject:
         assert result["color"]["g"] == 255
 
 
+class TestObjectAttributes:
+    """Integration tests for object attribute read/update commands."""
+
+    def test_get_and_update_object_attributes(self, mock_server):
+        """Test reading and updating user strings and common metadata."""
+        from rhinomcp.server import get_rhino_connection
+
+        conn = get_rhino_connection()
+
+        conn.send_command("create_layer", {"name": "Parts"})
+        created = conn.send_command("create_object", {
+            "type": "BOX",
+            "name": "RawBox",
+            "params": {"width": 1, "length": 1, "height": 1}
+        })
+
+        updated = conn.send_command("update_object_attributes", {
+            "id": created["id"],
+            "new_name": "Panel",
+            "layer": "Parts",
+            "color": [10, 20, 30],
+            "user_strings": {"PartNo": "A-100", "Count": 3}
+        })
+
+        assert updated["name"] == "Panel"
+        assert updated["layer"]["name"] == "Parts"
+        assert updated["color"]["r"] == 10
+        assert updated["user_strings"]["PartNo"] == "A-100"
+        assert updated["user_strings"]["Count"] == "3"
+
+        attributes = conn.send_command("get_object_attributes", {"id": created["id"]})
+
+        assert attributes["name"] == "Panel"
+        assert attributes["user_strings"]["PartNo"] == "A-100"
+
+    def test_update_object_attributes_deletes_user_strings(self, mock_server):
+        """Test deleting user strings without shipping full object geometry."""
+        from rhinomcp.server import get_rhino_connection
+
+        conn = get_rhino_connection()
+
+        created = conn.send_command("create_object", {
+            "type": "BOX",
+            "name": "AttrBox",
+            "params": {"width": 1, "length": 1, "height": 1}
+        })
+        conn.send_command("update_object_attributes", {
+            "id": created["id"],
+            "user_strings": {"Keep": "yes", "Drop": "no"}
+        })
+
+        updated = conn.send_command("update_object_attributes", {
+            "id": created["id"],
+            "delete_user_strings": ["Drop"]
+        })
+
+        assert updated["user_strings"] == {"Keep": "yes"}
+
+    def test_update_object_attributes_clears_material_index(self, mock_server):
+        """material_index=-1 restores layer material inheritance."""
+        from rhinomcp.server import get_rhino_connection
+
+        conn = get_rhino_connection()
+
+        created = conn.send_command("create_object", {
+            "type": "BOX",
+            "name": "MaterialBox",
+            "params": {"width": 1, "length": 1, "height": 1}
+        })
+        conn.send_command("update_object_attributes", {
+            "id": created["id"],
+            "material_index": 0
+        })
+
+        updated = conn.send_command("update_object_attributes", {
+            "id": created["id"],
+            "material_index": -1
+        })
+
+        assert updated["material_index"] == -1
+        assert updated["material_source"] == "MaterialFromLayer"
+
+
 class TestDeleteObject:
     """Integration tests for delete_object."""
 
