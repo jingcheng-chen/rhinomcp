@@ -20,11 +20,13 @@ namespace RhinoMCPPlugin.Commands
         {
             // Parse options
             var visualOption = new OptionToggle(false, "Off", "On");
+            var grasshopperOption = new OptionToggle(false, "Off", "On");
             var delayOption = new OptionInteger(500, 0, 5000);
 
             var go = new GetOption();
             go.SetCommandPrompt("MCP Test options (press Enter to run with defaults)");
             go.AddOptionToggle("Visual", ref visualOption);
+            go.AddOptionToggle("Grasshopper", ref grasshopperOption);
             go.AddOptionInteger("Delay", ref delayOption);
             go.AcceptNothing(true);
 
@@ -38,6 +40,7 @@ namespace RhinoMCPPlugin.Commands
             }
 
             bool visualMode = visualOption.CurrentValue;
+            bool includeGrasshopper = grasshopperOption.CurrentValue;
             int delayMs = delayOption.CurrentValue;
 
             if (visualMode)
@@ -52,6 +55,14 @@ namespace RhinoMCPPlugin.Commands
 
             var functions = new Functions.RhinoMCPFunctions();
             var results = functions.TestAllFunctions(visualMode, delayMs);
+            if (includeGrasshopper)
+            {
+                RhinoApp.WriteLine("Running Grasshopper MCP function tests...");
+                foreach (var prop in functions.TestGrasshopperFunctions(visualMode, delayMs).Properties())
+                {
+                    results[prop.Name] = prop.Value;
+                }
+            }
 
             // Print summary
             RhinoApp.WriteLine("========================================");

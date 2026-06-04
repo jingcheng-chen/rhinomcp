@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_layout_components.json",
+  "title": "gh_layout_components",
+  "description": "Lay out Grasshopper canvas objects using wires as a left-to-right graph.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "component_ids": {
+      "type": "array",
+      "description": "Optional Grasshopper object instance GUIDs to lay out. If omitted, all canvas objects are arranged.",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "include_groups": {
+      "type": "boolean",
+      "default": false
+    },
+    "x_spacing": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "default": 220
+    },
+    "y_spacing": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "default": 90
+    },
+    "start_position": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2,
+      "default": [40, 40]
+    },
+    "recompute": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

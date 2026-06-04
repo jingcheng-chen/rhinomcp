@@ -42,14 +42,57 @@ public partial class RhinoMCPFunctions
         ["ListItem"] = "List Item"
     };
 
-    private static GH_Document GetActiveGrasshopperDocument(bool required = true)
+    private static GH_Document GetActiveGrasshopperDocument(bool required = true, bool createIfMissing = false)
     {
-        var doc = Instances.ActiveCanvas?.Document;
+        var canvas = Instances.ActiveCanvas;
+        var doc = canvas?.Document;
+        var server = Instances.DocumentServer;
+
+        if (doc == null && server.DocumentCount > 0)
+        {
+            doc = server.NextAvailableDocument();
+            if (doc == null && server.DocumentCount == 1)
+            {
+                doc = server[0];
+            }
+        }
+
+        if (doc == null && createIfMissing)
+        {
+            doc = server.AddNewDocument();
+            if (doc != null)
+            {
+                server.PromoteDocument(doc);
+            }
+        }
+
+        if (doc != null && canvas != null && (canvas.Document == null || createIfMissing))
+        {
+            canvas.Document = doc;
+            RedrawGrasshopperCanvas();
+        }
+
         if (doc == null && required)
         {
             throw new InvalidOperationException("No active Grasshopper document");
         }
         return doc;
+    }
+
+    private static void RedrawGrasshopperCanvas(PointF? focus = null)
+    {
+        var canvas = Instances.ActiveCanvas;
+        if (canvas == null)
+        {
+            return;
+        }
+
+        if (focus.HasValue)
+        {
+            canvas.Viewport.Focus(focus.Value);
+        }
+        Instances.InvalidateCanvas();
+        Instances.RedrawCanvas();
     }
 
     private static IGH_DocumentObject FindGhObject(GH_Document doc, JObject parameters, string prefix = "")

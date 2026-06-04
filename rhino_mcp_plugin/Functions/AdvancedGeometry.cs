@@ -49,7 +49,6 @@ public partial class RhinoMCPFunctions
             1 => LoftType.Loose,
             2 => LoftType.Tight,
             3 => LoftType.Straight,
-            4 => LoftType.Developable,
             _ => LoftType.Normal
         };
 

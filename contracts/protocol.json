@@ -60,6 +60,7 @@
             "gh_expire_solution",
             "gh_add_component",
             "gh_delete_component",
+            "gh_layout_components",
             "gh_connect_components",
             "gh_disconnect_components",
             "gh_set_parameter_value",

@@ -1386,6 +1386,7 @@ class TestGrasshopperTools:
             gh_add_component,
             gh_clear_canvas,
             gh_delete_component,
+            gh_layout_components,
             gh_update_component,
         )
 
@@ -1403,6 +1404,7 @@ class TestGrasshopperTools:
             max=10,
             decimals=1,
         )
+        gh_add_component(ctx=None, component_name="Panel", nickname="AutoPlaced")
         gh_update_component(
             ctx=None,
             instance_id="abc",
@@ -1410,6 +1412,14 @@ class TestGrasshopperTools:
             position=[30, 40],
             enabled=False,
             preview=False,
+        )
+        gh_layout_components(
+            ctx=None,
+            component_ids=["abc", "def"],
+            start_position=[20, 30],
+            x_spacing=200,
+            y_spacing=75,
+            recompute=True,
         )
         gh_delete_component(ctx=None, nickname="Radius2")
         gh_clear_canvas(ctx=None, include_groups=False, recompute=True)
@@ -1428,6 +1438,13 @@ class TestGrasshopperTools:
             },
         )
         assert calls[1][0] == (
+            "gh_add_component",
+            {
+                "component_name": "Panel",
+                "nickname": "AutoPlaced",
+            },
+        )
+        assert calls[2][0] == (
             "gh_update_component",
             {
                 "instance_id": "abc",
@@ -1437,8 +1454,19 @@ class TestGrasshopperTools:
                 "preview": False,
             },
         )
-        assert calls[2][0] == ("gh_delete_component", {"nickname": "Radius2"})
-        assert calls[3][0] == ("gh_clear_canvas", {"include_groups": False, "recompute": True})
+        assert calls[3][0] == (
+            "gh_layout_components",
+            {
+                "include_groups": False,
+                "x_spacing": 200,
+                "y_spacing": 75,
+                "recompute": True,
+                "component_ids": ["abc", "def"],
+                "start_position": [20, 30],
+            },
+        )
+        assert calls[4][0] == ("gh_delete_component", {"nickname": "Radius2"})
+        assert calls[5][0] == ("gh_clear_canvas", {"include_groups": False, "recompute": True})
 
     @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
     def test_gh_connection_and_parameter_tools(self, mock_get_conn):
@@ -1573,6 +1601,7 @@ class TestPackageApi:
             "gh_get_document_info",
             "gh_search_components",
             "gh_add_component",
+            "gh_layout_components",
             "gh_run_solution",
             "gh_clear_canvas",
         ]:

@@ -55,12 +55,11 @@ def gh_add_component(
     text: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Add a Grasshopper component to the active canvas."""
-    params: Dict[str, Any] = {
-        "component_name": component_name,
-        "position": position or [0, 0],
-    }
+    params: Dict[str, Any] = {"component_name": component_name}
     if component_guid:
         params["component_guid"] = component_guid
+    if position is not None:
+        params["position"] = position
     if nickname:
         params["nickname"] = nickname
     if value is not None:
@@ -76,6 +75,30 @@ def gh_add_component(
     if text is not None:
         params["text"] = text
     return send_grasshopper_command("gh_add_component", params)
+
+
+@mcp.tool()
+def gh_layout_components(
+    ctx: Context,
+    component_ids: Optional[List[str]] = None,
+    include_groups: bool = False,
+    x_spacing: float = 220,
+    y_spacing: float = 90,
+    start_position: Optional[List[float]] = None,
+    recompute: bool = False,
+) -> Dict[str, Any]:
+    """Lay out Grasshopper canvas objects using wires as a left-to-right graph."""
+    params: Dict[str, Any] = {
+        "include_groups": include_groups,
+        "x_spacing": x_spacing,
+        "y_spacing": y_spacing,
+        "recompute": recompute,
+    }
+    if component_ids:
+        params["component_ids"] = component_ids
+    if start_position is not None:
+        params["start_position"] = start_position
+    return send_grasshopper_command("gh_layout_components", params)
 
 
 @mcp.tool(annotations=ToolAnnotations(destructiveHint=True))
