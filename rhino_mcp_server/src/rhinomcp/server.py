@@ -9,13 +9,19 @@ from dataclasses import dataclass
 from contextlib import asynccontextmanager
 from typing import AsyncIterator, Dict, Any
 
+from rhinomcp.static.rhinoscriptsyntax import rhinoscriptsyntax_json
+
 # Configuration from environment variables
 RHINO_HOST = os.getenv("RHINO_MCP_HOST", "127.0.0.1")
 RHINO_PORT = int(os.getenv("RHINO_MCP_PORT", "1999"))
 # Sending arbitrary tool payloads (including run_command / execute_rhinoscript)
 # over a non-loopback link with no authentication is genuinely dangerous.
 # Refuse non-loopback connect targets unless the operator opts in explicitly.
-RHINO_ALLOW_REMOTE = os.getenv("RHINO_MCP_ALLOW_REMOTE", "").lower() in ("1", "true", "yes")
+RHINO_ALLOW_REMOTE = os.getenv("RHINO_MCP_ALLOW_REMOTE", "").lower() in (
+    "1",
+    "true",
+    "yes",
+)
 if RHINO_HOST not in ("127.0.0.1", "::1", "localhost") and not RHINO_ALLOW_REMOTE:
     raise RuntimeError(
         f"RHINO_MCP_HOST={RHINO_HOST!r} is non-loopback. The TCP bridge to Rhino "
@@ -37,30 +43,46 @@ elif RHINO_VALIDATE in ("1", "true", "yes"):
     RHINO_VALIDATE = "warn"
 # Defer the unknown-value warning until after `logger` is defined; emitting it
 # here would NameError before the server even starts.
-_RHINO_VALIDATE_UNKNOWN = RHINO_VALIDATE if RHINO_VALIDATE not in ("off", "warn", "strict") else None
+_RHINO_VALIDATE_UNKNOWN = (
+    RHINO_VALIDATE if RHINO_VALIDATE not in ("off", "warn", "strict") else None
+)
 if _RHINO_VALIDATE_UNKNOWN is not None:
     RHINO_VALIDATE = "warn"
 
 # Configure logging
 log_level = getattr(logging, RHINO_LOG_LEVEL.upper(), logging.INFO)
 logging.basicConfig(
-    level=log_level,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=log_level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger("RhinoMCPServer")
 logger.setLevel(log_level)
 
 if _RHINO_VALIDATE_UNKNOWN is not None:
-    logger.warning(f"Unknown RHINO_MCP_VALIDATE={_RHINO_VALIDATE_UNKNOWN!r}; falling back to 'warn'.")
+    logger.warning(
+        f"Unknown RHINO_MCP_VALIDATE={_RHINO_VALIDATE_UNKNOWN!r}; falling back to 'warn'."
+    )
 
 if RHINO_DEBUG:
     logger.info("Debug mode enabled")
+
+
+def rhino_startup_error_message(
+    host: str, port: int, prefix: str = "Could not connect to Rhino"
+) -> str:
+    """Actionable guidance for the common case where Rhino's TCP listener is not running."""
+    return (
+        f"{prefix} at {host}:{port}. "
+        "Please start Rhino, run the Rhino command `mcpstart`, then retry the MCP request."
+    )
+
 
 @dataclass
 class RhinoConnection:
     host: str
     port: int
-    sock: socket.socket | None = None  # Changed from 'socket' to 'sock' to avoid naming conflict
+    sock: socket.socket | None = (
+        None  # Changed from 'socket' to 'sock' to avoid naming conflict
+    )
 
     def __post_init__(self):
         # Serializes the request/response cycle on the persistent socket.
@@ -73,7 +95,7 @@ class RhinoConnection:
         """Connect to the Rhino addon socket server"""
         if self.sock:
             return True
-            
+
         try:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.sock.connect((self.host, self.port))
@@ -83,7 +105,7 @@ class RhinoConnection:
             logger.error(f"Failed to connect to Rhino: {str(e)}")
             self.sock = None
             return False
-    
+
     def disconnect(self):
         """Disconnect from the Rhino addon"""
         if self.sock:
@@ -109,18 +131,22 @@ class RhinoConnection:
                     chunk = sock.recv(buffer_size)
                     if not chunk:
                         if not accumulated:
-                            raise Exception("Connection closed before receiving any data")
+                            raise Exception(
+                                "Connection closed before receiving any data"
+                            )
                         break
 
-                    accumulated += chunk.decode('utf-8')
+                    accumulated += chunk.decode("utf-8")
 
                     # Only attempt parsing when we see a closing brace (optimization)
-                    if accumulated.rstrip().endswith('}'):
+                    if accumulated.rstrip().endswith("}"):
                         try:
                             # raw_decode returns (obj, end_index) - more efficient for streaming
                             decoder.raw_decode(accumulated)
-                            logger.info(f"Received complete response ({len(accumulated)} bytes)")
-                            return accumulated.encode('utf-8')
+                            logger.info(
+                                f"Received complete response ({len(accumulated)} bytes)"
+                            )
+                            return accumulated.encode("utf-8")
                         except json.JSONDecodeError:
                             # Incomplete JSON, continue receiving
                             continue
@@ -138,30 +164,33 @@ class RhinoConnection:
 
         # Try to use what we have
         if accumulated:
-            logger.info(f"Returning data after receive completion ({len(accumulated)} bytes)")
+            logger.info(
+                f"Returning data after receive completion ({len(accumulated)} bytes)"
+            )
             try:
                 decoder.raw_decode(accumulated)
-                return accumulated.encode('utf-8')
+                return accumulated.encode("utf-8")
             except json.JSONDecodeError:
                 raise Exception("Incomplete JSON response received")
         else:
             raise Exception("No data received")
 
-    def send_command(self, command_type: str, params: Dict[str, Any] = {}) -> Dict[str, Any]:
+    def send_command(
+        self, command_type: str, params: Dict[str, Any] = {}
+    ) -> Dict[str, Any]:
         """Send a command to Rhino and return the response. Thread-safe: serialized
         across concurrent callers so request/response framing isn't interleaved."""
         with self._send_lock:
             return self._send_command_locked(command_type, params)
 
-    def _send_command_locked(self, command_type: str, params: Dict[str, Any] = {}) -> Dict[str, Any]:
+    def _send_command_locked(
+        self, command_type: str, params: Dict[str, Any] = {}
+    ) -> Dict[str, Any]:
         if not self.sock and not self.connect():
-            raise ConnectionError("Not connected to Rhino")
+            raise ConnectionError(rhino_startup_error_message(self.host, self.port))
 
-        command = {
-            "type": command_type,
-            "params": params or {}
-        }
-        
+        command = {"type": command_type, "params": params or {}}
+
         try:
             # Log the command being sent
             logger.info(f"Sending command: {command_type}")
@@ -174,8 +203,11 @@ class RhinoConnection:
             # no schema yet.
             if RHINO_VALIDATE != "off":
                 from rhinomcp.validation import validate_command
+
                 try:
-                    validate_command(command_type, command["params"], raise_on_error=True)
+                    validate_command(
+                        command_type, command["params"], raise_on_error=True
+                    )
                 except Exception as ve:
                     # validate_command raises jsonschema.ValidationError on schema
                     # failures (FileNotFoundError is handled internally). We keep
@@ -184,7 +216,9 @@ class RhinoConnection:
                     # ValidationError.
                     msg = f"Pre-flight validation failed for {command_type}: {ve}"
                     if RHINO_VALIDATE == "strict":
-                        raise ValueError(f"Invalid params for '{command_type}': {ve}") from ve
+                        raise ValueError(
+                            f"Invalid params for '{command_type}': {ve}"
+                        ) from ve
                     logger.warning(msg)
 
             if self.sock is None:
@@ -192,8 +226,10 @@ class RhinoConnection:
 
             # Send the command
             command_json = json.dumps(command)
-            logger.debug(f"Raw command JSON ({len(command_json)} bytes): {command_json[:500]}...")
-            self.sock.sendall(command_json.encode('utf-8'))
+            logger.debug(
+                f"Raw command JSON ({len(command_json)} bytes): {command_json[:500]}..."
+            )
+            self.sock.sendall(command_json.encode("utf-8"))
             logger.debug("Command sent, waiting for response...")
 
             # Set a timeout for receiving
@@ -203,29 +239,35 @@ class RhinoConnection:
             response_data = self.receive_full_response(self.sock)
             logger.debug(f"Received {len(response_data)} bytes of data")
 
-            response = json.loads(response_data.decode('utf-8'))
+            response = json.loads(response_data.decode("utf-8"))
             logger.info(f"Response status: {response.get('status', 'unknown')}")
             logger.debug(f"Full response: {json.dumps(response, indent=2)[:1000]}...")
-            
+
             if response.get("status") == "error":
                 logger.error(f"Rhino error: {response.get('message')}")
                 raise Exception(response.get("message", "Unknown error from Rhino"))
-            
+
             return response.get("result", {})
         except socket.timeout:
             logger.error("Socket timeout while waiting for response from Rhino")
             # Don't try to reconnect here - let the get_rhino_connection handle reconnection
             # Just invalidate the current socket so it will be recreated next time
             self.sock = None
-            raise Exception("Timeout waiting for Rhino response - try simplifying your request")
+            raise Exception(
+                "Timeout waiting for Rhino response - try simplifying your request"
+            )
         except (ConnectionError, BrokenPipeError, ConnectionResetError) as e:
             logger.error(f"Socket connection error: {str(e)}")
             self.sock = None
-            raise Exception(f"Connection to Rhino lost: {str(e)}")
+            raise Exception(
+                rhino_startup_error_message(
+                    self.host, self.port, "Connection to Rhino lost"
+                )
+            )
         except json.JSONDecodeError as e:
             logger.error(f"Invalid JSON response from Rhino: {str(e)}")
             # Try to log what was received
-            if 'response_data' in locals() and response_data: # type: ignore
+            if "response_data" in locals() and response_data:  # type: ignore
                 logger.error(f"Raw response (first 200 bytes): {response_data[:200]}")
             raise Exception(f"Invalid response from Rhino: {str(e)}")
         except ValueError:
@@ -237,25 +279,26 @@ class RhinoConnection:
             self.sock = None
             raise Exception(f"Communication error with Rhino: {str(e)}")
 
+
 @asynccontextmanager
 async def server_lifespan(server: FastMCP) -> AsyncIterator[Dict[str, Any]]:
     """Manage server startup and shutdown lifecycle"""
     # We don't need to create a connection here since we're using the global connection
     # for resources and tools
-    
+
     try:
         # Just log that we're starting up
         logger.info("RhinoMCP server starting up")
-        
+
         # Try to connect to Rhino on startup to verify it's available
         try:
             # This will initialize the global connection if needed
-            rhino = get_rhino_connection()
+            get_rhino_connection()
             logger.info("Successfully connected to Rhino on startup")
         except Exception as e:
             logger.warning(f"Could not connect to Rhino on startup: {str(e)}")
-            logger.warning("Make sure the Rhino addon is running before using Rhino resources or tools")
-        
+            logger.warning(rhino_startup_error_message(RHINO_HOST, RHINO_PORT))
+
         # Return an empty context - we're using the global connection
         yield {}
     finally:
@@ -267,19 +310,14 @@ async def server_lifespan(server: FastMCP) -> AsyncIterator[Dict[str, Any]]:
             _rhino_connection = None
         logger.info("RhinoMCP server shut down")
 
+
 # Create the MCP server with lifespan support
-mcp = FastMCP(
-    "RhinoMCP",
-    lifespan=server_lifespan
-)
+mcp = FastMCP("RhinoMCP", lifespan=server_lifespan)
 
 
 # ============================================================================
 # MCP Resources - Browsable RhinoScript Documentation
 # ============================================================================
-
-# Import rhinoscriptsyntax_json for resources
-from rhinomcp.static.rhinoscriptsyntax import rhinoscriptsyntax_json
 
 
 @mcp.resource("rhinoscript://modules")
@@ -366,6 +404,7 @@ def resource_get_function(function_name: str) -> str:
 _rhino_connection = None
 _connection_lock = threading.Lock()
 
+
 def get_rhino_connection():
     """Get or create a persistent Rhino connection (thread-safe)"""
     global _rhino_connection
@@ -377,10 +416,11 @@ def get_rhino_connection():
             if not _rhino_connection.connect():
                 logger.error("Failed to connect to Rhino")
                 _rhino_connection = None
-                raise Exception("Could not connect to Rhino. Make sure the Rhino addon is running.")
+                raise Exception(rhino_startup_error_message(RHINO_HOST, RHINO_PORT))
             logger.info("Created new persistent connection to Rhino")
 
         return _rhino_connection
+
 
 # Main execution
 def main():

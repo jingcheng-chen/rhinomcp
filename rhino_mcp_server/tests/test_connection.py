@@ -6,7 +6,7 @@ Tests connection logic, JSON parsing, and error handling without requiring Rhino
 import json
 import pytest
 import socket
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import patch, MagicMock
 
 
 class TestRhinoConnection:
@@ -21,7 +21,7 @@ class TestRhinoConnection:
         assert conn.port == 1999
         assert conn.sock is None
 
-    @patch('socket.socket')
+    @patch("socket.socket")
     def test_connect_success(self, mock_socket_class):
         """Test successful connection."""
         from rhinomcp.server import RhinoConnection
@@ -36,7 +36,7 @@ class TestRhinoConnection:
         assert conn.sock is not None
         mock_sock.connect.assert_called_once_with(("127.0.0.1", 1999))
 
-    @patch('socket.socket')
+    @patch("socket.socket")
     def test_connect_failure(self, mock_socket_class):
         """Test connection failure handling."""
         from rhinomcp.server import RhinoConnection
@@ -51,7 +51,7 @@ class TestRhinoConnection:
         assert result is False
         assert conn.sock is None
 
-    @patch('socket.socket')
+    @patch("socket.socket")
     def test_disconnect(self, mock_socket_class):
         """Test disconnection."""
         from rhinomcp.server import RhinoConnection
@@ -87,11 +87,11 @@ class TestReceiveFullResponse:
 
         mock_sock = MagicMock()
         response = {"status": "success", "result": {"id": "123"}}
-        mock_sock.recv.return_value = json.dumps(response).encode('utf-8')
+        mock_sock.recv.return_value = json.dumps(response).encode("utf-8")
 
         result = conn.receive_full_response(mock_sock)
 
-        assert json.loads(result.decode('utf-8')) == response
+        assert json.loads(result.decode("utf-8")) == response
 
     def test_receive_chunked_json(self):
         """Test receiving JSON response in multiple chunks."""
@@ -101,7 +101,7 @@ class TestReceiveFullResponse:
 
         mock_sock = MagicMock()
         response = {"status": "success", "result": {"data": "x" * 1000}}
-        full_json = json.dumps(response).encode('utf-8')
+        full_json = json.dumps(response).encode("utf-8")
 
         # Split into chunks
         chunk1 = full_json[:50]
@@ -110,7 +110,7 @@ class TestReceiveFullResponse:
 
         result = conn.receive_full_response(mock_sock)
 
-        assert json.loads(result.decode('utf-8')) == response
+        assert json.loads(result.decode("utf-8")) == response
 
     def test_receive_empty_response_raises(self):
         """Test that empty response raises exception."""
@@ -119,7 +119,7 @@ class TestReceiveFullResponse:
         conn = RhinoConnection(host="127.0.0.1", port=1999)
 
         mock_sock = MagicMock()
-        mock_sock.recv.return_value = b''
+        mock_sock.recv.return_value = b""
 
         with pytest.raises(Exception, match="Connection closed"):
             conn.receive_full_response(mock_sock)
@@ -129,18 +129,20 @@ class TestRemoteBindingGate:
     """Non-loopback hosts require an explicit RHINO_MCP_ALLOW_REMOTE opt-in,
     otherwise importing the server module raises."""
 
-    @patch.dict('os.environ', {'RHINO_MCP_HOST': '10.0.0.5'}, clear=False)
+    @patch.dict("os.environ", {"RHINO_MCP_HOST": "10.0.0.5"}, clear=False)
     def test_remote_host_refused_without_opt_in(self):
         # Run cleanly whether or not rhinomcp.server is already imported:
         # we wipe it from sys.modules so the patched env always takes effect.
         import importlib
         import sys
+
         sys.modules.pop("rhinomcp.server", None)
         with pytest.raises(RuntimeError, match="non-loopback"):
             importlib.import_module("rhinomcp.server")
         # Restore default state so later tests don't inherit the broken module.
         import os
-        os.environ.pop('RHINO_MCP_HOST', None)
+
+        os.environ.pop("RHINO_MCP_HOST", None)
         sys.modules.pop("rhinomcp.server", None)
         importlib.import_module("rhinomcp.server")
 
@@ -165,7 +167,7 @@ class TestConcurrencySafety:
 class TestRuntimeValidation:
     """Pre-flight schema validation modes."""
 
-    @patch('socket.socket')
+    @patch("socket.socket")
     def test_strict_mode_rejects_invalid_payload(self, mock_socket_class):
         import rhinomcp.server as srv
         from rhinomcp.server import RhinoConnection
@@ -180,13 +182,15 @@ class TestRuntimeValidation:
         srv.RHINO_VALIDATE = "strict"
         try:
             with pytest.raises(ValueError, match="Invalid params"):
-                conn.send_command("create_object", {"type": "BOX", "params": {"radius": 1}})
+                conn.send_command(
+                    "create_object", {"type": "BOX", "params": {"radius": 1}}
+                )
         finally:
             srv.RHINO_VALIDATE = original_mode
 
         mock_sock.sendall.assert_not_called()
 
-    @patch('socket.socket')
+    @patch("socket.socket")
     def test_warn_mode_lets_invalid_payload_through(self, mock_socket_class):
         """The default 'warn' mode logs but still sends — important while
         wrappers and schemas are still converging."""
@@ -195,7 +199,9 @@ class TestRuntimeValidation:
 
         mock_sock = MagicMock()
         mock_socket_class.return_value = mock_sock
-        mock_sock.recv.return_value = json.dumps({"status": "success", "result": {}}).encode("utf-8")
+        mock_sock.recv.return_value = json.dumps(
+            {"status": "success", "result": {}}
+        ).encode("utf-8")
 
         conn = RhinoConnection(host="127.0.0.1", port=1999)
         conn.connect()
@@ -214,8 +220,9 @@ class TestRuntimeValidation:
         the warning is deferred until after `logger` is constructed."""
         import importlib
         import sys
+
         sys.modules.pop("rhinomcp.server", None)
-        with patch.dict('os.environ', {'RHINO_MCP_VALIDATE': 'verbose'}, clear=False):
+        with patch.dict("os.environ", {"RHINO_MCP_VALIDATE": "verbose"}, clear=False):
             try:
                 mod = importlib.import_module("rhinomcp.server")
                 assert mod.RHINO_VALIDATE == "warn"
@@ -228,7 +235,7 @@ class TestRuntimeValidation:
 class TestSendCommand:
     """Tests for the send_command method."""
 
-    @patch('socket.socket')
+    @patch("socket.socket")
     def test_send_command_success(self, mock_socket_class):
         """Test successful command sending and response parsing."""
         from rhinomcp.server import RhinoConnection
@@ -237,25 +244,25 @@ class TestSendCommand:
         mock_socket_class.return_value = mock_sock
 
         response = {"status": "success", "result": {"name": "Box1", "id": "abc-123"}}
-        mock_sock.recv.return_value = json.dumps(response).encode('utf-8')
+        mock_sock.recv.return_value = json.dumps(response).encode("utf-8")
 
         conn = RhinoConnection(host="127.0.0.1", port=1999)
         conn.connect()
 
         result = conn.send_command(
             "create_object",
-            {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}}
+            {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}},
         )
 
         assert result == {"name": "Box1", "id": "abc-123"}
 
         # Verify the command was sent correctly
         sent_data = mock_sock.sendall.call_args[0][0]
-        sent_command = json.loads(sent_data.decode('utf-8'))
+        sent_command = json.loads(sent_data.decode("utf-8"))
         assert sent_command["type"] == "create_object"
         assert sent_command["params"]["type"] == "BOX"
 
-    @patch('socket.socket')
+    @patch("socket.socket")
     def test_send_command_error_response(self, mock_socket_class):
         """Test handling of error response from Rhino."""
         from rhinomcp.server import RhinoConnection
@@ -264,7 +271,7 @@ class TestSendCommand:
         mock_socket_class.return_value = mock_sock
 
         response = {"status": "error", "message": "Object not found"}
-        mock_sock.recv.return_value = json.dumps(response).encode('utf-8')
+        mock_sock.recv.return_value = json.dumps(response).encode("utf-8")
 
         conn = RhinoConnection(host="127.0.0.1", port=1999)
         conn.connect()
@@ -275,7 +282,7 @@ class TestSendCommand:
                 {"id": "00000000-0000-0000-0000-000000000000"},
             )
 
-    @patch('socket.socket')
+    @patch("socket.socket")
     def test_send_command_timeout(self, mock_socket_class):
         """Test handling of socket timeout."""
         from rhinomcp.server import RhinoConnection
@@ -297,14 +304,44 @@ class TestSendCommand:
         # Socket should be invalidated after timeout
         assert conn.sock is None
 
-    def test_send_command_not_connected(self):
+    @patch("socket.socket")
+    def test_send_command_not_connected(self, mock_socket_class):
         """Test sending command when not connected."""
         from rhinomcp.server import RhinoConnection
 
+        mock_sock = MagicMock()
+        mock_sock.connect.side_effect = ConnectionRefusedError("Connection refused")
+        mock_socket_class.return_value = mock_sock
+
         conn = RhinoConnection(host="127.0.0.1", port=1999)
 
-        with pytest.raises(Exception):
+        with pytest.raises(Exception, match="mcpstart") as exc:
             conn.send_command("test", {})
+
+        assert "Please start Rhino" in str(exc.value)
+        assert "127.0.0.1:1999" in str(exc.value)
+
+    @patch("socket.socket")
+    def test_get_rhino_connection_failure_shows_mcpstart_guidance(
+        self, mock_socket_class
+    ):
+        """Global connection creation should tell callers how to start RhinoMCP."""
+        import rhinomcp.server as server
+
+        mock_sock = MagicMock()
+        mock_sock.connect.side_effect = ConnectionRefusedError("Connection refused")
+        mock_socket_class.return_value = mock_sock
+
+        original_connection = server._rhino_connection
+        server._rhino_connection = None
+        try:
+            with pytest.raises(Exception, match="mcpstart") as exc:
+                server.get_rhino_connection()
+        finally:
+            server._rhino_connection = original_connection
+
+        assert "Please start Rhino" in str(exc.value)
+        assert "127.0.0.1:1999" in str(exc.value)
 
 
 class TestEnvironmentConfig:
@@ -319,18 +356,22 @@ class TestEnvironmentConfig:
         assert server.RHINO_PORT == 1999
         assert server.RHINO_TIMEOUT == 15.0
 
-    @patch.dict('os.environ', {
-        'RHINO_MCP_HOST': '192.168.1.100',
-        'RHINO_MCP_PORT': '2000',
-        'RHINO_MCP_TIMEOUT': '30.0',
-        # The non-loopback safety check kicks in here; tell it we know.
-        'RHINO_MCP_ALLOW_REMOTE': '1',
-    })
+    @patch.dict(
+        "os.environ",
+        {
+            "RHINO_MCP_HOST": "192.168.1.100",
+            "RHINO_MCP_PORT": "2000",
+            "RHINO_MCP_TIMEOUT": "30.0",
+            # The non-loopback safety check kicks in here; tell it we know.
+            "RHINO_MCP_ALLOW_REMOTE": "1",
+        },
+    )
     def test_custom_config(self):
         """Test custom configuration from environment variables."""
         # Need to reload the module to pick up new env vars
         import importlib
         import rhinomcp.server as server
+
         importlib.reload(server)
 
         assert server.RHINO_HOST == "192.168.1.100"
@@ -339,7 +380,8 @@ class TestEnvironmentConfig:
 
         # Reload again to restore defaults for other tests
         import os
-        os.environ.pop('RHINO_MCP_HOST', None)
-        os.environ.pop('RHINO_MCP_PORT', None)
-        os.environ.pop('RHINO_MCP_TIMEOUT', None)
+
+        os.environ.pop("RHINO_MCP_HOST", None)
+        os.environ.pop("RHINO_MCP_PORT", None)
+        os.environ.pop("RHINO_MCP_TIMEOUT", None)
         importlib.reload(server)
