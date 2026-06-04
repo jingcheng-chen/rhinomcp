@@ -293,6 +293,7 @@ def test_new_commands():
                     "expect_all_solid": True
                 }]
             },
+            "fail_on_verification_error": True,
             "recompute": True,
             "rollback_on_error": True
         }),
@@ -545,6 +546,7 @@ def test_invalid_examples():
         ("commands/gh_mutate_graph.json", {"operations": [{"op": "create", "alias": "bad alias", "component_name": "Panel"}]}, "gh_mutate_graph bad alias"),
         ("commands/gh_mutate_graph.json", {"operations": [{"op": "update", "target": "x"}], "preview_policy": {"mode": "show"}}, "gh_mutate_graph preview policy missing targets"),
         ("commands/gh_mutate_graph.json", {"operations": [{"op": "update", "target": "x"}], "verify": {"outputs": []}}, "gh_mutate_graph empty verify outputs"),
+        ("commands/gh_mutate_graph.json", {"operations": [{"op": "recompute"}], "fail_on_verification_error": "yes"}, "gh_mutate_graph fail_on_verification_error not boolean"),
         ("commands/gh_add_component.json", {"component_guid": "12345678-1234-1234-1234-123456789012"}, "gh_add_component guid without name"),
         ("commands/gh_add_component.json", {"component_name": "Circle", "position": [1, 2, 3]}, "gh_add_component bad position"),
         ("commands/gh_delete_component.json", {}, "gh_delete_component missing selector"),

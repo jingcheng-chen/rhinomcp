@@ -340,6 +340,10 @@ public partial class RhinoMCPFunctions
                 {
                     throw new InvalidOperationException($"gh_mutate_graph verification failed: {mutation["verification"]}");
                 }
+                if (mutation["verified"]?.ToObject<bool>() != true)
+                {
+                    throw new InvalidOperationException("gh_mutate_graph did not expose top-level verified=true.");
+                }
 
                 var operations = mutation["operations"] as JArray;
                 foreach (var op in operations?.OfType<JObject>() ?? Enumerable.Empty<JObject>())
@@ -360,6 +364,48 @@ public partial class RhinoMCPFunctions
                     {
                         createdIds.Add(id);
                     }
+                }
+            });
+
+            Record("gh_mutate_graph_fail_on_verification_error", () =>
+            {
+                bool threw = false;
+                try
+                {
+                    GhMutateGraph(new JObject
+                    {
+                        ["graph_id"] = "MCPTestMutation",
+                        ["operations"] = new JArray { new JObject { ["op"] = "recompute" } },
+                        ["verify"] = new JObject
+                        {
+                            ["run_solution"] = true,
+                            ["outputs"] = new JArray
+                            {
+                                new JObject
+                                {
+                                    ["target"] = "bg_add",
+                                    ["output_index"] = 0,
+                                    ["expect_count_exact"] = 999
+                                }
+                            }
+                        },
+                        ["fail_on_verification_error"] = true,
+                        ["recompute"] = true,
+                        ["rollback_on_error"] = true
+                    });
+                }
+                catch (Exception e)
+                {
+                    threw = true;
+                    if (!e.Message.Contains("Grasshopper verification failed", StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new InvalidOperationException($"Unexpected verification failure message: {e.Message}");
+                    }
+                }
+
+                if (!threw)
+                {
+                    throw new InvalidOperationException("gh_mutate_graph did not fail when verification failed with fail_on_verification_error=true.");
                 }
             });
 

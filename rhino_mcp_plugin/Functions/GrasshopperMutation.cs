@@ -32,6 +32,7 @@ public partial class RhinoMCPFunctions
         string graphId = CreateGraphId(OptionalString(parameters, "graph_id"));
         bool recompute = OptionalBool(parameters, "recompute", true);
         bool rollbackOnError = OptionalBool(parameters, "rollback_on_error", true);
+        bool failOnVerificationError = OptionalBool(parameters, "fail_on_verification_error", false);
 
         var operations = parameters["operations"] as JArray
             ?? throw new ArgumentException("operations is required.");
@@ -380,6 +381,12 @@ public partial class RhinoMCPFunctions
             verificationStopwatch.Stop();
             long verificationSolutionDurationMs = verification?["solution_duration_ms"]?.ToObject<long>() ?? 0;
             long totalSolutionDurationMs = solutionDurationMs + verificationSolutionDurationMs;
+            bool? verified = verification?["passed"]?.ToObject<bool?>();
+            if (failOnVerificationError && verified == false)
+            {
+                throw new InvalidOperationException($"Grasshopper verification failed: {verification}");
+            }
+
             var summaryObjects = touched
                 .Where(o => !pendingDeletes.Contains(o))
                 .Concat(GetGraphObjects(doc, graphId))
@@ -401,6 +408,8 @@ public partial class RhinoMCPFunctions
                 ["deleted_group_count"] = deletedGroupCount,
                 ["recomputed"] = recompute || forceRecompute,
                 ["rollback_on_error"] = rollbackOnError,
+                ["fail_on_verification_error"] = failOnVerificationError,
+                ["verified"] = verified.HasValue ? JToken.FromObject(verified.Value) : JValue.CreateNull(),
                 ["mutation_duration_ms"] = mutationStopwatch.ElapsedMilliseconds,
                 ["solution_duration_ms"] = totalSolutionDurationMs,
                 ["verification_duration_ms"] = verificationStopwatch.ElapsedMilliseconds,

@@ -1530,6 +1530,7 @@ class TestGrasshopperTools:
                     }
                 ],
             },
+            fail_on_verification_error=True,
             recompute=True,
             rollback_on_error=True,
         )
@@ -1559,6 +1560,7 @@ class TestGrasshopperTools:
                         "target_input_index": 0,
                     },
                 ],
+                "fail_on_verification_error": True,
                 "recompute": True,
                 "rollback_on_error": True,
                 "graph_id": "PointAttractor_20260604",

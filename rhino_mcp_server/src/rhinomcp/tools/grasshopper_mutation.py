@@ -17,12 +17,14 @@ def gh_mutate_graph(
     groups: Optional[List[Dict[str, Any]]] = None,
     layout: Optional[Dict[str, Any]] = None,
     verify: Optional[Dict[str, Any]] = None,
+    fail_on_verification_error: bool = False,
     recompute: bool = True,
     rollback_on_error: bool = True,
 ) -> Dict[str, Any]:
     """Mutate an existing or new Grasshopper graph in one batched operation."""
     params: Dict[str, Any] = {
         "operations": operations,
+        "fail_on_verification_error": fail_on_verification_error,
         "recompute": recompute,
         "rollback_on_error": rollback_on_error,
     }

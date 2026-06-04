@@ -34,6 +34,7 @@
       ]
     },
     "verify": { "$ref": "#/$defs/verify" },
+    "fail_on_verification_error": { "type": "boolean", "default": false },
     "recompute": { "type": "boolean", "default": true },
     "rollback_on_error": { "type": "boolean", "default": true }
   },
