@@ -95,10 +95,19 @@ In Rhino, open **Tools → Package Manager**, search for **`rhinomcp`**, and cli
 
 ### 2. Connect your AI client
 
-#### Option A: let your AI set it up (easiest)
+#### Option A: ask your AI assistant to install it (recommended)
 
-RhinoMCP is published on PyPI, so there is nothing to clone or build. If you use an agentic
-assistant (Claude Code, Cursor, Cline, and the like), just ask it to install the server.
+If you use an agentic assistant (Codex, Claude Code, Cursor, Cline, and the like), paste this prompt:
+
+> Please install https://github.com/jingcheng-chen/rhinomcp as a local MCP server named `rhino`.
+
+#### Option B: Install the mcp server or manually edit the config yourself
+
+**Codex**, in one command:
+
+```bash
+codex mcp add rhino --env RHINO_MCP_HOST=127.0.0.1 -- uvx rhinomcp
+```
 
 **Claude Code**, in one command:
 
@@ -106,35 +115,31 @@ assistant (Claude Code, Cursor, Cline, and the like), just ask it to install the
 claude mcp add rhino -- uvx rhinomcp
 ```
 
-**Any AI coding assistant**, by pasting this prompt:
+**ChatGPT:** use Codex for the local setup above. ChatGPT apps/MCP connectors currently connect
+to remote MCP servers, not local stdio commands like `uvx rhinomcp`. If you want to build a
+ChatGPT app around RhinoMCP, use ChatGPT developer mode with a remote or tunneled MCP endpoint.
 
-> Add an MCP server named `rhino` to my MCP config. It's the PyPI package `rhinomcp`,
-> launched with the command `uvx` and the argument `rhinomcp`. Use a local-only
-> (`127.0.0.1`) setup.
-
-#### Option B: edit the config yourself
-
-Add this to your client's MCP config:
+You can also manually edit the config yourself:
 
 ```json
 {
   "mcpServers": {
     "rhino": {
       "command": "uvx",
-      "args": ["rhinomcp"]
+      "args": ["rhinomcp"],
+      "env": {
+        "RHINO_MCP_HOST": "127.0.0.1"
+      }
     }
   }
 }
 ```
 
-- **Claude Desktop:** Settings → Developer → Edit Config → `claude_desktop_config.json`
-- **Cursor:** Settings → MCP → Add new server (or create `.cursor/mcp.json` in your project)
-
 > [!IMPORTANT]
 > The launcher `uvx` comes from [**uv**](https://docs.astral.sh/uv/). If you don't have it yet:
 > macOS `brew install uv` · Windows `powershell -c "irm https://astral.sh/uv/install.ps1 | iex"`
 >
-> Run **only one** RhinoMCP server at a time (Claude or Cursor, not both).
+> Run **only one** RhinoMCP server at a time (Codex, Claude, Cursor, etc. — not several at once).
 
 <details>
 <summary>Auto-restart the server with your AI client (optional)</summary>
