@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_build_graph.json",
+  "title": "gh_build_graph",
+  "description": "Create Grasshopper components, apply values, wire connections, optionally lay out, and optionally solve in one batched operation.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "alias": { "$ref": "#/$defs/alias" },
+          "component_name": { "type": "string", "minLength": 1 },
+          "component_guid": { "$ref": "#/$defs/guid" },
+          "position": { "$ref": "#/$defs/position" },
+          "nickname": { "type": "string", "minLength": 1 },
+          "value": {},
+          "min": { "type": "number" },
+          "max": { "type": "number" },
+          "decimals": { "type": "integer", "minimum": 0, "maximum": 12 },
+          "content": { "type": "string" },
+          "text": { "type": "string" },
+          "preview": { "type": "boolean" },
+          "enabled": { "type": "boolean" }
+        },
+        "required": ["alias", "component_name"]
+      }
+    },
+    "connections": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/connection" },
+      "default": []
+    },
+    "values": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/value_update" },
+      "default": []
+    },
+    "preview_updates": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" }
+      }
+    },
+    "layout": {
+      "oneOf": [
+        { "type": "boolean" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean", "default": true },
+            "include_groups": { "type": "boolean", "default": false },
+            "x_spacing": { "type": "number", "exclusiveMinimum": 0, "default": 220 },
+            "y_spacing": { "type": "number", "exclusiveMinimum": 0, "default": 90 },
+            "start_position": { "$ref": "#/$defs/position" }
+          }
+        }
+      ]
+    },
+    "recompute": {
+      "type": "boolean",
+      "default": true
+    },
+    "rollback_on_error": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": ["components"],
+  "$defs": {
+    "guid": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "alias": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z_][A-Za-z0-9_-]*$"
+    },
+    "selector": {
+      "type": "string",
+      "minLength": 1
+    },
+    "position": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "connection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": { "$ref": "#/$defs/selector" },
+        "source_output_index": { "type": "integer", "minimum": 0 },
+        "source_output_name": { "type": "string", "minLength": 1 },
+        "target": { "$ref": "#/$defs/selector" },
+        "target_input_index": { "type": "integer", "minimum": 0 },
+        "target_input_name": { "type": "string", "minLength": 1 }
+      },
+      "required": ["source", "target"]
+    },
+    "value_update": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "target": { "$ref": "#/$defs/selector" },
+        "value": {},
+        "input_index": { "type": "integer", "minimum": 0 },
+        "input_name": { "type": "string", "minLength": 1 },
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "decimals": { "type": "integer", "minimum": 0, "maximum": 12 }
+      },
+      "required": ["target", "value"]
+    }
+  }
+}

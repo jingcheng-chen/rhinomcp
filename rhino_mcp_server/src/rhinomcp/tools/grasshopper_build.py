@@ -1,0 +1,36 @@
+"""Grasshopper batch graph construction tools."""
+
+from typing import Any, Dict, List, Optional
+
+from mcp.server.fastmcp import Context
+
+from rhinomcp.server import mcp
+from rhinomcp.tools._grasshopper_common import JsonValue, send_grasshopper_command
+
+
+@mcp.tool()
+def gh_build_graph(
+    ctx: Context,
+    components: List[Dict[str, Any]],
+    connections: Optional[List[Dict[str, Any]]] = None,
+    values: Optional[List[Dict[str, JsonValue]]] = None,
+    preview_updates: Optional[Dict[str, Any]] = None,
+    layout: Optional[Dict[str, Any]] = None,
+    recompute: bool = True,
+    rollback_on_error: bool = True,
+) -> Dict[str, Any]:
+    """Create and wire a Grasshopper graph in one batched canvas operation."""
+    params: Dict[str, Any] = {
+        "components": components,
+        "recompute": recompute,
+        "rollback_on_error": rollback_on_error,
+    }
+    if connections is not None:
+        params["connections"] = connections
+    if values is not None:
+        params["values"] = values
+    if preview_updates is not None:
+        params["preview_updates"] = preview_updates
+    if layout is not None:
+        params["layout"] = layout
+    return send_grasshopper_command("gh_build_graph", params)

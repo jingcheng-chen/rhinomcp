@@ -125,86 +125,7 @@ public partial class RhinoMCPFunctions
             };
         }
 
-        var objectSet = new HashSet<IGH_DocumentObject>(objects);
-        var incoming = objects.ToDictionary(o => o, _ => new List<IGH_DocumentObject>());
-
-        foreach (var target in objects)
-        {
-            foreach (var input in GetInputParamsForLayout(target))
-            {
-                foreach (var source in input.Sources)
-                {
-                    var sourceObj = source.Attributes?.GetTopLevel.DocObject;
-                    if (sourceObj == null || sourceObj == target || !objectSet.Contains(sourceObj))
-                    {
-                        continue;
-                    }
-                    if (!incoming[target].Contains(sourceObj))
-                    {
-                        incoming[target].Add(sourceObj);
-                    }
-                }
-            }
-        }
-
-        int edgeCount = incoming.Values.Sum(list => list.Count);
-        var ordered = objects
-            .OrderBy(o => PivotToJson(o)[0]?.ToObject<double>() ?? 0)
-            .ThenBy(o => PivotToJson(o)[1]?.ToObject<double>() ?? 0)
-            .ThenBy(o => o.NickName)
-            .ToList();
-
-        if (edgeCount == 0)
-        {
-            int rows = Math.Max(1, (int)Math.Ceiling(Math.Sqrt(ordered.Count)));
-            for (int i = 0; i < ordered.Count; i++)
-            {
-                int column = i / rows;
-                int row = i % rows;
-                SetGrasshopperObjectPosition(
-                    ordered[i],
-                    new PointF(start.X + column * xSpacing, start.Y + row * ySpacing));
-            }
-        }
-        else
-        {
-            var memo = new Dictionary<IGH_DocumentObject, int>();
-            var visiting = new HashSet<IGH_DocumentObject>();
-
-            int LevelOf(IGH_DocumentObject obj)
-            {
-                if (memo.TryGetValue(obj, out int level))
-                {
-                    return level;
-                }
-                if (!visiting.Add(obj))
-                {
-                    return 0;
-                }
-
-                int result = 0;
-                foreach (var source in incoming[obj])
-                {
-                    result = Math.Max(result, LevelOf(source) + 1);
-                }
-
-                visiting.Remove(obj);
-                memo[obj] = result;
-                return result;
-            }
-
-            foreach (var group in ordered.GroupBy(LevelOf).OrderBy(g => g.Key))
-            {
-                int row = 0;
-                foreach (var obj in group)
-                {
-                    SetGrasshopperObjectPosition(
-                        obj,
-                        new PointF(start.X + group.Key * xSpacing, start.Y + row * ySpacing));
-                    row++;
-                }
-            }
-        }
+        var layout = ApplyGrasshopperLayout(objects, start, xSpacing, ySpacing);
 
         if (recompute)
         {
@@ -212,19 +133,11 @@ public partial class RhinoMCPFunctions
         }
         RedrawGrasshopperCanvas(start);
 
-        var positions = new JArray(objects.Select(o => new JObject
-        {
-            ["instance_id"] = o.InstanceGuid.ToString(),
-            ["name"] = o.Name,
-            ["nickname"] = o.NickName,
-            ["position"] = PivotToJson(o)
-        }));
-
         return new JObject
         {
-            ["layout_count"] = objects.Count,
-            ["edge_count"] = edgeCount,
-            ["positions"] = positions,
+            ["layout_count"] = layout["layout_count"],
+            ["edge_count"] = layout["edge_count"],
+            ["positions"] = layout["positions"],
             ["recomputed"] = recompute,
             ["message"] = $"Laid out {objects.Count} Grasshopper object(s)"
         };
@@ -331,6 +244,7 @@ public partial class RhinoMCPFunctions
             ["position"] = PivotToJson(obj),
             ["type"] = obj.GetType().Name
         };
+        AddSpecialGrasshopperState(result, obj);
 
         if (obj is IGH_Component component)
         {
@@ -349,6 +263,70 @@ public partial class RhinoMCPFunctions
         }
 
         return result;
+    }
+
+    private static void AddSpecialGrasshopperState(JObject result, IGH_DocumentObject obj)
+    {
+        if (obj is IGH_PreviewObject previewObj)
+        {
+            result["preview"] = !previewObj.Hidden;
+        }
+        if (obj is IGH_ActiveObject activeObj)
+        {
+            result["enabled"] = !activeObj.Locked;
+        }
+
+        if (obj is GH_NumberSlider slider)
+        {
+            result["special_type"] = "number_slider";
+            result["value"] = (double)slider.CurrentValue;
+            result["min"] = (double)slider.Slider.Minimum;
+            result["max"] = (double)slider.Slider.Maximum;
+            result["decimals"] = slider.Slider.DecimalPlaces;
+            result["expression"] = slider.Expression;
+            return;
+        }
+
+        if (obj is GH_BooleanToggle toggle)
+        {
+            result["special_type"] = "boolean_toggle";
+            result["value"] = toggle.Value;
+            return;
+        }
+
+        if (obj is GH_Panel panel)
+        {
+            result["special_type"] = "panel";
+            result["content"] = panel.UserText;
+            return;
+        }
+
+        if (obj is GH_ValueList valueList)
+        {
+            result["special_type"] = "value_list";
+            result["item_count"] = valueList.ListItems.Count;
+
+            var items = new JArray();
+            int selectedIndex = -1;
+            for (int i = 0; i < valueList.ListItems.Count; i++)
+            {
+                var item = valueList.ListItems[i];
+                if (item.Selected && selectedIndex < 0)
+                {
+                    selectedIndex = i;
+                }
+                items.Add(new JObject
+                {
+                    ["index"] = i,
+                    ["name"] = item.Name,
+                    ["expression"] = item.Expression,
+                    ["selected"] = item.Selected
+                });
+            }
+
+            result["selected_index"] = selectedIndex >= 0 ? selectedIndex : JValue.CreateNull();
+            result["items"] = items;
+        }
     }
 
     private static List<IGH_DocumentObject> GetLayoutObjects(GH_Document doc, JObject parameters, bool includeGroups)
@@ -392,6 +370,105 @@ public partial class RhinoMCPFunctions
             return new[] { param };
         }
         return Enumerable.Empty<IGH_Param>();
+    }
+
+    private static JObject ApplyGrasshopperLayout(List<IGH_DocumentObject> objects, PointF start, float xSpacing, float ySpacing)
+    {
+        var objectSet = new HashSet<IGH_DocumentObject>(objects);
+        var incoming = objects.ToDictionary(o => o, _ => new List<IGH_DocumentObject>());
+
+        foreach (var target in objects)
+        {
+            foreach (var input in GetInputParamsForLayout(target))
+            {
+                foreach (var source in input.Sources)
+                {
+                    var sourceObj = source.Attributes?.GetTopLevel.DocObject;
+                    if (sourceObj == null || sourceObj == target || !objectSet.Contains(sourceObj))
+                    {
+                        continue;
+                    }
+                    if (!incoming[target].Contains(sourceObj))
+                    {
+                        incoming[target].Add(sourceObj);
+                    }
+                }
+            }
+        }
+
+        int edgeCount = incoming.Values.Sum(list => list.Count);
+        var ordered = objects
+            .OrderBy(o => PivotToJson(o)[0]?.ToObject<double>() ?? 0)
+            .ThenBy(o => PivotToJson(o)[1]?.ToObject<double>() ?? 0)
+            .ThenBy(o => o.NickName)
+            .ToList();
+
+        if (edgeCount == 0)
+        {
+            int rows = Math.Max(1, (int)Math.Ceiling(Math.Sqrt(ordered.Count)));
+            for (int i = 0; i < ordered.Count; i++)
+            {
+                int column = i / rows;
+                int row = i % rows;
+                SetGrasshopperObjectPosition(
+                    ordered[i],
+                    new PointF(start.X + column * xSpacing, start.Y + row * ySpacing));
+            }
+        }
+        else
+        {
+            var memo = new Dictionary<IGH_DocumentObject, int>();
+            var visiting = new HashSet<IGH_DocumentObject>();
+
+            int LevelOf(IGH_DocumentObject obj)
+            {
+                if (memo.TryGetValue(obj, out int level))
+                {
+                    return level;
+                }
+                if (!visiting.Add(obj))
+                {
+                    return 0;
+                }
+
+                int result = 0;
+                foreach (var source in incoming[obj])
+                {
+                    result = Math.Max(result, LevelOf(source) + 1);
+                }
+
+                visiting.Remove(obj);
+                memo[obj] = result;
+                return result;
+            }
+
+            foreach (var group in ordered.GroupBy(LevelOf).OrderBy(g => g.Key))
+            {
+                int row = 0;
+                foreach (var obj in group)
+                {
+                    SetGrasshopperObjectPosition(
+                        obj,
+                        new PointF(start.X + group.Key * xSpacing, start.Y + row * ySpacing));
+                    row++;
+                }
+            }
+        }
+
+        var positions = new JArray(objects.Select(o => new JObject
+        {
+            ["instance_id"] = o.InstanceGuid.ToString(),
+            ["name"] = o.Name,
+            ["nickname"] = o.NickName,
+            ["position"] = PivotToJson(o)
+        }));
+
+        return new JObject
+        {
+            ["layout_count"] = objects.Count,
+            ["edge_count"] = edgeCount,
+            ["positions"] = positions
+        };
     }
 
     private static void SetGrasshopperObjectPosition(IGH_DocumentObject obj, PointF position)

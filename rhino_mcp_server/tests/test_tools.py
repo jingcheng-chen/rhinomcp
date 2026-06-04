@@ -1400,6 +1400,84 @@ class TestGrasshopperTools:
         )
 
     @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
+    def test_gh_build_graph_tool(self, mock_get_conn):
+        from rhinomcp.tools.grasshopper_build import gh_build_graph
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"success": True}
+        mock_get_conn.return_value = mock_conn
+
+        gh_build_graph(
+            ctx=None,
+            components=[
+                {
+                    "alias": "slider_a",
+                    "component_name": "Number Slider",
+                    "nickname": "A",
+                    "value": 3.5,
+                    "min": 0,
+                    "max": 10,
+                    "decimals": 2,
+                },
+                {"alias": "add", "component_name": "Addition", "nickname": "Add"},
+            ],
+            connections=[
+                {
+                    "source": "slider_a",
+                    "target": "add",
+                    "target_input_index": 0,
+                }
+            ],
+            values=[
+                {
+                    "target": "slider_a",
+                    "value": 4.0,
+                    "decimals": 1,
+                }
+            ],
+            preview_updates={"enabled": False},
+            layout={"enabled": True, "start_position": [40, 40]},
+            recompute=False,
+            rollback_on_error=True,
+        )
+
+        mock_conn.send_command.assert_called_once_with(
+            "gh_build_graph",
+            {
+                "components": [
+                    {
+                        "alias": "slider_a",
+                        "component_name": "Number Slider",
+                        "nickname": "A",
+                        "value": 3.5,
+                        "min": 0,
+                        "max": 10,
+                        "decimals": 2,
+                    },
+                    {"alias": "add", "component_name": "Addition", "nickname": "Add"},
+                ],
+                "connections": [
+                    {
+                        "source": "slider_a",
+                        "target": "add",
+                        "target_input_index": 0,
+                    }
+                ],
+                "values": [
+                    {
+                        "target": "slider_a",
+                        "value": 4.0,
+                        "decimals": 1,
+                    }
+                ],
+                "preview_updates": {"enabled": False},
+                "layout": {"enabled": True, "start_position": [40, 40]},
+                "recompute": False,
+                "rollback_on_error": True,
+            },
+        )
+
+    @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
     def test_gh_component_lifecycle_tools(self, mock_get_conn):
         from rhinomcp.tools.grasshopper_components import (
             gh_add_component,
@@ -1620,6 +1698,7 @@ class TestPackageApi:
             "gh_create_document",
             "gh_get_document_info",
             "gh_search_components",
+            "gh_build_graph",
             "gh_add_component",
             "gh_layout_components",
             "gh_run_solution",

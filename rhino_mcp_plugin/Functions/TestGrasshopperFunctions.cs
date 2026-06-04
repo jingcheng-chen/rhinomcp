@@ -172,6 +172,87 @@ public partial class RhinoMCPFunctions
                 }
             });
 
+            Record("gh_build_graph", () =>
+            {
+                var graph = GhBuildGraph(new JObject
+                {
+                    ["components"] = new JArray
+                    {
+                        new JObject
+                        {
+                            ["alias"] = "bg_a",
+                            ["component_name"] = "Number Slider",
+                            ["nickname"] = "BG_A",
+                            ["value"] = 1.25,
+                            ["min"] = 0,
+                            ["max"] = 10,
+                            ["decimals"] = 2
+                        },
+                        new JObject
+                        {
+                            ["alias"] = "bg_b",
+                            ["component_name"] = "Number Slider",
+                            ["nickname"] = "BG_B",
+                            ["value"] = 2.75,
+                            ["min"] = 0,
+                            ["max"] = 10,
+                            ["decimals"] = 2
+                        },
+                        new JObject
+                        {
+                            ["alias"] = "bg_add",
+                            ["component_name"] = "Addition",
+                            ["nickname"] = "BG_Add"
+                        },
+                        new JObject
+                        {
+                            ["alias"] = "bg_panel",
+                            ["component_name"] = "Panel",
+                            ["nickname"] = "BG_Out"
+                        }
+                    },
+                    ["connections"] = new JArray
+                    {
+                        new JObject { ["source"] = "bg_a", ["target"] = "bg_add", ["target_input_index"] = 0 },
+                        new JObject { ["source"] = "bg_b", ["target"] = "bg_add", ["target_input_index"] = 1 },
+                        new JObject { ["source"] = "bg_add", ["source_output_index"] = 0, ["target"] = "bg_panel" }
+                    },
+                    ["layout"] = new JObject
+                    {
+                        ["enabled"] = true,
+                        ["start_position"] = new JArray { 40, 260 },
+                        ["x_spacing"] = 220,
+                        ["y_spacing"] = 90
+                    },
+                    ["recompute"] = true,
+                    ["rollback_on_error"] = true
+                });
+
+                if ((graph["component_count"]?.ToObject<int>() ?? 0) != 4)
+                {
+                    throw new InvalidOperationException("gh_build_graph did not create the expected components.");
+                }
+                if ((graph["connection_count"]?.ToObject<int>() ?? 0) != 3)
+                {
+                    throw new InvalidOperationException("gh_build_graph did not create the expected connections.");
+                }
+                if ((graph["layout"]?["layout_count"]?.ToObject<int>() ?? 0) != 4)
+                {
+                    throw new InvalidOperationException("gh_build_graph did not lay out the expected components.");
+                }
+
+                var aliases = graph["aliases"] as JObject;
+                foreach (string alias in new[] { "bg_a", "bg_b", "bg_add", "bg_panel" })
+                {
+                    var id = aliases?[alias]?.ToString();
+                    if (string.IsNullOrEmpty(id))
+                    {
+                        throw new InvalidOperationException($"gh_build_graph did not return alias '{alias}'.");
+                    }
+                    createdIds.Add(id);
+                }
+            });
+
             Record("gh_add_component", () =>
             {
                 var sliderA = GhAddComponent(new JObject

@@ -9,6 +9,8 @@ namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    private static readonly Dictionary<string, IGH_ObjectProxy> GhComponentProxyCache = new(StringComparer.OrdinalIgnoreCase);
+
     [McpCommand("gh_search_components", ReadOnly = true)]
     public JObject GhSearchComponents(JObject parameters)
     {
@@ -216,7 +218,23 @@ public partial class RhinoMCPFunctions
 
     private static IGH_ObjectProxy FindComponentProxy(string componentName, string componentGuid, List<IGH_ObjectProxy> proxies = null)
     {
+        bool useCache = proxies == null;
+        string cacheKey = ComponentProxyCacheKey(componentName, componentGuid);
+        if (useCache && cacheKey != null && GhComponentProxyCache.TryGetValue(cacheKey, out var cached))
+        {
+            return cached;
+        }
+
         proxies ??= Instances.ComponentServer.ObjectProxies.ToList();
+
+        IGH_ObjectProxy CacheAndReturn(IGH_ObjectProxy proxy)
+        {
+            if (useCache && cacheKey != null && proxy != null)
+            {
+                GhComponentProxyCache[cacheKey] = proxy;
+            }
+            return proxy;
+        }
 
         if (!string.IsNullOrEmpty(componentGuid))
         {
@@ -225,7 +243,7 @@ public partial class RhinoMCPFunctions
                 throw new ArgumentException($"Invalid component GUID: {componentGuid}");
             }
             var byGuid = proxies.FirstOrDefault(p => p.Guid == guid);
-            if (byGuid != null) return byGuid;
+            if (byGuid != null) return CacheAndReturn(byGuid);
         }
 
         if (string.IsNullOrEmpty(componentName))
@@ -236,16 +254,31 @@ public partial class RhinoMCPFunctions
         if (GhComponentAliases.TryGetValue(componentName, out var alias))
         {
             var aliased = Instances.ComponentServer.FindObjectByName(alias, true, true);
-            if (aliased != null) return aliased;
+            if (aliased != null) return CacheAndReturn(aliased);
         }
 
         var direct = Instances.ComponentServer.FindObjectByName(componentName, true, true);
-        if (direct != null) return direct;
+        if (direct != null) return CacheAndReturn(direct);
 
-        return proxies.FirstOrDefault(p => p.Desc.Name.Equals(componentName, StringComparison.OrdinalIgnoreCase))
+        return CacheAndReturn(
+            proxies.FirstOrDefault(p => p.Desc.Name.Equals(componentName, StringComparison.OrdinalIgnoreCase))
             ?? proxies.FirstOrDefault(p => p.Desc.NickName?.Equals(componentName, StringComparison.OrdinalIgnoreCase) == true)
             ?? proxies.FirstOrDefault(p => p.Desc.Name.Contains(componentName, StringComparison.OrdinalIgnoreCase))
-            ?? proxies.FirstOrDefault(p => p.Desc.NickName?.Contains(componentName, StringComparison.OrdinalIgnoreCase) == true);
+            ?? proxies.FirstOrDefault(p => p.Desc.NickName?.Contains(componentName, StringComparison.OrdinalIgnoreCase) == true));
+    }
+
+    private static string ComponentProxyCacheKey(string componentName, string componentGuid)
+    {
+        if (!string.IsNullOrEmpty(componentGuid))
+        {
+            return $"guid:{componentGuid.ToLowerInvariant()}";
+        }
+        if (string.IsNullOrEmpty(componentName))
+        {
+            return null;
+        }
+        string normalized = GhComponentAliases.TryGetValue(componentName, out var alias) ? alias : componentName;
+        return $"name:{normalized.ToLowerInvariant()}";
     }
 
     private static List<string> FindSimilarComponents(string searchName, int maxResults)

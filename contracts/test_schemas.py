@@ -252,6 +252,18 @@ def test_new_commands():
         ("commands/gh_get_canvas_state.json", {"include_connections": True, "include_values": False, "max_items": 5}),
         ("commands/gh_run_solution.json", {"expire_all": True}),
         ("commands/gh_expire_solution.json", {"component_ids": [GUID], "recompute": True}),
+        ("commands/gh_build_graph.json", {
+            "components": [
+                {"alias": "slider_a", "component_name": "Number Slider", "nickname": "A", "value": 3.5, "min": 0, "max": 10},
+                {"alias": "add", "component_name": "Addition", "nickname": "Add"}
+            ],
+            "connections": [{"source": "slider_a", "target": "add", "target_input_index": 0}],
+            "values": [{"target": "slider_a", "value": 4.0, "decimals": 1}],
+            "preview_updates": {"enabled": False},
+            "layout": {"enabled": True, "start_position": [40, 40], "x_spacing": 220},
+            "recompute": True,
+            "rollback_on_error": True
+        }),
         ("commands/gh_add_component.json", {"component_name": "Number Slider", "position": [20, 40], "nickname": "Radius", "value": 5, "min": 0, "max": 10}),
         ("commands/gh_delete_component.json", {"nickname": "Radius"}),
         ("commands/gh_layout_components.json", {"component_ids": [GUID], "start_position": [40, 40], "x_spacing": 220, "y_spacing": 90, "recompute": True}),
@@ -485,6 +497,11 @@ def test_invalid_examples():
         ("commands/gh_get_component_info.json", {}, "gh_get_component_info missing selector"),
         ("commands/gh_get_canvas_state.json", {"max_items": -1}, "gh_get_canvas_state negative max_items"),
         ("commands/gh_run_solution.json", {"timeout_ms": 1000}, "gh_run_solution unknown timeout field"),
+        ("commands/gh_build_graph.json", {"components": []}, "gh_build_graph empty components"),
+        ("commands/gh_build_graph.json", {"components": [{"component_name": "Addition"}]}, "gh_build_graph component missing alias"),
+        ("commands/gh_build_graph.json", {"components": [{"alias": "1bad", "component_name": "Addition"}]}, "gh_build_graph bad alias"),
+        ("commands/gh_build_graph.json", {"components": [{"alias": "add", "component_name": "Addition"}], "connections": [{"source": "add"}]}, "gh_build_graph connection missing target"),
+        ("commands/gh_build_graph.json", {"components": [{"alias": "add", "component_name": "Addition"}], "layout": {"x_spacing": 0}}, "gh_build_graph bad layout spacing"),
         ("commands/gh_add_component.json", {"component_guid": "12345678-1234-1234-1234-123456789012"}, "gh_add_component guid without name"),
         ("commands/gh_add_component.json", {"component_name": "Circle", "position": [1, 2, 3]}, "gh_add_component bad position"),
         ("commands/gh_delete_component.json", {}, "gh_delete_component missing selector"),
@@ -649,7 +666,7 @@ def test_protocol_envelope():
         "gh_get_available_components", "gh_get_component_type_info",
         "gh_list_components", "gh_get_component_info",
         "gh_get_canvas_state", "gh_run_solution", "gh_expire_solution",
-        "gh_add_component", "gh_delete_component", "gh_layout_components", "gh_connect_components",
+        "gh_build_graph", "gh_add_component", "gh_delete_component", "gh_layout_components", "gh_connect_components",
         "gh_disconnect_components", "gh_set_parameter_value",
         "gh_get_parameter_value", "gh_update_component", "gh_clear_canvas",
     ]

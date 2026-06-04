@@ -122,6 +122,7 @@ public partial class RhinoMCPFunctions
                 ["inputs"] = ParamsToJson(component.Params.Input, includeConnections, includeValues, maxItems),
                 ["outputs"] = ParamsToJson(component.Params.Output, includeConnections, includeValues, maxItems)
             };
+            AddSpecialGrasshopperState(compInfo, component);
             components.Add(compInfo);
         }
 
@@ -129,7 +130,7 @@ public partial class RhinoMCPFunctions
         foreach (var param in doc.Objects.OfType<IGH_Param>()
                      .Where(p => p.Attributes?.GetTopLevel.DocObject is not IGH_Component))
         {
-            standaloneParams.Add(new JObject
+            var paramInfo = new JObject
             {
                 ["instance_id"] = param.InstanceGuid.ToString(),
                 ["name"] = param.Name,
@@ -138,7 +139,13 @@ public partial class RhinoMCPFunctions
                 ["position"] = PivotToJson(param),
                 ["source_count"] = param.SourceCount,
                 ["recipient_count"] = param.Recipients.Count
-            });
+            };
+            AddSpecialGrasshopperState(paramInfo, param);
+            if (includeValues)
+            {
+                paramInfo["value_data"] = ParamVolatileDataToJson(param, maxItems);
+            }
+            standaloneParams.Add(paramInfo);
         }
 
         var groups = new JArray(doc.Objects.OfType<GH_Group>().Select(g => new JObject
