@@ -99,7 +99,9 @@ In Rhino, open **Tools → Package Manager**, search for **`rhinomcp`**, and cli
 
 If you use an agentic assistant (Codex, Claude Code, Cursor, Cline, and the like), paste this prompt:
 
-> Please install https://github.com/jingcheng-chen/rhinomcp as a local MCP server named `rhino`.
+```
+Please install https://github.com/jingcheng-chen/rhinomcp as a local MCP server named `rhino`.
+```
 
 #### Option B: Install the mcp server or manually edit the config yourself
 
