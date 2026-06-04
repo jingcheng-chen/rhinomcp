@@ -47,6 +47,7 @@
             "split_curve",
             "run_command",
             "get_commands",
+            "gh_create_document",
             "gh_get_document_info",
             "gh_search_components",
             "gh_batch_search_components",

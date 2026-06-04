@@ -81,16 +81,34 @@ public partial class RhinoMCPFunctions
 
         try
         {
+            Record("gh_create_document", () =>
+            {
+                var created = GhCreateDocument(new JObject
+                {
+                    ["new_if_missing"] = true,
+                    ["make_active"] = true,
+                    ["open_canvas"] = true
+                });
+                if (created["has_document"]?.ToObject<bool>() != true)
+                {
+                    throw new InvalidOperationException(created["message"]?.ToString() ?? "Failed to create or activate Grasshopper document.");
+                }
+                initialObjectCount = created["object_count"]?.ToObject<int>() ?? 0;
+            });
+
+            if (results["gh_create_document"]?["status"]?.ToString() != "pass")
+            {
+                return results;
+            }
+
             Record("gh_get_document_info", () =>
             {
-                GetActiveGrasshopperDocument(required: true, createIfMissing: true);
                 var info = GhGetDocumentInfo(new JObject());
                 if (info["has_document"]?.ToObject<bool>() != true)
                 {
                     throw new InvalidOperationException(
                         "No active Grasshopper document. Open Grasshopper and create/open a document before running mcptest Grasshopper=On.");
                 }
-                initialObjectCount = info["object_count"]?.ToObject<int>() ?? 0;
             });
 
             if (results["gh_get_document_info"]?["status"]?.ToString() != "pass")
@@ -324,18 +342,46 @@ public partial class RhinoMCPFunctions
 
             Record("gh_get_parameter_value", () =>
             {
-                var value = GhGetParameterValue(new JObject
+                JObject ReadAdditionValue()
                 {
-                    ["instance_id"] = addId,
-                    ["output_index"] = 0,
-                    ["max_items"] = 5
-                });
-                var values = value["values"] as JArray;
-                var items = values != null && values.Count > 0 ? values[0]?["items"] as JArray : null;
-                var firstValue = items != null && items.Count > 0 ? items[0]?.ToObject<double>() : null;
+                    return GhGetParameterValue(new JObject
+                    {
+                        ["instance_id"] = addId,
+                        ["output_index"] = 0,
+                        ["max_items"] = 5
+                    });
+                }
+
+                double? FirstValue(JObject value)
+                {
+                    var values = value["values"] as JArray;
+                    var items = values != null && values.Count > 0 ? values[0]?["items"] as JArray : null;
+                    return items != null && items.Count > 0 ? items[0]?.ToObject<double>() : null;
+                }
+
+                var value = ReadAdditionValue();
+                var firstValue = FirstValue(value);
+                if (!firstValue.HasValue)
+                {
+                    GhExpireSolution(new JObject
+                    {
+                        ["component_ids"] = new JArray { addId },
+                        ["expire_downstream"] = true,
+                        ["recompute"] = true
+                    });
+                    GhRunSolution(new JObject { ["expire_all"] = true });
+                    RhinoApp.Wait();
+                    value = ReadAdditionValue();
+                    firstValue = FirstValue(value);
+                }
+
                 if (!firstValue.HasValue || Math.Abs(firstValue.Value - 8.0) > 0.001)
                 {
-                    throw new InvalidOperationException($"Expected Addition output 8.0, got {firstValue?.ToString() ?? "no value"}.");
+                    var info = GhGetComponentInfo(new JObject { ["instance_id"] = addId });
+                    throw new InvalidOperationException(
+                        $"Expected Addition output 8.0, got {firstValue?.ToString() ?? "no value"}. " +
+                        $"Raw value: {value.ToString(Newtonsoft.Json.Formatting.None)}. " +
+                        $"Component info: {info.ToString(Newtonsoft.Json.Formatting.None)}.");
                 }
             });
 

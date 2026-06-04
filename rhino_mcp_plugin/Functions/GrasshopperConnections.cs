@@ -32,7 +32,9 @@ public partial class RhinoMCPFunctions
         }
 
         inputParam.AddSource(outputParam);
-        doc.NewSolution(false);
+        EnsureParamHasData(outputParam);
+        targetObj.ExpireSolution(true);
+        RunGrasshopperSolution(doc, false);
 
         return new JObject
         {
@@ -81,7 +83,8 @@ public partial class RhinoMCPFunctions
             }
         }
 
-        doc.NewSolution(false);
+        targetObj.ExpireSolution(true);
+        RunGrasshopperSolution(doc, false);
 
         return new JObject
         {

@@ -13,16 +13,8 @@ public partial class RhinoMCPFunctions
         var doc = GetActiveGrasshopperDocument();
         bool expireAll = OptionalBool(parameters, "expire_all", false);
 
-        if (expireAll)
-        {
-            foreach (var obj in doc.Objects)
-            {
-                obj.ExpireSolution(false);
-            }
-        }
-
         var start = DateTime.UtcNow;
-        doc.NewSolution(true);
+        RunGrasshopperSolution(doc, expireAll);
 
         var runtime = CollectRuntimeMessages(doc);
         runtime["solution_state"] = doc.SolutionState.ToString();
@@ -73,7 +65,7 @@ public partial class RhinoMCPFunctions
 
         if (recompute)
         {
-            doc.NewSolution(false);
+            RunGrasshopperSolution(doc, false);
         }
 
         return new JObject

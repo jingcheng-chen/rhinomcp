@@ -1,12 +1,72 @@
 using System.Linq;
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
 using Newtonsoft.Json.Linq;
+using Rhino;
 
 namespace RhinoMCPPlugin.Functions;
 
 public partial class RhinoMCPFunctions
 {
+    [McpCommand("gh_create_document")]
+    public JObject GhCreateDocument(JObject parameters)
+    {
+        bool newIfMissing = OptionalBool(parameters, "new_if_missing", true);
+        bool makeActive = OptionalBool(parameters, "make_active", true);
+        bool openCanvas = OptionalBool(parameters, "open_canvas", true);
+
+        if (openCanvas && Instances.ActiveCanvas == null)
+        {
+            RhinoApp.RunScript("_Grasshopper", false);
+            RhinoApp.Wait();
+        }
+
+        var server = Instances.DocumentServer;
+        var canvas = Instances.ActiveCanvas;
+        var doc = canvas?.Document;
+        bool created = false;
+
+        if (doc == null && server.DocumentCount > 0)
+        {
+            doc = server.NextAvailableDocument();
+            if (doc == null && server.DocumentCount == 1)
+            {
+                doc = server[0];
+            }
+        }
+
+        if (doc == null && newIfMissing)
+        {
+            doc = server.AddNewDocument();
+            created = doc != null;
+        }
+
+        if (doc != null && makeActive)
+        {
+            server.PromoteDocument(doc);
+            if (Instances.ActiveCanvas != null)
+            {
+                Instances.ActiveCanvas.Document = doc;
+            }
+            RedrawGrasshopperCanvas();
+        }
+
+        bool hasDocument = doc != null;
+        return new JObject
+        {
+            ["has_document"] = hasDocument,
+            ["created"] = created,
+            ["made_active"] = hasDocument && makeActive,
+            ["canvas_open"] = Instances.ActiveCanvas != null,
+            ["file_path"] = doc?.FilePath ?? (hasDocument ? "(unsaved)" : null),
+            ["object_count"] = doc?.ObjectCount ?? 0,
+            ["message"] = hasDocument
+                ? (created ? "Created Grasshopper document" : "Grasshopper document is available")
+                : "No active Grasshopper document"
+        };
+    }
+
     [McpCommand("gh_get_document_info", ReadOnly = true)]
     public JObject GhGetDocumentInfo(JObject parameters)
     {

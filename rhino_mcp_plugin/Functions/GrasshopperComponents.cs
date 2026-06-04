@@ -87,7 +87,7 @@ public partial class RhinoMCPFunctions
         }
 
         doc.AddObject(obj, false);
-        doc.NewSolution(false);
+        RunGrasshopperSolution(doc, false);
         RedrawGrasshopperCanvas(position);
 
         return new JObject
@@ -208,7 +208,7 @@ public partial class RhinoMCPFunctions
 
         if (recompute)
         {
-            doc.NewSolution(false);
+            RunGrasshopperSolution(doc, false);
         }
         RedrawGrasshopperCanvas(start);
 
@@ -240,7 +240,7 @@ public partial class RhinoMCPFunctions
         string nickname = obj.NickName;
 
         doc.RemoveObject(obj, false);
-        doc.NewSolution(false);
+        RunGrasshopperSolution(doc, false);
 
         return new JObject
         {
@@ -280,7 +280,7 @@ public partial class RhinoMCPFunctions
         }
 
         obj.ExpireSolution(false);
-        doc.NewSolution(false);
+        RunGrasshopperSolution(doc, false);
 
         return new JObject
         {
@@ -306,7 +306,7 @@ public partial class RhinoMCPFunctions
         doc.RemoveObjects(objects, false);
         if (recompute)
         {
-            doc.NewSolution(false);
+            RunGrasshopperSolution(doc, false);
         }
 
         return new JObject
@@ -528,7 +528,7 @@ public partial class RhinoMCPFunctions
 
         slider.Slider.Minimum = min;
         slider.Slider.Maximum = max;
-        slider.Slider.Value = value;
+        SetNumberSliderValue(slider, value);
         slider.Slider.DecimalPlaces = Clamp(parameters["decimals"]?.ToObject<int>() ?? 2, 0, 12);
     }
 }

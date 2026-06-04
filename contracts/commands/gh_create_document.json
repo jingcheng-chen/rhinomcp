@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_create_document.json",
+  "title": "gh_create_document",
+  "description": "Create or activate a Grasshopper document for subsequent canvas commands.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "new_if_missing": {
+      "type": "boolean",
+      "default": true,
+      "description": "Create a new document if no active Grasshopper document is available."
+    },
+    "make_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Make the resolved or created document active on the Grasshopper canvas."
+    },
+    "open_canvas": {
+      "type": "boolean",
+      "default": true,
+      "description": "Open the Grasshopper canvas if it is not currently open."
+    }
+  }
+}

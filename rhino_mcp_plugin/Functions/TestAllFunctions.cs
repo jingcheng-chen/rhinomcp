@@ -33,6 +33,8 @@ public partial class RhinoMCPFunctions
         // Store created object IDs for later tests
         string boxId = null;
         string sphereId = null;
+        string batchBox1Id = null;
+        string batchBox2Id = null;
         string box2Id = null;
         string booleanBox1Id = null;
         string booleanBox2Id = null;
@@ -161,7 +163,11 @@ public partial class RhinoMCPFunctions
             var successCount = batchResult["success_count"]?.ToObject<int>() ?? 0;
             if (successCount != 2)
                 throw new Exception($"Expected 2 successes, got {successCount}");
-            box2Id = batchResult["objects"]?["BatchBox1"]?["id"]?.ToString();
+            batchBox1Id = batchResult["objects"]?["BatchBox1"]?["id"]?.ToString();
+            batchBox2Id = batchResult["objects"]?["BatchBox2"]?["id"]?.ToString();
+            if (string.IsNullOrEmpty(batchBox1Id) || string.IsNullOrEmpty(batchBox2Id))
+                throw new Exception("Batch-created boxes did not return object IDs");
+            box2Id = batchBox1Id;
             results["create_objects"] = new JObject { ["status"] = "pass", ["success_count"] = successCount };
             VisualUpdate("Created batch objects (2 boxes)");
         }
@@ -262,12 +268,14 @@ public partial class RhinoMCPFunctions
         // Test 9: ModifyObjects (batch)
         try
         {
+            if (string.IsNullOrEmpty(batchBox1Id) || string.IsNullOrEmpty(batchBox2Id))
+                throw new Exception("No batch object IDs available from create_objects test");
             var modifyBatchResult = ModifyObjects(new JObject
             {
                 ["objects"] = new JArray
                 {
-                    new JObject { ["name"] = "MCPBatchBox1", ["new_color"] = new JArray { 0, 255, 0 } }, // Bright green
-                    new JObject { ["name"] = "MCPBatchBox2", ["new_color"] = new JArray { 0, 0, 255 } }  // Bright blue
+                    new JObject { ["id"] = batchBox1Id, ["new_color"] = new JArray { 0, 255, 0 } }, // Bright green
+                    new JObject { ["id"] = batchBox2Id, ["new_color"] = new JArray { 0, 0, 255 } }  // Bright blue
                 }
             });
             var successCount = modifyBatchResult["success_count"]?.ToObject<int>() ?? 0;

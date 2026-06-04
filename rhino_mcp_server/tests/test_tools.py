@@ -1309,6 +1309,25 @@ class TestGrasshopperTools:
     """Tests for Grasshopper MCP wrappers."""
 
     @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
+    def test_gh_document_setup_tool(self, mock_get_conn):
+        from rhinomcp.tools.grasshopper_document import gh_create_document
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"success": True}
+        mock_get_conn.return_value = mock_conn
+
+        gh_create_document(ctx=None, new_if_missing=True, make_active=False, open_canvas=True)
+
+        mock_conn.send_command.assert_called_once_with(
+            "gh_create_document",
+            {
+                "new_if_missing": True,
+                "make_active": False,
+                "open_canvas": True,
+            },
+        )
+
+    @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
     def test_gh_readonly_discovery_tools(self, mock_get_conn):
         from rhinomcp.tools.grasshopper_catalog import (
             gh_batch_search_components,
@@ -1598,6 +1617,7 @@ class TestPackageApi:
             "undo",
             "redo",
             "analyze_objects",
+            "gh_create_document",
             "gh_get_document_info",
             "gh_search_components",
             "gh_add_component",

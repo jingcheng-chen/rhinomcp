@@ -95,6 +95,18 @@ public partial class RhinoMCPFunctions
         Instances.RedrawCanvas();
     }
 
+    private static void RunGrasshopperSolution(GH_Document doc, bool expireAllObjects)
+    {
+        if (expireAllObjects)
+        {
+            doc.ExpireSolution();
+        }
+        doc.NewSolution(expireAllObjects, GH_SolutionMode.CommandLine);
+        doc.GetType()
+            .GetMethod("SolveAllObjects", new[] { typeof(GH_SolutionMode) })
+            ?.Invoke(doc, new object[] { GH_SolutionMode.CommandLine });
+    }
+
     private static IGH_DocumentObject FindGhObject(GH_Document doc, JObject parameters, string prefix = "")
     {
         string instanceId = parameters[$"{prefix}instance_id"]?.ToString()

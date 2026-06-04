@@ -22,7 +22,7 @@ public partial class RhinoMCPFunctions
 
         if (TrySetSpecialComponentValue(obj, value, parameters, out var specialResult))
         {
-            doc.NewSolution(false);
+            RunGrasshopperSolution(doc, false);
             return specialResult;
         }
 
@@ -36,7 +36,7 @@ public partial class RhinoMCPFunctions
         }
 
         SetParamValue(inputParam, value);
-        doc.NewSolution(false);
+        RunGrasshopperSolution(doc, false);
 
         return new JObject
         {
@@ -60,6 +60,16 @@ public partial class RhinoMCPFunctions
         if (outputParam == null)
         {
             throw new InvalidOperationException($"Could not find output parameter on component '{obj.NickName}'.");
+        }
+        if (!ParamHasData(outputParam))
+        {
+            EnsureInputSourcesHaveData(obj);
+            ComputeGrasshopperObject(obj);
+        }
+        if (!ParamHasData(outputParam))
+        {
+            obj.ExpireSolution(true);
+            RunGrasshopperSolution(doc, false);
         }
 
         return ParamValueToJson(obj, outputParam, maxItems);
@@ -125,6 +135,51 @@ public partial class RhinoMCPFunctions
         result["param_name"] = param.Name;
         result["type_name"] = param.TypeName;
         return result;
+    }
+
+    private static bool ParamHasData(IGH_Param param)
+    {
+        return param.VolatileDataCount > 0 || param.VolatileData.DataCount > 0;
+    }
+
+    private static void EnsureInputSourcesHaveData(IGH_DocumentObject obj)
+    {
+        if (obj is not IGH_Component component)
+        {
+            return;
+        }
+
+        foreach (var input in component.Params.Input)
+        {
+            foreach (var source in input.Sources)
+            {
+                EnsureParamHasData(source);
+            }
+        }
+    }
+
+    private static void EnsureParamHasData(IGH_Param param)
+    {
+        if (ParamHasData(param))
+        {
+            return;
+        }
+        if (param is GH_NumberSlider slider)
+        {
+            PrimeNumberSliderData(slider, slider.CurrentValue);
+        }
+    }
+
+    private static void ComputeGrasshopperObject(IGH_DocumentObject obj)
+    {
+        if (obj is not IGH_ActiveObject activeObject)
+        {
+            return;
+        }
+
+        activeObject.ClearData();
+        activeObject.CollectData();
+        activeObject.ComputeData();
     }
 
     private static JObject ParamVolatileDataToJson(IGH_Param param, int maxItems)
@@ -256,8 +311,8 @@ public partial class RhinoMCPFunctions
             decimal numericValue = value.ToObject<decimal>();
             if (numericValue < slider.Slider.Minimum) numericValue = slider.Slider.Minimum;
             if (numericValue > slider.Slider.Maximum) numericValue = slider.Slider.Maximum;
-            slider.Slider.Value = numericValue;
-            slider.ExpireSolution(true);
+            SetNumberSliderValue(slider, numericValue);
+            ExpireRecipients(slider);
 
             result = new JObject
             {
@@ -333,6 +388,37 @@ public partial class RhinoMCPFunctions
         }
 
         return false;
+    }
+
+    private static void SetNumberSliderValue(GH_NumberSlider slider, decimal value)
+    {
+        if (!slider.TrySetSliderValue(value))
+        {
+            slider.SetSliderValue(value);
+        }
+        PrimeNumberSliderData(slider, value);
+    }
+
+    private static void PrimeNumberSliderData(GH_NumberSlider slider, decimal value)
+    {
+        slider.ClearData();
+        slider.AddVolatileData(new GH_Path(0), 0, new GH_Number((double)value));
+    }
+
+    private static void ExpireRecipients(IGH_Param sourceParam)
+    {
+        foreach (var recipient in sourceParam.Recipients)
+        {
+            var owner = recipient.Attributes?.GetTopLevel.DocObject;
+            if (owner != null)
+            {
+                owner.ExpireSolution(true);
+            }
+            else
+            {
+                recipient.ExpireSolution(true);
+            }
+        }
     }
 
     private static void SetParamValue(IGH_Param param, JToken value)
