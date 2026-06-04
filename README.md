@@ -60,30 +60,30 @@ Prefer a walkthrough? Nate made a showcase and install [tutorial on YouTube](htt
 
 ## What it can do
 
-### Rhino
+### <img width="30" height="30" src="https://img.icons8.com/color/48/rhinoceros-6.png" alt="rhinoceros-6"/> Rhino
 
-| Area | What the AI can do |
-| --- | --- |
-| Create geometry | Points, lines, polylines, circles, arcs, ellipses, curves, boxes, spheres, cones, cylinders, and surfaces, one at a time or in batches |
-| Transform & edit | Move, rotate, scale, recolor, rename, and delete objects |
-| Advanced modeling | Loft, extrude, sweep, offset, pipe; boolean union, difference, and intersection |
-| Curve operations | Project, intersect, and split curves |
-| Layers & attributes | Create, delete, and switch layers; read and write object attributes |
-| Inspect & select | Document summaries, object info, and filtered selection (by name, color, or category, with AND / OR logic) |
-| See the model | Capture the viewport so the AI gets visual feedback |
-| Analyze | Measure length, area, volume, bounding boxes, and more |
-| Go deeper | Run any Rhino command, execute RhinoScript-Python, or run RhinoCommon C#, with built-in RhinoScript docs lookup |
+| Area                | What the AI can do                                                                                                                     |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Create geometry     | Points, lines, polylines, circles, arcs, ellipses, curves, boxes, spheres, cones, cylinders, and surfaces, one at a time or in batches |
+| Transform & edit    | Move, rotate, scale, recolor, rename, and delete objects                                                                               |
+| Advanced modeling   | Loft, extrude, sweep, offset, pipe; boolean union, difference, and intersection                                                        |
+| Curve operations    | Project, intersect, and split curves                                                                                                   |
+| Layers & attributes | Create, delete, and switch layers; read and write object attributes                                                                    |
+| Inspect & select    | Document summaries, object info, and filtered selection (by name, color, or category, with AND / OR logic)                             |
+| See the model       | Capture the viewport so the AI gets visual feedback                                                                                    |
+| Analyze             | Measure length, area, volume, bounding boxes, and more                                                                                 |
+| Go deeper           | Run any Rhino command, execute RhinoScript-Python, or run RhinoCommon C#, with built-in RhinoScript docs lookup                        |
 
-### Grasshopper
+### <img width="30" height="30" src="https://img.icons8.com/officel/80/grasshopper.png" alt="grasshopper"/> Grasshopper
 
-| Area | What the AI can do |
-| --- | --- |
-| Find components | Search the installed component library and inspect a component's inputs and outputs before placing it |
-| Build canvases | Add, position, lay out, update, and delete components |
-| Wire it up | Connect and disconnect parameters between components |
-| Set & read values | Drive sliders, toggles, panels, and value lists; read structured data back out of outputs |
-| Solve | Run the solution and surface runtime warnings and errors |
-| Build in one shot | Construct and wire a whole graph, or mutate an existing one, in a single batched operation |
+| Area              | What the AI can do                                                                                    |
+| ----------------- | ----------------------------------------------------------------------------------------------------- |
+| Find components   | Search the installed component library and inspect a component's inputs and outputs before placing it |
+| Build canvases    | Add, position, lay out, update, and delete components                                                 |
+| Wire it up        | Connect and disconnect parameters between components                                                  |
+| Set & read values | Drive sliders, toggles, panels, and value lists; read structured data back out of outputs             |
+| Solve             | Run the solution and surface runtime warnings and errors                                              |
+| Build in one shot | Construct and wire a whole graph, or mutate an existing one, in a single batched operation            |
 
 ## Quick start
 
@@ -179,27 +179,12 @@ connects to (`mcpstop` ends it). Run it once per Rhino session.
 With the bridge running and your client connected, you'll see the RhinoMCP tools. From there, just
 chat: ask the assistant to model something, inspect your scene, or build a Grasshopper graph.
 
-<table>
-<tr>
-<td><img src="docs/assets/rhino_plugin_instruction.jpg" alt="mcpstart in the Rhino command line"></td>
-<td><img src="docs/assets/claude_enable_instruction.jpg" alt="RhinoMCP tools in Claude"></td>
-</tr>
-</table>
+<img src="docs/assets/rhino_plugin_instruction.jpg" alt="mcpstart in the Rhino command line"></td>
+<img src="docs/assets/claude_example.jpg" alt="RhinoMCP tools in Claude"></td>
 
 For Grasshopper, you only need Rhino open with `mcpstart` running. The assistant can open or create
-the Grasshopper document itself, then build the definition. For example: *"create a point attractor
-pattern with cylinders that have different heights."*
-
-<details>
-<summary>Cursor connection check</summary>
-
-In Cursor, a connected server shows a green indicator in **Settings → MCP**. If it isn't green,
-refresh the server. Open the chat with `Ctrl+I` and make sure **Agent** mode is selected.
-
-<img src="docs/assets/cursor_enable_instruction.jpg" alt="RhinoMCP enabled in Cursor" width="49%">
-<img src="docs/assets/cursor_usage_instruction.jpg" alt="Using RhinoMCP in Cursor" width="49%">
-
-</details>
+the Grasshopper document itself, then build the definition. For example: _"create a point attractor
+pattern with cylinders that have different heights."_
 
 ## Example prompts
 
@@ -217,48 +202,48 @@ refresh the server. Open the chat with `Ctrl+I` and make sure **Agent** mode is 
 <details>
 <summary><b>Rhino tools</b></summary>
 
-| Tool | Purpose |
-| --- | --- |
-| `create_object` / `create_objects` | Create one or many objects |
-| `modify_object` / `modify_objects` | Transform or edit one or many objects |
-| `delete_object` | Delete an object |
-| `boolean_union` / `boolean_difference` / `boolean_intersection` | Boolean operations |
-| `loft` / `extrude_curve` / `sweep1` / `offset_curve` / `pipe` | Advanced surface and solid modeling |
-| `project_curve` / `intersect_curves` / `split_curve` | Curve operations |
-| `analyze_objects` | Measure length, area, volume, bounding boxes, and more |
-| `select_objects` | Select by filters (name, color, category; AND / OR) |
-| `get_objects` / `get_object_info` / `get_selected_objects_info` | Query objects |
-| `get_object_attributes` / `update_object_attributes` | Read and write object attributes |
-| `create_layer` / `delete_layer` / `get_or_set_current_layer` | Layer management |
-| `get_document_summary` | Overview of the current document |
-| `capture_viewport` | Screenshot the viewport for visual feedback |
-| `run_command` | Run any native Rhino command |
-| `execute_rhinoscript_python_code` | Execute RhinoScript-Python |
-| `execute_rhinocommon_csharp_code` | Execute RhinoCommon C# |
-| `search_rhinoscript_functions` / `get_rhinoscript_docs` / `list_rhinoscript_modules` / `get_module_functions` | RhinoScript API docs lookup |
-| `get_commands` | List available commands |
-| `undo` / `redo` | Undo and redo |
+| Tool                                                                                                          | Purpose                                                |
+| ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `create_object` / `create_objects`                                                                            | Create one or many objects                             |
+| `modify_object` / `modify_objects`                                                                            | Transform or edit one or many objects                  |
+| `delete_object`                                                                                               | Delete an object                                       |
+| `boolean_union` / `boolean_difference` / `boolean_intersection`                                               | Boolean operations                                     |
+| `loft` / `extrude_curve` / `sweep1` / `offset_curve` / `pipe`                                                 | Advanced surface and solid modeling                    |
+| `project_curve` / `intersect_curves` / `split_curve`                                                          | Curve operations                                       |
+| `analyze_objects`                                                                                             | Measure length, area, volume, bounding boxes, and more |
+| `select_objects`                                                                                              | Select by filters (name, color, category; AND / OR)    |
+| `get_objects` / `get_object_info` / `get_selected_objects_info`                                               | Query objects                                          |
+| `get_object_attributes` / `update_object_attributes`                                                          | Read and write object attributes                       |
+| `create_layer` / `delete_layer` / `get_or_set_current_layer`                                                  | Layer management                                       |
+| `get_document_summary`                                                                                        | Overview of the current document                       |
+| `capture_viewport`                                                                                            | Screenshot the viewport for visual feedback            |
+| `run_command`                                                                                                 | Run any native Rhino command                           |
+| `execute_rhinoscript_python_code`                                                                             | Execute RhinoScript-Python                             |
+| `execute_rhinocommon_csharp_code`                                                                             | Execute RhinoCommon C#                                 |
+| `search_rhinoscript_functions` / `get_rhinoscript_docs` / `list_rhinoscript_modules` / `get_module_functions` | RhinoScript API docs lookup                            |
+| `get_commands`                                                                                                | List available commands                                |
+| `undo` / `redo`                                                                                               | Undo and redo                                          |
 
 </details>
 
 <details>
 <summary><b>Grasshopper tools</b></summary>
 
-| Tool | Purpose |
-| --- | --- |
-| `gh_create_document` / `gh_get_document_info` / `gh_get_canvas_state` | Document and canvas inspection |
-| `gh_search_components` / `gh_batch_search_components` | Search the component library |
-| `gh_list_component_categories` / `gh_get_available_components` | Browse installed components |
-| `gh_get_component_type_info` / `gh_get_component_info` | Inspect a component type or instance |
-| `gh_list_components` | List components on the canvas |
-| `gh_add_component` / `gh_update_component` / `gh_delete_component` | Add, update, or delete components |
-| `gh_layout_components` | Auto-lay-out the canvas |
-| `gh_clear_canvas` | Clear the canvas |
-| `gh_connect_components` / `gh_disconnect_components` | Wire or unwire parameters |
-| `gh_set_parameter_value` / `gh_get_parameter_value` | Drive inputs, read outputs |
-| `gh_run_solution` / `gh_expire_solution` | Solve or expire the solution |
-| `gh_build_graph` / `gh_mutate_graph` | Build or mutate a whole graph in one batched call |
-| `gh_get_graph` / `gh_clear_graph` | Inspect or clear objects by graph id |
+| Tool                                                                  | Purpose                                           |
+| --------------------------------------------------------------------- | ------------------------------------------------- |
+| `gh_create_document` / `gh_get_document_info` / `gh_get_canvas_state` | Document and canvas inspection                    |
+| `gh_search_components` / `gh_batch_search_components`                 | Search the component library                      |
+| `gh_list_component_categories` / `gh_get_available_components`        | Browse installed components                       |
+| `gh_get_component_type_info` / `gh_get_component_info`                | Inspect a component type or instance              |
+| `gh_list_components`                                                  | List components on the canvas                     |
+| `gh_add_component` / `gh_update_component` / `gh_delete_component`    | Add, update, or delete components                 |
+| `gh_layout_components`                                                | Auto-lay-out the canvas                           |
+| `gh_clear_canvas`                                                     | Clear the canvas                                  |
+| `gh_connect_components` / `gh_disconnect_components`                  | Wire or unwire parameters                         |
+| `gh_set_parameter_value` / `gh_get_parameter_value`                   | Drive inputs, read outputs                        |
+| `gh_run_solution` / `gh_expire_solution`                              | Solve or expire the solution                      |
+| `gh_build_graph` / `gh_mutate_graph`                                  | Build or mutate a whole graph in one batched call |
+| `gh_get_graph` / `gh_clear_graph`                                     | Inspect or clear objects by graph id              |
 
 </details>
 
@@ -285,16 +270,16 @@ authentication.
 <details>
 <summary>Operator switches (environment variables)</summary>
 
-| Variable | Default | Effect |
-| --- | --- | --- |
-| `RHINO_MCP_HOST` | `127.0.0.1` | Connect target. Refuses non-loopback hosts unless `RHINO_MCP_ALLOW_REMOTE=1`. |
-| `RHINO_MCP_PORT` | `1999` | TCP port. |
-| `RHINO_MCP_ENABLE_RUN_COMMAND` | `1` | Set `0` to disable the `run_command` tool. |
-| `RHINO_MCP_ENABLE_RHINOSCRIPT` | `1` | Set `0` to disable RhinoScript-Python execution. |
-| `RHINO_MCP_ENABLE_CSHARP` | `1` | Set `0` to disable RhinoCommon C# execution. |
-| `RHINO_MCP_VALIDATE` | `warn` | Pre-flight schema validation: `off` / `warn` / `strict`. |
-| `RHINO_MCP_TIMEOUT` | `15.0` | Socket timeout in seconds. |
-| `RHINO_MCP_DEBUG` | `0` | Verbose logging. |
+| Variable                       | Default     | Effect                                                                        |
+| ------------------------------ | ----------- | ----------------------------------------------------------------------------- |
+| `RHINO_MCP_HOST`               | `127.0.0.1` | Connect target. Refuses non-loopback hosts unless `RHINO_MCP_ALLOW_REMOTE=1`. |
+| `RHINO_MCP_PORT`               | `1999`      | TCP port.                                                                     |
+| `RHINO_MCP_ENABLE_RUN_COMMAND` | `1`         | Set `0` to disable the `run_command` tool.                                    |
+| `RHINO_MCP_ENABLE_RHINOSCRIPT` | `1`         | Set `0` to disable RhinoScript-Python execution.                              |
+| `RHINO_MCP_ENABLE_CSHARP`      | `1`         | Set `0` to disable RhinoCommon C# execution.                                  |
+| `RHINO_MCP_VALIDATE`           | `warn`      | Pre-flight schema validation: `off` / `warn` / `strict`.                      |
+| `RHINO_MCP_TIMEOUT`            | `15.0`      | Socket timeout in seconds.                                                    |
+| `RHINO_MCP_DEBUG`              | `0`         | Verbose logging.                                                              |
 
 </details>
 
