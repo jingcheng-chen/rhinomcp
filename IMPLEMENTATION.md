@@ -26,7 +26,7 @@ The project uses a **two-tier client-server architecture**:
                      │ MCP Protocol (stdio/HTTP)
                      │
 ┌────────────────────▼────────────────────────────────────────┐
-│         Python MCP Server (rhino_mcp_server)                 │
+│         Python MCP Server (server/)                         │
 │  - FastMCP framework (MCP implementation)                    │
 │  - Connects to Rhino on 127.0.0.1:1999                      │
 │  - Routes tool calls to Rhino plugin via TCP sockets        │
@@ -36,7 +36,7 @@ The project uses a **two-tier client-server architecture**:
                      │ 127.0.0.1:1999
                      │
 ┌────────────────────▼────────────────────────────────────────┐
-│     Rhino Plugin (rhino_mcp_plugin) - C# .NET 7.0           │
+│     Rhino Plugin (plugin/) - C# .NET 8.0                    │
 │  - Socket server listening for commands                      │
 │  - Executes commands in Rhino's main thread                 │
 │  - Returns results back to Python server                    │
@@ -59,7 +59,7 @@ User (Claude/AI) → MCP Tool Call → server.py
 
 ```
 rhinomcp/
-├── rhino_mcp_server/                 # Python MCP server package
+├── server/                          # Python MCP server package
 │   ├── src/rhinomcp/
 │   │   ├── server.py                 # Main MCP server & connection manager
 │   │   ├── tools/                    # MCP tools (16+ functions)
@@ -87,7 +87,7 @@ rhinomcp/
 │   ├── uv.lock                       # Dependency lock file
 │   └── dev.sh                        # Development runner
 │
-├── rhino_mcp_plugin/                 # C# Rhino plugin (.NET 7.0)
+├── plugin/                          # C# Rhino plugin (.NET 8.0)
 │   ├── RhinoMCPPlugin.cs             # Plugin base class
 │   ├── RhinoMCPServer.cs             # TCP socket server (main logic)
 │   ├── RhinoMCPServerController.cs   # Server lifecycle control
@@ -108,12 +108,9 @@ rhinomcp/
 │   │   └── _utils.cs                 # Helper methods
 │   ├── Serializers/
 │   │   └── Serializer.cs             # Converts Rhino geometry to JSON
-│   ├── rhinomcp.csproj               # C# project (targets net7.0)
+│   ├── rhinomcp.csproj               # C# project (targets net8.0)
 │   ├── manifest.yml                  # Yak package metadata
 │   └── bin/Release/                  # Build output (.rhp plugin file)
-│
-├── grasshopper_mcp_server/           # Grasshopper integration (experimental)
-├── grasshopper_mcp_plugin/           # Grasshopper plugin (experimental)
 │
 ├── .github/workflows/
 │   ├── mcp-server-publish.yml        # PyPI publish workflow
@@ -122,9 +119,9 @@ rhinomcp/
 ├── .cursor/
 │   └── mcp.json                      # Cursor IDE MCP configuration
 │
-├── assets/                           # Demo images & logo
-├── demo_chats/                       # Sample AI interactions
-├── website/                          # Documentation website
+├── docs/
+│   ├── assets/                       # Demo images & logo
+│   └── demo_chats/                   # Sample AI interactions
 ├── README.md                         # Main documentation
 └── IMPLEMENTATION.md                 # This file
 ```
@@ -133,7 +130,7 @@ rhinomcp/
 
 ## Key Components
 
-### 1. Python MCP Server (`rhino_mcp_server/src/rhinomcp/server.py`)
+### 1. Python MCP Server (`server/src/rhinomcp/server.py`)
 
 **Purpose:** Implements Model Context Protocol and manages socket communication with Rhino
 
@@ -162,7 +159,7 @@ result = conn.send_command("create_object", params)
 - Implements lifespan management (startup/shutdown)
 - Global persistent connection reuse via `rhino_connection` global variable
 
-### 2. Rhino Plugin (`rhino_mcp_plugin/`)
+### 2. Rhino Plugin (`plugin/`)
 
 **Purpose:** Socket server running inside Rhino, executing commands in the main thread
 
@@ -197,7 +194,7 @@ Dictionary<string, Func<JObject, JObject>> handlers = {
 - Singleton controller for server lifecycle
 - Start/Stop/Status management
 
-### 3. Functions (`rhino_mcp_plugin/Functions/`)
+### 3. Functions (`plugin/Functions/`)
 
 Each file implements a specific Rhino operation:
 
@@ -218,7 +215,7 @@ Each file implements a specific Rhino operation:
 | `ExecuteRhinoscript.cs`     | Execute Python code in Rhino                |
 | `_utils.cs`                 | Helper methods for transforms               |
 
-### 4. Serializer (`rhino_mcp_plugin/Serializers/Serializer.cs`)
+### 4. Serializer (`plugin/Serializers/Serializer.cs`)
 
 Converts Rhino geometry objects to JSON for client consumption:
 
@@ -360,7 +357,7 @@ applyScale(geometry, scale)              // Scale from bounding box min (non-uni
   "mcpServers": {
     "rhino": {
       "command": "uv",
-      "args": ["--directory", "/path/to/rhino_mcp_server", "run", "main.py"]
+      "args": ["--directory", "/path/to/server", "run", "main.py"]
     }
   }
 }
@@ -396,7 +393,7 @@ applyScale(geometry, scale)              // Scale from bounding box min (non-uni
 **Workflow:** `.github/workflows/rhino-plugin-publish.yml`
 
 - Triggered on GitHub release
-- Builds .NET 7.0 solution with MSBuild
+- Builds .NET 8.0 solution with MSBuild
 - Outputs `.rhp` (Rhino plugin) file
 - Packages as `.yak` file using Yak CLI
 - Publishes to Rhino Package Manager
@@ -406,13 +403,13 @@ applyScale(geometry, scale)              // Scale from bounding box min (non-uni
 **Python:**
 
 ```bash
-cd rhino_mcp_server
+cd server
 ./dev.sh  # Runs: uv venv && uv run mcp dev main.py:mcp
 ```
 
 **C# Plugin:**
 
-- Built with Visual Studio/Rider targeting net7.0
+- Built with Visual Studio/Rider targeting net8.0
 - Post-build copies to Rhino applications folder
 
 ---
@@ -429,7 +426,7 @@ cd rhino_mcp_server
 
 - **RhinoCommon** 8.17.25066.7001 (Rhino SDK)
 - **Newtonsoft.Json** 13.0.3 (JSON serialization)
-- **.NET SDK** 7.0
+- **.NET SDK** 8.0
 
 ---
 

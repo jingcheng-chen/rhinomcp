@@ -606,7 +606,7 @@ def test_contract_synchronization_across_tiers():
         r"""(?:send_command|_send|send_grasshopper_command)\(\s*["']([a-z_][a-z0-9_]*)["']"""
     )
     py_cmds: set[str] = set()
-    tools_dir = repo_root / "rhino_mcp_server" / "src" / "rhinomcp" / "tools"
+    tools_dir = repo_root / "server" / "src" / "rhinomcp" / "tools"
     for p in tools_dir.glob("*.py"):
         if p.name.startswith("_"):
             continue
@@ -615,7 +615,7 @@ def test_contract_synchronization_across_tiers():
     # C# handlers: scrape [McpCommand("<name>")] attribute usages.
     cs_pat = re.compile(r'\[McpCommand\(\s*"([a-z_][a-z0-9_]*)"')
     cs_cmds: set[str] = set()
-    funcs_dir = repo_root / "rhino_mcp_plugin" / "Functions"
+    funcs_dir = repo_root / "plugin" / "Functions"
     for p in funcs_dir.glob("*.cs"):
         cs_cmds.update(cs_pat.findall(p.read_text()))
 
@@ -690,7 +690,7 @@ def test_protocol_envelope():
     envelope = protocol["$defs"]["command"]
     validator = Draft202012Validator(envelope)
 
-    # Mirrors the C# dispatch table in rhino_mcp_plugin/RhinoMCPServer.cs.
+    # Mirrors the C# dispatch table in plugin/RhinoMCPServer.cs.
     # Update both sides together when adding a command.
     expected_commands = [
         "create_object", "create_objects", "modify_object", "modify_objects",

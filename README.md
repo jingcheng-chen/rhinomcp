@@ -1,6 +1,6 @@
 # RhinoMCP - Rhino Model Context Protocol Integration
 
-<img src="assets/rhinomcp_logo.svg" alt="RhinoMCP Logo" width="130">
+<img src="docs/assets/rhinomcp_logo.svg" alt="RhinoMCP Logo" width="130">
 
 RhinoMCP connects Rhino to AI agents through the Model Context Protocol (MCP), allowing AI agents to directly interact with and control Rhino. This integration enables prompt assisted 3D modeling in Rhino 3D.
 
@@ -24,13 +24,13 @@ RhinoMCP connects Rhino to AI agents through the Model Context Protocol (MCP), a
 
 This demo shows how AI can interact with Rhino in two directions. Click the image below to watch the video.
 
-[![demo2](assets/demo2.jpg)](https://youtu.be/pi6dbqUuhI4)
+[![demo2](docs/assets/demo2.jpg)](https://youtu.be/pi6dbqUuhI4)
 
 ### Demo 2
 
 This demo shows how to ask AI to create custom scripts and execute them in Rhino. Click the image below to watch the video.
 
-[![demo1](assets/demo1.jpg)](https://youtu.be/NFOF_Pjp3qY)
+[![demo1](docs/assets/demo1.jpg)](https://youtu.be/NFOF_Pjp3qY)
 
 ## Tutorial
 
@@ -40,8 +40,8 @@ Thanks to Nate. He has created a showcase and installation [tutorial](https://ww
 
 The system consists of two main components:
 
-1. **MCP Server (`src/rhino_mcp_server/server.py`)**: A Python server that implements the Model Context Protocol and connects to the Rhino plugin
-2. **Rhino Plugin (`src/rhino_mcp_plugin`)**: A Rhino plugin that creates a socket server within Rhino to receive and execute commands
+1. **MCP Server (`server/`)**: A Python FastMCP server that implements the Model Context Protocol and connects to the Rhino plugin
+2. **Rhino Plugin (`plugin/`)**: A Rhino plugin that creates a socket server within Rhino to receive and execute commands
 
 ## Installation
 
@@ -152,7 +152,7 @@ Operator switches:
 
 ### Starting the Connection
 
-![RhinoMCP in the command line](assets/rhino_plugin_instruction.jpg)
+![RhinoMCP in the command line](docs/assets/rhino_plugin_instruction.jpg)
 
 1. In Rhino, type `mcpstart` in the command line
 2. Make sure the MCP server is running in the rhino terminal
@@ -161,19 +161,19 @@ Operator switches:
 
 Once the config file has been set on Claude, and the plugin is running on Rhino, you will see a hammer icon with tools for the RhinoMCP.
 
-![RhinoMCP in Claude](assets/claude_enable_instruction.jpg)
+![RhinoMCP in Claude](docs/assets/claude_enable_instruction.jpg)
 
 ### Using with Cursor
 
 Once the config file has been set on Cursor, and the plugin is running on Rhino, you will see the green indicator in front of the MCP server.
 
-![RhinoMCP in Cursor](assets/cursor_enable_instruction.jpg)
+![RhinoMCP in Cursor](docs/assets/cursor_enable_instruction.jpg)
 
 If not, try refresh the server in Cursor. If any console pops up, please do not close it.
 
 Once it's ready, use `Ctrl+I` to open the chat box and start chatting with Rhino. Make sure you've selected **Agent** mode.
 
-![RhinoMCP in Cursor](assets/cursor_usage_instruction.jpg)
+![RhinoMCP in Cursor](docs/assets/cursor_usage_instruction.jpg)
 
 ## Technical Details
 
@@ -194,7 +194,7 @@ The system uses a simple JSON-based protocol over TCP sockets:
 ### Building and publishing the server
 
 ```bash
-cd rhino_mcp_server
+cd server
 uv build
 uv publish
 ```
@@ -204,7 +204,7 @@ uv publish
 1. build the tool in Release mode
 2. copy the "manifest.yml" file to the "bin/Release" folder
 3. run `yak build` in the Release folder
-4. run `yak push rhino_mcp_plugin_xxxx.yak` to publish the plugin
+4. run `yak push rhinomcp_xxxx.yak` to publish the plugin
 
 ## Contributing
 

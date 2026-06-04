@@ -1,4 +1,4 @@
-# rhino_mcp_server.py
+# server.py
 from mcp.server.fastmcp import FastMCP
 import socket
 import json

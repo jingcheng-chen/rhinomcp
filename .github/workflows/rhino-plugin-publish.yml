@@ -8,8 +8,8 @@ jobs:
   release-build:
     runs-on: ubuntu-latest
     env:
-      SOLUTION_PATH: ${{ github.workspace }}/rhino_mcp_plugin/rhinomcp.sln
-      PROJECT_PATH: ${{ github.workspace }}/rhino_mcp_plugin/rhinomcp.csproj
+      SOLUTION_PATH: ${{ github.workspace }}/plugin/rhinomcp.sln
+      PROJECT_PATH: ${{ github.workspace }}/plugin/rhinomcp.csproj
       ARTIFACT_NAME: rhinomcp
 
     steps:
@@ -35,9 +35,9 @@ jobs:
         run: |
           mkdir -p dist/net8.0
           # Copy DLL, RHP, and any other necessary files to the dist folder
-          cp ${{ github.workspace }}/rhino_mcp_plugin/bin/Release/net8.0/*.dll dist/net8.0/
-          cp ${{ github.workspace }}/rhino_mcp_plugin/bin/Release/net8.0/*.rhp dist/net8.0/
-          cp ${{ github.workspace }}/rhino_mcp_plugin/manifest.yml dist/
+          cp ${{ github.workspace }}/plugin/bin/Release/net8.0/*.dll dist/net8.0/
+          cp ${{ github.workspace }}/plugin/bin/Release/net8.0/*.rhp dist/net8.0/
+          cp ${{ github.workspace }}/plugin/manifest.yml dist/
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
