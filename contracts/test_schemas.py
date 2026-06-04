@@ -260,7 +260,25 @@ def test_new_commands():
             "connections": [{"source": "slider_a", "target": "add", "target_input_index": 0}],
             "values": [{"target": "slider_a", "value": 4.0, "decimals": 1}],
             "preview_updates": {"enabled": False},
+            "preview_policy": {"mode": "only", "targets": ["add"], "scope": ["slider_a", "add"]},
+            "groups": [{"name": "Controls", "targets": ["slider_a"], "color": [180, 220, 255]}],
             "layout": {"enabled": True, "start_position": [40, 40], "x_spacing": 220},
+            "graph_id": "TestGraph",
+            "recompute": True,
+            "rollback_on_error": True
+        }),
+        ("commands/gh_mutate_graph.json", {
+            "graph_id": "TestGraph",
+            "operations": [
+                {"op": "create", "alias": "height", "component_name": "Number Slider", "value": 8, "min": 0, "max": 20, "role": "control"},
+                {"op": "update", "target": "cylinder", "preview": False},
+                {"op": "connect", "source": "height", "target": "cap", "target_input_index": 0},
+                {"op": "recompute"}
+            ],
+            "preview_policy": {"mode": "only", "targets": ["cap"]},
+            "groups": [{"name": "Output", "targets": ["cap"], "color": [180, 220, 255]}],
+            "layout": {"enabled": True, "targets": ["height", "cap"]},
+            "verify": {"run_solution": True, "outputs": [{"target": "cap", "output_index": 0, "expect_count_min": 1, "expect_type": "Brep"}]},
             "recompute": True,
             "rollback_on_error": True
         }),
@@ -502,6 +520,13 @@ def test_invalid_examples():
         ("commands/gh_build_graph.json", {"components": [{"alias": "1bad", "component_name": "Addition"}]}, "gh_build_graph bad alias"),
         ("commands/gh_build_graph.json", {"components": [{"alias": "add", "component_name": "Addition"}], "connections": [{"source": "add"}]}, "gh_build_graph connection missing target"),
         ("commands/gh_build_graph.json", {"components": [{"alias": "add", "component_name": "Addition"}], "layout": {"x_spacing": 0}}, "gh_build_graph bad layout spacing"),
+        ("commands/gh_build_graph.json", {"components": [{"alias": "add", "component_name": "Addition"}], "preview_policy": {"mode": "only"}}, "gh_build_graph preview policy missing targets"),
+        ("commands/gh_mutate_graph.json", {"operations": []}, "gh_mutate_graph empty operations"),
+        ("commands/gh_mutate_graph.json", {"operations": [{"target": "x"}]}, "gh_mutate_graph op missing op"),
+        ("commands/gh_mutate_graph.json", {"operations": [{"op": "rename", "target": "x"}]}, "gh_mutate_graph bad op"),
+        ("commands/gh_mutate_graph.json", {"operations": [{"op": "create", "alias": "bad alias", "component_name": "Panel"}]}, "gh_mutate_graph bad alias"),
+        ("commands/gh_mutate_graph.json", {"operations": [{"op": "update", "target": "x"}], "preview_policy": {"mode": "show"}}, "gh_mutate_graph preview policy missing targets"),
+        ("commands/gh_mutate_graph.json", {"operations": [{"op": "update", "target": "x"}], "verify": {"outputs": []}}, "gh_mutate_graph empty verify outputs"),
         ("commands/gh_add_component.json", {"component_guid": "12345678-1234-1234-1234-123456789012"}, "gh_add_component guid without name"),
         ("commands/gh_add_component.json", {"component_name": "Circle", "position": [1, 2, 3]}, "gh_add_component bad position"),
         ("commands/gh_delete_component.json", {}, "gh_delete_component missing selector"),
@@ -666,7 +691,7 @@ def test_protocol_envelope():
         "gh_get_available_components", "gh_get_component_type_info",
         "gh_list_components", "gh_get_component_info",
         "gh_get_canvas_state", "gh_run_solution", "gh_expire_solution",
-        "gh_build_graph", "gh_add_component", "gh_delete_component", "gh_layout_components", "gh_connect_components",
+        "gh_build_graph", "gh_mutate_graph", "gh_add_component", "gh_delete_component", "gh_layout_components", "gh_connect_components",
         "gh_disconnect_components", "gh_set_parameter_value",
         "gh_get_parameter_value", "gh_update_component", "gh_clear_canvas",
     ]

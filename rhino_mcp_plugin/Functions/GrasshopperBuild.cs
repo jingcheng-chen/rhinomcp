@@ -15,6 +15,7 @@ public partial class RhinoMCPFunctions
         var doc = GetActiveGrasshopperDocument(createIfMissing: true);
         bool recompute = OptionalBool(parameters, "recompute", true);
         bool rollbackOnError = OptionalBool(parameters, "rollback_on_error", true);
+        string graphId = CreateGraphId(OptionalString(parameters, "graph_id"));
 
         var componentSpecs = parameters["components"] as JArray
             ?? throw new ArgumentException("components is required.");
@@ -89,6 +90,7 @@ public partial class RhinoMCPFunctions
                 }
 
                 doc.AddObject(obj, false);
+                ApplyGraphMetadata(obj, alias, graphId, OptionalString(spec, "role"));
                 aliases[alias] = obj;
                 created.Add(obj);
             }
@@ -125,6 +127,11 @@ public partial class RhinoMCPFunctions
                 startPosition = layoutStart;
             }
 
+            var createdComponents = created.ToList();
+            var groups = CreateGrasshopperGroups(doc, parameters["groups"] as JArray, aliases, created, graphId, created);
+
+            var previewPolicy = ApplyPreviewPolicy(doc, aliases, parameters["preview_policy"] as JObject, created, graphId);
+
             if (recompute)
             {
                 foreach (var obj in created)
@@ -136,7 +143,7 @@ public partial class RhinoMCPFunctions
 
             RedrawGrasshopperCanvas(startPosition);
 
-            var components = new JArray(created.Select(obj => new JObject
+            var components = new JArray(createdComponents.Select(obj => new JObject
             {
                 ["instance_id"] = obj.InstanceGuid.ToString(),
                 ["name"] = obj.Name,
@@ -150,14 +157,18 @@ public partial class RhinoMCPFunctions
             return new JObject
             {
                 ["success"] = true,
-                ["component_count"] = created.Count,
+                ["component_count"] = createdComponents.Count,
                 ["connection_count"] = connectionCount,
                 ["value_count"] = valueCount,
                 ["recomputed"] = recompute,
                 ["rolled_back"] = false,
+                ["graph_id"] = graphId,
                 ["aliases"] = aliasIds,
                 ["components"] = components,
+                ["groups"] = groups,
                 ["layout"] = layoutResult,
+                ["preview_policy"] = previewPolicy,
+                ["summary"] = BuildGraphSummary(doc, created, graphId, null),
                 ["message"] = $"Built Grasshopper graph with {created.Count} component(s) and {connectionCount} connection(s)"
             };
         }
@@ -192,7 +203,7 @@ public partial class RhinoMCPFunctions
         JObject valueSpec)
     {
         string target = OptionalString(valueSpec, "target");
-        var obj = ResolveBuildGraphObject(doc, aliases, target, "value target");
+        var obj = ResolveGraphObject(doc, aliases, target, "value target");
         var value = valueSpec["value"] ?? throw new ArgumentException("value update is missing value.");
 
         if (TrySetSpecialComponentValue(obj, value, valueSpec, out _))
@@ -217,12 +228,12 @@ public partial class RhinoMCPFunctions
         Dictionary<string, IGH_DocumentObject> aliases,
         JObject connectionSpec)
     {
-        var sourceObj = ResolveBuildGraphObject(
+        var sourceObj = ResolveGraphObject(
             doc,
             aliases,
             OptionalString(connectionSpec, "source"),
             "connection source");
-        var targetObj = ResolveBuildGraphObject(
+        var targetObj = ResolveGraphObject(
             doc,
             aliases,
             OptionalString(connectionSpec, "target"),
@@ -251,43 +262,4 @@ public partial class RhinoMCPFunctions
         targetObj.ExpireSolution(true);
     }
 
-    private static IGH_DocumentObject ResolveBuildGraphObject(
-        GH_Document doc,
-        Dictionary<string, IGH_DocumentObject> aliases,
-        string selector,
-        string role)
-    {
-        if (string.IsNullOrWhiteSpace(selector))
-        {
-            throw new ArgumentException($"Missing Grasshopper {role} selector.");
-        }
-
-        if (aliases.TryGetValue(selector, out var aliased))
-        {
-            return aliased;
-        }
-
-        if (Guid.TryParse(selector, out var guid))
-        {
-            var byId = doc.FindObject(guid, true);
-            if (byId != null)
-            {
-                return byId;
-            }
-        }
-
-        var matches = doc.Objects
-            .Where(o => o.NickName.Equals(selector, StringComparison.OrdinalIgnoreCase))
-            .ToList();
-        if (matches.Count > 1)
-        {
-            throw new InvalidOperationException($"Grasshopper {role} selector '{selector}' is ambiguous; use an alias or GUID.");
-        }
-        if (matches.Count == 1)
-        {
-            return matches[0];
-        }
-
-        throw new InvalidOperationException($"Grasshopper {role} selector '{selector}' was not found.");
-    }
 }

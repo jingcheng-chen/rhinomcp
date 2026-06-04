@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Newtonsoft.Json.Linq;
 using Rhino;
@@ -250,6 +251,115 @@ public partial class RhinoMCPFunctions
                         throw new InvalidOperationException($"gh_build_graph did not return alias '{alias}'.");
                     }
                     createdIds.Add(id);
+                }
+            });
+
+            Record("gh_mutate_graph", () =>
+            {
+                var mutation = GhMutateGraph(new JObject
+                {
+                    ["graph_id"] = "MCPTestMutation",
+                    ["operations"] = new JArray
+                    {
+                        new JObject
+                        {
+                            ["op"] = "create",
+                            ["alias"] = "mut_panel",
+                            ["component_name"] = "Panel",
+                            ["nickname"] = "Mut_Out",
+                            ["role"] = "output"
+                        },
+                        new JObject
+                        {
+                            ["op"] = "set",
+                            ["target"] = "bg_a",
+                            ["value"] = 2.0,
+                            ["min"] = 0,
+                            ["max"] = 10,
+                            ["decimals"] = 2
+                        },
+                        new JObject
+                        {
+                            ["op"] = "connect",
+                            ["source"] = "bg_add",
+                            ["source_output_index"] = 0,
+                            ["target"] = "mut_panel"
+                        },
+                        new JObject
+                        {
+                            ["op"] = "update",
+                            ["target"] = "bg_b",
+                            ["preview"] = false
+                        },
+                        new JObject { ["op"] = "recompute" }
+                    },
+                    ["preview_policy"] = new JObject
+                    {
+                        ["mode"] = "only",
+                        ["targets"] = new JArray { "mut_panel" },
+                        ["scope"] = new JArray { "bg_a", "bg_b", "bg_add", "mut_panel" }
+                    },
+                    ["groups"] = new JArray
+                    {
+                        new JObject
+                        {
+                            ["name"] = "Mutation Output",
+                            ["targets"] = new JArray { "bg_a", "bg_b", "bg_add", "mut_panel" },
+                            ["color"] = new JArray { 180, 220, 255 }
+                        }
+                    },
+                    ["layout"] = new JObject
+                    {
+                        ["enabled"] = true,
+                        ["targets"] = new JArray { "bg_a", "bg_b", "bg_add", "mut_panel" },
+                        ["start_position"] = new JArray { 40, 430 }
+                    },
+                    ["verify"] = new JObject
+                    {
+                        ["run_solution"] = true,
+                        ["outputs"] = new JArray
+                        {
+                            new JObject
+                            {
+                                ["target"] = "bg_add",
+                                ["output_index"] = 0,
+                                ["expect_count_min"] = 1,
+                                ["expect_type"] = "Number"
+                            }
+                        }
+                    },
+                    ["recompute"] = true,
+                    ["rollback_on_error"] = true
+                });
+
+                if (mutation["success"]?.ToObject<bool>() != true)
+                {
+                    throw new InvalidOperationException("gh_mutate_graph did not report success.");
+                }
+                if (mutation["verification"]?["passed"]?.ToObject<bool>() != true)
+                {
+                    throw new InvalidOperationException($"gh_mutate_graph verification failed: {mutation["verification"]}");
+                }
+
+                var operations = mutation["operations"] as JArray;
+                foreach (var op in operations?.OfType<JObject>() ?? Enumerable.Empty<JObject>())
+                {
+                    if (op["op"]?.ToString() == "create")
+                    {
+                        var id = op["instance_id"]?.ToString();
+                        if (!string.IsNullOrEmpty(id))
+                        {
+                            createdIds.Add(id);
+                        }
+                    }
+                }
+                foreach (var group in (mutation["groups"] as JArray)?.OfType<JObject>() ?? Enumerable.Empty<JObject>())
+                {
+                    var id = group["instance_id"]?.ToString();
+                    if (!string.IsNullOrEmpty(id))
+                    {
+                        createdIds.Add(id);
+                    }
                 }
             });
 

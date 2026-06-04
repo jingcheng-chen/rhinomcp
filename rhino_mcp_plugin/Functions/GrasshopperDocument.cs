@@ -123,6 +123,11 @@ public partial class RhinoMCPFunctions
                 ["outputs"] = ParamsToJson(component.Params.Output, includeConnections, includeValues, maxItems)
             };
             AddSpecialGrasshopperState(compInfo, component);
+            var componentMetadata = GraphMetadataToJson(component);
+            if (componentMetadata.Count > 0)
+            {
+                compInfo["metadata"] = componentMetadata;
+            }
             components.Add(compInfo);
         }
 
@@ -141,6 +146,11 @@ public partial class RhinoMCPFunctions
                 ["recipient_count"] = param.Recipients.Count
             };
             AddSpecialGrasshopperState(paramInfo, param);
+            var paramMetadata = GraphMetadataToJson(param);
+            if (paramMetadata.Count > 0)
+            {
+                paramInfo["metadata"] = paramMetadata;
+            }
             if (includeValues)
             {
                 paramInfo["value_data"] = ParamVolatileDataToJson(param, maxItems);
@@ -152,7 +162,8 @@ public partial class RhinoMCPFunctions
         {
             ["instance_id"] = g.InstanceGuid.ToString(),
             ["nickname"] = g.NickName,
-            ["object_count"] = g.ObjectIDs.Count
+            ["object_count"] = g.ObjectIDs.Count,
+            ["metadata"] = GraphMetadataToJson(g)
         }));
 
         return new JObject

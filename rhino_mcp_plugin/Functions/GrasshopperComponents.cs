@@ -30,18 +30,27 @@ public partial class RhinoMCPFunctions
                 c.NickName?.Contains(nameFilter, StringComparison.OrdinalIgnoreCase) == true);
         }
 
-        var components = new JArray(query.Take(limit).Select(c => new JObject
+        var components = new JArray(query.Take(limit).Select(c =>
         {
-            ["instance_id"] = c.InstanceGuid.ToString(),
-            ["name"] = c.Name,
-            ["nickname"] = c.NickName,
-            ["category"] = c.Category,
-            ["subcategory"] = c.SubCategory,
-            ["description"] = c.Description,
-            ["position"] = PivotToJson(c),
-            ["input_count"] = c.Params.Input.Count,
-            ["output_count"] = c.Params.Output.Count,
-            ["runtime_message_level"] = c.RuntimeMessageLevel.ToString()
+            var item = new JObject
+            {
+                ["instance_id"] = c.InstanceGuid.ToString(),
+                ["name"] = c.Name,
+                ["nickname"] = c.NickName,
+                ["category"] = c.Category,
+                ["subcategory"] = c.SubCategory,
+                ["description"] = c.Description,
+                ["position"] = PivotToJson(c),
+                ["input_count"] = c.Params.Input.Count,
+                ["output_count"] = c.Params.Output.Count,
+                ["runtime_message_level"] = c.RuntimeMessageLevel.ToString()
+            };
+            var metadata = GraphMetadataToJson(c);
+            if (metadata.Count > 0)
+            {
+                item["metadata"] = metadata;
+            }
+            return item;
         }));
 
         return new JObject
@@ -245,6 +254,11 @@ public partial class RhinoMCPFunctions
             ["type"] = obj.GetType().Name
         };
         AddSpecialGrasshopperState(result, obj);
+        var metadata = GraphMetadataToJson(obj);
+        if (metadata.Count > 0)
+        {
+            result["metadata"] = metadata;
+        }
 
         if (obj is IGH_Component component)
         {

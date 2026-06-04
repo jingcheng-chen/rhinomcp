@@ -134,6 +134,18 @@ public partial class RhinoMCPFunctions
 
         if (!string.IsNullOrEmpty(nickname))
         {
+            var aliasMatches = doc.Objects
+                .Where(o => GraphMetadataValue(o, GhMetaAlias).Equals(nickname, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            if (aliasMatches.Count > 1)
+            {
+                throw new InvalidOperationException($"Alias '{nickname}' is ambiguous; use instance_id instead.");
+            }
+            if (aliasMatches.Count == 1)
+            {
+                return aliasMatches[0];
+            }
+
             var matches = doc.Objects
                 .Where(o => o.NickName.Equals(nickname, StringComparison.OrdinalIgnoreCase))
                 .ToList();

@@ -60,6 +60,7 @@
             "gh_run_solution",
             "gh_expire_solution",
             "gh_build_graph",
+            "gh_mutate_graph",
             "gh_add_component",
             "gh_delete_component",
             "gh_layout_components",

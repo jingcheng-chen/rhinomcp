@@ -1478,6 +1478,102 @@ class TestGrasshopperTools:
         )
 
     @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
+    def test_gh_mutate_graph_tool(self, mock_get_conn):
+        from rhinomcp.tools.grasshopper_mutation import gh_mutate_graph
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"success": True}
+        mock_get_conn.return_value = mock_conn
+
+        gh_mutate_graph(
+            ctx=None,
+            graph_id="PointAttractor_20260604",
+            operations=[
+                {
+                    "op": "create",
+                    "alias": "height",
+                    "component_name": "Number Slider",
+                    "value": 8,
+                    "min": 0,
+                    "max": 20,
+                    "role": "control",
+                },
+                {
+                    "op": "update",
+                    "target": "cylinder",
+                    "preview": False,
+                },
+                {
+                    "op": "connect",
+                    "source": "height",
+                    "target": "cap",
+                    "target_input_index": 0,
+                },
+            ],
+            preview_policy={"mode": "only", "targets": ["cap"]},
+            groups=[{"name": "Output", "targets": ["cap"], "color": [180, 220, 255]}],
+            layout={"enabled": True, "targets": ["height", "cap"]},
+            verify={
+                "run_solution": True,
+                "outputs": [
+                    {
+                        "target": "cap",
+                        "output_index": 0,
+                        "expect_count_min": 1,
+                        "expect_type": "Brep",
+                    }
+                ],
+            },
+            recompute=True,
+            rollback_on_error=True,
+        )
+
+        mock_conn.send_command.assert_called_once_with(
+            "gh_mutate_graph",
+            {
+                "operations": [
+                    {
+                        "op": "create",
+                        "alias": "height",
+                        "component_name": "Number Slider",
+                        "value": 8,
+                        "min": 0,
+                        "max": 20,
+                        "role": "control",
+                    },
+                    {
+                        "op": "update",
+                        "target": "cylinder",
+                        "preview": False,
+                    },
+                    {
+                        "op": "connect",
+                        "source": "height",
+                        "target": "cap",
+                        "target_input_index": 0,
+                    },
+                ],
+                "recompute": True,
+                "rollback_on_error": True,
+                "graph_id": "PointAttractor_20260604",
+                "preview_policy": {"mode": "only", "targets": ["cap"]},
+                "groups": [{"name": "Output", "targets": ["cap"], "color": [180, 220, 255]}],
+                "layout": {"enabled": True, "targets": ["height", "cap"]},
+                "verify": {
+                    "run_solution": True,
+                    "outputs": [
+                        {
+                            "target": "cap",
+                            "output_index": 0,
+                            "expect_count_min": 1,
+                            "expect_type": "Brep",
+                        }
+                    ],
+                },
+            },
+        )
+
+    @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
     def test_gh_component_lifecycle_tools(self, mock_get_conn):
         from rhinomcp.tools.grasshopper_components import (
             gh_add_component,
@@ -1699,6 +1795,7 @@ class TestPackageApi:
             "gh_get_document_info",
             "gh_search_components",
             "gh_build_graph",
+            "gh_mutate_graph",
             "gh_add_component",
             "gh_layout_components",
             "gh_run_solution",

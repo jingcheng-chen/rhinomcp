@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_mutate_graph.json",
+  "title": "gh_mutate_graph",
+  "description": "Apply create/connect/set/update/delete/recompute operations to a Grasshopper graph in one batched mutation.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "graph_id": { "type": "string", "minLength": 1 },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/operation" }
+    },
+    "preview_policy": { "$ref": "#/$defs/preview_policy" },
+    "groups": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/group" }
+    },
+    "layout": {
+      "oneOf": [
+        { "type": "boolean" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean", "default": true },
+            "targets": { "$ref": "#/$defs/selectors" },
+            "x_spacing": { "type": "number", "exclusiveMinimum": 0, "default": 220 },
+            "y_spacing": { "type": "number", "exclusiveMinimum": 0, "default": 90 },
+            "start_position": { "$ref": "#/$defs/position" }
+          }
+        }
+      ]
+    },
+    "verify": { "$ref": "#/$defs/verify" },
+    "recompute": { "type": "boolean", "default": true },
+    "rollback_on_error": { "type": "boolean", "default": true }
+  },
+  "required": ["operations"],
+  "$defs": {
+    "guid": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "alias": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z_][A-Za-z0-9_-]*$"
+    },
+    "selector": {
+      "type": "string",
+      "minLength": 1
+    },
+    "selectors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/selector" },
+      "minItems": 1
+    },
+    "position": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": ["create", "connect", "set", "update", "disconnect", "delete", "recompute"]
+        },
+        "alias": { "$ref": "#/$defs/alias" },
+        "target": { "$ref": "#/$defs/selector" },
+        "source": { "$ref": "#/$defs/selector" },
+        "component_name": { "type": "string", "minLength": 1 },
+        "component_guid": { "$ref": "#/$defs/guid" },
+        "position": { "$ref": "#/$defs/position" },
+        "nickname": { "type": "string", "minLength": 1 },
+        "new_nickname": { "type": "string", "minLength": 1 },
+        "role": { "type": "string", "minLength": 1 },
+        "graph_id": { "type": "string", "minLength": 1 },
+        "value": {},
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "decimals": { "type": "integer", "minimum": 0, "maximum": 12 },
+        "content": { "type": "string" },
+        "text": { "type": "string" },
+        "preview": { "type": "boolean" },
+        "enabled": { "type": "boolean" },
+        "input_index": { "type": "integer", "minimum": 0 },
+        "input_name": { "type": "string", "minLength": 1 },
+        "output_index": { "type": "integer", "minimum": 0 },
+        "output_name": { "type": "string", "minLength": 1 },
+        "source_output_index": { "type": "integer", "minimum": 0 },
+        "source_output_name": { "type": "string", "minLength": 1 },
+        "target_input_index": { "type": "integer", "minimum": 0 },
+        "target_input_name": { "type": "string", "minLength": 1 },
+        "disconnect_all": { "type": "boolean" }
+      },
+      "required": ["op"]
+    },
+    "preview_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": { "type": "string", "enum": ["only", "show", "hide"] },
+        "targets": { "$ref": "#/$defs/selectors" },
+        "scope": { "$ref": "#/$defs/selectors" },
+        "graph_id": { "type": "string", "minLength": 1 }
+      },
+      "required": ["mode", "targets"]
+    },
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "nickname": { "type": "string", "minLength": 1 },
+        "alias": { "$ref": "#/$defs/alias" },
+        "role": { "type": "string", "minLength": 1 },
+        "targets": { "$ref": "#/$defs/selectors" },
+        "color": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 0, "maximum": 255 },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "anyOf": [
+        { "required": ["name"] },
+        { "required": ["label"] },
+        { "required": ["nickname"] }
+      ]
+    },
+    "verify": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "run_solution": { "type": "boolean", "default": true },
+        "outputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "target": { "$ref": "#/$defs/selector" },
+              "alias": { "$ref": "#/$defs/selector" },
+              "output_index": { "type": "integer", "minimum": 0 },
+              "output_name": { "type": "string", "minLength": 1 },
+              "expect_count_min": { "type": "integer", "minimum": 0 },
+              "expect_type": { "type": "string", "minLength": 1 },
+              "expect_solid": { "type": "boolean" },
+              "max_items": { "type": "integer", "minimum": 0, "maximum": 100 }
+            },
+            "anyOf": [
+              { "required": ["target"] },
+              { "required": ["alias"] }
+            ]
+          }
+        }
+      },
+      "required": ["outputs"]
+    }
+  }
+}

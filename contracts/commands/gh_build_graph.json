@@ -18,6 +18,7 @@
           "component_guid": { "$ref": "#/$defs/guid" },
           "position": { "$ref": "#/$defs/position" },
           "nickname": { "type": "string", "minLength": 1 },
+          "role": { "type": "string", "minLength": 1 },
           "value": {},
           "min": { "type": "number" },
           "max": { "type": "number" },
@@ -47,6 +48,11 @@
         "enabled": { "type": "boolean" }
       }
     },
+    "preview_policy": { "$ref": "#/$defs/preview_policy" },
+    "groups": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/group" }
+    },
     "layout": {
       "oneOf": [
         { "type": "boolean" },
@@ -66,6 +72,10 @@
     "recompute": {
       "type": "boolean",
       "default": true
+    },
+    "graph_id": {
+      "type": "string",
+      "minLength": 1
     },
     "rollback_on_error": {
       "type": "boolean",
@@ -105,6 +115,52 @@
         "target_input_name": { "type": "string", "minLength": 1 }
       },
       "required": ["source", "target"]
+    },
+    "preview_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": { "type": "string", "enum": ["only", "show", "hide"] },
+        "targets": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/selector" },
+          "minItems": 1
+        },
+        "scope": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/selector" },
+          "minItems": 1
+        },
+        "graph_id": { "type": "string", "minLength": 1 }
+      },
+      "required": ["mode", "targets"]
+    },
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "nickname": { "type": "string", "minLength": 1 },
+        "alias": { "$ref": "#/$defs/alias" },
+        "role": { "type": "string", "minLength": 1 },
+        "targets": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/selector" },
+          "minItems": 1
+        },
+        "color": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 0, "maximum": 255 },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "anyOf": [
+        { "required": ["name"] },
+        { "required": ["label"] },
+        { "required": ["nickname"] }
+      ]
     },
     "value_update": {
       "type": "object",
