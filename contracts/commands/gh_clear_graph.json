@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_clear_graph.json",
+  "title": "gh_clear_graph",
+  "description": "Delete all Grasshopper objects tagged with a RhinoMCP graph id.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "graph_id": { "type": "string", "minLength": 1 },
+    "include_groups": { "type": "boolean", "default": true },
+    "recompute": { "type": "boolean", "default": false }
+  },
+  "required": ["graph_id"]
+}

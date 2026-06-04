@@ -45,11 +45,7 @@ public partial class RhinoMCPFunctions
                 ["output_count"] = c.Params.Output.Count,
                 ["runtime_message_level"] = c.RuntimeMessageLevel.ToString()
             };
-            var metadata = GraphMetadataToJson(c);
-            if (metadata.Count > 0)
-            {
-                item["metadata"] = metadata;
-            }
+            AddGraphMetadataFields(item, c);
             return item;
         }));
 
@@ -254,11 +250,7 @@ public partial class RhinoMCPFunctions
             ["type"] = obj.GetType().Name
         };
         AddSpecialGrasshopperState(result, obj);
-        var metadata = GraphMetadataToJson(obj);
-        if (metadata.Count > 0)
-        {
-            result["metadata"] = metadata;
-        }
+        AddGraphMetadataFields(result, obj);
 
         if (obj is IGH_Component component)
         {

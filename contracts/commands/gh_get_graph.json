@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_get_graph.json",
+  "title": "gh_get_graph",
+  "description": "Inspect all Grasshopper objects tagged with a RhinoMCP graph id.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "graph_id": { "type": "string", "minLength": 1 },
+    "include_values": { "type": "boolean", "default": false },
+    "max_items": { "type": "integer", "minimum": 0, "maximum": 1000, "default": 20 }
+  },
+  "required": ["graph_id"]
+}

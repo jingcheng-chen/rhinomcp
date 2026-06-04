@@ -363,6 +363,58 @@ public partial class RhinoMCPFunctions
                 }
             });
 
+            Record("gh_get_graph", () =>
+            {
+                var graph = GhGetGraph(new JObject
+                {
+                    ["graph_id"] = "MCPTestMutation",
+                    ["include_values"] = true,
+                    ["max_items"] = 5
+                });
+                if ((graph["object_count"]?.ToObject<int>() ?? 0) < 2)
+                {
+                    throw new InvalidOperationException("gh_get_graph did not return the expected mutation graph objects.");
+                }
+            });
+
+            Record("gh_clear_graph", () =>
+            {
+                var cleared = GhClearGraph(new JObject
+                {
+                    ["graph_id"] = "MCPTestMutation",
+                    ["include_groups"] = true,
+                    ["recompute"] = false
+                });
+                if ((cleared["deleted_count"]?.ToObject<int>() ?? 0) < 1)
+                {
+                    throw new InvalidOperationException("gh_clear_graph did not delete the expected mutation graph objects.");
+                }
+
+                var remaining = GhGetGraph(new JObject { ["graph_id"] = "MCPTestMutation" });
+                if ((remaining["object_count"]?.ToObject<int>() ?? 0) != 0)
+                {
+                    throw new InvalidOperationException("gh_clear_graph left tagged mutation graph objects behind.");
+                }
+
+                var idsToRemove = createdIds
+                    .Where(id =>
+                    {
+                        try
+                        {
+                            return GetActiveGrasshopperDocument().FindObject(Guid.Parse(id), true) == null;
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    })
+                    .ToList();
+                foreach (var id in idsToRemove)
+                {
+                    createdIds.Remove(id);
+                }
+            });
+
             Record("gh_add_component", () =>
             {
                 var sliderA = GhAddComponent(new JObject

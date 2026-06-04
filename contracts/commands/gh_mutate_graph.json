@@ -140,6 +140,7 @@
       "additionalProperties": false,
       "properties": {
         "run_solution": { "type": "boolean", "default": true },
+        "expect_no_runtime_warnings": { "type": "boolean", "default": false },
         "outputs": {
           "type": "array",
           "minItems": 1,
@@ -152,8 +153,12 @@
               "output_index": { "type": "integer", "minimum": 0 },
               "output_name": { "type": "string", "minLength": 1 },
               "expect_count_min": { "type": "integer", "minimum": 0 },
+              "expect_count_exact": { "type": "integer", "minimum": 0 },
               "expect_type": { "type": "string", "minLength": 1 },
+              "expect_all_type": { "type": "string", "minLength": 1 },
               "expect_solid": { "type": "boolean" },
+              "expect_all_solid": { "type": "boolean" },
+              "expect_no_runtime_warnings": { "type": "boolean" },
               "max_items": { "type": "integer", "minimum": 0, "maximum": 100 }
             },
             "anyOf": [

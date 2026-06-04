@@ -1338,6 +1338,7 @@ class TestGrasshopperTools:
         )
         from rhinomcp.tools.grasshopper_components import gh_get_component_info, gh_list_components
         from rhinomcp.tools.grasshopper_document import gh_get_canvas_state, gh_get_document_info
+        from rhinomcp.tools.grasshopper_graph import gh_get_graph
 
         mock_conn = MagicMock()
         mock_conn.send_command.return_value = {"success": True}
@@ -1352,6 +1353,7 @@ class TestGrasshopperTools:
         gh_list_components(ctx=None, category="Curve", name="Circle", limit=10)
         gh_get_component_info(ctx=None, instance_id="abc")
         gh_get_canvas_state(ctx=None, include_connections=False, include_values=True, max_items=3)
+        gh_get_graph(ctx=None, graph_id="TestGraph", include_values=True, max_items=5)
 
         calls = mock_conn.send_command.call_args_list
         assert calls[0][0] == ("gh_get_document_info", {})
@@ -1368,6 +1370,10 @@ class TestGrasshopperTools:
         assert calls[8][0] == (
             "gh_get_canvas_state",
             {"include_connections": False, "include_values": True, "max_items": 3},
+        )
+        assert calls[9][0] == (
+            "gh_get_graph",
+            {"graph_id": "TestGraph", "include_values": True, "max_items": 5},
         )
 
     @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
@@ -1582,6 +1588,7 @@ class TestGrasshopperTools:
             gh_layout_components,
             gh_update_component,
         )
+        from rhinomcp.tools.grasshopper_graph import gh_clear_graph
 
         mock_conn = MagicMock()
         mock_conn.send_command.return_value = {"success": True}
@@ -1616,6 +1623,7 @@ class TestGrasshopperTools:
         )
         gh_delete_component(ctx=None, nickname="Radius2")
         gh_clear_canvas(ctx=None, include_groups=False, recompute=True)
+        gh_clear_graph(ctx=None, graph_id="TestGraph", include_groups=False, recompute=True)
 
         calls = mock_conn.send_command.call_args_list
         assert calls[0][0] == (
@@ -1660,6 +1668,10 @@ class TestGrasshopperTools:
         )
         assert calls[4][0] == ("gh_delete_component", {"nickname": "Radius2"})
         assert calls[5][0] == ("gh_clear_canvas", {"include_groups": False, "recompute": True})
+        assert calls[6][0] == (
+            "gh_clear_graph",
+            {"graph_id": "TestGraph", "include_groups": False, "recompute": True},
+        )
 
     @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
     def test_gh_connection_and_parameter_tools(self, mock_get_conn):
@@ -1750,6 +1762,7 @@ class TestToolAnnotations:
             "tools/grasshopper_catalog.py",
             "tools/grasshopper_components.py",
             "tools/grasshopper_document.py",
+            "tools/grasshopper_graph.py",
             "tools/grasshopper_parameters.py",
         ]:
             src = self._module_source(rel)
@@ -1763,6 +1776,7 @@ class TestToolAnnotations:
             "tools/execute_rhinoscript_python_code.py",
             "tools/execute_rhinocommon_csharp_code.py",
             "tools/grasshopper_components.py",
+            "tools/grasshopper_graph.py",
         ]:
             src = self._module_source(rel)
             assert "destructiveHint=True" in src, f"{rel} missing destructiveHint annotation"
@@ -1794,6 +1808,8 @@ class TestPackageApi:
             "gh_create_document",
             "gh_get_document_info",
             "gh_search_components",
+            "gh_get_graph",
+            "gh_clear_graph",
             "gh_build_graph",
             "gh_mutate_graph",
             "gh_add_component",

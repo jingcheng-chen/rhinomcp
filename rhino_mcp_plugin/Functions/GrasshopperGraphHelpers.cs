@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -94,6 +95,22 @@ public partial class RhinoMCPFunctions
         if (!string.IsNullOrEmpty(graphId)) metadata["graph_id"] = graphId;
         if (!string.IsNullOrEmpty(role)) metadata["role"] = role;
         return metadata;
+    }
+
+    private static void AddGraphMetadataFields(JObject result, IGH_DocumentObject obj)
+    {
+        string alias = GraphMetadataValue(obj, GhMetaAlias);
+        string graphId = GraphMetadataValue(obj, GhMetaGraphId);
+        string role = GraphMetadataValue(obj, GhMetaRole);
+        if (!string.IsNullOrEmpty(alias)) result["alias"] = alias;
+        if (!string.IsNullOrEmpty(graphId)) result["graph_id"] = graphId;
+        if (!string.IsNullOrEmpty(role)) result["role"] = role;
+
+        var metadata = GraphMetadataToJson(obj);
+        if (metadata.Count > 0)
+        {
+            result["metadata"] = metadata;
+        }
     }
 
     private static GhObjectSnapshot CaptureObjectSnapshot(IGH_DocumentObject obj)
@@ -364,13 +381,14 @@ public partial class RhinoMCPFunctions
             {
                 aliases[OptionalString(spec, "alias")] = group;
             }
-            createdGroups.Add(new JObject
+            var groupResult = new JObject
             {
                 ["instance_id"] = group.InstanceGuid.ToString(),
                 ["name"] = group.NickName,
-                ["object_count"] = targets.Count,
-                ["metadata"] = GraphMetadataToJson(group)
-            });
+                ["object_count"] = targets.Count
+            };
+            AddGraphMetadataFields(groupResult, group);
+            createdGroups.Add(groupResult);
         }
         return createdGroups;
     }
@@ -389,7 +407,7 @@ public partial class RhinoMCPFunctions
 
         string mode = OptionalString(policy, "mode") ?? "show";
         var targets = ResolveGraphTargets(doc, aliases, policy["targets"], "preview target");
-        var changed = new JArray();
+        var finalStates = new Dictionary<Guid, JObject>();
 
         void SetPreview(IGH_DocumentObject obj, bool visible)
         {
@@ -398,13 +416,14 @@ public partial class RhinoMCPFunctions
                 return;
             }
             previewObj.Hidden = !visible;
-            changed.Add(new JObject
+            var state = new JObject
             {
                 ["instance_id"] = obj.InstanceGuid.ToString(),
-                ["alias"] = GraphMetadataValue(obj, GhMetaAlias),
                 ["nickname"] = obj.NickName,
                 ["preview"] = visible
-            });
+            };
+            AddGraphMetadataFields(state, obj);
+            finalStates[obj.InstanceGuid] = state;
         }
 
         if (mode.Equals("only", StringComparison.OrdinalIgnoreCase))
@@ -441,8 +460,8 @@ public partial class RhinoMCPFunctions
         return new JObject
         {
             ["mode"] = mode,
-            ["changed_count"] = changed.Count,
-            ["changed"] = changed
+            ["final_state_count"] = finalStates.Count,
+            ["final_preview_state"] = new JArray(finalStates.Values)
         };
     }
 
@@ -456,9 +475,13 @@ public partial class RhinoMCPFunctions
             return null;
         }
 
+        long solutionDurationMs = 0;
         if (OptionalBool(verifySpec, "run_solution", false))
         {
+            var solutionStopwatch = Stopwatch.StartNew();
             RunGrasshopperSolution(doc, true);
+            solutionStopwatch.Stop();
+            solutionDurationMs = solutionStopwatch.ElapsedMilliseconds;
         }
 
         var checks = new JArray();
@@ -502,6 +525,13 @@ public partial class RhinoMCPFunctions
                 failures.Add($"Expected at least {expectCountMin.Value} item(s), got {dataCount}.");
             }
 
+            int? expectCountExact = outputSpec["expect_count_exact"]?.ToObject<int?>();
+            if (expectCountExact.HasValue && dataCount != expectCountExact.Value)
+            {
+                passed = false;
+                failures.Add($"Expected exactly {expectCountExact.Value} item(s), got {dataCount}.");
+            }
+
             string expectType = OptionalString(outputSpec, "expect_type");
             if (!string.IsNullOrEmpty(expectType) && !itemInfos.Any(item => item.Type.Equals(expectType, StringComparison.OrdinalIgnoreCase)))
             {
@@ -509,11 +539,41 @@ public partial class RhinoMCPFunctions
                 failures.Add($"Expected output type '{expectType}'.");
             }
 
+            string expectAllType = OptionalString(outputSpec, "expect_all_type");
+            if (!string.IsNullOrEmpty(expectAllType) &&
+                (itemInfos.Count == 0 || !itemInfos.All(item => item.Type.Equals(expectAllType, StringComparison.OrdinalIgnoreCase))))
+            {
+                passed = false;
+                failures.Add($"Expected all output items to be type '{expectAllType}'.");
+            }
+
             bool? expectSolid = outputSpec["expect_solid"]?.ToObject<bool?>();
             if (expectSolid.HasValue && !itemInfos.Any(item => item.IsSolid == expectSolid.Value))
             {
                 passed = false;
                 failures.Add($"Expected solid={expectSolid.Value}.");
+            }
+
+            bool? expectAllSolid = outputSpec["expect_all_solid"]?.ToObject<bool?>();
+            if (expectAllSolid.HasValue &&
+                (itemInfos.Count == 0 || !itemInfos.All(item => item.IsSolid == expectAllSolid.Value)))
+            {
+                passed = false;
+                failures.Add($"Expected all output items to have solid={expectAllSolid.Value}.");
+            }
+
+            bool expectNoRuntimeWarnings =
+                OptionalBool(verifySpec, "expect_no_runtime_warnings", false) ||
+                OptionalBool(outputSpec, "expect_no_runtime_warnings", false);
+            var runtimeMessages = obj is IGH_ActiveObject activeObject
+                ? RuntimeMessagesToJson(activeObject)
+                : new JArray();
+            if (expectNoRuntimeWarnings && runtimeMessages.Any(message =>
+                    message?["level"]?.ToString() == GH_RuntimeMessageLevel.Warning.ToString() ||
+                    message?["level"]?.ToString() == GH_RuntimeMessageLevel.Error.ToString()))
+            {
+                passed = false;
+                failures.Add("Expected no runtime warnings or errors.");
             }
 
             if (!passed)
@@ -532,6 +592,7 @@ public partial class RhinoMCPFunctions
                 ["data_count"] = dataCount,
                 ["branch_count"] = outputParam.VolatileData.PathCount,
                 ["sample"] = new JArray(itemInfos.Take(maxItems).Select(item => item.Json)),
+                ["runtime_messages"] = runtimeMessages,
                 ["failures"] = failures
             });
         }
@@ -540,6 +601,7 @@ public partial class RhinoMCPFunctions
         {
             ["passed"] = allPassed,
             ["check_count"] = checks.Count,
+            ["solution_duration_ms"] = solutionDurationMs,
             ["checks"] = checks
         };
     }

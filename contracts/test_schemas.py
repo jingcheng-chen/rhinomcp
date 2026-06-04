@@ -247,6 +247,8 @@ def test_new_commands():
         ("commands/gh_list_component_categories.json", {}),
         ("commands/gh_get_available_components.json", {"category": "Curve", "include_description": True, "limit": 25}),
         ("commands/gh_get_component_type_info.json", {"name": "Circle"}),
+        ("commands/gh_get_graph.json", {"graph_id": "TestGraph", "include_values": True, "max_items": 5}),
+        ("commands/gh_clear_graph.json", {"graph_id": "TestGraph", "include_groups": True, "recompute": False}),
         ("commands/gh_list_components.json", {"category": "Curve", "limit": 20}),
         ("commands/gh_get_component_info.json", {"instance_id": GUID}),
         ("commands/gh_get_canvas_state.json", {"include_connections": True, "include_values": False, "max_items": 5}),
@@ -278,7 +280,19 @@ def test_new_commands():
             "preview_policy": {"mode": "only", "targets": ["cap"]},
             "groups": [{"name": "Output", "targets": ["cap"], "color": [180, 220, 255]}],
             "layout": {"enabled": True, "targets": ["height", "cap"]},
-            "verify": {"run_solution": True, "outputs": [{"target": "cap", "output_index": 0, "expect_count_min": 1, "expect_type": "Brep"}]},
+            "verify": {
+                "run_solution": True,
+                "expect_no_runtime_warnings": True,
+                "outputs": [{
+                    "target": "cap",
+                    "output_index": 0,
+                    "expect_count_min": 1,
+                    "expect_count_exact": 1,
+                    "expect_type": "Brep",
+                    "expect_all_type": "Brep",
+                    "expect_all_solid": True
+                }]
+            },
             "recompute": True,
             "rollback_on_error": True
         }),
@@ -512,6 +526,10 @@ def test_invalid_examples():
         ("commands/gh_create_document.json", {"template_path": "example.gh"}, "gh_create_document unknown field"),
         ("commands/gh_batch_search_components.json", {"queries": []}, "gh_batch_search_components empty queries"),
         ("commands/gh_get_component_type_info.json", {}, "gh_get_component_type_info missing selector"),
+        ("commands/gh_get_graph.json", {}, "gh_get_graph missing graph_id"),
+        ("commands/gh_get_graph.json", {"graph_id": ""}, "gh_get_graph empty graph_id"),
+        ("commands/gh_clear_graph.json", {}, "gh_clear_graph missing graph_id"),
+        ("commands/gh_clear_graph.json", {"graph_id": "", "recompute": True}, "gh_clear_graph empty graph_id"),
         ("commands/gh_get_component_info.json", {}, "gh_get_component_info missing selector"),
         ("commands/gh_get_canvas_state.json", {"max_items": -1}, "gh_get_canvas_state negative max_items"),
         ("commands/gh_run_solution.json", {"timeout_ms": 1000}, "gh_run_solution unknown timeout field"),
@@ -689,6 +707,7 @@ def test_protocol_envelope():
         "gh_get_document_info", "gh_search_components",
         "gh_batch_search_components", "gh_list_component_categories",
         "gh_get_available_components", "gh_get_component_type_info",
+        "gh_get_graph", "gh_clear_graph",
         "gh_list_components", "gh_get_component_info",
         "gh_get_canvas_state", "gh_run_solution", "gh_expire_solution",
         "gh_build_graph", "gh_mutate_graph", "gh_add_component", "gh_delete_component", "gh_layout_components", "gh_connect_components",

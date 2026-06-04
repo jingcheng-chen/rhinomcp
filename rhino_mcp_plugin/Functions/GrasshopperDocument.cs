@@ -123,11 +123,7 @@ public partial class RhinoMCPFunctions
                 ["outputs"] = ParamsToJson(component.Params.Output, includeConnections, includeValues, maxItems)
             };
             AddSpecialGrasshopperState(compInfo, component);
-            var componentMetadata = GraphMetadataToJson(component);
-            if (componentMetadata.Count > 0)
-            {
-                compInfo["metadata"] = componentMetadata;
-            }
+            AddGraphMetadataFields(compInfo, component);
             components.Add(compInfo);
         }
 
@@ -146,11 +142,7 @@ public partial class RhinoMCPFunctions
                 ["recipient_count"] = param.Recipients.Count
             };
             AddSpecialGrasshopperState(paramInfo, param);
-            var paramMetadata = GraphMetadataToJson(param);
-            if (paramMetadata.Count > 0)
-            {
-                paramInfo["metadata"] = paramMetadata;
-            }
+            AddGraphMetadataFields(paramInfo, param);
             if (includeValues)
             {
                 paramInfo["value_data"] = ParamVolatileDataToJson(param, maxItems);
@@ -158,12 +150,16 @@ public partial class RhinoMCPFunctions
             standaloneParams.Add(paramInfo);
         }
 
-        var groups = new JArray(doc.Objects.OfType<GH_Group>().Select(g => new JObject
+        var groups = new JArray(doc.Objects.OfType<GH_Group>().Select(g =>
         {
-            ["instance_id"] = g.InstanceGuid.ToString(),
-            ["nickname"] = g.NickName,
-            ["object_count"] = g.ObjectIDs.Count,
-            ["metadata"] = GraphMetadataToJson(g)
+            var groupInfo = new JObject
+            {
+                ["instance_id"] = g.InstanceGuid.ToString(),
+                ["nickname"] = g.NickName,
+                ["object_count"] = g.ObjectIDs.Count
+            };
+            AddGraphMetadataFields(groupInfo, g);
+            return groupInfo;
         }));
 
         return new JObject

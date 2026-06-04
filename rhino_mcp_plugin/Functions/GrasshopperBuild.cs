@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using Grasshopper.Kernel;
@@ -12,6 +13,8 @@ public partial class RhinoMCPFunctions
     [McpCommand("gh_build_graph")]
     public JObject GhBuildGraph(JObject parameters)
     {
+        var totalStopwatch = Stopwatch.StartNew();
+        var mutationStopwatch = Stopwatch.StartNew();
         var doc = GetActiveGrasshopperDocument(createIfMissing: true);
         bool recompute = OptionalBool(parameters, "recompute", true);
         bool rollbackOnError = OptionalBool(parameters, "rollback_on_error", true);
@@ -132,13 +135,18 @@ public partial class RhinoMCPFunctions
 
             var previewPolicy = ApplyPreviewPolicy(doc, aliases, parameters["preview_policy"] as JObject, created, graphId);
 
+            mutationStopwatch.Stop();
+            long solutionDurationMs = 0;
             if (recompute)
             {
                 foreach (var obj in created)
                 {
                     obj.ExpireSolution(true);
                 }
+                var solutionStopwatch = Stopwatch.StartNew();
                 RunGrasshopperSolution(doc, false);
+                solutionStopwatch.Stop();
+                solutionDurationMs = solutionStopwatch.ElapsedMilliseconds;
             }
 
             RedrawGrasshopperCanvas(startPosition);
@@ -158,18 +166,24 @@ public partial class RhinoMCPFunctions
             {
                 ["success"] = true,
                 ["component_count"] = createdComponents.Count,
+                ["created_component_count"] = createdComponents.Count,
+                ["created_group_count"] = groups.Count,
                 ["connection_count"] = connectionCount,
                 ["value_count"] = valueCount,
                 ["recomputed"] = recompute,
                 ["rolled_back"] = false,
                 ["graph_id"] = graphId,
+                ["mutation_duration_ms"] = mutationStopwatch.ElapsedMilliseconds,
+                ["solution_duration_ms"] = solutionDurationMs,
+                ["verification_duration_ms"] = 0,
+                ["duration_ms"] = totalStopwatch.ElapsedMilliseconds,
                 ["aliases"] = aliasIds,
                 ["components"] = components,
                 ["groups"] = groups,
                 ["layout"] = layoutResult,
                 ["preview_policy"] = previewPolicy,
                 ["summary"] = BuildGraphSummary(doc, created, graphId, null),
-                ["message"] = $"Built Grasshopper graph with {created.Count} component(s) and {connectionCount} connection(s)"
+                ["message"] = $"Built Grasshopper graph with {createdComponents.Count} component(s) and {connectionCount} connection(s)"
             };
         }
         catch
@@ -197,7 +211,7 @@ public partial class RhinoMCPFunctions
         return (layoutToken as JObject)?["enabled"]?.ToObject<bool?>() ?? true;
     }
 
-    private static void ApplyBuildGraphValue(
+    private static JObject ApplyBuildGraphValue(
         GH_Document doc,
         Dictionary<string, IGH_DocumentObject> aliases,
         JObject valueSpec)
@@ -208,7 +222,7 @@ public partial class RhinoMCPFunctions
 
         if (TrySetSpecialComponentValue(obj, value, valueSpec, out _))
         {
-            return;
+            return BuildSetOperationValueResult(obj, null);
         }
 
         var inputParam = FindInputParam(
@@ -221,6 +235,27 @@ public partial class RhinoMCPFunctions
         }
 
         SetParamValue(inputParam, value);
+        return BuildSetOperationValueResult(obj, inputParam, value);
+    }
+
+    private static JObject BuildSetOperationValueResult(IGH_DocumentObject obj, IGH_Param inputParam, JToken requestedValue = null)
+    {
+        var result = new JObject
+        {
+            ["target_id"] = obj.InstanceGuid.ToString(),
+            ["target"] = obj.NickName,
+            ["alias"] = GraphMetadataValue(obj, GhMetaAlias)
+        };
+
+        if (inputParam != null)
+        {
+            result["param_name"] = inputParam.Name;
+            result["value"] = requestedValue ?? JValue.CreateNull();
+            return result;
+        }
+
+        AddSpecialGrasshopperState(result, obj);
+        return result;
     }
 
     private static void ApplyBuildGraphConnection(

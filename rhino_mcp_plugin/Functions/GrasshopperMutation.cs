@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using Grasshopper.Kernel;
@@ -25,6 +26,8 @@ public partial class RhinoMCPFunctions
     [McpCommand("gh_mutate_graph")]
     public JObject GhMutateGraph(JObject parameters)
     {
+        var totalStopwatch = Stopwatch.StartNew();
+        var mutationStopwatch = Stopwatch.StartNew();
         var doc = GetActiveGrasshopperDocument(createIfMissing: true);
         string graphId = CreateGraphId(OptionalString(parameters, "graph_id"));
         bool recompute = OptionalBool(parameters, "recompute", true);
@@ -179,14 +182,10 @@ public partial class RhinoMCPFunctions
                     {
                         var obj = ResolveGraphObject(doc, aliases, OptionalString(operation, "target"), "set target");
                         Snapshot(obj);
-                        ApplyBuildGraphValue(doc, aliases, operation);
+                        var valueResult = ApplyBuildGraphValue(doc, aliases, operation);
                         Touch(obj);
-                        opResults.Add(new JObject
-                        {
-                            ["op"] = "set",
-                            ["target_id"] = obj.InstanceGuid.ToString(),
-                            ["target"] = obj.NickName
-                        });
+                        valueResult["op"] = "set";
+                        opResults.Add(valueResult);
                         break;
                     }
 
@@ -352,21 +351,35 @@ public partial class RhinoMCPFunctions
 
             previewResult = ApplyPreviewPolicy(doc, aliases, parameters["preview_policy"] as JObject, touched, graphId);
 
+            int createdComponentCount = created.Count(o => o is IGH_Component || o is IGH_Param);
+            int createdGroupCount = created.Count(o => o is GH_Group);
+            int deletedComponentCount = pendingDeletes.Count(o => o is IGH_Component || o is IGH_Param);
+            int deletedGroupCount = pendingDeletes.Count(o => o is GH_Group);
+
             if (pendingDeletes.Count > 0)
             {
                 doc.RemoveObjects(pendingDeletes, false);
             }
 
+            mutationStopwatch.Stop();
+            long solutionDurationMs = 0;
             if (recompute || forceRecompute)
             {
                 foreach (var obj in touched.Where(o => !pendingDeletes.Contains(o)))
                 {
                     obj.ExpireSolution(true);
                 }
+                var solutionStopwatch = Stopwatch.StartNew();
                 RunGrasshopperSolution(doc, false);
+                solutionStopwatch.Stop();
+                solutionDurationMs = solutionStopwatch.ElapsedMilliseconds;
             }
 
+            var verificationStopwatch = Stopwatch.StartNew();
             verification = VerifyGrasshopperOutputs(doc, aliases, parameters["verify"] as JObject);
+            verificationStopwatch.Stop();
+            long verificationSolutionDurationMs = verification?["solution_duration_ms"]?.ToObject<long>() ?? 0;
+            long totalSolutionDurationMs = solutionDurationMs + verificationSolutionDurationMs;
             var summaryObjects = touched
                 .Where(o => !pendingDeletes.Contains(o))
                 .Concat(GetGraphObjects(doc, graphId))
@@ -381,9 +394,17 @@ public partial class RhinoMCPFunctions
                 ["graph_id"] = graphId,
                 ["operation_count"] = operations.Count,
                 ["created_count"] = created.Count,
+                ["created_component_count"] = createdComponentCount,
+                ["created_group_count"] = createdGroupCount,
                 ["deleted_count"] = pendingDeletes.Count,
+                ["deleted_component_count"] = deletedComponentCount,
+                ["deleted_group_count"] = deletedGroupCount,
                 ["recomputed"] = recompute || forceRecompute,
                 ["rollback_on_error"] = rollbackOnError,
+                ["mutation_duration_ms"] = mutationStopwatch.ElapsedMilliseconds,
+                ["solution_duration_ms"] = totalSolutionDurationMs,
+                ["verification_duration_ms"] = verificationStopwatch.ElapsedMilliseconds,
+                ["duration_ms"] = totalStopwatch.ElapsedMilliseconds,
                 ["operations"] = opResults,
                 ["groups"] = groups,
                 ["layout"] = layoutResult,
