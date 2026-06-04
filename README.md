@@ -18,6 +18,8 @@ Grasshopper definitions for you, just by chatting.
 
 [Quick start](#quick-start) · [What it can do](#what-it-can-do) · [Usage](#usage) · [Examples](#example-prompts) · [Tool reference](#tool-reference)
 
+**English** · [简体中文](README.zh-CN.md)
+
 </div>
 
 ---
