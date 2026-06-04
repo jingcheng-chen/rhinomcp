@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_search_components.json",
+  "title": "gh_search_components",
+  "description": "Search installed Grasshopper components.",
+  "type": "object",
+  "properties": {
+    "query": { "type": "string", "minLength": 1 },
+    "category": { "type": "string", "minLength": 1 },
+    "limit": { "type": "integer", "minimum": 1, "maximum": 500, "default": 50 }
+  },
+  "additionalProperties": false
+}

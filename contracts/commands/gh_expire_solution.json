@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_expire_solution.json",
+  "title": "gh_expire_solution",
+  "description": "Expire all or selected Grasshopper objects.",
+  "type": "object",
+  "properties": {
+    "instance_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "nickname": { "type": "string", "minLength": 1 },
+    "component_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      },
+      "minItems": 1,
+      "maxItems": 200
+    },
+    "expire_downstream": { "type": "boolean", "default": true },
+    "recompute": { "type": "boolean", "default": false }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_get_parameter_value.json",
+  "title": "gh_get_parameter_value",
+  "description": "Read structured data from a Grasshopper output parameter.",
+  "type": "object",
+  "properties": {
+    "instance_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "nickname": { "type": "string", "minLength": 1 },
+    "output_index": { "type": "integer", "minimum": 0, "default": 0 },
+    "output_name": { "type": "string", "minLength": 1 },
+    "max_items": { "type": "integer", "minimum": 0, "maximum": 10000, "default": 100 }
+  },
+  "oneOf": [
+    { "required": ["instance_id"] },
+    { "required": ["nickname"] }
+  ],
+  "additionalProperties": false
+}

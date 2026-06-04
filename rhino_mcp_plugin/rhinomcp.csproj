@@ -17,9 +17,18 @@
   
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.8.0" />
+    <PackageReference Include="Grasshopper" Version="8.17.25066.7001" />
+    <PackageReference Include="Microsoft.WindowsDesktop.App.Ref" Version="8.0.6" GeneratePathProperty="true" ExcludeAssets="all" PrivateAssets="all" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RhinoCommon" Version="8.17.25066.7001" ExcludeAssets="runtime" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(PkgMicrosoft_WindowsDesktop_App_Ref)' != ''">
+    <Reference Include="System.Windows.Forms">
+      <HintPath>$(PkgMicrosoft_WindowsDesktop_App_Ref)/ref/net8.0/System.Windows.Forms.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
 
   <!--

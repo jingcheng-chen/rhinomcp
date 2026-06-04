@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_get_document_info.json",
+  "title": "gh_get_document_info",
+  "description": "Get information about the active Grasshopper document.",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}

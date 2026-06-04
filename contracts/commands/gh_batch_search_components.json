@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_batch_search_components.json",
+  "title": "gh_batch_search_components",
+  "description": "Search for multiple installed Grasshopper components.",
+  "type": "object",
+  "properties": {
+    "queries": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "maxItems": 100
+    }
+  },
+  "required": ["queries"],
+  "additionalProperties": false
+}

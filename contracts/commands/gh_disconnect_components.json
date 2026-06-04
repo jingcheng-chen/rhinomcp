@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_disconnect_components.json",
+  "title": "gh_disconnect_components",
+  "description": "Disconnect one Grasshopper wire or all sources from a target input.",
+  "type": "object",
+  "properties": {
+    "source_instance_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "source_nickname": { "type": "string", "minLength": 1 },
+    "source_output_index": { "type": "integer", "minimum": 0 },
+    "source_output_name": { "type": "string", "minLength": 1 },
+    "target_instance_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "target_nickname": { "type": "string", "minLength": 1 },
+    "target_input_index": { "type": "integer", "minimum": 0 },
+    "target_input_name": { "type": "string", "minLength": 1 },
+    "disconnect_all": { "type": "boolean", "default": false }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        { "required": ["target_instance_id"] },
+        { "required": ["target_nickname"] }
+      ]
+    },
+    {
+      "anyOf": [
+        { "required": ["source_instance_id"] },
+        { "required": ["source_nickname"] },
+        {
+          "properties": {
+            "disconnect_all": { "const": true }
+          },
+          "required": ["disconnect_all"]
+        }
+      ]
+    }
+  ],
+  "additionalProperties": false
+}

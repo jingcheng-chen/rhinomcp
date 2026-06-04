@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_get_available_components.json",
+  "title": "gh_get_available_components",
+  "description": "List installed Grasshopper components, optionally filtered by category.",
+  "type": "object",
+  "properties": {
+    "category": { "type": "string", "minLength": 1 },
+    "include_description": { "type": "boolean", "default": false },
+    "limit": { "type": "integer", "minimum": 1, "maximum": 2000, "default": 500 }
+  },
+  "additionalProperties": false
+}

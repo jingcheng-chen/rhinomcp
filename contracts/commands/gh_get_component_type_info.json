@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_get_component_type_info.json",
+  "title": "gh_get_component_type_info",
+  "description": "Inspect a Grasshopper component type before placing it.",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string", "minLength": 1 },
+    "guid": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    }
+  },
+  "anyOf": [
+    { "required": ["name"] },
+    { "required": ["guid"] }
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_connect_components.json",
+  "title": "gh_connect_components",
+  "description": "Connect one Grasshopper output to one input.",
+  "type": "object",
+  "properties": {
+    "source_instance_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "source_nickname": { "type": "string", "minLength": 1 },
+    "source_output_index": { "type": "integer", "minimum": 0 },
+    "source_output_name": { "type": "string", "minLength": 1 },
+    "target_instance_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "target_nickname": { "type": "string", "minLength": 1 },
+    "target_input_index": { "type": "integer", "minimum": 0 },
+    "target_input_name": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        { "required": ["source_instance_id"] },
+        { "required": ["source_nickname"] }
+      ]
+    },
+    {
+      "oneOf": [
+        { "required": ["target_instance_id"] },
+        { "required": ["target_nickname"] }
+      ]
+    }
+  ],
+  "additionalProperties": false
+}

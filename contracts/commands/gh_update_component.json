@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_update_component.json",
+  "title": "gh_update_component",
+  "description": "Update a Grasshopper object's nickname, position, enabled state, or preview state.",
+  "type": "object",
+  "properties": {
+    "instance_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "nickname": { "type": "string", "minLength": 1 },
+    "new_nickname": { "type": "string", "minLength": 1 },
+    "position": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "enabled": { "type": "boolean" },
+    "preview": { "type": "boolean" }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        { "required": ["instance_id"] },
+        { "required": ["nickname"] }
+      ]
+    },
+    {
+      "anyOf": [
+        { "required": ["new_nickname"] },
+        { "required": ["position"] },
+        { "required": ["enabled"] },
+        { "required": ["preview"] }
+      ]
+    }
+  ],
+  "additionalProperties": false
+}

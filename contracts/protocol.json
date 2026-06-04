@@ -46,7 +46,26 @@
             "intersect_curves",
             "split_curve",
             "run_command",
-            "get_commands"
+            "get_commands",
+            "gh_get_document_info",
+            "gh_search_components",
+            "gh_batch_search_components",
+            "gh_list_component_categories",
+            "gh_get_available_components",
+            "gh_get_component_type_info",
+            "gh_list_components",
+            "gh_get_component_info",
+            "gh_get_canvas_state",
+            "gh_run_solution",
+            "gh_expire_solution",
+            "gh_add_component",
+            "gh_delete_component",
+            "gh_connect_components",
+            "gh_disconnect_components",
+            "gh_set_parameter_value",
+            "gh_get_parameter_value",
+            "gh_update_component",
+            "gh_clear_canvas"
           ]
         },
         "params": {

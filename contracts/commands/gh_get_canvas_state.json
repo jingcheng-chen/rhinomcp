@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_get_canvas_state.json",
+  "title": "gh_get_canvas_state",
+  "description": "Get a graph snapshot of the active Grasshopper canvas.",
+  "type": "object",
+  "properties": {
+    "include_connections": { "type": "boolean", "default": true },
+    "include_values": { "type": "boolean", "default": false },
+    "max_items": { "type": "integer", "minimum": 0, "maximum": 1000, "default": 20 }
+  },
+  "additionalProperties": false
+}

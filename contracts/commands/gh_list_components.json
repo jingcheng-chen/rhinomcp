@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_list_components.json",
+  "title": "gh_list_components",
+  "description": "List Grasshopper components on the active canvas.",
+  "type": "object",
+  "properties": {
+    "category": { "type": "string", "minLength": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "limit": { "type": "integer", "minimum": 1, "maximum": 1000, "default": 100 }
+  },
+  "additionalProperties": false
+}

@@ -1305,6 +1305,207 @@ class TestExecutionSafetyGates:
         assert "RHINO_MCP_ENABLE_CSHARP" in result["message"]
 
 
+class TestGrasshopperTools:
+    """Tests for Grasshopper MCP wrappers."""
+
+    @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
+    def test_gh_readonly_discovery_tools(self, mock_get_conn):
+        from rhinomcp.tools.grasshopper_catalog import (
+            gh_batch_search_components,
+            gh_get_available_components,
+            gh_get_component_type_info,
+            gh_list_component_categories,
+            gh_search_components,
+        )
+        from rhinomcp.tools.grasshopper_components import gh_get_component_info, gh_list_components
+        from rhinomcp.tools.grasshopper_document import gh_get_canvas_state, gh_get_document_info
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"success": True}
+        mock_get_conn.return_value = mock_conn
+
+        gh_get_document_info(ctx=None)
+        gh_search_components(ctx=None, query="add", category="Maths", limit=5)
+        gh_batch_search_components(ctx=None, queries=["Circle", "Panel"])
+        gh_list_component_categories(ctx=None)
+        gh_get_available_components(ctx=None, category="Curve", include_description=True, limit=25)
+        gh_get_component_type_info(ctx=None, name="Circle")
+        gh_list_components(ctx=None, category="Curve", name="Circle", limit=10)
+        gh_get_component_info(ctx=None, instance_id="abc")
+        gh_get_canvas_state(ctx=None, include_connections=False, include_values=True, max_items=3)
+
+        calls = mock_conn.send_command.call_args_list
+        assert calls[0][0] == ("gh_get_document_info", {})
+        assert calls[1][0] == ("gh_search_components", {"limit": 5, "query": "add", "category": "Maths"})
+        assert calls[2][0] == ("gh_batch_search_components", {"queries": ["Circle", "Panel"]})
+        assert calls[3][0] == ("gh_list_component_categories", {})
+        assert calls[4][0] == (
+            "gh_get_available_components",
+            {"include_description": True, "limit": 25, "category": "Curve"},
+        )
+        assert calls[5][0] == ("gh_get_component_type_info", {"name": "Circle"})
+        assert calls[6][0] == ("gh_list_components", {"limit": 10, "category": "Curve", "name": "Circle"})
+        assert calls[7][0] == ("gh_get_component_info", {"instance_id": "abc"})
+        assert calls[8][0] == (
+            "gh_get_canvas_state",
+            {"include_connections": False, "include_values": True, "max_items": 3},
+        )
+
+    @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
+    def test_gh_solution_tools(self, mock_get_conn):
+        from rhinomcp.tools.grasshopper_solution import gh_expire_solution, gh_run_solution
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"success": True}
+        mock_get_conn.return_value = mock_conn
+
+        gh_run_solution(ctx=None, expire_all=True)
+        gh_expire_solution(
+            ctx=None,
+            nickname="Circle",
+            component_ids=["abc"],
+            expire_downstream=False,
+            recompute=True,
+        )
+
+        calls = mock_conn.send_command.call_args_list
+        assert calls[0][0] == ("gh_run_solution", {"expire_all": True})
+        assert calls[1][0] == (
+            "gh_expire_solution",
+            {
+                "expire_downstream": False,
+                "recompute": True,
+                "nickname": "Circle",
+                "component_ids": ["abc"],
+            },
+        )
+
+    @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
+    def test_gh_component_lifecycle_tools(self, mock_get_conn):
+        from rhinomcp.tools.grasshopper_components import (
+            gh_add_component,
+            gh_clear_canvas,
+            gh_delete_component,
+            gh_update_component,
+        )
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"success": True}
+        mock_get_conn.return_value = mock_conn
+
+        gh_add_component(
+            ctx=None,
+            component_name="Number Slider",
+            position=[10, 20],
+            nickname="Radius",
+            value=5,
+            min=0,
+            max=10,
+            decimals=1,
+        )
+        gh_update_component(
+            ctx=None,
+            instance_id="abc",
+            new_nickname="Radius2",
+            position=[30, 40],
+            enabled=False,
+            preview=False,
+        )
+        gh_delete_component(ctx=None, nickname="Radius2")
+        gh_clear_canvas(ctx=None, include_groups=False, recompute=True)
+
+        calls = mock_conn.send_command.call_args_list
+        assert calls[0][0] == (
+            "gh_add_component",
+            {
+                "position": [10, 20],
+                "component_name": "Number Slider",
+                "nickname": "Radius",
+                "value": 5,
+                "min": 0,
+                "max": 10,
+                "decimals": 1,
+            },
+        )
+        assert calls[1][0] == (
+            "gh_update_component",
+            {
+                "instance_id": "abc",
+                "new_nickname": "Radius2",
+                "position": [30, 40],
+                "enabled": False,
+                "preview": False,
+            },
+        )
+        assert calls[2][0] == ("gh_delete_component", {"nickname": "Radius2"})
+        assert calls[3][0] == ("gh_clear_canvas", {"include_groups": False, "recompute": True})
+
+    @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
+    def test_gh_connection_and_parameter_tools(self, mock_get_conn):
+        from rhinomcp.tools.grasshopper_connections import (
+            gh_connect_components,
+            gh_disconnect_components,
+        )
+        from rhinomcp.tools.grasshopper_parameters import (
+            gh_get_parameter_value,
+            gh_set_parameter_value,
+        )
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"success": True}
+        mock_get_conn.return_value = mock_conn
+
+        gh_connect_components(
+            ctx=None,
+            source_instance_id="src",
+            source_output_index=0,
+            target_nickname="Circle",
+            target_input_name="Radius",
+        )
+        gh_disconnect_components(ctx=None, target_instance_id="dst", disconnect_all=True)
+        gh_set_parameter_value(
+            ctx=None,
+            nickname="Radius",
+            value=7.5,
+            input_name="R",
+            min=0,
+            max=10,
+            decimals=2,
+        )
+        gh_get_parameter_value(ctx=None, instance_id="circle-id", output_name="C", max_items=12)
+
+        calls = mock_conn.send_command.call_args_list
+        assert calls[0][0] == (
+            "gh_connect_components",
+            {
+                "source_instance_id": "src",
+                "source_output_index": 0,
+                "target_nickname": "Circle",
+                "target_input_name": "Radius",
+            },
+        )
+        assert calls[1][0] == (
+            "gh_disconnect_components",
+            {"disconnect_all": True, "target_instance_id": "dst"},
+        )
+        assert calls[2][0] == (
+            "gh_set_parameter_value",
+            {
+                "value": 7.5,
+                "input_index": 0,
+                "nickname": "Radius",
+                "input_name": "R",
+                "min": 0,
+                "max": 10,
+                "decimals": 2,
+            },
+        )
+        assert calls[3][0] == (
+            "gh_get_parameter_value",
+            {"output_index": 0, "max_items": 12, "instance_id": "circle-id", "output_name": "C"},
+        )
+
+
 class TestToolAnnotations:
     """Source-level guard that the readOnly/destructive ToolAnnotations stay attached.
     A live-runtime check is fragile under pytest's import ordering, but the source
@@ -1325,6 +1526,10 @@ class TestToolAnnotations:
             "tools/get_selected_objects_info.py",
             "tools/get_commands.py",
             "tools/rhinoscript_docs.py",
+            "tools/grasshopper_catalog.py",
+            "tools/grasshopper_components.py",
+            "tools/grasshopper_document.py",
+            "tools/grasshopper_parameters.py",
         ]:
             src = self._module_source(rel)
             assert "readOnlyHint=True" in src, f"{rel} missing readOnlyHint annotation"
@@ -1336,6 +1541,7 @@ class TestToolAnnotations:
             "tools/run_command.py",
             "tools/execute_rhinoscript_python_code.py",
             "tools/execute_rhinocommon_csharp_code.py",
+            "tools/grasshopper_components.py",
         ]:
             src = self._module_source(rel)
             assert "destructiveHint=True" in src, f"{rel} missing destructiveHint annotation"
@@ -1364,6 +1570,11 @@ class TestPackageApi:
             "undo",
             "redo",
             "analyze_objects",
+            "gh_get_document_info",
+            "gh_search_components",
+            "gh_add_component",
+            "gh_run_solution",
+            "gh_clear_canvas",
         ]:
             assert hasattr(rhinomcp, name), f"rhinomcp.{name} missing — re-export regression"
             assert callable(getattr(rhinomcp, name))

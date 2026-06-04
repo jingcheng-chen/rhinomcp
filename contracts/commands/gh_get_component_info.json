@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_get_component_info.json",
+  "title": "gh_get_component_info",
+  "description": "Get detailed metadata for one Grasshopper canvas object.",
+  "type": "object",
+  "properties": {
+    "instance_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "nickname": { "type": "string", "minLength": 1 }
+  },
+  "oneOf": [
+    { "required": ["instance_id"] },
+    { "required": ["nickname"] }
+  ],
+  "additionalProperties": false
+}

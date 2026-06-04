@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_clear_canvas.json",
+  "title": "gh_clear_canvas",
+  "description": "Clear objects from the active Grasshopper canvas.",
+  "type": "object",
+  "properties": {
+    "include_groups": { "type": "boolean", "default": true },
+    "recompute": { "type": "boolean", "default": false }
+  },
+  "additionalProperties": false
+}

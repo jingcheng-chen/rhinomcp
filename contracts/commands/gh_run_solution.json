@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_run_solution.json",
+  "title": "gh_run_solution",
+  "description": "Run the active Grasshopper solution.",
+  "type": "object",
+  "properties": {
+    "expire_all": { "type": "boolean", "default": false }
+  },
+  "additionalProperties": false
+}

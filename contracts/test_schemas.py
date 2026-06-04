@@ -240,6 +240,25 @@ def test_new_commands():
         ("commands/analyze_objects.json", {"id": GUID}),
         ("commands/analyze_objects.json", {"object_ids": [GUID]}),
         ("commands/analyze_objects.json", {"selected": True}),
+        ("commands/gh_get_document_info.json", {}),
+        ("commands/gh_search_components.json", {"query": "addition", "limit": 10}),
+        ("commands/gh_batch_search_components.json", {"queries": ["Circle", "Number Slider"]}),
+        ("commands/gh_list_component_categories.json", {}),
+        ("commands/gh_get_available_components.json", {"category": "Curve", "include_description": True, "limit": 25}),
+        ("commands/gh_get_component_type_info.json", {"name": "Circle"}),
+        ("commands/gh_list_components.json", {"category": "Curve", "limit": 20}),
+        ("commands/gh_get_component_info.json", {"instance_id": GUID}),
+        ("commands/gh_get_canvas_state.json", {"include_connections": True, "include_values": False, "max_items": 5}),
+        ("commands/gh_run_solution.json", {"expire_all": True}),
+        ("commands/gh_expire_solution.json", {"component_ids": [GUID], "recompute": True}),
+        ("commands/gh_add_component.json", {"component_name": "Number Slider", "position": [20, 40], "nickname": "Radius", "value": 5, "min": 0, "max": 10}),
+        ("commands/gh_delete_component.json", {"nickname": "Radius"}),
+        ("commands/gh_connect_components.json", {"source_instance_id": GUID, "source_output_index": 0, "target_instance_id": GUID, "target_input_name": "Radius"}),
+        ("commands/gh_disconnect_components.json", {"target_instance_id": GUID, "target_input_index": 0, "disconnect_all": True}),
+        ("commands/gh_set_parameter_value.json", {"nickname": "Radius", "value": 7.5, "input_index": 0}),
+        ("commands/gh_get_parameter_value.json", {"instance_id": GUID, "output_index": 0, "max_items": 10}),
+        ("commands/gh_update_component.json", {"instance_id": GUID, "new_nickname": "Radius2", "position": [100, 200], "preview": False}),
+        ("commands/gh_clear_canvas.json", {"include_groups": True, "recompute": False}),
         ("commands/undo.json", {}),
         ("commands/undo.json", {"steps": 3}),
         ("commands/redo.json", {}),
@@ -458,6 +477,21 @@ def test_invalid_examples():
         ("commands/analyze_objects.json", {"object_ids": []}, "analyze_objects empty object_ids"),
         ("commands/analyze_objects.json", {"id": "12345678-1234-1234-1234-123456789012", "selected": True}, "analyze_objects mixed selectors"),
         ("commands/analyze_objects.json", {"selected": False}, "analyze_objects selected=false"),
+        ("commands/gh_batch_search_components.json", {"queries": []}, "gh_batch_search_components empty queries"),
+        ("commands/gh_get_component_type_info.json", {}, "gh_get_component_type_info missing selector"),
+        ("commands/gh_get_component_info.json", {}, "gh_get_component_info missing selector"),
+        ("commands/gh_get_canvas_state.json", {"max_items": -1}, "gh_get_canvas_state negative max_items"),
+        ("commands/gh_run_solution.json", {"timeout_ms": 1000}, "gh_run_solution unknown timeout field"),
+        ("commands/gh_add_component.json", {"component_guid": "12345678-1234-1234-1234-123456789012"}, "gh_add_component guid without name"),
+        ("commands/gh_add_component.json", {"component_name": "Circle", "position": [1, 2, 3]}, "gh_add_component bad position"),
+        ("commands/gh_delete_component.json", {}, "gh_delete_component missing selector"),
+        ("commands/gh_connect_components.json", {"source_instance_id": "bad", "target_instance_id": "12345678-1234-1234-1234-123456789012"}, "gh_connect_components bad source guid"),
+        ("commands/gh_disconnect_components.json", {"disconnect_all": True}, "gh_disconnect_components missing target"),
+        ("commands/gh_disconnect_components.json", {"target_instance_id": "12345678-1234-1234-1234-123456789012"}, "gh_disconnect_components missing source when not disconnect_all"),
+        ("commands/gh_set_parameter_value.json", {"nickname": "Radius"}, "gh_set_parameter_value missing value"),
+        ("commands/gh_get_parameter_value.json", {"nickname": "Radius", "output_index": -1}, "gh_get_parameter_value negative output"),
+        ("commands/gh_update_component.json", {"instance_id": "12345678-1234-1234-1234-123456789012"}, "gh_update_component no updates"),
+        ("commands/gh_clear_canvas.json", {"confirm": True}, "gh_clear_canvas unknown field"),
     ]
 
     all_rejected = True
@@ -500,7 +534,9 @@ def test_contract_synchronization_across_tiers():
 
     # Python tools: scrape send_command("<name>") calls. We accept the
     # simple positional form because every wrapper uses it.
-    py_pat = re.compile(r"""send_command\(\s*["']([a-z_][a-z0-9_]*)["']""")
+    py_pat = re.compile(
+        r"""(?:send_command|_send|send_grasshopper_command)\(\s*["']([a-z_][a-z0-9_]*)["']"""
+    )
     py_cmds: set[str] = set()
     tools_dir = repo_root / "rhino_mcp_server" / "src" / "rhinomcp" / "tools"
     for p in tools_dir.glob("*.py"):
@@ -601,6 +637,14 @@ def test_protocol_envelope():
         "loft", "extrude_curve", "sweep1", "offset_curve", "pipe",
         "project_curve", "intersect_curves", "split_curve",
         "run_command", "get_commands",
+        "gh_get_document_info", "gh_search_components",
+        "gh_batch_search_components", "gh_list_component_categories",
+        "gh_get_available_components", "gh_get_component_type_info",
+        "gh_list_components", "gh_get_component_info",
+        "gh_get_canvas_state", "gh_run_solution", "gh_expire_solution",
+        "gh_add_component", "gh_delete_component", "gh_connect_components",
+        "gh_disconnect_components", "gh_set_parameter_value",
+        "gh_get_parameter_value", "gh_update_component", "gh_clear_canvas",
     ]
 
     all_passed = True

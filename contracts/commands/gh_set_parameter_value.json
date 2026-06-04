@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_set_parameter_value.json",
+  "title": "gh_set_parameter_value",
+  "description": "Set a Grasshopper slider, toggle, panel, value list, or input parameter value.",
+  "type": "object",
+  "properties": {
+    "instance_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "nickname": { "type": "string", "minLength": 1 },
+    "value": {},
+    "input_index": { "type": "integer", "minimum": 0, "default": 0 },
+    "input_name": { "type": "string", "minLength": 1 },
+    "min": { "type": "number" },
+    "max": { "type": "number" },
+    "decimals": { "type": "integer", "minimum": 0, "maximum": 12 }
+  },
+  "required": ["value"],
+  "oneOf": [
+    { "required": ["instance_id"] },
+    { "required": ["nickname"] }
+  ],
+  "additionalProperties": false
+}

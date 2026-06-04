@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_list_component_categories.json",
+  "title": "gh_list_component_categories",
+  "description": "List installed Grasshopper component categories.",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
