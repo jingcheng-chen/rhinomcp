@@ -21,6 +21,7 @@ def gh_build_graph(
     graph_id: Optional[str] = None,
     recompute: bool = True,
     rollback_on_error: bool = True,
+    open_canvas: bool = True,
 ) -> Dict[str, Any]:
     """Create and wire a Grasshopper graph in one batched canvas operation.
 
@@ -28,17 +29,22 @@ def gh_build_graph(
     aliases in connections, values, groups, and preview_policy; the response
     returns aliases mapped to generated instance IDs.
 
+    Number Slider components support value/min/max/decimals. Layout supports
+    max_columns to wrap long dataflow chains into a compact readable canvas.
+
     Minimal shape:
     components=[
-        {"alias": "a", "component_name": "Number Slider", "value": 3.5},
+        {"alias": "a", "component_name": "Number Slider", "value": 3.5, "min": 0, "max": 10},
         {"alias": "add", "component_name": "Addition"},
     ],
-    connections=[{"source": "a", "target": "add", "target_input_index": 0}]
+    connections=[{"source": "a", "target": "add", "target_input_index": 0}],
+    layout={"enabled": True, "max_columns": 6}
     """
     params: Dict[str, Any] = {
         "components": components,
         "recompute": recompute,
         "rollback_on_error": rollback_on_error,
+        "open_canvas": open_canvas,
     }
     if graph_id is not None:
         params["graph_id"] = graph_id

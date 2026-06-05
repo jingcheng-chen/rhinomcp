@@ -152,6 +152,62 @@ public partial class RhinoMCPFunctions
             throw new ArgumentException("Either name or guid is required.");
         }
 
+        return BuildComponentTypeInfo(name, guid);
+    }
+
+    [McpCommand("gh_batch_get_component_type_info", ReadOnly = true)]
+    public JObject GhBatchGetComponentTypeInfo(JObject parameters)
+    {
+        var specs = parameters["components"] as JArray
+            ?? throw new ArgumentException("components is required.");
+        if (specs.Count == 0)
+        {
+            throw new ArgumentException("components must contain at least one component selector.");
+        }
+
+        var results = new JArray();
+        var notFound = new JArray();
+        int foundCount = 0;
+
+        foreach (var specToken in specs)
+        {
+            if (specToken is not JObject spec)
+            {
+                throw new ArgumentException("Each component selector must be an object.");
+            }
+
+            string name = OptionalString(spec, "name") ?? OptionalString(spec, "component_name");
+            string guid = OptionalString(spec, "guid") ?? OptionalString(spec, "component_guid");
+            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(guid))
+            {
+                throw new ArgumentException("Each component selector requires name, component_name, guid, or component_guid.");
+            }
+
+            var result = BuildComponentTypeInfo(name, guid);
+            result["query"] = spec.DeepClone();
+            results.Add(result);
+            if (result["success"]?.ToObject<bool>() == true)
+            {
+                foundCount++;
+            }
+            else
+            {
+                notFound.Add(spec.DeepClone());
+            }
+        }
+
+        return new JObject
+        {
+            ["success"] = foundCount == specs.Count,
+            ["found_count"] = foundCount,
+            ["total_queries"] = specs.Count,
+            ["results"] = results,
+            ["not_found"] = notFound
+        };
+    }
+
+    private static JObject BuildComponentTypeInfo(string name, string guid)
+    {
         var proxy = FindComponentProxy(name, guid);
         if (proxy == null)
         {

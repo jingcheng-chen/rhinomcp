@@ -98,7 +98,9 @@ public partial class RhinoMCPFunctions
             ["optional"] = param.Optional,
             ["source_count"] = param.SourceCount,
             ["recipient_count"] = param.Recipients.Count,
-            ["has_data"] = param.VolatileDataCount > 0
+            ["has_data"] = param.VolatileDataCount > 0 || param.VolatileData.DataCount > 0,
+            ["data_count"] = param.VolatileData.DataCount,
+            ["branch_count"] = param.VolatileData.PathCount
         };
 
         if (includeSources && param.SourceCount > 0)

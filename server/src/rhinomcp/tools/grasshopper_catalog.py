@@ -79,3 +79,19 @@ def gh_get_component_type_info(
     if guid:
         params["guid"] = guid
     return send_grasshopper_command("gh_get_component_type_info", params)
+
+
+@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+def gh_batch_get_component_type_info(
+    ctx: Context,
+    components: List[Dict[str, str]],
+) -> Dict[str, Any]:
+    """Inspect multiple Grasshopper component types and I/O maps in one call.
+
+    Each selector needs name/component_name or guid/component_guid. Prefer GUIDs
+    when search returns ambiguous names.
+    """
+    return send_grasshopper_command(
+        "gh_batch_get_component_type_info",
+        {"components": components},
+    )

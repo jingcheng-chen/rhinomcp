@@ -37,14 +37,27 @@
           },
           "nickname": { "type": "string", "minLength": 1 },
           "role": { "type": "string", "minLength": 1 },
-          "value": {},
-          "min": { "type": "number" },
-          "max": { "type": "number" },
-          "decimals": { "type": "integer", "minimum": 0, "maximum": 12 },
-          "content": { "type": "string" },
-          "text": { "type": "string" },
-          "preview": { "type": "boolean" },
-          "enabled": { "type": "boolean" }
+          "value": {
+            "description": "Initial value for special controls such as Number Slider, Boolean Toggle, Panel, or Value List. Sliders accept numbers; toggles accept booleans; panels accept strings."
+          },
+          "min": {
+            "type": "number",
+            "description": "Number Slider minimum. Set this when value may be outside Grasshopper's default 0-1 range."
+          },
+          "max": {
+            "type": "number",
+            "description": "Number Slider maximum. Set this when value may be outside Grasshopper's default 0-1 range."
+          },
+          "decimals": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 12,
+            "description": "Number Slider decimal places."
+          },
+          "content": { "type": "string", "description": "Panel text content." },
+          "text": { "type": "string", "description": "Alias for Panel text content." },
+          "preview": { "type": "boolean", "description": "Whether this object should show Grasshopper preview." },
+          "enabled": { "type": "boolean", "description": "Whether this object should be enabled for solving." }
         },
         "required": ["alias"],
         "anyOf": [
@@ -89,6 +102,12 @@
             "include_groups": { "type": "boolean", "default": false },
             "x_spacing": { "type": "number", "exclusiveMinimum": 0, "default": 220 },
             "y_spacing": { "type": "number", "exclusiveMinimum": 0, "default": 90 },
+            "max_columns": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Wrap graph-depth layout after this many columns to avoid a very long horizontal canvas."
+            },
             "start_position": { "$ref": "#/$defs/position" }
           }
         }
@@ -105,6 +124,11 @@
     "rollback_on_error": {
       "type": "boolean",
       "default": true
+    },
+    "open_canvas": {
+      "type": "boolean",
+      "default": true,
+      "description": "Open Grasshopper and make the working document active before mutating, so live preview and screenshots can see the generated definition."
     }
   },
   "required": ["components"],
@@ -198,12 +222,14 @@
       "additionalProperties": false,
       "properties": {
         "target": { "$ref": "#/$defs/selector" },
-        "value": {},
+        "value": {
+          "description": "Value to apply. Sliders accept numbers and may also use min/max/decimals; toggles accept booleans; panels accept strings."
+        },
         "input_index": { "type": "integer", "minimum": 0 },
         "input_name": { "type": "string", "minLength": 1 },
-        "min": { "type": "number" },
-        "max": { "type": "number" },
-        "decimals": { "type": "integer", "minimum": 0, "maximum": 12 }
+        "min": { "type": "number", "description": "Number Slider minimum." },
+        "max": { "type": "number", "description": "Number Slider maximum." },
+        "decimals": { "type": "integer", "minimum": 0, "maximum": 12, "description": "Number Slider decimal places." }
       },
       "required": ["target", "value"]
     }
@@ -233,7 +259,8 @@
           "target_input_index": 0
         }
       ],
-      "layout": { "enabled": true },
+      "layout": { "enabled": true, "max_columns": 6 },
+      "open_canvas": true,
       "recompute": true
     }
   ]

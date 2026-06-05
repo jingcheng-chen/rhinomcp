@@ -82,6 +82,7 @@ READONLY_RETRY_COMMANDS = {
     "gh_list_component_categories",
     "gh_get_available_components",
     "gh_get_component_type_info",
+    "gh_batch_get_component_type_info",
     "gh_get_graph",
     "gh_list_components",
     "gh_get_component_info",

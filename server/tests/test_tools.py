@@ -1330,6 +1330,7 @@ class TestGrasshopperTools:
     @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
     def test_gh_readonly_discovery_tools(self, mock_get_conn):
         from rhinomcp.tools.grasshopper_catalog import (
+            gh_batch_get_component_type_info,
             gh_batch_search_components,
             gh_get_available_components,
             gh_get_component_type_info,
@@ -1350,6 +1351,10 @@ class TestGrasshopperTools:
         gh_list_component_categories(ctx=None)
         gh_get_available_components(ctx=None, category="Curve", include_description=True, limit=25)
         gh_get_component_type_info(ctx=None, name="Circle")
+        gh_batch_get_component_type_info(
+            ctx=None,
+            components=[{"name": "Circle"}, {"guid": "12345678-1234-1234-1234-123456789012"}],
+        )
         gh_list_components(ctx=None, category="Curve", name="Circle", limit=10)
         gh_get_component_info(ctx=None, instance_id="abc")
         gh_get_canvas_state(ctx=None, include_connections=False, include_values=True, max_items=3)
@@ -1368,13 +1373,17 @@ class TestGrasshopperTools:
             {"include_description": True, "limit": 25, "category": "Curve"},
         )
         assert calls[5][0] == ("gh_get_component_type_info", {"name": "Circle"})
-        assert calls[6][0] == ("gh_list_components", {"limit": 10, "category": "Curve", "name": "Circle"})
-        assert calls[7][0] == ("gh_get_component_info", {"instance_id": "abc"})
-        assert calls[8][0] == (
+        assert calls[6][0] == (
+            "gh_batch_get_component_type_info",
+            {"components": [{"name": "Circle"}, {"guid": "12345678-1234-1234-1234-123456789012"}]},
+        )
+        assert calls[7][0] == ("gh_list_components", {"limit": 10, "category": "Curve", "name": "Circle"})
+        assert calls[8][0] == ("gh_get_component_info", {"instance_id": "abc"})
+        assert calls[9][0] == (
             "gh_get_canvas_state",
             {"include_connections": False, "include_values": True, "max_items": 3},
         )
-        assert calls[9][0] == (
+        assert calls[10][0] == (
             "gh_get_graph",
             {"graph_id": "TestGraph", "include_values": True, "max_items": 5},
         )
@@ -1445,7 +1454,7 @@ class TestGrasshopperTools:
                 }
             ],
             preview_updates={"enabled": False},
-            layout={"enabled": True, "start_position": [40, 40]},
+            layout={"enabled": True, "start_position": [40, 40], "max_columns": 6},
             recompute=False,
             rollback_on_error=True,
         )
@@ -1480,9 +1489,10 @@ class TestGrasshopperTools:
                     }
                 ],
                 "preview_updates": {"enabled": False},
-                "layout": {"enabled": True, "start_position": [40, 40]},
+                "layout": {"enabled": True, "start_position": [40, 40], "max_columns": 6},
                 "recompute": False,
                 "rollback_on_error": True,
+                "open_canvas": True,
             },
         )
 
@@ -1521,7 +1531,7 @@ class TestGrasshopperTools:
             ],
             preview_policy={"mode": "only", "targets": ["cap"]},
             groups=[{"name": "Output", "targets": ["cap"], "color": [180, 220, 255]}],
-            layout={"enabled": True, "targets": ["height", "cap"]},
+            layout={"enabled": True, "targets": ["height", "cap"], "max_columns": 6},
             verify={
                 "run_solution": True,
                 "outputs": [
@@ -1566,10 +1576,11 @@ class TestGrasshopperTools:
                 "fail_on_verification_error": True,
                 "recompute": True,
                 "rollback_on_error": True,
+                "open_canvas": True,
                 "graph_id": "PointAttractor_20260604",
                 "preview_policy": {"mode": "only", "targets": ["cap"]},
                 "groups": [{"name": "Output", "targets": ["cap"], "color": [180, 220, 255]}],
-                "layout": {"enabled": True, "targets": ["height", "cap"]},
+                "layout": {"enabled": True, "targets": ["height", "cap"], "max_columns": 6},
                 "verify": {
                     "run_solution": True,
                     "outputs": [

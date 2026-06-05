@@ -161,6 +161,23 @@ public partial class RhinoMCPFunctions
                 }
             });
 
+            Record("gh_batch_get_component_type_info", () =>
+            {
+                var batchInfo = GhBatchGetComponentTypeInfo(new JObject
+                {
+                    ["components"] = new JArray
+                    {
+                        new JObject { ["name"] = "Number Slider" },
+                        new JObject { ["name"] = "Addition" },
+                        new JObject { ["name"] = "Panel" }
+                    }
+                });
+                if ((batchInfo["found_count"]?.ToObject<int>() ?? 0) != 3)
+                {
+                    throw new InvalidOperationException("Batch type info did not resolve the expected components.");
+                }
+            });
+
             Record("gh_batch_search_components", () =>
             {
                 var batch = GhBatchSearchComponents(new JObject
@@ -223,7 +240,8 @@ public partial class RhinoMCPFunctions
                         ["enabled"] = true,
                         ["start_position"] = new JArray { 40, 260 },
                         ["x_spacing"] = 220,
-                        ["y_spacing"] = 90
+                        ["y_spacing"] = 90,
+                        ["max_columns"] = 2
                     },
                     ["recompute"] = true,
                     ["rollback_on_error"] = true
@@ -240,6 +258,14 @@ public partial class RhinoMCPFunctions
                 if ((graph["layout"]?["layout_count"]?.ToObject<int>() ?? 0) != 4)
                 {
                     throw new InvalidOperationException("gh_build_graph did not lay out the expected components.");
+                }
+                if ((graph["layout"]?["max_columns"]?.ToObject<int>() ?? 0) != 2)
+                {
+                    throw new InvalidOperationException("gh_build_graph did not apply wrapped layout max_columns.");
+                }
+                if ((graph["diagnostics"]?["object_count"]?.ToObject<int>() ?? 0) != 4)
+                {
+                    throw new InvalidOperationException("gh_build_graph did not return diagnostics for created components.");
                 }
 
                 var aliases = graph["aliases"] as JObject;
@@ -312,7 +338,8 @@ public partial class RhinoMCPFunctions
                     {
                         ["enabled"] = true,
                         ["targets"] = new JArray { "bg_a", "bg_b", "bg_add", "mut_panel" },
-                        ["start_position"] = new JArray { 40, 430 }
+                        ["start_position"] = new JArray { 40, 430 },
+                        ["max_columns"] = 2
                     },
                     ["verify"] = new JObject
                     {
@@ -343,6 +370,14 @@ public partial class RhinoMCPFunctions
                 if (mutation["verified"]?.ToObject<bool>() != true)
                 {
                     throw new InvalidOperationException("gh_mutate_graph did not expose top-level verified=true.");
+                }
+                if ((mutation["layout"]?["max_columns"]?.ToObject<int>() ?? 0) != 2)
+                {
+                    throw new InvalidOperationException("gh_mutate_graph did not apply wrapped layout max_columns.");
+                }
+                if ((mutation["diagnostics"]?["object_count"]?.ToObject<int>() ?? 0) < 1)
+                {
+                    throw new InvalidOperationException("gh_mutate_graph did not return diagnostics.");
                 }
 
                 var operations = mutation["operations"] as JArray;

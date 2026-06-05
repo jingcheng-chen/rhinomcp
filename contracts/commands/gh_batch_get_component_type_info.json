@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_batch_get_component_type_info.json",
+  "title": "gh_batch_get_component_type_info",
+  "description": "Inspect multiple Grasshopper component types in one call, including input/output index maps. Each selector needs name/component_name or guid/component_guid; GUID takes precedence when both are supplied.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Grasshopper component display name or common alias."
+          },
+          "component_name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Alias for name."
+          },
+          "guid": {
+            "$ref": "#/$defs/guid",
+            "description": "Grasshopper component GUID."
+          },
+          "component_guid": {
+            "$ref": "#/$defs/guid",
+            "description": "Alias for guid."
+          }
+        },
+        "anyOf": [
+          { "required": ["name"] },
+          { "required": ["component_name"] },
+          { "required": ["guid"] },
+          { "required": ["component_guid"] }
+        ]
+      }
+    }
+  },
+  "required": ["components"],
+  "$defs": {
+    "guid": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    }
+  }
+}

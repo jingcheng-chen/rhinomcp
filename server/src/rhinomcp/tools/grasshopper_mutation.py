@@ -20,13 +20,19 @@ def gh_mutate_graph(
     fail_on_verification_error: bool = False,
     recompute: bool = True,
     rollback_on_error: bool = True,
+    open_canvas: bool = True,
 ) -> Dict[str, Any]:
-    """Mutate an existing or new Grasshopper graph in one batched operation."""
+    """Mutate an existing or new Grasshopper graph in one batched operation.
+
+    Use layout={"enabled": True, "max_columns": 6} to wrap long generated
+    graphs into a more compact canvas.
+    """
     params: Dict[str, Any] = {
         "operations": operations,
         "fail_on_verification_error": fail_on_verification_error,
         "recompute": recompute,
         "rollback_on_error": rollback_on_error,
+        "open_canvas": open_canvas,
     }
     if graph_id is not None:
         params["graph_id"] = graph_id

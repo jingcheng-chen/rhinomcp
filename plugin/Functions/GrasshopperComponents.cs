@@ -378,7 +378,12 @@ public partial class RhinoMCPFunctions
         return Enumerable.Empty<IGH_Param>();
     }
 
-    private static JObject ApplyGrasshopperLayout(List<IGH_DocumentObject> objects, PointF start, float xSpacing, float ySpacing)
+    private static JObject ApplyGrasshopperLayout(
+        List<IGH_DocumentObject> objects,
+        PointF start,
+        float xSpacing,
+        float ySpacing,
+        int maxColumns = 0)
     {
         var objectSet = new HashSet<IGH_DocumentObject>(objects);
         var incoming = objects.ToDictionary(o => o, _ => new List<IGH_DocumentObject>());
@@ -411,11 +416,13 @@ public partial class RhinoMCPFunctions
 
         if (edgeCount == 0)
         {
-            int rows = Math.Max(1, (int)Math.Ceiling(Math.Sqrt(ordered.Count)));
+            int rows = maxColumns > 0
+                ? Math.Max(1, (int)Math.Ceiling((double)ordered.Count / maxColumns))
+                : Math.Max(1, (int)Math.Ceiling(Math.Sqrt(ordered.Count)));
             for (int i = 0; i < ordered.Count; i++)
             {
-                int column = i / rows;
-                int row = i % rows;
+                int column = maxColumns > 0 ? i % maxColumns : i / rows;
+                int row = maxColumns > 0 ? i / maxColumns : i % rows;
                 SetGrasshopperObjectPosition(
                     ordered[i],
                     new PointF(start.X + column * xSpacing, start.Y + row * ySpacing));
@@ -448,14 +455,35 @@ public partial class RhinoMCPFunctions
                 return result;
             }
 
-            foreach (var group in ordered.GroupBy(LevelOf).OrderBy(g => g.Key))
+            var levelGroups = ordered.GroupBy(LevelOf).OrderBy(g => g.Key).ToList();
+            var bandOffsets = new Dictionary<int, int>();
+            if (maxColumns > 0)
             {
+                var bandHeights = levelGroups
+                    .GroupBy(g => g.Key / maxColumns)
+                    .OrderBy(g => g.Key)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Max(levelGroup => levelGroup.Count()));
+                int rowOffset = 0;
+                foreach (var pair in bandHeights)
+                {
+                    bandOffsets[pair.Key] = rowOffset;
+                    rowOffset += pair.Value + 1;
+                }
+            }
+
+            foreach (var group in levelGroups)
+            {
+                int column = maxColumns > 0 ? group.Key % maxColumns : group.Key;
+                int band = maxColumns > 0 ? group.Key / maxColumns : 0;
+                int rowOffset = maxColumns > 0 ? bandOffsets[band] : 0;
                 int row = 0;
                 foreach (var obj in group)
                 {
                     SetGrasshopperObjectPosition(
                         obj,
-                        new PointF(start.X + group.Key * xSpacing, start.Y + row * ySpacing));
+                        new PointF(start.X + column * xSpacing, start.Y + (rowOffset + row) * ySpacing));
                     row++;
                 }
             }
@@ -469,10 +497,16 @@ public partial class RhinoMCPFunctions
             ["position"] = PivotToJson(o)
         }));
 
+        string style = edgeCount == 0
+            ? (maxColumns > 0 ? "grid_wrapped" : "grid")
+            : (maxColumns > 0 ? "graph_depth_wrapped" : "graph_depth");
+
         return new JObject
         {
             ["layout_count"] = objects.Count,
             ["edge_count"] = edgeCount,
+            ["max_columns"] = maxColumns > 0 ? JToken.FromObject(maxColumns) : JValue.CreateNull(),
+            ["style"] = style,
             ["positions"] = positions
         };
     }

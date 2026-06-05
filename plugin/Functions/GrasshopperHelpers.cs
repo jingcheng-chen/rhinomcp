@@ -43,8 +43,17 @@ public partial class RhinoMCPFunctions
         ["ListItem"] = "List Item"
     };
 
-    private static GH_Document GetActiveGrasshopperDocument(bool required = true, bool createIfMissing = false)
+    private static GH_Document GetActiveGrasshopperDocument(
+        bool required = true,
+        bool createIfMissing = false,
+        bool openCanvas = false,
+        bool makeActive = false)
     {
+        if (openCanvas)
+        {
+            EnsureGrasshopperCanvasOpen();
+        }
+
         var canvas = Instances.ActiveCanvas;
         var doc = canvas?.Document;
         var server = Instances.DocumentServer;
@@ -67,7 +76,18 @@ public partial class RhinoMCPFunctions
             }
         }
 
-        if (doc != null && canvas != null && (canvas.Document == null || createIfMissing))
+        if (doc != null && makeActive)
+        {
+            server.PromoteDocument(doc);
+        }
+
+        if (doc != null && openCanvas && canvas == null)
+        {
+            EnsureGrasshopperCanvasOpen();
+            canvas = Instances.ActiveCanvas;
+        }
+
+        if (doc != null && canvas != null && (canvas.Document == null || createIfMissing || makeActive))
         {
             canvas.Document = doc;
             RedrawGrasshopperCanvas();
@@ -78,6 +98,18 @@ public partial class RhinoMCPFunctions
             throw new InvalidOperationException("No active Grasshopper document");
         }
         return doc;
+    }
+
+    private static bool EnsureGrasshopperCanvasOpen()
+    {
+        if (Instances.ActiveCanvas != null)
+        {
+            return true;
+        }
+
+        RhinoApp.RunScript("_Grasshopper", false);
+        RhinoApp.Wait();
+        return Instances.ActiveCanvas != null;
     }
 
     private static void RedrawGrasshopperCanvas(PointF? focus = null)

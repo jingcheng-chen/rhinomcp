@@ -647,6 +647,104 @@ public partial class RhinoMCPFunctions
         return item is IGH_Goo goo ? goo.TypeName : item?.GetType().Name ?? "Null";
     }
 
+    private static JObject BuildGrasshopperDiagnostics(IEnumerable<IGH_DocumentObject> objects)
+    {
+        var objectList = objects?
+            .Where(o => o != null && o is not GH_Group)
+            .Distinct()
+            .ToList() ?? new List<IGH_DocumentObject>();
+
+        var diagnostics = new JArray();
+        int warningCount = 0;
+        int errorCount = 0;
+        int outputCount = 0;
+        int outputsWithData = 0;
+        int totalOutputDataCount = 0;
+
+        foreach (var obj in objectList)
+        {
+            var messages = obj is IGH_ActiveObject activeObject
+                ? RuntimeMessagesToJson(activeObject)
+                : new JArray();
+            warningCount += messages.Count(m => m?["level"]?.ToString() == GH_RuntimeMessageLevel.Warning.ToString());
+            errorCount += messages.Count(m => m?["level"]?.ToString() == GH_RuntimeMessageLevel.Error.ToString());
+
+            var outputs = new JArray();
+            if (obj is IGH_Component component)
+            {
+                for (int i = 0; i < component.Params.Output.Count; i++)
+                {
+                    outputs.Add(ParamDiagnosticToJson(component.Params.Output[i], i));
+                }
+            }
+            else if (obj is IGH_Param param)
+            {
+                outputs.Add(ParamDiagnosticToJson(param, 0));
+            }
+
+            foreach (var output in outputs.OfType<JObject>())
+            {
+                outputCount++;
+                int dataCount = output["data_count"]?.ToObject<int>() ?? 0;
+                totalOutputDataCount += dataCount;
+                if (dataCount > 0)
+                {
+                    outputsWithData++;
+                }
+            }
+            int itemOutputsWithData = outputs
+                .OfType<JObject>()
+                .Count(o => (o["data_count"]?.ToObject<int>() ?? 0) > 0);
+
+            var item = new JObject
+            {
+                ["instance_id"] = obj.InstanceGuid.ToString(),
+                ["alias"] = GraphMetadataValue(obj, GhMetaAlias),
+                ["graph_id"] = GraphMetadataValue(obj, GhMetaGraphId),
+                ["role"] = GraphMetadataValue(obj, GhMetaRole),
+                ["name"] = obj.Name,
+                ["nickname"] = obj.NickName,
+                ["category"] = obj.Category,
+                ["subcategory"] = obj.SubCategory,
+                ["runtime_message_level"] = obj is IGH_ActiveObject diagnosticActive
+                    ? diagnosticActive.RuntimeMessageLevel.ToString()
+                    : null,
+                ["runtime_messages"] = messages,
+                ["output_count"] = outputs.Count,
+                ["outputs_with_data"] = itemOutputsWithData,
+                ["outputs"] = outputs
+            };
+            AddSpecialGrasshopperState(item, obj);
+            diagnostics.Add(item);
+        }
+
+        return new JObject
+        {
+            ["object_count"] = objectList.Count,
+            ["output_count"] = outputCount,
+            ["outputs_with_data"] = outputsWithData,
+            ["total_output_data_count"] = totalOutputDataCount,
+            ["warning_count"] = warningCount,
+            ["error_count"] = errorCount,
+            ["objects"] = diagnostics
+        };
+    }
+
+    private static JObject ParamDiagnosticToJson(IGH_Param param, int index)
+    {
+        return new JObject
+        {
+            ["index"] = index,
+            ["name"] = param.Name,
+            ["nickname"] = param.NickName,
+            ["type"] = param.TypeName,
+            ["access"] = param.Access.ToString(),
+            ["has_data"] = ParamHasData(param),
+            ["data_count"] = param.VolatileData.DataCount,
+            ["branch_count"] = param.VolatileData.PathCount
+        };
+    }
+
     private static JObject BuildGraphSummary(
         GH_Document doc,
         IEnumerable<IGH_DocumentObject> preferredObjects,

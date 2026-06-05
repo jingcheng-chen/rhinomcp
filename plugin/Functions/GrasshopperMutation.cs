@@ -28,7 +28,8 @@ public partial class RhinoMCPFunctions
     {
         var totalStopwatch = Stopwatch.StartNew();
         var mutationStopwatch = Stopwatch.StartNew();
-        var doc = GetActiveGrasshopperDocument(createIfMissing: true);
+        bool openCanvas = OptionalBool(parameters, "open_canvas", true);
+        var doc = GetActiveGrasshopperDocument(createIfMissing: true, openCanvas: openCanvas, makeActive: true);
         string graphId = CreateGraphId(OptionalString(parameters, "graph_id"));
         bool recompute = OptionalBool(parameters, "recompute", true);
         bool rollbackOnError = OptionalBool(parameters, "rollback_on_error", true);
@@ -343,10 +344,11 @@ public partial class RhinoMCPFunctions
                 {
                     float xSpacing = (float)Math.Max(60, layoutParams["x_spacing"]?.ToObject<double>() ?? 220);
                     float ySpacing = (float)Math.Max(40, layoutParams["y_spacing"]?.ToObject<double>() ?? 90);
+                    int maxColumns = Clamp(OptionalInt(layoutParams, "max_columns", 0), 0, 100);
                     var layoutStart = layoutParams["start_position"] != null
                         ? ReadPosition(layoutParams, "start_position", 40, 40)
                         : new PointF(40, 40);
-                    layoutResult = ApplyGrasshopperLayout(layoutTargets, layoutStart, xSpacing, ySpacing);
+                    layoutResult = ApplyGrasshopperLayout(layoutTargets, layoutStart, xSpacing, ySpacing, maxColumns);
                 }
             }
 
@@ -419,6 +421,7 @@ public partial class RhinoMCPFunctions
                 ["layout"] = layoutResult,
                 ["preview_policy"] = previewResult,
                 ["verification"] = verification,
+                ["diagnostics"] = BuildGrasshopperDiagnostics(summaryObjects),
                 ["visibility"] = GrasshopperVisibilityState(doc),
                 ["summary"] = BuildGraphSummary(doc, summaryObjects, graphId, verification),
                 ["message"] = $"Mutated Grasshopper graph with {operations.Count} operation(s)"

@@ -28,6 +28,12 @@
             "targets": { "$ref": "#/$defs/selectors" },
             "x_spacing": { "type": "number", "exclusiveMinimum": 0, "default": 220 },
             "y_spacing": { "type": "number", "exclusiveMinimum": 0, "default": 90 },
+            "max_columns": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Wrap graph-depth layout after this many columns to avoid a very long horizontal canvas."
+            },
             "start_position": { "$ref": "#/$defs/position" }
           }
         }
@@ -36,7 +42,12 @@
     "verify": { "$ref": "#/$defs/verify" },
     "fail_on_verification_error": { "type": "boolean", "default": false },
     "recompute": { "type": "boolean", "default": true },
-    "rollback_on_error": { "type": "boolean", "default": true }
+    "rollback_on_error": { "type": "boolean", "default": true },
+    "open_canvas": {
+      "type": "boolean",
+      "default": true,
+      "description": "Open Grasshopper and make the working document active before mutating, so live preview and screenshots can see the edited definition."
+    }
   },
   "required": ["operations"],
   "$defs": {
@@ -83,12 +94,14 @@
         "new_nickname": { "type": "string", "minLength": 1 },
         "role": { "type": "string", "minLength": 1 },
         "graph_id": { "type": "string", "minLength": 1 },
-        "value": {},
-        "min": { "type": "number" },
-        "max": { "type": "number" },
-        "decimals": { "type": "integer", "minimum": 0, "maximum": 12 },
-        "content": { "type": "string" },
-        "text": { "type": "string" },
+        "value": {
+          "description": "Value to apply for set/create/upsert-style control operations. Sliders accept numbers; toggles accept booleans; panels accept strings."
+        },
+        "min": { "type": "number", "description": "Number Slider minimum." },
+        "max": { "type": "number", "description": "Number Slider maximum." },
+        "decimals": { "type": "integer", "minimum": 0, "maximum": 12, "description": "Number Slider decimal places." },
+        "content": { "type": "string", "description": "Panel text content." },
+        "text": { "type": "string", "description": "Alias for Panel text content." },
         "preview": { "type": "boolean" },
         "enabled": { "type": "boolean" },
         "input_index": { "type": "integer", "minimum": 0 },
