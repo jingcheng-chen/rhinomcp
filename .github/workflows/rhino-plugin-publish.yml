@@ -4,6 +4,9 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+
 jobs:
   release-build:
     runs-on: ubuntu-latest
@@ -14,12 +17,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
 
@@ -40,7 +43,7 @@ jobs:
           cp ${{ github.workspace }}/plugin/manifest.yml dist/
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.ARTIFACT_NAME }}
           path: dist/
@@ -50,12 +53,14 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - release-build
+    permissions:
+      contents: write
     env:
       ARTIFACT_NAME: rhinomcp
 
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: ${{ env.ARTIFACT_NAME }}
           path: dist
@@ -101,17 +106,11 @@ jobs:
           # Get just the filename for the release asset name and GITHUB_ENV
           yakPackageBasename=$(basename "$yakPackageFile")
           echo "YAK_PACKAGE_BASENAME=$yakPackageBasename" >> $GITHUB_ENV
-          echo "YAK_PACKAGE_PATH_IN_DIST=$yakPackageFile" >> $GITHUB_ENV # Will be e.g., ./rhinomcp-1.2.3.yak
 
           # Push to yak server
           yak push "$yakPackageFile"
 
       - name: Upload .yak package to GitHub Release
-        uses: actions/upload-release-asset@v1
+        run: gh release upload "${{ github.event.release.tag_name }}" "dist/${{ env.YAK_PACKAGE_BASENAME }}" --clobber
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: dist/${{ env.YAK_PACKAGE_PATH_IN_DIST }} # Path relative to GITHUB_WORKSPACE
-          asset_name: ${{ env.YAK_PACKAGE_BASENAME }}
-          asset_content_type: application/zip
+          GH_TOKEN: ${{ github.token }}
