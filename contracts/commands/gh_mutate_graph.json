@@ -77,6 +77,7 @@
         "source": { "$ref": "#/$defs/selector" },
         "component_name": { "type": "string", "minLength": 1 },
         "component_guid": { "$ref": "#/$defs/guid" },
+        "guid": { "$ref": "#/$defs/guid" },
         "position": { "$ref": "#/$defs/position" },
         "nickname": { "type": "string", "minLength": 1 },
         "new_nickname": { "type": "string", "minLength": 1 },

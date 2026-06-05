@@ -61,6 +61,7 @@ public partial class RhinoMCPFunctions
             ["canvas_open"] = Instances.ActiveCanvas != null,
             ["file_path"] = doc?.FilePath ?? (hasDocument ? "(unsaved)" : null),
             ["object_count"] = doc?.ObjectCount ?? 0,
+            ["visibility"] = hasDocument ? GrasshopperVisibilityState(doc) : null,
             ["message"] = hasDocument
                 ? (created ? "Created Grasshopper document" : "Grasshopper document is available")
                 : "No active Grasshopper document"
@@ -95,6 +96,7 @@ public partial class RhinoMCPFunctions
             ["parameter_count"] = doc.Objects.OfType<IGH_Param>()
                 .Count(p => p.Attributes?.GetTopLevel.DocObject is not IGH_Component),
             ["group_count"] = doc.Objects.OfType<GH_Group>().Count(),
+            ["visibility"] = GrasshopperVisibilityState(doc),
             ["components_by_category"] = JObject.FromObject(componentsByCategory)
         };
     }
@@ -171,7 +173,8 @@ public partial class RhinoMCPFunctions
             ["group_count"] = groups.Count,
             ["components"] = components,
             ["standalone_parameters"] = standaloneParams,
-            ["groups"] = groups
+            ["groups"] = groups,
+            ["visibility"] = GrasshopperVisibilityState(doc)
         };
     }
 }

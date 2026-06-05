@@ -22,7 +22,19 @@ def gh_build_graph(
     recompute: bool = True,
     rollback_on_error: bool = True,
 ) -> Dict[str, Any]:
-    """Create and wire a Grasshopper graph in one batched canvas operation."""
+    """Create and wire a Grasshopper graph in one batched canvas operation.
+
+    Each component needs an alias plus component_name or component_guid. Use
+    aliases in connections, values, groups, and preview_policy; the response
+    returns aliases mapped to generated instance IDs.
+
+    Minimal shape:
+    components=[
+        {"alias": "a", "component_name": "Number Slider", "value": 3.5},
+        {"alias": "add", "component_name": "Addition"},
+    ],
+    connections=[{"source": "a", "target": "add", "target_input_index": 0}]
+    """
     params: Dict[str, Any] = {
         "components": components,
         "recompute": recompute,

@@ -47,7 +47,7 @@ public partial class RhinoMCPFunctions
 
                 string alias = OptionalString(spec, "alias");
                 string componentName = OptionalString(spec, "component_name");
-                string componentGuid = OptionalString(spec, "component_guid");
+                string componentGuid = OptionalString(spec, "component_guid") ?? OptionalString(spec, "guid");
                 if (string.IsNullOrWhiteSpace(alias))
                 {
                     throw new ArgumentException("Every gh_build_graph component requires an alias.");
@@ -56,9 +56,9 @@ public partial class RhinoMCPFunctions
                 {
                     throw new InvalidOperationException($"Duplicate Grasshopper build alias '{alias}'.");
                 }
-                if (string.IsNullOrWhiteSpace(componentName))
+                if (string.IsNullOrWhiteSpace(componentName) && string.IsNullOrWhiteSpace(componentGuid))
                 {
-                    throw new ArgumentException($"Component '{alias}' is missing component_name.");
+                    throw new ArgumentException($"Component '{alias}' is missing component_name or component_guid.");
                 }
 
                 var obj = CreateGrasshopperObject(componentName, componentGuid, spec);
@@ -182,6 +182,7 @@ public partial class RhinoMCPFunctions
                 ["groups"] = groups,
                 ["layout"] = layoutResult,
                 ["preview_policy"] = previewPolicy,
+                ["visibility"] = GrasshopperVisibilityState(doc),
                 ["summary"] = BuildGraphSummary(doc, created, graphId, null),
                 ["message"] = $"Built Grasshopper graph with {createdComponents.Count} component(s) and {connectionCount} connection(s)"
             };

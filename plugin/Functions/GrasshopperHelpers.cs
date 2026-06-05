@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using Grasshopper;
 using Grasshopper.Kernel;
+using Rhino;
 using Newtonsoft.Json.Linq;
 
 namespace RhinoMCPPlugin.Functions;
@@ -105,6 +106,49 @@ public partial class RhinoMCPFunctions
         doc.GetType()
             .GetMethod("SolveAllObjects", new[] { typeof(GH_SolutionMode) })
             ?.Invoke(doc, new object[] { GH_SolutionMode.CommandLine });
+    }
+
+    private static JObject GrasshopperVisibilityState(GH_Document doc)
+    {
+        var canvas = Instances.ActiveCanvas;
+        int previewCapableCount = doc?.Objects.OfType<IGH_PreviewObject>().Count() ?? 0;
+        int previewEnabledCount = doc?.Objects
+            .OfType<IGH_PreviewObject>()
+            .Count(o => !o.Hidden) ?? 0;
+        int rhinoObjectCount = RhinoDoc.ActiveDoc?.Objects.Count ?? 0;
+        bool canvasOpen = canvas != null;
+        bool activeCanvasDocument = doc != null && canvas?.Document == doc;
+
+        string note = null;
+        if (!canvasOpen)
+        {
+            note = "Grasshopper has a document, but the editor canvas is not open. Live Grasshopper preview may not be visible in Rhino viewport captures.";
+        }
+        else if (!activeCanvasDocument)
+        {
+            note = "Grasshopper editor is open, but this document is not the active canvas document.";
+        }
+        else if (previewCapableCount > 0 && previewEnabledCount == 0)
+        {
+            note = "All preview-capable Grasshopper objects have preview disabled.";
+        }
+        else if (previewEnabledCount > 0 && rhinoObjectCount == 0)
+        {
+            note = "Grasshopper preview is live but not baked. capture_viewport frames Rhino document objects and may not show live Grasshopper preview geometry.";
+        }
+
+        return new JObject
+        {
+            ["canvas_open"] = canvasOpen,
+            ["active_canvas_document"] = activeCanvasDocument,
+            ["preview_capable_object_count"] = previewCapableCount,
+            ["preview_enabled_object_count"] = previewEnabledCount,
+            ["preview_disabled_object_count"] = Math.Max(0, previewCapableCount - previewEnabledCount),
+            ["has_preview_enabled_objects"] = previewEnabledCount > 0,
+            ["rhino_document_object_count"] = rhinoObjectCount,
+            ["has_baked_rhino_objects"] = rhinoObjectCount > 0,
+            ["viewport_warning"] = note
+        };
     }
 
     private static IGH_DocumentObject FindGhObject(GH_Document doc, JObject parameters, string prefix = "")

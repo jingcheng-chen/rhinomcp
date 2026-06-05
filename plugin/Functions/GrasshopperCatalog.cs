@@ -45,30 +45,43 @@ public partial class RhinoMCPFunctions
     public JObject GhBatchSearchComponents(JObject parameters)
     {
         var queries = parameters["queries"]?.ToObject<List<string>>() ?? new List<string>();
+        int maxMatches = Clamp(OptionalInt(parameters, "max_matches", 5), 1, 50);
         var proxies = Instances.ComponentServer.ObjectProxies.ToList();
         var results = new JObject();
+        var matches = new JObject();
+        var ambiguous = new JObject();
         var notFound = new JArray();
         int foundCount = 0;
 
         foreach (string query in queries.Where(q => !string.IsNullOrWhiteSpace(q)))
         {
-            var proxy = FindComponentProxy(query, null, proxies);
-            if (proxy == null)
+            var queryMatches = FindComponentMatches(query, proxies, maxMatches);
+            if (queryMatches.Count == 0)
             {
                 results[query] = null;
+                matches[query] = new JArray();
                 notFound.Add(query);
                 continue;
             }
 
+            var proxy = queryMatches[0];
             results[query] = ComponentProxyToJson(proxy, includeDescription: false);
+            matches[query] = new JArray(queryMatches.Select(p => ComponentProxyToJson(p, includeDescription: false)));
+            if (queryMatches.Count > 1)
+            {
+                ambiguous[query] = matches[query]?.DeepClone() ?? new JArray();
+            }
             foundCount++;
         }
 
         return new JObject
         {
             ["results"] = results,
+            ["matches"] = matches,
+            ["ambiguous"] = ambiguous,
             ["found_count"] = foundCount,
             ["total_queries"] = queries.Count,
+            ["max_matches"] = maxMatches,
             ["not_found"] = notFound
         };
     }
@@ -244,6 +257,7 @@ public partial class RhinoMCPFunctions
             }
             var byGuid = proxies.FirstOrDefault(p => p.Guid == guid);
             if (byGuid != null) return CacheAndReturn(byGuid);
+            return null;
         }
 
         if (string.IsNullOrEmpty(componentName))
@@ -265,6 +279,34 @@ public partial class RhinoMCPFunctions
             ?? proxies.FirstOrDefault(p => p.Desc.NickName?.Equals(componentName, StringComparison.OrdinalIgnoreCase) == true)
             ?? proxies.FirstOrDefault(p => p.Desc.Name.Contains(componentName, StringComparison.OrdinalIgnoreCase))
             ?? proxies.FirstOrDefault(p => p.Desc.NickName?.Contains(componentName, StringComparison.OrdinalIgnoreCase) == true));
+    }
+
+    private static List<IGH_ObjectProxy> FindComponentMatches(string query, List<IGH_ObjectProxy> proxies, int maxResults)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return new List<IGH_ObjectProxy>();
+        }
+
+        string alias = GhComponentAliases.TryGetValue(query, out var aliasValue) ? aliasValue : null;
+        var candidates = proxies
+            .Where(p =>
+                p.Desc.Name?.Contains(query, StringComparison.OrdinalIgnoreCase) == true ||
+                p.Desc.NickName?.Contains(query, StringComparison.OrdinalIgnoreCase) == true ||
+                p.Desc.Description?.Contains(query, StringComparison.OrdinalIgnoreCase) == true ||
+                (!string.IsNullOrEmpty(alias) && p.Desc.Name?.Contains(alias, StringComparison.OrdinalIgnoreCase) == true))
+            .OrderByDescending(p => p.Desc.Name.Equals(query, StringComparison.OrdinalIgnoreCase))
+            .ThenByDescending(p => p.Desc.NickName?.Equals(query, StringComparison.OrdinalIgnoreCase) == true)
+            .ThenByDescending(p => !string.IsNullOrEmpty(alias) && p.Desc.Name.Equals(alias, StringComparison.OrdinalIgnoreCase))
+            .ThenBy(p => p.Desc.Category)
+            .ThenBy(p => p.Desc.SubCategory)
+            .ThenBy(p => p.Desc.Name);
+
+        return candidates
+            .GroupBy(p => p.Guid)
+            .Select(g => g.First())
+            .Take(maxResults)
+            .ToList();
     }
 
     private static string ComponentProxyCacheKey(string componentName, string componentGuid)

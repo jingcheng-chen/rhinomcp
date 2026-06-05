@@ -2,21 +2,39 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "gh_build_graph.json",
   "title": "gh_build_graph",
-  "description": "Create Grasshopper components, apply values, wire connections, optionally lay out, and optionally solve in one batched operation.",
+  "description": "Create Grasshopper components, apply values, wire connections, optionally lay out, and optionally solve in one batched operation. Component aliases are local names used by connections, values, groups, preview_policy, and the response aliases map.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
     "components": {
+      "description": "Components or params to create. Every item needs an alias and either component_name or component_guid/guid. GUID takes precedence over name when both are supplied.",
       "type": "array",
       "minItems": 1,
       "items": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "alias": { "$ref": "#/$defs/alias" },
-          "component_name": { "type": "string", "minLength": 1 },
-          "component_guid": { "$ref": "#/$defs/guid" },
-          "position": { "$ref": "#/$defs/position" },
+          "alias": {
+            "$ref": "#/$defs/alias",
+            "description": "Caller-defined id used by this request and returned in aliases."
+          },
+          "component_name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Component display name or common alias, for example 'Number Slider' or 'Addition'."
+          },
+          "component_guid": {
+            "$ref": "#/$defs/guid",
+            "description": "Grasshopper component GUID. Takes precedence over component_name."
+          },
+          "guid": {
+            "$ref": "#/$defs/guid",
+            "description": "Alias for component_guid."
+          },
+          "position": {
+            "$ref": "#/$defs/position",
+            "description": "Canvas pivot position [x, y]."
+          },
           "nickname": { "type": "string", "minLength": 1 },
           "role": { "type": "string", "minLength": 1 },
           "value": {},
@@ -28,15 +46,22 @@
           "preview": { "type": "boolean" },
           "enabled": { "type": "boolean" }
         },
-        "required": ["alias", "component_name"]
+        "required": ["alias"],
+        "anyOf": [
+          { "required": ["component_name"] },
+          { "required": ["component_guid"] },
+          { "required": ["guid"] }
+        ]
       }
     },
     "connections": {
+      "description": "Wires between aliases or selectors. source and target usually reference component aliases from components.",
       "type": "array",
       "items": { "$ref": "#/$defs/connection" },
       "default": []
     },
     "values": {
+      "description": "Optional post-create value updates. target usually references a component alias.",
       "type": "array",
       "items": { "$ref": "#/$defs/value_update" },
       "default": []
@@ -107,10 +132,16 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "source": { "$ref": "#/$defs/selector" },
+        "source": {
+          "$ref": "#/$defs/selector",
+          "description": "Source alias, GUID, or nickname."
+        },
         "source_output_index": { "type": "integer", "minimum": 0 },
         "source_output_name": { "type": "string", "minLength": 1 },
-        "target": { "$ref": "#/$defs/selector" },
+        "target": {
+          "$ref": "#/$defs/selector",
+          "description": "Target alias, GUID, or nickname."
+        },
         "target_input_index": { "type": "integer", "minimum": 0 },
         "target_input_name": { "type": "string", "minLength": 1 }
       },
@@ -176,5 +207,34 @@
       },
       "required": ["target", "value"]
     }
-  }
+  },
+  "examples": [
+    {
+      "components": [
+        {
+          "alias": "slider_a",
+          "component_name": "Number Slider",
+          "nickname": "A",
+          "value": 3.5,
+          "min": 0,
+          "max": 10,
+          "decimals": 1
+        },
+        {
+          "alias": "add",
+          "component_name": "Addition",
+          "nickname": "Add"
+        }
+      ],
+      "connections": [
+        {
+          "source": "slider_a",
+          "target": "add",
+          "target_input_index": 0
+        }
+      ],
+      "layout": { "enabled": true },
+      "recompute": true
+    }
+  ]
 }

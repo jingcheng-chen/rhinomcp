@@ -43,7 +43,7 @@ def gh_get_component_info(
 @mcp.tool()
 def gh_add_component(
     ctx: Context,
-    component_name: str,
+    component_name: Optional[str] = None,
     component_guid: Optional[str] = None,
     position: Optional[List[float]] = None,
     nickname: Optional[str] = None,
@@ -54,8 +54,14 @@ def gh_add_component(
     content: Optional[str] = None,
     text: Optional[str] = None,
 ) -> Dict[str, Any]:
-    """Add a Grasshopper component to the active canvas."""
-    params: Dict[str, Any] = {"component_name": component_name}
+    """Add a Grasshopper component to the active canvas.
+
+    Provide component_name or component_guid. If both are supplied, the GUID is
+    resolved first to avoid ambiguous names.
+    """
+    params: Dict[str, Any] = {}
+    if component_name:
+        params["component_name"] = component_name
     if component_guid:
         params["component_guid"] = component_guid
     if position is not None:

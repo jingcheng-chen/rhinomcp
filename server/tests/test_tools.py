@@ -1346,7 +1346,7 @@ class TestGrasshopperTools:
 
         gh_get_document_info(ctx=None)
         gh_search_components(ctx=None, query="add", category="Maths", limit=5)
-        gh_batch_search_components(ctx=None, queries=["Circle", "Panel"])
+        gh_batch_search_components(ctx=None, queries=["Circle", "Panel"], max_matches=8)
         gh_list_component_categories(ctx=None)
         gh_get_available_components(ctx=None, category="Curve", include_description=True, limit=25)
         gh_get_component_type_info(ctx=None, name="Circle")
@@ -1358,7 +1358,10 @@ class TestGrasshopperTools:
         calls = mock_conn.send_command.call_args_list
         assert calls[0][0] == ("gh_get_document_info", {})
         assert calls[1][0] == ("gh_search_components", {"limit": 5, "query": "add", "category": "Maths"})
-        assert calls[2][0] == ("gh_batch_search_components", {"queries": ["Circle", "Panel"]})
+        assert calls[2][0] == (
+            "gh_batch_search_components",
+            {"queries": ["Circle", "Panel"], "max_matches": 8},
+        )
         assert calls[3][0] == ("gh_list_component_categories", {})
         assert calls[4][0] == (
             "gh_get_available_components",
@@ -1606,6 +1609,7 @@ class TestGrasshopperTools:
             max=10,
             decimals=1,
         )
+        gh_add_component(ctx=None, component_guid="12345678-1234-1234-1234-123456789012")
         gh_add_component(ctx=None, component_name="Panel", nickname="AutoPlaced")
         gh_update_component(
             ctx=None,
@@ -1643,11 +1647,17 @@ class TestGrasshopperTools:
         assert calls[1][0] == (
             "gh_add_component",
             {
+                "component_guid": "12345678-1234-1234-1234-123456789012",
+            },
+        )
+        assert calls[2][0] == (
+            "gh_add_component",
+            {
                 "component_name": "Panel",
                 "nickname": "AutoPlaced",
             },
         )
-        assert calls[2][0] == (
+        assert calls[3][0] == (
             "gh_update_component",
             {
                 "instance_id": "abc",
@@ -1657,7 +1667,7 @@ class TestGrasshopperTools:
                 "preview": False,
             },
         )
-        assert calls[3][0] == (
+        assert calls[4][0] == (
             "gh_layout_components",
             {
                 "include_groups": False,
@@ -1668,9 +1678,9 @@ class TestGrasshopperTools:
                 "start_position": [20, 30],
             },
         )
-        assert calls[4][0] == ("gh_delete_component", {"nickname": "Radius2"})
-        assert calls[5][0] == ("gh_clear_canvas", {"include_groups": False, "recompute": True})
-        assert calls[6][0] == (
+        assert calls[5][0] == ("gh_delete_component", {"nickname": "Radius2"})
+        assert calls[6][0] == ("gh_clear_canvas", {"include_groups": False, "recompute": True})
+        assert calls[7][0] == (
             "gh_clear_graph",
             {"graph_id": "TestGraph", "include_groups": False, "recompute": True},
         )

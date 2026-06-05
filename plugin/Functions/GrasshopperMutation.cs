@@ -92,14 +92,14 @@ public partial class RhinoMCPFunctions
                     {
                         string alias = OptionalString(operation, "alias");
                         string componentName = OptionalString(operation, "component_name");
-                        string componentGuid = OptionalString(operation, "component_guid");
+                        string componentGuid = OptionalString(operation, "component_guid") ?? OptionalString(operation, "guid");
                         if (string.IsNullOrWhiteSpace(alias))
                         {
                             throw new ArgumentException("create operation requires alias.");
                         }
-                        if (string.IsNullOrWhiteSpace(componentName))
+                        if (string.IsNullOrWhiteSpace(componentName) && string.IsNullOrWhiteSpace(componentGuid))
                         {
-                            throw new ArgumentException("create operation requires component_name.");
+                            throw new ArgumentException("create operation requires component_name or component_guid.");
                         }
                         if (aliases.ContainsKey(alias))
                         {
@@ -419,6 +419,7 @@ public partial class RhinoMCPFunctions
                 ["layout"] = layoutResult,
                 ["preview_policy"] = previewResult,
                 ["verification"] = verification,
+                ["visibility"] = GrasshopperVisibilityState(doc),
                 ["summary"] = BuildGraphSummary(doc, summaryObjects, graphId, verification),
                 ["message"] = $"Mutated Grasshopper graph with {operations.Count} operation(s)"
             };

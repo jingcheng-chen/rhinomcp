@@ -69,10 +69,10 @@ public partial class RhinoMCPFunctions
     {
         var doc = GetActiveGrasshopperDocument();
         string componentName = OptionalString(parameters, "component_name");
-        string componentGuid = OptionalString(parameters, "component_guid");
-        if (string.IsNullOrEmpty(componentName))
+        string componentGuid = OptionalString(parameters, "component_guid") ?? OptionalString(parameters, "guid");
+        if (string.IsNullOrEmpty(componentName) && string.IsNullOrEmpty(componentGuid))
         {
-            throw new ArgumentException("component_name is required.");
+            throw new ArgumentException("component_name or component_guid is required.");
         }
 
         var position = parameters["position"] != null

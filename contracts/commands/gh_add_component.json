@@ -2,11 +2,15 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "gh_add_component.json",
   "title": "gh_add_component",
-  "description": "Add a Grasshopper component to the active canvas.",
+  "description": "Add a Grasshopper component to the active canvas. Provide component_name, component_guid, or guid. GUID takes precedence over name.",
   "type": "object",
   "properties": {
     "component_name": { "type": "string", "minLength": 1 },
     "component_guid": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "guid": {
       "type": "string",
       "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
     },
@@ -25,6 +29,10 @@
     "content": { "type": "string" },
     "text": { "type": "string" }
   },
-  "required": ["component_name"],
+  "anyOf": [
+    { "required": ["component_name"] },
+    { "required": ["component_guid"] },
+    { "required": ["guid"] }
+  ],
   "additionalProperties": false
 }

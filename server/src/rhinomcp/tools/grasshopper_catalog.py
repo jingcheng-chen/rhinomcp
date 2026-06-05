@@ -26,9 +26,21 @@ def gh_search_components(
 
 
 @mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
-def gh_batch_search_components(ctx: Context, queries: List[str]) -> Dict[str, Any]:
-    """Resolve multiple Grasshopper component names in one call."""
-    return send_grasshopper_command("gh_batch_search_components", {"queries": queries})
+def gh_batch_search_components(
+    ctx: Context,
+    queries: List[str],
+    max_matches: int = 5,
+) -> Dict[str, Any]:
+    """Search multiple Grasshopper component names and return ranked matches.
+
+    The legacy results field keeps the best match for each query. Use matches or
+    ambiguous to disambiguate names like "Square" or "Grid" by category,
+    subcategory, nickname, or GUID before creating components.
+    """
+    return send_grasshopper_command(
+        "gh_batch_search_components",
+        {"queries": queries, "max_matches": max_matches},
+    )
 
 
 @mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))

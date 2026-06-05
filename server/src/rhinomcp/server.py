@@ -5,6 +5,7 @@ import json
 import logging
 import os
 import threading
+import time
 from dataclasses import dataclass
 from contextlib import asynccontextmanager
 from typing import AsyncIterator, Dict, Any
@@ -64,6 +65,33 @@ if _RHINO_VALIDATE_UNKNOWN is not None:
 
 if RHINO_DEBUG:
     logger.info("Debug mode enabled")
+
+
+READONLY_RETRY_COMMANDS = {
+    "get_object_info",
+    "get_object_attributes",
+    "analyze_objects",
+    "get_selected_objects_info",
+    "get_document_summary",
+    "get_objects",
+    "capture_viewport",
+    "get_commands",
+    "gh_get_document_info",
+    "gh_search_components",
+    "gh_batch_search_components",
+    "gh_list_component_categories",
+    "gh_get_available_components",
+    "gh_get_component_type_info",
+    "gh_get_graph",
+    "gh_list_components",
+    "gh_get_component_info",
+    "gh_get_canvas_state",
+    "gh_get_parameter_value",
+}
+
+
+class TransientRhinoConnectionError(ConnectionError):
+    """A connected Rhino socket dropped while a command was in flight."""
 
 
 def rhino_startup_error_message(
@@ -131,7 +159,7 @@ class RhinoConnection:
                     chunk = sock.recv(buffer_size)
                     if not chunk:
                         if not accumulated:
-                            raise Exception(
+                            raise ConnectionResetError(
                                 "Connection closed before receiving any data"
                             )
                         break
@@ -184,6 +212,29 @@ class RhinoConnection:
             return self._send_command_locked(command_type, params)
 
     def _send_command_locked(
+        self, command_type: str, params: Dict[str, Any] = {}
+    ) -> Dict[str, Any]:
+        attempts = 2 if command_type in READONLY_RETRY_COMMANDS else 1
+        last_error = None
+        for attempt in range(1, attempts + 1):
+            try:
+                return self._send_command_once(command_type, params)
+            except TransientRhinoConnectionError as e:
+                last_error = e
+                if attempt >= attempts:
+                    raise
+                logger.warning(
+                    "Transient Rhino connection drop during read-only command "
+                    f"{command_type}; retrying once."
+                )
+                self.disconnect()
+                time.sleep(0.2)
+
+        if last_error:
+            raise last_error
+        raise RuntimeError("Rhino command send failed without an error.")
+
+    def _send_command_once(
         self, command_type: str, params: Dict[str, Any] = {}
     ) -> Dict[str, Any]:
         if not self.sock and not self.connect():
@@ -252,18 +303,28 @@ class RhinoConnection:
             logger.error("Socket timeout while waiting for response from Rhino")
             # Don't try to reconnect here - let the get_rhino_connection handle reconnection
             # Just invalidate the current socket so it will be recreated next time
-            self.sock = None
+            self.disconnect()
             raise Exception(
                 "Timeout waiting for Rhino response - try simplifying your request"
             )
         except (ConnectionError, BrokenPipeError, ConnectionResetError) as e:
             logger.error(f"Socket connection error: {str(e)}")
-            self.sock = None
-            raise Exception(
-                rhino_startup_error_message(
-                    self.host, self.port, "Connection to Rhino lost"
-                )
-            )
+            self.disconnect()
+            raise TransientRhinoConnectionError(
+                f"Connection to Rhino was interrupted at {self.host}:{self.port}. "
+                "Retry the request. If this keeps happening, confirm Rhino is open "
+                "and run the Rhino command `mcpstart`."
+            ) from e
+        except TransientRhinoConnectionError:
+            raise
+        except OSError as e:
+            logger.error(f"Socket OS error: {str(e)}")
+            self.disconnect()
+            raise TransientRhinoConnectionError(
+                f"Connection to Rhino was interrupted at {self.host}:{self.port}. "
+                "Retry the request. If this keeps happening, confirm Rhino is open "
+                "and run the Rhino command `mcpstart`."
+            ) from e
         except json.JSONDecodeError as e:
             logger.error(f"Invalid JSON response from Rhino: {str(e)}")
             # Try to log what was received
@@ -276,7 +337,7 @@ class RhinoConnection:
         except Exception as e:
             logger.error(f"Error communicating with Rhino: {str(e)}")
             # Don't try to reconnect here - let the get_rhino_connection handle reconnection
-            self.sock = None
+            self.disconnect()
             raise Exception(f"Communication error with Rhino: {str(e)}")
 
 

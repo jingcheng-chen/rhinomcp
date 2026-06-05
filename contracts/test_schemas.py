@@ -243,7 +243,7 @@ def test_new_commands():
         ("commands/gh_create_document.json", {"new_if_missing": True, "make_active": True, "open_canvas": True}),
         ("commands/gh_get_document_info.json", {}),
         ("commands/gh_search_components.json", {"query": "addition", "limit": 10}),
-        ("commands/gh_batch_search_components.json", {"queries": ["Circle", "Number Slider"]}),
+        ("commands/gh_batch_search_components.json", {"queries": ["Circle", "Number Slider"], "max_matches": 5}),
         ("commands/gh_list_component_categories.json", {}),
         ("commands/gh_get_available_components.json", {"category": "Curve", "include_description": True, "limit": 25}),
         ("commands/gh_get_component_type_info.json", {"name": "Circle"}),
@@ -257,7 +257,8 @@ def test_new_commands():
         ("commands/gh_build_graph.json", {
             "components": [
                 {"alias": "slider_a", "component_name": "Number Slider", "nickname": "A", "value": 3.5, "min": 0, "max": 10},
-                {"alias": "add", "component_name": "Addition", "nickname": "Add"}
+                {"alias": "add", "component_name": "Addition", "nickname": "Add"},
+                {"alias": "by_guid", "component_guid": GUID, "nickname": "ByGuid"}
             ],
             "connections": [{"source": "slider_a", "target": "add", "target_input_index": 0}],
             "values": [{"target": "slider_a", "value": 4.0, "decimals": 1}],
@@ -269,10 +270,12 @@ def test_new_commands():
             "recompute": True,
             "rollback_on_error": True
         }),
+        ("commands/gh_add_component.json", {"component_guid": GUID, "nickname": "ByGuid"}),
         ("commands/gh_mutate_graph.json", {
             "graph_id": "TestGraph",
             "operations": [
                 {"op": "create", "alias": "height", "component_name": "Number Slider", "value": 8, "min": 0, "max": 20, "role": "control"},
+                {"op": "create", "alias": "by_guid", "guid": GUID},
                 {"op": "update", "target": "cylinder", "preview": False},
                 {"op": "connect", "source": "height", "target": "cap", "target_input_index": 0},
                 {"op": "recompute"}
@@ -536,6 +539,7 @@ def test_invalid_examples():
         ("commands/gh_run_solution.json", {"timeout_ms": 1000}, "gh_run_solution unknown timeout field"),
         ("commands/gh_build_graph.json", {"components": []}, "gh_build_graph empty components"),
         ("commands/gh_build_graph.json", {"components": [{"component_name": "Addition"}]}, "gh_build_graph component missing alias"),
+        ("commands/gh_build_graph.json", {"components": [{"alias": "add"}]}, "gh_build_graph component missing selector"),
         ("commands/gh_build_graph.json", {"components": [{"alias": "1bad", "component_name": "Addition"}]}, "gh_build_graph bad alias"),
         ("commands/gh_build_graph.json", {"components": [{"alias": "add", "component_name": "Addition"}], "connections": [{"source": "add"}]}, "gh_build_graph connection missing target"),
         ("commands/gh_build_graph.json", {"components": [{"alias": "add", "component_name": "Addition"}], "layout": {"x_spacing": 0}}, "gh_build_graph bad layout spacing"),
@@ -547,7 +551,7 @@ def test_invalid_examples():
         ("commands/gh_mutate_graph.json", {"operations": [{"op": "update", "target": "x"}], "preview_policy": {"mode": "show"}}, "gh_mutate_graph preview policy missing targets"),
         ("commands/gh_mutate_graph.json", {"operations": [{"op": "update", "target": "x"}], "verify": {"outputs": []}}, "gh_mutate_graph empty verify outputs"),
         ("commands/gh_mutate_graph.json", {"operations": [{"op": "recompute"}], "fail_on_verification_error": "yes"}, "gh_mutate_graph fail_on_verification_error not boolean"),
-        ("commands/gh_add_component.json", {"component_guid": "12345678-1234-1234-1234-123456789012"}, "gh_add_component guid without name"),
+        ("commands/gh_add_component.json", {"position": [10, 20]}, "gh_add_component missing component selector"),
         ("commands/gh_add_component.json", {"component_name": "Circle", "position": [1, 2, 3]}, "gh_add_component bad position"),
         ("commands/gh_delete_component.json", {}, "gh_delete_component missing selector"),
         ("commands/gh_layout_components.json", {"component_ids": []}, "gh_layout_components empty component_ids"),

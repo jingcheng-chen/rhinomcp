@@ -321,6 +321,55 @@ class TestSendCommand:
         assert "Please start Rhino" in str(exc.value)
         assert "127.0.0.1:1999" in str(exc.value)
 
+    @patch("time.sleep", return_value=None)
+    @patch("socket.socket")
+    def test_readonly_command_retries_transient_connection_drop(
+        self, mock_socket_class, _mock_sleep
+    ):
+        """Read-only discovery commands can safely retry a dropped socket once."""
+        from rhinomcp.server import RhinoConnection
+
+        first_sock = MagicMock()
+        first_sock.recv.return_value = b""
+        second_sock = MagicMock()
+        second_sock.recv.return_value = json.dumps(
+            {"status": "success", "result": {"found_count": 1}}
+        ).encode("utf-8")
+        mock_socket_class.side_effect = [first_sock, second_sock]
+
+        conn = RhinoConnection(host="127.0.0.1", port=1999)
+        result = conn.send_command(
+            "gh_batch_search_components", {"queries": ["Square"]}
+        )
+
+        assert result == {"found_count": 1}
+        assert mock_socket_class.call_count == 2
+        first_sock.sendall.assert_called_once()
+        second_sock.sendall.assert_called_once()
+
+    @patch("socket.socket")
+    def test_mutating_command_does_not_retry_transient_connection_drop(
+        self, mock_socket_class
+    ):
+        """Mutating commands are not retried because the first attempt may have side effects."""
+        from rhinomcp.server import RhinoConnection
+
+        mock_sock = MagicMock()
+        mock_sock.recv.return_value = b""
+        mock_socket_class.return_value = mock_sock
+
+        conn = RhinoConnection(host="127.0.0.1", port=1999)
+
+        with pytest.raises(Exception, match="interrupted"):
+            conn.send_command(
+                "create_object",
+                {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}},
+            )
+
+        assert mock_socket_class.call_count == 1
+        mock_sock.sendall.assert_called_once()
+        assert conn.sock is None
+
     @patch("socket.socket")
     def test_get_rhino_connection_failure_shows_mcpstart_guidance(
         self, mock_socket_class
