@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "gh_build_graph.json",
   "title": "gh_build_graph",
-  "description": "Create Grasshopper components, apply values, wire connections, optionally lay out, and optionally solve in one batched operation. Component aliases are local names used by connections, values, groups, preview_policy, and the response aliases map.",
+  "description": "Create Grasshopper components, apply values, wire connections, optionally lay out, and optionally solve in one batched operation. Component aliases are local names used by connections, values, groups, preview_policy, and the response aliases map. For follow-up edits or rewires that touch existing components by GUID, alias, or nickname, use gh_mutate_graph.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -161,13 +161,21 @@
           "description": "Source alias, GUID, or nickname."
         },
         "source_output_index": { "type": "integer", "minimum": 0 },
-        "source_output_name": { "type": "string", "minLength": 1 },
+        "source_output_name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Output parameter name or nickname on source, for example 'R' or 'Result'."
+        },
         "target": {
           "$ref": "#/$defs/selector",
           "description": "Target alias, GUID, or nickname."
         },
         "target_input_index": { "type": "integer", "minimum": 0 },
-        "target_input_name": { "type": "string", "minLength": 1 }
+        "target_input_name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Input parameter name or nickname on target, for example 'L' or 'List'."
+        }
       },
       "required": ["source", "target"]
     },

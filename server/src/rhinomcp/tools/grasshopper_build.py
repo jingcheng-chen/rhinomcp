@@ -29,6 +29,9 @@ def gh_build_graph(
     aliases in connections, values, groups, and preview_policy; the response
     returns aliases mapped to generated instance IDs.
 
+    Use gh_mutate_graph for follow-up edits and rewires involving existing
+    components by persisted alias, Grasshopper instance GUID, or nickname.
+
     Number Slider components support value/min/max/decimals. Layout supports
     max_columns to wrap long dataflow chains into a compact readable canvas.
 

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "gh_mutate_graph.json",
   "title": "gh_mutate_graph",
-  "description": "Apply create/connect/set/update/delete/recompute operations to a Grasshopper graph in one batched mutation.",
+  "description": "Batch edit an existing or new Grasshopper graph in one transaction. Use this for rewiring, inserting components, updating controls, deleting objects, grouping, preview policy, layout, recompute, and verification. Operation selectors such as source, target, layout.targets, groups.targets, and preview_policy targets can reference request-local aliases, persisted aliases, Grasshopper instance GUIDs, or nicknames.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -83,12 +83,21 @@
           "type": "string",
           "enum": ["create", "connect", "set", "update", "disconnect", "delete", "recompute"]
         },
-        "alias": { "$ref": "#/$defs/alias" },
-        "target": { "$ref": "#/$defs/selector" },
-        "source": { "$ref": "#/$defs/selector" },
-        "component_name": { "type": "string", "minLength": 1 },
-        "component_guid": { "$ref": "#/$defs/guid" },
-        "guid": { "$ref": "#/$defs/guid" },
+        "alias": {
+          "$ref": "#/$defs/alias",
+          "description": "Request-local alias for a newly created object, or a persisted alias to assign during update."
+        },
+        "target": {
+          "$ref": "#/$defs/selector",
+          "description": "Target object selector. Can be a request-local alias, persisted alias, Grasshopper instance GUID, or nickname."
+        },
+        "source": {
+          "$ref": "#/$defs/selector",
+          "description": "Source object selector. Can be a request-local alias, persisted alias, Grasshopper instance GUID, or nickname."
+        },
+        "component_name": { "type": "string", "minLength": 1, "description": "Component display name or common alias for create operations." },
+        "component_guid": { "$ref": "#/$defs/guid", "description": "Grasshopper component GUID for create operations. Prefer GUIDs for ambiguous component names." },
+        "guid": { "$ref": "#/$defs/guid", "description": "Alias for component_guid." },
         "position": { "$ref": "#/$defs/position" },
         "nickname": { "type": "string", "minLength": 1 },
         "new_nickname": { "type": "string", "minLength": 1 },
@@ -104,14 +113,14 @@
         "text": { "type": "string", "description": "Alias for Panel text content." },
         "preview": { "type": "boolean" },
         "enabled": { "type": "boolean" },
-        "input_index": { "type": "integer", "minimum": 0 },
-        "input_name": { "type": "string", "minLength": 1 },
-        "output_index": { "type": "integer", "minimum": 0 },
-        "output_name": { "type": "string", "minLength": 1 },
-        "source_output_index": { "type": "integer", "minimum": 0 },
-        "source_output_name": { "type": "string", "minLength": 1 },
-        "target_input_index": { "type": "integer", "minimum": 0 },
-        "target_input_name": { "type": "string", "minLength": 1 },
+        "input_index": { "type": "integer", "minimum": 0, "description": "Input parameter index for set/update-style parameter selection." },
+        "input_name": { "type": "string", "minLength": 1, "description": "Input parameter name or nickname for set/update-style parameter selection." },
+        "output_index": { "type": "integer", "minimum": 0, "description": "Output parameter index for verification or generic output selection." },
+        "output_name": { "type": "string", "minLength": 1, "description": "Output parameter name or nickname for verification or generic output selection." },
+        "source_output_index": { "type": "integer", "minimum": 0, "description": "Output parameter index on source for connect/disconnect. Prefer source_output_name when a stable port nickname is known." },
+        "source_output_name": { "type": "string", "minLength": 1, "description": "Output parameter name or nickname on source for connect/disconnect, for example 'R' or 'Result'." },
+        "target_input_index": { "type": "integer", "minimum": 0, "description": "Input parameter index on target for connect/disconnect. Prefer target_input_name when a stable port nickname is known." },
+        "target_input_name": { "type": "string", "minLength": 1, "description": "Input parameter name or nickname on target for connect/disconnect, for example 'L' or 'List'." },
         "disconnect_all": { "type": "boolean" }
       },
       "required": ["op"]
@@ -185,5 +194,50 @@
       },
       "required": ["outputs"]
     }
-  }
+  },
+  "examples": [
+    {
+      "graph_id": "ExistingGraph",
+      "operations": [
+        {
+          "op": "disconnect",
+          "source": "11111111-1111-1111-1111-111111111111",
+          "source_output_name": "G",
+          "target": "22222222-2222-2222-2222-222222222222",
+          "target_input_name": "L"
+        },
+        {
+          "op": "create",
+          "alias": "flatten_inserted",
+          "component_name": "Flatten Tree",
+          "nickname": "Flatten",
+          "role": "utility"
+        },
+        {
+          "op": "connect",
+          "source": "11111111-1111-1111-1111-111111111111",
+          "source_output_name": "G",
+          "target": "flatten_inserted"
+        },
+        {
+          "op": "connect",
+          "source": "flatten_inserted",
+          "target": "22222222-2222-2222-2222-222222222222",
+          "target_input_name": "L"
+        },
+        { "op": "recompute" }
+      ],
+      "layout": {
+        "enabled": true,
+        "targets": [
+          "11111111-1111-1111-1111-111111111111",
+          "flatten_inserted",
+          "22222222-2222-2222-2222-222222222222"
+        ],
+        "max_columns": 4
+      },
+      "recompute": true,
+      "rollback_on_error": true
+    }
+  ]
 }

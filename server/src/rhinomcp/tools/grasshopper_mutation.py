@@ -22,10 +22,35 @@ def gh_mutate_graph(
     rollback_on_error: bool = True,
     open_canvas: bool = True,
 ) -> Dict[str, Any]:
-    """Mutate an existing or new Grasshopper graph in one batched operation.
+    """Batch edit, rewire, and verify an existing or new Grasshopper graph.
 
-    Use layout={"enabled": True, "max_columns": 6} to wrap long generated
-    graphs into a more compact canvas.
+    Use this after gh_build_graph for follow-up edits: insert components,
+    disconnect/reconnect wires, update values/preview/nicknames, delete objects,
+    group/layout the changed graph, recompute, and verify outputs in one
+    rollback-safe call. Selectors in source, target, layout targets, groups, and
+    preview_policy can be request-local aliases, persisted aliases, Grasshopper
+    instance GUIDs, or nicknames.
+
+    Port selection supports indices or names/nicknames:
+    source_output_name="R", target_input_name="L".
+
+    Insert a component between two existing components by GUID:
+    operations=[
+        {
+            "op": "disconnect",
+            "source": "source-guid",
+            "source_output_name": "G",
+            "target": "target-guid",
+            "target_input_name": "L",
+        },
+        {"op": "create", "alias": "flatten", "component_name": "Flatten Tree"},
+        {"op": "connect", "source": "source-guid", "source_output_name": "G", "target": "flatten"},
+        {"op": "connect", "source": "flatten", "target": "target-guid", "target_input_name": "L"},
+        {"op": "recompute"},
+    ]
+
+    Use layout={"enabled": True, "targets": ["source-guid", "flatten", "target-guid"], "max_columns": 4}
+    to keep the edited area readable.
     """
     params: Dict[str, Any] = {
         "operations": operations,

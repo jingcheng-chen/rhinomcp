@@ -304,6 +304,19 @@ def test_new_commands():
             "rollback_on_error": True,
             "open_canvas": True
         }),
+        ("commands/gh_mutate_graph.json", {
+            "graph_id": "ExistingGraph",
+            "operations": [
+                {"op": "disconnect", "source": GUID, "source_output_name": "G", "target": GUID, "target_input_name": "L"},
+                {"op": "create", "alias": "flatten_inserted", "component_name": "Flatten Tree", "nickname": "Flatten"},
+                {"op": "connect", "source": GUID, "source_output_name": "G", "target": "flatten_inserted"},
+                {"op": "connect", "source": "flatten_inserted", "target": GUID, "target_input_name": "L"},
+                {"op": "recompute"}
+            ],
+            "layout": {"enabled": True, "targets": [GUID, "flatten_inserted"], "max_columns": 4},
+            "recompute": True,
+            "rollback_on_error": True
+        }),
         ("commands/gh_add_component.json", {"component_name": "Number Slider", "position": [20, 40], "nickname": "Radius", "value": 5, "min": 0, "max": 10}),
         ("commands/gh_delete_component.json", {"nickname": "Radius"}),
         ("commands/gh_layout_components.json", {"component_ids": [GUID], "start_position": [40, 40], "x_spacing": 220, "y_spacing": 90, "recompute": True}),
