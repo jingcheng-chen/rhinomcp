@@ -75,7 +75,7 @@ MCP tool call
 rhinomcp/
 +-- server/                         # Python package published as rhinomcp
 |   +-- main.py                      # Local entry point
-|   +-- pyproject.toml               # Python package metadata, version 0.3.0
+|   +-- pyproject.toml               # Python package metadata
 |   +-- dev.sh                       # Development runner
 |   +-- tests/                       # Pytest tests and mock Rhino server
 |   +-- src/rhinomcp/
@@ -114,9 +114,9 @@ rhinomcp/
 |           +-- grasshopper_graph.py
 |
 +-- plugin/                         # RhinoCommon plugin
-|   +-- rhinomcp.csproj              # .NET 8 plugin project, version 0.3.0
+|   +-- rhinomcp.csproj              # .NET 8 plugin project
 |   +-- rhinomcp.sln                 # Plugin solution
-|   +-- manifest.yml                 # Yak package manifest, version 0.3.0
+|   +-- manifest.yml                 # Yak package manifest
 |   +-- Commands/
 |   |   +-- MCPStartCommand.cs
 |   |   +-- MCPStopCommand.cs
@@ -323,7 +323,7 @@ To add a command, the implementation must stay in sync across:
 
 ## Command Surface
 
-As of 0.3.0, `contracts/protocol.json` defines 59 command types: 34 Rhino
+`contracts/protocol.json` defines 59 command types: 34 Rhino
 commands and 25 Grasshopper commands.
 
 ### Rhino Commands
