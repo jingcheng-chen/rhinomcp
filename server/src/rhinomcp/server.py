@@ -87,6 +87,7 @@ READONLY_RETRY_COMMANDS = {
     "gh_list_components",
     "gh_get_component_info",
     "gh_get_canvas_state",
+    "gh_capture_preview",
     "gh_get_parameter_value",
 }
 

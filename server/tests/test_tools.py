@@ -1418,6 +1418,56 @@ class TestGrasshopperTools:
         )
 
     @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
+    def test_gh_capture_preview_tool(self, mock_get_conn):
+        import base64
+
+        from rhinomcp.tools.grasshopper_preview import gh_capture_preview
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "image_data": base64.b64encode(b"preview-png").decode("ascii"),
+            "width": 320,
+            "height": 240,
+            "viewport_name": "Perspective",
+            "captured_preview_object_count": 2,
+        }
+        mock_get_conn.return_value = mock_conn
+
+        image = gh_capture_preview(
+            ctx=None,
+            viewport="top",
+            width=320,
+            height=240,
+            show_grid=False,
+            show_axes=False,
+            graph_id="TestGraph",
+            targets=["output"],
+            include_hidden=True,
+            recompute=False,
+            open_canvas=True,
+            padding_factor=1.25,
+        )
+
+        mock_conn.send_command.assert_called_once_with(
+            "gh_capture_preview",
+            {
+                "viewport": "top",
+                "width": 320,
+                "height": 240,
+                "show_grid": False,
+                "show_axes": False,
+                "show_cplane_axes": False,
+                "include_hidden": True,
+                "recompute": False,
+                "open_canvas": True,
+                "padding_factor": 1.25,
+                "graph_id": "TestGraph",
+                "targets": ["output"],
+            },
+        )
+        assert image.data == b"preview-png"
+
+    @patch("rhinomcp.tools._grasshopper_common.get_rhino_connection")
     def test_gh_build_graph_tool(self, mock_get_conn):
         from rhinomcp.tools.grasshopper_build import gh_build_graph
 
@@ -1833,6 +1883,7 @@ class TestPackageApi:
             "gh_search_components",
             "gh_get_graph",
             "gh_clear_graph",
+            "gh_capture_preview",
             "gh_build_graph",
             "gh_mutate_graph",
             "gh_add_component",

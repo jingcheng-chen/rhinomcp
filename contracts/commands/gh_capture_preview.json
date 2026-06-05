@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gh_capture_preview.json",
+  "title": "gh_capture_preview",
+  "description": "Capture a Rhino viewport screenshot framed to live Grasshopper preview bounds without baking preview geometry. Bounds are computed from visible IGH_PreviewObject.ClippingBox values, optionally filtered by graph_id or target aliases/GUIDs/nicknames.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "viewport": {
+      "type": "string",
+      "default": "perspective",
+      "description": "Target Rhino viewport: active, perspective, top, front, right, back, left, bottom, or a custom viewport name."
+    },
+    "width": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 4096,
+      "default": 800
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 4096,
+      "default": 600
+    },
+    "show_grid": {
+      "type": "boolean",
+      "default": true
+    },
+    "show_axes": {
+      "type": "boolean",
+      "default": true
+    },
+    "show_cplane_axes": {
+      "type": "boolean",
+      "default": false
+    },
+    "graph_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional graph ownership tag. When provided and targets is omitted, only objects with this graph_id are considered."
+    },
+    "targets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/selector" },
+      "minItems": 1,
+      "description": "Optional aliases, GUIDs, or nicknames to frame. Takes precedence over graph_id."
+    },
+    "include_hidden": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether preview-hidden Grasshopper objects can contribute bounds."
+    },
+    "recompute": {
+      "type": "boolean",
+      "default": true,
+      "description": "Run a Grasshopper solution before computing preview bounds."
+    },
+    "open_canvas": {
+      "type": "boolean",
+      "default": true,
+      "description": "Open Grasshopper and make the working document active before capture."
+    },
+    "padding_factor": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 1.15,
+      "description": "Multiplier used to add breathing room around the preview bounds."
+    }
+  },
+  "$defs": {
+    "selector": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "examples": [
+    {
+      "viewport": "perspective",
+      "width": 1200,
+      "height": 900,
+      "graph_id": "PointAttractor_20260605",
+      "show_grid": false,
+      "recompute": true,
+      "open_canvas": true
+    }
+  ]
+}

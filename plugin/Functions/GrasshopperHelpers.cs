@@ -166,7 +166,7 @@ public partial class RhinoMCPFunctions
         }
         else if (previewEnabledCount > 0 && rhinoObjectCount == 0)
         {
-            note = "Grasshopper preview is live but not baked. capture_viewport frames Rhino document objects and may not show live Grasshopper preview geometry.";
+            note = "Grasshopper preview is live but not baked. Use gh_capture_preview to frame live Grasshopper preview bounds without baking.";
         }
 
         return new JObject

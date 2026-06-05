@@ -402,6 +402,60 @@ public partial class RhinoMCPFunctions
                 }
             });
 
+            Record("gh_capture_preview", () =>
+            {
+                var previewGraph = GhBuildGraph(new JObject
+                {
+                    ["graph_id"] = "MCPTestPreview",
+                    ["components"] = new JArray
+                    {
+                        new JObject
+                        {
+                            ["alias"] = "preview_point",
+                            ["component_name"] = "Point",
+                            ["nickname"] = "PreviewPt",
+                            ["role"] = "output"
+                        }
+                    },
+                    ["values"] = new JArray
+                    {
+                        new JObject
+                        {
+                            ["target"] = "preview_point",
+                            ["value"] = new JArray { 0, 0, 0 }
+                        }
+                    },
+                    ["recompute"] = true,
+                    ["rollback_on_error"] = true
+                });
+
+                var previewAliases = previewGraph["aliases"] as JObject;
+                var previewPointId = previewAliases?["preview_point"]?.ToString();
+                if (!string.IsNullOrEmpty(previewPointId))
+                {
+                    createdIds.Add(previewPointId);
+                }
+
+                var preview = GhCapturePreview(new JObject
+                {
+                    ["graph_id"] = "MCPTestPreview",
+                    ["viewport"] = "top",
+                    ["width"] = 160,
+                    ["height"] = 120,
+                    ["show_grid"] = false,
+                    ["show_axes"] = false,
+                    ["recompute"] = true
+                });
+                if (string.IsNullOrWhiteSpace(preview["image_data"]?.ToString()))
+                {
+                    throw new InvalidOperationException("gh_capture_preview did not return image data.");
+                }
+                if ((preview["captured_preview_object_count"]?.ToObject<int>() ?? 0) < 1)
+                {
+                    throw new InvalidOperationException("gh_capture_preview did not capture any preview-capable objects.");
+                }
+            });
+
             Record("gh_mutate_graph_fail_on_verification_error", () =>
             {
                 bool threw = false;

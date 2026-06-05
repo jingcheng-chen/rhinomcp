@@ -60,6 +60,7 @@
             "gh_list_components",
             "gh_get_component_info",
             "gh_get_canvas_state",
+            "gh_capture_preview",
             "gh_run_solution",
             "gh_expire_solution",
             "gh_build_graph",

@@ -65,40 +65,14 @@ public partial class RhinoMCPFunctions
             doc.Views.Redraw();
         }
 
-        // Capture the bitmap
-        Size captureSize = new Size(width, height);
-        Bitmap bitmap = targetView.CaptureToBitmap(captureSize, showGrid, showAxes, showCplaneAxes);
-
-        if (bitmap == null)
-        {
-            throw new InvalidOperationException("Failed to capture viewport bitmap. The viewport may be minimized or hidden.");
-        }
-
-        // Convert bitmap to base64 PNG. If the host runtime can't encode (no
-        // System.Drawing.Common / libgdiplus available) we surface a clear,
-        // user-actionable error instead of an opaque exception trace.
-        string base64Data;
-        try
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                bitmap.Save(ms, ImageFormat.Png);
-                byte[] imageBytes = ms.ToArray();
-                base64Data = Convert.ToBase64String(imageBytes);
-            }
-        }
-        catch (PlatformNotSupportedException ex)
-        {
-            bitmap.Dispose();
-            throw new InvalidOperationException(
-                "capture_viewport: PNG encoding is not supported on this platform. " +
-                "On macOS/Linux this requires running inside Rhino with its bundled " +
-                "libgdiplus.", ex);
-        }
-        finally
-        {
-            bitmap.Dispose();
-        }
+        string base64Data = CaptureViewToPngBase64(
+            targetView,
+            width,
+            height,
+            showGrid,
+            showAxes,
+            showCplaneAxes,
+            "capture_viewport");
 
         RhinoApp.WriteLine($"Captured viewport '{viewportName}' ({width}x{height})");
 
@@ -112,8 +86,47 @@ public partial class RhinoMCPFunctions
             ["viewport_target"] = viewportTarget,
             ["show_grid"] = showGrid,
             ["show_axes"] = showAxes,
+            ["show_cplane_axes"] = showCplaneAxes,
             ["object_count"] = doc.Objects.Count
         };
+    }
+
+    [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility",
+        Justification = "Runs in the Rhino process which provides cross-platform System.Drawing support.")]
+    private static string CaptureViewToPngBase64(
+        RhinoView targetView,
+        int width,
+        int height,
+        bool showGrid,
+        bool showAxes,
+        bool showCplaneAxes,
+        string commandName)
+    {
+        Size captureSize = new Size(width, height);
+        Bitmap bitmap = targetView.CaptureToBitmap(captureSize, showGrid, showAxes, showCplaneAxes);
+        if (bitmap == null)
+        {
+            throw new InvalidOperationException("Failed to capture viewport bitmap. The viewport may be minimized or hidden.");
+        }
+
+        try
+        {
+            using MemoryStream ms = new MemoryStream();
+            bitmap.Save(ms, ImageFormat.Png);
+            byte[] imageBytes = ms.ToArray();
+            return Convert.ToBase64String(imageBytes);
+        }
+        catch (PlatformNotSupportedException ex)
+        {
+            throw new InvalidOperationException(
+                $"{commandName}: PNG encoding is not supported on this platform. " +
+                "On macOS/Linux this requires running inside Rhino with its bundled " +
+                "libgdiplus.", ex);
+        }
+        finally
+        {
+            bitmap.Dispose();
+        }
     }
 
     /// <summary>
