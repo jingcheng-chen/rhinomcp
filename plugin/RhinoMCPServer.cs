@@ -24,6 +24,22 @@ namespace RhinoMCPPlugin
 {
     public class RhinoMCPServer
     {
+        // Wire framing: a 4-byte big-endian length header followed by UTF-8
+        // JSON, in both directions. Legacy (pre-framing) clients send bare
+        // JSON instead; the first byte of a connection decides which protocol
+        // that connection speaks. The size cap bounds memory per frame and
+        // keeps the header's first byte below any byte a legacy client could
+        // open with ('{' or whitespace), so the sniff is unambiguous.
+        private const int FrameHeaderSize = 4;
+        private const int MaxFrameSize = 64 * 1024 * 1024;
+
+        private enum ClientProtocol
+        {
+            Undecided,
+            Framed,
+            Legacy
+        }
+
         private string host;
         private int port;
         private bool running;
@@ -165,7 +181,8 @@ namespace RhinoMCPPlugin
             RhinoApp.WriteLine("Client handler started");
 
             byte[] buffer = new byte[8192];
-            string incompleteData = string.Empty;
+            var pending = new List<byte>();
+            ClientProtocol protocol = ClientProtocol.Undecided;
 
             try
             {
@@ -185,57 +202,42 @@ namespace RhinoMCPPlugin
                                 break;
                             }
 
-                            string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                            incompleteData += data;
-
-                            try
+                            for (int i = 0; i < bytesRead; i++)
                             {
-                                // Try to parse as JSON
-                                JObject command = JObject.Parse(incompleteData);
-                                incompleteData = string.Empty;
-
-                                // Execute command on Rhino's main thread
-                                RhinoApp.InvokeOnUiThread(new Action(() =>
-                                {
-                                    try
-                                    {
-                                        JObject response = ExecuteCommand(command);
-                                        string responseJson = JsonConvert.SerializeObject(response);
-
-                                        try
-                                        {
-                                            byte[] responseBytes = Encoding.UTF8.GetBytes(responseJson);
-                                            stream.Write(responseBytes, 0, responseBytes.Length);
-                                        }
-                                        catch
-                                        {
-                                            RhinoApp.WriteLine("Failed to send response - client disconnected");
-                                        }
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        RhinoApp.WriteLine($"Error executing command: {e.Message}");
-                                        try
-                                        {
-                                            JObject errorResponse = new JObject
-                                            {
-                                                ["status"] = "error",
-                                                ["message"] = e.Message
-                                            };
-
-                                            byte[] errorBytes = Encoding.UTF8.GetBytes(errorResponse.ToString());
-                                            stream.Write(errorBytes, 0, errorBytes.Length);
-                                        }
-                                        catch
-                                        {
-                                            // Ignore send errors
-                                        }
-                                    }
-                                }));
+                                pending.Add(buffer[i]);
                             }
-                            catch (JsonException)
+
+                            if (protocol == ClientProtocol.Undecided)
                             {
-                                // Incomplete JSON data, wait for more
+                                protocol = SniffProtocol(pending[0]);
+                            }
+
+                            if (protocol == ClientProtocol.Framed)
+                            {
+                                // Drain every complete frame in the buffer so
+                                // pipelined commands all execute in order
+                                // instead of wedging the connection.
+                                while (TryExtractFrame(pending, out JObject framedCommand))
+                                {
+                                    DispatchCommand(framedCommand, stream, framed: true);
+                                }
+                            }
+                            else
+                            {
+                                // Legacy client: bare JSON, no framing. Keep
+                                // the original semantics: try to parse the
+                                // whole accumulation, wait for more on failure.
+                                string incompleteData = Encoding.UTF8.GetString(pending.ToArray());
+                                try
+                                {
+                                    JObject command = JObject.Parse(incompleteData);
+                                    pending.Clear();
+                                    DispatchCommand(command, stream, framed: false);
+                                }
+                                catch (JsonException)
+                                {
+                                    // Incomplete JSON data, wait for more
+                                }
                             }
                         }
                         else
@@ -267,6 +269,106 @@ namespace RhinoMCPPlugin
                 }
                 RhinoApp.WriteLine("Client handler stopped");
             }
+        }
+
+        private static ClientProtocol SniffProtocol(byte firstByte)
+        {
+            // Legacy clients open with bare JSON: '{', possibly preceded by
+            // whitespace. A frame header's first byte is the high byte of the
+            // message length, which MaxFrameSize caps at 0x04 — below '{'
+            // (0x7B) and every whitespace byte (0x09, 0x0A, 0x0D, 0x20).
+            if (firstByte == (byte)'{' || firstByte == (byte)' ' ||
+                firstByte == (byte)'\t' || firstByte == (byte)'\r' ||
+                firstByte == (byte)'\n')
+            {
+                return ClientProtocol.Legacy;
+            }
+            return ClientProtocol.Framed;
+        }
+
+        private static bool TryExtractFrame(List<byte> pending, out JObject command)
+        {
+            command = null;
+            if (pending.Count < FrameHeaderSize) return false;
+
+            int frameLength = (pending[0] << 24) | (pending[1] << 16) |
+                              (pending[2] << 8) | pending[3];
+            if (frameLength <= 0 || frameLength > MaxFrameSize)
+            {
+                // Hard protocol violation; the caller logs and drops the
+                // connection rather than guessing where the next frame starts.
+                throw new InvalidOperationException(
+                    $"Invalid frame length {frameLength} (limit {MaxFrameSize} bytes)");
+            }
+
+            if (pending.Count < FrameHeaderSize + frameLength) return false;
+
+            string json = Encoding.UTF8.GetString(
+                pending.GetRange(FrameHeaderSize, frameLength).ToArray());
+            pending.RemoveRange(0, FrameHeaderSize + frameLength);
+            command = JObject.Parse(json);
+            return true;
+        }
+
+        private void DispatchCommand(JObject command, NetworkStream stream, bool framed)
+        {
+            // Execute command on Rhino's main thread. Posts are processed in
+            // order, so pipelined framed commands get their responses in the
+            // order the commands were sent.
+            RhinoApp.InvokeOnUiThread(new Action(() =>
+            {
+                try
+                {
+                    JObject response = ExecuteCommand(command);
+                    string responseJson = JsonConvert.SerializeObject(response);
+
+                    try
+                    {
+                        WriteMessage(stream, responseJson, framed);
+                    }
+                    catch
+                    {
+                        RhinoApp.WriteLine("Failed to send response - client disconnected");
+                    }
+                }
+                catch (Exception e)
+                {
+                    RhinoApp.WriteLine($"Error executing command: {e.Message}");
+                    try
+                    {
+                        JObject errorResponse = new JObject
+                        {
+                            ["status"] = "error",
+                            ["message"] = e.Message
+                        };
+
+                        WriteMessage(stream, errorResponse.ToString(), framed);
+                    }
+                    catch
+                    {
+                        // Ignore send errors
+                    }
+                }
+            }));
+        }
+
+        private static void WriteMessage(NetworkStream stream, string json, bool framed)
+        {
+            byte[] payload = Encoding.UTF8.GetBytes(json);
+            if (!framed)
+            {
+                stream.Write(payload, 0, payload.Length);
+                return;
+            }
+
+            // One write for header + payload keeps the frame contiguous.
+            byte[] message = new byte[FrameHeaderSize + payload.Length];
+            message[0] = (byte)((payload.Length >> 24) & 0xFF);
+            message[1] = (byte)((payload.Length >> 16) & 0xFF);
+            message[2] = (byte)((payload.Length >> 8) & 0xFF);
+            message[3] = (byte)(payload.Length & 0xFF);
+            Buffer.BlockCopy(payload, 0, message, FrameHeaderSize, payload.Length);
+            stream.Write(message, 0, message.Length);
         }
 
         private JObject ExecuteCommand(JObject command)

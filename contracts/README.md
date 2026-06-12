@@ -32,6 +32,11 @@ contracts/
 
 ## Protocol Format
 
+On the wire, every message in both directions is one frame: a 4-byte
+big-endian length header followed by that many bytes of UTF-8 JSON. The
+plugin also accepts legacy unframed connections (bare JSON, detected by the
+first byte) for older clients.
+
 ### Command (Python → C#)
 
 ```json

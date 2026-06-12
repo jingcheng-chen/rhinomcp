@@ -297,6 +297,20 @@ objects, and executes every command through `RhinoApp.InvokeOnUiThread(...)`.
 This is required because RhinoCommon and Grasshopper document APIs must run on
 Rhino's main thread.
 
+### Wire Framing
+
+Messages in both directions are length-prefixed: a 4-byte big-endian size
+header followed by that many bytes of UTF-8 JSON. This makes message
+boundaries exact, so pipelined commands and back-to-back responses cannot be
+misread, and frames split across TCP segments are read until complete.
+
+The plugin stays compatible with older unframed clients by sniffing the first
+byte of each connection: bare JSON (`{` or whitespace) selects the legacy
+unframed protocol for that connection, while a frame header's first byte is
+always below those values (frame sizes are capped at 64 MB). The bundled
+Python server always speaks the framed protocol and reports an actionable
+error if it detects an unframed (pre-framing) plugin.
+
 ### Handler Dispatch
 
 Dispatch is reflection based. `RhinoMCPFunctions.GetDispatchTable()` scans

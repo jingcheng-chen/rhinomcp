@@ -4,7 +4,9 @@ Integration tests using the mock Rhino server.
 These tests verify the full flow from MCP tools through to the server response.
 """
 
+import json
 import pytest
+import socket
 import time
 from tests.mock_rhino_server import MockRhinoServer
 
@@ -519,3 +521,72 @@ class TestAdvancedGeometry:
         # image_data must be valid base64 the wrapper can decode.
         base64.b64decode(result["image_data"])
         assert result["viewport_name"] == "perspective"
+
+
+class TestWireProtocol:
+    """Wire-level tests against the mock server, which mirrors the plugin's
+    framing logic: framed protocol for new clients, legacy bare JSON for old
+    ones, decided by the first byte of the connection."""
+
+    def _read_frame(self, sock):
+        header = b""
+        while len(header) < 4:
+            chunk = sock.recv(4 - len(header))
+            assert chunk, "connection closed mid-header"
+            header += chunk
+        length = int.from_bytes(header, "big")
+        body = b""
+        while len(body) < length:
+            chunk = sock.recv(length - len(body))
+            assert chunk, "connection closed mid-body"
+            body += chunk
+        return json.loads(body.decode("utf-8"))
+
+    def test_pipelined_framed_commands_all_answered_in_order(self, mock_server):
+        """The regression that motivated framing: two commands in one TCP
+        write. The old whole-buffer JObject.Parse approach could never parse
+        the concatenation, wedging the connection with both commands lost.
+        With framing both execute and answer in order."""
+        cmd1 = json.dumps({"type": "get_document_summary", "params": {}}).encode("utf-8")
+        cmd2 = json.dumps({"type": "get_objects", "params": {}}).encode("utf-8")
+        wire = (
+            len(cmd1).to_bytes(4, "big") + cmd1
+            + len(cmd2).to_bytes(4, "big") + cmd2
+        )
+
+        sock = socket.create_connection(("127.0.0.1", 19999), timeout=5)
+        try:
+            sock.sendall(wire)
+            first = self._read_frame(sock)
+            second = self._read_frame(sock)
+        finally:
+            sock.close()
+
+        assert first["status"] == "success"
+        assert "object_count" in first["result"]  # document summary
+        assert second["status"] == "success"
+        assert "objects" in second["result"]  # get_objects result
+
+    def test_legacy_unframed_client_still_works(self, mock_server):
+        """A pre-framing client sends bare JSON and expects bare JSON back.
+        The first-byte sniff must route it onto the legacy path."""
+        cmd = json.dumps({"type": "get_document_summary", "params": {}}).encode("utf-8")
+
+        sock = socket.create_connection(("127.0.0.1", 19999), timeout=5)
+        try:
+            sock.sendall(cmd)
+            sock.settimeout(5)
+            data = b""
+            while True:
+                data += sock.recv(65536)
+                try:
+                    response = json.loads(data.decode("utf-8"))
+                    break
+                except json.JSONDecodeError:
+                    continue
+        finally:
+            sock.close()
+
+        # Bare JSON back: the first byte is '{', not a length header.
+        assert data[0:1] == b"{"
+        assert response["status"] == "success"
