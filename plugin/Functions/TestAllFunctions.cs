@@ -707,6 +707,48 @@ public partial class RhinoMCPFunctions
             results["split_curve"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
+        // Test 24: CaptureViewport must not move the user's camera (ReadOnly contract)
+        try
+        {
+            var activeViewport = doc.Views.ActiveView?.ActiveViewport;
+            if (activeViewport == null)
+                throw new Exception("No active viewport to test against");
+
+            // zoom_to_fit moves the camera; a correct ReadOnly handler restores it.
+            string nameBefore = activeViewport.Name;
+            var before = new Rhino.DocObjects.ViewportInfo(activeViewport);
+            before.GetFrustum(out double bl, out double br, out double bb, out double bt, out _, out _);
+
+            CaptureViewport(new JObject
+            {
+                ["viewport"] = "active",
+                ["zoom_to_fit"] = true,
+                ["width"] = 200,
+                ["height"] = 200
+            });
+
+            var after = new Rhino.DocObjects.ViewportInfo(activeViewport);
+            after.GetFrustum(out double al, out double ar, out double ab, out double at, out _, out _);
+
+            double cameraDrift = before.CameraLocation.DistanceTo(after.CameraLocation);
+            double frustumDrift = Math.Abs(bl - al) + Math.Abs(br - ar) + Math.Abs(bb - ab) + Math.Abs(bt - at);
+            bool nameKept = activeViewport.Name == nameBefore;
+            if (cameraDrift > 1e-6 || frustumDrift > 1e-6 || !nameKept)
+                throw new Exception($"capture_viewport changed the active view (cameraDrift={cameraDrift:G4}, frustumDrift={frustumDrift:G4}, nameKept={nameKept})");
+
+            results["capture_viewport_readonly"] = new JObject
+            {
+                ["status"] = "pass",
+                ["camera_drift"] = cameraDrift,
+                ["frustum_drift"] = frustumDrift
+            };
+            VisualUpdate("capture_viewport left the camera unchanged");
+        }
+        catch (Exception e)
+        {
+            results["capture_viewport_readonly"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
         // Cleanup
         if (!visualMode)
         {
