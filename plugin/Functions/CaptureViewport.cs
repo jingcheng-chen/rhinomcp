@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using Rhino;
+using Rhino.DocObjects;
 using Rhino.Display;
 
 namespace RhinoMCPPlugin.Functions;
@@ -48,47 +49,87 @@ public partial class RhinoMCPFunctions
         width = Math.Max(width, 100);
         height = Math.Max(height, 100);
 
-        // Find the target view
+        // capture_viewport is ReadOnly, so it must leave every viewport exactly as it
+        // found it. Resolving a projection target (top/front/...) reprojects AND renames
+        // the active view, and zoom_to_fit moves the camera, so snapshot the projection
+        // and name of the views we might touch and restore them in the finally below.
+        RhinoView activeView = doc.Views.ActiveView;
+        ViewportInfo savedActiveState = activeView != null
+            ? new ViewportInfo(activeView.ActiveViewport)
+            : null;
+        string savedActiveName = activeView?.ActiveViewport.Name;
+
+        // Find the target view (may temporarily reproject the active view)
         RhinoView targetView = GetTargetView(doc, viewportTarget);
         if (targetView == null)
         {
             throw new InvalidOperationException($"Viewport '{viewportTarget}' not found. Available viewports: Perspective, Top, Front, Right, Back, Left, Bottom, or use 'active' for the current view.");
         }
 
-        // Store viewport name
-        string viewportName = targetView.ActiveViewport.Name ?? viewportTarget;
+        // A named projection view (e.g. an existing "Top") is a different view than the
+        // active one; snapshot it too since zoom_to_fit would otherwise leave it zoomed.
+        bool targetIsActive = activeView != null
+            && targetView.ActiveViewportID == activeView.ActiveViewportID;
+        ViewportInfo savedTargetState = !targetIsActive
+            ? new ViewportInfo(targetView.ActiveViewport)
+            : null;
+        string savedTargetName = !targetIsActive ? targetView.ActiveViewport.Name : null;
 
-        // Apply zoom to fit if requested
-        if (zoomToFit && doc.Objects.Count > 0)
+        try
         {
-            targetView.ActiveViewport.ZoomExtents();
+            // Store viewport name
+            string viewportName = targetView.ActiveViewport.Name ?? viewportTarget;
+
+            // Apply zoom to fit if requested
+            if (zoomToFit && doc.Objects.Count > 0)
+            {
+                targetView.ActiveViewport.ZoomExtents();
+                doc.Views.Redraw();
+            }
+
+            string base64Data = CaptureViewToPngBase64(
+                targetView,
+                width,
+                height,
+                showGrid,
+                showAxes,
+                showCplaneAxes,
+                "capture_viewport");
+
+            RhinoApp.WriteLine($"Captured viewport '{viewportName}' ({width}x{height})");
+
+            return new JObject
+            {
+                ["image_data"] = base64Data,
+                ["mime_type"] = "image/png",
+                ["width"] = width,
+                ["height"] = height,
+                ["viewport_name"] = viewportName,
+                ["viewport_target"] = viewportTarget,
+                ["show_grid"] = showGrid,
+                ["show_axes"] = showAxes,
+                ["show_cplane_axes"] = showCplaneAxes,
+                ["object_count"] = doc.Objects.Count
+            };
+        }
+        finally
+        {
+            // Restore any viewport we may have changed (projection and name) so the
+            // capture leaves no visible side effect on the user's views.
+            if (savedActiveState != null)
+            {
+                activeView.ActiveViewport.SetViewProjection(savedActiveState, true);
+                if (savedActiveName != null && activeView.ActiveViewport.Name != savedActiveName)
+                    activeView.ActiveViewport.Name = savedActiveName;
+            }
+            if (savedTargetState != null)
+            {
+                targetView.ActiveViewport.SetViewProjection(savedTargetState, true);
+                if (savedTargetName != null && targetView.ActiveViewport.Name != savedTargetName)
+                    targetView.ActiveViewport.Name = savedTargetName;
+            }
             doc.Views.Redraw();
         }
-
-        string base64Data = CaptureViewToPngBase64(
-            targetView,
-            width,
-            height,
-            showGrid,
-            showAxes,
-            showCplaneAxes,
-            "capture_viewport");
-
-        RhinoApp.WriteLine($"Captured viewport '{viewportName}' ({width}x{height})");
-
-        return new JObject
-        {
-            ["image_data"] = base64Data,
-            ["mime_type"] = "image/png",
-            ["width"] = width,
-            ["height"] = height,
-            ["viewport_name"] = viewportName,
-            ["viewport_target"] = viewportTarget,
-            ["show_grid"] = showGrid,
-            ["show_axes"] = showAxes,
-            ["show_cplane_axes"] = showCplaneAxes,
-            ["object_count"] = doc.Objects.Count
-        };
     }
 
     [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility",
@@ -178,27 +219,26 @@ public partial class RhinoMCPFunctions
     }
 
     /// <summary>
-    /// Finds a view by projection type, or temporarily sets the active view to that projection.
+    /// Finds a view by projection type, or temporarily reprojects the active view.
+    /// The caller (CaptureViewport) is responsible for restoring viewport state.
     /// </summary>
     private RhinoView FindViewByProjection(RhinoDoc doc, DefinedViewportProjection projection)
     {
         string projectionName = projection.ToString();
 
-        // First, try to find existing view with matching name
+        // First, try to find an existing view whose title matches the projection
         foreach (var view in doc.Views)
         {
             if (view.ActiveViewport.Name?.Equals(projectionName, StringComparison.OrdinalIgnoreCase) == true)
                 return view;
         }
 
-        // If not found by name, use the active view and temporarily set the projection
+        // No dedicated view exists: temporarily reproject the active view (this also
+        // renames it). CaptureViewport snapshots and restores both projection and name,
+        // so the change is invisible to the user.
         var activeView = doc.Views.ActiveView;
         if (activeView != null)
         {
-            // Store original state
-            var originalProjection = activeView.ActiveViewport.IsParallelProjection;
-
-            // Set the desired projection
             activeView.ActiveViewport.SetProjection(projection, projectionName, false);
             doc.Views.Redraw();
 
