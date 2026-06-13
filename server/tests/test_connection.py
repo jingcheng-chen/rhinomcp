@@ -232,6 +232,159 @@ class TestRuntimeValidation:
         importlib.import_module("rhinomcp.server")
 
 
+class TestResponseValidation:
+    """Post-flight schema validation of Rhino responses, behind the same
+    RHINO_MCP_VALIDATE switch as the pre-flight check."""
+
+    # A create_object result that satisfies responses/object_info.json.
+    VALID_OBJECT_INFO = {
+        "id": "12345678-1234-1234-1234-123456789012",
+        "name": "MyBox",
+        "type": "BOX",
+        "layer": "Default",
+        "material": "-1",
+        "color": {"r": 255, "g": 0, "b": 0},
+        "bounding_box": [[-1, -1, -1], [1, 1, 1]],
+        "geometry": {},
+    }
+
+    # Valid params so the pre-flight check passes and the response check is
+    # the only thing under test.
+    VALID_BOX_PARAMS = {
+        "type": "BOX",
+        "params": {"width": 1.0, "length": 1.0, "height": 1.0},
+    }
+
+    def _connect_with_response(self, mock_socket_class, result):
+        """Connection whose next receive yields the given result payload.
+
+        Stubs receive_full_response rather than raw socket bytes: these tests
+        pin validation policy, not wire framing, so they stay valid if the
+        wire format changes (framing has its own coverage).
+        """
+        from rhinomcp.server import RhinoConnection
+
+        mock_sock = MagicMock()
+        mock_socket_class.return_value = mock_sock
+
+        conn = RhinoConnection(host="127.0.0.1", port=1999)
+        conn.connect()
+        payload = json.dumps({"status": "success", "result": result}).encode(
+            "utf-8"
+        )
+        conn.receive_full_response = lambda sock, buffer_size=8192: payload
+        return conn
+
+    @patch("socket.socket")
+    def test_strict_mode_rejects_contract_violating_response(
+        self, mock_socket_class
+    ):
+        import rhinomcp.server as srv
+
+        # An empty result is missing every required object_info field.
+        conn = self._connect_with_response(mock_socket_class, {})
+
+        original_mode = srv.RHINO_VALIDATE
+        srv.RHINO_VALIDATE = "strict"
+        try:
+            with pytest.raises(ValueError, match="failed contract validation"):
+                conn.send_command("create_object", self.VALID_BOX_PARAMS)
+        finally:
+            srv.RHINO_VALIDATE = original_mode
+
+    @patch("socket.socket")
+    def test_strict_mode_passes_valid_response_through(self, mock_socket_class):
+        import rhinomcp.server as srv
+
+        conn = self._connect_with_response(
+            mock_socket_class, self.VALID_OBJECT_INFO
+        )
+
+        original_mode = srv.RHINO_VALIDATE
+        srv.RHINO_VALIDATE = "strict"
+        try:
+            result = conn.send_command("create_object", self.VALID_BOX_PARAMS)
+        finally:
+            srv.RHINO_VALIDATE = original_mode
+
+        assert result == self.VALID_OBJECT_INFO
+
+    @patch("socket.socket")
+    def test_warn_mode_logs_and_returns_result_anyway(
+        self, mock_socket_class, caplog
+    ):
+        """The default 'warn' mode must never turn a successful Rhino command
+        into a client error — the command already executed."""
+        import rhinomcp.server as srv
+
+        conn = self._connect_with_response(mock_socket_class, {})
+
+        original_mode = srv.RHINO_VALIDATE
+        srv.RHINO_VALIDATE = "warn"
+        try:
+            with caplog.at_level("WARNING", logger="RhinoMCPServer"):
+                result = conn.send_command("create_object", self.VALID_BOX_PARAMS)
+        finally:
+            srv.RHINO_VALIDATE = original_mode
+
+        assert result == {}
+        assert any(
+            "Response validation failed for create_object" in r.message
+            for r in caplog.records
+        )
+
+    @patch("socket.socket")
+    def test_unmapped_command_skips_response_validation(self, mock_socket_class):
+        """get_selected_objects_info returns {"selected_objects": [...]}, which
+        no response schema describes — it must pass untouched even in strict."""
+        import rhinomcp.server as srv
+
+        result_payload = {"selected_objects": [{"id": "1", "name": "Box1"}]}
+        conn = self._connect_with_response(mock_socket_class, result_payload)
+
+        original_mode = srv.RHINO_VALIDATE
+        srv.RHINO_VALIDATE = "strict"
+        try:
+            result = conn.send_command("get_selected_objects_info", {})
+        finally:
+            srv.RHINO_VALIDATE = original_mode
+
+        assert result == result_payload
+
+    @patch("socket.socket")
+    def test_schema_infrastructure_error_never_fails_the_command(
+        self, mock_socket_class, caplog
+    ):
+        """A broken schema (unresolvable $ref, unreadable file) is not a
+        verdict on the response. Even in strict mode the result must come
+        back, with a 'could not validate' warning instead of a failure."""
+        import rhinomcp.server as srv
+
+        conn = self._connect_with_response(
+            mock_socket_class, self.VALID_OBJECT_INFO
+        )
+
+        original_mode = srv.RHINO_VALIDATE
+        srv.RHINO_VALIDATE = "strict"
+        try:
+            with patch(
+                "rhinomcp.validation.validate_response",
+                side_effect=RuntimeError("Unresolvable: object_info.json"),
+            ):
+                with caplog.at_level("WARNING", logger="RhinoMCPServer"):
+                    result = conn.send_command(
+                        "create_object", self.VALID_BOX_PARAMS
+                    )
+        finally:
+            srv.RHINO_VALIDATE = original_mode
+
+        assert result == self.VALID_OBJECT_INFO
+        assert any(
+            "Could not validate response for create_object" in r.message
+            for r in caplog.records
+        )
+
+
 class TestSendCommand:
     """Tests for the send_command method."""
 

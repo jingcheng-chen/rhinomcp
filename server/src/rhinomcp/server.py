@@ -300,7 +300,47 @@ class RhinoConnection:
                 logger.error(f"Rhino error: {response.get('message')}")
                 raise Exception(response.get("message", "Unknown error from Rhino"))
 
-            return response.get("result", {})
+            result = response.get("result", {})
+
+            # Post-flight: validate the unwrapped result against the response
+            # contract, mirroring the pre-flight semantics. The C# side doesn't
+            # validate anything against contracts/, so this is the only place
+            # plugin/contract drift gets caught. Note the command has already
+            # executed in Rhino by now: 'warn' logs and returns the result
+            # anyway; 'strict' raises. validate_response no-ops if jsonschema
+            # is missing or the command has no response schema.
+            if RHINO_VALIDATE != "off":
+                from rhinomcp.validation import HAS_JSONSCHEMA, validate_response
+
+                try:
+                    validate_response(command_type, result, raise_on_error=True)
+                except Exception as ve:
+                    # Only a genuine validation verdict gets the warn/strict
+                    # treatment. Anything else (unresolvable $ref, unreadable
+                    # schema file) is a schema-infrastructure problem, not
+                    # evidence the response is wrong — a successful command
+                    # must not fail because the local schema tooling broke.
+                    is_verdict = False
+                    if HAS_JSONSCHEMA:
+                        import jsonschema
+
+                        is_verdict = isinstance(ve, jsonschema.ValidationError)
+                    if not is_verdict:
+                        logger.warning(
+                            f"Could not validate response for {command_type} "
+                            f"(schema error): {ve}"
+                        )
+                    elif RHINO_VALIDATE == "strict":
+                        raise ValueError(
+                            f"Rhino executed '{command_type}' but the response "
+                            f"failed contract validation: {ve}"
+                        ) from ve
+                    else:
+                        logger.warning(
+                            f"Response validation failed for {command_type}: {ve}"
+                        )
+
+            return result
         except socket.timeout:
             logger.error("Socket timeout while waiting for response from Rhino")
             # Don't try to reconnect here - let the get_rhino_connection handle reconnection
@@ -334,7 +374,8 @@ class RhinoConnection:
                 logger.error(f"Raw response (first 200 bytes): {response_data[:200]}")
             raise Exception(f"Invalid response from Rhino: {str(e)}")
         except ValueError:
-            # Pre-flight validation failures — local, not a transport issue. Propagate.
+            # Pre/post-flight validation failures — local, not a transport
+            # issue. Propagate.
             raise
         except Exception as e:
             logger.error(f"Error communicating with Rhino: {str(e)}")

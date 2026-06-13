@@ -34,8 +34,15 @@ class MockRhinoServer:
 
         # Mock document state
         self.objects: Dict[str, Dict[str, Any]] = {}
+        # Shaped like the plugin's SerializeLayer output (layer_info.json):
+        # color is an {r,g,b} object, parent is a guid.
         self.layers: Dict[str, Dict[str, Any]] = {
-            "Default": {"id": str(uuid.uuid4()), "name": "Default", "color": [0, 0, 0]}
+            "Default": {
+                "id": str(uuid.uuid4()),
+                "name": "Default",
+                "color": {"r": 0, "g": 0, "b": 0},
+                "parent": "00000000-0000-0000-0000-000000000000",
+            }
         }
         self.current_layer = "Default"
         self.undo_stack: list = []
@@ -760,6 +767,7 @@ class MockRhinoServer:
         )
         return {
             "image_data": png_b64,
+            "mime_type": "image/png",
             "viewport_name": params.get("viewport", "active"),
             "width": params.get("width", 800),
             "height": params.get("height", 600),
