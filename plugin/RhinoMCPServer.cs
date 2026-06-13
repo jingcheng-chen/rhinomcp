@@ -217,8 +217,42 @@ namespace RhinoMCPPlugin
                                 // Drain every complete frame in the buffer so
                                 // pipelined commands all execute in order
                                 // instead of wedging the connection.
-                                while (TryExtractFrame(pending, out JObject framedCommand))
+                                while (TryExtractFrame(pending, out string framedJson))
                                 {
+                                    JObject framedCommand;
+                                    try
+                                    {
+                                        framedCommand = JObject.Parse(framedJson);
+                                    }
+                                    catch (JsonException ex)
+                                    {
+                                        // The frame was well-formed (its length
+                                        // matched) but the payload isn't valid
+                                        // JSON. Framing already located the next
+                                        // frame, so answer this one with an error
+                                        // and keep the connection instead of
+                                        // dropping every command queued behind it.
+                                        // Routed through the UI thread like every
+                                        // other write so responses stay
+                                        // single-writer and in send order.
+                                        string detail = ex.Message;
+                                        RhinoApp.InvokeOnUiThread(new Action(() =>
+                                        {
+                                            try
+                                            {
+                                                WriteMessage(stream, new JObject
+                                                {
+                                                    ["status"] = "error",
+                                                    ["message"] = $"Invalid JSON in framed message: {detail}"
+                                                }.ToString(), framed: true);
+                                            }
+                                            catch
+                                            {
+                                                RhinoApp.WriteLine("Failed to send error response - client disconnected");
+                                            }
+                                        }));
+                                        continue;
+                                    }
                                     DispatchCommand(framedCommand, stream, framed: true);
                                 }
                             }
@@ -286,27 +320,32 @@ namespace RhinoMCPPlugin
             return ClientProtocol.Framed;
         }
 
-        private static bool TryExtractFrame(List<byte> pending, out JObject command)
+        private static bool TryExtractFrame(List<byte> pending, out string payloadJson)
         {
-            command = null;
+            // Frame de-chunking only: pulls the bytes of one complete frame off
+            // the buffer and returns them as a string. JSON parsing happens in
+            // the caller, on purpose — a well-framed message whose payload is
+            // bad JSON should be a per-message error, not a dropped connection,
+            // and that's only recoverable once the frame bytes are consumed.
+            payloadJson = null;
             if (pending.Count < FrameHeaderSize) return false;
 
             int frameLength = (pending[0] << 24) | (pending[1] << 16) |
                               (pending[2] << 8) | pending[3];
             if (frameLength <= 0 || frameLength > MaxFrameSize)
             {
-                // Hard protocol violation; the caller logs and drops the
-                // connection rather than guessing where the next frame starts.
+                // A bad length means framing sync is lost: we can't tell where
+                // the next frame starts, so this one stays fatal. The caller
+                // logs and drops the connection.
                 throw new InvalidOperationException(
                     $"Invalid frame length {frameLength} (limit {MaxFrameSize} bytes)");
             }
 
             if (pending.Count < FrameHeaderSize + frameLength) return false;
 
-            string json = Encoding.UTF8.GetString(
+            payloadJson = Encoding.UTF8.GetString(
                 pending.GetRange(FrameHeaderSize, frameLength).ToArray());
             pending.RemoveRange(0, FrameHeaderSize + frameLength);
-            command = JObject.Parse(json);
             return true;
         }
 

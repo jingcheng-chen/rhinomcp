@@ -590,3 +590,35 @@ class TestWireProtocol:
         # Bare JSON back: the first byte is '{', not a length header.
         assert data[0:1] == b"{"
         assert response["status"] == "success"
+
+    def test_malformed_frame_gets_error_and_connection_survives(self, mock_server):
+        """A well-framed message carrying bad JSON must not take the whole
+        connection down with it. Framing pins where the next frame starts, so
+        the bad one gets an error response and the command queued behind it is
+        still answered. This pins the contract the plugin has to meet."""
+        good1 = json.dumps({"type": "get_document_summary", "params": {}}).encode("utf-8")
+        bad = b"{not valid json"
+        good2 = json.dumps({"type": "get_objects", "params": {}}).encode("utf-8")
+        wire = (
+            len(good1).to_bytes(4, "big") + good1
+            + len(bad).to_bytes(4, "big") + bad
+            + len(good2).to_bytes(4, "big") + good2
+        )
+
+        sock = socket.create_connection(("127.0.0.1", 19999), timeout=5)
+        try:
+            sock.sendall(wire)
+            first = self._read_frame(sock)
+            second = self._read_frame(sock)
+            third = self._read_frame(sock)
+        finally:
+            sock.close()
+
+        # The good commands before and after the bad frame both succeed, in
+        # order; the bad one comes back as an error rather than a dropped
+        # connection (which would hang _read_frame on the third reply).
+        assert first["status"] == "success"
+        assert "object_count" in first["result"]
+        assert second["status"] == "error"
+        assert third["status"] == "success"
+        assert "objects" in third["result"]
