@@ -110,6 +110,75 @@ class TestCreateObjectTool:
         with pytest.raises(Exception, match="Connection failed"):
             create_object(ctx=None, type="BOX", params={"width": 1, "length": 1, "height": 1})
 
+    @patch('rhinomcp.tools.create_object.get_rhino_connection')
+    def test_create_surfaces_bounding_box(self, mock_get_conn):
+        """The plugin serializes the new object's bounding box; the wrapper must
+        pass it through instead of discarding it, so the client learns where the
+        object landed without a follow-up query."""
+        from rhinomcp.tools.create_object import create_object
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "id": "abc-123",
+            "name": "TestBox",
+            "type": "Brep",
+            "bounding_box": [[0, 0, 0], [1, 2, 3]],
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = create_object(
+            ctx=None, type="BOX", name="TestBox",
+            params={"width": 1, "length": 2, "height": 3},
+        )
+
+        assert result["bounding_box"] == [[0, 0, 0], [1, 2, 3]]
+        # Purely additive: existing fields are untouched.
+        assert result["success"] is True
+        assert result["id"] == "abc-123"
+        assert "geometry" not in result  # a box carries no geometry block
+
+    @patch('rhinomcp.tools.create_object.get_rhino_connection')
+    def test_create_surfaces_geometry_for_curve_like(self, mock_get_conn):
+        """Curve-like types (LINE here) carry a geometry block; it rides through too."""
+        from rhinomcp.tools.create_object import create_object
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "id": "line-1",
+            "name": "Edge",
+            "type": "LINE",
+            "bounding_box": [[0, 0, 0], [3, 4, 0]],
+            "geometry": {"start": [0, 0, 0], "end": [3, 4, 0]},
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = create_object(
+            ctx=None, type="LINE", name="Edge",
+            params={"start": [0, 0, 0], "end": [3, 4, 0]},
+        )
+
+        assert result["geometry"] == {"start": [0, 0, 0], "end": [3, 4, 0]}
+        assert result["bounding_box"] == [[0, 0, 0], [3, 4, 0]]
+
+    @patch('rhinomcp.tools.create_object.get_rhino_connection')
+    def test_create_omits_perception_fields_when_plugin_absent(self, mock_get_conn):
+        """If the plugin reports neither field (an older plugin, or a path that
+        doesn't serialize them), the response shape stays exactly as before —
+        no null keys leak in."""
+        from rhinomcp.tools.create_object import create_object
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"id": "x", "name": "Y", "type": "BOX"}
+        mock_get_conn.return_value = mock_conn
+
+        result = create_object(
+            ctx=None, type="BOX", params={"width": 1, "length": 1, "height": 1},
+        )
+
+        assert "bounding_box" not in result
+        assert "geometry" not in result
+        assert result["id"] == "x"
+
 
 class TestCreateObjectsTool:
     """Tests for create_objects tool."""
@@ -190,6 +259,61 @@ class TestModifyObjectTool:
 
         call_args = mock_conn.send_command.call_args
         assert call_args[0][1]["new_color"] == [255, 128, 0]
+
+    @patch('rhinomcp.tools.modify_object.get_rhino_connection')
+    def test_modify_surfaces_new_bounding_box(self, mock_get_conn):
+        """The plugin re-serializes after the edit, so bounding_box is the NEW
+        post-transform extent. A translate must report the moved box — that is
+        the whole point of surfacing it."""
+        from rhinomcp.tools.modify_object import modify_object
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "id": "abc-123",
+            "name": "Moved",
+            "bounding_box": [[10, 20, 30], [11, 22, 33]],
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = modify_object(ctx=None, id="abc-123", translation=[10, 20, 30])
+
+        assert result["bounding_box"] == [[10, 20, 30], [11, 22, 33]]
+        assert result["success"] is True
+        assert result["id"] == "abc-123"
+
+    @patch('rhinomcp.tools.modify_object.get_rhino_connection')
+    def test_modify_surfaces_geometry(self, mock_get_conn):
+        from rhinomcp.tools.modify_object import modify_object
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "id": "line-1",
+            "name": "Edge",
+            "bounding_box": [[0, 0, 0], [5, 0, 0]],
+            "geometry": {"start": [0, 0, 0], "end": [5, 0, 0]},
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = modify_object(ctx=None, id="line-1", scale=[5, 1, 1])
+
+        assert result["geometry"] == {"start": [0, 0, 0], "end": [5, 0, 0]}
+        assert result["bounding_box"] == [[0, 0, 0], [5, 0, 0]]
+
+    @patch('rhinomcp.tools.modify_object.get_rhino_connection')
+    def test_modify_omits_perception_fields_when_plugin_absent(self, mock_get_conn):
+        """A rename carries no spatial change worth surfacing if the plugin
+        doesn't include it; the response stays minimal with no null keys."""
+        from rhinomcp.tools.modify_object import modify_object
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"id": "abc-123", "name": "NewName"}
+        mock_get_conn.return_value = mock_conn
+
+        result = modify_object(ctx=None, id="abc-123", new_name="NewName")
+
+        assert "bounding_box" not in result
+        assert "geometry" not in result
+        assert result["name"] == "NewName"
 
 
 class TestObjectAttributesTools:

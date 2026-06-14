@@ -523,6 +523,56 @@ class TestAdvancedGeometry:
         assert result["viewport_name"] == "perspective"
 
 
+class TestPerceptionPassthrough:
+    """End-to-end: the create/modify tool wrappers must surface the spatial
+    feedback (bounding_box) the plugin serializes, through the full
+    wrapper -> socket -> plugin -> wrapper path. This is the CI-runnable
+    end-to-end of Scene Perception Layer stage 0, against the mock whose
+    create/modify responses mirror the plugin's Serializer.RhinoObject shape.
+
+    The wrappers' get_rhino_connection is monkeypatched to a connection aimed
+    explicitly at the mock port. That keeps the test hermetic: it can never
+    fall back to a real Rhino on the default port (which would mutate a live
+    document), and it doesn't depend on module-reload ordering elsewhere in the
+    suite that can leave the wrapper's import-time binding pointed at the
+    default port.
+    """
+
+    def _mock_conn(self, monkeypatch):
+        from rhinomcp.server import RhinoConnection
+        import rhinomcp.tools.create_object as create_mod
+        import rhinomcp.tools.modify_object as modify_mod
+
+        conn = RhinoConnection(host="127.0.0.1", port=19999)
+        monkeypatch.setattr(create_mod, "get_rhino_connection", lambda: conn)
+        monkeypatch.setattr(modify_mod, "get_rhino_connection", lambda: conn)
+        return create_mod.create_object, modify_mod.modify_object
+
+    def test_create_wrapper_surfaces_bounding_box(self, mock_server, monkeypatch):
+        create_object, _ = self._mock_conn(monkeypatch)
+
+        result = create_object(
+            ctx=None, type="BOX", name="PerceptionBox",
+            params={"width": 1, "length": 1, "height": 1},
+        )
+
+        assert result["success"] is True
+        assert result["id"] is not None
+        # The bbox the plugin computed is now visible to the client end to end.
+        assert result["bounding_box"] == [[-1, -1, -1], [1, 1, 1]]
+
+    def test_modify_wrapper_surfaces_bounding_box(self, mock_server, monkeypatch):
+        create_object, modify_object = self._mock_conn(monkeypatch)
+
+        created = create_object(
+            ctx=None, type="BOX", name="ToMove",
+            params={"width": 1, "length": 1, "height": 1},
+        )
+        moved = modify_object(ctx=None, id=created["id"], translation=[5, 0, 0])
+
+        assert moved["success"] is True
+        # A modify now reports the object's extent rather than just id/name.
+        assert "bounding_box" in moved
 class TestWireProtocol:
     """Wire-level tests against the mock server, which mirrors the plugin's
     framing logic: framed protocol for new clients, legacy bare JSON for old

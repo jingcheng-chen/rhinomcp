@@ -82,7 +82,9 @@ def create_object(
     - closed: ([bool, bool], optional) Two booleans defining if the surface is closed in the u,v directions
     
     Returns:
-    A dict with success, id, name, type, message — exceptions propagate as MCP tool errors.
+    A dict with success, id, name, type, message, plus bounding_box (the new
+    object's axis-aligned extent) and, for curve-like types, geometry — each
+    present only when the plugin reported it. Exceptions propagate as MCP tool errors.
     
     Examples of params:
     - POINT: {"x": 0, "y": 0, "z": 0}
@@ -108,10 +110,21 @@ def create_object(
     # Errors propagate so MCP clients see a real tool error instead of a
     # successful string starting with "Error ...".
     result = rhino.send_command("create_object", command_params)
-    return {
+    response: Dict[str, Any] = {
         "success": True,
         "id": result.get("id"),
         "name": result.get("name"),
         "type": result.get("type", type),
         "message": f"Created {type} object: {result.get('name')}",
     }
+    # Surface the spatial feedback the plugin already serialized for the new
+    # object — its axis-aligned bounding box, plus the geometry block for
+    # curve-like types — instead of discarding it. This lets the client see
+    # where the object landed and how big it is without a follow-up query.
+    # Each is added only when present so primitives that carry no geometry
+    # block keep a stable response shape.
+    if result.get("bounding_box") is not None:
+        response["bounding_box"] = result["bounding_box"]
+    if result.get("geometry") is not None:
+        response["geometry"] = result["geometry"]
+    return response
