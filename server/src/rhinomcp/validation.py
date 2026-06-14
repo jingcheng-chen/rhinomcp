@@ -172,6 +172,7 @@ def validate_response(command_type: str, response: Dict[str, Any], raise_on_erro
         "get_object_attributes": "object_attributes.json",
         "update_object_attributes": "object_attributes.json",
         "analyze_objects": "analyze_objects_result.json",
+        "measure_objects": "measure_result.json",
         # get_selected_objects_info is deliberately unmapped: it returns
         # {"selected_objects": [...]}, which no current response schema
         # describes (object_info.json would reject it on every call).

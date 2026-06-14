@@ -90,6 +90,7 @@ READONLY_RETRY_COMMANDS = {
     "get_object_info",
     "get_object_attributes",
     "analyze_objects",
+    "measure_objects",
     "get_selected_objects_info",
     "get_document_summary",
     "get_objects",

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "measure_result.json",
+  "title": "MeasureObjects Result",
+  "description": "Spatial relationship between two objects.",
+  "type": "object",
+  "properties": {
+    "object_a": { "$ref": "../common/definitions.json#/$defs/guid" },
+    "object_b": { "$ref": "../common/definitions.json#/$defs/guid" },
+    "clash": {
+      "type": "boolean",
+      "description": "Whether the two objects intersect."
+    },
+    "intersection_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Intersection curves+points (brep) or events (curve); 0 for the bbox method."
+    },
+    "bbox_gap": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Exact minimum distance between the two bounding boxes (0 if they meet or overlap); a lower bound on the true distance."
+    },
+    "method": {
+      "type": "string",
+      "enum": ["brep", "curve", "bbox"],
+      "description": "How clash was determined."
+    }
+  },
+  "required": ["object_a", "object_b", "clash", "intersection_count", "bbox_gap", "method"],
+  "additionalProperties": false
+}

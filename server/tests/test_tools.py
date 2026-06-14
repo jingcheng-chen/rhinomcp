@@ -316,6 +316,39 @@ class TestModifyObjectTool:
         assert result["name"] == "NewName"
 
 
+class TestMeasureObjectsTool:
+    """Tests for measure_objects tool."""
+
+    @patch('rhinomcp.tools.measure_objects.get_rhino_connection')
+    def test_measure_objects(self, mock_get_conn):
+        from rhinomcp.tools.measure_objects import measure_objects
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "object_a": "a", "object_b": "b",
+            "clash": False, "intersection_count": 0,
+            "bbox_gap": 3.0, "method": "brep",
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = measure_objects(ctx=None, object_ids=["a", "b"])
+
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][0] == "measure_objects"
+        assert call_args[0][1]["object_ids"] == ["a", "b"]
+        assert result["clash"] is False
+        assert result["bbox_gap"] == 3.0
+        assert result["method"] == "brep"
+
+    def test_measure_objects_requires_exactly_two(self):
+        from rhinomcp.tools.measure_objects import measure_objects
+
+        with pytest.raises(ValueError, match="exactly two"):
+            measure_objects(ctx=None, object_ids=["only-one"])
+        with pytest.raises(ValueError, match="exactly two"):
+            measure_objects(ctx=None, object_ids=["a", "b", "c"])
+
+
 class TestObjectAttributesTools:
     """Tests for object attribute read/update tools."""
 
