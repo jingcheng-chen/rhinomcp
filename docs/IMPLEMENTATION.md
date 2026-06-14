@@ -221,10 +221,13 @@ to the `result` of each mutating (non-ReadOnly) command:
   "result": {
     "...": "normal command result",
     "_delta": {
+      "created_count": 1,
+      "deleted_count": 0,
+      "count_before": 3,
+      "count_after": 4,
       "created_ids": ["..."],
       "deleted_ids": ["..."],
-      "count_before": 3,
-      "count_after": 4
+      "truncated": false
     }
   }
 }
@@ -233,12 +236,16 @@ to the `result` of each mutating (non-ReadOnly) command:
 The delta is computed once at the dispatch choke point (`ExecuteCommandInternal`)
 by diffing the document's object id set before and after the handler, so it
 covers every mutating command, including multi-effect ones like `run_command`
-and booleans with `delete_sources`. `created_ids` and `deleted_ids` are exact
-set differences; there is no modified count because an in-place transform reuses
-the same id. The flag rides on the envelope rather than in `params` so it never
-collides with a command's parameters or trips params validation. It is off by
-default, so responses are byte-identical unless enabled. See
-`contracts/responses/change_delta.json`.
+and booleans with `delete_sources`. The counts are exact set differences; there
+is no modified count because an in-place transform reuses the same id. To keep a
+single operation over a large model from flooding the client's context, the
+`created_ids` / `deleted_ids` arrays are included only when their count is within
+`DeltaIdListCap` (50); past that they are omitted and `truncated` is set, while
+the counts stay exact. This follows the summarize-don't-enumerate approach
+`get_document_summary` takes. The flag rides on the envelope rather than in
+`params` so it never collides with a command's parameters or trips params
+validation. It is off by default, so responses are byte-identical unless
+enabled. See `contracts/responses/change_delta.json`.
 
 ### Schema Validation
 

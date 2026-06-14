@@ -528,10 +528,13 @@ class TestPerceptionForwarding:
         import rhinomcp.server as srv
 
         delta = {
-            "created_ids": ["11111111-1111-1111-1111-111111111111"],
-            "deleted_ids": [],
+            "created_count": 1,
+            "deleted_count": 0,
             "count_before": 0,
             "count_after": 1,
+            "created_ids": ["11111111-1111-1111-1111-111111111111"],
+            "deleted_ids": [],
+            "truncated": False,
         }
         conn, _ = self._connect(mock_socket_class, {"id": "x", "_delta": delta})
         original = srv.RHINO_PERCEPTION

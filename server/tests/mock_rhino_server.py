@@ -229,15 +229,35 @@ class MockRhinoServer:
             result = handler(params)
             if track_delta and isinstance(result, dict):
                 after = set(self.objects.keys())
-                result["_delta"] = {
-                    "created_ids": [k for k in after if k not in before],
-                    "deleted_ids": [k for k in before if k not in after],
-                    "count_before": len(before),
-                    "count_after": len(after),
-                }
+                result["_delta"] = self._build_delta(before, after)
             return {"status": "success", "result": result}
         except Exception as e:
             return {"status": "error", "message": str(e)}
+
+    _DELTA_ID_CAP = 50
+
+    def _build_delta(self, before: set, after: set) -> Dict:
+        """Mirror the plugin's BuildDelta: exact counts always, id arrays only
+        when within the cap, truncated flag when one is dropped."""
+        created = [k for k in after if k not in before]
+        deleted = [k for k in before if k not in after]
+        delta = {
+            "created_count": len(created),
+            "deleted_count": len(deleted),
+            "count_before": len(before),
+            "count_after": len(after),
+        }
+        truncated = False
+        if len(created) <= self._DELTA_ID_CAP:
+            delta["created_ids"] = created
+        else:
+            truncated = True
+        if len(deleted) <= self._DELTA_ID_CAP:
+            delta["deleted_ids"] = deleted
+        else:
+            truncated = True
+        delta["truncated"] = truncated
+        return delta
 
     def _get_document_summary(self, params: Dict) -> Dict:
         """Return document summary."""

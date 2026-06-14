@@ -761,14 +761,28 @@ public partial class RhinoMCPFunctions
             var pure = BuildDelta(
                 new System.Collections.Generic.HashSet<Guid> { idA, idB },
                 new System.Collections.Generic.HashSet<Guid> { idB, idC });
+            if ((int)pure["created_count"] != 1 || (int)pure["deleted_count"] != 1)
+                throw new Exception("BuildDelta counts incorrect");
             var created = (JArray)pure["created_ids"];
             var deleted = (JArray)pure["deleted_ids"];
             if (created.Count != 1 || created[0].ToString() != idC.ToString())
                 throw new Exception("BuildDelta created_ids incorrect");
             if (deleted.Count != 1 || deleted[0].ToString() != idA.ToString())
                 throw new Exception("BuildDelta deleted_ids incorrect");
-            if ((int)pure["count_before"] != 2 || (int)pure["count_after"] != 2)
-                throw new Exception("BuildDelta counts incorrect");
+            if ((bool)pure["truncated"])
+                throw new Exception("BuildDelta marked a small delta truncated");
+
+            // Over the cap: counts stay exact, id lists are dropped, truncated set.
+            var bigBefore = new System.Collections.Generic.HashSet<Guid>();
+            var bigAfter = new System.Collections.Generic.HashSet<Guid>();
+            for (int i = 0; i < DeltaIdListCap + 10; i++) bigAfter.Add(Guid.NewGuid());
+            var big = BuildDelta(bigBefore, bigAfter);
+            if ((int)big["created_count"] != DeltaIdListCap + 10)
+                throw new Exception("BuildDelta dropped the count when truncating");
+            if (big["created_ids"] != null)
+                throw new Exception("BuildDelta included an over-cap id list");
+            if (!(bool)big["truncated"])
+                throw new Exception("BuildDelta did not set truncated for an over-cap list");
 
             var idsBefore = SnapshotObjectIds(doc);
             var probe = CreateObject(new JObject
@@ -791,7 +805,7 @@ public partial class RhinoMCPFunctions
             results["change_delta"] = new JObject
             {
                 ["status"] = "pass",
-                ["created_reported"] = ((JArray)live["created_ids"]).Count
+                ["created_reported"] = (int)live["created_count"]
             };
             VisualUpdate("change-delta helpers report created/deleted ids");
         }

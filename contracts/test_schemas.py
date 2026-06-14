@@ -498,29 +498,41 @@ def test_responses():
     print("  change_delta:")
     GUID = "12345678-1234-1234-1234-123456789012"
     delta_created = {
-        "created_ids": [GUID],
-        "deleted_ids": [],
+        "created_count": 1,
+        "deleted_count": 0,
         "count_before": 0,
         "count_after": 1,
+        "created_ids": [GUID],
+        "deleted_ids": [],
+        "truncated": False,
     }
     if not validate("responses/change_delta.json", delta_created):
         all_passed = False
-    delta_deleted = {
-        "created_ids": [],
-        "deleted_ids": [GUID],
-        "count_before": 1,
-        "count_after": 0,
+    # Truncated shape: counts present, id arrays omitted, truncated true.
+    delta_truncated = {
+        "created_count": 5000,
+        "deleted_count": 0,
+        "count_before": 0,
+        "count_after": 5000,
+        "truncated": True,
     }
-    if not validate("responses/change_delta.json", delta_deleted):
+    if not validate("responses/change_delta.json", delta_truncated):
         all_passed = False
 
     # Negative: the schema must actually constrain (not be vacuously permissive).
     delta_schema = load_schema_with_refs("responses/change_delta.json")
     delta_validator = Draft202012Validator(delta_schema)
     bad_deltas = [
-        {"created_ids": ["not-a-guid"], "deleted_ids": [], "count_before": 0, "count_after": 1},
-        {"created_ids": [], "deleted_ids": [], "count_before": 0, "count_after": 1, "modified_count": 3},
-        {"created_ids": [], "deleted_ids": [], "count_before": 0},
+        # bad guid in an id list
+        {"created_count": 1, "deleted_count": 0, "count_before": 0, "count_after": 1,
+         "created_ids": ["not-a-guid"], "deleted_ids": [], "truncated": False},
+        # unknown field
+        {"created_count": 0, "deleted_count": 0, "count_before": 0, "count_after": 0,
+         "truncated": False, "modified_count": 3},
+        # missing required truncated
+        {"created_count": 0, "deleted_count": 0, "count_before": 0, "count_after": 0},
+        # missing required count
+        {"created_count": 0, "deleted_count": 0, "count_after": 0, "truncated": False},
     ]
     for bad in bad_deltas:
         if not list(delta_validator.iter_errors(bad)):
