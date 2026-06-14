@@ -9,6 +9,24 @@ import socket
 from unittest.mock import patch, MagicMock
 
 
+def frame(payload: bytes) -> bytes:
+    """Wrap a payload in the wire protocol's 4-byte big-endian length header."""
+    return len(payload).to_bytes(4, "big") + payload
+
+
+def buffered_recv(wire_bytes: bytes):
+    """A recv side_effect that serves wire_bytes honoring the requested byte
+    count, like a real socket buffer. Returns b"" once drained (peer close)."""
+    buffer = bytearray(wire_bytes)
+
+    def recv(n):
+        chunk = bytes(buffer[:n])
+        del buffer[:n]
+        return chunk
+
+    return recv
+
+
 class TestRhinoConnection:
     """Tests for the RhinoConnection class."""
 
@@ -80,33 +98,34 @@ class TestReceiveFullResponse:
     """Tests for the receive_full_response method."""
 
     def test_receive_complete_json(self):
-        """Test receiving a complete JSON response in one chunk."""
+        """Test receiving a complete framed response."""
         from rhinomcp.server import RhinoConnection
 
         conn = RhinoConnection(host="127.0.0.1", port=1999)
 
         mock_sock = MagicMock()
         response = {"status": "success", "result": {"id": "123"}}
-        mock_sock.recv.return_value = json.dumps(response).encode("utf-8")
+        wire = frame(json.dumps(response).encode("utf-8"))
+        mock_sock.recv.side_effect = buffered_recv(wire)
 
         result = conn.receive_full_response(mock_sock)
 
         assert json.loads(result.decode("utf-8")) == response
 
     def test_receive_chunked_json(self):
-        """Test receiving JSON response in multiple chunks."""
+        """Test receiving a frame split across multiple TCP segments."""
         from rhinomcp.server import RhinoConnection
 
         conn = RhinoConnection(host="127.0.0.1", port=1999)
 
         mock_sock = MagicMock()
         response = {"status": "success", "result": {"data": "x" * 1000}}
-        full_json = json.dumps(response).encode("utf-8")
+        wire = frame(json.dumps(response).encode("utf-8"))
 
-        # Split into chunks
-        chunk1 = full_json[:50]
-        chunk2 = full_json[50:]
-        mock_sock.recv.side_effect = [chunk1, chunk2]
+        # Header alone, then the body dribbling in: sockets may return fewer
+        # bytes than requested.
+        chunks = [wire[:4], wire[4:54], wire[54:]]
+        mock_sock.recv.side_effect = chunks
 
         result = conn.receive_full_response(mock_sock)
 
@@ -122,6 +141,73 @@ class TestReceiveFullResponse:
         mock_sock.recv.return_value = b""
 
         with pytest.raises(Exception, match="Connection closed"):
+            conn.receive_full_response(mock_sock)
+
+
+class TestWireFraming:
+    """Length-prefixed framing: message boundaries are read, not guessed."""
+
+    def test_consecutive_responses_do_not_bleed(self):
+        """Two responses back-to-back in the receive buffer is legal TCP.
+        The old endswith-'}' + raw_decode heuristic passed both to one
+        json.loads, which raised 'Extra data' and lost the second response.
+        Framed reads return exactly one message per call."""
+        from rhinomcp.server import RhinoConnection
+
+        conn = RhinoConnection(host="127.0.0.1", port=1999)
+
+        resp1 = json.dumps({"status": "success", "result": {"sequence": 1}})
+        resp2 = json.dumps({"status": "success", "result": {"sequence": 2}})
+        wire = frame(resp1.encode("utf-8")) + frame(resp2.encode("utf-8"))
+
+        mock_sock = MagicMock()
+        mock_sock.recv.side_effect = buffered_recv(wire)
+
+        first = conn.receive_full_response(mock_sock)
+        second = conn.receive_full_response(mock_sock)
+
+        assert json.loads(first)["result"]["sequence"] == 1
+        assert json.loads(second)["result"]["sequence"] == 2
+
+    def test_unframed_response_raises_actionable_error(self):
+        """An old plugin replies with bare JSON where the header should be.
+        That must fail with update guidance, not a bogus 2 GB frame length."""
+        from rhinomcp.server import RhinoConnection
+
+        conn = RhinoConnection(host="127.0.0.1", port=1999)
+
+        bare = json.dumps({"status": "success", "result": {}}).encode("utf-8")
+        mock_sock = MagicMock()
+        mock_sock.recv.side_effect = buffered_recv(bare)
+
+        with pytest.raises(Exception, match="predates length-prefixed framing"):
+            conn.receive_full_response(mock_sock)
+
+    def test_oversized_frame_rejected(self):
+        from rhinomcp.server import MAX_FRAME_SIZE, RhinoConnection
+
+        conn = RhinoConnection(host="127.0.0.1", port=1999)
+
+        header = (MAX_FRAME_SIZE + 1).to_bytes(4, "big")
+        mock_sock = MagicMock()
+        mock_sock.recv.side_effect = buffered_recv(header)
+
+        with pytest.raises(Exception, match="Invalid response frame length"):
+            conn.receive_full_response(mock_sock)
+
+    def test_connection_closed_mid_frame_raises(self):
+        """EOF after the header but before the body completes must surface as
+        a connection error, not hang or return a truncated message."""
+        from rhinomcp.server import RhinoConnection
+
+        conn = RhinoConnection(host="127.0.0.1", port=1999)
+
+        body = json.dumps({"status": "success", "result": {}}).encode("utf-8")
+        wire = frame(body)[: 4 + len(body) // 2]  # header + half the body
+        mock_sock = MagicMock()
+        mock_sock.recv.side_effect = buffered_recv(wire)
+
+        with pytest.raises(ConnectionError, match="mid-message"):
             conn.receive_full_response(mock_sock)
 
 
@@ -199,9 +285,9 @@ class TestRuntimeValidation:
 
         mock_sock = MagicMock()
         mock_socket_class.return_value = mock_sock
-        mock_sock.recv.return_value = json.dumps(
-            {"status": "success", "result": {}}
-        ).encode("utf-8")
+        mock_sock.recv.side_effect = buffered_recv(
+            frame(json.dumps({"status": "success", "result": {}}).encode("utf-8"))
+        )
 
         conn = RhinoConnection(host="127.0.0.1", port=1999)
         conn.connect()
@@ -397,7 +483,9 @@ class TestSendCommand:
         mock_socket_class.return_value = mock_sock
 
         response = {"status": "success", "result": {"name": "Box1", "id": "abc-123"}}
-        mock_sock.recv.return_value = json.dumps(response).encode("utf-8")
+        mock_sock.recv.side_effect = buffered_recv(
+            frame(json.dumps(response).encode("utf-8"))
+        )
 
         conn = RhinoConnection(host="127.0.0.1", port=1999)
         conn.connect()
@@ -409,9 +497,11 @@ class TestSendCommand:
 
         assert result == {"name": "Box1", "id": "abc-123"}
 
-        # Verify the command was sent correctly
+        # Verify the command went out as one frame: 4-byte big-endian length
+        # header followed by the JSON payload.
         sent_data = mock_sock.sendall.call_args[0][0]
-        sent_command = json.loads(sent_data.decode("utf-8"))
+        assert int.from_bytes(sent_data[:4], "big") == len(sent_data) - 4
+        sent_command = json.loads(sent_data[4:].decode("utf-8"))
         assert sent_command["type"] == "create_object"
         assert sent_command["params"]["type"] == "BOX"
 
@@ -424,7 +514,9 @@ class TestSendCommand:
         mock_socket_class.return_value = mock_sock
 
         response = {"status": "error", "message": "Object not found"}
-        mock_sock.recv.return_value = json.dumps(response).encode("utf-8")
+        mock_sock.recv.side_effect = buffered_recv(
+            frame(json.dumps(response).encode("utf-8"))
+        )
 
         conn = RhinoConnection(host="127.0.0.1", port=1999)
         conn.connect()
@@ -447,8 +539,8 @@ class TestSendCommand:
         conn = RhinoConnection(host="127.0.0.1", port=1999)
         conn.connect()
 
-        # Socket timeout leads to "No data received" which is wrapped as communication error
-        with pytest.raises(Exception, match="Communication error with Rhino"):
+        # Receive timeouts propagate to the dedicated timeout handler
+        with pytest.raises(Exception, match="Timeout waiting for Rhino response"):
             conn.send_command(
                 "create_object",
                 {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}},
@@ -485,9 +577,13 @@ class TestSendCommand:
         first_sock = MagicMock()
         first_sock.recv.return_value = b""
         second_sock = MagicMock()
-        second_sock.recv.return_value = json.dumps(
-            {"status": "success", "result": {"found_count": 1}}
-        ).encode("utf-8")
+        second_sock.recv.side_effect = buffered_recv(
+            frame(
+                json.dumps(
+                    {"status": "success", "result": {"found_count": 1}}
+                ).encode("utf-8")
+            )
+        )
         mock_socket_class.side_effect = [first_sock, second_sock]
 
         conn = RhinoConnection(host="127.0.0.1", port=1999)

@@ -88,25 +88,82 @@ class MockRhinoServer:
                 if self.running:
                     print(f"Server error: {e}")
 
+    # Mirrors the plugin's wire protocol (RhinoMCPServer.cs): messages are a
+    # 4-byte big-endian length header plus UTF-8 JSON in both directions;
+    # legacy clients that open with bare JSON ('{' or whitespace) get the old
+    # unframed behavior for the whole connection.
+    FRAME_HEADER_SIZE = 4
+    MAX_FRAME_SIZE = 64 * 1024 * 1024
+    _LEGACY_FIRST_BYTES = b"{ \t\r\n"
+
     def _handle_client(self, client_socket: socket.socket):
-        """Handle a client connection."""
+        """Handle a client connection, sniffing framed vs legacy protocol."""
+        pending = bytearray()
+        framed: Optional[bool] = None
         try:
             while self.running:
                 data = client_socket.recv(65536)
                 if not data:
                     break
+                pending.extend(data)
 
-                try:
-                    command = json.loads(data.decode('utf-8'))
-                    response = self._process_command(command)
-                    client_socket.sendall(json.dumps(response).encode('utf-8'))
-                except json.JSONDecodeError as e:
-                    error_response = {"status": "error", "message": f"Invalid JSON: {e}"}
-                    client_socket.sendall(json.dumps(error_response).encode('utf-8'))
+                if framed is None:
+                    framed = pending[0:1] not in [
+                        bytes([b]) for b in self._LEGACY_FIRST_BYTES
+                    ]
+
+                if framed:
+                    # Drain every complete frame so pipelined commands all
+                    # execute, in order — same as the plugin.
+                    while len(pending) >= self.FRAME_HEADER_SIZE:
+                        frame_length = int.from_bytes(
+                            pending[: self.FRAME_HEADER_SIZE], "big"
+                        )
+                        if frame_length <= 0 or frame_length > self.MAX_FRAME_SIZE:
+                            raise ValueError(
+                                f"Invalid frame length {frame_length}"
+                            )
+                        if len(pending) < self.FRAME_HEADER_SIZE + frame_length:
+                            break
+                        payload = bytes(
+                            pending[
+                                self.FRAME_HEADER_SIZE : self.FRAME_HEADER_SIZE
+                                + frame_length
+                            ]
+                        )
+                        del pending[: self.FRAME_HEADER_SIZE + frame_length]
+                        self._respond(client_socket, payload, framed=True)
+                else:
+                    # Legacy: try the whole accumulation, wait for more on
+                    # incomplete JSON.
+                    try:
+                        json.loads(pending.decode("utf-8"))
+                    except (json.JSONDecodeError, UnicodeDecodeError):
+                        continue
+                    payload = bytes(pending)
+                    pending.clear()
+                    self._respond(client_socket, payload, framed=False)
         except Exception as e:
             print(f"Client handler error: {e}")
         finally:
             client_socket.close()
+
+    def _respond(self, client_socket: socket.socket, payload: bytes, framed: bool):
+        """Process one command payload and write the response in the
+        connection's protocol."""
+        try:
+            command = json.loads(payload.decode("utf-8"))
+            response = self._process_command(command)
+        except json.JSONDecodeError as e:
+            response = {"status": "error", "message": f"Invalid JSON: {e}"}
+
+        body = json.dumps(response).encode("utf-8")
+        if framed:
+            client_socket.sendall(
+                len(body).to_bytes(self.FRAME_HEADER_SIZE, "big") + body
+            )
+        else:
+            client_socket.sendall(body)
 
     def _process_command(self, command: Dict[str, Any]) -> Dict[str, Any]:
         """Process a command and return a response."""
