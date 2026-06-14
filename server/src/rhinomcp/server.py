@@ -67,6 +67,14 @@ if RHINO_DEBUG:
     logger.info("Debug mode enabled")
 
 
+# Wire framing: every message in both directions is a 4-byte big-endian length
+# header followed by that many bytes of UTF-8 JSON. The cap below bounds memory
+# per frame; it also doubles as cross-version detection, since a legacy
+# unframed response starts with '{' (0x7B) and would decode as a ~2 GB length.
+FRAME_HEADER_SIZE = 4
+MAX_FRAME_SIZE = 64 * 1024 * 1024
+
+
 READONLY_RETRY_COMMANDS = {
     "get_object_info",
     "get_object_attributes",
@@ -146,64 +154,55 @@ class RhinoConnection:
             finally:
                 self.sock = None
 
-    def receive_full_response(self, sock, buffer_size=8192):
-        """Receive the complete response, potentially in multiple chunks.
+    def _recv_exact(self, sock, num_bytes, buffer_size=8192):
+        """Receive exactly num_bytes from sock.
 
-        Uses incremental parsing to avoid O(n^2) JSON parsing overhead.
+        Raises ConnectionResetError if the peer closes mid-message; lets
+        socket.timeout propagate so the caller's timeout handling applies.
         """
-        accumulated = ""
-        decoder = json.JSONDecoder()
+        received = bytearray()
+        while len(received) < num_bytes:
+            chunk = sock.recv(min(buffer_size, num_bytes - len(received)))
+            if not chunk:
+                raise ConnectionResetError(
+                    "Connection closed mid-message "
+                    f"({len(received)}/{num_bytes} bytes received)"
+                )
+            received.extend(chunk)
+        return bytes(received)
+
+    def receive_full_response(self, sock, buffer_size=8192):
+        """Receive one length-prefixed response frame.
+
+        Every message on the wire is a 4-byte big-endian length header followed
+        by that many bytes of UTF-8 JSON. Reading exact byte counts means
+        message boundaries are never guessed: back-to-back responses can't
+        bleed into one read, and a frame split across TCP segments is simply
+        read until complete.
+        """
         sock.settimeout(RHINO_TIMEOUT)
 
-        try:
-            while True:
-                try:
-                    chunk = sock.recv(buffer_size)
-                    if not chunk:
-                        if not accumulated:
-                            raise ConnectionResetError(
-                                "Connection closed before receiving any data"
-                            )
-                        break
-
-                    accumulated += chunk.decode("utf-8")
-
-                    # Only attempt parsing when we see a closing brace (optimization)
-                    if accumulated.rstrip().endswith("}"):
-                        try:
-                            # raw_decode returns (obj, end_index) - more efficient for streaming
-                            decoder.raw_decode(accumulated)
-                            logger.info(
-                                f"Received complete response ({len(accumulated)} bytes)"
-                            )
-                            return accumulated.encode("utf-8")
-                        except json.JSONDecodeError:
-                            # Incomplete JSON, continue receiving
-                            continue
-                except socket.timeout:
-                    logger.warning("Socket timeout during chunked receive")
-                    break
-                except (ConnectionError, BrokenPipeError, ConnectionResetError) as e:
-                    logger.error(f"Socket connection error during receive: {str(e)}")
-                    raise
-        except socket.timeout:
-            logger.warning("Socket timeout during chunked receive")
-        except Exception as e:
-            logger.error(f"Error during receive: {str(e)}")
-            raise
-
-        # Try to use what we have
-        if accumulated:
-            logger.info(
-                f"Returning data after receive completion ({len(accumulated)} bytes)"
+        header = self._recv_exact(sock, FRAME_HEADER_SIZE, buffer_size)
+        if header.startswith(b"{"):
+            # Bare JSON where a header should be: the installed plugin
+            # predates framing. Fail actionably instead of treating '{"st'
+            # as a ~2 GB length.
+            raise Exception(
+                "Rhino sent an unframed response: the installed rhinomcp "
+                "plugin predates length-prefixed framing. Update the plugin "
+                "to match this server version."
             )
-            try:
-                decoder.raw_decode(accumulated)
-                return accumulated.encode("utf-8")
-            except json.JSONDecodeError:
-                raise Exception("Incomplete JSON response received")
-        else:
-            raise Exception("No data received")
+
+        frame_length = int.from_bytes(header, "big")
+        if frame_length <= 0 or frame_length > MAX_FRAME_SIZE:
+            raise Exception(
+                f"Invalid response frame length {frame_length} from Rhino "
+                f"(limit {MAX_FRAME_SIZE} bytes)."
+            )
+
+        payload = self._recv_exact(sock, frame_length, buffer_size)
+        logger.info(f"Received complete response ({len(payload)} bytes)")
+        return payload
 
     def send_command(
         self, command_type: str, params: Dict[str, Any] = {}
@@ -277,12 +276,14 @@ class RhinoConnection:
             if self.sock is None:
                 raise Exception("Socket is not connected")
 
-            # Send the command
+            # Send the command as one length-prefixed frame
             command_json = json.dumps(command)
             logger.debug(
                 f"Raw command JSON ({len(command_json)} bytes): {command_json[:500]}..."
             )
-            self.sock.sendall(command_json.encode("utf-8"))
+            command_bytes = command_json.encode("utf-8")
+            header = len(command_bytes).to_bytes(FRAME_HEADER_SIZE, "big")
+            self.sock.sendall(header + command_bytes)
             logger.debug("Command sent, waiting for response...")
 
             # Set a timeout for receiving
