@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "change_delta.json",
+  "title": "ChangeDelta",
+  "description": "What changed in the document as a result of a mutating command. Attached as `_delta` on the command result when the client opts in (envelope include_delta=true). Created/deleted are exact id set differences; a modified count is intentionally absent since an in-place transform reuses the same id.",
+  "type": "object",
+  "properties": {
+    "created_ids": {
+      "type": "array",
+      "items": { "$ref": "../common/definitions.json#/$defs/guid" },
+      "description": "Object GUIDs present after the command but not before."
+    },
+    "deleted_ids": {
+      "type": "array",
+      "items": { "$ref": "../common/definitions.json#/$defs/guid" },
+      "description": "Object GUIDs present before the command but not after."
+    },
+    "count_before": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Object count before the command ran."
+    },
+    "count_after": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Object count after the command ran."
+    }
+  },
+  "required": ["created_ids", "deleted_ids", "count_before", "count_after"],
+  "additionalProperties": false
+}

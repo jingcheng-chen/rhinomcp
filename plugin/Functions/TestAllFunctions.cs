@@ -749,6 +749,57 @@ public partial class RhinoMCPFunctions
             results["capture_viewport_readonly"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
+        // Test 25: change-delta helpers (Scene Perception Layer). The dispatch
+        // path that attaches _delta is private to RhinoMCPServer, so assert the
+        // public helpers directly: BuildDelta as a pure set diff, and a real
+        // before/after snapshot around a create.
+        try
+        {
+            var idA = Guid.NewGuid();
+            var idB = Guid.NewGuid();
+            var idC = Guid.NewGuid();
+            var pure = BuildDelta(
+                new System.Collections.Generic.HashSet<Guid> { idA, idB },
+                new System.Collections.Generic.HashSet<Guid> { idB, idC });
+            var created = (JArray)pure["created_ids"];
+            var deleted = (JArray)pure["deleted_ids"];
+            if (created.Count != 1 || created[0].ToString() != idC.ToString())
+                throw new Exception("BuildDelta created_ids incorrect");
+            if (deleted.Count != 1 || deleted[0].ToString() != idA.ToString())
+                throw new Exception("BuildDelta deleted_ids incorrect");
+            if ((int)pure["count_before"] != 2 || (int)pure["count_after"] != 2)
+                throw new Exception("BuildDelta counts incorrect");
+
+            var idsBefore = SnapshotObjectIds(doc);
+            var probe = CreateObject(new JObject
+            {
+                ["type"] = "BOX",
+                ["name"] = "MCPDeltaProbe",
+                ["params"] = new JObject { ["width"] = 1, ["length"] = 1, ["height"] = 1 }
+            });
+            string probeId = probe["id"]?.ToString();
+            var live = BuildDelta(idsBefore, SnapshotObjectIds(doc));
+            bool sawProbe = false;
+            foreach (var t in (JArray)live["created_ids"])
+                if (t.ToString() == probeId) sawProbe = true;
+            if (!sawProbe)
+                throw new Exception("snapshot/delta did not report the created object");
+            if ((int)live["count_after"] != (int)live["count_before"] + 1)
+                throw new Exception("live delta count did not rise by exactly 1");
+
+            DeleteObject(new JObject { ["id"] = probeId });
+            results["change_delta"] = new JObject
+            {
+                ["status"] = "pass",
+                ["created_reported"] = ((JArray)live["created_ids"]).Count
+            };
+            VisualUpdate("change-delta helpers report created/deleted ids");
+        }
+        catch (Exception e)
+        {
+            results["change_delta"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
         // Cleanup
         if (!visualMode)
         {
@@ -768,6 +819,7 @@ public partial class RhinoMCPFunctions
                 DeleteObject(new JObject { ["name"] = "IntLine2" });
                 DeleteObject(new JObject { ["name"] = "IntersectionPoint_point" });
                 DeleteObject(new JObject { ["name"] = "SplitSegment" });
+                DeleteObject(new JObject { ["name"] = "MCPDeltaProbe" });
             }
             catch
             {

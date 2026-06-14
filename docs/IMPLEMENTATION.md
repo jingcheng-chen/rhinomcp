@@ -209,6 +209,37 @@ or:
 The plugin always returns the envelope. The Python `RhinoConnection` unwraps
 successful responses and raises an exception for `status: error`.
 
+### Change Delta (Perception)
+
+When `RHINO_MCP_PERCEPTION` is enabled, the Python server adds an envelope-level
+`include_delta` flag to every command, and the plugin attaches a `_delta` block
+to the `result` of each mutating (non-ReadOnly) command:
+
+```json
+{
+  "status": "success",
+  "result": {
+    "...": "normal command result",
+    "_delta": {
+      "created_ids": ["..."],
+      "deleted_ids": ["..."],
+      "count_before": 3,
+      "count_after": 4
+    }
+  }
+}
+```
+
+The delta is computed once at the dispatch choke point (`ExecuteCommandInternal`)
+by diffing the document's object id set before and after the handler, so it
+covers every mutating command, including multi-effect ones like `run_command`
+and booleans with `delete_sources`. `created_ids` and `deleted_ids` are exact
+set differences; there is no modified count because an in-place transform reuses
+the same id. The flag rides on the envelope rather than in `params` so it never
+collides with a command's parameters or trips params validation. It is off by
+default, so responses are byte-identical unless enabled. See
+`contracts/responses/change_delta.json`.
+
 ### Schema Validation
 
 `server/src/rhinomcp/validation.py` validates tool parameters against
@@ -250,6 +281,7 @@ Main file: `server/src/rhinomcp/server.py`
 | `RHINO_MCP_PORT`         | `1999`            | TCP port.                                                                   |
 | `RHINO_MCP_ALLOW_REMOTE` | unset             | Set to `1` only if accepting unauthenticated remote command execution risk. |
 | `RHINO_MCP_TIMEOUT`      | `15.0`            | Socket timeout in seconds.                                                  |
+| `RHINO_MCP_PERCEPTION`   | unset             | Set truthy to attach a `_delta` change block to mutating-command results.   |
 | `RHINO_MCP_DEBUG`        | unset             | Enables verbose logging when truthy.                                        |
 | `RHINO_MCP_LOG_LEVEL`    | `INFO` or `DEBUG` | Explicit Python logging level.                                              |
 

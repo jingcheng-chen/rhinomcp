@@ -493,6 +493,41 @@ def test_responses():
     if not validate("responses/analyze_objects_result.json", analyze_result):
         all_passed = False
 
+    # Change delta (perception). created/deleted may be empty (a delete creates
+    # nothing), so the schema must accept empty arrays.
+    print("  change_delta:")
+    GUID = "12345678-1234-1234-1234-123456789012"
+    delta_created = {
+        "created_ids": [GUID],
+        "deleted_ids": [],
+        "count_before": 0,
+        "count_after": 1,
+    }
+    if not validate("responses/change_delta.json", delta_created):
+        all_passed = False
+    delta_deleted = {
+        "created_ids": [],
+        "deleted_ids": [GUID],
+        "count_before": 1,
+        "count_after": 0,
+    }
+    if not validate("responses/change_delta.json", delta_deleted):
+        all_passed = False
+
+    # Negative: the schema must actually constrain (not be vacuously permissive).
+    delta_schema = load_schema_with_refs("responses/change_delta.json")
+    delta_validator = Draft202012Validator(delta_schema)
+    bad_deltas = [
+        {"created_ids": ["not-a-guid"], "deleted_ids": [], "count_before": 0, "count_after": 1},
+        {"created_ids": [], "deleted_ids": [], "count_before": 0, "count_after": 1, "modified_count": 3},
+        {"created_ids": [], "deleted_ids": [], "count_before": 0},
+    ]
+    for bad in bad_deltas:
+        if not list(delta_validator.iter_errors(bad)):
+            print(f"  FAIL: change_delta accepted invalid payload {bad}")
+            all_passed = False
+    print("  change_delta negatives correctly rejected")
+
     return all_passed
 
 

@@ -30,6 +30,17 @@ if RHINO_HOST not in ("127.0.0.1", "::1", "localhost") and not RHINO_ALLOW_REMOT
         "set RHINO_MCP_ALLOW_REMOTE=1 to acknowledge the risk and proceed."
     )
 RHINO_TIMEOUT = float(os.getenv("RHINO_MCP_TIMEOUT", "15.0"))
+# Opt-in perception: when enabled, every mutating command carries an
+# `include_delta` flag on the envelope, and the plugin attaches a `_delta` block
+# (created_ids / deleted_ids / count_before / count_after) to the result so a
+# client can see what changed without re-querying. Off by default, so responses
+# are byte-identical unless explicitly turned on.
+RHINO_PERCEPTION = os.getenv("RHINO_MCP_PERCEPTION", "").lower() in (
+    "1",
+    "true",
+    "yes",
+    "on",
+)
 RHINO_DEBUG = os.getenv("RHINO_MCP_DEBUG", "").lower() in ("1", "true", "yes")
 RHINO_LOG_LEVEL = os.getenv("RHINO_MCP_LOG_LEVEL", "DEBUG" if RHINO_DEBUG else "INFO")
 # Pre-flight schema validation. Three modes:
@@ -242,6 +253,11 @@ class RhinoConnection:
             raise ConnectionError(rhino_startup_error_message(self.host, self.port))
 
         command = {"type": command_type, "params": params or {}}
+        if RHINO_PERCEPTION:
+            # Envelope-level flag, kept out of params so it never collides with a
+            # command's own parameters or trips params schema validation. The
+            # plugin ignores it for read-only commands.
+            command["include_delta"] = True
 
         try:
             # Log the command being sent

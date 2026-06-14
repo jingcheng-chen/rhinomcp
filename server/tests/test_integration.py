@@ -672,3 +672,81 @@ class TestWireProtocol:
         assert second["status"] == "error"
         assert third["status"] == "success"
         assert "objects" in third["result"]
+
+
+class TestChangeDeltaPerception:
+    """End-to-end: with perception enabled the server forwards include_delta and
+    mutating commands come back with a _delta block reporting created/deleted
+    ids and counts; with it disabled nothing changes. Runs against the mock,
+    whose dispatch mirrors the plugin's delta attachment."""
+
+    def _enable(self):
+        import rhinomcp.server as srv
+        srv._rhino_connection = None
+        srv.RHINO_PERCEPTION = True
+
+    def _restore(self, value):
+        import rhinomcp.server as srv
+        srv.RHINO_PERCEPTION = value
+        srv._rhino_connection = None
+
+    def test_create_carries_delta_when_enabled(self, mock_server):
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+
+        original = srv.RHINO_PERCEPTION
+        self._enable()
+        try:
+            conn = get_rhino_connection()
+            result = conn.send_command("create_object", {
+                "type": "BOX", "name": "DeltaBox",
+                "params": {"width": 1, "length": 1, "height": 1},
+            })
+        finally:
+            self._restore(original)
+
+        assert "_delta" in result
+        d = result["_delta"]
+        assert result["id"] in d["created_ids"]
+        assert d["deleted_ids"] == []
+        assert d["count_after"] == d["count_before"] + 1
+
+    def test_delete_carries_delta_when_enabled(self, mock_server):
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+
+        original = srv.RHINO_PERCEPTION
+        self._enable()
+        try:
+            conn = get_rhino_connection()
+            created = conn.send_command("create_object", {
+                "type": "BOX", "name": "ToDelete",
+                "params": {"width": 1, "length": 1, "height": 1},
+            })
+            deleted = conn.send_command("delete_object", {"id": created["id"]})
+        finally:
+            self._restore(original)
+
+        assert "_delta" in deleted
+        assert created["id"] in deleted["_delta"]["deleted_ids"]
+        assert deleted["_delta"]["created_ids"] == []
+        assert deleted["_delta"]["count_after"] == deleted["_delta"]["count_before"] - 1
+
+    def test_no_delta_when_disabled(self, mock_server):
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+
+        original = srv.RHINO_PERCEPTION
+        import rhinomcp.server as _srv
+        _srv._rhino_connection = None
+        _srv.RHINO_PERCEPTION = False
+        try:
+            conn = get_rhino_connection()
+            result = conn.send_command("create_object", {
+                "type": "BOX", "name": "NoDeltaBox",
+                "params": {"width": 1, "length": 1, "height": 1},
+            })
+        finally:
+            self._restore(original)
+
+        assert "_delta" not in result
