@@ -254,10 +254,13 @@ class RhinoConnection:
 
         command = {"type": command_type, "params": params or {}}
         if RHINO_PERCEPTION:
-            # Envelope-level flag, kept out of params so it never collides with a
-            # command's own parameters or trips params schema validation. The
-            # plugin ignores it for read-only commands.
+            # Envelope-level flags, kept out of params so they never collide with a
+            # command's own parameters or trip params schema validation. The plugin
+            # ignores them for read-only commands. Perception is the master switch
+            # for the whole perceive-act loop: what changed (_delta) and whether the
+            # new geometry is sound (_health).
             command["include_delta"] = True
+            command["include_health"] = True
 
         try:
             # Log the command being sent

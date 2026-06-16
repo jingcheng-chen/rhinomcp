@@ -247,6 +247,42 @@ the counts stay exact. This follows the summarize-don't-enumerate approach
 validation. It is off by default, so responses are byte-identical unless
 enabled. See `contracts/responses/change_delta.json`.
 
+### Geometry Health (Perception)
+
+With `RHINO_MCP_PERCEPTION` enabled, the same envelope also carries an
+`include_health` flag, and the plugin attaches a `_health` block alongside
+`_delta` on each mutating command's `result`:
+
+```json
+{
+  "status": "success",
+  "result": {
+    "...": "normal command result",
+    "_health": {
+      "checked_count": 2,
+      "invalid_count": 1,
+      "issues": [
+        { "id": "...", "reason": "Line points are coincident." }
+      ],
+      "truncated": false
+    }
+  }
+}
+```
+
+Health is computed at the same dispatch choke point, over the objects the command
+just created (the `after - before` set the delta already derives). Each created
+object is checked with `GeometryBase.IsValidWithLog`, which returns the verdict
+and a human-readable reason in one pass; only the invalid ones are listed, so a
+clean write returns an empty `issues` array rather than a wall of "ok".
+`checked_count` and `invalid_count` are always exact; the `issues` list is capped
+at `HealthIssueCap` (50) with `truncated` set when some were dropped, the same
+summarize-don't-enumerate shape as the delta. Scope matches the delta: created
+geometry only, since an in-place modify reuses its id and can't be told apart by
+a set diff. The big win is the arbitrary-code and boolean/loft paths, where an
+invalid result can otherwise land silently. See
+`contracts/responses/change_health.json`.
+
 ### Schema Validation
 
 `server/src/rhinomcp/validation.py` validates tool parameters against
@@ -288,7 +324,7 @@ Main file: `server/src/rhinomcp/server.py`
 | `RHINO_MCP_PORT`         | `1999`            | TCP port.                                                                   |
 | `RHINO_MCP_ALLOW_REMOTE` | unset             | Set to `1` only if accepting unauthenticated remote command execution risk. |
 | `RHINO_MCP_TIMEOUT`      | `15.0`            | Socket timeout in seconds.                                                  |
-| `RHINO_MCP_PERCEPTION`   | unset             | Set truthy to attach a `_delta` change block to mutating-command results.   |
+| `RHINO_MCP_PERCEPTION`   | unset             | Set truthy to attach `_delta` (what changed) and `_health` (validity of created geometry) blocks to mutating-command results. |
 | `RHINO_MCP_DEBUG`        | unset             | Enables verbose logging when truthy.                                        |
 | `RHINO_MCP_LOG_LEVEL`    | `INFO` or `DEBUG` | Explicit Python logging level.                                              |
 

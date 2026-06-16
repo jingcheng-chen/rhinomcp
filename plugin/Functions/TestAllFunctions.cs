@@ -871,6 +871,56 @@ public partial class RhinoMCPFunctions
             results["layer_name_live"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
+        // Test 26: change-health helper (Scene Perception Layer). BuildHealth runs
+        // GeometryBase.IsValidWithLog over the newly-created objects. Create one
+        // valid object and add one genuinely invalid curve (a zero-length line,
+        // which the document accepts but reports invalid), then assert only the
+        // bad one is listed, with a reason, and the counts are exact.
+        try
+        {
+            var healthBefore = SnapshotObjectIds(doc);
+            var okBox = CreateObject(new JObject
+            {
+                ["type"] = "BOX",
+                ["name"] = "MCPHealthOk",
+                ["params"] = new JObject { ["width"] = 1, ["length"] = 1, ["height"] = 1 }
+            });
+            string okId = okBox["id"]?.ToString();
+            var badId = doc.Objects.AddCurve(new Rhino.Geometry.LineCurve(
+                new Rhino.Geometry.Point3d(0, 0, 0), new Rhino.Geometry.Point3d(0, 0, 0)));
+
+            var health = BuildHealth(doc, healthBefore, SnapshotObjectIds(doc));
+            if ((int)health["checked_count"] != 2)
+                throw new Exception("BuildHealth checked_count should be 2, got " + health["checked_count"]);
+            if ((int)health["invalid_count"] != 1)
+                throw new Exception("BuildHealth invalid_count should be 1, got " + health["invalid_count"]);
+            if ((bool)health["truncated"])
+                throw new Exception("BuildHealth marked a single issue truncated");
+            var issues = (JArray)health["issues"];
+            if (issues.Count != 1)
+                throw new Exception("BuildHealth should list exactly one issue, got " + issues.Count);
+            if (issues[0]["id"].ToString() != badId.ToString())
+                throw new Exception("BuildHealth flagged the wrong object");
+            if (string.IsNullOrWhiteSpace(issues[0]["reason"]?.ToString()))
+                throw new Exception("BuildHealth issue is missing a reason");
+            foreach (var it in issues)
+                if (it["id"].ToString() == okId)
+                    throw new Exception("BuildHealth listed the valid object as an issue");
+
+            doc.Objects.Delete(badId, true);
+            DeleteObject(new JObject { ["id"] = okId });
+            results["change_health"] = new JObject
+            {
+                ["status"] = "pass",
+                ["reason"] = issues[0]["reason"]
+            };
+            VisualUpdate("change-health flags invalid created geometry");
+        }
+        catch (Exception e)
+        {
+            results["change_health"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
         // Cleanup
         if (!visualMode)
         {
@@ -891,6 +941,7 @@ public partial class RhinoMCPFunctions
                 DeleteObject(new JObject { ["name"] = "IntersectionPoint_point" });
                 DeleteObject(new JObject { ["name"] = "SplitSegment" });
                 DeleteObject(new JObject { ["name"] = "MCPDeltaProbe" });
+                DeleteObject(new JObject { ["name"] = "MCPHealthOk" });
             }
             catch
             {

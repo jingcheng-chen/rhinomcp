@@ -420,10 +420,11 @@ namespace RhinoMCPPlugin
                 // so it never collides with a command's own parameters. Defaults
                 // off, so behavior is unchanged unless a client asks for it.
                 bool includeDelta = command["include_delta"]?.ToObject<bool>() ?? false;
+                bool includeHealth = command["include_health"]?.ToObject<bool>() ?? false;
 
                 RhinoApp.WriteLine($"Executing command: {cmdType}");
 
-                JObject result = ExecuteCommandInternal(cmdType, parameters, includeDelta);
+                JObject result = ExecuteCommandInternal(cmdType, parameters, includeDelta, includeHealth);
 
                 RhinoApp.WriteLine("Command execution complete");
                 return result;
@@ -439,7 +440,7 @@ namespace RhinoMCPPlugin
             }
         }
 
-        private JObject ExecuteCommandInternal(string cmdType, JObject parameters, bool includeDelta)
+        private JObject ExecuteCommandInternal(string cmdType, JObject parameters, bool includeDelta, bool includeHealth)
         {
             // Reflection-discovered dispatch table — see Functions/_Registry.cs.
             // Adding a new command means adding a [McpCommand("name")] method on
@@ -458,14 +459,17 @@ namespace RhinoMCPPlugin
             var doc = RhinoDoc.ActiveDoc;
             bool needsUndo = !entry.ReadOnly;
 
-            // A change-delta only makes sense for a mutating command, and only
-            // when the client asked for it. Snapshot the document's object ids
-            // just before the handler runs so we can diff against the post-state.
-            // This is the one place every mutator funnels through, so it covers
-            // them all (including multi-effect ones like run_command and booleans
-            // with delete_sources) with no per-handler changes.
+            // A change-delta or health report only makes sense for a mutating
+            // command, and only when the client asked for it. Snapshot the
+            // document's object ids just before the handler runs so we can diff
+            // against the post-state. This is the one place every mutator funnels
+            // through, so it covers them all (including multi-effect ones like
+            // run_command and booleans with delete_sources) with no per-handler
+            // changes.
             bool wantDelta = includeDelta && needsUndo && doc != null;
-            HashSet<Guid> idsBefore = wantDelta ? this.handler.SnapshotObjectIds(doc) : null;
+            bool wantHealth = includeHealth && needsUndo && doc != null;
+            HashSet<Guid> idsBefore = (wantDelta || wantHealth)
+                ? this.handler.SnapshotObjectIds(doc) : null;
 
             uint record = 0;
             if (needsUndo)
@@ -476,10 +480,18 @@ namespace RhinoMCPPlugin
             try
             {
                 JObject result = entry.Handler(parameters);
-                if (wantDelta && result != null)
+                if ((wantDelta || wantHealth) && result != null)
                 {
-                    result["_delta"] = this.handler.BuildDelta(
-                        idsBefore, this.handler.SnapshotObjectIds(doc));
+                    var idsAfter = this.handler.SnapshotObjectIds(doc);
+                    if (wantDelta) result["_delta"] = this.handler.BuildDelta(idsBefore, idsAfter);
+                    // Health walks RhinoCommon geometry, so keep it from ever
+                    // turning a successful mutation into a failure: a hiccup
+                    // degrades to no _health rather than throwing out the result.
+                    if (wantHealth)
+                    {
+                        try { result["_health"] = this.handler.BuildHealth(doc, idsBefore, idsAfter); }
+                        catch (Exception he) { RhinoApp.WriteLine($"health check skipped: {he.Message}"); }
+                    }
                 }
                 return new JObject
                 {

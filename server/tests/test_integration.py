@@ -786,3 +786,97 @@ class TestChangeDeltaPerception:
         assert "created_ids" not in d            # omitted because over the cap
         assert d["deleted_count"] == 0
         assert d["deleted_ids"] == []            # under the cap, so present
+
+
+class TestChangeHealthPerception:
+    """End-to-end: with perception enabled the server forwards include_health and
+    mutating commands come back with a _health block reporting how many created
+    objects were checked and which were invalid. The mock holds no real geometry,
+    so it reports the all-clear shape; the invalid path is covered by the C# unit
+    test, the live test, and the schema test."""
+
+    def _enable(self):
+        import rhinomcp.server as srv
+        srv._rhino_connection = None
+        srv.RHINO_PERCEPTION = True
+
+    def _restore(self, value):
+        import rhinomcp.server as srv
+        srv.RHINO_PERCEPTION = value
+        srv._rhino_connection = None
+
+    def test_create_carries_health_when_enabled(self, mock_server):
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+
+        original = srv.RHINO_PERCEPTION
+        self._enable()
+        try:
+            conn = get_rhino_connection()
+            result = conn.send_command("create_object", {
+                "type": "BOX", "name": "HealthBox",
+                "params": {"width": 1, "length": 1, "height": 1},
+            })
+        finally:
+            self._restore(original)
+
+        assert "_health" in result
+        h = result["_health"]
+        assert h["checked_count"] == 1
+        assert h["invalid_count"] == 0
+        assert h["issues"] == []
+        assert h["truncated"] is False
+
+    def test_perception_carries_both_delta_and_health(self, mock_server):
+        """RHINO_PERCEPTION is one master switch, so a mutating command comes
+        back with both perception blocks."""
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+
+        original = srv.RHINO_PERCEPTION
+        self._enable()
+        try:
+            conn = get_rhino_connection()
+            result = conn.send_command("create_object", {
+                "type": "BOX", "name": "BothBox",
+                "params": {"width": 1, "length": 1, "height": 1},
+            })
+        finally:
+            self._restore(original)
+
+        assert "_delta" in result and "_health" in result
+        assert result["_delta"]["created_count"] == 1
+        assert result["_health"]["checked_count"] == 1
+
+    def test_no_health_when_disabled(self, mock_server):
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+
+        original = srv.RHINO_PERCEPTION
+        srv._rhino_connection = None
+        srv.RHINO_PERCEPTION = False
+        try:
+            conn = get_rhino_connection()
+            result = conn.send_command("create_object", {
+                "type": "BOX", "name": "NoHealthBox",
+                "params": {"width": 1, "length": 1, "height": 1},
+            })
+        finally:
+            self._restore(original)
+
+        assert "_health" not in result
+
+    def test_readonly_has_no_health(self, mock_server):
+        """Read-only commands never carry a _health, even with perception on."""
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+
+        original = srv.RHINO_PERCEPTION
+        self._enable()
+        try:
+            conn = get_rhino_connection()
+            result = conn.send_command("get_document_summary", {})
+        finally:
+            self._restore(original)
+
+        assert "_health" not in result
