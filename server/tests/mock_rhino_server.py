@@ -206,6 +206,7 @@ class MockRhinoServer:
             "boolean_intersection": self._boolean_intersection,
             "run_command": self._run_command,
             "get_commands": self._get_commands,
+            "describe_capabilities": self._describe_capabilities,
             "execute_rhinoscript_python_code": self._execute_script,
             "execute_rhinocommon_csharp_code": self._execute_csharp,
             "capture_viewport": self._capture_viewport,
@@ -990,6 +991,29 @@ class MockRhinoServer:
             matched = list(all_commands)
         matched.sort(key=str.lower)
         return {"count": len(matched), "commands": matched}
+
+    def _describe_capabilities(self, params: Dict) -> Dict:
+        """Representative capabilities shape. The real plugin reflects its live
+        dispatch table; the mock returns a fixed, well-formed sample so the
+        wiring and the response shape can be exercised."""
+        return {
+            "version": "0.0.0-mock",
+            "command_count": 3,
+            "commands": [
+                {"name": "create_object", "read_only": False},
+                {"name": "delete_object", "read_only": False},
+                {"name": "get_document_summary", "read_only": True},
+            ],
+            "perception": {
+                "description": "Mutating commands accept opt-in envelope flags.",
+                "envelope_flags": [
+                    {"flag": "include_delta", "attaches": "_delta",
+                     "description": "Attaches a change-delta to a mutating command's result."},
+                    {"flag": "include_health", "attaches": "_health",
+                     "description": "Attaches a geometry-health report to a mutating command's result."},
+                ],
+            },
+        }
 
 
 if __name__ == "__main__":

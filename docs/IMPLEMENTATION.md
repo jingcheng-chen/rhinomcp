@@ -282,6 +282,22 @@ geometry only, since an in-place modify reuses its id and can't be told apart by
 a set diff. The big win is the arbitrary-code and boolean/loft paths, where an
 invalid result can otherwise land silently. See
 `contracts/responses/change_health.json`.
+### Capabilities (Self-Description)
+
+`describe_capabilities` returns what this server itself can do: every command it
+handles with a `read_only` flag, the perception envelope flags it honors, and the
+plugin version. The command list is built from the live dispatch table
+(`GetDispatchTable`), so it can't drift from what the server actually accepts;
+adding a `[McpCommand]` makes it appear automatically.
+
+This is deliberately distinct from `get_commands`, which lists Rhino's own
+application commands (`Box`, `Circle`, ...) for use with `run_command`.
+`describe_capabilities` describes the MCP command surface, so an agent can
+discover what it can send here rather than guessing. Parameters are not included:
+the handlers take an untyped payload, so there is no parameter schema to reflect
+at runtime; the authoritative shapes live in `contracts/` and are already
+surfaced to clients through the MCP tool list. See
+`contracts/responses/capabilities.json`.
 
 ### Schema Validation
 
@@ -424,7 +440,7 @@ commands and 25 Grasshopper commands.
 | Object attributes             | `update_object_attributes`                                                                                                                            |
 | Selection                     | `select_objects`                                                                                                                                      |
 | Layers                        | `create_layer`, `delete_layer`, `get_or_set_current_layer`                                                                                            |
-| Scripting and commands        | `run_command`, `get_commands`, `execute_rhinoscript_python_code`, `execute_rhinocommon_csharp_code`                                                   |
+| Scripting and commands        | `run_command`, `get_commands`, `describe_capabilities`, `execute_rhinoscript_python_code`, `execute_rhinocommon_csharp_code`                          |
 | Undo                          | `undo`, `redo`                                                                                                                                        |
 | Booleans                      | `boolean_union`, `boolean_difference`, `boolean_intersection`                                                                                         |
 | Curves and generated geometry | `loft`, `extrude_curve`, `sweep1`, `offset_curve`, `pipe`, `project_curve`, `intersect_curves`, `split_curve`                                         |

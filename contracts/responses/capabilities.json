@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "capabilities.json",
+  "title": "Capabilities",
+  "description": "Self-description returned by describe_capabilities: the MCP command surface (each command and whether it is read-only), the perception envelope flags the server honors, and the plugin version.",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Plugin version."
+    },
+    "command_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of commands the server handles."
+    },
+    "commands": {
+      "type": "array",
+      "description": "Every command the server handles, sorted by name.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Command type, e.g. create_object."
+          },
+          "read_only": {
+            "type": "boolean",
+            "description": "True if the command does not mutate the document (no undo record)."
+          }
+        },
+        "required": ["name", "read_only"],
+        "additionalProperties": false
+      }
+    },
+    "perception": {
+      "type": "object",
+      "description": "Opt-in envelope flags that attach extra feedback to a mutating command's result.",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "How the perception flags are enabled."
+        },
+        "envelope_flags": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "flag": {
+                "type": "string",
+                "description": "Envelope flag name, e.g. include_delta."
+              },
+              "attaches": {
+                "type": "string",
+                "description": "The result block it attaches, e.g. _delta."
+              },
+              "description": {
+                "type": "string",
+                "description": "What the flag does."
+              }
+            },
+            "required": ["flag", "attaches", "description"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["description", "envelope_flags"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["version", "command_count", "commands", "perception"],
+  "additionalProperties": false
+}

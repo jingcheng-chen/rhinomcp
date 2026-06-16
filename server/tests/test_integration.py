@@ -908,3 +908,43 @@ class TestMeasureObjects:
         assert result["bbox_gap"] >= 0
         assert result["method"] in ("brep", "curve", "bbox")
         assert result["intersection_count"] >= 0
+
+
+class TestDescribeCapabilities:
+    """End-to-end describe_capabilities through the mock: the server's
+    self-description arrives with the command surface, read-only flags, and
+    perception envelope flags intact."""
+
+    def test_describe_capabilities_shape(self, mock_server):
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+        srv._rhino_connection = None
+
+        conn = get_rhino_connection()
+        result = conn.send_command("describe_capabilities", {})
+
+        assert isinstance(result["version"], str)
+        assert result["command_count"] == len(result["commands"])
+        for c in result["commands"]:
+            assert isinstance(c["name"], str)
+            assert isinstance(c["read_only"], bool)
+        flags = [f["flag"] for f in result["perception"]["envelope_flags"]]
+        assert "include_delta" in flags
+        assert "include_health" in flags
+
+    def test_describe_capabilities_is_readonly_no_delta(self, mock_server):
+        """A read-only command carries no _delta even with perception on."""
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+
+        original = srv.RHINO_PERCEPTION
+        srv._rhino_connection = None
+        srv.RHINO_PERCEPTION = True
+        try:
+            conn = get_rhino_connection()
+            result = conn.send_command("describe_capabilities", {})
+        finally:
+            srv.RHINO_PERCEPTION = original
+            srv._rhino_connection = None
+
+        assert "_delta" not in result

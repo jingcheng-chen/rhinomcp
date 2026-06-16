@@ -445,6 +445,55 @@ def test_responses():
     if not validate("responses/execute_script_result.json", script_result):
         all_passed = False
 
+    # Capabilities (describe_capabilities). The command list and perception flags
+    # may be empty; the shape must still hold.
+    print("  capabilities:")
+    capabilities = {
+        "version": "0.3.1",
+        "command_count": 2,
+        "commands": [
+            {"name": "create_object", "read_only": False},
+            {"name": "get_objects", "read_only": True},
+        ],
+        "perception": {
+            "description": "Mutating commands accept opt-in envelope flags.",
+            "envelope_flags": [
+                {"flag": "include_delta", "attaches": "_delta",
+                 "description": "Attaches a change-delta."},
+                {"flag": "include_health", "attaches": "_health",
+                 "description": "Attaches a geometry-health report."},
+            ],
+        },
+    }
+    if not validate("responses/capabilities.json", capabilities):
+        all_passed = False
+    minimal_caps = {"version": "0", "command_count": 0, "commands": [],
+                    "perception": {"description": "none", "envelope_flags": []}}
+    if not validate("responses/capabilities.json", minimal_caps):
+        all_passed = False
+    caps_validator = Draft202012Validator(load_schema_with_refs("responses/capabilities.json"))
+    bad_caps = [
+        # a command missing read_only
+        {"version": "0.3.1", "command_count": 1, "commands": [{"name": "x"}],
+         "perception": {"description": "d", "envelope_flags": []}},
+        # read_only not a boolean
+        {"version": "0.3.1", "command_count": 1, "commands": [{"name": "x", "read_only": "yes"}],
+         "perception": {"description": "d", "envelope_flags": []}},
+        # unknown top-level field
+        {"version": "0.3.1", "command_count": 0, "commands": [],
+         "perception": {"description": "d", "envelope_flags": []}, "extra": 1},
+        # missing perception
+        {"version": "0.3.1", "command_count": 0, "commands": []},
+        # envelope flag missing attaches
+        {"version": "0.3.1", "command_count": 0, "commands": [],
+         "perception": {"description": "d", "envelope_flags": [{"flag": "include_delta", "description": "d"}]}},
+    ]
+    for bad in bad_caps:
+        if not list(caps_validator.iter_errors(bad)):
+            print(f"  FAIL: capabilities accepted invalid payload {bad}")
+            all_passed = False
+    print("  capabilities negatives correctly rejected")
+
     # Layer info
     print("  layer_info:")
     layer_info = {
