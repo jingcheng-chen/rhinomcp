@@ -569,6 +569,30 @@ public partial class RhinoMCPFunctions
             results["delete_object"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
+        // Test 19b: deleting an UNNAMED object must report the "(unnamed)"
+        // fallback, never null. A null name made delete_result fail response
+        // validation under strict mode.
+        try
+        {
+            var lineId = doc.Objects.AddLine(
+                new Rhino.Geometry.Point3d(0, 0, 0), new Rhino.Geometry.Point3d(3, 0, 0));
+            if (lineId == Guid.Empty)
+                throw new Exception("could not add an unnamed line to test with");
+
+            var res = DeleteObject(new JObject { ["id"] = lineId.ToString() });
+            if (!(res["deleted"]?.ToObject<bool>() ?? false))
+                throw new Exception("unnamed object was not deleted");
+            var name = res["name"]?.ToString();
+            if (name != "(unnamed)")
+                throw new Exception("expected name '(unnamed)' for a nameless object, got '" + (name ?? "null") + "'");
+            results["delete_unnamed_object"] = new JObject { ["status"] = "pass", ["name"] = name };
+            VisualUpdate("Deleted unnamed object reports (unnamed)");
+        }
+        catch (Exception e)
+        {
+            results["delete_unnamed_object"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
         // Test 20: DeleteLayer
         try
         {
