@@ -471,6 +471,82 @@ class TestResponseValidation:
         )
 
 
+class TestPerceptionForwarding:
+    """Opt-in perception forwards an envelope-level include_delta flag and
+    passes the plugin's _delta block straight through to the caller."""
+
+    def _connect(self, mock_socket_class, result):
+        from rhinomcp.server import RhinoConnection
+
+        mock_sock = MagicMock()
+        mock_socket_class.return_value = mock_sock
+        # Responses are length-prefixed on the wire (framing), so frame the
+        # canned response the way the plugin would.
+        mock_sock.recv.side_effect = buffered_recv(
+            frame(json.dumps({"status": "success", "result": result}).encode("utf-8"))
+        )
+        conn = RhinoConnection(host="127.0.0.1", port=1999)
+        conn.connect()
+        return conn, mock_sock
+
+    @patch("socket.socket")
+    def test_off_by_default_no_flag_sent(self, mock_socket_class):
+        import rhinomcp.server as srv
+
+        conn, mock_sock = self._connect(mock_socket_class, {})
+        original = srv.RHINO_PERCEPTION
+        srv.RHINO_PERCEPTION = False
+        try:
+            conn.send_command("create_object", {"type": "BOX", "params": {}})
+        finally:
+            srv.RHINO_PERCEPTION = original
+
+        sent = json.loads(mock_sock.sendall.call_args[0][0][4:].decode("utf-8"))  # skip frame header
+        assert "include_delta" not in sent  # byte-identical to pre-feature
+
+    @patch("socket.socket")
+    def test_on_sends_envelope_flag_without_touching_params(self, mock_socket_class):
+        import rhinomcp.server as srv
+
+        conn, mock_sock = self._connect(mock_socket_class, {})
+        original = srv.RHINO_PERCEPTION
+        srv.RHINO_PERCEPTION = True
+        try:
+            conn.send_command("create_object", {"type": "BOX", "params": {"width": 1}})
+        finally:
+            srv.RHINO_PERCEPTION = original
+
+        sent = json.loads(mock_sock.sendall.call_args[0][0][4:].decode("utf-8"))  # skip frame header
+        # Flag rides on the envelope, never inside params (so it can't trip
+        # params schema validation or collide with a real parameter).
+        assert sent["include_delta"] is True
+        assert "include_delta" not in sent["params"]
+        assert sent["params"] == {"type": "BOX", "params": {"width": 1}}
+
+    @patch("socket.socket")
+    def test_delta_in_result_flows_through(self, mock_socket_class):
+        import rhinomcp.server as srv
+
+        delta = {
+            "created_count": 1,
+            "deleted_count": 0,
+            "count_before": 0,
+            "count_after": 1,
+            "created_ids": ["11111111-1111-1111-1111-111111111111"],
+            "deleted_ids": [],
+            "truncated": False,
+        }
+        conn, _ = self._connect(mock_socket_class, {"id": "x", "_delta": delta})
+        original = srv.RHINO_PERCEPTION
+        srv.RHINO_PERCEPTION = True
+        try:
+            result = conn.send_command("create_object", {"type": "BOX", "params": {}})
+        finally:
+            srv.RHINO_PERCEPTION = original
+
+        assert result["_delta"] == delta
+
+
 class TestSendCommand:
     """Tests for the send_command method."""
 

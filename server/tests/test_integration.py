@@ -672,3 +672,117 @@ class TestWireProtocol:
         assert second["status"] == "error"
         assert third["status"] == "success"
         assert "objects" in third["result"]
+
+
+class TestChangeDeltaPerception:
+    """End-to-end: with perception enabled the server forwards include_delta and
+    mutating commands come back with a _delta block reporting created/deleted
+    ids and counts; with it disabled nothing changes. Runs against the mock,
+    whose dispatch mirrors the plugin's delta attachment."""
+
+    def _enable(self):
+        import rhinomcp.server as srv
+        srv._rhino_connection = None
+        srv.RHINO_PERCEPTION = True
+
+    def _restore(self, value):
+        import rhinomcp.server as srv
+        srv.RHINO_PERCEPTION = value
+        srv._rhino_connection = None
+
+    def test_create_carries_delta_when_enabled(self, mock_server):
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+
+        original = srv.RHINO_PERCEPTION
+        self._enable()
+        try:
+            conn = get_rhino_connection()
+            result = conn.send_command("create_object", {
+                "type": "BOX", "name": "DeltaBox",
+                "params": {"width": 1, "length": 1, "height": 1},
+            })
+        finally:
+            self._restore(original)
+
+        assert "_delta" in result
+        d = result["_delta"]
+        assert d["created_count"] == 1
+        assert d["deleted_count"] == 0
+        assert d["truncated"] is False
+        # The id list is included because the count is within the cap.
+        assert result["id"] in d["created_ids"]
+        assert d["deleted_ids"] == []
+        assert d["count_after"] == d["count_before"] + 1
+
+    def test_delete_carries_delta_when_enabled(self, mock_server):
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+
+        original = srv.RHINO_PERCEPTION
+        self._enable()
+        try:
+            conn = get_rhino_connection()
+            created = conn.send_command("create_object", {
+                "type": "BOX", "name": "ToDelete",
+                "params": {"width": 1, "length": 1, "height": 1},
+            })
+            deleted = conn.send_command("delete_object", {"id": created["id"]})
+        finally:
+            self._restore(original)
+
+        dd = deleted["_delta"]
+        assert dd["deleted_count"] == 1
+        assert dd["created_count"] == 0
+        assert dd["truncated"] is False
+        assert created["id"] in dd["deleted_ids"]
+        assert dd["created_ids"] == []
+        assert dd["count_after"] == dd["count_before"] - 1
+
+    def test_no_delta_when_disabled(self, mock_server):
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+
+        original = srv.RHINO_PERCEPTION
+        import rhinomcp.server as _srv
+        _srv._rhino_connection = None
+        _srv.RHINO_PERCEPTION = False
+        try:
+            conn = get_rhino_connection()
+            result = conn.send_command("create_object", {
+                "type": "BOX", "name": "NoDeltaBox",
+                "params": {"width": 1, "length": 1, "height": 1},
+            })
+        finally:
+            self._restore(original)
+
+        assert "_delta" not in result
+
+    def test_large_op_truncates_id_lists(self, mock_server):
+        """A single operation that creates more than the cap reports exact
+        counts but omits the id arrays and sets truncated=true, so a
+        thousand-object operation can't flood the client's context."""
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+
+        original = srv.RHINO_PERCEPTION
+        self._enable()
+        try:
+            conn = get_rhino_connection()
+            specs = {
+                f"B{i}": {
+                    "type": "BOX", "name": f"BulkBox{i}",
+                    "params": {"width": 1, "length": 1, "height": 1},
+                }
+                for i in range(60)
+            }
+            result = conn.send_command("create_objects", specs)
+        finally:
+            self._restore(original)
+
+        d = result["_delta"]
+        assert d["created_count"] == 60          # exact count is always there
+        assert d["truncated"] is True
+        assert "created_ids" not in d            # omitted because over the cap
+        assert d["deleted_count"] == 0
+        assert d["deleted_ids"] == []            # under the cap, so present

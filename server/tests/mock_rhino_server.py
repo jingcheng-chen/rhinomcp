@@ -165,6 +165,18 @@ class MockRhinoServer:
         else:
             client_socket.sendall(body)
 
+    # Commands the plugin treats as mutating (non-ReadOnly). Only these get a
+    # _delta attached when include_delta is set, mirroring the plugin's
+    # ExecuteCommandInternal (read-only commands never carry a delta).
+    _MUTATING_COMMANDS = {
+        "create_object", "create_objects", "modify_object", "modify_objects",
+        "delete_object", "boolean_union", "boolean_difference",
+        "boolean_intersection", "loft", "extrude_curve", "sweep1",
+        "offset_curve", "pipe", "run_command",
+        "execute_rhinoscript_python_code", "execute_rhinocommon_csharp_code",
+        "undo", "redo", "create_layer", "delete_layer",
+    }
+
     def _process_command(self, command: Dict[str, Any]) -> Dict[str, Any]:
         """Process a command and return a response."""
         cmd_type = command.get("type", "")
@@ -204,14 +216,48 @@ class MockRhinoServer:
         }
 
         handler = handlers.get(cmd_type)
-        if handler:
-            try:
-                result = handler(params)
-                return {"status": "success", "result": result}
-            except Exception as e:
-                return {"status": "error", "message": str(e)}
-        else:
+        if not handler:
             return {"status": "error", "message": f"Unknown command: {cmd_type}"}
+
+        try:
+            # Mirror the plugin: when the client asks for a delta, snapshot the
+            # object id set around a mutating handler and attach what changed.
+            track_delta = bool(command.get("include_delta")) and (
+                cmd_type in self._MUTATING_COMMANDS
+            )
+            before = set(self.objects.keys()) if track_delta else None
+            result = handler(params)
+            if track_delta and isinstance(result, dict):
+                after = set(self.objects.keys())
+                result["_delta"] = self._build_delta(before, after)
+            return {"status": "success", "result": result}
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
+    _DELTA_ID_CAP = 50
+
+    def _build_delta(self, before: set, after: set) -> Dict:
+        """Mirror the plugin's BuildDelta: exact counts always, id arrays only
+        when within the cap, truncated flag when one is dropped."""
+        created = [k for k in after if k not in before]
+        deleted = [k for k in before if k not in after]
+        delta = {
+            "created_count": len(created),
+            "deleted_count": len(deleted),
+            "count_before": len(before),
+            "count_after": len(after),
+        }
+        truncated = False
+        if len(created) <= self._DELTA_ID_CAP:
+            delta["created_ids"] = created
+        else:
+            truncated = True
+        if len(deleted) <= self._DELTA_ID_CAP:
+            delta["deleted_ids"] = deleted
+        else:
+            truncated = True
+        delta["truncated"] = truncated
+        return delta
 
     def _get_document_summary(self, params: Dict) -> Dict:
         """Return document summary."""

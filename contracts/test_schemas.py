@@ -493,6 +493,53 @@ def test_responses():
     if not validate("responses/analyze_objects_result.json", analyze_result):
         all_passed = False
 
+    # Change delta (perception). created/deleted may be empty (a delete creates
+    # nothing), so the schema must accept empty arrays.
+    print("  change_delta:")
+    GUID = "12345678-1234-1234-1234-123456789012"
+    delta_created = {
+        "created_count": 1,
+        "deleted_count": 0,
+        "count_before": 0,
+        "count_after": 1,
+        "created_ids": [GUID],
+        "deleted_ids": [],
+        "truncated": False,
+    }
+    if not validate("responses/change_delta.json", delta_created):
+        all_passed = False
+    # Truncated shape: counts present, id arrays omitted, truncated true.
+    delta_truncated = {
+        "created_count": 5000,
+        "deleted_count": 0,
+        "count_before": 0,
+        "count_after": 5000,
+        "truncated": True,
+    }
+    if not validate("responses/change_delta.json", delta_truncated):
+        all_passed = False
+
+    # Negative: the schema must actually constrain (not be vacuously permissive).
+    delta_schema = load_schema_with_refs("responses/change_delta.json")
+    delta_validator = Draft202012Validator(delta_schema)
+    bad_deltas = [
+        # bad guid in an id list
+        {"created_count": 1, "deleted_count": 0, "count_before": 0, "count_after": 1,
+         "created_ids": ["not-a-guid"], "deleted_ids": [], "truncated": False},
+        # unknown field
+        {"created_count": 0, "deleted_count": 0, "count_before": 0, "count_after": 0,
+         "truncated": False, "modified_count": 3},
+        # missing required truncated
+        {"created_count": 0, "deleted_count": 0, "count_before": 0, "count_after": 0},
+        # missing required count
+        {"created_count": 0, "deleted_count": 0, "count_after": 0, "truncated": False},
+    ]
+    for bad in bad_deltas:
+        if not list(delta_validator.iter_errors(bad)):
+            print(f"  FAIL: change_delta accepted invalid payload {bad}")
+            all_passed = False
+    print("  change_delta negatives correctly rejected")
+
     return all_passed
 
 

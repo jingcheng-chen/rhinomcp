@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "change_delta.json",
+  "title": "ChangeDelta",
+  "description": "What changed in the document as a result of a mutating command. Attached as `_delta` on the command result when the client opts in (envelope include_delta=true). Counts are always exact; the created_ids/deleted_ids arrays are included only when small enough not to flood the response, and `truncated` is set when one was dropped. A modified count is intentionally absent since an in-place transform reuses the same id.",
+  "type": "object",
+  "properties": {
+    "created_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of objects present after the command but not before."
+    },
+    "deleted_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of objects present before the command but not after."
+    },
+    "count_before": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Object count before the command ran."
+    },
+    "count_after": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Object count after the command ran."
+    },
+    "created_ids": {
+      "type": "array",
+      "items": { "$ref": "../common/definitions.json#/$defs/guid" },
+      "description": "Created object GUIDs. Present only when created_count is within the cap; omitted otherwise (see truncated)."
+    },
+    "deleted_ids": {
+      "type": "array",
+      "items": { "$ref": "../common/definitions.json#/$defs/guid" },
+      "description": "Deleted object GUIDs. Present only when deleted_count is within the cap; omitted otherwise (see truncated)."
+    },
+    "truncated": {
+      "type": "boolean",
+      "description": "True when an id array was omitted because it exceeded the cap; the counts are still exact."
+    }
+  },
+  "required": ["created_count", "deleted_count", "count_before", "count_after", "truncated"],
+  "additionalProperties": false
+}

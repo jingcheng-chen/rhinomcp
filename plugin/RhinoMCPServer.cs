@@ -416,10 +416,14 @@ namespace RhinoMCPPlugin
             {
                 string cmdType = command["type"]?.ToString();
                 JObject parameters = command["params"] as JObject ?? new JObject();
+                // Opt-in perception flag, carried on the envelope (not in params)
+                // so it never collides with a command's own parameters. Defaults
+                // off, so behavior is unchanged unless a client asks for it.
+                bool includeDelta = command["include_delta"]?.ToObject<bool>() ?? false;
 
                 RhinoApp.WriteLine($"Executing command: {cmdType}");
 
-                JObject result = ExecuteCommandInternal(cmdType, parameters);
+                JObject result = ExecuteCommandInternal(cmdType, parameters, includeDelta);
 
                 RhinoApp.WriteLine("Command execution complete");
                 return result;
@@ -435,7 +439,7 @@ namespace RhinoMCPPlugin
             }
         }
 
-        private JObject ExecuteCommandInternal(string cmdType, JObject parameters)
+        private JObject ExecuteCommandInternal(string cmdType, JObject parameters, bool includeDelta)
         {
             // Reflection-discovered dispatch table — see Functions/_Registry.cs.
             // Adding a new command means adding a [McpCommand("name")] method on
@@ -453,6 +457,16 @@ namespace RhinoMCPPlugin
 
             var doc = RhinoDoc.ActiveDoc;
             bool needsUndo = !entry.ReadOnly;
+
+            // A change-delta only makes sense for a mutating command, and only
+            // when the client asked for it. Snapshot the document's object ids
+            // just before the handler runs so we can diff against the post-state.
+            // This is the one place every mutator funnels through, so it covers
+            // them all (including multi-effect ones like run_command and booleans
+            // with delete_sources) with no per-handler changes.
+            bool wantDelta = includeDelta && needsUndo && doc != null;
+            HashSet<Guid> idsBefore = wantDelta ? this.handler.SnapshotObjectIds(doc) : null;
+
             uint record = 0;
             if (needsUndo)
             {
@@ -462,6 +476,11 @@ namespace RhinoMCPPlugin
             try
             {
                 JObject result = entry.Handler(parameters);
+                if (wantDelta && result != null)
+                {
+                    result["_delta"] = this.handler.BuildDelta(
+                        idsBefore, this.handler.SnapshotObjectIds(doc));
+                }
                 return new JObject
                 {
                     ["status"] = "success",

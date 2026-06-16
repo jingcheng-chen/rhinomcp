@@ -749,6 +749,71 @@ public partial class RhinoMCPFunctions
             results["capture_viewport_readonly"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
+        // Test 25: change-delta helpers (Scene Perception Layer). The dispatch
+        // path that attaches _delta is private to RhinoMCPServer, so assert the
+        // public helpers directly: BuildDelta as a pure set diff, and a real
+        // before/after snapshot around a create.
+        try
+        {
+            var idA = Guid.NewGuid();
+            var idB = Guid.NewGuid();
+            var idC = Guid.NewGuid();
+            var pure = BuildDelta(
+                new System.Collections.Generic.HashSet<Guid> { idA, idB },
+                new System.Collections.Generic.HashSet<Guid> { idB, idC });
+            if ((int)pure["created_count"] != 1 || (int)pure["deleted_count"] != 1)
+                throw new Exception("BuildDelta counts incorrect");
+            var created = (JArray)pure["created_ids"];
+            var deleted = (JArray)pure["deleted_ids"];
+            if (created.Count != 1 || created[0].ToString() != idC.ToString())
+                throw new Exception("BuildDelta created_ids incorrect");
+            if (deleted.Count != 1 || deleted[0].ToString() != idA.ToString())
+                throw new Exception("BuildDelta deleted_ids incorrect");
+            if ((bool)pure["truncated"])
+                throw new Exception("BuildDelta marked a small delta truncated");
+
+            // Over the cap: counts stay exact, id lists are dropped, truncated set.
+            var bigBefore = new System.Collections.Generic.HashSet<Guid>();
+            var bigAfter = new System.Collections.Generic.HashSet<Guid>();
+            for (int i = 0; i < DeltaIdListCap + 10; i++) bigAfter.Add(Guid.NewGuid());
+            var big = BuildDelta(bigBefore, bigAfter);
+            if ((int)big["created_count"] != DeltaIdListCap + 10)
+                throw new Exception("BuildDelta dropped the count when truncating");
+            if (big["created_ids"] != null)
+                throw new Exception("BuildDelta included an over-cap id list");
+            if (!(bool)big["truncated"])
+                throw new Exception("BuildDelta did not set truncated for an over-cap list");
+
+            var idsBefore = SnapshotObjectIds(doc);
+            var probe = CreateObject(new JObject
+            {
+                ["type"] = "BOX",
+                ["name"] = "MCPDeltaProbe",
+                ["params"] = new JObject { ["width"] = 1, ["length"] = 1, ["height"] = 1 }
+            });
+            string probeId = probe["id"]?.ToString();
+            var live = BuildDelta(idsBefore, SnapshotObjectIds(doc));
+            bool sawProbe = false;
+            foreach (var t in (JArray)live["created_ids"])
+                if (t.ToString() == probeId) sawProbe = true;
+            if (!sawProbe)
+                throw new Exception("snapshot/delta did not report the created object");
+            if ((int)live["count_after"] != (int)live["count_before"] + 1)
+                throw new Exception("live delta count did not rise by exactly 1");
+
+            DeleteObject(new JObject { ["id"] = probeId });
+            results["change_delta"] = new JObject
+            {
+                ["status"] = "pass",
+                ["created_reported"] = (int)live["created_count"]
+            };
+            VisualUpdate("change-delta helpers report created/deleted ids");
+        }
+        catch (Exception e)
+        {
+            results["change_delta"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
         // Cleanup
         if (!visualMode)
         {
@@ -768,6 +833,7 @@ public partial class RhinoMCPFunctions
                 DeleteObject(new JObject { ["name"] = "IntLine2" });
                 DeleteObject(new JObject { ["name"] = "IntersectionPoint_point" });
                 DeleteObject(new JObject { ["name"] = "SplitSegment" });
+                DeleteObject(new JObject { ["name"] = "MCPDeltaProbe" });
             }
             catch
             {
