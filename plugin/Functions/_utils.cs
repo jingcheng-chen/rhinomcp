@@ -117,6 +117,20 @@ public partial class RhinoMCPFunctions
         throw new InvalidOperationException("Object lookup requires 'id' or 'name'.");
     }
 
+    /// <summary>
+    /// Count the active (non-deleted) objects in the document. This walks the
+    /// same object enumeration get_document_summary categorizes, so the count
+    /// always agrees with that breakdown. RhinoObjectTable.Count is deliberately
+    /// not used: it also counts objects that were deleted but are still undoable,
+    /// so it over-reports until the undo history is cleared.
+    /// </summary>
+    private int CountActiveObjects(RhinoDoc doc)
+    {
+        int count = 0;
+        foreach (var obj in doc.Objects) count++;
+        return count;
+    }
+
     private Transform applyRotation(JObject parameters, GeometryBase geometry)
     {
         double[] rotation = parameters["rotation"].ToObject<double[]>();

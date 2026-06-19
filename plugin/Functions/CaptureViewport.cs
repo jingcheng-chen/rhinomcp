@@ -80,8 +80,10 @@ public partial class RhinoMCPFunctions
             // Store viewport name
             string viewportName = targetView.ActiveViewport.Name ?? viewportTarget;
 
-            // Apply zoom to fit if requested
-            if (zoomToFit && doc.Objects.Count > 0)
+            // Apply zoom to fit if requested. Count active objects, not
+            // doc.Objects.Count, which also counts undoable-deleted entries.
+            int activeCount = CountActiveObjects(doc);
+            if (zoomToFit && activeCount > 0)
             {
                 targetView.ActiveViewport.ZoomExtents();
                 doc.Views.Redraw();
@@ -109,7 +111,7 @@ public partial class RhinoMCPFunctions
                 ["show_grid"] = showGrid,
                 ["show_axes"] = showAxes,
                 ["show_cplane_axes"] = showCplaneAxes,
-                ["object_count"] = doc.Objects.Count
+                ["object_count"] = activeCount
             };
         }
         finally

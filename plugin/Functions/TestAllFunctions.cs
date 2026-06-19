@@ -1055,6 +1055,43 @@ public partial class RhinoMCPFunctions
             results["modify_object_no_shear"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
+        // Test: get_document_summary.object_count reports active objects only, so
+        // it equals objects_by_type and is not inflated by undoable-deleted
+        // entries. Create three, delete one (leaving a tombstone), and check.
+        try
+        {
+            var beforeSummary = GetDocumentSummary(new JObject());
+            int beforeCount = (int)beforeSummary["object_count"];
+            var countIds = new string[3];
+            for (int i = 0; i < 3; i++)
+            {
+                var o = CreateObject(new JObject
+                {
+                    ["type"] = "BOX",
+                    ["name"] = "MCPCountProbe" + i,
+                    ["params"] = new JObject { ["width"] = 1, ["length"] = 1, ["height"] = 1 }
+                });
+                countIds[i] = o["id"]?.ToString();
+            }
+            DeleteObject(new JObject { ["id"] = countIds[0] });   // leaves an undoable tombstone
+            var afterSummary = GetDocumentSummary(new JObject());
+            int afterCount = (int)afterSummary["object_count"];
+            int typeSum = 0;
+            foreach (var kv in (JObject)afterSummary["objects_by_type"]) typeSum += (int)kv.Value;
+            DeleteObject(new JObject { ["id"] = countIds[1] });
+            DeleteObject(new JObject { ["id"] = countIds[2] });
+            if (afterCount != typeSum)
+                throw new Exception("object_count " + afterCount + " != objects_by_type sum " + typeSum);
+            if (afterCount != beforeCount + 2)
+                throw new Exception("object_count net change wrong: " + beforeCount + " -> " + afterCount);
+            results["live_object_count"] = new JObject { ["status"] = "pass", ["count"] = afterCount };
+            VisualUpdate("object_count counts active objects, matches breakdown");
+        }
+        catch (Exception e)
+        {
+            results["live_object_count"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
         // Cleanup
         if (!visualMode)
         {
@@ -1082,6 +1119,9 @@ public partial class RhinoMCPFunctions
                 DeleteObject(new JObject { ["name"] = "MCPMeasureBig" });
                 DeleteObject(new JObject { ["name"] = "MCPMeasureSmall" });
                 DeleteObject(new JObject { ["name"] = "MCPShearBox" });
+                DeleteObject(new JObject { ["name"] = "MCPCountProbe0" });
+                DeleteObject(new JObject { ["name"] = "MCPCountProbe1" });
+                DeleteObject(new JObject { ["name"] = "MCPCountProbe2" });
             }
             catch
             {
