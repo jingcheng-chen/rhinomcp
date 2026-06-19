@@ -814,6 +814,39 @@ public partial class RhinoMCPFunctions
             results["change_delta"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
+        // Test: a serialized object's layer name is read live, so renaming a
+        // layer is reflected immediately instead of being served stale from a
+        // cache. Calls the serializer directly and renames the layer between two
+        // reads of the same object.
+        try
+        {
+            var ld = RhinoDoc.ActiveDoc;
+            int li = ld.Layers.Add("MCPLayerCacheProbe", System.Drawing.Color.Gray);
+            if (li < 0)
+                throw new Exception("could not add probe layer");
+            var attr = new Rhino.DocObjects.ObjectAttributes { LayerIndex = li };
+            var gid = ld.Objects.AddPoint(new Rhino.Geometry.Point3d(0, 0, 0), attr);
+            var lo = ld.Objects.Find(gid);
+
+            string before = rhinomcp.Serializers.Serializer.RhinoObject(lo)["layer"]?.ToString();
+            ld.Layers[li].Name = "MCPLayerCacheProbeRenamed";
+            string after = rhinomcp.Serializers.Serializer.RhinoObject(lo)["layer"]?.ToString();
+
+            ld.Objects.Delete(gid, true);
+            ld.Layers.Delete(li, true);
+
+            if (before != "MCPLayerCacheProbe")
+                throw new Exception("layer before rename was " + before);
+            if (after != "MCPLayerCacheProbeRenamed")
+                throw new Exception("stale layer name after rename: " + after);
+            results["layer_name_live"] = new JObject { ["status"] = "pass" };
+            VisualUpdate("serialized layer name reads live after rename");
+        }
+        catch (Exception e)
+        {
+            results["layer_name_live"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
         // Cleanup
         if (!visualMode)
         {
