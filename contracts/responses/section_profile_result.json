@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "section_profile_result.json",
+  "title": "SectionProfile Response",
+  "description": "Cross-section measurements from cutting a plane (or a stack of parallel planes) through objects.",
+  "type": "object",
+  "properties": {
+    "mode": { "type": "string", "enum": ["plane", "profile"] },
+    "object_count": { "type": "integer", "minimum": 0 },
+
+    "plane": {
+      "type": "object",
+      "description": "The resolved cut plane (plane mode only).",
+      "properties": {
+        "origin": { "$ref": "../common/definitions.json#/$defs/point3d" },
+        "normal": { "$ref": "../common/definitions.json#/$defs/vector3d" }
+      },
+      "required": ["origin", "normal"],
+      "additionalProperties": false
+    },
+    "total_section_area": { "type": "number" },
+    "total_loop_count": { "type": "integer", "minimum": 0 },
+    "profiles": {
+      "type": "array",
+      "description": "Per-object cross-section reports (plane mode only).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "$ref": "../common/definitions.json#/$defs/guid" },
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "section_area": { "type": "number" },
+          "loop_count": { "type": "integer", "minimum": 0 },
+          "loops": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "closed": { "type": "boolean" },
+                "perimeter": { "type": "number" },
+                "area": { "type": ["number", "null"] },
+                "centroid": {
+                  "type": ["array", "null"],
+                  "items": { "type": "number" },
+                  "minItems": 3,
+                  "maxItems": 3
+                }
+              },
+              "required": ["closed", "perimeter", "area", "centroid"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["id", "name", "type", "section_area", "loop_count", "loops"],
+        "additionalProperties": false
+      }
+    },
+
+    "axis": { "type": "string", "enum": ["X", "Y", "Z"] },
+    "count": { "type": "integer", "minimum": 2 },
+    "sections": {
+      "type": "array",
+      "description": "Sectional-area curve, one slice per plane (profile mode only).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "position": { "type": "number" },
+          "total_section_area": { "type": "number" },
+          "loop_count": { "type": "integer", "minimum": 0 }
+        },
+        "required": ["position", "total_section_area", "loop_count"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["mode", "object_count"],
+  "allOf": [
+    {
+      "if": {
+        "properties": { "mode": { "const": "plane" } },
+        "required": ["mode"]
+      },
+      "then": {
+        "required": ["plane", "total_section_area", "total_loop_count", "profiles"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "mode": { "const": "profile" } },
+        "required": ["mode"]
+      },
+      "then": {
+        "required": ["axis", "count", "sections"]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

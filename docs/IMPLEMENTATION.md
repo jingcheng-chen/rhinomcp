@@ -299,6 +299,35 @@ at runtime; the authoritative shapes live in `contracts/` and are already
 surfaced to clients through the MCP tool list. See
 `contracts/responses/capabilities.json`.
 
+### Section Profile (Cross-Section Measurement)
+
+`section_profile` cuts a plane (or a stack of parallel planes) through the
+selected objects and reports each cross-section's area, perimeter, centroid, and
+whether it closed. It is read-only and adds nothing to the document: the contour
+curves are produced in memory with `Brep.CreateContourCurves` /
+`Mesh.CreateContourCurves`, joined with `Curve.JoinCurves`, measured, and
+discarded. This answers questions no other command can, such as the filled
+floor-plate area at a height or a beam's cross-sectional area, without the agent
+having to model and delete scratch geometry.
+
+Two modes, exactly one per call:
+
+- `plane`: a single cut, given either as `{axis, value}` for an axis-aligned
+  world plane or `{origin, normal}` for an arbitrary plane. The response carries
+  the resolved plane, a per-object `profiles` list, and document totals. A single
+  cut can produce several loops (a tube, a torus, the two legs of an L); nested
+  loops are counted as holes by even-odd depth, so a hollow section reports outer
+  area minus its holes, and each loop carries an `is_hole` flag.
+- `profile`: a stack of `count` parallel cuts along an axis, spanning the
+  selection's extent unless an explicit `start`/`end` is given. The response is
+  the sectional-area curve: one `{position, total_section_area, loop_count}` per
+  slice, which is what naval and structural section analysis needs.
+
+An area is reported only for a loop that closed and is planar; an open or
+fragmented section is marked `closed: false` with a perimeter and no fabricated
+area, so the numbers never overstate what was found. See
+`contracts/responses/section_profile_result.json`.
+
 ### Schema Validation
 
 `server/src/rhinomcp/validation.py` validates tool parameters against
@@ -428,7 +457,7 @@ To add a command, the implementation must stay in sync across:
 
 ## Command Surface
 
-`contracts/protocol.json` defines 59 command types: 34 Rhino
+`contracts/protocol.json` defines 60 command types: 35 Rhino
 commands and 25 Grasshopper commands.
 
 ### Rhino Commands
@@ -437,6 +466,7 @@ commands and 25 Grasshopper commands.
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Object creation and edits     | `create_object`, `create_objects`, `modify_object`, `modify_objects`, `delete_object`                                                                 |
 | Object and document query     | `get_document_summary`, `get_objects`, `get_object_info`, `get_selected_objects_info`, `get_object_attributes`, `analyze_objects`, `measure_objects`, `capture_viewport` |
+| Object and document query     | `get_document_summary`, `get_objects`, `get_object_info`, `get_selected_objects_info`, `get_object_attributes`, `analyze_objects`, `section_profile`, `capture_viewport` |
 | Object attributes             | `update_object_attributes`                                                                                                                            |
 | Selection                     | `select_objects`                                                                                                                                      |
 | Layers                        | `create_layer`, `delete_layer`, `get_or_set_current_layer`                                                                                            |

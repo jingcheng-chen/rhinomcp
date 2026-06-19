@@ -23,6 +23,7 @@
             "update_object_attributes",
             "analyze_objects",
             "measure_objects",
+            "section_profile",
             "get_selected_objects_info",
             "get_document_summary",
             "get_objects",

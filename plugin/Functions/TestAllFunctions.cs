@@ -1140,6 +1140,123 @@ public partial class RhinoMCPFunctions
             results["describe_capabilities"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
+        // Test: section_profile cuts a plane through objects and measures the
+        // cross-section without creating anything. A 4x2x2 box centred on the
+        // origin, cut at Z=0, gives one closed loop of area 8. Two boxes cut
+        // together give two loops whose areas sum. An open surface cut gives an
+        // open section with a perimeter and no area. A profile of a prismatic box
+        // gives `count` equal-area slices.
+        try
+        {
+            var sBoxA = CreateObject(new JObject
+            {
+                ["type"] = "BOX",
+                ["name"] = "MCPSectionBoxA",
+                ["params"] = new JObject { ["width"] = 4, ["length"] = 2, ["height"] = 2 }
+            });
+            var sBoxB = CreateObject(new JObject
+            {
+                ["type"] = "BOX",
+                ["name"] = "MCPSectionBoxB",
+                ["params"] = new JObject { ["width"] = 2, ["length"] = 2, ["height"] = 2 },
+                ["translation"] = new JArray { 10, 0, 0 }
+            });
+            string sAId = sBoxA["id"]?.ToString();
+            string sBId = sBoxB["id"]?.ToString();
+
+            // Single box at mid-height: one closed loop, area = 4 * 2 = 8.
+            var oneCut = SectionProfile(new JObject
+            {
+                ["id"] = sAId,
+                ["plane"] = new JObject { ["axis"] = "Z", ["value"] = 0 }
+            });
+            if (oneCut["mode"]?.ToString() != "plane")
+                throw new Exception("section_profile mode was not 'plane'");
+            var profA = (JObject)((JArray)oneCut["profiles"])[0];
+            if ((int)profA["loop_count"] != 1)
+                throw new Exception("section_profile expected 1 loop on a box, got " + profA["loop_count"]);
+            double areaA = (double)profA["section_area"];
+            if (Math.Abs(areaA - 8.0) > 1e-6)
+                throw new Exception("section_profile box area expected 8, got " + areaA);
+            if (!(bool)((JObject)((JArray)profA["loops"])[0])["closed"])
+                throw new Exception("section_profile box loop should be closed");
+
+            // Two boxes cut together: two loops, areas summed (8 + 4 = 12).
+            var twoCut = SectionProfile(new JObject
+            {
+                ["object_ids"] = new JArray { sAId, sBId },
+                ["plane"] = new JObject { ["axis"] = "Z", ["value"] = 0 }
+            });
+            if ((int)twoCut["total_loop_count"] != 2)
+                throw new Exception("section_profile expected 2 loops across two boxes");
+            double total = (double)twoCut["total_section_area"];
+            if (Math.Abs(total - 12.0) > 1e-6)
+                throw new Exception("section_profile two-box total area expected 12, got " + total);
+
+            // Open surface: a vertical bilinear quad cut by a horizontal plane is
+            // an open section, so it must report a perimeter and no area.
+            var sSurf = CreateObject(new JObject
+            {
+                ["type"] = "SURFACE",
+                ["name"] = "MCPSectionSurface",
+                ["params"] = new JObject
+                {
+                    ["count"] = new JArray { 2, 2 },
+                    ["degree"] = new JArray { 1, 1 },
+                    ["points"] = new JArray
+                    {
+                        new JArray { 0, 0, -1 }, new JArray { 4, 0, -1 },
+                        new JArray { 0, 0, 1 }, new JArray { 4, 0, 1 }
+                    }
+                }
+            });
+            string sSurfId = sSurf["id"]?.ToString();
+            var surfCut = SectionProfile(new JObject
+            {
+                ["id"] = sSurfId,
+                ["plane"] = new JObject { ["axis"] = "Z", ["value"] = 0 }
+            });
+            var surfProf = (JObject)((JArray)surfCut["profiles"])[0];
+            if ((double)surfProf["section_area"] != 0.0)
+                throw new Exception("section_profile open surface must report no area");
+            foreach (var l in (JArray)surfProf["loops"])
+                if ((bool)((JObject)l)["closed"])
+                    throw new Exception("section_profile open surface should not report a closed loop");
+
+            // Profile mode: a prismatic box sliced along Z gives `count` equal slices.
+            var prof = SectionProfile(new JObject
+            {
+                ["id"] = sAId,
+                ["profile"] = new JObject { ["axis"] = "Z", ["count"] = 4 }
+            });
+            if (prof["mode"]?.ToString() != "profile")
+                throw new Exception("section_profile profile mode label wrong");
+            var slices = (JArray)prof["sections"];
+            if (slices.Count != 4)
+                throw new Exception("section_profile profile expected 4 slices, got " + slices.Count);
+            foreach (var s in slices)
+            {
+                double sa = (double)((JObject)s)["total_section_area"];
+                if (Math.Abs(sa - 8.0) > 1e-6)
+                    throw new Exception("section_profile profile slice area expected 8, got " + sa);
+            }
+
+            DeleteObject(new JObject { ["id"] = sAId });
+            DeleteObject(new JObject { ["id"] = sBId });
+            DeleteObject(new JObject { ["id"] = sSurfId });
+            results["section_profile"] = new JObject
+            {
+                ["status"] = "pass",
+                ["box_area"] = areaA,
+                ["two_box_total"] = total
+            };
+            VisualUpdate("section_profile cross-section area + profile");
+        }
+        catch (Exception e)
+        {
+            results["section_profile"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
         // Cleanup
         if (!visualMode)
         {
@@ -1170,6 +1287,9 @@ public partial class RhinoMCPFunctions
                 DeleteObject(new JObject { ["name"] = "MCPCountProbe0" });
                 DeleteObject(new JObject { ["name"] = "MCPCountProbe1" });
                 DeleteObject(new JObject { ["name"] = "MCPCountProbe2" });
+                DeleteObject(new JObject { ["name"] = "MCPSectionBoxA" });
+                DeleteObject(new JObject { ["name"] = "MCPSectionBoxB" });
+                DeleteObject(new JObject { ["name"] = "MCPSectionSurface" });
             }
             catch
             {

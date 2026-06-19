@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "section_profile.json",
+  "title": "SectionProfile Command",
+  "description": "Cut a plane (or a stack of parallel planes) through objects and report each cross-section's area, perimeter, and centroid. Read-only; nothing is added to the document.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../common/definitions.json#/$defs/guid",
+      "description": "GUID of one object to section"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of one object to section"
+    },
+    "object_ids": {
+      "$ref": "../common/definitions.json#/$defs/guidArray",
+      "description": "GUIDs of objects to section"
+    },
+    "selected": {
+      "type": "boolean",
+      "const": true,
+      "description": "Section the currently selected Rhino objects"
+    },
+    "plane": {
+      "type": "object",
+      "description": "A single cut. Either an axis-aligned world plane {axis, value} or an arbitrary plane {origin, normal}.",
+      "oneOf": [
+        {
+          "properties": {
+            "axis": { "type": "string", "enum": ["X", "Y", "Z"] },
+            "value": { "type": "number" }
+          },
+          "required": ["axis", "value"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "origin": { "$ref": "../common/definitions.json#/$defs/point3d" },
+            "normal": { "$ref": "../common/definitions.json#/$defs/vector3d" }
+          },
+          "required": ["origin", "normal"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "profile": {
+      "type": "object",
+      "description": "A stack of `count` parallel cuts along an axis, returning the sectional-area curve. Spans the selection's extent along the axis unless start/end are given.",
+      "properties": {
+        "axis": { "type": "string", "enum": ["X", "Y", "Z"] },
+        "count": { "type": "integer", "minimum": 2, "maximum": 100 },
+        "start": { "type": "number" },
+        "end": { "type": "number" }
+      },
+      "required": ["axis", "count"],
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        { "required": ["id"] },
+        { "required": ["name"] },
+        { "required": ["object_ids"] },
+        { "required": ["selected"] }
+      ]
+    },
+    {
+      "oneOf": [
+        { "required": ["plane"] },
+        { "required": ["profile"] }
+      ]
+    }
+  ],
+  "additionalProperties": false
+}
