@@ -3,6 +3,7 @@ using System.Threading;
 using Newtonsoft.Json.Linq;
 using Rhino;
 using Rhino.Display;
+using Rhino.Geometry;
 
 namespace RhinoMCPPlugin.Functions;
 
@@ -919,6 +920,8 @@ public partial class RhinoMCPFunctions
         catch (Exception e)
         {
             results["change_health"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
         // Test: measure_objects reports clash and bounding-box gap. Two 2x2x2
         // boxes 10 apart on X must not clash (positive gap, brep method); a box
         // overlapping the first must clash with a zero gap.
@@ -994,6 +997,64 @@ public partial class RhinoMCPFunctions
             results["measure_objects"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
+        // Test: modify_object with a rotation and a non-uniform scale must not
+        // shear. A box rotated 45 deg about Z and scaled 3x in X stays a right
+        // box, so its three edge directions at a corner stay mutually
+        // perpendicular. Before the fix this sheared to ~0.8 off-orthogonal.
+        try
+        {
+            var sh = CreateObject(new JObject
+            {
+                ["type"] = "BOX",
+                ["name"] = "MCPShearBox",
+                ["params"] = new JObject { ["width"] = 2, ["length"] = 2, ["height"] = 2 }
+            });
+            string shId = sh["id"]?.ToString();
+            ModifyObject(new JObject
+            {
+                ["id"] = shId,
+                ["rotation"] = new JArray { 0, 0, Math.PI / 4 },
+                ["scale"] = new JArray { 3, 1, 1 }
+            });
+
+            var shObj = doc.Objects.Find(new Guid(shId));
+            var shBrep = shObj.Geometry as Brep;
+            if (shBrep == null)
+                throw new Exception("modified object is not a brep");
+
+            double worst = -1.0;
+            foreach (var v in shBrep.Vertices)
+            {
+                var ei = v.EdgeIndices();
+                if (ei.Length != 3) continue;
+                var d = new Vector3d[3];
+                for (int k = 0; k < 3; k++)
+                {
+                    var e = shBrep.Edges[ei[k]];
+                    Point3d p0 = e.PointAtStart, p1 = e.PointAtEnd;
+                    var dir = v.Location.DistanceTo(p0) <= v.Location.DistanceTo(p1)
+                        ? p1 - v.Location
+                        : p0 - v.Location;
+                    dir.Unitize();
+                    d[k] = dir;
+                }
+                worst = Math.Max(Math.Abs(d[0] * d[1]), Math.Max(Math.Abs(d[1] * d[2]), Math.Abs(d[0] * d[2])));
+                break;
+            }
+
+            DeleteObject(new JObject { ["id"] = shId });
+            if (worst < 0)
+                throw new Exception("could not find a 3-edge vertex on the modified box");
+            if (worst > 1e-6)
+                throw new Exception("modify_object sheared the box: max off-orthogonality " + worst);
+            results["modify_object_no_shear"] = new JObject { ["status"] = "pass", ["max_offorth"] = worst };
+            VisualUpdate("modify_object rotation + scale stays orthogonal");
+        }
+        catch (Exception e)
+        {
+            results["modify_object_no_shear"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
         // Cleanup
         if (!visualMode)
         {
@@ -1020,6 +1081,7 @@ public partial class RhinoMCPFunctions
                 DeleteObject(new JObject { ["name"] = "MCPMeasureC" });
                 DeleteObject(new JObject { ["name"] = "MCPMeasureBig" });
                 DeleteObject(new JObject { ["name"] = "MCPMeasureSmall" });
+                DeleteObject(new JObject { ["name"] = "MCPShearBox" });
             }
             catch
             {

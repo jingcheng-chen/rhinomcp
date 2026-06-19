@@ -61,17 +61,21 @@ public partial class RhinoMCPFunctions
             geometryModified = true;
         }
 
+        // Apply rotation if provided. Rotation is composed before scale on
+        // purpose: scaling after a rotation applies a world-axis, non-uniform
+        // scale to an already-rotated object, which shears it. Scaling first
+        // (xform = T * R * S) keeps a combined scale and rotation a clean
+        // similarity with no shear.
+        if (parameters["rotation"] != null)
+        {
+            xform *= applyRotation(parameters, geometry);
+            geometryModified = true;
+        }
+
         // Apply scale if provided
         if (parameters["scale"] != null)
         {
             xform *= applyScale(parameters, geometry);
-            geometryModified = true;
-        }
-
-        // Apply rotation if provided
-        if (parameters["rotation"] != null)
-        {
-            xform *= applyRotation(parameters, geometry);
             geometryModified = true;
         }
 
