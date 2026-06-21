@@ -49,8 +49,12 @@ public partial class RhinoMCPFunctions
 
         return new JObject
         {
+            // Coalesce to match Serializer.RhinoObject: an object with no name
+            // reports "(unnamed)", never null. delete_result.json types name as a
+            // string, so emitting null here made deleting an unnamed object fail
+            // response validation.
             ["id"] = obj.Id,
-            ["name"] = obj.Name,
+            ["name"] = obj.Name ?? "(unnamed)",
             ["deleted"] = true
         };
     }

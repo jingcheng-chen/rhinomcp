@@ -424,6 +424,19 @@ def test_responses():
     delete_result = {"id": "12345678-1234-1234-1234-123456789012", "name": "Deleted", "deleted": True}
     if not validate("responses/delete_result.json", delete_result):
         all_passed = False
+    # Deleting an unnamed object reports the "(unnamed)" fallback, never null.
+    # name is typed as a string, so a null is a regression: it made deleting a
+    # nameless object fail response validation under strict mode.
+    unnamed_delete = {"id": "12345678-1234-1234-1234-123456789012", "name": "(unnamed)", "deleted": True}
+    if not validate("responses/delete_result.json", unnamed_delete):
+        all_passed = False
+    delete_validator = Draft202012Validator(load_schema_with_refs("responses/delete_result.json"))
+    null_name = {"id": "12345678-1234-1234-1234-123456789012", "name": None, "deleted": True}
+    if not list(delete_validator.iter_errors(null_name)):
+        print("  FAIL: delete_result accepted a null name")
+        all_passed = False
+    else:
+        print("  delete_result rejects a null name")
 
     # Execute script result
     print("  execute_script_result:")
