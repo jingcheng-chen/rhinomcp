@@ -86,4 +86,67 @@ public partial class RhinoMCPFunctions
 
         return delta;
     }
+
+    /// <summary>
+    /// The issues list is capped so a pathological write that produces many
+    /// invalid objects can't flood the response. invalid_count is always exact;
+    /// the issues array holds at most this many entries, and the health block's
+    /// `truncated` flag is set when some were dropped. Same summarize-don't-
+    /// enumerate shape as the change-delta.
+    /// </summary>
+    public const int HealthIssueCap = 50;
+
+    /// <summary>
+    /// Build a geometry-health report over the objects a command just created
+    /// (the set difference after - before, the same newly-created ids the
+    /// change-delta reports). Each created object is checked with
+    /// GeometryBase.IsValidWithLog, which returns the verdict and a human-readable
+    /// reason in one pass. checked_count and invalid_count are always exact; only
+    /// the invalid objects are listed, with their reason, so a clean write returns
+    /// an empty issues array rather than a wall of "ok".
+    ///
+    /// Scope mirrors the change-delta: created geometry only. An in-place modify
+    /// reuses its id, so it can't be told apart by a set diff, and validity rarely
+    /// changes under a rigid transform; rather than special-case it per handler at
+    /// the cost of a half-covered field, this reports the new geometry that every
+    /// mutator funnels through here produces. The big win is the arbitrary-code and
+    /// boolean/loft paths, where an invalid result can otherwise land silently.
+    /// </summary>
+    public JObject BuildHealth(RhinoDoc doc, HashSet<Guid> before, HashSet<Guid> after)
+    {
+        before ??= new HashSet<Guid>();
+        after ??= new HashSet<Guid>();
+
+        int checkedCount = 0;
+        int invalidCount = 0;
+        var issues = new JArray();
+
+        foreach (var id in after)
+        {
+            if (before.Contains(id)) continue;            // only newly created objects
+            var geo = doc?.Objects.FindId(id)?.Geometry;
+            if (geo == null) continue;                    // not resolvable / nothing to judge
+            checkedCount++;
+            if (!geo.IsValidWithLog(out string log))
+            {
+                invalidCount++;
+                if (issues.Count < HealthIssueCap)
+                {
+                    issues.Add(new JObject
+                    {
+                        ["id"] = id.ToString(),
+                        ["reason"] = (log ?? "").Trim()
+                    });
+                }
+            }
+        }
+
+        return new JObject
+        {
+            ["checked_count"] = checkedCount,
+            ["invalid_count"] = invalidCount,
+            ["issues"] = issues,
+            ["truncated"] = invalidCount > HealthIssueCap
+        };
+    }
 }

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "change_health.json",
+  "title": "ChangeHealth",
+  "description": "Geometry-health report over the objects a mutating command just created (the same newly-created ids the change-delta reports). Attached as `_health` on the command result when the client opts in (envelope include_health=true). checked_count and invalid_count are always exact; the issues array lists only invalid objects with their reason and is capped, so a clean write returns an empty issues array. `truncated` is set when the issues list dropped some. Created geometry only, matching the change-delta scope.",
+  "type": "object",
+  "properties": {
+    "checked_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of newly-created objects whose geometry was checked."
+    },
+    "invalid_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "How many of the checked objects failed GeometryBase.IsValidWithLog."
+    },
+    "issues": {
+      "type": "array",
+      "description": "One entry per invalid object (valid objects are omitted). Capped; see truncated.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "../common/definitions.json#/$defs/guid",
+            "description": "GUID of the invalid object."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Human-readable validity log from RhinoCommon (e.g. 'Line points are coincident.')."
+          }
+        },
+        "required": ["id", "reason"],
+        "additionalProperties": false
+      }
+    },
+    "truncated": {
+      "type": "boolean",
+      "description": "True when invalid_count exceeded the cap and the issues list dropped some; the counts are still exact."
+    }
+  },
+  "required": ["checked_count", "invalid_count", "issues", "truncated"],
+  "additionalProperties": false
+}

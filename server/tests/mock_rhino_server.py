@@ -226,11 +226,17 @@ class MockRhinoServer:
             track_delta = bool(command.get("include_delta")) and (
                 cmd_type in self._MUTATING_COMMANDS
             )
-            before = set(self.objects.keys()) if track_delta else None
+            track_health = bool(command.get("include_health")) and (
+                cmd_type in self._MUTATING_COMMANDS
+            )
+            before = set(self.objects.keys()) if (track_delta or track_health) else None
             result = handler(params)
-            if track_delta and isinstance(result, dict):
+            if isinstance(result, dict) and (track_delta or track_health):
                 after = set(self.objects.keys())
-                result["_delta"] = self._build_delta(before, after)
+                if track_delta:
+                    result["_delta"] = self._build_delta(before, after)
+                if track_health:
+                    result["_health"] = self._build_health(before, after)
             return {"status": "success", "result": result}
         except Exception as e:
             return {"status": "error", "message": str(e)}
@@ -259,6 +265,19 @@ class MockRhinoServer:
             truncated = True
         delta["truncated"] = truncated
         return delta
+
+    def _build_health(self, before: set, after: set) -> Dict:
+        """Mirror the plugin's BuildHealth shape over the created objects. The
+        mock holds no real geometry, so every created object is treated as valid;
+        this exercises the wiring and the all-clear shape. The invalid path is
+        covered by the C# unit test, the live test, and the schema test."""
+        created = [k for k in after if k not in before]
+        return {
+            "checked_count": len(created),
+            "invalid_count": 0,
+            "issues": [],
+            "truncated": False,
+        }
 
     def _get_document_summary(self, params: Dict) -> Dict:
         """Return document summary."""

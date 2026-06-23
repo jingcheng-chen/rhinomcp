@@ -554,6 +554,50 @@ def test_responses():
             all_passed = False
     print("  change_delta negatives correctly rejected")
 
+    # Change health (perception). A clean write has an empty issues array; an
+    # invalid write lists each bad object with its validity reason.
+    print("  change_health:")
+    health_clean = {
+        "checked_count": 3,
+        "invalid_count": 0,
+        "issues": [],
+        "truncated": False,
+    }
+    if not validate("responses/change_health.json", health_clean):
+        all_passed = False
+    health_issue = {
+        "checked_count": 2,
+        "invalid_count": 1,
+        "issues": [{"id": GUID, "reason": "Line points are coincident."}],
+        "truncated": False,
+    }
+    if not validate("responses/change_health.json", health_issue):
+        all_passed = False
+
+    # Negative: the schema must actually constrain.
+    health_schema = load_schema_with_refs("responses/change_health.json")
+    health_validator = Draft202012Validator(health_schema)
+    bad_healths = [
+        # bad guid in an issue
+        {"checked_count": 1, "invalid_count": 1,
+         "issues": [{"id": "not-a-guid", "reason": "x"}], "truncated": False},
+        # issue missing its reason
+        {"checked_count": 1, "invalid_count": 1,
+         "issues": [{"id": GUID}], "truncated": False},
+        # issue carrying an unknown field
+        {"checked_count": 1, "invalid_count": 1,
+         "issues": [{"id": GUID, "reason": "x", "severity": "high"}], "truncated": False},
+        # unknown top-level field
+        {"checked_count": 0, "invalid_count": 0, "issues": [], "truncated": False,
+         "warnings": 2},
+        # missing required issues array
+        {"checked_count": 0, "invalid_count": 0, "truncated": False},
+    ]
+    for bad in bad_healths:
+        if not list(health_validator.iter_errors(bad)):
+            print(f"  FAIL: change_health accepted invalid payload {bad}")
+            all_passed = False
+    print("  change_health negatives correctly rejected")
     # Measure result
     print("  measure_result:")
     measure_result = {
