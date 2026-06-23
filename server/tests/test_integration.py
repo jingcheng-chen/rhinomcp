@@ -786,3 +786,32 @@ class TestChangeDeltaPerception:
         assert "created_ids" not in d            # omitted because over the cap
         assert d["deleted_count"] == 0
         assert d["deleted_ids"] == []            # under the cap, so present
+
+
+class TestMeasureObjects:
+    """End-to-end measure_objects through the mock: verifies the command wiring
+    and the result shape. The exact spatial values come from real RhinoCommon
+    geometry, which the mock can't model, so those are covered by the live test;
+    here we pin that the contract shape arrives intact."""
+
+    def test_measure_two_objects(self, mock_server):
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+        srv._rhino_connection = None
+
+        conn = get_rhino_connection()
+        a = conn.send_command("create_object", {
+            "type": "BOX", "name": "MeasA",
+            "params": {"width": 1, "length": 1, "height": 1}})
+        b = conn.send_command("create_object", {
+            "type": "BOX", "name": "MeasB",
+            "params": {"width": 1, "length": 1, "height": 1}})
+
+        result = conn.send_command("measure_objects", {"object_ids": [a["id"], b["id"]]})
+
+        assert result["object_a"] == a["id"]
+        assert result["object_b"] == b["id"]
+        assert isinstance(result["clash"], bool)
+        assert result["bbox_gap"] >= 0
+        assert result["method"] in ("brep", "curve", "bbox")
+        assert result["intersection_count"] >= 0
