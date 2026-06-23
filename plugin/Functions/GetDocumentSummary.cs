@@ -32,9 +32,15 @@ public partial class RhinoMCPFunctions
         var typeCounts = new Dictionary<string, int>();
         var layerCounts = new Dictionary<int, int>(); // Use layer index for counting
         BoundingBox modelBbox = BoundingBox.Empty;
+        // Count active objects from this same enumeration so object_count always
+        // matches objects_by_type. RhinoObjectTable.Count is avoided: it also
+        // counts objects deleted but still undoable, which over-reports.
+        int objectCount = 0;
 
         foreach (var obj in doc.Objects)
         {
+            objectCount++;
+
             // Count by type
             string objType = GetNormalizedType(obj);
             if (!typeCounts.ContainsKey(objType))
@@ -73,7 +79,7 @@ public partial class RhinoMCPFunctions
         var result = new JObject
         {
             ["meta_data"] = metaData,
-            ["object_count"] = doc.Objects.Count,
+            ["object_count"] = objectCount,
             ["objects_by_type"] = typeCountsJson,
             ["objects_by_layer"] = layerCountsJson,
             ["model_bounding_box"] = modelBbox.IsValid ? Serializer.SerializeBBox(modelBbox) : null,
@@ -81,7 +87,7 @@ public partial class RhinoMCPFunctions
             ["layer_hierarchy"] = layerHierarchy
         };
 
-        RhinoApp.WriteLine($"Document summary collected: {doc.Objects.Count} objects");
+        RhinoApp.WriteLine($"Document summary collected: {objectCount} objects");
         return result;
     }
 

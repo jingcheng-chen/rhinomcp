@@ -23,7 +23,7 @@ public partial class RhinoMCPFunctions
 
         if (all)
         {
-            int count = doc.Objects.Count;
+            int count = CountActiveObjects(doc);
             doc.Objects.Clear();
             doc.Views.Redraw();
             return new JObject()
