@@ -919,6 +919,79 @@ public partial class RhinoMCPFunctions
         catch (Exception e)
         {
             results["change_health"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        // Test: measure_objects reports clash and bounding-box gap. Two 2x2x2
+        // boxes 10 apart on X must not clash (positive gap, brep method); a box
+        // overlapping the first must clash with a zero gap.
+        try
+        {
+            var mA = CreateObject(new JObject
+            {
+                ["type"] = "BOX", ["name"] = "MCPMeasureA",
+                ["params"] = new JObject { ["width"] = 2, ["length"] = 2, ["height"] = 2 }
+            });
+            var mB = CreateObject(new JObject
+            {
+                ["type"] = "BOX", ["name"] = "MCPMeasureB",
+                ["params"] = new JObject { ["width"] = 2, ["length"] = 2, ["height"] = 2 },
+                ["translation"] = new JArray { 10, 0, 0 }
+            });
+            var mC = CreateObject(new JObject
+            {
+                ["type"] = "BOX", ["name"] = "MCPMeasureC",
+                ["params"] = new JObject { ["width"] = 2, ["length"] = 2, ["height"] = 2 },
+                ["translation"] = new JArray { 1, 0, 0 }
+            });
+            string mAId = mA["id"]?.ToString();
+            string mBId = mB["id"]?.ToString();
+            string mCId = mC["id"]?.ToString();
+
+            var apart = MeasureObjects(new JObject { ["object_ids"] = new JArray { mAId, mBId } });
+            if (apart["clash"].ToObject<bool>())
+                throw new Exception("measure_objects reported a clash for boxes 10 apart");
+            if (apart["method"]?.ToString() != "brep")
+                throw new Exception("measure_objects expected brep method, got " + apart["method"]);
+            if (apart["bbox_gap"].ToObject<double>() <= 0)
+                throw new Exception("measure_objects expected a positive bbox_gap for separated boxes");
+
+            var overlap = MeasureObjects(new JObject { ["object_ids"] = new JArray { mAId, mCId } });
+            if (!overlap["clash"].ToObject<bool>())
+                throw new Exception("measure_objects missed a clash for overlapping boxes");
+            if (overlap["bbox_gap"].ToObject<double>() != 0.0)
+                throw new Exception("measure_objects expected a zero bbox_gap for overlapping boxes");
+
+            // A small box fully inside a large box clashes even though their
+            // surfaces never cross (containment).
+            var mBig = CreateObject(new JObject
+            {
+                ["type"] = "BOX", ["name"] = "MCPMeasureBig",
+                ["params"] = new JObject { ["width"] = 10, ["length"] = 10, ["height"] = 10 }
+            });
+            var mSmall = CreateObject(new JObject
+            {
+                ["type"] = "BOX", ["name"] = "MCPMeasureSmall",
+                ["params"] = new JObject { ["width"] = 2, ["length"] = 2, ["height"] = 2 }
+            });
+            string mBigId = mBig["id"]?.ToString();
+            string mSmallId = mSmall["id"]?.ToString();
+            var contained = MeasureObjects(new JObject { ["object_ids"] = new JArray { mBigId, mSmallId } });
+            DeleteObject(new JObject { ["id"] = mBigId });
+            DeleteObject(new JObject { ["id"] = mSmallId });
+            if (!contained["clash"].ToObject<bool>())
+                throw new Exception("measure_objects missed containment (small box fully inside big box)");
+
+            DeleteObject(new JObject { ["id"] = mAId });
+            DeleteObject(new JObject { ["id"] = mBId });
+            DeleteObject(new JObject { ["id"] = mCId });
+            results["measure_objects"] = new JObject
+            {
+                ["status"] = "pass",
+                ["gap_apart"] = apart["bbox_gap"]
+            };
+            VisualUpdate("measure_objects clash + bbox gap");
+        }
+        catch (Exception e)
+        {
+            results["measure_objects"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
         // Cleanup
@@ -942,6 +1015,11 @@ public partial class RhinoMCPFunctions
                 DeleteObject(new JObject { ["name"] = "SplitSegment" });
                 DeleteObject(new JObject { ["name"] = "MCPDeltaProbe" });
                 DeleteObject(new JObject { ["name"] = "MCPHealthOk" });
+                DeleteObject(new JObject { ["name"] = "MCPMeasureA" });
+                DeleteObject(new JObject { ["name"] = "MCPMeasureB" });
+                DeleteObject(new JObject { ["name"] = "MCPMeasureC" });
+                DeleteObject(new JObject { ["name"] = "MCPMeasureBig" });
+                DeleteObject(new JObject { ["name"] = "MCPMeasureSmall" });
             }
             catch
             {

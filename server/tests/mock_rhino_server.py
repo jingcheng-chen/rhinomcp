@@ -191,6 +191,7 @@ class MockRhinoServer:
             "get_object_attributes": self._get_object_attributes,
             "update_object_attributes": self._update_object_attributes,
             "analyze_objects": self._analyze_objects,
+            "measure_objects": self._measure_objects,
             "modify_object": self._modify_object,
             "modify_objects": self._modify_objects,
             "delete_object": self._delete_object,
@@ -514,6 +515,36 @@ class MockRhinoServer:
 
         analyses = [self._analysis_payload(obj) for obj in targets]
         return {"object_count": len(analyses), "analyses": analyses}
+
+    def _measure_objects(self, params: Dict) -> Dict:
+        """Spatial relationship between two objects. The mock has no real
+        geometry, so it reports the bbox method only, mirroring the plugin's
+        bounding-box gap math."""
+        ids = params.get("object_ids", [])
+        if len(ids) != 2:
+            raise Exception("measure_objects requires object_ids with exactly two object ids.")
+        a = self.objects.get(ids[0])
+        b = self.objects.get(ids[1])
+        if a is None or b is None:
+            raise Exception("measure_objects: object not found.")
+        gap = self._bbox_gap(
+            a.get("bounding_box", [[0, 0, 0], [0, 0, 0]]),
+            b.get("bounding_box", [[0, 0, 0], [0, 0, 0]]),
+        )
+        return {
+            "object_a": ids[0],
+            "object_b": ids[1],
+            "clash": gap <= 1e-9,
+            "intersection_count": 0,
+            "bbox_gap": gap,
+            "method": "bbox",
+        }
+
+    def _bbox_gap(self, a, b) -> float:
+        gx = max(0.0, max(a[0][0] - b[1][0], b[0][0] - a[1][0]))
+        gy = max(0.0, max(a[0][1] - b[1][1], b[0][1] - a[1][1]))
+        gz = max(0.0, max(a[0][2] - b[1][2], b[0][2] - a[1][2]))
+        return (gx * gx + gy * gy + gz * gz) ** 0.5
 
     def _analysis_payload(self, obj: Dict) -> Dict:
         bbox = obj.get("bounding_box", [[0, 0, 0], [0, 0, 0]])

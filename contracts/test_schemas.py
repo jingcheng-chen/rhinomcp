@@ -240,6 +240,7 @@ def test_new_commands():
         ("commands/analyze_objects.json", {"id": GUID}),
         ("commands/analyze_objects.json", {"object_ids": [GUID]}),
         ("commands/analyze_objects.json", {"selected": True}),
+        ("commands/measure_objects.json", {"object_ids": [GUID, GUID]}),
         ("commands/gh_create_document.json", {"new_if_missing": True, "make_active": True, "open_canvas": True}),
         ("commands/gh_get_document_info.json", {}),
         ("commands/gh_search_components.json", {"query": "addition", "limit": 10}),
@@ -597,6 +598,32 @@ def test_responses():
             print(f"  FAIL: change_health accepted invalid payload {bad}")
             all_passed = False
     print("  change_health negatives correctly rejected")
+    # Measure result
+    print("  measure_result:")
+    measure_result = {
+        "object_a": GUID,
+        "object_b": GUID,
+        "clash": False,
+        "intersection_count": 0,
+        "bbox_gap": 3.5,
+        "method": "brep",
+    }
+    if not validate("responses/measure_result.json", measure_result):
+        all_passed = False
+    # Negative: an unknown method and a missing field must be rejected.
+    measure_schema = load_schema_with_refs("responses/measure_result.json")
+    measure_validator = Draft202012Validator(measure_schema)
+    bad_measures = [
+        {"object_a": GUID, "object_b": GUID, "clash": False,
+         "intersection_count": 0, "bbox_gap": 1.0, "method": "voxel"},
+        {"object_a": GUID, "object_b": GUID, "clash": False,
+         "intersection_count": 0, "method": "brep"},
+    ]
+    for bad in bad_measures:
+        if not list(measure_validator.iter_errors(bad)):
+            print(f"  FAIL: measure_result accepted invalid payload {bad}")
+            all_passed = False
+    print("  measure_result negatives correctly rejected")
 
     return all_passed
 
@@ -649,6 +676,10 @@ def test_invalid_examples():
         ("commands/analyze_objects.json", {"object_ids": []}, "analyze_objects empty object_ids"),
         ("commands/analyze_objects.json", {"id": "12345678-1234-1234-1234-123456789012", "selected": True}, "analyze_objects mixed selectors"),
         ("commands/analyze_objects.json", {"selected": False}, "analyze_objects selected=false"),
+        ("commands/measure_objects.json", {"object_ids": ["12345678-1234-1234-1234-123456789012"]}, "measure_objects needs two ids"),
+        ("commands/measure_objects.json", {"object_ids": ["12345678-1234-1234-1234-123456789012", "12345678-1234-1234-1234-123456789012", "12345678-1234-1234-1234-123456789012"]}, "measure_objects too many ids"),
+        ("commands/measure_objects.json", {"object_ids": ["not-a-guid", "12345678-1234-1234-1234-123456789012"]}, "measure_objects bad guid"),
+        ("commands/measure_objects.json", {"object_ids": ["12345678-1234-1234-1234-123456789012", "12345678-1234-1234-1234-123456789012"], "bogus": 1}, "measure_objects unknown field"),
         ("commands/gh_create_document.json", {"template_path": "example.gh"}, "gh_create_document unknown field"),
         ("commands/gh_batch_search_components.json", {"queries": []}, "gh_batch_search_components empty queries"),
         ("commands/gh_get_component_type_info.json", {}, "gh_get_component_type_info missing selector"),
@@ -831,7 +862,7 @@ def test_protocol_envelope():
         "create_object", "create_objects", "modify_object", "modify_objects",
         "delete_object", "get_object_info", "get_selected_objects_info",
         "get_object_attributes", "update_object_attributes",
-        "analyze_objects",
+        "analyze_objects", "measure_objects",
         "get_document_summary", "get_objects", "select_objects",
         "create_layer", "delete_layer", "get_or_set_current_layer",
         "execute_rhinoscript_python_code", "execute_rhinocommon_csharp_code",
