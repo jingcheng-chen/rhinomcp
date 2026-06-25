@@ -683,17 +683,18 @@ def test_responses():
         "mode": "plane",
         "object_count": 1,
         "plane": {"origin": [0, 0, 0], "normal": [0, 0, 1]},
-        "total_section_area": 8.0,
-        "total_loop_count": 1,
+        "total_section_area": 6.0,
+        "total_loop_count": 2,
         "profiles": [
             {
                 "id": GUID,
-                "name": "Beam",
+                "name": "Tube",
                 "type": "BREP",
-                "section_area": 8.0,
-                "loop_count": 1,
+                "section_area": 6.0,
+                "loop_count": 2,
                 "loops": [
-                    {"closed": True, "perimeter": 12.0, "area": 8.0, "centroid": [0, 0, 0]}
+                    {"closed": True, "perimeter": 12.0, "area": 8.0, "centroid": [0, 0, 0], "is_hole": False},
+                    {"closed": True, "perimeter": 6.0, "area": 2.0, "centroid": [0, 0, 0], "is_hole": True}
                 ],
             }
         ],
@@ -713,7 +714,7 @@ def test_responses():
                 "type": "SURFACE",
                 "section_area": 0.0,
                 "loop_count": 1,
-                "loops": [{"closed": False, "perimeter": 4.0, "area": None, "centroid": None}],
+                "loops": [{"closed": False, "perimeter": 4.0, "area": None, "centroid": None, "is_hole": False}],
             }
         ],
     }

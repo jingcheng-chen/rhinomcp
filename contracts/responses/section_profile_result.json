@@ -44,9 +44,10 @@
                   "items": { "type": "number" },
                   "minItems": 3,
                   "maxItems": 3
-                }
+                },
+                "is_hole": { "type": "boolean" }
               },
-              "required": ["closed", "perimeter", "area", "centroid"],
+              "required": ["closed", "perimeter", "area", "centroid", "is_hole"],
               "additionalProperties": false
             }
           }

@@ -194,31 +194,65 @@ public partial class RhinoMCPFunctions
         if (joined == null || joined.Length == 0)
             joined = fragments;
 
+        // Closed, planar loops carry an area. Collect them first so nested loops
+        // (a hole in a solid section, e.g. a tube's annulus) can be handled with
+        // the even-odd rule: a loop sitting inside an odd number of others is a
+        // hole, so its area is subtracted rather than added.
+        var closedLoops = new List<Curve>();
+        var closedAreas = new List<double>();
+        var closedCentroids = new List<Point3d>();
+
         foreach (var curve in joined)
         {
             if (curve == null) continue;
 
             bool closed = curve.IsClosed && curve.IsPlanar(tol);
-            var loop = new JObject
-            {
-                ["closed"] = closed,
-                ["perimeter"] = curve.GetLength(),
-                ["area"] = null,
-                ["centroid"] = null
-            };
-
             if (closed)
             {
                 var amp = AreaMassProperties.Compute(curve);
                 if (amp != null)
                 {
-                    loop["area"] = amp.Area;
-                    loop["centroid"] = Serializer.SerializePoint(amp.Centroid);
-                    area += amp.Area;
+                    closedLoops.Add(curve);
+                    closedAreas.Add(amp.Area);
+                    closedCentroids.Add(amp.Centroid);
+                    continue;
                 }
             }
 
-            loops.Add(loop);
+            // Open, non-planar, or area unavailable: report it honestly with a
+            // perimeter and no area, never a fabricated one.
+            loops.Add(new JObject
+            {
+                ["closed"] = false,
+                ["perimeter"] = curve.GetLength(),
+                ["area"] = null,
+                ["centroid"] = null,
+                ["is_hole"] = false
+            });
+        }
+
+        for (int i = 0; i < closedLoops.Count; i++)
+        {
+            int containedBy = 0;
+            for (int j = 0; j < closedLoops.Count; j++)
+            {
+                if (i == j) continue;
+                if (Curve.PlanarClosedCurveRelationship(closedLoops[i], closedLoops[j], plane, tol)
+                    == RegionContainment.AInsideB)
+                    containedBy++;
+            }
+
+            bool isHole = (containedBy % 2) == 1;
+            area += isHole ? -closedAreas[i] : closedAreas[i];
+
+            loops.Add(new JObject
+            {
+                ["closed"] = true,
+                ["perimeter"] = closedLoops[i].GetLength(),
+                ["area"] = closedAreas[i],
+                ["centroid"] = Serializer.SerializePoint(closedCentroids[i]),
+                ["is_hole"] = isHole
+            });
         }
 
         return (loops, area, joined.Length);

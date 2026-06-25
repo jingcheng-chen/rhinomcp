@@ -1241,6 +1241,43 @@ public partial class RhinoMCPFunctions
                     throw new Exception("section_profile profile slice area expected 8, got " + sa);
             }
 
+            // Hollow solid: a square tube (a 10x10x10 box minus a 6x6 box poking
+            // through it) sections to an annulus. The inner loop is a hole, so its
+            // area must be subtracted: 10*10 - 6*6 = 64, not 136.
+            var tubeBig = CreateObject(new JObject
+            {
+                ["type"] = "BOX", ["name"] = "MCPSectTubeBig",
+                ["params"] = new JObject { ["width"] = 10, ["length"] = 10, ["height"] = 10 }
+            });
+            var tubeSmall = CreateObject(new JObject
+            {
+                ["type"] = "BOX", ["name"] = "MCPSectTubeSmall",
+                ["params"] = new JObject { ["width"] = 6, ["length"] = 6, ["height"] = 12 }
+            });
+            var bd = BooleanDifference(new JObject
+            {
+                ["base_id"] = tubeBig["id"],
+                ["subtract_ids"] = new JArray { tubeSmall["id"] }
+            });
+            string tubeId = ((JArray)bd["result_ids"])[0].ToString();
+            var hollow = SectionProfile(new JObject
+            {
+                ["id"] = tubeId,
+                ["plane"] = new JObject { ["axis"] = "Z", ["value"] = 0 }
+            });
+            var hp = (JObject)((JArray)hollow["profiles"])[0];
+            int holeCount = 0;
+            foreach (var l in (JArray)hp["loops"])
+                if ((bool)((JObject)l)["is_hole"]) holeCount++;
+            double hollowArea = (double)hp["section_area"];
+            DeleteObject(new JObject { ["id"] = tubeId });
+            if ((int)hp["loop_count"] != 2)
+                throw new Exception("section_profile hollow tube expected 2 loops, got " + hp["loop_count"]);
+            if (holeCount != 1)
+                throw new Exception("section_profile hollow tube expected 1 hole loop, got " + holeCount);
+            if (Math.Abs(hollowArea - 64.0) > 1e-3)
+                throw new Exception("section_profile hollow area expected 64 (100-36), got " + hollowArea);
+
             DeleteObject(new JObject { ["id"] = sAId });
             DeleteObject(new JObject { ["id"] = sBId });
             DeleteObject(new JObject { ["id"] = sSurfId });
@@ -1290,6 +1327,8 @@ public partial class RhinoMCPFunctions
                 DeleteObject(new JObject { ["name"] = "MCPSectionBoxA" });
                 DeleteObject(new JObject { ["name"] = "MCPSectionBoxB" });
                 DeleteObject(new JObject { ["name"] = "MCPSectionSurface" });
+                DeleteObject(new JObject { ["name"] = "MCPSectTubeBig" });
+                DeleteObject(new JObject { ["name"] = "MCPSectTubeSmall" });
             }
             catch
             {
