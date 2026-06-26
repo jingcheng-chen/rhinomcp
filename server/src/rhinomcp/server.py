@@ -41,6 +41,11 @@ RHINO_PERCEPTION = os.getenv("RHINO_MCP_PERCEPTION", "").lower() in (
     "yes",
     "on",
 )
+# Envelope metadata the plugin injects into a mutating command's result when
+# perception is on. These are cross-cutting, not part of any single command's
+# result contract, so they are stripped before post-flight validation; the
+# full result, these keys included, is still returned to the caller.
+PERCEPTION_RESULT_KEYS = ("_delta", "_health")
 RHINO_DEBUG = os.getenv("RHINO_MCP_DEBUG", "").lower() in ("1", "true", "yes")
 RHINO_LOG_LEVEL = os.getenv("RHINO_MCP_LOG_LEVEL", "DEBUG" if RHINO_DEBUG else "INFO")
 # Pre-flight schema validation. Three modes:
@@ -333,8 +338,23 @@ class RhinoConnection:
             if RHINO_VALIDATE != "off":
                 from rhinomcp.validation import HAS_JSONSCHEMA, validate_response
 
+                # Validate the command's own result, not the perception envelope
+                # the plugin may have injected into it. _delta / _health are
+                # metadata no response schema declares, so leaving them in would
+                # trip a closed (additionalProperties:false) schema such as
+                # object_attributes and fail an otherwise-correct response.
+                to_validate = result
+                if isinstance(result, dict) and any(
+                    key in result for key in PERCEPTION_RESULT_KEYS
+                ):
+                    to_validate = {
+                        key: value
+                        for key, value in result.items()
+                        if key not in PERCEPTION_RESULT_KEYS
+                    }
+
                 try:
-                    validate_response(command_type, result, raise_on_error=True)
+                    validate_response(command_type, to_validate, raise_on_error=True)
                 except Exception as ve:
                     # Only a genuine validation verdict gets the warn/strict
                     # treatment. Anything else (unresolvable $ref, unreadable
