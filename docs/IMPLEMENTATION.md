@@ -465,8 +465,7 @@ commands and 25 Grasshopper commands.
 | Area                          | Commands                                                                                                                                              |
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Object creation and edits     | `create_object`, `create_objects`, `modify_object`, `modify_objects`, `delete_object`                                                                 |
-| Object and document query     | `get_document_summary`, `get_objects`, `get_object_info`, `get_selected_objects_info`, `get_object_attributes`, `analyze_objects`, `measure_objects`, `capture_viewport` |
-| Object and document query     | `get_document_summary`, `get_objects`, `get_object_info`, `get_selected_objects_info`, `get_object_attributes`, `analyze_objects`, `section_profile`, `capture_viewport` |
+| Object and document query     | `get_document_summary`, `get_objects`, `get_object_info`, `get_selected_objects_info`, `get_object_attributes`, `analyze_objects`, `measure_objects`, `section_profile`, `capture_viewport` |
 | Object attributes             | `update_object_attributes`                                                                                                                            |
 | Selection                     | `select_objects`                                                                                                                                      |
 | Layers                        | `create_layer`, `delete_layer`, `get_or_set_current_layer`                                                                                            |
