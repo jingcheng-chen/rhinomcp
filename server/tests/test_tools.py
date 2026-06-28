@@ -1533,7 +1533,7 @@ class TestDescribeCapabilitiesTool:
 
         mock_conn = MagicMock()
         mock_conn.send_command.return_value = {
-            "version": "0.3.1",
+            "version": "0.3.2",
             "command_count": 2,
             "commands": [
                 {"name": "create_object", "read_only": False},

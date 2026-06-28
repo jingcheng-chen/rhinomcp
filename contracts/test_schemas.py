@@ -453,7 +453,7 @@ def test_responses():
     # may be empty; the shape must still hold.
     print("  capabilities:")
     capabilities = {
-        "version": "0.3.1",
+        "version": "0.3.2",
         "command_count": 2,
         "commands": [
             {"name": "create_object", "read_only": False},
@@ -478,18 +478,18 @@ def test_responses():
     caps_validator = Draft202012Validator(load_schema_with_refs("responses/capabilities.json"))
     bad_caps = [
         # a command missing read_only
-        {"version": "0.3.1", "command_count": 1, "commands": [{"name": "x"}],
+        {"version": "0.3.2", "command_count": 1, "commands": [{"name": "x"}],
          "perception": {"description": "d", "envelope_flags": []}},
         # read_only not a boolean
-        {"version": "0.3.1", "command_count": 1, "commands": [{"name": "x", "read_only": "yes"}],
+        {"version": "0.3.2", "command_count": 1, "commands": [{"name": "x", "read_only": "yes"}],
          "perception": {"description": "d", "envelope_flags": []}},
         # unknown top-level field
-        {"version": "0.3.1", "command_count": 0, "commands": [],
+        {"version": "0.3.2", "command_count": 0, "commands": [],
          "perception": {"description": "d", "envelope_flags": []}, "extra": 1},
         # missing perception
-        {"version": "0.3.1", "command_count": 0, "commands": []},
+        {"version": "0.3.2", "command_count": 0, "commands": []},
         # envelope flag missing attaches
-        {"version": "0.3.1", "command_count": 0, "commands": [],
+        {"version": "0.3.2", "command_count": 0, "commands": [],
          "perception": {"description": "d", "envelope_flags": [{"flag": "include_delta", "description": "d"}]}},
     ]
     for bad in bad_caps:
