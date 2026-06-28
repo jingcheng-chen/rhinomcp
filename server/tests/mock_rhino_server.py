@@ -192,6 +192,7 @@ class MockRhinoServer:
             "update_object_attributes": self._update_object_attributes,
             "analyze_objects": self._analyze_objects,
             "measure_objects": self._measure_objects,
+            "section_profile": self._section_profile,
             "modify_object": self._modify_object,
             "modify_objects": self._modify_objects,
             "delete_object": self._delete_object,
@@ -592,6 +593,120 @@ class MockRhinoServer:
                 "naked_edge_count": 0,
             }
         return {}
+
+    def _section_profile(self, params: Dict) -> Dict:
+        """Cross-section measurement. The mock has no real geometry to slice, so
+        it returns the contract shape with zeroed measurements; exact areas come
+        from the live Rhino test. Verifies selector and plane/profile wiring."""
+        targets = self._resolve_section_targets(params)
+
+        has_plane = isinstance(params.get("plane"), dict)
+        has_profile = isinstance(params.get("profile"), dict)
+        if has_plane == has_profile:
+            raise Exception("section_profile requires exactly one of plane or profile.")
+
+        if has_plane:
+            origin, normal = self._plane_origin_normal(params["plane"])
+            profiles = [
+                {
+                    "id": obj["id"],
+                    "name": obj.get("name", ""),
+                    "type": obj.get("type", "UNKNOWN"),
+                    "section_area": 0.0,
+                    "loop_count": 0,
+                    "loops": [],
+                }
+                for obj in targets
+            ]
+            return {
+                "mode": "plane",
+                "object_count": len(targets),
+                "plane": {"origin": origin, "normal": normal},
+                "total_section_area": 0.0,
+                "total_loop_count": 0,
+                "profiles": profiles,
+            }
+
+        profile = params["profile"]
+        axis = profile.get("axis")
+        if axis not in ("X", "Y", "Z"):
+            raise Exception("section_profile profile axis must be 'X', 'Y', or 'Z'.")
+        count = profile.get("count")
+        if isinstance(count, bool) or not isinstance(count, int) or count < 2 or count > 100:
+            raise Exception("section_profile profile count must be an integer in [2, 100].")
+
+        axis_idx = {"X": 0, "Y": 1, "Z": 2}[axis]
+        lo, hi = self._selection_axis_extent(targets, axis_idx)
+        if "start" in profile:
+            lo = profile["start"]
+        if "end" in profile:
+            hi = profile["end"]
+        if hi < lo:
+            lo, hi = hi, lo
+        span = hi - lo
+        sections = [
+            {
+                "position": lo + span * (i + 0.5) / count,
+                "total_section_area": 0.0,
+                "loop_count": 0,
+            }
+            for i in range(count)
+        ]
+        return {
+            "mode": "profile",
+            "object_count": len(targets),
+            "axis": axis,
+            "count": count,
+            "sections": sections,
+        }
+
+    def _resolve_section_targets(self, params: Dict) -> list:
+        selectors = [
+            "id" in params,
+            "name" in params,
+            "object_ids" in params,
+            params.get("selected") is True,
+        ]
+        if sum(1 for s in selectors if s) != 1:
+            raise Exception(
+                "section_profile requires exactly one of id, name, object_ids, or selected=true."
+            )
+        if params.get("selected") is True:
+            return list(self.objects.values())
+        if "object_ids" in params:
+            if len(params["object_ids"]) == 0:
+                raise Exception("section_profile object_ids must contain at least one id.")
+            return [self._get_object_info({"id": oid}) for oid in params["object_ids"]]
+        return [self._get_object_info(params)]
+
+    def _plane_origin_normal(self, spec: Dict):
+        if "axis" in spec and "value" in spec:
+            axis = spec["axis"]
+            if axis not in ("X", "Y", "Z"):
+                raise Exception("section_profile plane axis must be 'X', 'Y', or 'Z'.")
+            idx = {"X": 0, "Y": 1, "Z": 2}[axis]
+            origin = [0.0, 0.0, 0.0]
+            origin[idx] = float(spec["value"])
+            normal = [0.0, 0.0, 0.0]
+            normal[idx] = 1.0
+            return origin, normal
+        if "origin" in spec and "normal" in spec:
+            n = spec["normal"]
+            mag = (n[0] ** 2 + n[1] ** 2 + n[2] ** 2) ** 0.5
+            if mag == 0:
+                raise Exception("section_profile plane normal must be a non-zero vector.")
+            return [float(x) for x in spec["origin"]], [n[0] / mag, n[1] / mag, n[2] / mag]
+        raise Exception("section_profile plane requires {axis, value} or {origin, normal}.")
+
+    def _selection_axis_extent(self, targets: list, axis_idx: int):
+        mins, maxs = [], []
+        for obj in targets:
+            bb = obj.get("bounding_box", [[0, 0, 0], [0, 0, 0]])
+            mins.append(bb[0][axis_idx])
+            maxs.append(bb[1][axis_idx])
+        if not mins:
+            raise Exception("Cannot derive a profile span: the selection has no valid bounding box.")
+        return min(mins), max(maxs)
 
     def _modify_object(self, params: Dict) -> Dict:
         """Modify an object."""

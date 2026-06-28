@@ -948,3 +948,67 @@ class TestDescribeCapabilities:
             srv._rhino_connection = None
 
         assert "_delta" not in result
+
+
+class TestSectionProfile:
+    """End-to-end section_profile through the mock: verifies command wiring and
+    the result shape. The mock has no real geometry to slice, so exact areas come
+    from the live Rhino test; here we pin that the contract shape arrives intact
+    for both the single-plane and profile modes."""
+
+    def test_section_plane_shape(self, mock_server):
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+        srv._rhino_connection = None
+
+        conn = get_rhino_connection()
+        box = conn.send_command("create_object", {
+            "type": "BOX", "name": "SecBox",
+            "params": {"width": 2, "length": 2, "height": 2}})
+
+        result = conn.send_command("section_profile", {
+            "object_ids": [box["id"]],
+            "plane": {"axis": "Z", "value": 0}})
+
+        assert result["mode"] == "plane"
+        assert result["object_count"] == 1
+        assert "origin" in result["plane"] and "normal" in result["plane"]
+        assert isinstance(result["total_section_area"], (int, float))
+        assert len(result["profiles"]) == 1
+        prof = result["profiles"][0]
+        assert prof["id"] == box["id"]
+        assert "loops" in prof and "section_area" in prof and "loop_count" in prof
+
+    def test_section_profile_mode_shape(self, mock_server):
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+        srv._rhino_connection = None
+
+        conn = get_rhino_connection()
+        box = conn.send_command("create_object", {
+            "type": "BOX", "name": "SecProfBox",
+            "params": {"width": 2, "length": 2, "height": 4}})
+
+        result = conn.send_command("section_profile", {
+            "id": box["id"],
+            "profile": {"axis": "Z", "count": 5}})
+
+        assert result["mode"] == "profile"
+        assert result["axis"] == "Z"
+        assert result["count"] == 5
+        assert len(result["sections"]) == 5
+        for s in result["sections"]:
+            assert "position" in s and "total_section_area" in s and "loop_count" in s
+
+    def test_section_requires_one_cut(self, mock_server):
+        import rhinomcp.server as srv
+        from rhinomcp.server import get_rhino_connection
+        srv._rhino_connection = None
+
+        conn = get_rhino_connection()
+        box = conn.send_command("create_object", {
+            "type": "BOX", "name": "SecBadBox",
+            "params": {"width": 1, "length": 1, "height": 1}})
+
+        with pytest.raises(Exception, match="exactly one of plane or profile"):
+            conn.send_command("section_profile", {"id": box["id"]})
