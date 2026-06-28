@@ -241,6 +241,10 @@ def test_new_commands():
         ("commands/analyze_objects.json", {"object_ids": [GUID]}),
         ("commands/analyze_objects.json", {"selected": True}),
         ("commands/measure_objects.json", {"object_ids": [GUID, GUID]}),
+        ("commands/section_profile.json", {"id": GUID, "plane": {"axis": "Z", "value": 0}}),
+        ("commands/section_profile.json", {"object_ids": [GUID], "plane": {"origin": [0, 0, 0], "normal": [0, 0, 1]}}),
+        ("commands/section_profile.json", {"selected": True, "profile": {"axis": "X", "count": 10}}),
+        ("commands/section_profile.json", {"name": "Wall", "profile": {"axis": "Z", "count": 5, "start": 0, "end": 30}}),
         ("commands/gh_create_document.json", {"new_if_missing": True, "make_active": True, "open_canvas": True}),
         ("commands/gh_get_document_info.json", {}),
         ("commands/gh_search_components.json", {"query": "addition", "limit": 10}),
@@ -673,6 +677,81 @@ def test_responses():
             print(f"  FAIL: measure_result accepted invalid payload {bad}")
             all_passed = False
     print("  measure_result negatives correctly rejected")
+    # Section profile (plane mode and profile mode)
+    print("  section_profile_result:")
+    section_plane = {
+        "mode": "plane",
+        "object_count": 1,
+        "plane": {"origin": [0, 0, 0], "normal": [0, 0, 1]},
+        "total_section_area": 6.0,
+        "total_loop_count": 2,
+        "profiles": [
+            {
+                "id": GUID,
+                "name": "Tube",
+                "type": "BREP",
+                "section_area": 6.0,
+                "loop_count": 2,
+                "loops": [
+                    {"closed": True, "perimeter": 12.0, "area": 8.0, "centroid": [0, 0, 0], "is_hole": False},
+                    {"closed": True, "perimeter": 6.0, "area": 2.0, "centroid": [0, 0, 0], "is_hole": True}
+                ],
+            }
+        ],
+    }
+    if not validate("responses/section_profile_result.json", section_plane):
+        all_passed = False
+    section_open = {
+        "mode": "plane",
+        "object_count": 1,
+        "plane": {"origin": [0, 0, 0], "normal": [0, 0, 1]},
+        "total_section_area": 0.0,
+        "total_loop_count": 1,
+        "profiles": [
+            {
+                "id": GUID,
+                "name": "Shell",
+                "type": "SURFACE",
+                "section_area": 0.0,
+                "loop_count": 1,
+                "loops": [{"closed": False, "perimeter": 4.0, "area": None, "centroid": None, "is_hole": False}],
+            }
+        ],
+    }
+    if not validate("responses/section_profile_result.json", section_open):
+        all_passed = False
+    section_curve = {
+        "mode": "profile",
+        "object_count": 1,
+        "axis": "Z",
+        "count": 3,
+        "sections": [
+            {"position": -1.0, "total_section_area": 8.0, "loop_count": 1},
+            {"position": 0.0, "total_section_area": 8.0, "loop_count": 1},
+            {"position": 1.0, "total_section_area": 8.0, "loop_count": 1},
+        ],
+    }
+    if not validate("responses/section_profile_result.json", section_curve):
+        all_passed = False
+
+    # Negative: a plane-mode response missing profiles, and a profile-mode
+    # response missing sections, must both be rejected by the mode if/then.
+    section_schema = load_schema_with_refs("responses/section_profile_result.json")
+    section_validator = Draft202012Validator(section_schema)
+    bad_sections = [
+        {"mode": "plane", "object_count": 1,
+         "plane": {"origin": [0, 0, 0], "normal": [0, 0, 1]},
+         "total_section_area": 0.0, "total_loop_count": 0},  # missing profiles
+        {"mode": "profile", "object_count": 1, "axis": "Z", "count": 3},  # missing sections
+        {"mode": "plane", "object_count": 1,
+         "plane": {"origin": [0, 0, 0], "normal": [0, 0, 1]},
+         "total_section_area": 0.0, "total_loop_count": 0, "profiles": [], "bogus": 1},  # unknown field
+    ]
+    for bad in bad_sections:
+        if not list(section_validator.iter_errors(bad)):
+            print(f"  FAIL: section_profile_result accepted invalid payload {bad}")
+            all_passed = False
+    print("  section_profile_result negatives correctly rejected")
 
     return all_passed
 
@@ -729,6 +808,14 @@ def test_invalid_examples():
         ("commands/measure_objects.json", {"object_ids": ["12345678-1234-1234-1234-123456789012", "12345678-1234-1234-1234-123456789012", "12345678-1234-1234-1234-123456789012"]}, "measure_objects too many ids"),
         ("commands/measure_objects.json", {"object_ids": ["not-a-guid", "12345678-1234-1234-1234-123456789012"]}, "measure_objects bad guid"),
         ("commands/measure_objects.json", {"object_ids": ["12345678-1234-1234-1234-123456789012", "12345678-1234-1234-1234-123456789012"], "bogus": 1}, "measure_objects unknown field"),
+        ("commands/section_profile.json", {"plane": {"axis": "Z", "value": 0}}, "section_profile no selector"),
+        ("commands/section_profile.json", {"id": "12345678-1234-1234-1234-123456789012"}, "section_profile no cut"),
+        ("commands/section_profile.json", {"id": "12345678-1234-1234-1234-123456789012", "plane": {"axis": "Z", "value": 0}, "profile": {"axis": "Z", "count": 3}}, "section_profile both cuts"),
+        ("commands/section_profile.json", {"id": "12345678-1234-1234-1234-123456789012", "plane": {"axis": "Z", "value": 0, "origin": [0, 0, 0], "normal": [0, 0, 1]}}, "section_profile mixed plane forms"),
+        ("commands/section_profile.json", {"id": "12345678-1234-1234-1234-123456789012", "plane": {"axis": "Q", "value": 0}}, "section_profile bad axis"),
+        ("commands/section_profile.json", {"id": "12345678-1234-1234-1234-123456789012", "profile": {"axis": "Z", "count": 1}}, "section_profile profile count too low"),
+        ("commands/section_profile.json", {"id": "12345678-1234-1234-1234-123456789012", "profile": {"axis": "Z", "count": 200}}, "section_profile profile count too high"),
+        ("commands/section_profile.json", {"id": "12345678-1234-1234-1234-123456789012", "plane": {"axis": "Z", "value": 0}, "bogus": 1}, "section_profile unknown field"),
         ("commands/gh_create_document.json", {"template_path": "example.gh"}, "gh_create_document unknown field"),
         ("commands/gh_batch_search_components.json", {"queries": []}, "gh_batch_search_components empty queries"),
         ("commands/gh_get_component_type_info.json", {}, "gh_get_component_type_info missing selector"),
@@ -911,7 +998,7 @@ def test_protocol_envelope():
         "create_object", "create_objects", "modify_object", "modify_objects",
         "delete_object", "get_object_info", "get_selected_objects_info",
         "get_object_attributes", "update_object_attributes",
-        "analyze_objects", "measure_objects",
+        "analyze_objects", "measure_objects", "section_profile",
         "get_document_summary", "get_objects", "select_objects",
         "create_layer", "delete_layer", "get_or_set_current_layer",
         "execute_rhinoscript_python_code", "execute_rhinocommon_csharp_code",

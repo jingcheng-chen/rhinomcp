@@ -347,6 +347,96 @@ class TestMeasureObjectsTool:
             measure_objects(ctx=None, object_ids=["only-one"])
         with pytest.raises(ValueError, match="exactly two"):
             measure_objects(ctx=None, object_ids=["a", "b", "c"])
+class TestSectionProfileTool:
+    """Tests for section_profile tool."""
+
+    @patch('rhinomcp.tools.section_profile.get_rhino_connection')
+    def test_section_profile_plane(self, mock_get_conn):
+        from rhinomcp.tools.section_profile import section_profile
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "mode": "plane", "object_count": 1,
+            "plane": {"origin": [0, 0, 0], "normal": [0, 0, 1]},
+            "total_section_area": 8.0, "total_loop_count": 1, "profiles": [],
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = section_profile(ctx=None, id="abc", plane={"axis": "Z", "value": 0})
+
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][0] == "section_profile"
+        assert call_args[0][1]["id"] == "abc"
+        assert call_args[0][1]["plane"] == {"axis": "Z", "value": 0}
+        assert "profile" not in call_args[0][1]
+        assert result["mode"] == "plane"
+
+    @patch('rhinomcp.tools.section_profile.get_rhino_connection')
+    def test_section_profile_origin_normal(self, mock_get_conn):
+        from rhinomcp.tools.section_profile import section_profile
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"mode": "plane", "object_count": 2}
+        mock_get_conn.return_value = mock_conn
+
+        section_profile(
+            ctx=None,
+            object_ids=["a", "b"],
+            plane={"origin": [0, 0, 0], "normal": [0, 0, 1]},
+        )
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][1]["object_ids"] == ["a", "b"]
+        assert call_args[0][1]["plane"]["normal"] == [0, 0, 1]
+
+    @patch('rhinomcp.tools.section_profile.get_rhino_connection')
+    def test_section_profile_profile_mode(self, mock_get_conn):
+        from rhinomcp.tools.section_profile import section_profile
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"mode": "profile", "object_count": 1}
+        mock_get_conn.return_value = mock_conn
+
+        section_profile(ctx=None, selected=True, profile={"axis": "Z", "count": 5})
+        call_args = mock_conn.send_command.call_args
+        assert call_args[0][0] == "section_profile"
+        assert call_args[0][1]["selected"] is True
+        assert call_args[0][1]["profile"]["count"] == 5
+        assert "plane" not in call_args[0][1]
+
+    def test_section_profile_requires_one_selector(self):
+        from rhinomcp.tools.section_profile import section_profile
+
+        with pytest.raises(ValueError, match="exactly one of id"):
+            section_profile(ctx=None, plane={"axis": "Z", "value": 0})
+        with pytest.raises(ValueError, match="exactly one of id"):
+            section_profile(ctx=None, id="a", name="b", plane={"axis": "Z", "value": 0})
+
+    def test_section_profile_requires_one_cut(self):
+        from rhinomcp.tools.section_profile import section_profile
+
+        with pytest.raises(ValueError, match="exactly one of plane or profile"):
+            section_profile(ctx=None, id="a")
+        with pytest.raises(ValueError, match="exactly one of plane or profile"):
+            section_profile(
+                ctx=None, id="a",
+                plane={"axis": "Z", "value": 0},
+                profile={"axis": "Z", "count": 3},
+            )
+
+    def test_section_profile_rejects_bad_plane_and_profile(self):
+        from rhinomcp.tools.section_profile import section_profile
+
+        with pytest.raises(ValueError, match="not both"):
+            section_profile(
+                ctx=None, id="a",
+                plane={"axis": "Z", "value": 0, "origin": [0, 0, 0], "normal": [0, 0, 1]},
+            )
+        with pytest.raises(ValueError, match="axis must be"):
+            section_profile(ctx=None, id="a", plane={"axis": "Q", "value": 0})
+        with pytest.raises(ValueError, match="count must be"):
+            section_profile(ctx=None, id="a", profile={"axis": "Z", "count": 1})
+        with pytest.raises(ValueError, match="count must be"):
+            section_profile(ctx=None, id="a", profile={"axis": "Z", "count": 500})
 
 
 class TestObjectAttributesTools:
