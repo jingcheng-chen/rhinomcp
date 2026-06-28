@@ -111,6 +111,6 @@ jobs:
           yak push "$yakPackageFile"
 
       - name: Upload .yak package to GitHub Release
-        run: gh release upload "${{ github.event.release.tag_name }}" "dist/${{ env.YAK_PACKAGE_BASENAME }}" --clobber
+        run: gh release upload "${{ github.event.release.tag_name }}" "dist/${{ env.YAK_PACKAGE_BASENAME }}" --clobber --repo "${{ github.repository }}"
         env:
           GH_TOKEN: ${{ github.token }}
