@@ -470,6 +470,74 @@ class TestResponseValidation:
             for r in caplog.records
         )
 
+    # A result that satisfies the closed responses/object_attributes.json
+    # (additionalProperties:false), used to prove perception keys are stripped
+    # before validation rather than rejected by it.
+    VALID_OBJECT_ATTRIBUTES = {
+        "id": "12345678-1234-1234-1234-123456789012",
+        "name": "MyBox",
+        "type": "BOX",
+        "layer": {
+            "index": 0,
+            "id": "12345678-1234-1234-1234-123456789012",
+            "name": "Default",
+            "full_path": "Default",
+        },
+        "color": {"r": 255, "g": 0, "b": 0},
+        "color_source": "by_layer",
+        "material_index": -1,
+        "material_source": "by_layer",
+        "visible": True,
+        "locked": False,
+        "hidden": False,
+        "normal": True,
+        "user_strings": {},
+    }
+
+    @patch("socket.socket")
+    def test_perception_keys_do_not_fail_closed_schema(self, mock_socket_class):
+        """With perception on, the plugin injects _delta/_health into a mutating
+        command's result. object_attributes.json is closed, so validating the
+        raw result would reject those keys and turn a successful
+        update_object_attributes into a strict-mode error. They must be stripped
+        before validation, and still come back to the caller."""
+        import rhinomcp.server as srv
+
+        result_with_perception = {
+            **self.VALID_OBJECT_ATTRIBUTES,
+            "_delta": {
+                "created_ids": [],
+                "deleted_ids": [],
+                "count_before": 1,
+                "count_after": 1,
+            },
+            "_health": {
+                "checked_count": 0,
+                "invalid_count": 0,
+                "issues": [],
+                "truncated": False,
+            },
+        }
+        conn = self._connect_with_response(
+            mock_socket_class, result_with_perception
+        )
+
+        original_mode = srv.RHINO_VALIDATE
+        srv.RHINO_VALIDATE = "strict"
+        try:
+            result = conn.send_command(
+                "update_object_attributes",
+                {"id": "12345678-1234-1234-1234-123456789012", "visible": True},
+            )
+        finally:
+            srv.RHINO_VALIDATE = original_mode
+
+        # No raise in strict mode, and the perception blocks survive untouched
+        # in the returned result.
+        assert result["name"] == "MyBox"
+        assert result["_delta"]["count_after"] == 1
+        assert result["_health"]["invalid_count"] == 0
+
 
 class TestPerceptionForwarding:
     """Opt-in perception forwards an envelope-level include_delta flag and
