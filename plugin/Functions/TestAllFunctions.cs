@@ -1092,6 +1092,54 @@ public partial class RhinoMCPFunctions
             results["live_object_count"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
+        // Test: describe_capabilities reports the live dispatch table with
+        // read-only flags, the perception envelope flags, and the version. The
+        // command list is reflection-driven, so it must include the commands we
+        // exercise here and describe_capabilities itself, with correct read_only.
+        try
+        {
+            var caps = DescribeCapabilities(new JObject());
+            var cmds = (JArray)caps["commands"];
+            if ((int)caps["command_count"] != cmds.Count)
+                throw new Exception("command_count does not match the commands array length");
+            if (string.IsNullOrWhiteSpace(caps["version"]?.ToString()))
+                throw new Exception("version is empty");
+
+            var readOnly = new System.Collections.Generic.Dictionary<string, bool>();
+            foreach (var c in cmds)
+                readOnly[c["name"].ToString()] = (bool)c["read_only"];
+
+            if (!readOnly.ContainsKey("describe_capabilities") || !readOnly["describe_capabilities"])
+                throw new Exception("describe_capabilities should list itself as read_only");
+            if (!readOnly.ContainsKey("create_object") || readOnly["create_object"])
+                throw new Exception("create_object should be present and not read_only");
+            if (!readOnly.ContainsKey("get_document_summary") || !readOnly["get_document_summary"])
+                throw new Exception("get_document_summary should be present and read_only");
+
+            bool hasDelta = false, hasHealth = false;
+            foreach (var f in (JArray)caps["perception"]["envelope_flags"])
+            {
+                if (f["flag"]?.ToString() == "include_delta") hasDelta = true;
+                if (f["flag"]?.ToString() == "include_health") hasHealth = true;
+            }
+            if (!hasDelta)
+                throw new Exception("perception should advertise include_delta");
+            if (!hasHealth)
+                throw new Exception("perception should advertise include_health");
+
+            results["describe_capabilities"] = new JObject
+            {
+                ["status"] = "pass",
+                ["command_count"] = (int)caps["command_count"],
+                ["version"] = caps["version"]
+            };
+            VisualUpdate("describe_capabilities lists the command surface");
+        }
+        catch (Exception e)
+        {
+            results["describe_capabilities"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
         // Cleanup
         if (!visualMode)
         {

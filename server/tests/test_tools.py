@@ -1434,6 +1434,44 @@ class TestGetCommandsTool:
         assert call_args[0][1]["loaded_only"] is False
 
 
+class TestDescribeCapabilitiesTool:
+    """Tests for describe_capabilities tool (the MCP server's self-description)."""
+
+    @patch('rhinomcp.tools.describe_capabilities.get_rhino_connection')
+    def test_describe_capabilities(self, mock_get_conn):
+        from rhinomcp.tools.describe_capabilities import describe_capabilities
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "version": "0.3.1",
+            "command_count": 2,
+            "commands": [
+                {"name": "create_object", "read_only": False},
+                {"name": "get_objects", "read_only": True},
+            ],
+            "perception": {
+                "description": "Mutating commands accept opt-in envelope flags.",
+                "envelope_flags": [
+                    {"flag": "include_delta", "attaches": "_delta",
+                     "description": "Attaches a change-delta."},
+                    {"flag": "include_health", "attaches": "_health",
+                     "description": "Attaches a geometry-health report."},
+                ],
+            },
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = describe_capabilities(ctx=None)
+
+        # Forwards the right command with no params, and returns the surface.
+        assert mock_conn.send_command.call_args[0][0] == "describe_capabilities"
+        assert result["command_count"] == 2
+        assert {"name": "get_objects", "read_only": True} in result["commands"]
+        flags = [f["flag"] for f in result["perception"]["envelope_flags"]]
+        assert "include_delta" in flags
+        assert "include_health" in flags
+
+
 class TestExecutionSafetyGates:
     """The arbitrary-code execution tools must refuse calls when their
     env flag is off, before reaching Rhino."""
@@ -1988,6 +2026,7 @@ class TestToolAnnotations:
             "tools/analyze_objects.py",
             "tools/get_selected_objects_info.py",
             "tools/get_commands.py",
+            "tools/describe_capabilities.py",
             "tools/rhinoscript_docs.py",
             "tools/grasshopper_catalog.py",
             "tools/grasshopper_components.py",

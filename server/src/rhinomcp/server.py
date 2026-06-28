@@ -96,6 +96,7 @@ READONLY_RETRY_COMMANDS = {
     "get_objects",
     "capture_viewport",
     "get_commands",
+    "describe_capabilities",
     "gh_get_document_info",
     "gh_search_components",
     "gh_batch_search_components",

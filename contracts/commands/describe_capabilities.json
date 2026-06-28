@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "describe_capabilities.json",
+  "title": "DescribeCapabilities Command",
+  "description": "Describe the MCP server's own command surface: every command it handles and whether each is read-only, the perception envelope flags it honors, and the plugin version. Distinct from get_commands, which lists Rhino's own application commands.",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}

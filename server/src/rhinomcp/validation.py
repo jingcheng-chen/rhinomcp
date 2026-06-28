@@ -185,6 +185,7 @@ def validate_response(command_type: str, response: Dict[str, Any], raise_on_erro
         "get_or_set_current_layer": "layer_info.json",
         "execute_rhinoscript_python_code": "execute_script_result.json",
         "capture_viewport": "capture_viewport_result.json",
+        "describe_capabilities": "capabilities.json",
     }
 
     schema_name = response_schema_map.get(command_type)
