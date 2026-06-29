@@ -107,8 +107,23 @@ jobs:
           yakPackageBasename=$(basename "$yakPackageFile")
           echo "YAK_PACKAGE_BASENAME=$yakPackageBasename" >> $GITHUB_ENV
 
-          # Push to yak server
-          yak push "$yakPackageFile"
+          # Push to yak server. If this release was retried after a successful
+          # Yak publish, treat the duplicate-version response as success so the
+          # GitHub release asset upload can still run.
+          set +e
+          yakPushOutput=$(yak push "$yakPackageFile" 2>&1)
+          yakPushStatus=$?
+          set -e
+
+          echo "$yakPushOutput"
+
+          if [ "$yakPushStatus" -ne 0 ]; then
+            if [[ "$yakPushOutput" == *"already exists"* ]]; then
+              echo "Yak package already exists; continuing to upload the GitHub release asset."
+            else
+              exit "$yakPushStatus"
+            fi
+          fi
 
       - name: Upload .yak package to GitHub Release
         run: gh release upload "${{ github.event.release.tag_name }}" "dist/${{ env.YAK_PACKAGE_BASENAME }}" --clobber --repo "${{ github.repository }}"
