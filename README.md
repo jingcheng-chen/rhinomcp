@@ -4,6 +4,8 @@
 
 # RhinoMCP
 
+[![MCP Toplist](https://mcptoplist.com/badge/pulsemcp%2Fjingcheng-chen-rhino-8.svg)](https://mcptoplist.com/server/pulsemcp%2Fjingcheng-chen-rhino-8)
+
 **Control Rhino 3D and Grasshopper with AI, in plain language.**
 
 RhinoMCP connects Rhino to AI agents through the [Model Context Protocol](https://modelcontextprotocol.io),
