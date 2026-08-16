@@ -325,4 +325,4 @@ dotnet build plugin/rhinomcp.sln --configuration Release
 
 ## Star 历史
 
-[![Star History Chart](https://api.star-history.com/svg?repos=jingcheng-chen/rhinomcp&type=Date)](https://www.star-history.com/#jingcheng-chen/rhinomcp&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=jingcheng-chen/rhinomcp&type=Date)](https://star-history.dera.page/#jingcheng-chen/rhinomcp&Date)
