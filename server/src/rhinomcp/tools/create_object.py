@@ -2,6 +2,7 @@ from mcp.server.fastmcp import Context
 from rhinomcp.server import get_rhino_connection, mcp
 from typing import Any, List, Dict, Optional
 
+
 @mcp.tool()
 def create_object(
     ctx: Context,
@@ -15,7 +16,7 @@ def create_object(
 ) -> Dict[str, Any]:
     """
     Create a new object in the Rhino document.
-    
+
     Parameters:
     - type: Object type ("POINT", "LINE", "POLYLINE", "CIRCLE", "ARC", "ELLIPSE", "CURVE", "BOX", "SPHERE", "CONE", "CYLINDER", "SURFACE"). For pipes, use the dedicated `pipe` tool.
     - name: Optional name for the object
@@ -80,12 +81,12 @@ def create_object(
     - points: List of [x, y, z] points that define the surface
     - degree: ([number, number], optional) Degree of the surface (default is 3, if user asked for smoother surface, degree can be higher)
     - closed: ([bool, bool], optional) Two booleans defining if the surface is closed in the u,v directions
-    
+
     Returns:
     A dict with success, id, name, type, message, plus bounding_box (the new
     object's axis-aligned extent) and, for curve-like types, geometry — each
     present only when the plugin reported it. Exceptions propagate as MCP tool errors.
-    
+
     Examples of params:
     - POINT: {"x": 0, "y": 0, "z": 0}
     - LINE: {"start": [0, 0, 0], "end": [1, 1, 1]}
@@ -101,11 +102,16 @@ def create_object(
     rhino = get_rhino_connection()
 
     command_params: Dict[str, Any] = {"type": type, "params": params or {}}
-    if translation is not None: command_params["translation"] = translation
-    if rotation is not None: command_params["rotation"] = rotation
-    if scale is not None: command_params["scale"] = scale
-    if name: command_params["name"] = name
-    if color: command_params["color"] = color
+    if translation is not None:
+        command_params["translation"] = translation
+    if rotation is not None:
+        command_params["rotation"] = rotation
+    if scale is not None:
+        command_params["scale"] = scale
+    if name:
+        command_params["name"] = name
+    if color:
+        command_params["color"] = color
 
     # Errors propagate so MCP clients see a real tool error instead of a
     # successful string starting with "Error ...".

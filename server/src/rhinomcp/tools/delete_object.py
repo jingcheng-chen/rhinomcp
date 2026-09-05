@@ -6,7 +6,9 @@ from rhinomcp.server import get_rhino_connection, mcp
 
 
 @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
-def delete_object(ctx: Context, id: str = None, name: str = None, all: bool = None) -> Dict[str, Any]:
+def delete_object(
+    ctx: Context, id: str = None, name: str = None, all: bool = None
+) -> Dict[str, Any]:
     """
     Delete an object from the Rhino document.
 
@@ -27,9 +29,12 @@ def delete_object(ctx: Context, id: str = None, name: str = None, all: bool = No
     rhino = get_rhino_connection()
 
     commandParams: Dict[str, Any] = {}
-    if id is not None: commandParams["id"] = id
-    if name is not None: commandParams["name"] = name
-    if all: commandParams["all"] = True
+    if id is not None:
+        commandParams["id"] = id
+    if name is not None:
+        commandParams["name"] = name
+    if all:
+        commandParams["all"] = True
 
     result = rhino.send_command("delete_object", commandParams)
 
@@ -39,7 +44,9 @@ def delete_object(ctx: Context, id: str = None, name: str = None, all: bool = No
             "success": True,
             "scope": "all",
             "count": count,
-            "message": f"Deleted all objects ({count})." if count is not None else "Deleted all objects.",
+            "message": f"Deleted all objects ({count})."
+            if count is not None
+            else "Deleted all objects.",
         }
     return {
         "success": True,
