@@ -5,8 +5,11 @@ Visual overview: [roadmap.html](roadmap.html), including the Barcelona-chair des
 Agent behavior and runtime responsibilities are mapped in
 [harness/README.md](harness/README.md).
 
-This first implementation runs one model/evaluate/plan loop with fresh Codex CLI
-sessions. It does not yet automatically edit, install, or promote plugin fixes.
+The modeling runner uses fresh Codex CLI sessions. A bounded builder can generate
+and revise reviewed patches; the trial controller verifies validation/recovery using
+a disposable file runtime. Live Rhino installation and validation remain supervisory,
+and no automatic promotion is enabled. See [TRIAL_CONTROLLER.md](TRIAL_CONTROLLER.md)
+for the new trial commands and the still-pending local Rhino adapter.
 No user reference data is required for the box, posed-prism, and through-hole tasks.
 
 ## Agent/operator startup runbook

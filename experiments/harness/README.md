@@ -18,15 +18,19 @@ configuration, not a second copy of instructions kept elsewhere.
 | Reference drawing generation and fixed-view image delivery | `../references.py`, `../modeler_mcp.py` |
 | Trusted saved-file measurements and acceptance | `../evaluate.cs`, `../evaluator.py` |
 | Live capture framing and viewport-preservation regression | `../validate_capture.py` |
-| Build, installation, Rhino startup, execution and recovery | `../README.md` |
+| Candidate trial transitions, input identity and recovery | `../trial.py`, `../TRIAL_CONTROLLER.md` |
+| Frozen live trial cases and evaluator inputs | `trial-suite.json` |
+| Machine installation and Rhino startup (local adapter still pending) | `../README.md`, `../TRIAL_CONTROLLER.md` |
 | Development handoff and next milestone | `../CONTINUE.md` |
 | Actual prompts, tool calls, evidence and decisions | `../runs/<run>/` (local, ignored by Git) |
 
 Changing Markdown does not grant permissions. The controller and gateway enforce
 tool access and output contracts. The deterministic evaluator is ordinary code,
 not an AI role. Fresh builder sessions and review corrections are implemented for a known-defect
-pilot. Build/install/live validation remain supervisory; QA-reviewer sessions and
-automatic promotion are still planned. See `../BUILDER_LOOP.md`.
+pilot. Controller validation/recovery is verified with a disposable file runtime.
+The live Rhino adapter is pending; build/install/live validation remain supervisory.
+QA-reviewer sessions and automatic promotion are still planned. See
+`../BUILDER_LOOP.md` and `../TRIAL_CONTROLLER.md`.
 
 For every invocation the runner saves the assembled prompt and output schema,
 so past runs retain the instructions they actually used even after role edits.

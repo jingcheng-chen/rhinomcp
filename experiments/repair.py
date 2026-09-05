@@ -47,7 +47,9 @@ def inventory(directory):
         if path.is_symlink():
             raise ValueError("Candidate contains a symlink")
         if not (path.is_file() or path.is_dir()):
-            raise ValueError("Candidate contains an unsupported filesystem entry")
+            raise ValueError(
+                f"Candidate contains an unsupported filesystem entry: {path.relative_to(directory)}"
+            )
         result[path.relative_to(directory).as_posix()] = {
             "kind": "file" if path.is_file() else "directory",
             "sha256": sha256(path) if path.is_file() else None,

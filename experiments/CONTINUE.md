@@ -127,24 +127,40 @@ This demonstrates modeling/evaluation/planning and a supervised plugin-code repa
 The successful modeler corrected the box's centered placement using returned bounds.
 No production plugin behavior was changed for the first loop.
 
+## Latest milestone: durable trial controller
+
+`trial.py` now registers reviewed builder candidates, pins source/patch/binary,
+adapter and evaluator inputs, and records build/install/test/restore transitions.
+It compares exact baseline/candidate case sets, rejects regressions and restores
+through an operator-owned adapter, then verifies baseline identity and tests.
+The checkpoint blocks further builder revision. Interrupted commands are not
+replayed: unresolved child processes require an operator stop attestation before
+recovery. No automatic promotion is enabled.
+
+All 326 tests pass (103 experiment, 223 server), including 22 controller tests with
+real subprocesses and a disposable file-based runtime. This is NOT live Rhino
+rollback evidence. The runtime adapter for Rhino remains unimplemented. Read
+`TRIAL_CONTROLLER.md` for the protocol, failure behavior, evidence and limitations.
+`harness/trial-suite.json` freezes 43 live verdicts covering all canonical tasks,
+swapped-reference control, 26 repeated fixtures and 11 captures; this combined suite
+has not yet been run through the trial controller.
+
 ## Next concrete milestone
 
-Implement controller-owned candidate validation and recovery:
+Connect the trial controller to a reviewed local Rhino runtime adapter:
 
-1. Preserve the four canonical tasks, swapped-axis image control and capture suite.
-   Read `BUILDER_LOOP.md` and the completed pilot checkpoint before making changes.
-2. Define a durable validation state machine around the reviewed patch and binary
-   hashes. Recheck source identity before each build/load/test transition. Keep
-   operator-specific installation outside tracked commands.
-3. Add recorded baseline/candidate result comparison and rejection handling, with
-   explicit resume rules after failed builds, timeouts or interrupted restarts.
-   Trial restoration is proven manually; automatic rollback is not implemented.
-4. Address evaluator-process trust before automatic candidate promotion. The current
-   trusted C# measurement runs inside the candidate's Rhino process. A source-path
-   gate cannot prove that arbitrary code will not interfere with evaluation.
-5. Exercise a deliberately failing candidate and verify that the controller rejects
-   it and restores the previous verified binary. Do not promote the replay patch
-   merely because the development fixtures pass.
+1. Read `TRIAL_CONTROLLER.md`, `BUILDER_LOOP.md` and the fixed trial suite. Keep
+   machine-specific installation configuration outside tracked project commands.
+2. Implement build/probe/install/test/restore for an explicitly owned dedicated
+   Rhino process and document. Verify loaded MVID separately from installed bytes;
+   do not close unrelated work. Compile a separate copy of the reviewed snapshot.
+3. Generate a new bounded, reviewed candidate. The historical completed builder
+   pilot is not eligible for preparation; do not reset its executed checkpoint.
+4. Run baseline and candidate comparisons, deliberately fail a candidate, verify
+   real baseline restoration and all required verdicts, then exercise interruption.
+   Current automatic restoration is proven only with the file-based test adapter.
+5. Address evaluator-process trust and held-out comparisons before automatic
+   promotion. The current C# judge runs in the candidate's Rhino process.
 
 Fresh Codex sessions are implemented for modeling, planning and bounded building.
 Claude Code adapters, model/version selection, held-out comparisons, OS-level
@@ -157,8 +173,9 @@ is still blocked until a public-feedback/redaction boundary is implemented.
   The Python runner requires an already-running listener and an empty unsaved doc.
 - Do not reset or close unrelated user work. Inspect current state; create a new
   dedicated document. Never infer that the previous run's document is still active.
-- Bounded source repair and review dispatch are implemented. Unattended candidate
-  validation/install/rollback/promotion, automatic session resume, a full five-task
+- Bounded source repair and review dispatch are implemented. The trial controller has
+  adapter-based validation/recovery, but unattended live Rhino installation/rollback,
+  promotion, automatic continuation of interrupted agent sessions, a full five-task
   suite and real-photo evaluation are not implemented.
 - The gateway checks document identity but cannot lock out a human or external
   client. Current evaluation runs inside Rhino through the trusted C# bridge;
@@ -179,7 +196,8 @@ is still blocked until a public-feedback/redaction boundary is implemented.
 ## Evidence and portability
 
 `FIRST_LOOP.md`, `POSED_PRISM_LOOP.md`, `THROUGH_HOLE_LOOP.md`, and
-`CAPTURE_REPAIR.md`, `REFERENCE_LOOP.md`, and `BUILDER_LOOP.md` are portable summaries. Full local records are under ignored
+`CAPTURE_REPAIR.md`, `REFERENCE_LOOP.md`, `BUILDER_LOOP.md`, and
+`TRIAL_CONTROLLER.md` are portable summaries. Full local records are under ignored
 `runs/` directories and may not exist on another machine. If absent, rerun the
 fixtures and task; do not claim fresh verification from the historical report.
 Do not rely on a chat session, sidebar task, or its internal memory for state.
