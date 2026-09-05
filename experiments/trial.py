@@ -115,7 +115,8 @@ def prepare(repair, baseline, baseline_mvid, suite, adapter, runtime_lock, revie
             "review_sha256": sha256(directory / "review.txt"),
             "adapter": str(adapter),
             "adapter_sha256": sha256(adapter),
-            "python": str(Path(sys.executable).resolve()),
+            "python": str(Path(sys.executable).absolute()),
+            "python_binary": str(Path(sys.executable).resolve()),
             "python_sha256": sha256(Path(sys.executable).resolve()),
             "runtime_lock": str(runtime_lock),
         }
@@ -150,11 +151,15 @@ class Trial:
         persist(self.directory / "state.json", self.state)
 
     def guards(self, source=True):
+        if Path(self.manifest["python"]).resolve() != Path(
+            self.manifest["python_binary"]
+        ):
+            raise ValueError("Pinned Python interpreter target changed")
         pairs = {
             self.directory / "manifest.json": self.state["manifest_sha256"],
             self.directory / "baseline.rhp": self.manifest["baseline"]["sha256"],
             Path(self.manifest["adapter"]): self.manifest["adapter_sha256"],
-            Path(self.manifest["python"]): self.manifest["python_sha256"],
+            Path(self.manifest["python_binary"]): self.manifest["python_sha256"],
             self.directory / "suite.json": self.manifest["suite_sha256"],
         }
         pairs.update(

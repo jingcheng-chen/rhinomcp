@@ -62,6 +62,11 @@
     "../tasks/through_hole.json",
     "../tasks/reference_box.json",
     "../harness/roles/modeler.md",
-    "../harness/roles/planner.md"
+    "../harness/roles/planner.md",
+    "../rhino_trial.py",
+    "../assembly_identity/Program.cs",
+    "../assembly_identity/assembly_identity.csproj",
+    "../../server/pyproject.toml",
+    "../../server/uv.lock"
   ]
 }

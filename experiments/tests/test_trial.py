@@ -16,6 +16,7 @@ ADAPTER = """import hashlib, json, pathlib, shutil, sys, time
 request = json.loads(pathlib.Path(sys.argv[1]).read_text())
 root = pathlib.Path(__file__).parent
 mode = (root / "mode").read_text()
+if mode == "venv": import rhinomcp
 active = root / "active.rhp"
 trial = pathlib.Path(request["trial"])
 action = request["action"]
@@ -262,3 +263,8 @@ def test_prepare_rejects_reuse_of_registered_candidate(prepared):
             root / "runtime.lock",
             "Second review",
         )
+
+
+def test_adapter_retains_virtual_environment_dependencies(prepared):
+    _, _, state = run_mode(prepared, "venv")
+    assert state["stage"] == "accepted_trial"

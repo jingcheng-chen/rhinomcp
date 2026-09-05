@@ -10,6 +10,8 @@ import json
 import time
 from pathlib import Path
 
+from PIL import Image
+
 from experiments.bridge import assert_document, identity, script
 from experiments.runner import ROOT, save, sha256
 from rhinomcp.server import get_rhino_connection
@@ -28,7 +30,7 @@ foreach (var view in doc.Views) {
 }
 output.AppendLine(Serialize(new { views, doc.Modified,
     active=doc.Views.ActiveView.ActiveViewportID,
-    objects=doc.Objects.Select(o => new {o.Id, crc=o.Geometry.DataCRC(0)}).ToArray()
+    objects=doc.Objects.Where(o => o != null && !o.IsDeleted).Select(o => new {o.Id, crc=o.Geometry.DataCRC(0)}).ToArray()
 }));
 """
 
@@ -44,21 +46,28 @@ def equivalent(a, b):
 
 
 def pixel_bounds(path):
-    return json.loads(
-        script(f"""
-using(var bitmap = new System.Drawing.Bitmap({json.dumps(str(path))})) {{
-    int left=bitmap.Width, right=-1, top=bitmap.Height, bottom=-1, count=0;
-    for(int y=0;y<bitmap.Height;y++) for(int x=0;x<bitmap.Width;x++) {{
-        var c=bitmap.GetPixel(x,y);
-        if(c.R<80 && c.G<80 && c.B<80) {{
-            left=Math.Min(left,x);right=Math.Max(right,x);
-            top=Math.Min(top,y);bottom=Math.Max(bottom,y);count++;
-        }}
-    }}
-    output.AppendLine(Serialize(new {{left,right,top,bottom,count,
-        width=bitmap.Width,height=bitmap.Height}}));
-}}
-""")
+    # Read the saved image in the controller, not a slow per-pixel Rhino script.
+    # Preserve the original predicate exactly: R, G and B are each below 80.
+    with Image.open(path) as image:
+        rgb = image.convert("RGB")
+        width, height = rgb.size
+        pixels = rgb.load()
+        left, right, top, bottom, count = width, -1, height, -1, 0
+        for y in range(height):
+            for x in range(width):
+                r, g, b = pixels[x, y]
+                if r < 80 and g < 80 and b < 80:
+                    left, right = min(left, x), max(right, x)
+                    top, bottom = min(top, y), max(bottom, y)
+                    count += 1
+    return dict(
+        left=left,
+        right=right,
+        top=top,
+        bottom=bottom,
+        count=count,
+        width=width,
+        height=height,
     )
 
 

@@ -32,7 +32,7 @@ var asm = AppDomain.CurrentDomain.GetAssemblies().Single(a => a.GetName().Name =
 output.AppendLine(Serialize(new {
     document = doc.RuntimeSerialNumber,
     marker = doc.Strings.GetValue("rhinomcp_experiment"),
-    object_count = doc.Objects.Count,
+    object_count = doc.Objects.Count(o => o != null && !o.IsDeleted),
     path = doc.Path,
     assembly = asm.Location,
     mvid = asm.ManifestModule.ModuleVersionId.ToString(),

@@ -127,40 +127,66 @@ This demonstrates modeling/evaluation/planning and a supervised plugin-code repa
 The successful modeler corrected the box's centered placement using returned bounds.
 No production plugin behavior was changed for the first loop.
 
-## Latest milestone: durable trial controller
+## Latest milestone: live trial controller and interrupted recovery
 
-`trial.py` now registers reviewed builder candidates, pins source/patch/binary,
-adapter and evaluator inputs, and records build/install/test/restore transitions.
-It compares exact baseline/candidate case sets, rejects regressions and restores
-through an operator-owned adapter, then verifies baseline identity and tests.
-The checkpoint blocks further builder revision. Interrupted commands are not
-replayed: unresolved child processes require an operator stop attestation before
-recovery. No automatic promotion is enabled.
+`trial.py` registers reviewed candidates, pins source/patch/binary and declared
+adapter/evaluator inputs, and records build/install/test/restore transitions.
+`rhino_trial.py` now connects it to a dedicated live Rhino process and document.
+The controller builds a separate candidate copy, checks actual loaded MVID and
+installed bytes, and runs the frozen 43-case suite. Desktop quit/install/restart
+remains supervised through a recorded lifecycle ticket; no automatic promotion.
+Read `LIVE_TRIAL.md` for the runbook and evidence, and `TRIAL_CONTROLLER.md` for
+checkpoint and recovery semantics.
 
-All 326 tests pass (103 experiment, 223 server), including 22 controller tests with
-real subprocesses and a disposable file-based runtime. This is NOT live Rhino
-rollback evidence. The runtime adapter for Rhino remains unimplemented. Read
-`TRIAL_CONTROLLER.md` for the protocol, failure behavior, evidence and limitations.
-`harness/trial-suite.json` freezes 43 live verdicts covering all canonical tasks,
-swapped-reference control, 26 repeated fixtures and 11 captures; this combined suite
-has not yet been run through the trial controller.
+A fresh supervisor-authored negative candidate disables capture fitting; it is
+fault injection for recovery validation, not an agent-produced improvement.
+Baseline: 43/43 pass. Candidate: 34/43 pass, with exactly nine fitted capture
+regressions. The controller rejects it. At the idle restoration handoff, the
+supervisor deliberately stops the controller and adapter. Resume without a stop
+attestation blocks; after verified stop and acknowledgement, it proceeds directly
+to restoration without replaying candidate installation.
+
+The restored baseline passes **43/43**. Final state is `rejected`,
+`runtime_dirty=false`, `promoted=false`. Rhino is left running the working baseline
+in an empty unsaved test document. Verify current state before reuse; complete
+evidence and lifecycle instructions are recorded in `LIVE_TRIAL.md`.
+Local trial: `runs/live-recovery-20260905-224344/trial-dc347a7d/`.
+Verified baseline MVID: `90d87782-2887-435e-a8b2-02467f0c5094`.
+
+All **338 tests pass** (115 experiment, 223 server). The candidate build also passes
+235 Python/contract tests and lint, with zero C# warnings/errors. Integration fixed
+virtual-environment invocation, active-object counting after undoable deletion,
+slow pixel measurement and stale connections across restart. The pixel predicate
+was preserved and all ten historical image measurements match exactly. Earlier
+failed attempts remain recorded and were not rewritten as successes.
+
+Run developer suites sequentially: the existing mock-server fixtures share a port.
+Full server lint passes after formatting-only commit `e41c257`; the full server
+format check still reports 17 pre-existing files. Do not conflate that limitation
+with the focused experiment format check, which passes.
 
 ## Next concrete milestone
 
-Connect the trial controller to a reviewed local Rhino runtime adapter:
+Define and run the first chair baseline, using screenshots only:
 
-1. Read `TRIAL_CONTROLLER.md`, `BUILDER_LOOP.md` and the fixed trial suite. Keep
-   machine-specific installation configuration outside tracked project commands.
-2. Implement build/probe/install/test/restore for an explicitly owned dedicated
-   Rhino process and document. Verify loaded MVID separately from installed bytes;
-   do not close unrelated work. Compile a separate copy of the reviewed snapshot.
-3. Generate a new bounded, reviewed candidate. The historical completed builder
-   pilot is not eligible for preparation; do not reset its executed checkpoint.
-4. Run baseline and candidate comparisons, deliberately fail a candidate, verify
-   real baseline restoration and all required verdicts, then exercise interruption.
-   Current automatic restoration is proven only with the file-based test adapter.
-5. Address evaluator-process trust and held-out comparisons before automatic
-   promotion. The current C# judge runs in the candidate's Rhino process.
+1. Read `LIVE_TRIAL.md` and verify the current runtime/branch before reuse. Preserve
+   the 43-case suite and lifecycle ownership rules. Do not reuse an executed builder
+   checkpoint or close unrelated Rhino documents.
+2. Open the linked Sketchfab scene in the browser and capture a compact, consistent
+   reference pack showing front, side, back and oblique frame coverage. Keep the
+   source mesh outside modeler input. Record screenshot hashes and camera assumptions.
+3. Freeze a chair-first scope, normalized scale (unless a known dimension is given),
+   named parts and target detail level. Reserve views for evaluation. Define visual
+   checks separately from the existing black-wireframe fixture thresholds.
+4. Extend the task/input and permitted modeling operations as needed, then run a
+   fresh modeler baseline. Save the .3dm, comparable views and measured failures.
+   Distinguish an illustrative first attempt from a calibrated acceptance result.
+5. Turn observed gaps into focused frame/cushion tasks and bounded tool or guidance
+   changes. Add preservation and held-out comparisons before claiming improvement.
+
+Engineering work still ahead: unattended desktop lifecycle, evaluator-process
+isolation, held-out comparisons, and explicit model/environment pinning. Recovery
+at an idle handoff is verified; this is not proof of every partial-install crash.
 
 Fresh Codex sessions are implemented for modeling, planning and bounded building.
 Claude Code adapters, model/version selection, held-out comparisons, OS-level
@@ -174,9 +200,9 @@ is still blocked until a public-feedback/redaction boundary is implemented.
 - Do not reset or close unrelated user work. Inspect current state; create a new
   dedicated document. Never infer that the previous run's document is still active.
 - Bounded source repair and review dispatch are implemented. The trial controller has
-  adapter-based validation/recovery, but unattended live Rhino installation/rollback,
-  promotion, automatic continuation of interrupted agent sessions, a full five-task
-  suite and real-photo evaluation are not implemented.
+  live validation/recovery with supervised desktop steps. Unattended installation,
+  promotion, automatic continuation of interrupted agent sessions and real-photo
+  evaluation are not implemented. The fixed suite includes five modeling runs.
 - The gateway checks document identity but cannot lock out a human or external
   client. Current evaluation runs inside Rhino through the trusted C# bridge;
   stronger isolation is required before accepting untrusted plugin changes.
@@ -197,7 +223,7 @@ is still blocked until a public-feedback/redaction boundary is implemented.
 
 `FIRST_LOOP.md`, `POSED_PRISM_LOOP.md`, `THROUGH_HOLE_LOOP.md`, and
 `CAPTURE_REPAIR.md`, `REFERENCE_LOOP.md`, `BUILDER_LOOP.md`, and
-`TRIAL_CONTROLLER.md` are portable summaries. Full local records are under ignored
+`TRIAL_CONTROLLER.md` and `LIVE_TRIAL.md` are portable summaries. Full local records are under ignored
 `runs/` directories and may not exist on another machine. If absent, rerun the
 fixtures and task; do not claim fresh verification from the historical report.
 Do not rely on a chat session, sidebar task, or its internal memory for state.

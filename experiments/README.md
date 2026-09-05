@@ -6,10 +6,11 @@ Agent behavior and runtime responsibilities are mapped in
 [harness/README.md](harness/README.md).
 
 The modeling runner uses fresh Codex CLI sessions. A bounded builder can generate
-and revise reviewed patches; the trial controller verifies validation/recovery using
-a disposable file runtime. Live Rhino installation and validation remain supervisory,
-and no automatic promotion is enabled. See [TRIAL_CONTROLLER.md](TRIAL_CONTROLLER.md)
-for the new trial commands and the still-pending local Rhino adapter.
+and revise reviewed patches. The trial controller now connects to live Rhino through
+`rhino_trial.py`: build, identity checks, the fixed 43-case suite and recovery are
+recorded by the controller; desktop quit/install/restart steps remain supervised.
+No automatic promotion is enabled. See [TRIAL_CONTROLLER.md](TRIAL_CONTROLLER.md)
+for the protocol and [LIVE_TRIAL.md](LIVE_TRIAL.md) for the live adapter runbook.
 No user reference data is required for the box, posed-prism, and through-hole tasks.
 
 ## Agent/operator startup runbook

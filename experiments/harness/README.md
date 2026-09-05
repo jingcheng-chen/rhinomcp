@@ -20,17 +20,19 @@ configuration, not a second copy of instructions kept elsewhere.
 | Live capture framing and viewport-preservation regression | `../validate_capture.py` |
 | Candidate trial transitions, input identity and recovery | `../trial.py`, `../TRIAL_CONTROLLER.md` |
 | Frozen live trial cases and evaluator inputs | `trial-suite.json` |
-| Machine installation and Rhino startup (local adapter still pending) | `../README.md`, `../TRIAL_CONTROLLER.md` |
+| Live build/probe/test and supervised lifecycle tickets | `../rhino_trial.py`, `../LIVE_TRIAL.md` |
+| Assembly metadata without executing candidate code | `../assembly_identity/` |
+| Machine installation and Rhino startup | `../README.md`, local `AGENTS.md` |
 | Development handoff and next milestone | `../CONTINUE.md` |
 | Actual prompts, tool calls, evidence and decisions | `../runs/<run>/` (local, ignored by Git) |
 
 Changing Markdown does not grant permissions. The controller and gateway enforce
 tool access and output contracts. The deterministic evaluator is ordinary code,
 not an AI role. Fresh builder sessions and review corrections are implemented for a known-defect
-pilot. Controller validation/recovery is verified with a disposable file runtime.
-The live Rhino adapter is pending; build/install/live validation remain supervisory.
+pilot. The live adapter connects the controller to the frozen 43-case Rhino suite.
+Desktop quit/install/restart remains supervised through hash-bound lifecycle tickets.
 QA-reviewer sessions and automatic promotion are still planned. See
-`../BUILDER_LOOP.md` and `../TRIAL_CONTROLLER.md`.
+`../BUILDER_LOOP.md`, `../TRIAL_CONTROLLER.md` and `../LIVE_TRIAL.md`.
 
 For every invocation the runner saves the assembled prompt and output schema,
 so past runs retain the instructions they actually used even after role edits.

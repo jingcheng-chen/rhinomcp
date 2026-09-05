@@ -1,8 +1,9 @@
 # Candidate validation and recovery controller
 
-Implemented on 2026-09-05. This milestone verifies orchestration with real adapter
-subprocesses and a disposable **file-based runtime**, not a live Rhino installation.
-The previous live builder pilot remains documented in `BUILDER_LOOP.md`.
+Implemented on 2026-09-05. The initial milestone verified orchestration with real
+adapter subprocesses and a disposable file runtime. The subsequent live Rhino
+adapter and its verification are documented in [LIVE_TRIAL.md](LIVE_TRIAL.md).
+The earlier live builder pilot remains documented in `BUILDER_LOOP.md`.
 
 ## What is implemented
 
@@ -13,7 +14,8 @@ trial so `repair.py --revise` cannot modify it. A reviewed candidate must not be
 prepared while a builder is still active.
 
 The manifest pins the patch, source inventory, baseline bytes/MVID, adapter script,
-Python executable, suite contract, declared evaluator inputs and review text.
+Python invocation path and resolved executable, suite contract, declared evaluator
+inputs and review text. The invocation retains the virtual environment.
 Guards run before and after adapter calls. Compilers must build a separate working
 copy: changes or build output in the reviewed source snapshot fail its inventory.
 One trial lock and one operator-selected shared runtime lock prevent overlapping
@@ -74,11 +76,11 @@ memory. Installation success alone is not evidence of the loaded assembly.
 (each with the expected verdict twice), 11 captures, five modeling runs covering
 four task types and swapped reference dimensions, and the equal-volume negative
 reference control. Its evaluator/task/role inputs are pinned during preparation.
-The live adapter is **not yet implemented**. These 43 cases have not been executed
-as a single controller-owned Rhino trial. The file-runtime tests use two synthetic
-case names and make no geometry claim.
+The tracked `rhino_trial.py` adapter executes this full suite. Its local wrapper
+and supervised desktop lifecycle are described in `LIVE_TRIAL.md`. File-runtime
+unit tests still use two synthetic case names and make no geometry claim.
 
-Example once a reviewed local adapter exists (from repository root):
+Example with the reviewed local adapter wrapper (from repository root):
 
 ```sh
 server/.venv/bin/python -m experiments.trial prepare \
@@ -89,8 +91,12 @@ server/.venv/bin/python -m experiments.trial prepare \
   --adapter /absolute/path/to/local_adapter.py \
   --runtime-lock /absolute/path/to/shared-rhino-runtime.lock \
   --review /absolute/path/to/review.txt
-server/.venv/bin/python -m experiments.trial run experiments/runs/REPAIR_RUN/trial-ID
+server/.venv/bin/python -m experiments.trial run experiments/runs/REPAIR_RUN/trial-ID --timeout 1800
 ```
+
+Before running the live adapter, claim the fresh dedicated document with
+`rhino_trial.claim_empty(trial_directory)` and service its lifecycle tickets as
+described in `LIVE_TRIAL.md`.
 
 The completed earlier builder pilot cannot be reused directly: its checkpoint says
 it was already executed. Prepare a newly generated/reviewed candidate; do not edit
@@ -105,7 +111,7 @@ source drift, timeout, failed restoration followed by recovery, interrupted inst
 pinned-input changes, evaluator changes, manifest changes, runtime lock, blocked
 builder revision, and terminal idempotence.
 
-Final full suite: **326 passed** (103 experiment + 223 server tests).
+Initial controller milestone full suite: **326 passed** (103 experiment + 223 server tests).
 Local records: `runs/controller-validation-20260905-final/`; JUnit report:
 `runs/controller-validation-20260905-final-results.xml`. These are ignored and not
 portable; rerun tests rather than assuming they exist in another checkout.
@@ -124,9 +130,8 @@ and pin adapter dependencies, the environment and model versions for comparisons
 Current Rhino measurement runs inside the candidate process. An untrusted plugin
 could interfere with its own judge; no automatic promotion is enabled.
 
-Next: implement and review the local Rhino adapter, wire its output to the existing
-live validators, and exercise a deliberately failing candidate with real restart,
-restoration and independent assembly verification. Preserve all canonical tasks.
-Then harden evaluator isolation and held-out comparisons. The chair screenshot pack
+The live adapter now wires the existing validators into the controller; see
+`LIVE_TRIAL.md` for restart, rejection and restoration evidence. Remaining work
+includes unattended desktop lifecycle, evaluator isolation and held-out comparisons. The chair screenshot pack
 and baseline attempt are the next modeling track; no chair capability is claimed by
 this controller milestone.
