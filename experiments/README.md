@@ -1,6 +1,7 @@
 # Live RhinoMCP improvement experiment
 
 **Continuing development in a fresh session? Start with [CONTINUE.md](CONTINUE.md).**
+Visual overview: [roadmap.html](roadmap.html), including the Barcelona-chair destination.
 Agent behavior and runtime responsibilities are mapped in
 [harness/README.md](harness/README.md).
 

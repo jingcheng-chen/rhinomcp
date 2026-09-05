@@ -10,7 +10,19 @@ Build a repeatable task → modeling → independent evaluation → planning →
 repair → retest workflow for RhinoMCP. Improve plugin code or modeling guidance
 using evidence, while keeping the agent model and evaluator fixed during a
 comparison. The long-term input includes reference pictures; start with objective
-geometry tasks and generated references. No additional user data is needed now.
+geometry tasks and generated references. No additional user data is needed for
+infrastructure work now.
+
+The user specified the concrete modeling destination on 2026-09-05: reconstruct
+this Barcelona chair in Rhino using only screenshots from different angles:
+https://sketchfab.com/3d-models/barcelona-chair-7f871ae1a07f4f68b2146d71b4c52bfa
+The scene includes a matching ottoman; chair-first is a working scope assumption,
+not a confirmed exclusion of the ottoman. A screenshot pack, scale/camera policy,
+visual thresholds and required editability remain to be defined. Do not give the
+modeler the source mesh. Start with a baseline chair attempt, then turn observed
+failures into focused frame/cushion tasks. This modeling track can advance alongside
+the validation/recovery milestone below; chair reconstruction is not yet demonstrated.
+See [roadmap.html](roadmap.html) for the visual status snapshot and proposed path.
 
 The approach is inspired by Harness-of-Harness:
 https://arxiv.org/html/2609.01481v1
@@ -83,7 +95,8 @@ are not isolation.
 - Final plugin MVID is `90d87782-2887-435e-a8b2-02467f0c5094`, verified after a
   clean build/install/restart. The Release build has zero warnings/errors;
   all 279 Python tests, schema checks and relevant lint/format checks pass.
-  An isolated builder and automatic code-repair/promotion remain unimplemented.
+  At that milestone, an isolated builder and automatic code-repair/promotion
+  were still unimplemented; see the later builder pilot below.
 
 - Generated-reference input now works for grid-aligned cuboids. A hidden saved box
   produces calibrated Top/Front/Right drawings; only those PNGs reach the modeler.
