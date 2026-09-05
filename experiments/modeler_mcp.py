@@ -1,6 +1,7 @@
 """Narrow MCP gateway: no code execution, file access, reset, or evaluator tools."""
 
 import os
+from typing import Literal
 from mcp.server.fastmcp import FastMCP
 from rhinomcp.tools.create_object import create_object as original_create
 from rhinomcp.tools.analyze_objects import analyze_objects as original_analyze
@@ -93,6 +94,15 @@ def analyze_objects(object_ids: list[str]):
     """Inspect validity, bounding dimensions, and volume for created objects."""
     guard()
     return original_analyze(None, object_ids=object_ids)
+
+
+@mcp.tool()
+def get_reference_image(view: Literal["top", "front", "right"]):
+    """Read one calibrated reference image. No candidate or hidden model access."""
+    guard()
+    from experiments.references import reference_image
+
+    return reference_image(view)
 
 
 if __name__ == "__main__":

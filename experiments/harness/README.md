@@ -8,11 +8,12 @@ configuration, not a second copy of instructions kept elsewhere.
 | --- | --- |
 | Modeler behavior | `roles/modeler.md` |
 | Planner behavior | `roles/planner.md` |
-| Modeling tasks and expected measurements | `../tasks/box.json`, `../tasks/posed_prism.json`, `../tasks/through_hole.json` |
+| Modeling tasks and expected measurements | `../tasks/box.json`, `../tasks/posed_prism.json`, `../tasks/through_hole.json`, `../tasks/reference_box.json` |
 | Supported task types and input contract | `../tasks/schema.json` |
 | Role order, context assembly, session launch, timeouts, output schemas | `../runner.py` |
 | Permitted modeling operations and call budget | `../modeler_mcp.py` |
 | Document identity guard and controller-only execution | `../bridge.py` |
+| Reference drawing generation and fixed-view image delivery | `../references.py`, `../modeler_mcp.py` |
 | Trusted saved-file measurements and acceptance | `../evaluate.cs`, `../evaluator.py` |
 | Live capture framing and viewport-preservation regression | `../validate_capture.py` |
 | Build, installation, Rhino startup, execution and recovery | `../README.md` |

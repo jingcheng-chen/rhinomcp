@@ -156,3 +156,24 @@ similarity score and does not replace independent saved-file geometry evaluation
 The report and PNGs are saved under `runs/capture-validation-<timestamp>/`.
 Run the same checker and saved file against baseline and candidate assemblies,
 restarting the dedicated Rhino application between installations.
+
+## Generated-reference task
+
+In a fresh empty, unsaved Rhino document with the listener running:
+
+```
+server/.venv/bin/python -m experiments.runner --task experiments/tasks/reference_box.json
+```
+
+The controller saves and validates a hidden reference box, then generates three
+orthographic grid drawings. Only PNGs are available to the modeler through
+`get_reference_image`; target dimensions are absent from its prompt. The grid,
+axis labels, supplied cuboid assumption and exact 10 mm increments make this
+first image task unambiguous. These are analytic drawings, not viewport captures
+or photographs. Other task types remain text-driven and cannot use the image tool.
+
+`references.py` defines generation and calibration; `tasks/schema.json` constrains
+this input mode to supported boxes. Runs retain reference hashes, generator source,
+public calibration and the separate reference evaluation. Reference-task feedback
+replay is disabled until hidden-answer redaction exists. See `REFERENCE_LOOP.md`
+for two passing live reconstructions and the swapped-axis negative control.

@@ -85,32 +85,42 @@ are not isolation.
   all 279 Python tests, schema checks and relevant lint/format checks pass.
   An isolated builder and automatic code-repair/promotion remain unimplemented.
 
+- Generated-reference input now works for grid-aligned cuboids. A hidden saved box
+  produces calibrated Top/Front/Right drawings; only those PNGs reach the modeler.
+  Two fresh loops reconstruct 70×40×30 and 40×70×30 mm correctly. Checking the
+  second against the first task rejects dimensions while accepting equal volume.
+  See `REFERENCE_LOOP.md` for evidence and the deliberately constrained scope.
+- All 286 Python tests pass (63 experiment, 223 server), and the 26 live geometry
+  fixtures retain their expected verdicts twice. Reference images/model are hashed,
+  generator source is retained, and reference-task feedback is blocked to prevent
+  the planner's private answer from leaking into a new modeler attempt.
+
 This demonstrates modeling/evaluation/planning and a supervised plugin-code repair.
 The successful modeler corrected the box's centered placement using returned bounds.
 No production plugin behavior was changed for the first loop.
 
 ## Next concrete milestone
 
-Define the first generated-reference reconstruction task:
+Implement the first isolated builder adapter and bounded repair pilot:
 
-1. Preserve the box, posed prism and through-hole geometry tasks and the new
-   capture regression. Read `CAPTURE_REPAIR.md` for the verified production fix.
-2. Generate reference views from a known, saved object with fixed cameras. Record
-   camera calibration, model units and an explicit scale cue; pictures alone do
-   not determine absolute dimensions. Keep hidden geometry outside the modeler.
-3. Extend the narrow modeler gateway to deliver only the intended reference images
-   and task brief, while retaining trusted independent saved-file evaluation.
-4. Run a fresh modeler/evaluator/planner loop against objective geometric criteria.
-   Treat visual similarity as supporting evidence, not a replacement for geometry.
-5. Record the result and any task ambiguities before attempting real-photo tasks.
+1. Preserve all four canonical tasks, the swapped-axis image control, and the
+   capture regression. The first image task is complete; no user data is needed.
+2. Add a distinct `evaluator_issue` planner route before dispatching any repairs.
+   Such findings go to supervision and cannot authorize evaluator edits.
+3. Define builder inputs/outputs and allowed production paths in durable harness
+   files. Use a separate checkout and fresh coding session; keep task/evaluator
+   sources immutable and reject out-of-scope diffs before running candidate code.
+4. Add explicit baseline/candidate identity, build/test records, supervised initial
+   install/restart verification, and rollback handling. Start from a reproducible
+   known defect (the archived capture baseline is a possible pilot), not a made-up
+   failure in a passing image task. No automatic promotion until comparisons pass.
+5. Save the pilot outcome and remaining isolation limits. A separate later image
+   milestone can add non-box shapes; do not generalize cuboid drawings to photos.
 
-Then implement an isolated builder adapter and verified restart/reload plus
-baseline/candidate comparison. Basic profile extrusion is already exercised by
-the prism task. Before automatic repairs, add a distinct evaluator-issue route:
-the current planner enum only has `plugin_issue`, so its through-hole measurement
-diagnosis was assigned that action despite being an evaluator bug. Such findings
-must go to supervisory review, never authorize the plugin builder to edit the
-evaluator. See the roadmap for acceptance criteria.
+The modeler/planner adapters still use fresh Codex CLI sessions only. Configurable
+Claude Code adapters, model/version selection and stronger evaluator process
+isolation remain roadmap items. Reference-task feedback remains disabled until
+an explicit public-feedback/redaction boundary is implemented.
 
 ## Known limits and operational lessons
 
@@ -139,7 +149,7 @@ evaluator. See the roadmap for acceptance criteria.
 ## Evidence and portability
 
 `FIRST_LOOP.md`, `POSED_PRISM_LOOP.md`, `THROUGH_HOLE_LOOP.md`, and
-`CAPTURE_REPAIR.md` are portable summaries. Full local records are under ignored
+`CAPTURE_REPAIR.md`, and `REFERENCE_LOOP.md` are portable summaries. Full local records are under ignored
 `runs/` directories and may not exist on another machine. If absent, rerun the
 fixtures and task; do not claim fresh verification from the historical report.
 Do not rely on a chat session, sidebar task, or its internal memory for state.

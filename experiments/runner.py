@@ -238,6 +238,11 @@ def run(task_path, timeout, feedback_path=None):
 
 def run_locked(task_path, timeout, runs, feedback_path=None):
     task = load_task(task_path)
+    image_task = task.get("input_mode") == "generated_reference"
+    if image_task and feedback_path:
+        raise ValueError(
+            "Reference-task planner feedback contains hidden answers; redaction is not implemented"
+        )
     state = identity()
     if state["object_count"] != 0 or state["path"]:
         raise RuntimeError(
@@ -285,6 +290,25 @@ doc.Strings.SetString("rhinomcp_experiment", {json.dumps(marker)});
 doc.ModelUnitSystem = UnitSystem.Millimeters;
 doc.ModelAbsoluteTolerance = {task["linear_tolerance"]};
 """)
+    references = None
+    if image_task:
+        from experiments.references import generate
+
+        references = generate(task, run_dir / "references")
+        save(run_dir / "reference_manifest.json", references)
+        # Prove the separately saved reference agrees with the unchanged evaluator.
+        reference_report = evaluate(task, measure(run_dir / "references/reference.3dm"))
+        save(run_dir / "reference_evaluation.json", reference_report)
+        if reference_report["status"] != "pass":
+            raise RuntimeError("Generated reference failed independent evaluation")
+    gateway_env = {
+        "PYTHONPATH": str(ROOT),
+        "EXPERIMENT_DOCUMENT": str(serial),
+        "EXPERIMENT_MARKER": marker,
+        "EXPERIMENT_MAX_CALLS": "20",
+    }
+    if image_task:
+        gateway_env["EXPERIMENT_REFERENCE_DIR"] = str(run_dir / "references")
     mcp_config = {
         "command": json.dumps(sys.executable),
         "args": json.dumps(["-m", "experiments.modeler_mcp"]),
@@ -293,25 +317,27 @@ doc.ModelAbsoluteTolerance = {task["linear_tolerance"]};
         "tools.create_object.approval_mode": '"approve"',
         "tools.translate_object.approval_mode": '"approve"',
         "tools.analyze_objects.approval_mode": '"approve"',
-        "env": "{ PYTHONPATH = "
-        + json.dumps(str(ROOT))
-        + ", EXPERIMENT_DOCUMENT = "
-        + json.dumps(str(serial))
-        + ", EXPERIMENT_MARKER = "
-        + json.dumps(marker)
-        + ', EXPERIMENT_MAX_CALLS = "20" }',
+        "env": "{ "
+        + ", ".join(
+            f"{key} = {json.dumps(value)}" for key, value in gateway_env.items()
+        )
+        + " }",
     }
     optional_tools = {
         "extrude_curve",
         "rotate_object",
         "delete_object",
         "boolean_difference",
+        "get_reference_image",
     }
     extras = {
         "axis_aligned_box": set(),
         "triangular_prism_pose": {"extrude_curve", "rotate_object", "delete_object"},
         "box_through_hole": {"boolean_difference", "delete_object"},
     }[task["type"]]
+    if image_task:
+        extras = extras | {"get_reference_image"}
+
     for tool in sorted(extras):
         mcp_config[f"tools.{tool}.approval_mode"] = '"approve"'
     mcp_config["disabled_tools"] = json.dumps(sorted(optional_tools - extras))
@@ -337,6 +363,15 @@ doc.ModelAbsoluteTolerance = {task["linear_tolerance"]};
             raise RuntimeError(
                 "Evaluator sources changed during the run; refusing an unversioned verdict"
             )
+        if references:
+            for view, metadata in references["public"]["views"].items():
+                if sha256(run_dir / "references" / f"{view}.png") != metadata["sha256"]:
+                    raise RuntimeError("Reference image changed during modeling")
+            if (
+                sha256(run_dir / "references/reference.3dm")
+                != references["model_sha256"]
+            ):
+                raise RuntimeError("Hidden reference changed during modeling")
         report = evaluate(task, measure(candidate))
         report["evaluator_versions"] = evaluator_hashes
         report["artifact_sha256"] = artifact_hash

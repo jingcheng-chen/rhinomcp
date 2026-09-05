@@ -4,6 +4,7 @@
   "properties": {
     "id": {"type": "string", "minLength": 1},
     "type": {"enum": ["axis_aligned_box", "triangular_prism_pose", "box_through_hole"]},
+    "input_mode": {"enum": ["text", "generated_reference"]},
     "instruction": {"type": "string", "minLength": 1},
     "dimensions": {"$ref": "#/$defs/dimensions"},
     "minimum": {"$ref": "#/$defs/vector"},
@@ -35,6 +36,14 @@
       "not": {"anyOf": [{"required": ["translation"]}, {"required": ["rotation_z_degrees"]}]}
     }
   ],
+  "allOf": [{
+    "if": {"properties": {"input_mode": {"const": "generated_reference"}}, "required": ["input_mode"]},
+    "then": {"properties": {
+      "type": {"const": "axis_aligned_box"},
+      "minimum": {"const": [0, 0, 0]},
+      "dimensions": {"items": {"type": "number", "minimum": 10, "maximum": 80, "multipleOf": 10}}
+    }}
+  }],
   "$defs": {
     "vector": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}},
     "dimensions": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number", "exclusiveMinimum": 0}}

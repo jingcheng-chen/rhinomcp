@@ -1,0 +1,19 @@
+{
+  "id": "reference-box-v1",
+  "type": "axis_aligned_box",
+  "input_mode": "generated_reference",
+  "instruction": "Reconstruct the object shown in the three reference images. Call get_reference_image for top, front and right before modeling. The object is one solid rectangular cuboid, aligned with the world axes, with its minimum corner at world (0,0,0). Each labeled grid square represents 10 mm, and all its edge lengths are exact multiples of 10 mm. Read the dimensions from the images; do not guess dimensions from other tasks. Image axes are explicitly labeled. Leave exactly one valid closed solid and no construction objects. Units are millimeters. Verify using available tools.",
+  "dimensions": [
+    70,
+    40,
+    30
+  ],
+  "minimum": [
+    0,
+    0,
+    0
+  ],
+  "units": "Millimeters",
+  "linear_tolerance": 0.001,
+  "volume_tolerance": 0.01
+}
