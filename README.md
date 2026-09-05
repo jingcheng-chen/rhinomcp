@@ -26,6 +26,9 @@ Grasshopper definitions for you, just by chatting.
 
 ## Highlights
 
+For development of the autonomous improvement experiments, start with the
+[continuation guide](experiments/CONTINUE.md).
+
 - Describe what you want and the assistant builds it in Rhino.
 - It reads your document and can capture the viewport, so it works from what is actually on screen.
 - It scripts Grasshopper for you: finding components, wiring them, setting sliders, and solving.
