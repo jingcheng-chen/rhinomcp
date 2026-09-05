@@ -95,32 +95,48 @@ are not isolation.
   generator source is retained, and reference-task feedback is blocked to prevent
   the planner's private answer from leaking into a new modeler attempt.
 
+- The isolated builder pilot is complete; see `BUILDER_LOOP.md`. Fresh planner and
+  builder sessions generated a capture repair in an independent production checkout.
+  A second builder session addressed supervisor review. The scope gate passed, the
+  candidate built cleanly, 223 candidate tests and all 11 live captures passed, and
+  26 geometry fixtures preserved expected verdicts twice. A fresh prism loop passed.
+- `evaluator_issue` now routes to supervision and cannot dispatch the builder; both
+  unit tests and a fresh live planner session verify that route. Root tests total 304.
+  Exact-path edits, hashes, whole-checkout integrity checks and fresh review sessions
+  are implemented; candidate execution and acceptance remain supervised.
+- The trial candidate MVID was `e7e17267-3a6a-45e4-b37f-869810ee216d`. The supervisor
+  restored and verified the prior working binary `90d87782-2887-435e-a8b2-02467f0c5094`.
+  Rhino was left running with an empty document. Verify current state before reuse.
+  Root production source remains unchanged; the replay patch lives in the ignored
+  pilot directory `runs/repair-20260905-211537-bc56415e/` and was not promoted.
+
 This demonstrates modeling/evaluation/planning and a supervised plugin-code repair.
 The successful modeler corrected the box's centered placement using returned bounds.
 No production plugin behavior was changed for the first loop.
 
 ## Next concrete milestone
 
-Implement the first isolated builder adapter and bounded repair pilot:
+Implement controller-owned candidate validation and recovery:
 
-1. Preserve all four canonical tasks, the swapped-axis image control, and the
-   capture regression. The first image task is complete; no user data is needed.
-2. Add a distinct `evaluator_issue` planner route before dispatching any repairs.
-   Such findings go to supervision and cannot authorize evaluator edits.
-3. Define builder inputs/outputs and allowed production paths in durable harness
-   files. Use a separate checkout and fresh coding session; keep task/evaluator
-   sources immutable and reject out-of-scope diffs before running candidate code.
-4. Add explicit baseline/candidate identity, build/test records, supervised initial
-   install/restart verification, and rollback handling. Start from a reproducible
-   known defect (the archived capture baseline is a possible pilot), not a made-up
-   failure in a passing image task. No automatic promotion until comparisons pass.
-5. Save the pilot outcome and remaining isolation limits. A separate later image
-   milestone can add non-box shapes; do not generalize cuboid drawings to photos.
+1. Preserve the four canonical tasks, swapped-axis image control and capture suite.
+   Read `BUILDER_LOOP.md` and the completed pilot checkpoint before making changes.
+2. Define a durable validation state machine around the reviewed patch and binary
+   hashes. Recheck source identity before each build/load/test transition. Keep
+   operator-specific installation outside tracked commands.
+3. Add recorded baseline/candidate result comparison and rejection handling, with
+   explicit resume rules after failed builds, timeouts or interrupted restarts.
+   Trial restoration is proven manually; automatic rollback is not implemented.
+4. Address evaluator-process trust before automatic candidate promotion. The current
+   trusted C# measurement runs inside the candidate's Rhino process. A source-path
+   gate cannot prove that arbitrary code will not interfere with evaluation.
+5. Exercise a deliberately failing candidate and verify that the controller rejects
+   it and restores the previous verified binary. Do not promote the replay patch
+   merely because the development fixtures pass.
 
-The modeler/planner adapters still use fresh Codex CLI sessions only. Configurable
-Claude Code adapters, model/version selection and stronger evaluator process
-isolation remain roadmap items. Reference-task feedback remains disabled until
-an explicit public-feedback/redaction boundary is implemented.
+Fresh Codex sessions are implemented for modeling, planning and bounded building.
+Claude Code adapters, model/version selection, held-out comparisons, OS-level
+isolation and unattended installation remain roadmap items. Reference-task feedback
+is still blocked until a public-feedback/redaction boundary is implemented.
 
 ## Known limits and operational lessons
 
@@ -128,8 +144,9 @@ an explicit public-feedback/redaction boundary is implemented.
   The Python runner requires an already-running listener and an empty unsaved doc.
 - Do not reset or close unrelated user work. Inspect current state; create a new
   dedicated document. Never infer that the previous run's document is still active.
-- No automatic plugin repair, automatic session resume, candidate promotion,
-  rollback, full five-task suite, or real-photo evaluation is implemented yet.
+- Bounded source repair and review dispatch are implemented. Unattended candidate
+  validation/install/rollback/promotion, automatic session resume, a full five-task
+  suite and real-photo evaluation are not implemented.
 - The gateway checks document identity but cannot lock out a human or external
   client. Current evaluation runs inside Rhino through the trusted C# bridge;
   stronger isolation is required before accepting untrusted plugin changes.
@@ -149,7 +166,7 @@ an explicit public-feedback/redaction boundary is implemented.
 ## Evidence and portability
 
 `FIRST_LOOP.md`, `POSED_PRISM_LOOP.md`, `THROUGH_HOLE_LOOP.md`, and
-`CAPTURE_REPAIR.md`, and `REFERENCE_LOOP.md` are portable summaries. Full local records are under ignored
+`CAPTURE_REPAIR.md`, `REFERENCE_LOOP.md`, and `BUILDER_LOOP.md` are portable summaries. Full local records are under ignored
 `runs/` directories and may not exist on another machine. If absent, rerun the
 fixtures and task; do not claim fresh verification from the historical report.
 Do not rely on a chat session, sidebar task, or its internal memory for state.

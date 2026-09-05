@@ -7,7 +7,9 @@ configuration, not a second copy of instructions kept elsewhere.
 | Concern | Source of truth |
 | --- | --- |
 | Modeler behavior | `roles/modeler.md` |
-| Planner behavior | `roles/planner.md` |
+| Planner behavior and evaluator-issue routing | `roles/planner.md`, `../runner.py` |
+| Builder behavior | `roles/builder.md` |
+| Builder checkout, dispatch, review and integrity gates | `../repair.py`, `../builder_mcp.py` |
 | Modeling tasks and expected measurements | `../tasks/box.json`, `../tasks/posed_prism.json`, `../tasks/through_hole.json`, `../tasks/reference_box.json` |
 | Supported task types and input contract | `../tasks/schema.json` |
 | Role order, context assembly, session launch, timeouts, output schemas | `../runner.py` |
@@ -22,8 +24,9 @@ configuration, not a second copy of instructions kept elsewhere.
 
 Changing Markdown does not grant permissions. The controller and gateway enforce
 tool access and output contracts. The deterministic evaluator is ordinary code,
-not an AI role. Builder and QA-reviewer sessions are still planned; no dormant
-role files should be mistaken for implemented stages.
+not an AI role. Fresh builder sessions and review corrections are implemented for a known-defect
+pilot. Build/install/live validation remain supervisory; QA-reviewer sessions and
+automatic promotion are still planned. See `../BUILDER_LOOP.md`.
 
 For every invocation the runner saves the assembled prompt and output schema,
 so past runs retain the instructions they actually used even after role edits.

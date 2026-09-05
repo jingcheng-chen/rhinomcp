@@ -60,7 +60,13 @@ PLANNER_SCHEMA = schema(
         "diagnosis": {"type": "string"},
         "action": {
             "type": "string",
-            "enum": ["accept", "revise_modeling", "plugin_issue", "inconclusive"],
+            "enum": [
+                "accept",
+                "revise_modeling",
+                "plugin_issue",
+                "evaluator_issue",
+                "inconclusive",
+            ],
         },
         "next_instruction": {"type": "string"},
         "preserve": {"type": "array", "items": {"type": "string"}},

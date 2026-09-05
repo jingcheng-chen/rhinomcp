@@ -177,3 +177,31 @@ this input mode to supported boxes. Runs retain reference hashes, generator sour
 public calibration and the separate reference evaluation. Reference-task feedback
 replay is disabled until hidden-answer redaction exists. See `REFERENCE_LOOP.md`
 for two passing live reconstructions and the swapped-axis negative control.
+
+## Bounded builder pilot
+
+Replay the known capture defect with the recorded baseline evidence:
+
+```
+server/.venv/bin/python -m experiments.repair --evidence experiments/runs/capture-validation-20260905-202746/validation.json
+```
+
+This needs no Rhino connection: it prepares an independent production checkout,
+starts fresh planner/builder sessions, and stops at a scoped patch for review.
+It does not build, install, execute or promote the candidate. `--timeout` bounds
+each session. The baseline source is pinned to `a7bd5d1`. On another host, first
+rebuild and measure that baseline in a dedicated Rhino session and supply its
+operator-verified loaded MVID with `--baseline-mvid`; never label evidence from a
+different source as this baseline. Follow the local installation instructions.
+
+To return review findings to an unexecuted candidate, put the findings in a text
+file and use:
+
+```
+server/.venv/bin/python -m experiments.repair --revise experiments/runs/<repair-run> --feedback <review.txt>
+```
+
+Each review uses a fresh session and retains its input patch and feedback. Inspect
+checkpoints/failure records after interruption; do not blindly replay writes or
+revise a checkout after builds have added files. See `BUILDER_LOOP.md` for the
+completed supervised build/live-test/restoration pilot and its isolation limits.
