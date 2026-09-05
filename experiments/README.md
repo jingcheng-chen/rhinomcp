@@ -6,7 +6,7 @@ Agent behavior and runtime responsibilities are mapped in
 
 This first implementation runs one model/evaluate/plan loop with fresh Codex CLI
 sessions. It does not yet automatically edit, install, or promote plugin fixes.
-No user reference data is required for the included box and posed-prism tasks.
+No user reference data is required for the box, posed-prism, and through-hole tasks.
 
 ## Agent/operator startup runbook
 
@@ -39,6 +39,8 @@ configurable experiment matrix. The box modeler has only create, translate and
 analyze tools. The prism task additionally enables extrusion, rotation, and deletion
 of individual construction objects. Each gateway operation checks the active
 document's serial and run marker.
+The through-hole task enables boolean subtraction and individual-object deletion;
+extrusion and rotation are disabled for that task.
 The planner receives evidence in its prompt and has no Rhino MCP connection.
 The task's gateway tools are explicitly preapproved for this authorized test session;
 other MCP servers and tools are not enabled. Without that scoped configuration,
@@ -58,6 +60,7 @@ contacting Rhino. To run the posed prism, create a new empty Rhino document and 
 
 ```
 server/.venv/bin/python -m experiments.runner --task experiments/tasks/posed_prism.json
+server/.venv/bin/python -m experiments.runner --task experiments/tasks/through_hole.json
 ```
 
 `axis_aligned_box` checks world bounds, validity, solidity and volume.
@@ -71,6 +74,18 @@ are accepted. Correct volume alone cannot hide an incorrect pose or handedness.
 The modeler may choose any available construction sequence that achieves the
 specified result. The live prism run directly constructed the transformed profile;
 it did not exercise the optional rotation tool.
+
+`box_through_hole` requires a single Z-aligned circular through-hole inside an
+axis-aligned block. It checks block bounds, cylinder axis/radius, full trimmed-face
+height, an unobstructed centerline, six outer boundary planes, area and volume.
+The schema rejects a hole touching or crossing the block's side walls. A blind
+hole with equal removed volume must still fail. Unsupported surface types cannot
+pass this task; this is not a general freeform-hole evaluator.
+
+Run each command in its own fresh empty document. Each run snapshots the evaluator
+sources and hashes in `evaluator_source/` and `evaluator_versions.json`. A detected
+source change before evaluation stops the run instead of silently changing its
+acceptance rules.
 
 ## Evaluator validation
 
@@ -87,8 +102,13 @@ Prism fixtures check correct geometry, equivalent split faces, and seven errors:
 wrong rotation, translation, handedness, scale, open geometry, extra objects and
 wrong units. Every fixture is measured twice. The prism references are built from
 joined planar faces, independently of the production extrusion operation.
+Through-hole fixtures add three correct representations and eight flawed models,
+including blind and equal-volume blind holes. Correct extrusion/Brep references
+use an inner profile rather than the production subtraction command. A separate
+oversized-cutter fixture protects against confusing untrimmed surface bounds with
+actual trimmed-face bounds.
 The evaluator uses RhinoCommon directly on saved files, not the modeler's analysis
-claims. Its scope is the two explicit task types, not general shape reconstruction.
+claims. Its scope is the three explicit task types, not general shape reconstruction.
 Screenshots are illustrative and do not affect the verdict. The prism run exposed
 a clipped screenshot; capture framing needs separate investigation.
 

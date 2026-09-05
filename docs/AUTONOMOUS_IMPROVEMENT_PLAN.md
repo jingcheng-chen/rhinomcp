@@ -2,7 +2,7 @@
 
 Status: partial implementation in `experiments/`; a live box modeling/evaluation/planning loop has passed. See `experiments/README.md` for the startup runbook and `experiments/FIRST_LOOP.md` for evidence. Production plugin behavior is unchanged.
 
-Implemented so far: two analytic task types (axis-aligned box and posed triangular prism), saved-file RhinoCommon evaluation, correct/incorrect live fixtures including equivalent face subdivisions, fresh Codex modeler and planner sessions, a restricted modeling gateway, session timeouts, artifact records, and explicit prior-feedback handoff. Both live task loops passed. The complete five-task suite, automatic recovery, plugin builder, candidate deployment/rollback, and visual reconstruction remain planned. Current isolation is a local prototype, not sufficient for accepting changes from an untrusted autonomous plugin builder.
+Implemented so far: three analytic task types (axis-aligned box, posed triangular prism, and block with a through-hole), saved-file RhinoCommon evaluation, correct/incorrect live fixtures including equivalent representations and equal-volume flaws, fresh Codex modeler and planner sessions, a restricted modeling gateway, session timeouts, artifact records, evaluator snapshots, and explicit prior-feedback handoff. All three task types have passed live loops. The complete five-task suite, automatic recovery, plugin builder, candidate deployment/rollback, and visual reconstruction remain planned. Current isolation is a local prototype, not sufficient for accepting changes from an untrusted autonomous plugin builder.
 
 ## Objective
 

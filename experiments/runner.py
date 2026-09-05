@@ -36,6 +36,13 @@ def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def evaluator_versions():
+    return {
+        name: sha256(ROOT / "experiments" / name)
+        for name in ("evaluate.cs", "evaluator.py", "tasks/schema.json")
+    }
+
+
 def schema(properties):
     return {
         "type": "object",
@@ -71,11 +78,20 @@ def load_task(path):
         + task.get("minimum", task.get("translation", []))
         + [task["linear_tolerance"], task["volume_tolerance"]]
         + [task.get("rotation_z_degrees", 0), task.get("area_tolerance", 0)]
+        + task.get("hole_center", [])
+        + [task.get("hole_radius", 0)]
     )
     if not all(math.isfinite(value) for value in numbers):
         raise ValueError("Task numbers must be finite")
     if not math.isfinite(math.prod(task["dimensions"])):
         raise ValueError("Task volume exceeds numeric range")
+    if task["type"] == "box_through_hole":
+        for center, minimum, size in zip(
+            task["hole_center"], task["minimum"], task["dimensions"]
+        ):
+            margin = task["hole_radius"] + task["linear_tolerance"]
+            if not minimum + margin < center < minimum + size - margin:
+                raise ValueError("Hole must lie strictly inside the block's XY bounds")
     return task
 
 
@@ -232,6 +248,12 @@ def run_locked(task_path, timeout, runs, feedback_path=None):
     marker = run_dir.name
     serial = state["document"]
     save(run_dir / "task.json", task)
+    evaluator_hashes = evaluator_versions()
+    save(run_dir / "evaluator_versions.json", evaluator_hashes)
+    for name in evaluator_hashes:
+        snapshot = run_dir / "evaluator_source" / name
+        snapshot.parent.mkdir(parents=True, exist_ok=True)
+        snapshot.write_bytes((ROOT / "experiments" / name).read_bytes())
     feedback = ""
     if feedback_path:
         previous = json.loads(feedback_path.read_text())
@@ -279,13 +301,20 @@ doc.ModelAbsoluteTolerance = {task["linear_tolerance"]};
         + json.dumps(marker)
         + ', EXPERIMENT_MAX_CALLS = "20" }',
     }
-    if task["type"] == "triangular_prism_pose":
-        for tool in ("extrude_curve", "rotate_object", "delete_object"):
-            mcp_config[f"tools.{tool}.approval_mode"] = '"approve"'
-    else:
-        mcp_config["disabled_tools"] = json.dumps(
-            ["extrude_curve", "rotate_object", "delete_object"]
-        )
+    optional_tools = {
+        "extrude_curve",
+        "rotate_object",
+        "delete_object",
+        "boolean_difference",
+    }
+    extras = {
+        "axis_aligned_box": set(),
+        "triangular_prism_pose": {"extrude_curve", "rotate_object", "delete_object"},
+        "box_through_hole": {"boolean_difference", "delete_object"},
+    }[task["type"]]
+    for tool in sorted(extras):
+        mcp_config[f"tools.{tool}.approval_mode"] = '"approve"'
+    mcp_config["disabled_tools"] = json.dumps(sorted(optional_tools - extras))
     try:
         save(
             run_dir / "checkpoint.json",
@@ -304,7 +333,12 @@ doc.ModelAbsoluteTolerance = {task["linear_tolerance"]};
             run_dir / "checkpoint.json",
             {"stage": "evaluating", "artifact_sha256": artifact_hash},
         )
+        if evaluator_versions() != evaluator_hashes:
+            raise RuntimeError(
+                "Evaluator sources changed during the run; refusing an unversioned verdict"
+            )
         report = evaluate(task, measure(candidate))
+        report["evaluator_versions"] = evaluator_hashes
         report["artifact_sha256"] = artifact_hash
         save(run_dir / "evaluation.json", report)
         capture(run_dir, serial, marker)

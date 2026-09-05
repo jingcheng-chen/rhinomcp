@@ -7,6 +7,7 @@ from rhinomcp.tools.analyze_objects import analyze_objects as original_analyze
 from rhinomcp.tools.modify_object import modify_object as original_modify
 from rhinomcp.tools.advanced_geometry import extrude_curve as original_extrude
 from rhinomcp.tools.delete_object import delete_object as original_delete
+from rhinomcp.tools.boolean_operations import boolean_difference as original_difference
 from experiments.bridge import assert_document
 
 mcp = FastMCP("RhinoMCP experiment")
@@ -28,6 +29,8 @@ def create_object(type: str, params: dict, translation: list[float] | None = Non
     """Create a primitive. BOX params: width (X), length (Y), height (Z).
 
     POLYLINE params: points, a list of XYZ triples. Repeat the first point to close.
+    CYLINDER params: radius, height, cap (true for a solid). Its base is at world
+    origin and height runs along +Z; translation offsets it. BOX is centered at origin.
 
     Primitives use the plugin's default placement; translation offsets the result.
     The returned bounding box shows the actual extent. Units are millimeters.
@@ -71,6 +74,18 @@ def delete_object(id: str):
     """Delete one construction object by ID in the dedicated experiment document."""
     guard()
     return original_delete(None, id=id)
+
+
+@mcp.tool()
+def boolean_difference(base_id: str, subtract_ids: list[str]):
+    """Subtract closed-solid cutters from a base solid. On success deletes sources
+    and returns the resulting object IDs in the message. A cutter extending beyond
+    both block faces can produce a through-hole. Inspect the result before claiming success.
+    """
+    guard()
+    return original_difference(
+        None, base_id=base_id, subtract_ids=subtract_ids, delete_sources=True
+    )
 
 
 @mcp.tool()

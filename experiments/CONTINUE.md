@@ -56,6 +56,19 @@ are not isolation.
   each produced their expected verdict twice (three valid forms, twelve flaws).
   The current server suite also passed all 223 tests.
   See `POSED_PRISM_LOOP.md` for the run records and verification details.
+- The through-hole task now validates a 100 × 60 × 20 mm block with a radius-6
+  Z-axis hole at XY (30,20). It checks trimmed hole depth, axis, radius, clear
+  centerline, outer boundary planes, area and volume. See `THROUGH_HOLE_LOOP.md`.
+- A live task exposed an evaluator bug: `BrepFace.GetBoundingBox(true)` measured
+  the oversized cutter's untrimmed surface. A new correct fixture reproduced it;
+  the supervisor changed measurement to `DuplicateFace(false).GetBoundingBox(true)`.
+  The unchanged original candidate then passed. Requirements were not relaxed.
+- Runs now snapshot evaluator sources/hashes. The new fixture suite has 26 cases:
+  six valid representations and twenty flaws, each measured twice. A blind hole
+  with the correct volume is rejected on other geometric predicates.
+- The fresh through-hole run and box/prism regressions all passed. At this milestone,
+  all 56 experiment tests and 223 current server tests passed, plus experiment lint
+  and formatting checks. Production plugin code remains unchanged.
 
 This demonstrates modeling/evaluation/planning, not autonomous plugin-code repair.
 The successful modeler corrected the box's centered placement using returned bounds.
@@ -63,24 +76,27 @@ No production plugin behavior was changed for the first loop.
 
 ## Next concrete milestone
 
-Expand objective task coverage with a through-hole task before enabling an
-autonomous plugin builder:
+Prepare reliable capture for the planned reference-image task:
 
-1. Preserve both passing tasks as regression cases.
-2. Define a solid with a specified through-hole, its location, diameter, depth,
-   and expected volume. Extend the task schema and independent evaluator first.
-3. Validate correct and deliberately wrong fixtures, including a blind hole,
-   wrong hole location, and wrong diameter. Do not rely on volume alone.
-4. Expose only the required boolean/modeling operations through the gateway.
-5. Run a fresh modeler/evaluator/planner cycle and recheck the existing tasks.
-6. If a reproducible plugin failure occurs, record a bounded repair plan and
-   preserve the baseline. Never weaken the evaluator to make a candidate pass.
+1. Preserve the three passing geometry tasks as regression cases.
+2. Reproduce the prism's clipped screenshot with a saved candidate and fixed
+   camera/capture settings. Determine whether framing or capture scaling is wrong.
+3. Make one bounded, evidence-backed capture fix if a defect is confirmed, and
+   verify full-object framing plus preservation of the original viewport state.
+4. If the fix changes production behavior, keep Python/C#/contracts synchronized
+   as required; rebuild/install/restart in the dedicated Rhino session and verify
+   the loaded candidate before testing it.
+5. Once capture is reliable, define a generated-reference reconstruction task
+   with known cameras and explicit geometric acceptance. Do not use unreliable
+   screenshots to accept or reject geometry.
 
 Then implement an isolated builder adapter and verified restart/reload plus
-baseline/candidate comparison. The broader remaining task suite includes a
-through-hole, profile extrusion, and reconstruction from generated orthographic
-images. Basic profile extrusion is already exercised by the prism task. See the
-roadmap for acceptance criteria.
+baseline/candidate comparison. Basic profile extrusion is already exercised by
+the prism task. Before automatic repairs, add a distinct evaluator-issue route:
+the current planner enum only has `plugin_issue`, so its through-hole measurement
+diagnosis was assigned that action despite being an evaluator bug. Such findings
+must go to supervisory review, never authorize the plugin builder to edit the
+evaluator. See the roadmap for acceptance criteria.
 
 ## Known limits and operational lessons
 
@@ -106,7 +122,7 @@ roadmap for acceptance criteria.
 
 ## Evidence and portability
 
-`FIRST_LOOP.md` and `POSED_PRISM_LOOP.md` are portable summaries. Full local records are under ignored
+`FIRST_LOOP.md`, `POSED_PRISM_LOOP.md`, and `THROUGH_HOLE_LOOP.md` are portable summaries. Full local records are under ignored
 `runs/` directories and may not exist on another machine. If absent, rerun the
 fixtures and task; do not claim fresh verification from the historical report.
 Do not rely on a chat session, sidebar task, or its internal memory for state.

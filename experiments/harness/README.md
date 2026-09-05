@@ -8,7 +8,7 @@ configuration, not a second copy of instructions kept elsewhere.
 | --- | --- |
 | Modeler behavior | `roles/modeler.md` |
 | Planner behavior | `roles/planner.md` |
-| Modeling tasks and expected measurements | `../tasks/box.json`, `../tasks/posed_prism.json` |
+| Modeling tasks and expected measurements | `../tasks/box.json`, `../tasks/posed_prism.json`, `../tasks/through_hole.json` |
 | Supported task types and input contract | `../tasks/schema.json` |
 | Role order, context assembly, session launch, timeouts, output schemas | `../runner.py` |
 | Permitted modeling operations and call budget | `../modeler_mcp.py` |
@@ -25,5 +25,9 @@ role files should be mistaken for implemented stages.
 
 For every invocation the runner saves the assembled prompt and output schema,
 so past runs retain the instructions they actually used even after role edits.
+Runs also snapshot evaluator sources and record their hashes. Evaluator corrections
+belong to the supervising development workflow, never to a plugin builder seeking
+to pass its own candidate. Preserve old verdicts and validate corrections with
+independent fixtures before starting another experiment.
 Maintain one source for each rule. Extract additional schemas or adapter modules
 when their complexity warrants it; a top-level `harness/` rename is unnecessary.

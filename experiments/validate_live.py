@@ -6,6 +6,7 @@ import time
 from experiments.bridge import script
 from experiments.evaluator import evaluate
 from experiments.runner import ROOT, measure, save
+from experiments.validate_hole import validate_hole
 
 
 def validate_box():
@@ -125,3 +126,4 @@ using (var model = new Rhino.FileIO.File3dm()) {{
 if __name__ == "__main__":
     print(validate_box())
     print(validate_prism())
+    print(validate_hole())

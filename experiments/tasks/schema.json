@@ -3,12 +3,14 @@
   "type": "object",
   "properties": {
     "id": {"type": "string", "minLength": 1},
-    "type": {"enum": ["axis_aligned_box", "triangular_prism_pose"]},
+    "type": {"enum": ["axis_aligned_box", "triangular_prism_pose", "box_through_hole"]},
     "instruction": {"type": "string", "minLength": 1},
     "dimensions": {"$ref": "#/$defs/dimensions"},
     "minimum": {"$ref": "#/$defs/vector"},
     "translation": {"$ref": "#/$defs/vector"},
     "rotation_z_degrees": {"type": "number"},
+    "hole_center": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}},
+    "hole_radius": {"type": "number", "exclusiveMinimum": 0},
     "units": {"const": "Millimeters"},
     "linear_tolerance": {"type": "number", "exclusiveMinimum": 0},
     "volume_tolerance": {"type": "number", "exclusiveMinimum": 0},
@@ -20,12 +22,17 @@
     {
       "properties": {"type": {"const": "axis_aligned_box"}},
       "required": ["minimum"],
-      "not": {"anyOf": [{"required": ["translation"]}, {"required": ["rotation_z_degrees"]}, {"required": ["area_tolerance"]}]}
+      "not": {"anyOf": [{"required": ["translation"]}, {"required": ["rotation_z_degrees"]}, {"required": ["area_tolerance"]}, {"required": ["hole_center"]}, {"required": ["hole_radius"]}]}
     },
     {
       "properties": {"type": {"const": "triangular_prism_pose"}},
       "required": ["translation", "rotation_z_degrees", "area_tolerance"],
-      "not": {"required": ["minimum"]}
+      "not": {"anyOf": [{"required": ["minimum"]}, {"required": ["hole_center"]}, {"required": ["hole_radius"]}]}
+    },
+    {
+      "properties": {"type": {"const": "box_through_hole"}},
+      "required": ["minimum", "hole_center", "hole_radius", "area_tolerance"],
+      "not": {"anyOf": [{"required": ["translation"]}, {"required": ["rotation_z_degrees"]}]}
     }
   ],
   "$defs": {
