@@ -3,9 +3,8 @@ import base64
 from rhinomcp.server import get_rhino_connection, mcp, logger
 
 
-# Not marked readOnly: zoom_to_fit=True and projection-view changes mutate the
-# active viewport's camera/projection. Leave the annotation off so MCP clients
-# treating "readOnly" as auto-runnable don't surprise the user.
+# Camera fitting and standard-view projection are temporary; the plugin restores
+# the original viewport state after capture.
 @mcp.tool()
 def capture_viewport(
     ctx: Context,
@@ -39,7 +38,8 @@ def capture_viewport(
     - show_grid: Show the viewport grid (default: True)
     - show_axes: Show world axes indicator (default: True)
     - show_cplane_axes: Show construction plane axes (default: False)
-    - zoom_to_fit: Zoom viewport to fit all objects before capture (default: False)
+    - zoom_to_fit: Fit visible objects to the requested image dimensions (default: False).
+      The original camera and projection are restored after capture.
 
     Returns:
     An Image object that Claude can analyze visually.

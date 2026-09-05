@@ -70,25 +70,50 @@ are not isolation.
   all 56 experiment tests and 223 current server tests passed, plus experiment lint
   and formatting checks. Production plugin code remains unchanged.
 
-This demonstrates modeling/evaluation/planning, not autonomous plugin-code repair.
+- Capture repair is in progress; see `CAPTURE_REPAIR.md`. Fitting the requested
+  aspect fixes clipping. An intermediate candidate passed eleven imported-model
+  checks, but a fresh modeling loop exposed an empty image without a document
+  refresh. Restoring every viewport around that refresh still allowed queued
+  redraws to move cameras after return. A direct `RhinoApp.Wait()` experiment
+  preserved state; that final ordering is in source but awaits build/live validation.
+- Last loaded MVID is `6efd7016-3b1e-4ede-b5a9-5c9f28a73634`, NOT the final source.
+  A quit/save dialog is pending for a disposable capture fixture. Desktop control
+  reported the Mac locked; the user was asked to unlock it. Do not overwrite the
+  loaded plugin file before Rhino exits. No isolated builder is implemented.
+
+This demonstrates modeling/evaluation/planning and a supervised plugin-code repair.
 The successful modeler corrected the box's centered placement using returned bounds.
 No production plugin behavior was changed for the first loop.
 
 ## Next concrete milestone
 
-Prepare reliable capture for the planned reference-image task:
+Finish and verify the capture repair first:
 
-1. Preserve the three passing geometry tasks as regression cases.
-2. Reproduce the prism's clipped screenshot with a saved candidate and fixed
-   camera/capture settings. Determine whether framing or capture scaling is wrong.
-3. Make one bounded, evidence-backed capture fix if a defect is confirmed, and
-   verify full-object framing plus preservation of the original viewport state.
-4. If the fix changes production behavior, keep Python/C#/contracts synchronized
-   as required; rebuild/install/restart in the dedicated Rhino session and verify
-   the loaded candidate before testing it.
-5. Once capture is reliable, define a generated-reference reconstruction task
-   with known cameras and explicit geometric acceptance. Do not use unreliable
-   screenshots to accept or reject geometry.
+1. After the user unlocks the Mac, inspect the Rhino quit dialog. The only remaining
+   document is the disposable imported capture fixture, backed by the existing saved
+   prism. Finish quitting, build/install per local `AGENTS.md`, then restart and
+   run `mcpstart`. Verify the loaded MVID changed from the value above.
+2. Run `validate_capture` with the saved prism as documented in `README.md`.
+   The current checker starts with unrefreshed geometry. All eleven cases must pass.
+3. Run the 26 geometry fixtures and a fresh posed-prism model/evaluate/plan loop.
+   Inspect the fresh PNG as well as its geometry verdict; a previous intermediate
+   candidate passed geometry but produced an empty screenshot.
+4. Update this handoff/report with actual final outcomes. The current source adds
+   `RhinoApp.Wait()` after the document redraw; it has only been checked through
+   a direct live scripting experiment, not the rebuilt command yet.
+
+Then define the first generated-reference reconstruction task:
+
+1. Preserve the box, posed prism and through-hole geometry tasks and the new
+   capture regression. Read `CAPTURE_REPAIR.md` for the verified production fix.
+2. Generate reference views from a known, saved object with fixed cameras. Record
+   camera calibration, model units and an explicit scale cue; pictures alone do
+   not determine absolute dimensions. Keep hidden geometry outside the modeler.
+3. Extend the narrow modeler gateway to deliver only the intended reference images
+   and task brief, while retaining trusted independent saved-file evaluation.
+4. Run a fresh modeler/evaluator/planner loop against objective geometric criteria.
+   Treat visual similarity as supporting evidence, not a replacement for geometry.
+5. Record the result and any task ambiguities before attempting real-photo tasks.
 
 Then implement an isolated builder adapter and verified restart/reload plus
 baseline/candidate comparison. Basic profile extrusion is already exercised by
@@ -115,14 +140,17 @@ evaluator. See the roadmap for acceptance criteria.
   logs. Do not blindly repeat a mutation after an interruption.
 - The machine-local app-bundle copy belongs in local instructions, not tracked
   automation. A file replacement does not reload the active assembly.
-- The prism's screenshot is clipped despite a passing saved-file geometry result.
-  Capture framing is an open investigation, not a confirmed geometry failure.
+- Capture repair still needs final live verification. Its pixel thresholds are
+  specific to black wireframe fixture geometry, not general image acceptance rules.
+- Stop the dedicated Rhino process before replacing its loaded plugin file. An
+  in-place replacement caused metadata errors; a fresh restart was required.
 - The prism modeler created already-transformed profile coordinates. Its successful
   pose is verified, but this run does not validate the optional rotation tool.
 
 ## Evidence and portability
 
-`FIRST_LOOP.md`, `POSED_PRISM_LOOP.md`, and `THROUGH_HOLE_LOOP.md` are portable summaries. Full local records are under ignored
+`FIRST_LOOP.md`, `POSED_PRISM_LOOP.md`, `THROUGH_HOLE_LOOP.md`, and
+`CAPTURE_REPAIR.md` are portable summaries. Full local records are under ignored
 `runs/` directories and may not exist on another machine. If absent, rerun the
 fixtures and task; do not claim fresh verification from the historical report.
 Do not rely on a chat session, sidebar task, or its internal memory for state.

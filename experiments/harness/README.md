@@ -14,6 +14,7 @@ configuration, not a second copy of instructions kept elsewhere.
 | Permitted modeling operations and call budget | `../modeler_mcp.py` |
 | Document identity guard and controller-only execution | `../bridge.py` |
 | Trusted saved-file measurements and acceptance | `../evaluate.cs`, `../evaluator.py` |
+| Live capture framing and viewport-preservation regression | `../validate_capture.py` |
 | Build, installation, Rhino startup, execution and recovery | `../README.md` |
 | Development handoff and next milestone | `../CONTINUE.md` |
 | Actual prompts, tool calls, evidence and decisions | `../runs/<run>/` (local, ignored by Git) |

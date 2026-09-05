@@ -134,3 +134,25 @@ a clipped screenshot; capture framing needs separate investigation.
   `mcpstart`; fully unattended restart/reload remains a later milestone.
 
 The broader roadmap is in `docs/AUTONOMOUS_IMPROVEMENT_PLAN.md`.
+
+## Capture regression
+
+With a new empty, unsaved Rhino document and the listener running, use a saved
+passing posed-prism candidate:
+
+```
+server/.venv/bin/python -m experiments.validate_capture --model experiments/runs/<prism-run>/candidate.3dm
+```
+
+This imports that file into the dedicated document, uses black wireframe geometry,
+and captures Perspective, Top and Back at 1000×750, 400×1000 and 1000×400.
+The first capture starts without an explicit display refresh after geometry creation.
+It checks nonempty geometry pixels and a five-pixel border, output dimensions,
+and before/after camera, target, projection, frustum, view identity/name/size,
+display mode, active view, document modified flag and geometry checksums.
+It also exercises capture without fitting and a missing-view error.
+The pixel rule applies only to this controlled fixture; it is not a general image
+similarity score and does not replace independent saved-file geometry evaluation.
+The report and PNGs are saved under `runs/capture-validation-<timestamp>/`.
+Run the same checker and saved file against baseline and candidate assemblies,
+restarting the dedicated Rhino application between installations.

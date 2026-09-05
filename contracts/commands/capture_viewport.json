@@ -42,7 +42,7 @@
     "zoom_to_fit": {
       "type": "boolean",
       "default": false,
-      "description": "Whether to zoom viewport to fit all objects before capture"
+      "description": "Fit visible objects to the requested image dimensions; restore the original viewport camera and projection after capture"
     }
   },
   "additionalProperties": false
