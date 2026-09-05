@@ -1,7 +1,6 @@
 # Capture framing repair
 
-Investigation and intermediate live checks in Rhino 8 on 2026-09-05, on `harness`.
-**Final source awaits build/live verification because the Mac locked during restart.**
+Verified live in Rhino 8 on 2026-09-05, on the `harness` branch.
 
 ## Reproduction and diagnosis
 
@@ -37,13 +36,20 @@ disposed. Python tool documentation and the command schema describe the same
 visible-object fitting and restoration behavior. No geometry evaluator or task
 acceptance threshold changed.
 
-An intermediate candidate passed the imported-model fixture but produced an empty
-image in fresh loop `20260905-203244-d5b83544`, despite passing geometry evaluation.
-Removing all document redraws had left newly modeled geometry absent from the
-capture cache; a target-view redraw alone was insufficient. The final candidate
-retains one document refresh and snapshots/restores every view around it. The
-checker now deliberately leaves newly imported geometry unrefreshed before its
-first capture; its framing thresholds remain unchanged.
+An intermediate candidate without redraw passed the initialized-model fixture.
+Its fresh-loop screenshot appeared empty in the preview and was initially
+misdiagnosed as a display-cache failure. A later audit of the unchanged saved PNG
+found 11,807 dark pixels, valid margins, and the exact same SHA-256 as the final
+candidate's image. **The empty-image diagnosis was incorrect.** A document refresh
+is retained from the original handler; this investigation did not establish that
+removing it prevents newly created geometry from being captured.
+
+Retaining that refresh exposed a separately measured issue: Rhino queues redraws,
+so camera adjustments could occur after synchronous restoration. Waiting for the
+refresh before fitting/restoring fixes that ordering. The checker deliberately
+leaves imported geometry unrefreshed before the first capture; framing and state
+thresholds remain unchanged. Saved-image pixels and hashes take precedence over
+an unreliable inline preview.
 
 Both baseline and candidate were built, installed with Rhino closed, restarted,
 and identified by the loaded assembly MVID:
@@ -51,11 +57,11 @@ and identified by the loaded assembly MVID:
 | Version | Loaded MVID | Result |
 | --- | --- | --- |
 | Baseline | `243974ba-3378-4df8-88b6-fd4dba066ebc` | Four of nine fitted images clipped; all ten successful captures changed camera state |
-| Intermediate, without refresh | `22e41162-15da-4cc4-9367-ce9b4c74be10` | Eleven initialized-fixture cases passed; fresh modeling capture was empty |
+| Intermediate, without refresh | `22e41162-15da-4cc4-9367-ce9b4c74be10` | Eleven initialized-fixture cases passed; fresh PNG later confirmed valid |
 | Intermediate, with queued refresh | `6efd7016-3b1e-4ede-b5a9-5c9f28a73634` | Framing passed; camera preservation failed |
-| Final source, waiting for refresh completion | Not yet built/loaded | Direct scripting experiment preserved state; full verification pending |
+| Final, waiting for refresh completion | `90d87782-2887-435e-a8b2-02467f0c5094` | All eleven cases passed, starting with unrefreshed geometry |
 
-For the first intermediate candidate's 1000×750 perspective image, dark geometry spans X=45..954
+For the final candidate's 1000×750 perspective image, dark geometry spans X=45..954
 and Y=185..592: the full controlled fixture is separated from every image edge.
 All checked camera locations/targets/directions, projection frusta, names, sizes,
 display modes, active view, document modified flag and geometry checksums were
@@ -63,8 +69,8 @@ preserved (floating-point comparison tolerance 1e-8).
 
 ## Verification and local evidence
 
-- Intermediate C# Release builds: zero warnings/errors; each installed and loaded after restart.
-  Final source adds `RhinoApp.Wait()` after redraw and still requires build/reload.
+- Final C# Release build: zero warnings/errors; installed with Rhino closed and
+  loaded after restart, with the candidate MVID verified through the live bridge.
 - 279 Python tests passed (56 experiment and 223 server tests).
 - Contract/schema synchronization checks and relevant lint/format checks passed.
 - All 26 independent saved-geometry fixtures returned their expected verdicts twice:
@@ -72,9 +78,18 @@ preserved (floating-point comparison tolerance 1e-8).
 - Baseline capture evidence: `runs/capture-validation-20260905-202746/`.
 - First intermediate capture evidence: `runs/capture-validation-20260905-203035/`.
 - Queued-refresh intermediate evidence: `runs/capture-validation-20260905-203734/`.
-- Intermediate fresh loop: `runs/20260905-203244-d5b83544/` (geometry pass, empty PNG).
-- Geometry regression evidence: `runs/evaluator-box-20260905-203206/`,
-  `runs/evaluator-prism-20260905-203208/`, `runs/evaluator-hole-20260905-203210/`.
+- Intermediate fresh loop: `runs/20260905-203244-d5b83544/` (geometry and PNG pass;
+  the earlier empty-preview interpretation was disproved by a pixel/hash audit).
+- Final capture evidence: `runs/capture-validation-20260905-205236/`.
+- Final geometry regression evidence: `runs/evaluator-box-20260905-205401/`,
+  `runs/evaluator-prism-20260905-205403/`, `runs/evaluator-hole-20260905-205406/`.
+- Final fresh modeler/evaluator/planner loop: `runs/20260905-205440-a9e6b334/`.
+  Geometry passed and the planner accepted. Candidate `.3dm` SHA-256:
+  `63d768932b07c8715b927cba3694c7eb1f6e07736cedc406fa7f8bed72767cfd`.
+  The PNG has 11,807 dark pixels with bounds X=45..954, Y=185..592, preserving
+  margins on all sides. PNG SHA-256:
+  `aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d`.
+- Intermediate image audit: `runs/capture-investigation/intermediate-pixel-audit.json`.
 - Investigation images/logs: `runs/capture-investigation/`.
 
 Raw run directories are local and ignored by Git. Reproduction instructions are
@@ -84,8 +99,8 @@ views and arbitrary reference images are not covered by this fixture.
 
 This repair was performed by the supervising development session. An isolated
 builder, automated restart/rollback and autonomous code promotion are still future
-work. The investigation supplies a real baseline/repair/retest example, with final
-acceptance still pending. Resume from `CONTINUE.md`.
+work. The result supplies a verified baseline/repair/retest example for that next stage.
+Resume development from `CONTINUE.md`.
 
 Operational lesson: stop the dedicated Rhino process before replacing its plugin
 file. An exploratory in-place replacement while Rhino was running caused script

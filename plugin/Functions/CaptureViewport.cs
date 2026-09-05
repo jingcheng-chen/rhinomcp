@@ -67,8 +67,7 @@ public partial class RhinoMCPFunctions
             if (targetView == null)
                 throw new InvalidOperationException($"Viewport '{viewportTarget}' not found. Available viewports: Perspective, Top, Front, Right, Back, Left, Bottom, or use 'active' for the current view.");
 
-            // Newly modeled geometry may not yet be present in the display cache.
-            // A target-view redraw alone does not flush that cache on Rhino for Mac.
+            // Refresh the current document display before capturing.
             doc.Views.Redraw();
             // Rhino queues redraws on Mac. Finish them before fitting/restoring;
             // otherwise a queued redraw changes cameras after this method returns.

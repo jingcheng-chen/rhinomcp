@@ -70,16 +70,20 @@ are not isolation.
   all 56 experiment tests and 223 current server tests passed, plus experiment lint
   and formatting checks. Production plugin code remains unchanged.
 
-- Capture repair is in progress; see `CAPTURE_REPAIR.md`. Fitting the requested
-  aspect fixes clipping. An intermediate candidate passed eleven imported-model
-  checks, but a fresh modeling loop exposed an empty image without a document
-  refresh. Restoring every viewport around that refresh still allowed queued
-  redraws to move cameras after return. A direct `RhinoApp.Wait()` experiment
-  preserved state; that final ordering is in source but awaits build/live validation.
-- Last loaded MVID is `6efd7016-3b1e-4ede-b5a9-5c9f28a73634`, NOT the final source.
-  A quit/save dialog is pending for a disposable capture fixture. Desktop control
-  reported the Mac locked; the user was asked to unlock it. Do not overwrite the
-  loaded plugin file before Rhino exits. No isolated builder is implemented.
+- Capture repair is verified; see `CAPTURE_REPAIR.md`. The final implementation
+  fits the requested image aspect, refreshes display caches, waits for queued
+  redraws, and restores every viewport's projection and camera target.
+  All eleven capture checks pass, starting with unrefreshed geometry. The 26
+  geometry fixtures still produce their expected verdicts twice.
+- Fresh prism loop `20260905-205440-a9e6b334` passes geometry evaluation and
+  planning, and its PNG passes the controlled-fixture pixel/margin check.
+  An earlier empty-image diagnosis was a preview interpretation error: the
+  saved intermediate and final PNGs have identical hashes and valid pixel bounds.
+  See the explicit correction in `CAPTURE_REPAIR.md`; do not pursue that false lead.
+- Final plugin MVID is `90d87782-2887-435e-a8b2-02467f0c5094`, verified after a
+  clean build/install/restart. The Release build has zero warnings/errors;
+  all 279 Python tests, schema checks and relevant lint/format checks pass.
+  An isolated builder and automatic code-repair/promotion remain unimplemented.
 
 This demonstrates modeling/evaluation/planning and a supervised plugin-code repair.
 The successful modeler corrected the box's centered placement using returned bounds.
@@ -87,22 +91,7 @@ No production plugin behavior was changed for the first loop.
 
 ## Next concrete milestone
 
-Finish and verify the capture repair first:
-
-1. After the user unlocks the Mac, inspect the Rhino quit dialog. The only remaining
-   document is the disposable imported capture fixture, backed by the existing saved
-   prism. Finish quitting, build/install per local `AGENTS.md`, then restart and
-   run `mcpstart`. Verify the loaded MVID changed from the value above.
-2. Run `validate_capture` with the saved prism as documented in `README.md`.
-   The current checker starts with unrefreshed geometry. All eleven cases must pass.
-3. Run the 26 geometry fixtures and a fresh posed-prism model/evaluate/plan loop.
-   Inspect the fresh PNG as well as its geometry verdict; a previous intermediate
-   candidate passed geometry but produced an empty screenshot.
-4. Update this handoff/report with actual final outcomes. The current source adds
-   `RhinoApp.Wait()` after the document redraw; it has only been checked through
-   a direct live scripting experiment, not the rebuilt command yet.
-
-Then define the first generated-reference reconstruction task:
+Define the first generated-reference reconstruction task:
 
 1. Preserve the box, posed prism and through-hole geometry tasks and the new
    capture regression. Read `CAPTURE_REPAIR.md` for the verified production fix.
@@ -140,8 +129,8 @@ evaluator. See the roadmap for acceptance criteria.
   logs. Do not blindly repeat a mutation after an interruption.
 - The machine-local app-bundle copy belongs in local instructions, not tracked
   automation. A file replacement does not reload the active assembly.
-- Capture repair still needs final live verification. Its pixel thresholds are
-  specific to black wireframe fixture geometry, not general image acceptance rules.
+- Capture repair passes the live regression. Its pixel thresholds are specific
+  to black wireframe fixture geometry, not general image acceptance rules.
 - Stop the dedicated Rhino process before replacing its loaded plugin file. An
   in-place replacement caused metadata errors; a fresh restart was required.
 - The prism modeler created already-transformed profile coordinates. Its successful
