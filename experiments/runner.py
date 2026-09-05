@@ -63,33 +63,14 @@ PLANNER_SCHEMA = schema(
 
 def load_task(path):
     task = json.loads(path.read_text())
-    vector = {
-        "type": "array",
-        "minItems": 3,
-        "maxItems": 3,
-        "items": {"type": "number"},
-    }
     jsonschema.validate(
-        task,
-        schema(
-            {
-                "id": {"type": "string", "minLength": 1},
-                "instruction": {"type": "string", "minLength": 1},
-                "dimensions": {
-                    **vector,
-                    "items": {"type": "number", "exclusiveMinimum": 0},
-                },
-                "minimum": vector,
-                "units": {"const": "Millimeters"},
-                "linear_tolerance": {"type": "number", "exclusiveMinimum": 0},
-                "volume_tolerance": {"type": "number", "exclusiveMinimum": 0},
-            }
-        ),
+        task, json.loads((ROOT / "experiments/tasks/schema.json").read_text())
     )
     numbers = (
         task["dimensions"]
-        + task["minimum"]
+        + task.get("minimum", task.get("translation", []))
         + [task["linear_tolerance"], task["volume_tolerance"]]
+        + [task.get("rotation_z_degrees", 0), task.get("area_tolerance", 0)]
     )
     if not all(math.isfinite(value) for value in numbers):
         raise ValueError("Task numbers must be finite")
@@ -296,8 +277,15 @@ doc.ModelAbsoluteTolerance = {task["linear_tolerance"]};
         + json.dumps(str(serial))
         + ", EXPERIMENT_MARKER = "
         + json.dumps(marker)
-        + ', EXPERIMENT_MAX_CALLS = "12" }',
+        + ', EXPERIMENT_MAX_CALLS = "20" }',
     }
+    if task["type"] == "triangular_prism_pose":
+        for tool in ("extrude_curve", "rotate_object", "delete_object"):
+            mcp_config[f"tools.{tool}.approval_mode"] = '"approve"'
+    else:
+        mcp_config["disabled_tools"] = json.dumps(
+            ["extrude_curve", "rotate_object", "delete_object"]
+        )
     try:
         save(
             run_dir / "checkpoint.json",

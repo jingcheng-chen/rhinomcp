@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "type": {"enum": ["axis_aligned_box", "triangular_prism_pose"]},
+    "instruction": {"type": "string", "minLength": 1},
+    "dimensions": {"$ref": "#/$defs/dimensions"},
+    "minimum": {"$ref": "#/$defs/vector"},
+    "translation": {"$ref": "#/$defs/vector"},
+    "rotation_z_degrees": {"type": "number"},
+    "units": {"const": "Millimeters"},
+    "linear_tolerance": {"type": "number", "exclusiveMinimum": 0},
+    "volume_tolerance": {"type": "number", "exclusiveMinimum": 0},
+    "area_tolerance": {"type": "number", "exclusiveMinimum": 0}
+  },
+  "required": ["id", "type", "instruction", "dimensions", "units", "linear_tolerance", "volume_tolerance"],
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "properties": {"type": {"const": "axis_aligned_box"}},
+      "required": ["minimum"],
+      "not": {"anyOf": [{"required": ["translation"]}, {"required": ["rotation_z_degrees"]}, {"required": ["area_tolerance"]}]}
+    },
+    {
+      "properties": {"type": {"const": "triangular_prism_pose"}},
+      "required": ["translation", "rotation_z_degrees", "area_tolerance"],
+      "not": {"required": ["minimum"]}
+    }
+  ],
+  "$defs": {
+    "vector": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}},
+    "dimensions": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number", "exclusiveMinimum": 0}}
+  }
+}

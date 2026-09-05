@@ -36,16 +36,26 @@ are not isolation.
 
 - One box task: exactly one valid closed solid, minimum (0,0,0), XYZ dimensions
   100 × 50 × 30 mm, volume 150,000 mm³.
+- A posed scalene triangular prism task: 80 × 40 mm local right-triangle profile,
+  25 mm extrusion, +30° world-Z rotation then translation (120,-40,15) mm.
+  A fresh live modeling/evaluation/planning cycle passed; the box regression passed.
+- Explicit task-type schemas and pose-sensitive evaluation: six corners,
+  containment, planar faces, straight edges, area and volume. Split planar faces
+  are accepted. Prism fixtures independently use joined faces, not extrusion.
 - Independent RhinoCommon measurements of saved `.3dm` files and analytic checks.
 - Live fixtures: a correct box passes; wrong scale, wrong position, extra geometry,
   open surface, and wrong units fail. Repeated measurements agreed.
 - Fresh Codex modeler and planner sessions, narrow MCP gateway, scoped approval
-  for its three tools, timeouts, logs, artifact hashes, and explicit feedback input.
+  for task-specific tools, timeouts, logs, artifact hashes, and explicit feedback input.
 - A completed passing live loop, preceded by a failed attempt whose MCP creation
   calls were canceled by client configuration. The supervising development session
   fixed the configuration; the next attempt consumed the prior planner's findings.
 - 193 existing Python tests and 23 experiment tests passed at the first milestone.
   The C# Release build passed and was installed before Rhino was launched.
+- At the posed-prism milestone, 38 experiment tests passed and 15 live fixtures
+  each produced their expected verdict twice (three valid forms, twelve flaws).
+  The current server suite also passed all 223 tests.
+  See `POSED_PRISM_LOOP.md` for the run records and verification details.
 
 This demonstrates modeling/evaluation/planning, not autonomous plugin-code repair.
 The successful modeler corrected the box's centered placement using returned bounds.
@@ -53,23 +63,24 @@ No production plugin behavior was changed for the first loop.
 
 ## Next concrete milestone
 
-Expand objective task coverage before enabling an autonomous plugin builder:
+Expand objective task coverage with a through-hole task before enabling an
+autonomous plugin builder:
 
-1. Preserve the passing box case as a regression task.
-2. Add a translated/rotated asymmetric solid task with explicit world-space pose
-   and dimensions. Define task type and evaluator contracts first; the current
-   evaluator assumes an axis-aligned box and must not grade arbitrary shapes.
-3. Add trusted positive and negative fixtures for the new predicates, including
-   incorrect rotation and translation, and verify them against real Rhino.
-4. Expose only the modeling operations needed by this task through the gateway.
-5. Run a fresh modeler/evaluator/planner cycle, retaining both successes and failures.
+1. Preserve both passing tasks as regression cases.
+2. Define a solid with a specified through-hole, its location, diameter, depth,
+   and expected volume. Extend the task schema and independent evaluator first.
+3. Validate correct and deliberately wrong fixtures, including a blind hole,
+   wrong hole location, and wrong diameter. Do not rely on volume alone.
+4. Expose only the required boolean/modeling operations through the gateway.
+5. Run a fresh modeler/evaluator/planner cycle and recheck the existing tasks.
 6. If a reproducible plugin failure occurs, record a bounded repair plan and
    preserve the baseline. Never weaken the evaluator to make a candidate pass.
 
 Then implement an isolated builder adapter and verified restart/reload plus
 baseline/candidate comparison. The broader remaining task suite includes a
 through-hole, profile extrusion, and reconstruction from generated orthographic
-images. See the roadmap for acceptance criteria.
+images. Basic profile extrusion is already exercised by the prism task. See the
+roadmap for acceptance criteria.
 
 ## Known limits and operational lessons
 
@@ -88,10 +99,14 @@ images. See the roadmap for acceptance criteria.
   logs. Do not blindly repeat a mutation after an interruption.
 - The machine-local app-bundle copy belongs in local instructions, not tracked
   automation. A file replacement does not reload the active assembly.
+- The prism's screenshot is clipped despite a passing saved-file geometry result.
+  Capture framing is an open investigation, not a confirmed geometry failure.
+- The prism modeler created already-transformed profile coordinates. Its successful
+  pose is verified, but this run does not validate the optional rotation tool.
 
 ## Evidence and portability
 
-`FIRST_LOOP.md` is the portable summary. Full local records are under ignored
+`FIRST_LOOP.md` and `POSED_PRISM_LOOP.md` are portable summaries. Full local records are under ignored
 `runs/` directories and may not exist on another machine. If absent, rerun the
 fixtures and task; do not claim fresh verification from the historical report.
 Do not rely on a chat session, sidebar task, or its internal memory for state.

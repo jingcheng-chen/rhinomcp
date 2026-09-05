@@ -8,7 +8,8 @@ configuration, not a second copy of instructions kept elsewhere.
 | --- | --- |
 | Modeler behavior | `roles/modeler.md` |
 | Planner behavior | `roles/planner.md` |
-| Modeling task and expected measurements | `../tasks/box.json` |
+| Modeling tasks and expected measurements | `../tasks/box.json`, `../tasks/posed_prism.json` |
+| Supported task types and input contract | `../tasks/schema.json` |
 | Role order, context assembly, session launch, timeouts, output schemas | `../runner.py` |
 | Permitted modeling operations and call budget | `../modeler_mcp.py` |
 | Document identity guard and controller-only execution | `../bridge.py` |

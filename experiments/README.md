@@ -6,7 +6,7 @@ Agent behavior and runtime responsibilities are mapped in
 
 This first implementation runs one model/evaluate/plan loop with fresh Codex CLI
 sessions. It does not yet automatically edit, install, or promote plugin fixes.
-No user reference data is required for the included box task.
+No user reference data is required for the included box and posed-prism tasks.
 
 ## Agent/operator startup runbook
 
@@ -35,10 +35,12 @@ No user reference data is required for the included box task.
 Codex must already be installed and authenticated. The adapter ignores personal
 client configuration, disables unrelated tools, and uses the CLI's default model;
 the event stream records the actual run. Client/model selection is not yet a
-configurable experiment matrix. The modeler has only create, translate and analyze
-tools. Each gateway operation checks the active document's serial and run marker.
+configurable experiment matrix. The box modeler has only create, translate and
+analyze tools. The prism task additionally enables extrusion, rotation, and deletion
+of individual construction objects. Each gateway operation checks the active
+document's serial and run marker.
 The planner receives evidence in its prompt and has no Rhino MCP connection.
-The three gateway tools are explicitly preapproved for this authorized test session;
+The task's gateway tools are explicitly preapproved for this authorized test session;
 other MCP servers and tools are not enabled. Without that scoped configuration,
 non-interactive sessions can cancel modeling calls that require confirmation.
 
@@ -47,6 +49,28 @@ and run `server/.venv/bin/python -m experiments.runner --feedback <previous-summ
 The previous result is retained and copied into the new run. This is an explicit
 new attempt, not automatic replay of potentially completed operations. A failed
 geometry verdict exits with code 2; execution errors exit unsuccessfully as well.
+
+## Task definitions
+
+`tasks/schema.json` defines the supported task types. The runner rejects unknown
+types, incompatible fields, nonfinite numbers, and invalid dimensions before
+contacting Rhino. To run the posed prism, create a new empty Rhino document and use:
+
+```
+server/.venv/bin/python -m experiments.runner --task experiments/tasks/posed_prism.json
+```
+
+`axis_aligned_box` checks world bounds, validity, solidity and volume.
+`triangular_prism_pose` specifies a right-triangle profile with unequal legs, its
+extrusion height, Z rotation about world origin followed by world translation,
+and area/volume tolerances. Evaluation maps measured vertices into the prescribed
+local frame, checks the six required corners and containment, and checks planar
+faces, straight edges, area and volume. Equivalent subdivisions of planar faces
+are accepted. Correct volume alone cannot hide an incorrect pose or handedness.
+
+The modeler may choose any available construction sequence that achieves the
+specified result. The live prism run directly constructed the transformed profile;
+it did not exercise the optional rotation tool.
 
 ## Evaluator validation
 
@@ -58,11 +82,15 @@ server/.venv/bin/python -m pytest experiments/tests
 ```
 
 Live validation creates independent `.3dm` fixtures in memory, leaving the active
-document unchanged. It checks a correct box and rejects wrong scale, wrong position,
-extra geometry, an open surface, and wrong units. Every fixture is measured twice.
+document unchanged. Box fixtures check correct geometry and five error cases.
+Prism fixtures check correct geometry, equivalent split faces, and seven errors:
+wrong rotation, translation, handedness, scale, open geometry, extra objects and
+wrong units. Every fixture is measured twice. The prism references are built from
+joined planar faces, independently of the production extrusion operation.
 The evaluator uses RhinoCommon directly on saved files, not the modeler's analysis
-claims. Its scope is the included axis-aligned box specification, not general shape
-reconstruction. Screenshots are illustrative and do not affect the verdict.
+claims. Its scope is the two explicit task types, not general shape reconstruction.
+Screenshots are illustrative and do not affect the verdict. The prism run exposed
+a clipped screenshot; capture framing needs separate investigation.
 
 ## Boundaries and recovery
 
@@ -70,7 +98,7 @@ reconstruction. Screenshots are illustrative and do not affect the verdict.
   prevent a person or unrelated MCP client from changing Rhino. Keep the dedicated
   session idle while it runs; document identity checks reduce accidental crossover.
 - A 180-second default timeout bounds each agent session; `--timeout` overrides it.
-  The modeler gateway allows at most 12 calls. Process groups are terminated on
+  The modeler gateway allows at most 20 calls. Process groups are terminated on
   timeout. Mutations are never retried automatically.
 - Checkpoints, failures, and partial session logs are retained. Automatic resume,
   malformed-output correction, provider switching, and plugin-repair sessions are
