@@ -132,3 +132,19 @@ through the existing production `run_command`. It exposes no agent-authored macr
 or script input. This is a harness permission/workflow change, not a new plugin
 operation. See `../CUSHION_BODY_LOOP.md` before classifying a missing gateway tool
 as a plugin defect. Keep the six-surface assembly and closed-solid verdict distinct.
+
+## Screenshot integration and comparisons
+
+`../integration_runner.py` and `../visual_tasks/barcelona_chair_integration.json`
+retain the original public screenshot boundary while adding the verified general
+surface/closure/layer workflow guidance. `../integration_mcp.py` exposes attributes
+and a UUID-only Join recipe; its read-only planner rejects Join explicitly.
+`../integration_audit.py`/`.cs` add repeated saved-file integration observations.
+They do not assign a visual score or authorize a builder.
+
+After the diagnostic completes, `../compare_models.py`/`.cs` render neutral-gray
+copies of the two saved models with shared camera settings. `../finish_integration.py`
+checks ownership, runs the comparison, then restores the originally empty document,
+tolerance and display modes. Read `../CHAIR_INTEGRATION.md` and the run checkpoint
+before any recovery; partial/failed runs must remain distinguishable from successes.
+The old diagnostic runner and historical task remain unchanged.

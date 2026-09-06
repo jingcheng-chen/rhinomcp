@@ -62,7 +62,7 @@
     "sha256": "50c21e7841d3e42f85eab2bbfb34f2ca6dda34b680238d4fbac042c765010020",
     "report": "STRIP_MODELER_LOOP.md",
     "status": "Geometry passed",
-    "caption": "The repaired sweep can make a closed strip. This isolated part has not yet been applied to a new chair.",
+    "caption": "The repaired sweep can make a closed strip. This isolated workflow is now used in phase 12.",
     "kind": "actual_rhino_capture"
   },
   {
@@ -169,6 +169,34 @@
     "report": "CUSHION_BODY_LOOP.md",
     "status": "Scale variation passed",
     "caption": "Fresh agent: 75 mm footprint and 7.5 mm minimum thickness. Images are fitted independently; saved geometry verifies scale.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "chair-integration",
+    "title": "12 \u00b7 Chair integration attempt",
+    "image": "assets/agent-chair-integration-perspective.png",
+    "source": "runs/integration-20260906-171254-6eb9935e/perspective-shaded.png",
+    "sha256": "0c9168b6e2f0aa1f31ba8fcf73a3da168bdee0fd4abe96c6be6b3b3f005a6342",
+    "views": {
+      "perspective": {
+        "image": "assets/agent-chair-integration-perspective.png",
+        "source": "runs/integration-20260906-171254-6eb9935e/perspective-shaded.png",
+        "sha256": "0c9168b6e2f0aa1f31ba8fcf73a3da168bdee0fd4abe96c6be6b3b3f005a6342"
+      },
+      "top": {
+        "image": "assets/agent-chair-integration-top.png",
+        "source": "runs/integration-20260906-171254-6eb9935e/top-shaded.png",
+        "sha256": "33093b6a67bb533207ce2976c4879c5ecf6370e34addc7d8f03e361a80f2536d"
+      },
+      "front": {
+        "image": "assets/agent-chair-integration-front.png",
+        "source": "runs/integration-20260906-171254-6eb9935e/front-shaded.png",
+        "sha256": "c1a6a654aad44b1d143c5d13149b8b2124899fca7807fa535636fc8c9b8ff1a3"
+      }
+    },
+    "report": "CHAIR_INTEGRATION.md",
+    "status": "Partial integration; visual unscored",
+    "caption": "28 valid objects. Seat, frame and layers pass integration checks; back cushion remains open with four naked edges.",
     "kind": "actual_rhino_capture"
   }
 ]

@@ -473,21 +473,44 @@ Open-top evaluator source remains unchanged. No build, installation or bounded
 plugin builder was needed. Selected actual shaded captures are tracked in the
 roadmap gallery with source hashes; original saved chair remains historical.
 
+## Latest chair integration diagnostic
+
+Run `runs/integration-20260906-171254-6eb9935e/`; see `CHAIR_INTEGRATION.md`.
+A fresh screenshot-only modeler used the four original public views with continuous
+cushion/closed-strip guidance and the eight-layer tree. 28 valid objects; all nine
+structural observations and five of six integration observations pass. Seat and
+frame are solid; the six-face back cushion has four naked edges. **Partial, visual
+acceptance unscored.** No plugin defect or promotion is established.
+The new File3dm audit initially failed; an explicit-iteration correction recovered
+repeat-identical measurements of the unchanged artifact. Recovery sources/logs persist.
+
+Fresh planner returned modeling feedback but failed to use image tools. Its visual
+claims are unsupported. See `review-evidence-supervisor.json`; original summary is
+retained. Future summaries record required image delivery, with a regression test;
+updated tool-specific prompts have not yet been validated in a fresh session.
+Matched model-to-model Perspective/Front/Right captures preserve identical camera
+records and both source files. Selected images/provenance are tracked in assets;
+roadmap shows all 12 phases and paired chair comparisons.
+
+Cleanup verified the original empty document, six layers, 0.001 tolerance and display
+modes. Runtime PID 84726 / document 268435457 / MVID
+`326aaa12-b851-4c6a-afcb-45291e734a5c`, marker none, unsaved modified=true.
+Reverify before reuse. New chair SHA `8d283f733e44ef95764d5c57c68d56b39b4e7bab38030b78a142a4821a06b2b6`.
+458 developer tests (207 experiment, 238 server, 13 contract); production plugin and
+accepted 61-case contract unchanged, historical full live pass not rerun here.
+
 ## Next concrete milestone
 
-Revisit the chair as a controlled integration diagnostic using the original public
-screenshot pack, continuous cushion construction, closed curved strips and proper
-hierarchical layers. Read `CHAIR_BASELINE.md` and `VISUAL_BENCHMARKS.md` first.
-Reuse the restricted native Join recipe if needed; do not expose arbitrary scripts
-or hidden reference data. Save a separate model and matched-view screenshots so
-the user can compare the initial schematic chair with the new attempt.
-
-Keep visual acceptance unscored until cameras, reference visibility and calibrated
-criteria are fixed. Report remaining edge rounding, proportions and upholstery
-fidelity honestly. Preserve the original file and simpler benchmark contracts.
-This is one complex integration test within a general improvement suite, not the
-only target. Only measured plugin defects should dispatch bounded repairs, followed
-by the accepted preservation suite. No additional user data is required yet.
+First diagnose and verify fresh planner image-tool delivery (the configured read-only
+gateway should expose get_reference_image and inspect_view; the last planner instead
+tried guessed local files). A text result alone is not a completed visual review.
+Then isolate the open reclined back cushion in a small transferable task. Inspect
+edge correspondence/gaps; compare joining a closed body in local coordinates then
+applying one rigid pose. Calibrate open-body and wrong-pose counterexamples, test
+another pose/scale, and only then revisit the preserved chair. Do not relax closure
+predicates or claim overall visual improvement from valid geometry. Preserve all
+simpler benchmark contracts and include actual phase screenshots. No extra user
+reference data is needed for this step.
 
 ## Requested visual progress policy
 
