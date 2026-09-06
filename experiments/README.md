@@ -2,6 +2,8 @@
 
 **Continuing development in a fresh session? Start with [CONTINUE.md](CONTINUE.md).**
 Visual overview: [roadmap.html](roadmap.html), including the Barcelona-chair destination.
+The chair is one complex benchmark for general improvement across many objects.
+For screenshot diagnostics, see [VISUAL_BENCHMARKS.md](VISUAL_BENCHMARKS.md).
 Agent behavior and runtime responsibilities are mapped in
 [harness/README.md](harness/README.md).
 

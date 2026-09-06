@@ -1,0 +1,13 @@
+{
+  "id": "barcelona-chair-diagnostic-v1",
+  "purpose": "One complex benchmark for general RhinoMCP improvement; diagnose reusable capability gaps across a growing suite.",
+  "instruction": "Reconstruct only the chair with a backrest shown in the four screenshots; exclude the separate ottoman. Use screenshots only, not a downloaded source mesh or outside references. Model the curved crossing metal frame, seat cushion, reclined back cushion and supporting straps as organized editable Rhino geometry. Capture the visible proportions and curvature before decorative details. Use X for left-right width, +Y toward the back, +Z up, with the lowest feet at Z=0. Normalize overall chair width to 1000 mm as a coordinate convention, not a claim about real dimensions. Name objects by their functional part, beginning frame_, seat_, back_ or straps_. Remove construction curves. Inspect your own model from multiple views and report missing details and tool failures honestly. Do not replace curved metal strips with round pipes without recording that approximation.",
+  "public_views": ["front", "front-oblique", "side", "back-detail"],
+  "part_prefixes": ["frame_", "seat_", "back_", "straps_"],
+  "normalized_width": 1000,
+  "width_tolerance": 20,
+  "max_calls": 160,
+  "timeout_seconds": 900,
+  "visual_acceptance": "uncalibrated; qualitative diagnostic only, never automatic promotion",
+  "reference_limitations": "Approximate perspective views, unknown camera parameters and scale; ottoman remains visible but is excluded. Back-detail and held-out rear-oblique crop some feet. Hidden surfaces are inferred. No target mesh is provided."
+}

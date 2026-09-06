@@ -1,7 +1,7 @@
 # Continue autonomous RhinoMCP improvement
 
 This is the entry point for a development agent with no prior chat context.
-Last updated: 2026-09-05. Verify repository and application state before acting;
+Last updated: 2026-09-06. Verify repository and application state before acting;
 the previous session's running processes and document selection are not assumptions.
 
 ## Objective and agreed design
@@ -13,7 +13,13 @@ comparison. The long-term input includes reference pictures; start with objectiv
 geometry tasks and generated references. No additional user data is needed for
 infrastructure work now.
 
-The user specified the concrete modeling destination on 2026-09-05: reconstruct
+The user clarified on 2026-09-06 that the goal is a general RhinoMCP improvement
+process across many tasks. The chair is one complex diagnostic benchmark, not the
+only ultimate test or a reason to hard-code chair-specific plugin behavior.
+Changes should improve reusable operations or guidance and preserve existing tasks;
+transfer to other objects and held-out cases is needed to establish generalization.
+
+The current complex benchmark, introduced on 2026-09-05, is to reconstruct
 this Barcelona chair in Rhino using only screenshots from different angles:
 https://sketchfab.com/3d-models/barcelona-chair-7f871ae1a07f4f68b2146d71b4c52bfa
 The scene includes a matching ottoman; chair-first is a working scope assumption,
@@ -127,7 +133,7 @@ This demonstrates modeling/evaluation/planning and a supervised plugin-code repa
 The successful modeler corrected the box's centered placement using returned bounds.
 No production plugin behavior was changed for the first loop.
 
-## Latest milestone: live trial controller and interrupted recovery
+## Previous milestone: live trial controller and interrupted recovery
 
 `trial.py` registers reviewed candidates, pins source/patch/binary and declared
 adapter/evaluator inputs, and records build/install/test/restore transitions.
@@ -165,24 +171,49 @@ Full server lint passes after formatting-only commit `e41c257`; the full server
 format check still reports 17 pre-existing files. Do not conflate that limitation
 with the focused experiment format check, which passes.
 
+## Latest milestone: first complex screenshot diagnostic
+
+The general-purpose screenshot runner is implemented: `visual_runner.py`,
+`visual_mcp.py`, `visual_audit.cs`, and configurable `visual_tasks/`.
+Read `VISUAL_BENCHMARKS.md` and `CHAIR_BASELINE.md` before continuing.
+Four public chair screenshots were captured from Sketchfab; one rear-oblique
+view was reserved outside both fresh agents. No target mesh was extracted.
+
+Run `runs/visual-20260906-084828-2fc89506/` completed with 65 valid named objects
+(61 solid extrusions, four open swept frame Breps). The nine structure checks pass,
+but visual acceptance is explicitly `unscored`. The fresh planner recommends
+`revise_modeling`: angular cushion blocks, inaccurate frame profile and transitions,
+open frame ends, and crude strap wrapping. No command failures were reported.
+No production behavior changed. No builder was dispatched and nothing was promoted.
+This is a diagnostic starting point, not demonstrated self-improvement.
+
+**Current Rhino state at handoff:** the saved baseline chair remains in the owned
+unsaved document, marker `visual-20260906-084828-2fc89506`, original plugin MVID
+`90d87782-2887-435e-a8b2-02467f0c5094`. Verify live identity and contents before any
+cleanup; do not reuse the older assumption of an empty document. Full local model,
+images and reports are saved in the run. Source/image hashes preserve the baseline.
+
+All **348 developer tests pass** (125 experiment, 223 server), including ten new
+screenshot-boundary and diagnostic-verdict tests. Experiment lint/format checks
+pass. The 43-case live contract is unchanged; its live suite was not rerun because
+this milestone changed no production plugin/server/protocol behavior.
+
 ## Next concrete milestone
 
-Define and run the first chair baseline, using screenshots only:
+Use the chair findings to define smaller, transferable experiments:
 
-1. Read `LIVE_TRIAL.md` and verify the current runtime/branch before reuse. Preserve
-   the 43-case suite and lifecycle ownership rules. Do not reuse an executed builder
-   checkpoint or close unrelated Rhino documents.
-2. Open the linked Sketchfab scene in the browser and capture a compact, consistent
-   reference pack showing front, side, back and oblique frame coverage. Keep the
-   source mesh outside modeler input. Record screenshot hashes and camera assumptions.
-3. Freeze a chair-first scope, normalized scale (unless a known dimension is given),
-   named parts and target detail level. Reserve views for evaluation. Define visual
-   checks separately from the existing black-wireframe fixture thresholds.
-4. Extend the task/input and permitted modeling operations as needed, then run a
-   fresh modeler baseline. Save the .3dm, comparable views and measured failures.
-   Distinguish an illustrative first attempt from a calibrated acceptance result.
-5. Turn observed gaps into focused frame/cushion tasks and bounded tool or guidance
-   changes. Add preservation and held-out comparisons before claiming improvement.
+1. Preserve the baseline artifacts and inspect the current owned Rhino document.
+2. Reproduce a curved rectangular strip with explicit closed-solid requirements.
+   The current sweep contract does not expose end capping. Define independent
+   fixture measurements before deciding on generic tool support versus guidance.
+3. In a separate task, attempt a continuous rounded 2×2 cushion patch using existing
+   surface tools. Compare smooth cells/recessed seams against stacked boxes with
+   fixed views and deliberate negative examples. Do not assume a plugin defect.
+4. Investigate tight/cropped orthographic chair captures with a simple tall-object
+   fixture before adopting automated silhouette scores.
+5. Feed reproducible findings into the existing planner/bounded-builder/trial loop.
+   Preserve all 43 existing cases and test transfer to other objects before claiming
+   general improvement. Never hard-code the chair into plugin behavior.
 
 Engineering work still ahead: unattended desktop lifecycle, evaluator-process
 isolation, held-out comparisons, and explicit model/environment pinning. Recovery
