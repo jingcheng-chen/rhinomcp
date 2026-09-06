@@ -171,7 +171,7 @@ Full server lint passes after formatting-only commit `e41c257`; the full server
 format check still reports 17 pre-existing files. Do not conflate that limitation
 with the focused experiment format check, which passes.
 
-## Latest milestone: first complex screenshot diagnostic
+## Previous milestone: first complex screenshot diagnostic
 
 The general-purpose screenshot runner is implemented: `visual_runner.py`,
 `visual_mcp.py`, `visual_audit.cs`, and configurable `visual_tasks/`.
@@ -198,22 +198,57 @@ screenshot-boundary and diagnostic-verdict tests. Experiment lint/format checks
 pass. The 43-case live contract is unchanged; its live suite was not rerun because
 this milestone changed no production plugin/server/protocol behavior.
 
+## Latest milestone: curved-strip closure probe
+
+Read `STRIP_PROBE.md`. Actual MCP sweeps of a quarter-circle rectangular strip are
+open with both `closed=false` and `closed=true`; measurements are identical. A
+supervisor-capped copy and independently extruded sector pass the fixed geometry
+checks. Wrong width/radius/position, extra objects and open shells fail. All nine
+fixtures produce expected verdicts twice. Containment measurement now normalizes
+inward normals on an in-memory copy, with both orientations verified as positives;
+the initial unexpected-positive run remains preserved.
+
+Fresh planner result: `plugin_issue` for unsupported end-capping, not a regression
+of an existing cap feature. Proposed change: explicit opt-in `cap_planar_ends` on
+`sweep1`, default false, valid closed output or clear failure without partial objects.
+The unused `closed` flag is a distinct rail-closure contract issue; do not repurpose it.
+No plugin change or builder dispatch has happened yet.
+
+Run: `runs/strip-20260906-090832-bc7dde0c/`. All 65 chair objects, their attributes,
+and six existing layers match their before-probe state. The existing chair marker
+and original plugin remain in place; verify current ownership before further work.
+**356 developer tests pass** (133 experiment, 223 server), plus experiment lint/format.
+
 ## Next concrete milestone
 
-Use the chair findings to define smaller, transferable experiments:
+1. Prepare the end-capping proposal for a fresh bounded builder. `repair.py` and
+   `roles/builder.md` currently hard-code the capture pilot; introduce reviewed,
+   pinned per-repair paths/instructions without expanding the builder's authority
+   over evaluator, scope or execution. Preserve existing capture-controller tests.
+2. Dispatch the sweep C#/Python/schema/test change, review it, then build and run
+   the live baseline/candidate/restoration workflow. Keep the existing 43 cases
+   unchanged and add explicit capping positives, uncapable/invalid negatives and
+   failure-atomicity tests. The supervisor-only capped control is not a modeler tool.
+3. Separately test a continuous rounded 2×2 cushion patch using current surface tools.
+4. Check tight/cropped orthographic chair captures with a small tall-object fixture
+   before adopting silhouette scoring. Test other objects before claiming transfer.
 
-1. Preserve the baseline artifacts and inspect the current owned Rhino document.
-2. Reproduce a curved rectangular strip with explicit closed-solid requirements.
-   The current sweep contract does not expose end capping. Define independent
-   fixture measurements before deciding on generic tool support versus guidance.
-3. In a separate task, attempt a continuous rounded 2×2 cushion patch using existing
-   surface tools. Compare smooth cells/recessed seams against stacked boxes with
-   fixed views and deliberate negative examples. Do not assume a plugin defect.
-4. Investigate tight/cropped orthographic chair captures with a simple tall-object
-   fixture before adopting automated silhouette scores.
-5. Feed reproducible findings into the existing planner/bounded-builder/trial loop.
-   Preserve all 43 existing cases and test transfer to other objects before claiming
-   general improvement. Never hard-code the chair into plugin behavior.
+## Requested model organization milestone
+
+The user requested proper layers, preferably hierarchical, on 2026-09-06. Add
+this after the focused strip/cushion work unless a test needs it sooner. Use a
+model/assembly root with functional children, e.g. `Model::Frame::Left`,
+`Model::Frame::Right`, `Model::Upholstery::Seat`, `Model::Upholstery::Back`, and
+`Model::Straps`. Keep construction geometry separate and remove it from final
+outputs. Object names complement layers; they do not replace them.
+
+Existing tools expose `create_layer(parent=...)` and attribute assignment by layer
+name/full path. Verify actual nesting and full-path resolution before relying on
+this: the current creation handler looks up a parent by name. Define saved-file
+checks for parent IDs/full paths, object-to-layer assignments, visibility, and no
+unintended Default-layer geometry. Test duplicate child names under distinct
+parents and save/reopen preservation. The historical chair baseline is unchanged;
+it must not retroactively pass a new layer criterion.
 
 Engineering work still ahead: unattended desktop lifecycle, evaluator-process
 isolation, held-out comparisons, and explicit model/environment pinning. Recovery

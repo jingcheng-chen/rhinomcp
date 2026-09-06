@@ -11,6 +11,8 @@ configuration, not a second copy of instructions kept elsewhere.
 | Builder behavior | `roles/builder.md` |
 | Builder checkout, dispatch, review and integrity gates | `../repair.py`, `../builder_mcp.py` |
 | Screenshot diagnostic tasks and runner | `../visual_tasks/`, `../visual_runner.py`, `../VISUAL_BENCHMARKS.md` |
+| Focused curved-strip diagnosis and independent controls | `../strip_probe.py`, `../strip_measure.cs`, `../strip_controls.cs`, `../STRIP_PROBE.md` |
+| Requested hierarchical layer policy (upcoming) | `../CONTINUE.md` |
 | Screenshot gateway and structural audit | `../visual_mcp.py`, `../visual_audit.cs` |
 | Modeling tasks and expected measurements | `../tasks/box.json`, `../tasks/posed_prism.json`, `../tasks/through_hole.json`, `../tasks/reference_box.json` |
 | Supported task types and input contract | `../tasks/schema.json` |
