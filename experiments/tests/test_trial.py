@@ -4,6 +4,7 @@ This is controller verification, not Rhino geometry or live installation evidenc
 """
 
 import hashlib
+from pathlib import Path
 import subprocess
 
 import pytest
@@ -268,3 +269,51 @@ def test_prepare_rejects_reuse_of_registered_candidate(prepared):
 def test_adapter_retains_virtual_environment_dependencies(prepared):
     _, _, state = run_mode(prepared, "venv")
     assert state["stage"] == "accepted_trial"
+
+
+def test_baseline_expectations_are_explicit_and_boolean():
+    from experiments.trial import baseline_expectations
+
+    assert baseline_expectations(
+        {"cases": ["old", "new"], "baseline_expectations": {"new": False}}
+    ) == {"old": True, "new": False}
+    for expected in ({"unknown": False}, {"new": "false"}, []):
+        with pytest.raises(ValueError, match="baseline expectations"):
+            baseline_expectations(
+                {"cases": ["old", "new"], "baseline_expectations": expected}
+            )
+
+
+@pytest.mark.parametrize("improves", [True, False])
+def test_new_capability_improves_without_redefining_baseline(prepared, improves):
+    root, directory = prepared
+    manifest = read(directory / "manifest.json")
+    suite = read(directory / "suite.json")
+    suite["baseline_expectations"] = {"capture": False}
+    save(directory / "suite.json", suite)
+    from experiments.runner import sha256
+
+    manifest["suite_sha256"] = sha256(directory / "suite.json")
+    save(directory / "manifest.json", manifest)
+    adapter = Path(manifest["adapter"])
+    adapter.write_text(
+        adapter.read_text().replace(
+            'if not candidate and mode == "baseline_fail":',
+            'if not candidate or mode == "no_improvement":',
+        )
+    )
+    if not improves:
+        (root / "mode").write_text("no_improvement")
+    manifest["adapter_sha256"] = sha256(adapter)
+    save(directory / "manifest.json", manifest)
+    state = read(directory / "state.json")
+    state["manifest_sha256"] = sha256(directory / "manifest.json")
+    save(directory / "state.json", state)
+    result = Trial(directory).run()
+    assert result["stage"] == ("accepted_trial" if improves else "rejected")
+    assert result["baseline_cases"]["capture"] is False
+    assert result["restored_cases"]["capture"] is False
+    comparison = read(directory / "comparison.json")
+    assert comparison["improvements"] == (["capture"] if improves else [])
+    assert comparison["unmet_requirements"] == ([] if improves else ["capture"])
+    assert comparison["regressions"] == []

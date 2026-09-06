@@ -152,6 +152,10 @@ def build(request):
             timeout=180,
             env={**os.environ, "PYTHONPATH": str(workspace / "server/src")},
         )
+    if read(Path(request["suite"])).get("sweep_cap_probe") is True:
+        from experiments.validate_sweep_source import validate
+
+        save(directory / "sweep-source-validation.json", validate(workspace))
     binary = workspace / "plugin/bin/Release/net8.0/rhinomcp.rhp"
     shutil.copy2(binary, request["candidate_binary"])
     helper_output = directory / "metadata-reader"
@@ -264,7 +268,16 @@ def test_suite(request):
             )
         clear_owned(directory, run_dir.name)
         save(report_dir / "progress.json", {"cases": cases, "evidence": evidence})
-    if set(cases) != set(read(Path(request["suite"]))["cases"]):
+    contract = read(Path(request["suite"]))
+    if contract.get("sweep_cap_probe") is True:
+        from experiments.sweep_cap_probe import run_checks
+
+        cases.update(run_checks(report_dir / "sweep-cap", runtime()))
+        evidence["sweep_cap"] = {
+            "path": str(report_dir / "sweep-cap/result.json"),
+            "sha256": sha256(report_dir / "sweep-cap/result.json"),
+        }
+    if set(cases) != set(contract["cases"]):
         raise ValueError("Live suite case names do not match the frozen contract")
     if probe(directory) != observed:
         raise RuntimeError("Runtime changed during the live suite")

@@ -177,3 +177,65 @@ def test_review_has_exclusive_writer_lock(tmp_path):
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         with pytest.raises(BlockingIOError):
             repair.revise(tmp_path, "concurrent write")
+
+
+def test_gateway_pins_manifest_before_each_access(candidate, monkeypatch):
+    from experiments.runner import sha256
+
+    manifest = candidate.parent / "manifest.json"
+    monkeypatch.setenv("BUILDER_MANIFEST_SHA256", sha256(manifest))
+    builder_mcp.read_source(repair.READ_PATHS[0])
+    data = json.loads(manifest.read_text())
+    data["write_paths"].append("plugin/Functions/_utils.cs")
+    manifest.write_text(json.dumps(data))
+    with pytest.raises(ValueError, match="manifest changed"):
+        builder_mcp.read_source(repair.READ_PATHS[0])
+
+
+def test_scoped_checkpoint_rejects_scope_drift(candidate):
+    from experiments.runner import save, sha256
+
+    directory = candidate.parent
+    manifest = directory / "manifest.json"
+    data = json.loads(manifest.read_text())
+    data["scope_version"] = 1
+    save(manifest, data)
+    pin = {"manifest_sha256": sha256(manifest)}
+    save(directory / "scope-lock.json", pin)
+    assert repair.repair_scope(directory, pin)["write_paths"] == repair.WRITE_PATHS
+    with pytest.raises(ValueError, match="checkpoint"):
+        repair.repair_scope(directory, {"manifest_sha256": "different"})
+    data["write_paths"].append("plugin/Functions/_utils.cs")
+    save(manifest, data)
+    with pytest.raises(ValueError, match="changed after dispatch"):
+        repair.repair_scope(directory, pin)
+
+
+def test_per_repair_inventory_gate_has_no_capture_write_fallback(candidate):
+    before = repair.inventory(candidate)
+    name = "plugin/Functions/_utils.cs"
+    (candidate / name).write_text("new scoped source")
+    assert repair.check_candidate(candidate, before, [name]) == [name]
+    (candidate / repair.WRITE_PATHS[0]).write_text("capture outside new scope")
+    with pytest.raises(ValueError, match="protected"):
+        repair.check_candidate(candidate, before, [name])
+
+
+@pytest.mark.parametrize(
+    "bad_path",
+    [
+        "experiments/evaluator.py",
+        "plugin/Functions/../Commands/X.cs",
+        "/plugin/Functions/X.cs",
+        ".git/config",
+    ],
+)
+def test_new_scope_cannot_grant_harness_or_traversal_access(tmp_path, bad_path):
+    from experiments.runner import save
+
+    scope = tmp_path / "scope.json"
+    evidence = tmp_path / "evidence.json"
+    save(scope, {"read_paths": [bad_path], "write_paths": [bad_path]})
+    save(evidence, {"planner": {"action": "plugin_issue"}})
+    with pytest.raises(ValueError, match="production source paths"):
+        repair.scoped_repair(scope, evidence)

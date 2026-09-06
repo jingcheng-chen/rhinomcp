@@ -18,7 +18,11 @@ def checked_path(name, write=False):
     calls += 1
     if calls > 24:
         raise RuntimeError("Builder call budget exhausted")
-    manifest = json.loads(Path(os.environ["BUILDER_MANIFEST"]).read_text())
+    data = Path(os.environ["BUILDER_MANIFEST"]).read_bytes()
+    expected = os.environ.get("BUILDER_MANIFEST_SHA256")
+    if expected is not None and digest(data) != expected:
+        raise ValueError("Builder scope manifest changed")
+    manifest = json.loads(data)
     allowed = manifest["write_paths" if write else "read_paths"]
     if name not in allowed:
         raise ValueError("Path is outside the builder scope")

@@ -1,4 +1,4 @@
-"""Prepare a bounded capture-repair candidate; never execute or install it.
+"""Prepare a bounded source-repair candidate; never execute or install it.
 
 The controller exports production source from a pinned Git revision into a separate
 checkout. Fresh planner/builder sessions use narrow tools, not a general shell.
@@ -58,14 +58,14 @@ def inventory(directory):
     return result
 
 
-def check_candidate(directory, before):
+def check_candidate(directory, before, write_paths=None):
     after = inventory(directory)
     if before.keys() != after.keys():
         raise ValueError("Builder added or removed files")
     changed = [path for path in before if before[path] != after[path]]
     if not changed:
         raise ValueError("Builder produced no changes")
-    if set(changed) - set(WRITE_PATHS):
+    if set(changed) - set(WRITE_PATHS if write_paths is None else write_paths):
         raise ValueError("Builder changed protected files")
     if any(before[path]["mode"] != after[path]["mode"] for path in changed):
         raise ValueError("Builder changed file modes")
@@ -121,10 +121,116 @@ def export_candidate(revision, target):
         subprocess.run(["git", *command], cwd=target, check=True, capture_output=True)
 
 
+def repair_scope(directory, checkpoint=None):
+    """Load a pinned per-repair manifest, or the historical fixed capture scope."""
+    path = directory / "manifest.json"
+    manifest = (
+        json.loads(path.read_text())
+        if path.exists()
+        else {"read_paths": READ_PATHS, "write_paths": WRITE_PATHS}
+    )
+    if manifest.get("scope_version") == 1:
+        pin = json.loads((directory / "scope-lock.json").read_text())
+        if pin["manifest_sha256"] != sha256(path):
+            raise ValueError("Repair scope manifest changed after dispatch")
+        if checkpoint and checkpoint.get("manifest_sha256") != sha256(path):
+            raise ValueError("Repair scope differs from reviewed checkpoint")
+    elif manifest["read_paths"] != READ_PATHS or manifest["write_paths"] != WRITE_PATHS:
+        raise ValueError("Legacy repair must retain the fixed builder scope")
+    if (
+        "candidate" in manifest
+        and Path(manifest["candidate"]).resolve() != (directory / "candidate").resolve()
+    ):
+        raise ValueError("Repair scope points to another candidate")
+    return manifest
+
+
+def scoped_repair(scope_path, evidence_path, timeout=240):
+    """Supervisor dispatch from a reviewed scope and an existing plugin-issue plan."""
+    scope = json.loads(scope_path.read_text())
+    evidence = json.loads(evidence_path.read_text())
+    require_plugin_plan(evidence["planner"])
+    reads, writes = scope["read_paths"], scope["write_paths"]
+    for paths in (reads, writes):
+        if not isinstance(paths, list) or not paths or len(paths) != len(set(paths)):
+            raise ValueError("Scope requires distinct nonempty path lists")
+        for name in paths:
+            path = PurePosixPath(name)
+            if (
+                path.is_absolute()
+                or ".." in path.parts
+                or str(path) != name
+                or not (
+                    name.startswith("plugin/Functions/")
+                    or name.startswith("server/src/rhinomcp/tools/")
+                    or name.startswith("contracts/commands/")
+                )
+            ):
+                raise ValueError("Scope must contain exact production source paths")
+    if not set(writes) <= set(reads):
+        raise ValueError("Writable paths must also be readable")
+    revision = subprocess.check_output(
+        ["git", "rev-parse", scope["baseline_revision"] + "^{commit}"],
+        cwd=ROOT,
+        text=True,
+    ).strip()
+    directory = (
+        ROOT
+        / "experiments/runs"
+        / ("repair-" + time.strftime("%Y%m%d-%H%M%S-") + uuid.uuid4().hex[:8])
+    )
+    directory.mkdir()
+    export_candidate(revision, directory / "candidate")
+    for name in reads:
+        if not (directory / "candidate" / name).is_file():
+            raise ValueError("Scope source is absent from pinned revision")
+    save(directory / "baseline_inventory.json", inventory(directory / "candidate"))
+    manifest = dict(
+        scope,
+        scope_version=1,
+        baseline_revision=revision,
+        candidate=str((directory / "candidate").resolve()),
+        evidence_sha256=sha256(evidence_path),
+        scope_source_sha256=sha256(scope_path),
+        builder_instructions=role_instructions("bounded_builder"),
+    )
+    save(directory / "manifest.json", manifest)
+    save(
+        directory / "scope-lock.json",
+        {"manifest_sha256": sha256(directory / "manifest.json")},
+    )
+    save(directory / "development_evidence.json", evidence)
+    save(directory / "checkpoint.json", {"stage": "building"})
+    try:
+        result = run_session(
+            directory / "builder",
+            manifest["builder_instructions"]
+            + "\n"
+            + json.dumps(
+                {
+                    "scope": manifest,
+                    "development_evidence": evidence,
+                }
+            ),
+            BUILDER_SCHEMA,
+            timeout,
+            builder_config(directory),
+        )
+        finish_candidate(directory, result)
+    except BaseException as error:
+        save(
+            directory / "failure.json",
+            {"error": str(error), "executed": False, "installed": False},
+        )
+        raise
+    return directory
+
+
 def builder_config(directory):
     env = {
         "PYTHONPATH": str(ROOT),
         "BUILDER_MANIFEST": str(directory / "manifest.json"),
+        "BUILDER_MANIFEST_SHA256": sha256(directory / "manifest.json"),
     }
     return {
         "command": json.dumps(sys.executable),
@@ -144,7 +250,8 @@ def finish_candidate(directory, result):
     before = json.loads((directory / "baseline_inventory.json").read_text())
     if not result["complete"]:
         raise ValueError("Builder reported incomplete work")
-    changed = check_candidate(candidate, before)
+    manifest = repair_scope(directory)
+    changed = check_candidate(candidate, before, manifest["write_paths"])
     patch = subprocess.check_output(
         ["git", "diff", "--no-ext-diff", "--binary"], cwd=candidate
     )
@@ -158,6 +265,8 @@ def finish_candidate(directory, result):
         "installed": False,
         "candidate_inventory": inventory(candidate),
     }
+    if manifest.get("scope_version") == 1:
+        report["manifest_sha256"] = sha256(directory / "manifest.json")
     save(directory / "checkpoint.json", report)
 
 
@@ -268,13 +377,7 @@ def revise_locked(directory, feedback, timeout):
         "executed"
     ):
         raise ValueError("Only an unexecuted, reviewed candidate can be revised")
-    manifest = json.loads((directory / "manifest.json").read_text())
-    if (
-        Path(manifest["candidate"]).resolve() != (directory / "candidate").resolve()
-        or manifest["write_paths"] != WRITE_PATHS
-        or manifest["read_paths"] != READ_PATHS
-    ):
-        raise ValueError("Review manifest does not match the fixed builder scope")
+    manifest = repair_scope(directory, checkpoint)
     # Verify the candidate still matches the last recorded patch before another writer.
     patch = subprocess.check_output(
         ["git", "diff", "--no-ext-diff", "--binary"], cwd=directory / "candidate"
@@ -286,6 +389,7 @@ def revise_locked(directory, feedback, timeout):
     check_candidate(
         directory / "candidate",
         json.loads((directory / "baseline_inventory.json").read_text()),
+        manifest["write_paths"],
     )
     name = "builder-review-" + uuid.uuid4().hex[:8]
     (directory / (name + "-input.patch")).write_bytes(patch)
@@ -294,11 +398,18 @@ def revise_locked(directory, feedback, timeout):
     try:
         result = run_session(
             directory / name,
-            role_instructions("builder")
+            manifest.get("builder_instructions", role_instructions("builder"))
+            + "\nRepair requirements:\n"
+            + json.dumps(manifest)
             + "\nController review:\n"
             + feedback
             + "\n"
-            + json.dumps({"read_paths": READ_PATHS, "write_paths": WRITE_PATHS}),
+            + json.dumps(
+                {
+                    "read_paths": manifest["read_paths"],
+                    "write_paths": manifest["write_paths"],
+                }
+            ),
             BUILDER_SCHEMA,
             timeout,
             builder_config(directory),
@@ -318,6 +429,8 @@ if __name__ == "__main__":
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--evidence", type=Path)
     source.add_argument("--revise", type=Path)
+    source.add_argument("--scope", type=Path)
+    parser.add_argument("--diagnosis", type=Path)
     parser.add_argument(
         "--feedback", type=Path, help="Controller review text for --revise"
     )
@@ -328,7 +441,13 @@ if __name__ == "__main__":
         help="Operator-verified MVID when rebuilding the pinned baseline on another host",
     )
     args = parser.parse_args()
-    if args.revise:
+    if args.scope:
+        if not args.diagnosis:
+            parser.error("--scope requires --diagnosis")
+        print(
+            scoped_repair(args.scope.resolve(), args.diagnosis.resolve(), args.timeout)
+        )
+    elif args.revise:
         if not args.feedback:
             parser.error("--revise requires --feedback")
         print(revise(args.revise.resolve(), args.feedback.read_text(), args.timeout))

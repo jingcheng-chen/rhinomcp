@@ -1120,6 +1120,25 @@ def test_protocol_envelope():
     return all_passed
 
 
+def test_sweep_planar_cap_schema():
+    """Caps are optional booleans and remain independent from rail closure."""
+    schema = load_schema_with_refs("commands/sweep1.json")
+    validator = Draft202012Validator(schema)
+    payload = {
+        "rail_id": "00000000-0000-0000-0000-000000000001",
+        "profile_ids": ["00000000-0000-0000-0000-000000000002"],
+    }
+    assert not list(validator.iter_errors(payload))
+    assert schema["properties"]["cap_planar_ends"]["default"] is False
+    for cap in (False, True):
+        for closed in (False, True):
+            assert not list(validator.iter_errors(
+                {**payload, "cap_planar_ends": cap, "closed": closed}
+            ))
+    for invalid in (None, 0, 1, "true", [], {}):
+        assert list(validator.iter_errors({**payload, "cap_planar_ends": invalid}))
+
+
 def main():
     """Run all tests."""
     print("RhinoMCP Schema Validation Tests")
@@ -1138,6 +1157,8 @@ def main():
     results.append(("schema coverage", test_schema_coverage_against_protocol()))
     results.append(("contract sync (3 tiers)", test_contract_synchronization_across_tiers()))
     results.append(("protocol envelope", test_protocol_envelope()))
+    test_sweep_planar_cap_schema()
+    results.append(("sweep planar caps", True))
 
     print("\n" + "=" * 40)
     print("SUMMARY")

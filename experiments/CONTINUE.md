@@ -187,7 +187,7 @@ open frame ends, and crude strap wrapping. No command failures were reported.
 No production behavior changed. No builder was dispatched and nothing was promoted.
 This is a diagnostic starting point, not demonstrated self-improvement.
 
-**Current Rhino state at handoff:** the saved baseline chair remains in the owned
+**Historical Rhino state at that milestone:** the saved baseline chair remained in the owned
 unsaved document, marker `visual-20260906-084828-2fc89506`, original plugin MVID
 `90d87782-2887-435e-a8b2-02467f0c5094`. Verify live identity and contents before any
 cleanup; do not reuse the older assumption of an empty document. Full local model,
@@ -198,7 +198,7 @@ screenshot-boundary and diagnostic-verdict tests. Experiment lint/format checks
 pass. The 43-case live contract is unchanged; its live suite was not rerun because
 this milestone changed no production plugin/server/protocol behavior.
 
-## Latest milestone: curved-strip closure probe
+## Previous milestone: curved-strip closure probe
 
 Read `STRIP_PROBE.md`. Actual MCP sweeps of a quarter-circle rectangular strip are
 open with both `closed=false` and `closed=true`; measurements are identical. A
@@ -219,19 +219,76 @@ and six existing layers match their before-probe state. The existing chair marke
 and original plugin remain in place; verify current ownership before further work.
 **356 developer tests pass** (133 experiment, 223 server), plus experiment lint/format.
 
+## Latest milestone: validated generic sweep end caps
+
+Read `SWEEP_CAP_TRIAL.md`. A fresh bounded builder added opt-in
+`cap_planar_ends` to `sweep1` across C#, Python and schema. Default false preserves
+existing open sweeps. Enabled capping validates all outputs before adding any,
+accepts existing solids, fails clearly for uncapable results, rolls back partial
+insertions and disposes temporary geometry. The old unused `closed` flag is
+unchanged and remains a separate contract issue.
+
+New repairs use `harness/roles/bounded_builder.md` and a reviewed per-repair scope
+(`harness/repairs/sweep-cap.json`). Manifest hashes and checkout inventory protect
+scope across initial dispatch, review/revision and trial preparation. The old
+capture replay remains supported. The exact tested patch is preserved in
+`harness/repairs/sweep-cap.patch` for replay from its pinned baseline revision.
+
+The expanded frozen contract `harness/trial-sweep-cap.json` retains all 43 previous
+verdicts and adds seven sweep cases. Baseline: 47 true, three explicitly measured
+capability failures. Candidate: **50/50 true**. Restored baseline: exactly the same
+47 true / three false vector. No regressions; three measured improvements. Final
+controller state: `accepted_trial`, `runtime_dirty=false`, `promoted=false`.
+The supervisor then integrated the exact tested three-file patch into this branch
+and added independent permanent transport/schema tests. This is source adoption;
+the running Rhino plugin is still the restored original binary.
+
+Local builder: `runs/repair-20260906-092614-ae7792cc/`.
+Successful trial: `trial-667b3692/` inside that run. Earlier `trial-194a32ba` failed
+before build/install due to adapter launch setup and was safely rejected; do not
+resume it. Use an absolute repository PYTHONPATH for live controller invocation and
+call `rhino_trial.claim_empty(trial_directory)` on a verified fresh empty document
+before running. Never reset a registered candidate or replay an interrupted step
+without checking its durable state and whether a child process remains alive.
+
+**Current Rhino state at this handoff:** PID 59985, one dedicated empty unsaved
+document, serial 268435457, marker none, modified=true from the cleared test work;
+original MVID
+`90d87782-2887-435e-a8b2-02467f0c5094`. Recheck actual identity before reuse.
+The original chair is safely stored in
+`runs/visual-20260906-084828-2fc89506/candidate.3dm`, SHA-256
+`188777bf59d32b40dc122959b6753b6407f9e58f874a562ef76f9f98983a6923`.
+Its full geometry/attribute/layer fingerprint was verified before closing.
+Rhino takes time to exit; wait for the main process to disappear before copying
+any plugin. No forced termination or in-place loaded-binary replacement occurred.
+
+The verified candidate binary is `trial-667b3692/candidate.rhp`, MVID
+`79b1500e-e20d-47af-9c83-6f915729a712`, SHA-256
+`635e8ccf94a55775ea2b58166d83eb995ad517c3de3d66963caed7772a027d7e`.
+Rebuilding changes binary identity; do not assume its old MVID. Baseline binary
+and complete lifecycle tickets are retained in the trial directory.
+
+Final source validation: **385 tests pass** (144 harness, 228 server, 13 contract
+tests); standalone contract validation passes. Experiment lint/format and server
+source lint pass. The fresh post-trial planner recommends `accept`, followed by
+a small fresh-modeler curved-strip task. See the saved post-trial plan.
+
 ## Next concrete milestone
 
-1. Prepare the end-capping proposal for a fresh bounded builder. `repair.py` and
-   `roles/builder.md` currently hard-code the capture pilot; introduce reviewed,
-   pinned per-repair paths/instructions without expanding the builder's authority
-   over evaluator, scope or execution. Preserve existing capture-controller tests.
-2. Dispatch the sweep C#/Python/schema/test change, review it, then build and run
-   the live baseline/candidate/restoration workflow. Keep the existing 43 cases
-   unchanged and add explicit capping positives, uncapable/invalid negatives and
-   failure-atomicity tests. The supervisor-only capped control is not a modeler tool.
-3. Separately test a continuous rounded 2×2 cushion patch using current surface tools.
-4. Check tight/cropped orthographic chair captures with a small tall-object fixture
-   before adopting silhouette scoring. Test other objects before claiming transfer.
+Demonstrate the new capability through a **fresh modeling agent**, not just the
+scripted probe. Pin/install the verified version under the existing supervised
+lifecycle, then give the agent one objective curved-strip task and permitted tools.
+It must construct the rail/profile, request capping, remove construction geometry
+and save exactly one solid that passes the independent strip evaluator. Follow
+with a different geometry or pose to begin transfer testing; retain all existing
+preservation cases. Do not claim improved chair reconstruction until a new chair
+attempt and appropriate visual evaluation support that conclusion.
+
+The current screenshot gateway already exposes command schemas dynamically; the
+objective task runner still needs a curved-strip task/evaluator dispatch and a
+bounded sweep tool path. Keep evaluator code outside builder/modeler write access.
+Continuous cushions and hierarchical layers are separate milestones. Keep the
+chair as one diagnostic benchmark in a general suite.
 
 ## Requested model organization milestone
 
@@ -288,7 +345,7 @@ is still blocked until a public-feedback/redaction boundary is implemented.
 ## Evidence and portability
 
 `FIRST_LOOP.md`, `POSED_PRISM_LOOP.md`, `THROUGH_HOLE_LOOP.md`, and
-`CAPTURE_REPAIR.md`, `REFERENCE_LOOP.md`, `BUILDER_LOOP.md`, and
+`CAPTURE_REPAIR.md`, `REFERENCE_LOOP.md`, `BUILDER_LOOP.md`, `SWEEP_CAP_TRIAL.md`, and
 `TRIAL_CONTROLLER.md` and `LIVE_TRIAL.md` are portable summaries. Full local records are under ignored
 `runs/` directories and may not exist on another machine. If absent, rerun the
 fixtures and task; do not claim fresh verification from the historical report.

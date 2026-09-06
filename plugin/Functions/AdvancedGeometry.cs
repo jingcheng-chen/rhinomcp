@@ -162,6 +162,7 @@ public partial class RhinoMCPFunctions
         var profileIds = parameters["profile_ids"]?.ToObject<List<string>>();
         var name = parameters["name"]?.ToString();
         var closed = parameters["closed"]?.ToObject<bool>() ?? false;
+        var capPlanarEnds = parameters["cap_planar_ends"]?.ToObject<bool>() ?? false;
 
         if (string.IsNullOrEmpty(railId))
             throw new ArgumentException("Sweep requires a rail_id");
@@ -201,25 +202,81 @@ public partial class RhinoMCPFunctions
         if (breps == null || breps.Length == 0)
             throw new InvalidOperationException("Sweep operation failed - ensure rail and profiles are valid");
 
-        var resultIds = new JArray();
-        foreach (var brep in breps)
-        {
-            var attr = new ObjectAttributes();
-            if (!string.IsNullOrEmpty(name))
-                attr.Name = name;
+        var cappedBreps = new List<Brep>();
+        var resultsToAdd = new List<Brep>();
+        var addedIds = new List<Guid>();
 
-            var id = doc.Objects.AddBrep(brep, attr);
-            resultIds.Add(id.ToString());
+        try
+        {
+            foreach (var brep in breps)
+            {
+                if (!capPlanarEnds)
+                {
+                    resultsToAdd.Add(brep);
+                    continue;
+                }
+
+                if (brep.IsValid && brep.IsSolid)
+                {
+                    resultsToAdd.Add(brep);
+                    continue;
+                }
+
+                var cappedBrep = brep.CapPlanarHoles(doc.ModelAbsoluteTolerance);
+                if (cappedBrep == null || !cappedBrep.IsValid || !cappedBrep.IsSolid)
+                {
+                    cappedBrep?.Dispose();
+                    throw new InvalidOperationException(
+                        "Sweep planar end capping failed: every result must be a valid solid; no results were added");
+                }
+
+                cappedBreps.Add(cappedBrep);
+                resultsToAdd.Add(cappedBrep);
+            }
+
+            var resultIds = new JArray();
+            try
+            {
+                foreach (var resultBrep in resultsToAdd)
+                {
+                    var attr = new ObjectAttributes();
+                    if (!string.IsNullOrEmpty(name))
+                        attr.Name = name;
+
+                    var id = doc.Objects.AddBrep(resultBrep, attr);
+                    if (id == Guid.Empty)
+                        throw new InvalidOperationException(
+                            "Sweep document insertion failed; no results were retained");
+
+                    addedIds.Add(id);
+                    resultIds.Add(id.ToString());
+                }
+            }
+            catch
+            {
+                foreach (var id in addedIds)
+                    doc.Objects.Delete(id, true);
+                throw;
+            }
+
+            doc.Views.Redraw();
+
+            return new JObject
+            {
+                ["result_ids"] = resultIds,
+                ["count"] = resultsToAdd.Count,
+                ["message"] = capPlanarEnds
+                    ? $"Sweep created {resultsToAdd.Count} solid(s)"
+                    : $"Sweep created {resultsToAdd.Count} surface(s)"
+            };
         }
-
-        doc.Views.Redraw();
-
-        return new JObject
+        finally
         {
-            ["result_ids"] = resultIds,
-            ["count"] = breps.Length,
-            ["message"] = $"Sweep created {breps.Length} surface(s)"
-        };
+            foreach (var cappedBrep in cappedBreps)
+                cappedBrep.Dispose();
+            foreach (var brep in breps)
+                brep.Dispose();
+        }
     }
 
     /// <summary>

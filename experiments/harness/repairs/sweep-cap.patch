@@ -1,0 +1,154 @@
+diff --git a/contracts/commands/sweep1.json b/contracts/commands/sweep1.json
+index e36f0c8..0c4dcde 100644
+--- a/contracts/commands/sweep1.json
++++ b/contracts/commands/sweep1.json
+@@ -8,6 +8,11 @@
+     "rail_id": { "$ref": "../common/definitions.json#/$defs/guid" },
+     "profile_ids": { "$ref": "../common/definitions.json#/$defs/guidArray" },
+     "closed": { "type": "boolean", "default": false },
++    "cap_planar_ends": {
++      "type": "boolean",
++      "default": false,
++      "description": "Cap planar holes at document tolerance. All sweep results must be valid solids before any are added; otherwise the command fails without retaining results."
++    },
+     "name": { "type": "string" }
+   },
+   "required": ["rail_id", "profile_ids"],
+diff --git a/plugin/Functions/AdvancedGeometry.cs b/plugin/Functions/AdvancedGeometry.cs
+index 61876ef..e5cce06 100644
+--- a/plugin/Functions/AdvancedGeometry.cs
++++ b/plugin/Functions/AdvancedGeometry.cs
+@@ -162,6 +162,7 @@ public partial class RhinoMCPFunctions
+         var profileIds = parameters["profile_ids"]?.ToObject<List<string>>();
+         var name = parameters["name"]?.ToString();
+         var closed = parameters["closed"]?.ToObject<bool>() ?? false;
++        var capPlanarEnds = parameters["cap_planar_ends"]?.ToObject<bool>() ?? false;
+ 
+         if (string.IsNullOrEmpty(railId))
+             throw new ArgumentException("Sweep requires a rail_id");
+@@ -201,25 +202,81 @@ public partial class RhinoMCPFunctions
+         if (breps == null || breps.Length == 0)
+             throw new InvalidOperationException("Sweep operation failed - ensure rail and profiles are valid");
+ 
+-        var resultIds = new JArray();
+-        foreach (var brep in breps)
++        var cappedBreps = new List<Brep>();
++        var resultsToAdd = new List<Brep>();
++        var addedIds = new List<Guid>();
++
++        try
+         {
+-            var attr = new ObjectAttributes();
+-            if (!string.IsNullOrEmpty(name))
+-                attr.Name = name;
++            foreach (var brep in breps)
++            {
++                if (!capPlanarEnds)
++                {
++                    resultsToAdd.Add(brep);
++                    continue;
++                }
+ 
+-            var id = doc.Objects.AddBrep(brep, attr);
+-            resultIds.Add(id.ToString());
+-        }
++                if (brep.IsValid && brep.IsSolid)
++                {
++                    resultsToAdd.Add(brep);
++                    continue;
++                }
+ 
+-        doc.Views.Redraw();
++                var cappedBrep = brep.CapPlanarHoles(doc.ModelAbsoluteTolerance);
++                if (cappedBrep == null || !cappedBrep.IsValid || !cappedBrep.IsSolid)
++                {
++                    cappedBrep?.Dispose();
++                    throw new InvalidOperationException(
++                        "Sweep planar end capping failed: every result must be a valid solid; no results were added");
++                }
+ 
+-        return new JObject
++                cappedBreps.Add(cappedBrep);
++                resultsToAdd.Add(cappedBrep);
++            }
++
++            var resultIds = new JArray();
++            try
++            {
++                foreach (var resultBrep in resultsToAdd)
++                {
++                    var attr = new ObjectAttributes();
++                    if (!string.IsNullOrEmpty(name))
++                        attr.Name = name;
++
++                    var id = doc.Objects.AddBrep(resultBrep, attr);
++                    if (id == Guid.Empty)
++                        throw new InvalidOperationException(
++                            "Sweep document insertion failed; no results were retained");
++
++                    addedIds.Add(id);
++                    resultIds.Add(id.ToString());
++                }
++            }
++            catch
++            {
++                foreach (var id in addedIds)
++                    doc.Objects.Delete(id, true);
++                throw;
++            }
++
++            doc.Views.Redraw();
++
++            return new JObject
++            {
++                ["result_ids"] = resultIds,
++                ["count"] = resultsToAdd.Count,
++                ["message"] = capPlanarEnds
++                    ? $"Sweep created {resultsToAdd.Count} solid(s)"
++                    : $"Sweep created {resultsToAdd.Count} surface(s)"
++            };
++        }
++        finally
+         {
+-            ["result_ids"] = resultIds,
+-            ["count"] = breps.Length,
+-            ["message"] = $"Sweep created {breps.Length} surface(s)"
+-        };
++            foreach (var cappedBrep in cappedBreps)
++                cappedBrep.Dispose();
++            foreach (var brep in breps)
++                brep.Dispose();
++        }
+     }
+ 
+     /// <summary>
+diff --git a/server/src/rhinomcp/tools/advanced_geometry.py b/server/src/rhinomcp/tools/advanced_geometry.py
+index ce25c53..6529c6c 100644
+--- a/server/src/rhinomcp/tools/advanced_geometry.py
++++ b/server/src/rhinomcp/tools/advanced_geometry.py
+@@ -121,6 +121,7 @@ def sweep1(
+     profile_ids: List[str],
+     name: Optional[str] = None,
+     closed: bool = False,
++    cap_planar_ends: bool = False,
+ ) -> Dict[str, Any]:
+     """
+     Sweep one or more profile curves along a rail curve.
+@@ -130,6 +131,9 @@ def sweep1(
+     - profile_ids: List of profile curve IDs (GUIDs) - the shapes to sweep
+     - name: Optional name for the resulting surface
+     - closed: If True, creates a closed sweep
++    - cap_planar_ends: If True, cap planar holes at document tolerance. Every
++      result must become a valid solid before any result is added; otherwise
++      the operation fails and leaves the document unchanged (default: False).
+ 
+     Returns:
+     - Dictionary with result_ids (list of created surface IDs) and message
+@@ -149,6 +153,7 @@ def sweep1(
+             "rail_id": rail_id,
+             "profile_ids": profile_ids,
+             "closed": closed,
++            "cap_planar_ends": cap_planar_ends,
+         }
+         if name:
+             params["name"] = name

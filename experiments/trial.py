@@ -19,7 +19,7 @@ import sys
 import time
 import uuid
 
-from experiments.repair import check_candidate, inventory
+from experiments.repair import check_candidate, inventory, repair_scope
 from experiments.runner import save, sha256
 
 
@@ -46,6 +46,17 @@ def read(path):
     return json.loads(path.read_text())
 
 
+def baseline_expectations(contract):
+    expected = contract.get("baseline_expectations", {})
+    if (
+        not isinstance(expected, dict)
+        or set(expected) - set(contract["cases"])
+        or any(type(value) is not bool for value in expected.values())
+    ):
+        raise ValueError("Invalid baseline expectations")
+    return {name: expected.get(name, True) for name in contract["cases"]}
+
+
 def prepare(repair, baseline, baseline_mvid, suite, adapter, runtime_lock, review):
     repair = repair.resolve(strict=True)
     adapter = adapter.resolve(strict=True)
@@ -62,6 +73,7 @@ def prepare(repair, baseline, baseline_mvid, suite, adapter, runtime_lock, revie
         or len(set(cases)) != len(cases)
     ):
         raise ValueError("Suite requires unique nonempty case names")
+    baseline_expectations(contract)
     inputs = contract.get("inputs", [])
     if not isinstance(inputs, list) or not all(
         isinstance(name, str) for name in inputs
@@ -80,7 +92,10 @@ def prepare(repair, baseline, baseline_mvid, suite, adapter, runtime_lock, revie
             "executed"
         ):
             raise ValueError("Trial requires an unexecuted candidate ready for review")
-        check_candidate(source, read(repair / "baseline_inventory.json"))
+        scope = repair_scope(repair, checkpoint)
+        check_candidate(
+            source, read(repair / "baseline_inventory.json"), scope["write_paths"]
+        )
         if inventory(source) != checkpoint["candidate_inventory"]:
             raise ValueError("Candidate changed since builder checkpoint")
         patch = subprocess.check_output(
@@ -272,8 +287,8 @@ class Trial:
         self.probe(baseline, recovery=True)
         outcomes = self.test(baseline, recovery=True)
         self.probe(baseline, recovery=True)
-        if not all(outcomes.values()):
-            raise ValueError("Restored baseline failed its fixed suite")
+        if outcomes != baseline_expectations(read(self.directory / "suite.json")):
+            raise ValueError("Restored baseline differs from its frozen expectations")
         self.record("restored", runtime_dirty=False, restored_cases=outcomes)
 
     def run(self):
@@ -302,7 +317,9 @@ class Trial:
                 baseline = self.manifest["baseline"]
                 self.probe(baseline)
                 baseline_cases = self.test(baseline)
-                if not all(baseline_cases.values()):
+                if baseline_cases != baseline_expectations(
+                    read(self.directory / "suite.json")
+                ):
                     raise ValueError("Baseline does not pass the frozen suite")
                 self.record("baseline_verified", baseline_cases=baseline_cases)
                 build = self.invoke("build")
@@ -328,12 +345,24 @@ class Trial:
                 comparison = {
                     "baseline": baseline_cases,
                     "candidate": outcomes,
-                    "regressions": [name for name in outcomes if not outcomes[name]],
+                    "regressions": [
+                        name
+                        for name in outcomes
+                        if baseline_cases[name] and not outcomes[name]
+                    ],
+                    "improvements": [
+                        name
+                        for name in outcomes
+                        if not baseline_cases[name] and outcomes[name]
+                    ],
+                    "unmet_requirements": [
+                        name for name in outcomes if not outcomes[name]
+                    ],
                 }
                 persist(self.directory / "comparison.json", comparison)
                 self.record("compared", candidate_passed=all(outcomes.values()))
                 if not all(outcomes.values()):
-                    raise ValueError("Candidate regressed on the frozen suite")
+                    raise ValueError("Candidate did not pass every frozen requirement")
                 self.restore()
                 self.record("accepted_trial", promoted=False)
             except Exception as error:
