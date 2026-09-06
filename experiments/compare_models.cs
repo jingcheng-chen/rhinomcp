@@ -1,5 +1,5 @@
 var savedViews=doc.Views.Select(v=>new {view=v,projection=new Rhino.DocObjects.ViewportInfo(v.ActiveViewport),target=v.ActiveViewport.CameraTarget,name=v.ActiveViewport.Name,mode=v.ActiveViewport.DisplayMode.Id}).ToArray();
-var original=doc.Objects.Where(o=>o!=null&&!o.IsDeleted).Select(o=>new {id=o.Id,hidden=o.IsHidden}).ToArray();
+var original=doc.Objects.GetObjectList(new Rhino.DocObjects.ObjectEnumeratorSettings { NormalObjects=true, HiddenObjects=true, LockedObjects=true, ReferenceObjects=true, IncludeLights=true }).Where(o=>o!=null&&!o.IsDeleted).Select(o=>new {id=o.Id,hidden=o.IsHidden}).ToArray();
 var added=new List<Guid>(); var groups=new List<List<Guid>>(); var bounds=BoundingBox.Empty;
 var reports=new List<object>();
 try {
@@ -42,8 +42,10 @@ try {
  }
  output.AppendLine(Serialize(reports));
 } finally {
- foreach(var id in added)doc.Objects.Delete(id,true);
+ var cleanupFailures=new List<Guid>();
+ foreach(var id in added){doc.Objects.Show(id,true);if(!doc.Objects.Delete(id,true))cleanupFailures.Add(id);}
  foreach(var o in original)if(!o.hidden)doc.Objects.Show(o.id,true);
  doc.Views.Redraw();Rhino.RhinoApp.Wait();
  foreach(var v in savedViews){var vp=v.view.ActiveViewport;vp.SetViewProjection(v.projection,false);vp.SetCameraTarget(v.target,false);vp.Name=v.name;vp.DisplayMode=Rhino.Display.DisplayModeDescription.GetDisplayMode(v.mode);}
+ if(cleanupFailures.Count>0)throw new Exception("Comparison copy cleanup failed: "+string.Join(",",cleanupFailures));
 }

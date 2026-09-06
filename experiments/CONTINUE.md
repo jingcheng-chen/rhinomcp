@@ -492,25 +492,86 @@ Matched model-to-model Perspective/Front/Right captures preserve identical camer
 records and both source files. Selected images/provenance are tracked in assets;
 roadmap shows all 12 phases and paired chair comparisons.
 
-Cleanup verified the original empty document, six layers, 0.001 tolerance and display
-modes. Runtime PID 84726 / document 268435457 / MVID
+**Correction from the next milestone:** that cleanup check omitted hidden objects.
+The comparison left 65 hidden copies; the next saved-file check caught them.
+They have since been archived, verified and removed, and live enumeration/cleanup
+now pass a hidden-object regression. See `POSED_CUSHION_LOOP.md`.
+Historical runtime PID 84726 / document 268435457 / MVID
 `326aaa12-b851-4c6a-afcb-45291e734a5c`, marker none, unsaved modified=true.
 Reverify before reuse. New chair SHA `8d283f733e44ef95764d5c57c68d56b39b4e7bab38030b78a142a4821a06b2b6`.
 458 developer tests (207 experiment, 238 server, 13 contract); production plugin and
 accepted 61-case contract unchanged, historical full live pass not rerun here.
 
+## Latest: verified image review, boundary diagnosis and posed cushions
+
+Read `POSED_CUSHION_LOOP.md`. The original image gateway succeeds in a fresh explicit
+probe. A fresh saved-image review receives all seven selected PNGs; source hashes
+and client-returned image bytes match. `saved_review.py`/`saved_review_mcp.py` provide
+a read-only frozen-pack route independent of live Rhino. Missing image delivery
+marks the review incomplete. Exact cause of the previous planner's tool-use failure
+is not established; visual similarity remains qualitative/unscored.
+
+Boundary read `runs/chair-boundary-20260906-173916/` finds two naked-edge pairs on
+the unchanged back cushion. Matching endpoints hide sampled curve gaps up to about
+0.087 mm versus 0.01 mm tolerance. No plugin defect follows; do not raise tolerance
+just to make a closed-solid verdict pass.
+
+The first posed-cushion run `...-174420-3b37dd79` saves 65 hidden comparison copies
+plus the new cushion, correctly failing uniqueness. The planner proposed excluding
+hidden extras; the supervisor rejected that because a clean saved file is required.
+The old comparison's unchecked deletion of hidden objects and default enumeration
+caused the contamination. **The earlier empty-document claim was incorrect.**
+Recovery archives and verifies those exact copies against baseline geometry before
+removal. `bridge.identity`, `rhino_trial.runtime`, `strip_probe.fingerprint` and
+`compare_models.cs` now include hidden/locked objects; comparison shows copies before
+checked deletion. Live regression `.../comparison-cleanup-validation-20260906-175039/`
+counts normal/hidden/locked objects, preserves a hidden sentinel and removes every
+comparison copy. Original chair and integration artifacts remain byte-identical.
+
+`posed_cushion_modeler.py` builds and joins the analytic closed cushion locally,
+then uses existing modify_object with bbox-center compensation to implement world
+rotation/translation. `posed_cushion_probe.py` inverse-transforms a duplicate for
+the unchanged 17 body predicates. Calibration `...-174320` has 13 expected verdicts
+twice, including wrong pose/scale and open bodies. An earlier fixture writer failed
+to persist transforms; retained failed campaign `...-174133` was corrected by adding
+transformed duplicates to new files, without relaxing the judge.
+
+Clean fresh repeat `runs/posed-cushion-model-20260906-175112-f2f8dd8d/` passes all 17
+checks, with one saved solid, zero naked edges and 0.24092 mm maximum sampled height
+error. A fresh geometry planner accepts. The alternate run `...-175410-5bf01af5` fails with 42 separate objects after
+the agent misread flat returned bounds and exhausted its call budget. Its planner
+input exceeded the CLI limit; compact feedback recovered a fresh planner without
+changing the artifact. See `summary-recovered.json` and `planner-recovery.json`. Failed/successful phase
+screenshots are distinct. This proves a planar-perimeter posed cushion workflow,
+not closure of the original chair's curved perimeter or accurate chair padding.
+
 ## Next concrete milestone
 
-First diagnose and verify fresh planner image-tool delivery (the configured read-only
-gateway should expose get_reference_image and inspect_view; the last planner instead
-tried guessed local files). A text result alone is not a completed visual review.
-Then isolate the open reclined back cushion in a small transferable task. Inspect
-edge correspondence/gaps; compare joining a closed body in local coordinates then
-applying one rigid pose. Calibrate open-body and wrong-pose counterexamples, test
-another pose/scale, and only then revisit the preserved chair. Do not relax closure
-predicates or claim overall visual improvement from valid geometry. Preserve all
-simpler benchmark contracts and include actual phase screenshots. No extra user
-reference data is needed for this step.
+First investigate misleading initial SURFACE response bounds. Two minimal probes
+(`runs/surface-bounds-20260906-180014/` and `...-180231/`) return maximum Z=10 for
+an actual interpolated surface center Z=30. Subsequent direct Brep and surface
+bounds give maximum Z=30. Geometry is not flattened; timing/cache cause and other
+affected commands remain unverified. Reuse `surface_bounds_probe.py`, add fixed
+positive/negative and trimmed-surface regression coverage, and only then dispatch
+a bounded production repair if warranted. Do not naively use untrimmed surface bounds
+for all Breps. Retry the alternate pose after the feedback problem is understood.
+
+Then test curved-perimeter closure using shared boundary curves instead of fitting
+adjacent edges independently. Keep the 0.01 mm chair tolerance fixed; do not merely
+raise it to pass Join. Only revisit the chair back on a separate copy after focused
+tests pass. Preserve simpler contracts, hidden-object guards, saved files and actual
+phase screenshots. This remains a general suite; no extra user data is needed yet.
+
+Latest validation: 465 developer tests (214 experiment, 238 server, 13 contract),
+13 expected posed-fixture verdicts twice, plus live hidden-object comparison cleanup.
+No production plugin/server/schema change or build/install occurred. The accepted
+61-case production contract is unchanged; its full live pass remains historical.
+Do not resume an old run whose source pins predate the corrected live enumeration.
+The roadmap includes 15 distinct modeling phases: one clean posed pass and two
+failed attempts are explicitly separate. Final runtime/artifact checks: `runs/posed-cushion-completion-20260906-180450/summary.json`.
+Runtime remains PID 84726 / document 268435457 / MVID
+`326aaa12-b851-4c6a-afcb-45291e734a5c`; actual all-object count zero, marker none,
+six layers, 0.001 mm tolerance, unsaved modified=true. Verify again before reuse.
 
 ## Requested visual progress policy
 

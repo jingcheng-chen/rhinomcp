@@ -85,6 +85,13 @@ The C# reader correction is additionally verified by repeated live saved-file re
 
 ## Review limitation and completion
 
+**Later correction:** the comparison left 65 hidden display copies in the live
+document. Its original empty-document check omitted hidden objects. The next
+posed-cushion save caught them and correctly failed. They were archived, verified
+and removed; cleanup/enumeration now pass a live hidden-object regression. See
+[POSED_CUSHION_LOOP.md](POSED_CUSHION_LOOP.md). Saved chair files are unchanged.
+A subsequent fresh review successfully received all seven selected images.
+
 The fresh planner returned `revise_modeling`, recommending a small reclined-cushion
 closure task. However, it made no successful reference-image or candidate-view
 calls: it queried empty MCP resources and tried nonexistent local image paths.
@@ -97,9 +104,9 @@ coverage, and prompts name the two gateway tools. This prompt change is not yet
 validated in a fresh review; tool availability/delivery needs diagnosis next.
 
 Matched Perspective, Front and Right pairs completed with identical camera records.
-Both saved file hashes and live document fingerprint were preserved. Cleanup restored
-the original empty document, six layers, 0.001 mm tolerance and all four display
-modes. PID 84726, document 268435457, MVID
+Both saved file hashes were preserved. The initial fingerprint/cleanup check
+reported an empty document, but missed the hidden copies described in the correction
+above. Six layers, 0.001 mm tolerance and display modes were restored. PID 84726, document 268435457, MVID
 `326aaa12-b851-4c6a-afcb-45291e734a5c` remained unchanged; marker is cleared.
 The new saved model SHA-256 is
 `8d283f733e44ef95764d5c57c68d56b39b4e7bab38030b78a142a4821a06b2b6`.

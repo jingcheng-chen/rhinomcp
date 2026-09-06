@@ -198,5 +198,74 @@
     "status": "Partial integration; visual unscored",
     "caption": "28 valid objects. Seat, frame and layers pass integration checks; back cushion remains open with four naked edges.",
     "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "posed-cushion-contaminated",
+    "title": "13 \u00b7 Reclined cushion \u00b7 rejected file",
+    "image": "assets/agent-posed-cushion-contaminated-perspective.png",
+    "source": "runs/posed-cushion-model-20260906-174420-3b37dd79/perspective-shaded.png",
+    "sha256": "069bdb97ce697a4d1042015524ad5bfda46ce788b24194a296275f585e568081",
+    "report": "POSED_CUSHION_LOOP.md",
+    "status": "Failed \u00b7 hidden extra objects",
+    "caption": "The visible cushion is closed, but the saved file contains 65 hidden display copies left by the comparison harness. The one-object check correctly rejects it. This is why a screenshot alone cannot establish a clean model.",
+    "kind": "actual_rhino_capture",
+    "additional_views": {
+      "front": {
+        "image": "assets/agent-posed-cushion-contaminated-front.png",
+        "source": "runs/posed-cushion-model-20260906-174420-3b37dd79/front-shaded.png",
+        "sha256": "e784b56888deb1dbdacb5937cea5c87fea9556de94472e2afed0bd52354c702a"
+      },
+      "top": {
+        "image": "assets/agent-posed-cushion-contaminated-top.png",
+        "source": "runs/posed-cushion-model-20260906-174420-3b37dd79/top-shaded.png",
+        "sha256": "fe4e51cef52755cd560bf53b74501ae10361ed46c25f8e861a38c274e8338f63"
+      }
+    }
+  },
+  {
+    "id": "posed-cushion-reclined",
+    "title": "14 \u00b7 Reclined cushion \u00b7 clean repeat",
+    "image": "assets/agent-posed-cushion-reclined-perspective.png",
+    "source": "runs/posed-cushion-model-20260906-175112-f2f8dd8d/perspective-shaded.png",
+    "sha256": "7b1a72297252a4f205b4fbeb5f338ffb6c657c37c30fe354b3c187ad9b196e13",
+    "report": "POSED_CUSHION_LOOP.md",
+    "status": "17 geometry + layer checks passed",
+    "caption": "A fresh agent closes the local cushion, then rotates it 65\u00b0 and moves it into place. The saved file contains exactly one solid with zero open edges. Maximum sampled surface error: 0.24 mm.",
+    "kind": "actual_rhino_capture",
+    "additional_views": {
+      "front": {
+        "image": "assets/agent-posed-cushion-reclined-front.png",
+        "source": "runs/posed-cushion-model-20260906-175112-f2f8dd8d/front-shaded.png",
+        "sha256": "5311852deba61ccc9ef6afe7ee72e7f953d4e6a85729837b42eb0ddd020ab1dc"
+      },
+      "top": {
+        "image": "assets/agent-posed-cushion-reclined-top.png",
+        "source": "runs/posed-cushion-model-20260906-175112-f2f8dd8d/top-shaded.png",
+        "sha256": "2a8ac2b300a94897a9ac11a064b6eb6de44ba3e215dce718f7f0934ecad37558"
+      }
+    }
+  },
+  {
+    "id": "posed-cushion-alternate-failed",
+    "title": "15 \u00b7 Alternate pose \u00b7 failed attempt",
+    "image": "assets/agent-posed-cushion-alternate-failed-perspective.png",
+    "source": "runs/posed-cushion-model-20260906-175410-5bf01af5/perspective-shaded.png",
+    "sha256": "34b01fcd910d3f10e2560ab08d0ceb8c8b8da5adc67e83bf45e75f2d6aaf6602",
+    "report": "POSED_CUSHION_LOOP.md",
+    "status": "Failed \u00b7 tool budget exhausted",
+    "caption": "The agent interpreted a flat bounding-box response as a flat surface, switched to small patches and exhausted its budget. The saved file has 42 objects and fails. A minimal probe later confirms that the surface can be curved despite that initial bounding-box report.",
+    "kind": "actual_rhino_capture",
+    "additional_views": {
+      "front": {
+        "image": "assets/agent-posed-cushion-alternate-failed-front.png",
+        "source": "runs/posed-cushion-model-20260906-175410-5bf01af5/front-shaded.png",
+        "sha256": "31cb097529e969933a57f3afaa994a67b8fe8952029086617a213a453044080e"
+      },
+      "top": {
+        "image": "assets/agent-posed-cushion-alternate-failed-top.png",
+        "source": "runs/posed-cushion-model-20260906-175410-5bf01af5/top-shaded.png",
+        "sha256": "afbd9946542ee1d3d628bd08bd67a6673ae0ba6ecea31554c1fb0c7509f3dcd7"
+      }
+    }
   }
 ]

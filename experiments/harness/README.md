@@ -148,3 +148,17 @@ checks ownership, runs the comparison, then restores the originally empty docume
 tolerance and display modes. Read `../CHAIR_INTEGRATION.md` and the run checkpoint
 before any recovery; partial/failed runs must remain distinguishable from successes.
 The old diagnostic runner and historical task remain unchanged.
+
+## Saved-image review and posed cushions
+
+`../saved_review.py` freezes explicit reference/model PNGs for a fresh planner.
+`../saved_review_mcp.py` exposes only hash-checked image IDs. Completion requires
+matching server logs and image bytes in successful client responses for every
+required image; a text result does not establish image review.
+
+`../chair_boundary_probe.py` measures the saved chair's open back edges without
+changing the model. `../posed_cushion_modeler.py` tests closing a local analytic
+body before applying its pose through existing `modify_object`.
+`../posed_cushion_probe.py` inverse-transforms duplicates for the unchanged body
+judge; `../validate_posed_cushion.py` checks independent positive/negative fixtures.
+See `../POSED_CUSHION_LOOP.md` for limits, recovery evidence and live run results.

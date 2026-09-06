@@ -31,7 +31,7 @@ def runtime():
 output.AppendLine(Serialize(new {
  pid=System.Diagnostics.Process.GetCurrentProcess().Id,
  docs=Rhino.RhinoDoc.OpenDocuments().Select(d=>new {
- serial=d.RuntimeSerialNumber,path=d.Path,count=d.Objects.Count(o => o != null && !o.IsDeleted),modified=d.Modified
+ serial=d.RuntimeSerialNumber,path=d.Path,count=d.Objects.GetObjectList(new Rhino.DocObjects.ObjectEnumeratorSettings { NormalObjects=true, HiddenObjects=true, LockedObjects=true, ReferenceObjects=true, IncludeLights=true }).Count(o => o != null && !o.IsDeleted),modified=d.Modified
  }).ToArray()
 }));
 """)

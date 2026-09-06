@@ -75,7 +75,7 @@ def fingerprint():
     return json.loads(
         script("""
 output.AppendLine(Serialize(new {
- objects=doc.Objects.Where(o=>o!=null && !o.IsDeleted).OrderBy(o=>o.Id).Select(o=>new {id=o.Id,geometry=o.Geometry.DataCRC(0),attributes=o.Attributes.ToJSON(new Rhino.FileIO.SerializationOptions())}).ToArray(),
+ objects=doc.Objects.GetObjectList(new Rhino.DocObjects.ObjectEnumeratorSettings { NormalObjects=true, HiddenObjects=true, LockedObjects=true, ReferenceObjects=true, IncludeLights=true }).Where(o=>o!=null && !o.IsDeleted).OrderBy(o=>o.Id).Select(o=>new {id=o.Id,geometry=o.Geometry.DataCRC(0),attributes=o.Attributes.ToJSON(new Rhino.FileIO.SerializationOptions())}).ToArray(),
  layers=doc.Layers.Where(l=>!l.IsDeleted).Select(l=>new {l.Id,l.Name,l.ParentLayerId,l.IsVisible,l.IsLocked}).ToArray(),
  units=doc.ModelUnitSystem.ToString(),tolerance=doc.ModelAbsoluteTolerance
 }));
