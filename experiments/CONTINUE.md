@@ -328,7 +328,7 @@ is unchanged and its earlier pass remains historical; no new preservation run wa
 needed for this harness-only diagnostic. Source snapshots preserve failed setup
 attempts and the completed evidence separately.
 
-## Latest milestone: accepted layer-parent repair and fresh-agent assembly
+## Previous milestone: accepted layer-parent repair and fresh-agent assembly
 
 Read `LAYER_PARENT_TRIAL.md`. A fresh bounded builder produced the three-file
 repair scoped by `harness/repairs/layer-parent.json`. Full parent paths resolve
@@ -368,20 +368,47 @@ agent-efficiency improvement. The geometry judge checks solids and bounds rather
 than complete shape equivalence; keep this scope explicit. Model version pinning
 and stronger process isolation remain outstanding.
 
+## Latest milestone: deeper assembly transfer
+
+Read `DEEP_LAYER_TRANSFER.md`. Public assembly data now lives in
+`assembly_tasks/deep_stand.json`, validated by `assembly_tasks/schema.json` and
+`assembly_task.py`. Run `layer_modeler.py` with `--task` to use that specification;
+without it, the original two-cube prompt remains supported. Source and task inputs
+are snapshotted for each run.
+
+A fresh agent builds a three-part stand under nine layers, with four-level paths
+and repeated intermediate Support and leaf Part names. All 14 saved-file predicates
+pass and the fresh planner accepts. A fresh legacy two-cube loop also passes.
+Independent calibration gives all 19 expected verdicts twice (nine legacy, ten
+stand); nine live layer-command regression checks pass. Document fingerprints
+are preserved. **425 developer tests pass** (174 experiment, 238 server, 13 contract).
+
+Campaign: `runs/deep-layer-calibration-20260906-162009-232d6665/`.
+Legacy modeling: `runs/layer-model-20260906-162152-1456b3ab/`.
+Stand modeling: `runs/layer-model-20260906-162305-f09de086/`.
+Production source and installed binary are unchanged. Runtime remains PID 84726,
+MVID `326aaa12-b851-4c6a-afcb-45291e734a5c`, same SHA recorded above, empty unsaved
+document serial 268435457, marker none. Verify before reuse. The original chair
+file hash is unchanged. No new defect was found and no builder was dispatched.
+
+The 61-case contract is unchanged; its full pass is historical, not rerun for this
+harness-only extension. Do not resume a completed historical trial against changed
+source hashes. This is limited organization transfer, not broad generalization;
+geometry checks still establish valid solids and bounds, not complete shape equivalence.
+
 ## Next concrete milestone
 
-Test organization transfer with a different assembly: deeper nesting, repeated
-intermediate names and an explicit saved-file assignment policy. Reuse the accepted
-61-case baseline and calibrated parent-ID judge; extend the public task data and
-negative fixtures before running a fresh modeler. Do not create another inspection
-tool just because the planner suggested one: `get_object_attributes` already
-reports full paths, IDs and indices. Verify existing outputs first.
+Read `CHAIR_BASELINE.md` and define one continuous rounded-cushion geometry task,
+with independent positive and negative saved-file fixtures before a fresh modeler
+run. Carry hierarchical layers into this richer geometry task. Inspect existing
+creation and inspection tools first; `get_object_attributes` already reports full
+paths, IDs and indices. Distinguish evaluator problems, modeling guidance failures,
+and plugin defects before dispatching any bounded repair.
 
-Then combine hierarchical organization with richer geometry, including continuous
-cushions, before another chair attempt. The chair remains one of multiple benchmarks;
-its visual acceptance is still unscored. No additional user testing data is needed
-for the next assembly experiment. Avoid rebuilding/reinstalling the plugin unless
-new evidence requires a production change.
+Use the accepted 61-case baseline for any future production repair. Keep the chair
+as one of multiple benchmarks; its visual acceptance remains unscored. No additional
+user testing data is needed for the next focused geometry diagnostic. Avoid
+rebuilding/reinstalling the plugin unless new evidence requires a production change.
 
 ## Requested model organization milestone
 

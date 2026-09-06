@@ -22,7 +22,22 @@ EXPECTED = {
 }
 
 
-def evaluate(measured, root="Assembly"):
+def evaluate(measured, root="Assembly", task=None):
+    targets = (
+        task["parts"]
+        if task
+        else [
+            {
+                "name": name,
+                "layer": root + "::" + side + "::Part",
+                "min": [i * 30, 0, 0],
+                "max": [i * 30 + 10, 10, 10],
+            }
+            for i, (name, side) in enumerate(
+                (("left_part", "Left"), ("right_part", "Right"))
+            )
+        ]
+    )
     layers = measured["layers"]
     by_id = {layer["id"]: layer for layer in layers}
     by_index = {layer["index"]: layer for layer in layers}
@@ -40,7 +55,11 @@ def evaluate(measured, root="Assembly"):
         checks["valid_tree"] = (
             len(by_id) == len(layers) == len(by_index) == len(set(paths.values()))
         )
-        expected = {p.replace("Assembly", root, 1) for p in EXPECTED}
+        expected = (
+            set(task["layers"])
+            if task
+            else {p.replace("Assembly", root, 1) for p in EXPECTED}
+        )
         checks["exact_tree"] = set(paths.values()) - {"Default"} == expected
         checks["visible_unlocked_layers"] = all(
             layer["visible"] and not layer["locked"]
@@ -51,16 +70,14 @@ def evaluate(measured, root="Assembly"):
         paths = {}
         checks.update(valid_tree=False, exact_tree=False, visible_unlocked_layers=False)
     objects = measured["objects"]
-    checks["exact_parts"] = len(objects) == 2 and {o["name"] for o in objects} == {
-        "left_part",
-        "right_part",
-    }
-    for i, (name, side) in enumerate((("left_part", "Left"), ("right_part", "Right"))):
+    checks["exact_parts"] = len(objects) == len(targets) and {
+        o["name"] for o in objects
+    } == {part["name"] for part in targets}
+    for part in targets:
+        name = part["name"]
         matches = [o for o in objects if o["name"] == name]
         obj = matches[0] if len(matches) == 1 else {}
-        checks[name + "/layer"] = (
-            paths.get(obj.get("layer")) == root + "::" + side + "::Part"
-        )
+        checks[name + "/layer"] = paths.get(obj.get("layer")) == part["layer"]
         checks[name + "/visible_solid"] = (
             obj.get("visible") is True
             and obj.get("mode") == "Normal"
@@ -68,7 +85,7 @@ def evaluate(measured, root="Assembly"):
             and obj.get("solid") is True
         )
         bounds = obj.get("min", []) + obj.get("max", [])
-        target = [i * 30, 0, 0, i * 30 + 10, 10, 10]
+        target = part["min"] + part["max"]
         checks[name + "/bounds"] = len(bounds) == 6 and all(
             isinstance(a, (int, float)) and math.isfinite(a) and abs(a - b) <= 0.01
             for a, b in zip(bounds, target)

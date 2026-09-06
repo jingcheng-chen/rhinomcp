@@ -1,6 +1,8 @@
-"""Fresh agent builds a fixed assembly; supervisor judges the saved layer tree."""
+"""Fresh agent builds a public assembly task; supervisor judges the saved layer tree."""
 
 import json
+import argparse
+from pathlib import Path
 import sys
 import time
 import uuid
@@ -48,7 +50,12 @@ def configuration(directory, owner):
     }
 
 
-def run():
+def run(task_path=None):
+    from experiments.assembly_task import load, instruction
+
+    task = load(task_path) if task_path else None
+    prompt = instruction(task) if task else TASK
+    root = task["root"] if task else "Assembly"
     with locked(ROOT / "experiments/runs/rhino.lock"):
         owner = runtime()
         require_owned(owner, owner)
@@ -58,8 +65,8 @@ def run():
         if before["units"] != "Millimeters":
             raise RuntimeError("Assembly task requires millimeter document units")
         original_ids = {layer["Id"] for layer in before["layers"]}
-        if any(layer["Name"] == "Assembly" for layer in before["layers"]):
-            raise RuntimeError("Existing Assembly layer conflicts with task")
+        if any(layer["Name"] == root for layer in before["layers"]):
+            raise RuntimeError(f"Existing {root} layer conflicts with task")
         directory = (
             ROOT
             / "experiments/runs"
@@ -69,6 +76,8 @@ def run():
         print(directory, flush=True)
         names = [
             "experiments/layer_modeler.py",
+            "experiments/assembly_task.py",
+            "experiments/assembly_tasks/schema.json",
             "experiments/layer_modeler_mcp.py",
             "experiments/layer_probe.py",
             "experiments/layer_measure.cs",
@@ -81,6 +90,8 @@ def run():
             "experiments/harness/roles/planner.md",
             "contracts/common/definitions.json",
         ] + ["contracts/commands/" + command + ".json" for command in sorted(COMMANDS)]
+        if task_path:
+            names.append(str(task_path.resolve().relative_to(ROOT)))
         pins = {name: sha256(ROOT / name) for name in names}
         save(directory / "inputs.json", pins)
         save(
@@ -90,8 +101,9 @@ def run():
         save(
             directory / "task.json",
             {
-                "instruction": TASK,
-                "root": "Assembly",
+                "instruction": prompt,
+                "root": root,
+                "specification": task,
                 "ignored_existing_layer_ids": sorted(original_ids),
             },
         )
@@ -105,7 +117,7 @@ def run():
         try:
             result = run_session(
                 directory / "modeler",
-                role_instructions("modeler") + "\n" + TASK,
+                role_instructions("modeler") + "\n" + prompt,
                 MODELER_SCHEMA,
                 240,
                 configuration(directory, owner),
@@ -121,7 +133,8 @@ def run():
                         for layer in first["layers"]
                         if layer["id"] not in original_ids
                     ],
-                }
+                },
+                task=task,
             )
             report.update(
                 repeat_identical=first == second,
@@ -136,7 +149,7 @@ def run():
                 directory / "planner",
                 role_instructions("planner")
                 + "\n"
-                + json.dumps({"task": TASK, "modeler": result, "evaluation": report}),
+                + json.dumps({"task": prompt, "modeler": result, "evaluation": report}),
                 PLANNER_SCHEMA,
                 180,
             )
@@ -177,4 +190,6 @@ doc.Strings.Delete("rhinomcp_experiment");
 
 
 if __name__ == "__main__":
-    run()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--task", type=Path)
+    run(parser.parse_args().task)

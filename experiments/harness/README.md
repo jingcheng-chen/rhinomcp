@@ -88,3 +88,16 @@ The bounded sweep tool is enabled only for `quarter_annular_strip` tasks. Their
 shape is fixed in v1; only translation varies. Saved-file bounds are reported in
 the normalized local frame. See `../STRIP_MODELER_LOOP.md` for the paired runtime
 comparison and the separate supervisor decision to keep the verified binary active.
+
+## Public assembly tasks
+
+`../assembly_tasks/` stores public task JSON and its schema; `../assembly_task.py`
+validates complete ancestors, part assignments and numeric bounds. Run
+`../layer_modeler.py` with `--task experiments/assembly_tasks/deep_stand.json` from
+the repository root (through `python -m experiments.layer_modeler`). Omitting the
+option preserves the original two-cube task. The same narrow gateway applies.
+
+`../validate_deep_layers.py` and `../deep_layer_controls.cs` calibrate the saved-file
+judge independently. See `../DEEP_LAYER_TRANSFER.md` for 19 fixture verdicts, nine
+live command checks and passing fresh legacy/stand runs. These assembly runs remain
+separate from the 61-case production trial contract.

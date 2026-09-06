@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "additionalProperties": false,
+  "required": ["id", "root", "layers", "parts"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "root": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_ ]*$"},
+    "layers": {"type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_ ]*(::[A-Za-z][A-Za-z0-9_ ]*)*$"}},
+    "parts": {"type": "array", "minItems": 1, "maxItems": 6, "items": {"type": "object", "additionalProperties": false, "required": ["name", "layer", "min", "max"], "properties": {"name": {"type": "string", "minLength": 1}, "layer": {"type": "string"}, "min": {"$ref": "#/$defs/vector"}, "max": {"$ref": "#/$defs/vector"}}}}
+  },
+  "$defs": {"vector": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}}}
+}
