@@ -1,0 +1,118 @@
+[
+  {
+    "id": "box",
+    "title": "01 \u00b7 Exact box",
+    "image": "assets/agent-box.png",
+    "source": "runs/20260905-184415-34495492/perspective.png",
+    "sha256": "39866ab3b5c1beb75e45c6ea010da348fdbce1582a710d890611ded7699ab840",
+    "report": "FIRST_LOOP.md",
+    "status": "Geometry passed",
+    "caption": "One solid at the required size and position. Early wireframe capture.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "prism",
+    "title": "02 \u00b7 Posed prism",
+    "image": "assets/agent-prism.png",
+    "source": "runs/20260905-205440-a9e6b334/perspective.png",
+    "sha256": "aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d",
+    "report": "CAPTURE_REPAIR.md",
+    "status": "Geometry + capture passed",
+    "caption": "A later prism repeat after the framing repair; pose and geometry checked.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "hole",
+    "title": "03 \u00b7 Through-hole",
+    "image": "assets/agent-hole.png",
+    "source": "runs/20260905-201324-306962d7/perspective.png",
+    "sha256": "1fe94eecb524d7f164f114e793419aae61a46d08077b63f719d7dca2e8bc7f5e",
+    "report": "THROUGH_HOLE_LOOP.md",
+    "status": "Geometry passed",
+    "caption": "A true through-hole in one block, independently checked in the saved file.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "reference-box",
+    "title": "04 \u00b7 From three drawings",
+    "image": "assets/agent-reference-box.png",
+    "source": "runs/20260905-210251-4e4dc288/perspective.png",
+    "sha256": "518c6589313a94560c8182dad93783e46b362947e377bc20881cd7e2b54e261d",
+    "report": "REFERENCE_LOOP.md",
+    "status": "Constrained reconstruction passed",
+    "caption": "Agent output from calibrated orthographic drawings; this is not the reference image.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "chair-baseline",
+    "title": "05 \u00b7 Chair baseline",
+    "image": "assets/agent-chair-baseline.png",
+    "source": "runs/visual-20260906-084828-2fc89506/perspective.png",
+    "sha256": "a2f840ecddf229d9e6efb1b186f8ee250a41690eb74dca373d91d898803e1a05",
+    "report": "CHAIR_BASELINE.md",
+    "status": "Visual fidelity unscored",
+    "caption": "The first schematic chair. Separate hard panels and open frame strips motivated the focused tasks.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "curved-strip",
+    "title": "06 \u00b7 Solid curved strip",
+    "image": "assets/agent-curved-strip.png",
+    "source": "runs/20260906-141535-2697590c/perspective.png",
+    "sha256": "50c21e7841d3e42f85eab2bbfb34f2ca6dda34b680238d4fbac042c765010020",
+    "report": "STRIP_MODELER_LOOP.md",
+    "status": "Geometry passed",
+    "caption": "The repaired sweep can make a closed strip. This isolated part has not yet been applied to a new chair.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "layer-assembly",
+    "title": "07 \u00b7 Layer organization",
+    "image": "assets/agent-layer-assembly.png",
+    "source": "runs/layer-model-20260906-160939-63c22fdf/perspective.png",
+    "sha256": "204e2b2987192ca51952d450ec01300ff8dbbac44b7fcfdf0d9f9ef13f911968",
+    "report": "LAYER_PARENT_TRIAL.md",
+    "status": "Geometry + layers passed",
+    "caption": "Two cubes with correctly assigned duplicate Part names in separate branches.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "deep-stand",
+    "title": "08 \u00b7 Deeper assembly",
+    "image": "assets/agent-deep-stand.png",
+    "source": "runs/layer-model-20260906-162305-f09de086/perspective.png",
+    "sha256": "f1b6474d74683e4270157eb8db536e57953770b4ad51652d612b987e21113c2f",
+    "report": "DEEP_LAYER_TRANSFER.md",
+    "status": "Geometry + layers passed",
+    "caption": "Three parts under nine layers; repeated Support and Part names across four levels.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "cushion-top",
+    "title": "09 \u00b7 Continuous cushion top",
+    "image": "assets/agent-cushion-perspective.png",
+    "source": "runs/cushion-model-20260906-164426-a4a9967e/perspective-shaded.png",
+    "sha256": "350bf3ac58a97b3314abe548d9f73823978db3cf14f83cad360096751fa203df",
+    "report": "CUSHION_TOP_LOOP.md",
+    "status": "Geometry + layers passed",
+    "caption": "One smooth four-lobed top surface. Open surface only; thickness and closed-body construction follow.",
+    "kind": "actual_rhino_capture",
+    "views": {
+      "perspective": {
+        "image": "assets/agent-cushion-perspective.png",
+        "source": "runs/cushion-model-20260906-164426-a4a9967e/perspective-shaded.png",
+        "sha256": "350bf3ac58a97b3314abe548d9f73823978db3cf14f83cad360096751fa203df"
+      },
+      "top": {
+        "image": "assets/agent-cushion-top.png",
+        "source": "runs/cushion-model-20260906-164426-a4a9967e/top-shaded.png",
+        "sha256": "1d9d0584aff50bfff4362de2238b60156fdda51108fba54169ea20c2bac0a88e"
+      },
+      "front": {
+        "image": "assets/agent-cushion-front.png",
+        "source": "runs/cushion-model-20260906-164426-a4a9967e/front-shaded.png",
+        "sha256": "0ad3c29b14c44e6f88260b3ec9b8e7e3b7db7cd0f66fef4572d2cc572701aa95"
+      }
+    }
+  }
+]

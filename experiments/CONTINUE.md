@@ -368,7 +368,7 @@ agent-efficiency improvement. The geometry judge checks solids and bounds rather
 than complete shape equivalence; keep this scope explicit. Model version pinning
 and stronger process isolation remain outstanding.
 
-## Latest milestone: deeper assembly transfer
+## Previous milestone: deeper assembly transfer
 
 Read `DEEP_LAYER_TRANSFER.md`. Public assembly data now lives in
 `assembly_tasks/deep_stand.json`, validated by `assembly_tasks/schema.json` and
@@ -396,19 +396,72 @@ harness-only extension. Do not resume a completed historical trial against chang
 source hashes. This is limited organization transfer, not broad generalization;
 geometry checks still establish valid solids and bounds, not complete shape equivalence.
 
+## Latest milestone: continuous cushion top and phase screenshots
+
+Read `CUSHION_TOP_LOOP.md`. The fixed public `cushion_task.json` describes one
+100×100 mm, four-lobed open top surface with recessed crossing seams. A fresh
+modeler uses the existing assembly gateway and SURFACE creation. No production
+plugin/server/schema change is needed. `cushion_probe.py` measures the saved file
+through `cushion_measure.cs`: one valid untrimmed open face, C1 continuity, exact
+layer tree/assignment, XY bounds, 1,681 surface samples and 441 target distances.
+Error limits remain 1 mm. This is a finite-sample geometry test, not a visual score.
+
+Twelve independent Bezier fixtures return their expected verdicts twice; the two
+positives include a changed parameter domain. Final calibration:
+`runs/cushion-calibration-20260906-163932-cefbb616/`.
+First fresh run `runs/cushion-model-20260906-163948-e09d1b86/` passes geometry
+(maximum sampled height error 0.24092 mm), but its new screenshot helper failed to
+restore display modes before the planner. See its `capture-incident.json`; original
+modes were not persisted and exact display restoration is not claimed for that run.
+Geometry/layers were cleaned up; the supervisor reset dedicated views to Wireframe.
+The corrected helper persists and verifies modes around capture.
+
+Second fresh run: `runs/cushion-model-20260906-164426-a4a9967e/`, geometry passes
+with maximum sampled height error 0.12890 mm and shaded Perspective/Top/Front
+screenshots. The fresh planner accepts; cleanup preserves the original document fingerprint.
+Display-mode restoration passes. Task and evaluator bytes are unchanged
+between runs. **438 developer tests pass** (187 experiment, 238 server, 13 contract),
+plus the focused 13 tests after the screenshot-helper correction. Verify final
+`summary.json` and `preservation.json` before any reuse.
+
+Final runtime: PID 84726, MVID `326aaa12-b851-4c6a-afcb-45291e734a5c`,
+same installed SHA as above, empty unsaved document 268435457, marker none.
+Original chair hash and pinned inputs remain unchanged; see run `completion.json`.
+
+The roadmap now includes nine actual modeling-phase screenshots with evidence
+links. Selected images and `assets/model-progress.json` are tracked. Historical
+models, including the original chair, are not relabeled as new results. The accepted
+61-case contract remains unchanged; its full pass is historical and not rerun for
+this harness-only task. A passing surface is not evidence of a plugin-code repair.
+
 ## Next concrete milestone
 
-Read `CHAIR_BASELINE.md` and define one continuous rounded-cushion geometry task,
-with independent positive and negative saved-file fixtures before a fresh modeler
-run. Carry hierarchical layers into this richer geometry task. Inspect existing
-creation and inspection tools first; `get_object_attributes` already reports full
-paths, IDs and indices. Distinguish evaluator problems, modeling guidance failures,
-and plugin defects before dispatching any bounded repair.
+Define a closed cushion-body task building on the smooth top: specify thickness,
+side and underside behavior, joins and desired boundary continuity. Inspect existing
+operations before concluding a reusable command is missing. Build independent
+positive/negative saved-file controls before a fresh agent, retaining layer policy
+and shaded screenshots. Include a scale variation, as recommended by the fresh
+planner, when defining transfer controls. Classify failures as evaluation, guidance or plugin issues;
+only a measured plugin issue should dispatch a bounded builder.
 
-Use the accepted 61-case baseline for any future production repair. Keep the chair
-as one of multiple benchmarks; its visual acceptance remains unscored. No additional
-user testing data is needed for the next focused geometry diagnostic. Avoid
-rebuilding/reinstalling the plugin unless new evidence requires a production change.
+Keep the chair as one of multiple benchmarks; its appearance remains unscored and
+this diagnostic is not yet applied to its geometry. No additional user data is
+needed for the next focused task. Require the accepted 61-case preservation suite
+for any future production repair; avoid rebuilding/reinstalling without evidence.
+
+## Requested visual progress policy
+
+The user requested a screenshot of the model at each modeling phase on 2026-09-06.
+Keep actual screenshots visible in the roadmap gallery (`#model-progress`), with
+phase labels, evidence links and clear geometry/visual verdicts. Keep failed and
+successful attempts distinct. Do not use illustrations as result evidence or imply
+that separate benchmark objects are successive chair versions.
+
+Track selected images and their provenance/hashes in `assets/model-progress.json`;
+raw run images alone are ignored and do not survive checkout. New surface tasks
+should include shaded Perspective, Top and Front views using the supervisor helper
+`model_screenshots.py`, in addition to any wireframe diagnostic. Preserve display
+modes, cameras, saved model bytes and pre-existing document contents.
 
 ## Requested model organization milestone
 

@@ -101,3 +101,19 @@ option preserves the original two-cube task. The same narrow gateway applies.
 judge independently. See `../DEEP_LAYER_TRANSFER.md` for 19 fixture verdicts, nine
 live command checks and passing fresh legacy/stand runs. These assembly runs remain
 separate from the 61-case production trial contract.
+
+## Continuous surface task and visual progress
+
+`../cushion_task.json` is the fixed public cushion-top task.
+`../cushion_modeler.py` uses the existing restricted assembly gateway (which already
+allows SURFACE creation); `../cushion_probe.py` and `../cushion_measure.cs` judge the
+saved file. `../cushion_controls.cs` creates independent Bezier fixtures;
+`../validate_cushion.py` verifies both positive and deliberately flawed examples.
+See `../CUSHION_TOP_LOOP.md` for scope and evidence. Run modules from the repository
+root using the server virtual environment and an absolute repository PYTHONPATH.
+
+`../model_screenshots.py` provides supervisor-only shaded progress captures with
+persisted display-mode recovery records. Add a selected actual model screenshot to
+`../roadmap.html#model-progress` and its provenance to `../assets/model-progress.json`
+at every modeling milestone. Retain failed attempts as such; pictures are not an
+independent geometry verdict. This reporting policy is a persistent user request.
