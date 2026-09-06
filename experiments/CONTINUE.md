@@ -219,7 +219,7 @@ and six existing layers match their before-probe state. The existing chair marke
 and original plugin remain in place; verify current ownership before further work.
 **356 developer tests pass** (133 experiment, 223 server), plus experiment lint/format.
 
-## Latest milestone: validated generic sweep end caps
+## Previous milestone: validated generic sweep end caps
 
 Read `SWEEP_CAP_TRIAL.md`. A fresh bounded builder added opt-in
 `cap_planar_ends` to `sweep1` across C#, Python and schema. Default false preserves
@@ -241,7 +241,7 @@ capability failures. Candidate: **50/50 true**. Restored baseline: exactly the s
 controller state: `accepted_trial`, `runtime_dirty=false`, `promoted=false`.
 The supervisor then integrated the exact tested three-file patch into this branch
 and added independent permanent transport/schema tests. This is source adoption;
-the running Rhino plugin is still the restored original binary.
+at that milestone the running Rhino plugin was still the restored original binary.
 
 Local builder: `runs/repair-20260906-092614-ae7792cc/`.
 Successful trial: `trial-667b3692/` inside that run. Earlier `trial-194a32ba` failed
@@ -251,7 +251,7 @@ call `rhino_trial.claim_empty(trial_directory)` on a verified fresh empty docume
 before running. Never reset a registered candidate or replay an interrupted step
 without checking its durable state and whether a child process remains alive.
 
-**Current Rhino state at this handoff:** PID 59985, one dedicated empty unsaved
+**Historical Rhino state at that handoff:** PID 59985, one dedicated empty unsaved
 document, serial 268435457, marker none, modified=true from the cleared test work;
 original MVID
 `90d87782-2887-435e-a8b2-02467f0c5094`. Recheck actual identity before reuse.
@@ -273,22 +273,44 @@ tests); standalone contract validation passes. Experiment lint/format and server
 source lint pass. The fresh post-trial planner recommends `accept`, followed by
 a small fresh-modeler curved-strip task. See the saved post-trial plan.
 
+## Latest milestone: fresh-agent benefit and active improved baseline
+
+Read `STRIP_MODELER_LOOP.md`. A fixed quarter-annular strip task now runs through
+fresh modeler/planner sessions and a narrow, task-specific `sweep1` gateway.
+The old plugin fails the origin task; the exact accepted cap binary passes with
+identical prompt bytes and evaluator hashes. A translated task also passes.
+Nine independent calibration cases returned their expected verdicts twice,
+including wrong-pose cross-evaluations. Judge bounds are normalized local bounds;
+world pose is checked by inverse-transforming an in-memory duplicate.
+
+The new `harness/trial-preservation-v2.json` requires **52/52 true**: all previous
+50 requirements plus both strip modeling tasks. All pass, including fresh repeats
+of both poses. The former three capability failures are no longer allowed for this
+baseline. **392 developer tests pass** (151 experiment, 228 server, 13 contract).
+These fixed-shape runs do not establish broad transfer or improved chair geometry.
+
+Campaign: `runs/strip-modeling-20260906-140908/`; its source snapshots, comparison,
+calibration, preservation result and activation decision preserve the evidence.
+The supervisor explicitly adopted the exact previously accepted runtime after
+validation. No production source changes or rebuild were needed for this milestone.
+Historical trial restoration and promotion records remain unchanged.
+
+**Current runtime at handoff:** PID 94887, MVID
+`79b1500e-e20d-47af-9c83-6f915729a712`, SHA-256
+`635e8ccf94a55775ea2b58166d83eb995ad517c3de3d66963caed7772a027d7e`.
+One empty unsaved document, serial 268435457, marker none, modified=true after
+cleanup. Verify identity and contents again before acting. `claim_empty` requires
+an unmodified fresh document; do not blindly reuse this handoff state. The original
+binary remains in the prior trial for recovery. The saved chair is untouched.
+
 ## Next concrete milestone
 
-Demonstrate the new capability through a **fresh modeling agent**, not just the
-scripted probe. Pin/install the verified version under the existing supervised
-lifecycle, then give the agent one objective curved-strip task and permitted tools.
-It must construct the rail/profile, request capping, remove construction geometry
-and save exactly one solid that passes the independent strip evaluator. Follow
-with a different geometry or pose to begin transfer testing; retain all existing
-preservation cases. Do not claim improved chair reconstruction until a new chair
-attempt and appropriate visual evaluation support that conclusion.
-
-The current screenshot gateway already exposes command schemas dynamically; the
-objective task runner still needs a curved-strip task/evaluator dispatch and a
-bounded sweep tool path. Keep evaluator code outside builder/modeler write access.
-Continuous cushions and hierarchical layers are separate milestones. Keep the
-chair as one diagnostic benchmark in a general suite.
+Define a small assembly task with **hierarchical layers**, then independently
+validate nesting, full paths and saved part assignments before a fresh agent run.
+Include duplicate child names under distinct parents and save/reopen checks.
+Use observed failures to distinguish modeling guidance from a reusable plugin
+repair. Preserve the new 52-case baseline and keep the chair one of many cases.
+Continuous cushions and broader unseen-shape/image transfer follow separately.
 
 ## Requested model organization milestone
 
@@ -325,7 +347,7 @@ is still blocked until a public-feedback/redaction boundary is implemented.
 - Bounded source repair and review dispatch are implemented. The trial controller has
   live validation/recovery with supervised desktop steps. Unattended installation,
   promotion, automatic continuation of interrupted agent sessions and real-photo
-  evaluation are not implemented. The fixed suite includes five modeling runs.
+  evaluation are not implemented. The new baseline suite includes seven modeling runs.
 - The gateway checks document identity but cannot lock out a human or external
   client. Current evaluation runs inside Rhino through the trusted C# bridge;
   stronger isolation is required before accepting untrusted plugin changes.
@@ -346,7 +368,7 @@ is still blocked until a public-feedback/redaction boundary is implemented.
 
 `FIRST_LOOP.md`, `POSED_PRISM_LOOP.md`, `THROUGH_HOLE_LOOP.md`, and
 `CAPTURE_REPAIR.md`, `REFERENCE_LOOP.md`, `BUILDER_LOOP.md`, `SWEEP_CAP_TRIAL.md`, and
-`TRIAL_CONTROLLER.md` and `LIVE_TRIAL.md` are portable summaries. Full local records are under ignored
+`TRIAL_CONTROLLER.md`, `STRIP_MODELER_LOOP.md` and `LIVE_TRIAL.md` are portable summaries. Full local records are under ignored
 `runs/` directories and may not exist on another machine. If absent, rerun the
 fixtures and task; do not claim fresh verification from the historical report.
 Do not rely on a chat session, sidebar task, or its internal memory for state.

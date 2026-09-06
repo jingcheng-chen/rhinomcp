@@ -1,0 +1,19 @@
+{
+  "id": "quarter-strip-translated-v1",
+  "type": "quarter_annular_strip",
+  "instruction": "Build exactly one closed solid quarter-annular rectangular strip in Rhino, in millimeters. In its local frame: centerline radius 100, radial width 20 (inner radius 90 and outer radius 110), height 10 along +Z from z=0 to 10. The strip runs counterclockwise from +X to +Y through 90 degrees in the XY plane. Translate the complete shape by [150, -80, 25] in world XYZ. Use a single-rail sweep with planar end capping. Delete all construction curves; leave only the final solid. Inspect the result before claiming completion.",
+  "dimensions": [
+    110,
+    110,
+    10
+  ],
+  "translation": [
+    150,
+    -80,
+    25
+  ],
+  "units": "Millimeters",
+  "linear_tolerance": 0.01,
+  "volume_tolerance": 0.5,
+  "area_tolerance": 0.1
+}

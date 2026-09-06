@@ -39,7 +39,14 @@ def sha256(path):
 def evaluator_versions():
     return {
         name: sha256(ROOT / "experiments" / name)
-        for name in ("evaluate.cs", "evaluator.py", "tasks/schema.json")
+        for name in (
+            "evaluate.cs",
+            "evaluator.py",
+            "tasks/schema.json",
+            "strip_task.py",
+            "strip_measure.cs",
+            "strip_probe.py",
+        )
     }
 
 
@@ -202,7 +209,11 @@ if (!doc.WriteFile({json.dumps(str(path))}, new Rhino.FileIO.FileWriteOptions())
     return sha256(path)
 
 
-def measure(path):
+def measure(path, task=None):
+    if task and task["type"] == "quarter_annular_strip":
+        from experiments.strip_task import measure as measure_strip
+
+        return measure_strip(path, task)
     before = sha256(path)
     code = (
         (ROOT / "experiments/evaluate.cs")
@@ -335,11 +346,13 @@ doc.ModelAbsoluteTolerance = {task["linear_tolerance"]};
         "delete_object",
         "boolean_difference",
         "get_reference_image",
+        "sweep1",
     }
     extras = {
         "axis_aligned_box": set(),
         "triangular_prism_pose": {"extrude_curve", "rotate_object", "delete_object"},
         "box_through_hole": {"boolean_difference", "delete_object"},
+        "quarter_annular_strip": {"sweep1", "delete_object"},
     }[task["type"]]
     if image_task:
         extras = extras | {"get_reference_image"}
@@ -378,7 +391,16 @@ doc.ModelAbsoluteTolerance = {task["linear_tolerance"]};
                 != references["model_sha256"]
             ):
                 raise RuntimeError("Hidden reference changed during modeling")
-        report = evaluate(task, measure(candidate))
+        measured = (
+            measure(candidate, task)
+            if task["type"] == "quarter_annular_strip"
+            else measure(candidate)
+        )
+        report = evaluate(task, measured)
+        if task["type"] == "quarter_annular_strip":
+            report["repeat_identical"] = measured == measure(candidate, task)
+            if not report["repeat_identical"]:
+                raise RuntimeError("Strip measurements did not repeat identically")
         report["evaluator_versions"] = evaluator_hashes
         report["artifact_sha256"] = artifact_hash
         save(run_dir / "evaluation.json", report)

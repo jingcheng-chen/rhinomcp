@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "id": {"type": "string", "minLength": 1},
-    "type": {"enum": ["axis_aligned_box", "triangular_prism_pose", "box_through_hole"]},
+    "type": {"enum": ["axis_aligned_box", "triangular_prism_pose", "box_through_hole", "quarter_annular_strip"]},
     "input_mode": {"enum": ["text", "generated_reference"]},
     "instruction": {"type": "string", "minLength": 1},
     "dimensions": {"$ref": "#/$defs/dimensions"},
@@ -34,6 +34,11 @@
       "properties": {"type": {"const": "box_through_hole"}},
       "required": ["minimum", "hole_center", "hole_radius", "area_tolerance"],
       "not": {"anyOf": [{"required": ["translation"]}, {"required": ["rotation_z_degrees"]}]}
+    },
+    {
+      "properties": {"type": {"const": "quarter_annular_strip"}, "dimensions": {"const": [110, 110, 10]}},
+      "required": ["translation", "area_tolerance"],
+      "not": {"anyOf": [{"required": ["minimum"]}, {"required": ["rotation_z_degrees"]}, {"required": ["hole_center"]}, {"required": ["hole_radius"]}]}
     }
   ],
   "allOf": [{

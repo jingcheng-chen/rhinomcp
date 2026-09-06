@@ -13,6 +13,7 @@ configuration, not a second copy of instructions kept elsewhere.
 | Builder checkout, dispatch, review and integrity gates | `../repair.py`, `../builder_mcp.py` |
 | Screenshot diagnostic tasks and runner | `../visual_tasks/`, `../visual_runner.py`, `../VISUAL_BENCHMARKS.md` |
 | Focused curved-strip diagnosis and independent controls | `../strip_probe.py`, `../strip_measure.cs`, `../strip_controls.cs`, `../STRIP_PROBE.md` |
+| Fresh curved-strip tasks and calibrated posed judge | `../tasks/quarter_strip_*.json`, `../strip_task.py`, `../validate_strip_task.py`, `../STRIP_MODELER_LOOP.md` |
 | Requested hierarchical layer policy (upcoming) | `../CONTINUE.md` |
 | Screenshot gateway and structural audit | `../visual_mcp.py`, `../visual_audit.cs` |
 | Modeling tasks and expected measurements | `../tasks/box.json`, `../tasks/posed_prism.json`, `../tasks/through_hole.json`, `../tasks/reference_box.json` |
@@ -24,7 +25,7 @@ configuration, not a second copy of instructions kept elsewhere.
 | Trusted saved-file measurements and acceptance | `../evaluate.cs`, `../evaluator.py` |
 | Live capture framing and viewport-preservation regression | `../validate_capture.py` |
 | Candidate trial transitions, input identity and recovery | `../trial.py`, `../TRIAL_CONTROLLER.md` |
-| Frozen live trial cases and evaluator inputs | `trial-suite.json` (43 preservation checks); `trial-sweep-cap.json` (50 checks with three explicit baseline capability failures) |
+| Frozen live trial cases and evaluator inputs | `trial-suite.json` (43 preservation checks); `trial-sweep-cap.json` (historical 50 checks with three explicit baseline capability failures); `trial-preservation-v2.json` (current 52 checks, all required true) |
 | Live build/probe/test and supervised lifecycle tickets | `../rhino_trial.py`, `../LIVE_TRIAL.md` |
 | Assembly metadata without executing candidate code | `../assembly_identity/` |
 | Machine installation and Rhino startup | `../README.md`, local `AGENTS.md` |
@@ -34,7 +35,8 @@ configuration, not a second copy of instructions kept elsewhere.
 Changing Markdown does not grant permissions. The controller and gateway enforce
 tool access and output contracts. The deterministic evaluator is ordinary code,
 not an AI role. Fresh builder sessions and review corrections are implemented for a known-defect
-pilot. The live adapter connects the controller to the frozen 43-case Rhino suite.
+pilot. The live adapter connects the controller to a frozen suite; the active improved
+baseline uses 52 requirements, including seven fresh modeling sessions.
 Desktop quit/install/restart remains supervised through hash-bound lifecycle tickets.
 QA-reviewer sessions and automatic promotion are still planned. See
 `../BUILDER_LOOP.md`, `../TRIAL_CONTROLLER.md` and `../LIVE_TRIAL.md`.
@@ -78,3 +80,8 @@ For the live adapter, launch the controller with an **absolute** repository
 verifying a fresh, empty, unmodified dedicated Rhino document. A relative path is
 insufficient because adapter subprocesses run from the trial directory. These are
 still supervisor setup steps, not unattended orchestration.
+
+The bounded sweep tool is enabled only for `quarter_annular_strip` tasks. Their
+shape is fixed in v1; only translation varies. Saved-file bounds are reported in
+the normalized local frame. See `../STRIP_MODELER_LOOP.md` for the paired runtime
+comparison and the separate supervisor decision to keep the verified binary active.

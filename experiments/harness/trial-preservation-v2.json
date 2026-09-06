@@ -1,6 +1,6 @@
 {
-  "name": "rhino-sweep-cap-v1",
-  "description": "The existing 43 preservation verdicts plus 7 fixed sweep cases. Baseline has three explicitly measured capability failures; candidate must pass all 50. Restoration must match baseline expectations exactly. No automatic promotion.",
+  "name": "rhino-preservation-v2",
+  "description": "Accepted sweep-cap baseline: all previous 50 requirements plus two fresh-agent curved-strip tasks. All 52 baseline and candidate cases must pass. Historical old-runtime capability failures are no longer accepted for this baseline.",
   "cases": [
     "geometry/box/correct",
     "geometry/box/wrong_scale",
@@ -51,7 +51,9 @@
     "sweep/cap_closed_true",
     "sweep/reject_open_profile",
     "sweep/closed_rail_default",
-    "sweep/closed_rail_cap"
+    "sweep/closed_rail_cap",
+    "model/quarter_strip_origin",
+    "model/quarter_strip_translated"
   ],
   "inputs": [
     "../evaluate.cs",
@@ -79,12 +81,10 @@
     "../strip_probe.py",
     "../strip_measure.cs",
     "../validate_sweep_source.py",
-    "../strip_task.py"
+    "../strip_task.py",
+    "../tasks/quarter_strip_origin.json",
+    "../tasks/quarter_strip_translated.json"
   ],
   "sweep_cap_probe": true,
-  "baseline_expectations": {
-    "sweep/cap_closed_false": false,
-    "sweep/cap_closed_true": false,
-    "sweep/reject_open_profile": false
-  }
+  "strip_modeling": true
 }

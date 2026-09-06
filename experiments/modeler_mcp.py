@@ -7,6 +7,7 @@ from rhinomcp.tools.create_object import create_object as original_create
 from rhinomcp.tools.analyze_objects import analyze_objects as original_analyze
 from rhinomcp.tools.modify_object import modify_object as original_modify
 from rhinomcp.tools.advanced_geometry import extrude_curve as original_extrude
+from rhinomcp.tools.advanced_geometry import sweep1 as original_sweep
 from rhinomcp.tools.delete_object import delete_object as original_delete
 from rhinomcp.tools.boolean_operations import boolean_difference as original_difference
 from experiments.bridge import assert_document
@@ -29,6 +30,7 @@ def guard():
 def create_object(type: str, params: dict, translation: list[float] | None = None):
     """Create a primitive. BOX params: width (X), length (Y), height (Z).
 
+    ARC params: center (XYZ), radius and angle (degrees), from +X in the XY plane.
     POLYLINE params: points, a list of XYZ triples. Repeat the first point to close.
     CYLINDER params: radius, height, cap (true for a solid). Its base is at world
     origin and height runs along +Z; translation offsets it. BOX is centered at origin.
@@ -67,6 +69,19 @@ def extrude_curve(curve_id: str, direction: list[float], cap: bool = True):
     result = original_extrude(None, curve_id=curve_id, direction=direction, cap=cap)
     if not result.get("success"):
         raise RuntimeError(result.get("message", "Extrusion failed"))
+    return result
+
+
+@mcp.tool()
+def sweep1(rail_id: str, profile_ids: list[str], cap_planar_ends: bool = False):
+    """Sweep profiles along one rail using RoadlikeTop framing. Optional planar
+    end caps require every output to be a valid solid or fail before insertion.
+    Rail and profile curves remain; delete construction geometry separately.
+    """
+    guard()
+    result = original_sweep(None, rail_id, profile_ids, cap_planar_ends=cap_planar_ends)
+    if not result.get("success"):
+        raise RuntimeError(result.get("message", "Sweep failed"))
     return result
 
 

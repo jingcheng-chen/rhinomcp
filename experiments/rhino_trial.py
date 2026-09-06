@@ -198,6 +198,7 @@ def fixture_verdicts(kind, reports):
 
 
 def test_suite(request):
+    contract = read(Path(request["suite"]))
     directory = Path(request["trial"])
     observed = probe(directory)
     if observed != request["expected_identity"]:
@@ -247,6 +248,11 @@ def test_suite(request):
     swapped_path = report_dir / "reference-swapped.json"
     save(swapped_path, swapped)
     tasks.append(("reference_box_swapped", swapped_path))
+    if contract.get("strip_modeling") is True:
+        tasks.extend(
+            (name, task_root / (name + ".json"))
+            for name in ["quarter_strip_origin", "quarter_strip_translated"]
+        )
     for name, task in tasks:
         print("Modeling " + name, flush=True)
         run_dir, summary = run_locked(task, 180, ROOT / "experiments/runs")
@@ -268,7 +274,6 @@ def test_suite(request):
             )
         clear_owned(directory, run_dir.name)
         save(report_dir / "progress.json", {"cases": cases, "evidence": evidence})
-    contract = read(Path(request["suite"]))
     if contract.get("sweep_cap_probe") is True:
         from experiments.sweep_cap_probe import run_checks
 

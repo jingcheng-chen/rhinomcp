@@ -67,6 +67,9 @@
     "../assembly_identity/Program.cs",
     "../assembly_identity/assembly_identity.csproj",
     "../../server/pyproject.toml",
-    "../../server/uv.lock"
+    "../../server/uv.lock",
+    "../strip_task.py",
+    "../strip_measure.cs",
+    "../strip_probe.py"
   ]
 }

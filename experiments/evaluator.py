@@ -144,6 +144,10 @@ def through_hole_checks(task, obj):
 
 
 def evaluate(task, measurements):
+    if task["type"] == "quarter_annular_strip":
+        from experiments.strip_task import evaluate as evaluate_strip
+
+        return evaluate_strip(task, measurements)
     kind = task["type"]
     if kind not in ("axis_aligned_box", "triangular_prism_pose", "box_through_hole"):
         raise ValueError(f"Unsupported evaluation task type: {kind}")
