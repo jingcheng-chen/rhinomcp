@@ -1,0 +1,15 @@
+{
+  "baseline_revision": "3444a702308332dafbd470aa801350922fd00a87",
+  "read_paths": [
+    "plugin/Functions/CreateLayer.cs",
+    "server/src/rhinomcp/tools/create_layer.py",
+    "contracts/commands/create_layer.json"
+  ],
+  "write_paths": [
+    "plugin/Functions/CreateLayer.cs",
+    "server/src/rhinomcp/tools/create_layer.py",
+    "contracts/commands/create_layer.json"
+  ],
+  "requirements": "Repair create_layer parent resolution generically. A parent containing :: must resolve its exact full path, case insensitive, among nondeleted layers. A simple name must resolve exactly one nondeleted layer; reject ambiguous names even if a root with that name exists. Missing or ambiguous parents must fail before insertion with clear actionable errors. Preserve omitted parent/root creation and omitted name/automatic naming. Reject duplicate sibling names before insertion and check Add result before accessing/serializing. Same child name under different parents remains valid. Keep Python wrapper transport-focused and document full-path and error semantics; schema must match, additionalProperties false, no new command. No other handlers or files may change. No chair-specific logic.",
+  "acceptance": "Preserve all 52 accepted baseline checks. Positive root/automatic naming, unique short-name parent, full-path parent, duplicate leaves on distinct branches, and saved-file object assignment checks. Negative missing/ambiguous parent and duplicate sibling must fail without document changes. Case-insensitive full paths and meaningful failure messages. Supervisor reviews candidate before build/install; do not modify judge or tests."
+}

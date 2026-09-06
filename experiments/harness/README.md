@@ -14,7 +14,9 @@ configuration, not a second copy of instructions kept elsewhere.
 | Screenshot diagnostic tasks and runner | `../visual_tasks/`, `../visual_runner.py`, `../VISUAL_BENCHMARKS.md` |
 | Focused curved-strip diagnosis and independent controls | `../strip_probe.py`, `../strip_measure.cs`, `../strip_controls.cs`, `../STRIP_PROBE.md` |
 | Fresh curved-strip tasks and calibrated posed judge | `../tasks/quarter_strip_*.json`, `../strip_task.py`, `../validate_strip_task.py`, `../STRIP_MODELER_LOOP.md` |
-| Calibrated layer-tree diagnosis and next repair | `../layer_probe.py`, `../layer_measure.cs`, `../layer_controls.cs`, `../LAYER_DIAGNOSIS.md`, `../CONTINUE.md` |
+| Calibrated layer-tree diagnosis | `../layer_probe.py`, `../layer_measure.cs`, `../layer_controls.cs`, `../LAYER_DIAGNOSIS.md`, `../CONTINUE.md` |
+| Bounded layer repair, comparison and accepted baseline | `repairs/layer-parent.json`, `trial-layer-parent.json`, `trial-preservation-v3.json`, `../LAYER_PARENT_TRIAL.md` |
+| Fresh assembly task and restricted gateway | `../layer_modeler.py` (fixed task and orchestration), `../layer_modeler_mcp.py` (allowed commands), `../layer_probe.py` (judge) |
 | Screenshot gateway and structural audit | `../visual_mcp.py`, `../visual_audit.cs` |
 | Modeling tasks and expected measurements | `../tasks/box.json`, `../tasks/posed_prism.json`, `../tasks/through_hole.json`, `../tasks/reference_box.json` |
 | Supported task types and input contract | `../tasks/schema.json` |
@@ -25,7 +27,7 @@ configuration, not a second copy of instructions kept elsewhere.
 | Trusted saved-file measurements and acceptance | `../evaluate.cs`, `../evaluator.py` |
 | Live capture framing and viewport-preservation regression | `../validate_capture.py` |
 | Candidate trial transitions, input identity and recovery | `../trial.py`, `../TRIAL_CONTROLLER.md` |
-| Frozen live trial cases and evaluator inputs | `trial-suite.json` (43 preservation checks); `trial-sweep-cap.json` (historical 50 checks with three explicit baseline capability failures); `trial-preservation-v2.json` (current 52 checks, all required true) |
+| Frozen live trial cases and evaluator inputs | `trial-suite.json` (43 preservation checks); `trial-sweep-cap.json` (historical 50 checks with three explicit baseline capability failures); `trial-preservation-v2.json` (historical 52); `trial-layer-parent.json` (61, six baseline failures); `trial-preservation-v3.json` (current 61, all true) |
 | Live build/probe/test and supervised lifecycle tickets | `../rhino_trial.py`, `../LIVE_TRIAL.md` |
 | Assembly metadata without executing candidate code | `../assembly_identity/` |
 | Machine installation and Rhino startup | `../README.md`, local `AGENTS.md` |
@@ -36,7 +38,8 @@ Changing Markdown does not grant permissions. The controller and gateway enforce
 tool access and output contracts. The deterministic evaluator is ordinary code,
 not an AI role. Fresh builder sessions and review corrections are implemented for a known-defect
 pilot. The live adapter connects the controller to a frozen suite; the active improved
-baseline uses 52 requirements, including seven fresh modeling sessions.
+baseline uses 61 requirements, including seven fresh modeling sessions. The fresh
+layer-assembly task runs separately and is not yet included in that contract.
 Desktop quit/install/restart remains supervised through hash-bound lifecycle tickets.
 QA-reviewer sessions and automatic promotion are still planned. See
 `../BUILDER_LOOP.md`, `../TRIAL_CONTROLLER.md` and `../LIVE_TRIAL.md`.

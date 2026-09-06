@@ -282,6 +282,14 @@ def test_suite(request):
             "path": str(report_dir / "sweep-cap/result.json"),
             "sha256": sha256(report_dir / "sweep-cap/result.json"),
         }
+    if contract.get("layer_parent_probe") is True:
+        from experiments.layer_checks import run_checks as layer_checks
+
+        cases.update(layer_checks(report_dir / "layer-parent", runtime()))
+        evidence["layer_parent"] = {
+            "path": str(report_dir / "layer-parent/result.json"),
+            "sha256": sha256(report_dir / "layer-parent/result.json"),
+        }
     if set(cases) != set(contract["cases"]):
         raise ValueError("Live suite case names do not match the frozen contract")
     if probe(directory) != observed:

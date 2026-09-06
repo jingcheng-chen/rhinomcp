@@ -303,7 +303,7 @@ cleanup. Verify identity and contents again before acting. `claim_empty` require
 an unmodified fresh document; do not blindly reuse this handoff state. The original
 binary remains in the prior trial for recovery. The saved chair is untouched.
 
-## Latest milestone: calibrated layer-tree diagnosis
+## Previous milestone: calibrated layer-tree diagnosis
 
 Read `LAYER_DIAGNOSIS.md` and `layer_probe.py`. The fixed two-cube assembly requires
 `Assembly::Left::Part` and `Assembly::Right::Part`, with duplicate leaf names.
@@ -328,33 +328,72 @@ is unchanged and its earlier pass remains historical; no new preservation run wa
 needed for this harness-only diagnostic. Source snapshots preserve failed setup
 attempts and the completed evidence separately.
 
+## Latest milestone: accepted layer-parent repair and fresh-agent assembly
+
+Read `LAYER_PARENT_TRIAL.md`. A fresh bounded builder produced the three-file
+repair scoped by `harness/repairs/layer-parent.json`. Full parent paths resolve
+case-insensitively, unique short names remain supported, and missing/ambiguous
+parents and duplicate siblings fail clearly without inserting layers. The exact
+reviewed patch is retained as `harness/repairs/layer-parent.patch` and adopted in
+production source. Python documentation and schema match the C# behavior.
+
+Trial `runs/repair-20260906-153718-295e7376/trial-f5110bdd/`: baseline 55 true / six
+known layer failures; candidate **61/61 true**, six gains and no regressions;
+restoration exactly reproduced the original vector. Final trial state is
+`accepted_trial`, `runtime_dirty=false`, `promoted=false`. All 21 fresh modeling
+sessions across the three suite passes succeeded. The controller's restoration
+policy is unchanged. `harness/trial-preservation-v3.json` now requires all 61 true
+for future repairs; retain historical known-failure contracts for replay only.
+
+After restoration, the supervisor separately adopted the tested source and exact
+binary. Fresh assembly run `runs/layer-model-20260906-160939-63c22fdf/` passes:
+Assembly::Left::Part and Assembly::Right::Part with correct object assignments,
+visibility, solid validity and bounds. Both saved-file measurements agree and the
+fresh planner accepts. Document cleanup preserved the original fingerprint.
+`layer_modeler.py` owns this fixed task and orchestration; `layer_modeler_mcp.py`
+limits tool access. This separate task is not counted in the 61-case trial contract.
+
+**Current runtime at handoff:** PID 84726, MVID
+`326aaa12-b851-4c6a-afcb-45291e734a5c`, SHA-256
+`a8791fdfd00500113f138375a6b196d32b191873a1c5ef228e4fe1fd1df193e1`.
+One empty unsaved document, serial 268435457, marker none, modified=true after
+cleanup. Verify again before reuse. Trial `adoption.json` records the separate
+`accepted_active_baseline` / runtime promotion decision. The capped-only baseline
+binary is retained for recovery. The saved original chair is untouched.
+
+**417 developer tests pass** (166 experiment, 238 server, 13 contract); experiment
+lint/format and server source lint pass. Candidate build: zero warnings/errors.
+The fresh assembly demonstrates one successful task, not broad transfer or a paired
+agent-efficiency improvement. The geometry judge checks solids and bounds rather
+than complete shape equivalence; keep this scope explicit. Model version pinning
+and stronger process isolation remain outstanding.
+
 ## Next concrete milestone
 
-Review a bounded layer-creation repair scope using the saved `plugin_issue` plan,
-then dispatch a fresh builder through the existing harness. Resolve exact full
-parent paths, support unambiguous short names, reject missing/ambiguous parents
-without mutation, and report duplicate/insertion failure clearly. Keep Python,
-C# and schema changes together. Do not assume the object-assignment handler is
-broken; it already has a full-path fallback.
+Test organization transfer with a different assembly: deeper nesting, repeated
+intermediate names and an explicit saved-file assignment policy. Reuse the accepted
+61-case baseline and calibrated parent-ID judge; extend the public task data and
+negative fixtures before running a fresh modeler. Do not create another inspection
+tool just because the planner suggested one: `get_object_attributes` already
+reports full paths, IDs and indices. Verify existing outputs first.
 
-Freeze new positive/negative live requirements before candidate comparison and
-preserve all 52 currently accepted checks. Verify saved tree/assignments and no
-partial layers on failures. Then demonstrate fresh-agent use on a clean two-part
-assembly. Continuous cushions, broader shape transfer and chair visual scoring
-remain separate work. No additional user testing data is needed for this step.
+Then combine hierarchical organization with richer geometry, including continuous
+cushions, before another chair attempt. The chair remains one of multiple benchmarks;
+its visual acceptance is still unscored. No additional user testing data is needed
+for the next assembly experiment. Avoid rebuilding/reinstalling the plugin unless
+new evidence requires a production change.
 
 ## Requested model organization milestone
 
-The user requested proper layers, preferably hierarchical, on 2026-09-06. Add
-this after the focused strip/cushion work unless a test needs it sooner. Use a
+The user requested proper layers, preferably hierarchical, on 2026-09-06. The
+basic capability is now validated; apply it in new modeling tasks. Use a
 model/assembly root with functional children, e.g. `Model::Frame::Left`,
 `Model::Frame::Right`, `Model::Upholstery::Seat`, `Model::Upholstery::Back`, and
 `Model::Straps`. Keep construction geometry separate and remove it from final
 outputs. Object names complement layers; they do not replace them.
 
 Existing tools expose `create_layer(parent=...)` and attribute assignment by layer
-name/full path. Verify actual nesting and full-path resolution before relying on
-this: the current creation handler looks up a parent by name. Define saved-file
+name/full path. Full-path parent resolution and the basic two-branch assembly now pass. Keep saved-file
 checks for parent IDs/full paths, object-to-layer assignments, visibility, and no
 unintended Default-layer geometry. Test duplicate child names under distinct
 parents and save/reopen preservation. The historical chair baseline is unchanged;

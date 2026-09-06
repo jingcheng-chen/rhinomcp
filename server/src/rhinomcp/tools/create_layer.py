@@ -16,22 +16,26 @@ def create_layer(
     Parameters:
     - name: The name of the new layer. If omitted, Rhino automatically generates the layer name.
     - color: Optional [r, g, b] color values (0-255) for the layer
-    - parent: Optional name of the new layer's parent layer. If omitted, the new layer will not have a parent layer.
+    - parent: Optional parent reference. Use an exact full path such as "Assembly::Left"
+      when names repeat; a simple name is accepted only when it identifies exactly one
+      nondeleted layer. Missing or ambiguous parents and duplicate sibling names return errors.
 
     Returns:
-    A message indicating the created layer name.
+    A message indicating the created layer name, or a clear creation error.
 
     Examples of params:
     - name: "Layer 1"
     - color: [255, 0, 0]
-    - parent: "Default"
+    - parent: "Assembly::Left"
     """
     try:
         # Get the global connection
         rhino = get_rhino_connection()
 
-        command_params = {"name": name}
+        command_params = {}
 
+        if name is not None:
+            command_params["name"] = name
         if color is not None:
             command_params["color"] = color
         if parent is not None:
