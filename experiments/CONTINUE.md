@@ -273,7 +273,7 @@ tests); standalone contract validation passes. Experiment lint/format and server
 source lint pass. The fresh post-trial planner recommends `accept`, followed by
 a small fresh-modeler curved-strip task. See the saved post-trial plan.
 
-## Latest milestone: fresh-agent benefit and active improved baseline
+## Previous milestone: fresh-agent benefit and active improved baseline
 
 Read `STRIP_MODELER_LOOP.md`. A fixed quarter-annular strip task now runs through
 fresh modeler/planner sessions and a narrow, task-specific `sweep1` gateway.
@@ -303,14 +303,45 @@ cleanup. Verify identity and contents again before acting. `claim_empty` require
 an unmodified fresh document; do not blindly reuse this handoff state. The original
 binary remains in the prior trial for recovery. The saved chair is untouched.
 
+## Latest milestone: calibrated layer-tree diagnosis
+
+Read `LAYER_DIAGNOSIS.md` and `layer_probe.py`. The fixed two-cube assembly requires
+`Assembly::Left::Part` and `Assembly::Right::Part`, with duplicate leaf names.
+Nine independent saved fixtures validate parent-ID reconstruction, object layer
+indices, visible/unlocked ancestors and geometry; correct passes and eight flaws
+fail, each identically twice. File reads preserve artifact hashes.
+
+Live run `runs/layers-20260906-144144-a4abc4d4/` confirms `create_layer` cannot resolve
+full-path parents: it creates a root-level Part, the second Part errors, and object
+assignment fails because the requested children do not exist. A missing parent
+also silently creates a root. Existing empty layers remain in the diagnostic file;
+its strict exact-tree verdict includes these extras, while parent IDs and failed
+assignments independently demonstrate the specific limitation. The fresh planner
+returns `plugin_issue`. No builder has been dispatched for layers yet.
+
+Cleanup preserved the original document fingerprint. The accepted capped runtime
+is unchanged, PID 94887 / MVID `79b1500e-e20d-47af-9c83-6f915729a712` at this run;
+recheck live ownership, empty contents, marker and unsaved state before reuse.
+The saved chair is untouched. **404 developer tests pass** (163 experiment,
+228 server, 13 contract), plus experiment lint/format. The 52-case baseline contract
+is unchanged and its earlier pass remains historical; no new preservation run was
+needed for this harness-only diagnostic. Source snapshots preserve failed setup
+attempts and the completed evidence separately.
+
 ## Next concrete milestone
 
-Define a small assembly task with **hierarchical layers**, then independently
-validate nesting, full paths and saved part assignments before a fresh agent run.
-Include duplicate child names under distinct parents and save/reopen checks.
-Use observed failures to distinguish modeling guidance from a reusable plugin
-repair. Preserve the new 52-case baseline and keep the chair one of many cases.
-Continuous cushions and broader unseen-shape/image transfer follow separately.
+Review a bounded layer-creation repair scope using the saved `plugin_issue` plan,
+then dispatch a fresh builder through the existing harness. Resolve exact full
+parent paths, support unambiguous short names, reject missing/ambiguous parents
+without mutation, and report duplicate/insertion failure clearly. Keep Python,
+C# and schema changes together. Do not assume the object-assignment handler is
+broken; it already has a full-path fallback.
+
+Freeze new positive/negative live requirements before candidate comparison and
+preserve all 52 currently accepted checks. Verify saved tree/assignments and no
+partial layers on failures. Then demonstrate fresh-agent use on a clean two-part
+assembly. Continuous cushions, broader shape transfer and chair visual scoring
+remain separate work. No additional user testing data is needed for this step.
 
 ## Requested model organization milestone
 
