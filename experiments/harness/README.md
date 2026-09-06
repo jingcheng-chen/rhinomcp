@@ -117,3 +117,18 @@ persisted display-mode recovery records. Add a selected actual model screenshot 
 `../roadmap.html#model-progress` and its provenance to `../assets/model-progress.json`
 at every modeling milestone. Retain failed attempts as such; pictures are not an
 independent geometry verdict. This reporting policy is a persistent user request.
+
+## Closed cushion body and native Join
+
+`../cushion_body_task.json`, `../cushion_body_modeler.py` and
+`../cushion_body_probe.py` define the closed-body diagnostic at scales 1 and 0.75.
+`../cushion_body_measure.cs` extracts the top and measures closure, boundary planes,
+volume and membership. The unchanged open-top judge is reused in normalized
+coordinates. `../validate_cushion_body.py` calibrates independent saved controls
+from `../cushion_body_controls.cs`.
+
+`../cushion_body_mcp.py` extends the assembly gateway with a UUID-only Join recipe
+through the existing production `run_command`. It exposes no agent-authored macro
+or script input. This is a harness permission/workflow change, not a new plugin
+operation. See `../CUSHION_BODY_LOOP.md` before classifying a missing gateway tool
+as a plugin defect. Keep the six-surface assembly and closed-solid verdict distinct.

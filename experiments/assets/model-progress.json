@@ -114,5 +114,61 @@
         "sha256": "0ad3c29b14c44e6f88260b3ec9b8e7e3b7db7cd0f66fef4572d2cc572701aa95"
       }
     }
+  },
+  {
+    "id": "cushion-body",
+    "title": "10 \u00b7 Closed cushion body",
+    "image": "assets/agent-cushion-body-perspective.png",
+    "source": "runs/cushion-body-model-20260906-170006-73abe04e/perspective-shaded.png",
+    "sha256": "03042239f8168a8e3bb8f6b65e59ec2ac343438f09fad19eb06b2762246b4c42",
+    "views": {
+      "perspective": {
+        "image": "assets/agent-cushion-body-perspective.png",
+        "source": "runs/cushion-body-model-20260906-170006-73abe04e/perspective-shaded.png",
+        "sha256": "03042239f8168a8e3bb8f6b65e59ec2ac343438f09fad19eb06b2762246b4c42"
+      },
+      "top": {
+        "image": "assets/agent-cushion-body-top.png",
+        "source": "runs/cushion-body-model-20260906-170006-73abe04e/top-shaded.png",
+        "sha256": "cc908e27ffc3c7a7308640404f164617b413e68a34ffa1bc1cd632094b7ef8c8"
+      },
+      "front": {
+        "image": "assets/agent-cushion-body-front.png",
+        "source": "runs/cushion-body-model-20260906-170006-73abe04e/front-shaded.png",
+        "sha256": "f77fdf25e485983b9596b8afd9cc9307d9513a7ff20caca15a9b39b9c4d4cefd"
+      }
+    },
+    "report": "CUSHION_BODY_LOOP.md",
+    "status": "Closed solid + layers passed",
+    "caption": "100 mm footprint, minimum vertical thickness 10 mm. Native Join closes six agent-built surfaces; sharp perimeter joins are intentional.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "cushion-body-scaled",
+    "title": "11 \u00b7 Smaller closed body",
+    "image": "assets/agent-cushion-body-scaled-perspective.png",
+    "source": "runs/cushion-body-model-20260906-170246-4abd21d9/perspective-shaded.png",
+    "sha256": "27a0539a6f0a41f5f453deca56956b986aa91a12b9fd2bbfc96612d708907bb0",
+    "views": {
+      "perspective": {
+        "image": "assets/agent-cushion-body-scaled-perspective.png",
+        "source": "runs/cushion-body-model-20260906-170246-4abd21d9/perspective-shaded.png",
+        "sha256": "27a0539a6f0a41f5f453deca56956b986aa91a12b9fd2bbfc96612d708907bb0"
+      },
+      "top": {
+        "image": "assets/agent-cushion-body-scaled-top.png",
+        "source": "runs/cushion-body-model-20260906-170246-4abd21d9/top-shaded.png",
+        "sha256": "50593c4b0e8ea31f49f9c6cd29312467c821bd1ea69a787ee29cf51a27128b33"
+      },
+      "front": {
+        "image": "assets/agent-cushion-body-scaled-front.png",
+        "source": "runs/cushion-body-model-20260906-170246-4abd21d9/front-shaded.png",
+        "sha256": "e6a168467e4f5d192d8fbb03d6ea7ac569ed8cac93efaa03585c37804fea1764"
+      }
+    },
+    "report": "CUSHION_BODY_LOOP.md",
+    "status": "Scale variation passed",
+    "caption": "Fresh agent: 75 mm footprint and 7.5 mm minimum thickness. Images are fitted independently; saved geometry verifies scale.",
+    "kind": "actual_rhino_capture"
   }
 ]

@@ -396,7 +396,7 @@ harness-only extension. Do not resume a completed historical trial against chang
 source hashes. This is limited organization transfer, not broad generalization;
 geometry checks still establish valid solids and bounds, not complete shape equivalence.
 
-## Latest milestone: continuous cushion top and phase screenshots
+## Previous milestone: continuous cushion top and phase screenshots
 
 Read `CUSHION_TOP_LOOP.md`. The fixed public `cushion_task.json` describes one
 100×100 mm, four-lobed open top surface with recessed crossing seams. A fresh
@@ -434,20 +434,60 @@ models, including the original chair, are not relabeled as new results. The acce
 61-case contract remains unchanged; its full pass is historical and not rerun for
 this harness-only task. A passing surface is not evidence of a plugin-code repair.
 
+## Latest milestone: closed cushion body through existing tools
+
+Read `CUSHION_BODY_LOOP.md`. The public `cushion_body_task.json` adds a flat bottom
+at Z=0 and four vertical walls to the analytic smooth top. Scale 1 has a 100×100 mm
+footprint and minimum vertical thickness 10 mm; scale 0.75 scales all dimensions.
+Sharp C0 perimeter joins are explicitly accepted; rounded/rolled cushion edges
+are not demonstrated. Required output is one valid solid `cushion_body` on
+`Cushion::Upholstery::Body`.
+
+The existing production `run_command` can invoke native Join. The harness-only
+`cushion_body_mcp.py` exposes a fixed UUID-only selection/Join recipe alongside the
+existing restricted creation tools. No arbitrary agent-authored macro is allowed.
+This expands the task gateway, not production plugin code. Do not classify a missing
+operation in a narrow gateway as a missing RhinoMCP operation without checking.
+
+`cushion_body_probe.py`/`cushion_body_measure.cs` reuse unchanged top checks in
+normalized coordinates and add closure, naked-edge, boundary-plane, underside,
+volume and membership requirements. Twelve calibration verdicts pass twice,
+including independent correct full-size/scaled bodies and wrong-scale evaluation.
+Campaign: `runs/cushion-body-calibration-20260906-165916-e73f1c0b/`.
+Full-size model: `runs/cushion-body-model-20260906-170006-73abe04e/` passes all 17
+predicates; fresh planner accepts. Maximum sampled height error is 0.65252 mm.
+Scaled model: `runs/cushion-body-model-20260906-170246-4abd21d9/`, also 17/17
+with fresh planner acceptance; maximum sampled height error 0.18069 mm. Both runs
+preserve the original document fingerprint and restore all four display modes.
+The scaled agent recovered a layer-assignment-before-creation error. The campaign's
+`modeling-results.json` records both. The roadmap has 11 pictured modeling phases.
+Final `completion.json` verifies both artifact hashes, pinned inputs and original
+chair bytes. Runtime remains PID 84726 / MVID `326aaa12-b851-4c6a-afcb-45291e734a5c`,
+empty unsaved document 268435457, marker none, modified=true after cleanup; verify
+again before reuse. Installed SHA remains `a8791fdfd00500113f138375a6b196d32b191873a1c5ef228e4fe1fd1df193e1`.
+
+**451 developer tests pass** (200 experiment, 238 server, 13 contract), plus
+experiment lint/format. The accepted 61-case production-repair contract is unchanged;
+its earlier full pass is historical and not rerun for this harness-only task.
+Open-top evaluator source remains unchanged. No build, installation or bounded
+plugin builder was needed. Selected actual shaded captures are tracked in the
+roadmap gallery with source hashes; original saved chair remains historical.
+
 ## Next concrete milestone
 
-Define a closed cushion-body task building on the smooth top: specify thickness,
-side and underside behavior, joins and desired boundary continuity. Inspect existing
-operations before concluding a reusable command is missing. Build independent
-positive/negative saved-file controls before a fresh agent, retaining layer policy
-and shaded screenshots. Include a scale variation, as recommended by the fresh
-planner, when defining transfer controls. Classify failures as evaluation, guidance or plugin issues;
-only a measured plugin issue should dispatch a bounded builder.
+Revisit the chair as a controlled integration diagnostic using the original public
+screenshot pack, continuous cushion construction, closed curved strips and proper
+hierarchical layers. Read `CHAIR_BASELINE.md` and `VISUAL_BENCHMARKS.md` first.
+Reuse the restricted native Join recipe if needed; do not expose arbitrary scripts
+or hidden reference data. Save a separate model and matched-view screenshots so
+the user can compare the initial schematic chair with the new attempt.
 
-Keep the chair as one of multiple benchmarks; its appearance remains unscored and
-this diagnostic is not yet applied to its geometry. No additional user data is
-needed for the next focused task. Require the accepted 61-case preservation suite
-for any future production repair; avoid rebuilding/reinstalling without evidence.
+Keep visual acceptance unscored until cameras, reference visibility and calibrated
+criteria are fixed. Report remaining edge rounding, proportions and upholstery
+fidelity honestly. Preserve the original file and simpler benchmark contracts.
+This is one complex integration test within a general improvement suite, not the
+only target. Only measured plugin defects should dispatch bounded repairs, followed
+by the accepted preservation suite. No additional user data is required yet.
 
 ## Requested visual progress policy
 
