@@ -54,6 +54,10 @@ class Gateway:
         result = [available[name].model_copy(deep=True) for name in TOOLS]
         if self.description_suffix:
             tool = next(t for t in result if t.name == "create_object")
+            if self.description_suffix.strip() in (tool.description or ""):
+                raise ValueError(
+                    "Candidate guidance is already present in production; restore the recorded baseline before replay"
+                )
             tool.description = (tool.description or "") + self.description_suffix
         return result
 

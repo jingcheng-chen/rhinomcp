@@ -1,55 +1,79 @@
-# Reserved placement validation — prepared 2026-09-07
+# Placement validation and supervised adoption — 2026-09-07
 
-Two new cases are frozen before agent execution:
+The reserved cases meet the unchanged acceptance rule: **all eight models pass,
+zero MCP calls fail, and median calls decrease in both families**. The tested wording
+is now adopted in the production Python MCP `create_object` description. No geometry
+code, command schema, defaults or Rhino binary changed. This is a supervised interface
+improvement, not automatic promotion.
 
-| Family | New input |
-| --- | --- |
-| Primitives | 64 × 36 × 22 mm box; minimum (−110,45,−28) mm |
-| Subtractive solids | 72 × 44 × 18 mm block; minimum (140,−80,35) mm; radius-4.5 through-hole at XY (161,−63) |
+| Reserved case | Baseline median calls | Candidate median calls | Baseline seconds | Candidate seconds |
+| --- | ---: | ---: | ---: | ---: |
+| primitives | 4.5 | 4 | 39.87 | 65.56 |
+| subtractive-solids | 10.5 | 7 | 87.84 | 52.91 |
 
-These are new cases within the same two families, not a new unseen family. The
-candidate text is byte-identical to the discovery trial. Model alias, reasoning,
-budget, two counterbalanced pairs, evaluator tolerances and acceptance criterion
-are unchanged. The planned eight agent runs have **not run**.
+The offset box is 64 × 36 × 22 mm with minimum (−110,45,−28). The through-hole
+block is 72 × 44 × 18 mm with minimum (140,−80,35), radius 4.5 and axis XY (161,−63).
+These dimensions/offsets were reserved after discovery; they are new cases within
+the same families, not evidence from a new task family. The candidate, requested
+model (`gpt-5.6-terra`, medium reasoning), budgets and evaluators stayed fixed.
+Each case ran baseline/candidate, then candidate/baseline, in fresh sessions.
 
-Independent in-memory fixtures calibrate the unchanged evaluator at these offsets.
-For each task, the correct fixture passes and a deliberately misplaced fixture
-fails. Each verdict repeats identically. The wrong hole retains the correct radius
-and volume but shifts its axis by 1 mm, verifying position-sensitive rejection.
-The active Rhino document fingerprint is unchanged by calibration.
+Box timing worsened despite fewer calls. No general speed or cost saving is claimed.
+The sample remains small and shares primitive creation across cases. The model alias
+is explicit, but the backend snapshot is unavailable. Preserve those limitations when
+reporting the result. The earlier eight discovery runs remain separate evidence.
 
-A first calibration preflight stopped because the active document was no longer
-the experiment document. Read-only fixture construction can safely run in memory;
-it does not require replacing the active document. An initial hole fixture generator
-then failed when adding an inner profile at the elevated plane. The corrected generator
-constructs the profile locally and translates the completed solid. No evaluator,
-production behavior or acceptance criterion changed. Failed attempts remain local.
+## Every reserved-case run
 
-Final calibration: `experiments/runs/placement-validation-controls-20260907-160041/`.
-It retains the generator, synthetic files, repeated reports and preservation evidence.
-The [tracked calibration summary](placement-validation-controls.json) retains verdicts
-and the generator hash without including the user's model contents.
+All rows passed independent saved-file evaluation.
 
-## Live execution boundary
+| Family | Pair | Arm | Calls | Seconds | Input / cached input / output tokens |
+| --- | ---: | --- | ---: | ---: | --- |
+| primitives | 1 | baseline | 5 | 37.22 | 105,431 / 84,480 / 652 |
+| primitives | 1 | candidate | 4 | 101.93 | 90,265 / 79,360 / 523 |
+| primitives | 2 | candidate | 4 | 29.19 | 88,205 / 53,248 / 483 |
+| primitives | 2 | baseline | 4 | 42.51 | 118,908 / 81,408 / 864 |
+| subtractive-solids | 1 | baseline | 10 | 65.62 | 176,176 / 151,040 / 1,381 |
+| subtractive-solids | 1 | candidate | 7 | 56.54 | 174,207 / 156,928 / 1,098 |
+| subtractive-solids | 2 | candidate | 7 | 49.28 | 147,785 / 130,816 / 1,005 |
+| subtractive-solids | 2 | baseline | 11 | 110.05 | 141,055 / 124,672 / 1,295 |
 
-Rhino currently has a saved packaging document open alongside the empty experiment
-document. The existing shared harness requires one dedicated unsaved document and
-rejects this state. No user document was closed, cleared or changed. The agent trial
-is pending availability of Rhino for exclusive testing; do not weaken the ownership
-checks or silently switch documents.
+Cached input is part of input, not additional usage. Timing includes model/client
+latency and gateway guards. These counters are not monetary costs.
 
-Once the user makes Rhino available, recheck process/document state and run:
+## Adoption and preservation
 
-```sh
-PYTHONPATH=/absolute/path/to/rhinomcp server/.venv/bin/python -m experiments.workflow.compare experiments/workflow/placement-validation-trial.json
-```
+The supervisor added the tested generic anchor-point guidance to the production
+function docstring. An AST comparison confirmed that executable code was identical.
+A freshly loaded MCP catalog matched the tested candidate after normalizing terminal
+whitespace removed by docstring extraction; all schemas/defaults/other metadata matched.
+Fresh MCP server sessions load the new description. Existing servers may need restarting
+to refresh their advertised tools; the Rhino plugin itself needs no rebuild or restart.
 
-Keep the prior positive discovery result separate. Do not adopt the description into
-production until this validation is completed and reviewed. Record every outcome,
-including failures or ties. No new model screenshots exist in this preparation phase;
-the roadmap retains the previous eight agent outputs.
+All eight cleanup fingerprints matched. Final runtime: document 268435459, zero
+objects, no file path or marker; assembly MVID `326aaa12-b851-4c6a-afcb-45291e734a5c`.
+Rhino was initially at its startup screen with no document; a fresh test document was
+created. No user model was closed or cleared by this session. Recheck before resuming.
 
-Verification: **489 tests pass**, with 12 existing warnings. New checks ensure that
-reserved cases change dimensions/positions while retaining evaluator types/tolerances,
-and that the candidate hash and agent settings match discovery. No build or installation
-was performed. Production code and the tested candidate remain unchanged.
+The historical A/B contracts require the old production description. The gateway
+now rejects reapplying guidance already in production, so an accidental replay cannot
+masquerade as a fresh intervention. To reproduce the old baseline, use pre-adoption
+commit `6265121` in an isolated checkout with the unchanged Rhino binary. Detailed
+pre-adoption source snapshots remain in the run artifacts.
+
+[Comparison](placement-validation-results.json), [all eight screenshots and hashes](placement-validation-images.json),
+and [adoption record](placement-adoption.json) are tracked. Full evidence is local under
+`experiments/runs/workflow-comparison-20260907-162356-15ca48a3/`.
+The earlier [independent calibration](placement-validation-controls.json) proved correct
+fixtures pass and misplaced fixtures fail twice each. Its first elevated inner-profile
+generator failed; constructing locally then translating fixed that generator without
+changing the evaluator or acceptance rule.
+
+Next: investigate the already-evidenced misleading initial surface bounds through
+the shared workflow and existing bounded repair route. Add reusable evaluator adapters
+where needed; do not create another object-specific modeling runner. General capability
+builder support and automatic promotion remain pending.
+
+Verification: **490 tests pass**, with 12 existing warnings; relevant lint and format
+checks pass. The unchanged 61-case live production suite was not rerun for this
+docstring-only change.

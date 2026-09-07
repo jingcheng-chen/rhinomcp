@@ -137,10 +137,16 @@ Neither faster failures nor incomplete runs pass. Even a positive small discover
 trial does not authorize automatic promotion or establish held-out generalization.
 
 
-## Reserved-case validation status
+## Reserved-case validation and adoption
 
-[PLACEMENT_VALIDATION.md](PLACEMENT_VALIDATION.md) records two new placement cases
-and successful independent evaluator calibration. The unchanged candidate is ready
-for eight paired sessions using `placement-validation-trial.json`. Live sessions are
-pending a dedicated Rhino document; the user's packaging model is currently open.
-No agent validation result or production adoption is claimed from calibration alone.
+[PLACEMENT_VALIDATION.md](PLACEMENT_VALIDATION.md) records eight additional passing
+agent runs on new dimensions/offsets. The supervisor adopted the tested placement
+wording into the production creation-tool docstring. Median calls decreased in both
+families; latency was mixed. See the report for limits, screenshots and adoption checks.
+
+The current production baseline already includes the guidance. Historical description
+trials must use pre-adoption revision `6265121`; the gateway rejects duplicating a suffix
+already present in the native description. The generic pilot remains usable without
+an intervention. Automatic promotion and general capability-builder support are still
+pending. Next investigate the independent surface-feedback evidence through the shared
+workflow and existing bounded repair path.

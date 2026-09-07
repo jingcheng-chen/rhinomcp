@@ -98,6 +98,11 @@ def create_object(
     - CONE: {"radius": 1.0, "height": 1.0, "cap": True}
     - CYLINDER: {"radius": 1.0, "height": 1.0, "cap": True}
     - SURFACE: {"count": (3, 3), "points": [[0, 0, 0], [1, 0, 0], [2, 0, 0], [0, 1, 0], [1, 1, 0], [2, 1, 0], [0, 2, 0], [1, 2, 0], [2, 2, 0]], "degree": (3, 3), "closed": (False, False)}
+
+    Primitive placement before optional transforms:
+    - BOX is centered at world origin. Its bounds are [-width/2, -length/2, -height/2] to [width/2, length/2, height/2]. For an unrotated box whose minimum corner is [x,y,z], pass translation=[x+width/2, y+length/2, z+height/2] during creation.
+    - CYLINDER has its base-circle center at world origin and extends along +Z from 0 to height. Translation places the base center, not the middle of the cylinder. To span Z from z0 to z1, use height=z1-z0 and translation=[center_x, center_y, z0].
+    These rules describe unrotated, unscaled primitives. Inspect the returned bounding_box when applying additional transforms.
     """
     rhino = get_rhino_connection()
 

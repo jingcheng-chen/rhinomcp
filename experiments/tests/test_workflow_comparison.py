@@ -90,3 +90,17 @@ def test_bad_agent_configuration_rejected_before_launch(tmp_path):
             agent_config={"model": "x", "reasoning_effort": "bogus"},
         )
     assert not (tmp_path / "session").exists()
+
+
+def test_adopted_guidance_cannot_be_measured_as_a_new_intervention(tmp_path):
+    from experiments.runner import ROOT
+
+    suffix = (ROOT / "experiments/workflow/placement-guidance.txt").read_text()
+
+    async def check():
+        with pytest.raises(ValueError, match="already present"):
+            await Gateway(
+                1, "owner", 2, tmp_path / "log", description_suffix=suffix
+            ).definitions()
+
+    asyncio.run(check())

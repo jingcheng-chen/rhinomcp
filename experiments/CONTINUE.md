@@ -13,20 +13,33 @@ the revised cycle and implementation boundary. New capabilities, tool ergonomics
 reusable workflows are legitimate proposals even when no command is defective.
 A task success or additional tests alone do not establish an improved MCP tool.
 
-## Current handoff — validation prepared; Rhino availability pending
+## Current handoff — reserved validation passed; guidance adopted
 
-Read [workflow/PLACEMENT_VALIDATION.md](workflow/PLACEMENT_VALIDATION.md). Two new
-placement cases, suite and eight-run contract are frozen. Independent in-memory
-fixtures prove correct cases pass and misplaced cases fail, twice each, without
-changing the active document. All 489 tests pass. Candidate wording, agent settings
-and acceptance rules match discovery; no agent validation runs have started.
+Read [workflow/PLACEMENT_VALIDATION.md](workflow/PLACEMENT_VALIDATION.md). The eight
+reserved-case runs all pass with zero failed calls. Median calls are 4.5→4 for the
+offset box and 10.5→7 for the elevated through-hole task. Box timing worsens, so do
+not claim general speed/cost improvement. These are new cases in existing families,
+not a new held-out family; requested model alias/effort are pinned, backend snapshot
+is unavailable. The earlier discovery result remains separately preserved.
 
-Rhino now has the user's saved packaging document open alongside the empty test
-window. The user was asked whether Rhino can be reserved for testing; no answer
-has arrived at this handoff. Do not close or clear the user's document or bypass
-single-document ownership checks. Recheck availability/runtime before dispatching
-`workflow/placement-validation-trial.json` through the existing comparator. Production
-adoption remains pending validation. No new modeled phase or screenshot is claimed.
+The supervisor adopted the tested anchor-point wording in production
+`server/src/rhinomcp/tools/create_object.py`. Only its docstring changed; AST and
+published-catalog checks preserve execution, schemas and defaults. No Rhino build
+or install was needed. All 490 tests pass. This is supervised description adoption,
+not automatic promotion. Fresh MCP sessions expose it; already-running servers may
+need restart to refresh schemas. The gateway now rejects duplicate application of
+the adopted suffix. Historical A/B replay requires pre-adoption baseline `6265121`.
+
+All eight new screenshots/models are saved and on the roadmap. Final runtime document
+268435459 is empty, unsaved and unclaimed, with the same assembly MVID as discovery.
+The previous user-work blocker is resolved; this session created a new test document
+from Rhino's startup screen. Recheck application state before any future trial.
+
+Next bounded step: diagnose the recorded misleading initial surface-bounds response,
+using independent probes and the existing bounded repair route. Keep workflow/task
+performance distinct from geometry acceptance. Extend shared evaluator adapters when
+needed instead of adding object-specific runners. General new-capability builder
+support and automatic promotion remain pending. Older next steps below are historical.
 
 ## Latest milestone — placement guidance comparison (2026-09-07)
 
