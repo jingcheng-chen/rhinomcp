@@ -1,0 +1,19 @@
+{
+  "baseline_revision": "69aa2298c450ee48f864c7ef78e84d83d5b59f47",
+  "read_paths": [
+    "plugin/Serializers/Serializer.cs",
+    "plugin/Functions/_utils.cs",
+    "plugin/Functions/CreateObject.cs",
+    "plugin/Functions/ModifyObject.cs",
+    "server/src/rhinomcp/tools/create_object.py",
+    "server/src/rhinomcp/tools/modify_object.py",
+    "contracts/commands/create_object.json",
+    "contracts/commands/modify_object.json"
+  ],
+  "write_paths": [
+    "plugin/Serializers/Serializer.cs",
+    "plugin/Functions/_utils.cs"
+  ],
+  "requirements": "Repair inaccurate bounds immediately after inserting Brep surfaces, generically. Add one shared public static bounds helper in Serializer: for Brep geometry compute accurate bounds on a deep DuplicateBrep inside a using scope; for all other GeometryBase types preserve the existing accurate GetBoundingBox(true) path. Never mutate document geometry to clear caches, approximate with sample points/meshes, or use untrimmed underlying-surface bounds. Route Serializer.RhinoObject bounding_box plus _utils.applyRotation and applyScale pivot calculations through that helper. Preserve existing schemas/defaults and T*R*S transform composition, curve/extrusion behavior, attributes, undo and layer behavior. Keep the adopted Python placement description intact. Only the two declared existing files may change; no new files or other handlers. This is a cache-isolation candidate, not proof of performance benefit.",
+  "acceptance": "Raised/depressed surface creation feedback must match interior extrema. Creation-time rotation and scaling must use accurate center/min pivots and match independent analytic bounds and center points. Preserve tight bounds and geometry of trimmed through-hole solids; never use their oversized underlying cutter surfaces. Preserve the 61-case live production contract and existing placement guidance. Supervisor will review, build/install under the existing lifecycle process, probe and compare fresh workflows independently. Do not claim live validation or execution."
+}

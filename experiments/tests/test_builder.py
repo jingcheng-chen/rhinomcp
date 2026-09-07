@@ -49,6 +49,7 @@ def test_evaluator_issue_is_valid_but_cannot_dispatch_builder():
         "/etc/passwd",
         ".git/config",
         "plugin/Functions/_utils.cs",
+        "plugin/Serializers/Serializer.cs",
     ],
 )
 def test_builder_cannot_write_outside_exact_scope(candidate, path):

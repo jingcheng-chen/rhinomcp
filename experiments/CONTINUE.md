@@ -13,6 +13,26 @@ the revised cycle and implementation boundary. New capabilities, tool ergonomics
 reusable workflows are legitimate proposals even when no command is defective.
 A task success or additional tests alone do not establish an improved MCP tool.
 
+## Current handoff — surface feedback candidate prepared
+
+Read [workflow/SURFACE_FEEDBACK.md](workflow/SURFACE_FEEDBACK.md). Independent generic
+probes reproduce eight failing predicates out of 19: curved surface feedback is flat,
+and creation-time rotation/scaling use incorrect pivots. Four models/screenshots and
+analytic expectations are retained. The trimmed-solid control passes. A fresh planner
+classified a plugin defect; a fresh bounded builder produced a reviewed two-file patch.
+The portable patch and baseline evidence live in `workflow/surface-feedback-*`.
+
+Candidate is NOT built, installed or adopted. All 491 development tests pass; they do
+not validate this C# repair. Next: use the existing supervised candidate lifecycle,
+run frozen surface probes and the 61-case preservation contract, then compare fresh
+workflows. Measure duplication overhead before claiming efficiency. Production
+placement guidance remains adopted. Recheck runtime ownership and binary identity.
+Builder run: `runs/repair-20260907-171657-ec239178`; scope:
+`harness/repairs/surface-feedback.json`. Serializer eligibility was added to the
+controller, while exact-path and whole-checkout restrictions remain enforced.
+
+Older handoffs below are historical where they conflict with this section.
+
 ## Current handoff — reserved validation passed; guidance adopted
 
 Read [workflow/PLACEMENT_VALIDATION.md](workflow/PLACEMENT_VALIDATION.md). The eight

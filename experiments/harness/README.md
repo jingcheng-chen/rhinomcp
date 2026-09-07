@@ -171,3 +171,5 @@ body before applying its pose through existing `modify_object`.
 `../posed_cushion_probe.py` inverse-transforms duplicates for the unchanged body
 judge; `../validate_posed_cushion.py` checks independent positive/negative fixtures.
 See `../POSED_CUSHION_LOOP.md` for limits, recovery evidence and live run results.
+
+Surface feedback repair scope: `repairs/surface-feedback.json`. Existing serializer files are eligible for explicitly listed repairs, alongside handler/wrapper/schema files. Eligibility never grants access to undeclared paths. See `../workflow/SURFACE_FEEDBACK.md` for the candidate-only status and live acceptance gate.

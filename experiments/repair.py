@@ -162,6 +162,7 @@ def scoped_repair(scope_path, evidence_path, timeout=240):
                 or str(path) != name
                 or not (
                     name.startswith("plugin/Functions/")
+                    or name.startswith("plugin/Serializers/")
                     or name.startswith("server/src/rhinomcp/tools/")
                     or name.startswith("contracts/commands/")
                 )
