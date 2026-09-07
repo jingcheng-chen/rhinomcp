@@ -49,9 +49,9 @@ PYTHONPATH=/absolute/path/to/rhinomcp server/.venv/bin/python -m experiments.wor
 
 ## Remaining implementation — do not confuse with the existing defect pilot
 
-- One shared task/session runner with a common agent-facing gateway; task definitions
-  should supply inputs, budgets and evaluator adapters, not fork orchestration.
-  Migrate a small cross-task pilot first; keep old runners as historical replay paths.
+- Extend the shared pilot beyond its existing analytic solid evaluator adapter.
+  Keep task definitions as inputs and evaluator registrations, rather than forking
+  orchestration. Old runners remain historical replay paths.
 - Explicit model/version, prompt, evaluator and environment pinning for prospective
   comparisons. The current audit deliberately cannot authorize a promotion.
 - A reviewed capability-builder route permitting exact declared new files and their
@@ -62,8 +62,9 @@ PYTHONPATH=/absolute/path/to/rhinomcp server/.venv/bin/python -m experiments.wor
   task families. Do not create a runner for every object or substitute a test count
   for agent-effectiveness measurements.
 
-The next bounded work is the common task/session contract and a non-chair pilot for
-reliable geometry feedback, then builder extension and paired trials. Curved panels
+The shared native-interface pilot is implemented below. Next, pin agent configuration
+and investigate primitive placement guidance through repeated paired trials. Reliable
+geometry feedback remains another evidence-backed investigation. Curved panels
 and trimmed patches are proposed validation families, not implemented benchmarks.
 No more chair-only construction milestones are scheduled by this workflow.
 
@@ -77,3 +78,33 @@ change. The next pilot must expose representative native MCP tool schemas and re
 comparison pins. Reuse existing tasks/evaluators; do not add another object-specific
 runner. Reliable surface feedback remains an independent investigation, suitable
 for the existing repair route once cross-task acceptance cases are fixed.
+
+## Native-interface pilot (2026-09-07)
+
+`pilot.json` registers existing box and through-hole tasks with one common tool set,
+call budget and timeout. `pilot.py` handles fresh sessions, source snapshots, runtime
+identity, saved-file evaluation, screenshots, workflow metrics and guarded cleanup.
+`native_mcp.py` exposes 12 production tools with identical names, descriptions, input
+and output schemas, defaults and return values. It adds only document checks, call
+budget enforcement, serialization and a controller-side call log. It does not supply
+special modeling recipes or a schema-discovery tool.
+
+This is a **restricted native interface**, not the complete production server:
+script execution, desktop/filesystem access and other capabilities are excluded.
+Both tasks get the same tools. Guard time contributes to measured elapsed time;
+client traces remain the source for all attempts, including rejected calls.
+
+```sh
+PYTHONPATH=/absolute/path/to/rhinomcp server/.venv/bin/python -m experiments.workflow.pilot
+```
+
+Use one empty, unsaved, unclaimed dedicated Rhino document. The suite holds the
+shared Rhino lock, saves each candidate and screenshot, and removes its construction
+objects including hidden objects after each task. Source and loaded plugin identities
+are checked before evaluation. Failure records remain local; failures are not retried
+silently. The original units, tolerance, objects and layer fingerprint must survive.
+
+The run records CLI version, task, prompt, tool catalog, code and binary hashes,
+budgets and runtime identity. The resolved agent model version is still unavailable;
+these baseline observations cannot authorize comparison or promotion. Explicit agent
+configuration, repeated paired trials and held-out cases are the next comparison work.

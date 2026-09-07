@@ -13,6 +13,7 @@ configuration, not a second copy of instructions kept elsewhere.
 
 | Concern | Source of truth |
 | --- | --- |
+| Shared native-interface pilot | `../workflow/pilot.json`, `../workflow/pilot.py`, `../workflow/native_mcp.py` |
 | Modeler behavior | `roles/modeler.md` |
 | Planner behavior and evaluator-issue routing | `roles/planner.md`, `../runner.py` |
 | Builder behavior | `roles/bounded_builder.md` for per-repair work; `roles/builder.md` for historical capture replay |

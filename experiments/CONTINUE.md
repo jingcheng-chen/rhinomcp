@@ -13,6 +13,25 @@ the revised cycle and implementation boundary. New capabilities, tool ergonomics
 reusable workflows are legitimate proposals even when no command is defective.
 A task success or additional tests alone do not establish an improved MCP tool.
 
+## Latest milestone — native-interface baseline (2026-09-07)
+
+Read [workflow/NATIVE_BASELINE.md](workflow/NATIVE_BASELINE.md). One shared suite
+runner now executes existing box and through-hole tasks through 12 unchanged native
+production MCP tool definitions, with document/budget guards. Both fresh sessions
+pass independent saved-file evaluation: 5 and 9 calls, zero failures. Source snapshots,
+tool catalogs, artifacts, screenshots, CLI/runtime identities and cleanup evidence
+are retained. The dedicated document is empty and unclaimed after both runs.
+
+Next bounded step: pin the agent configuration and define repeated baseline/candidate
+trials for primitive placement guidance. Both agents corrected centered-box placement;
+the second also corrected the base-anchored cylinder. This is an interface hypothesis,
+not a demonstrated improvement. Keep semantics unchanged; compare production tool
+documentation as the intervention and reserve additional placement cases for validation.
+The resolved model version remains unpinned, so today's observations cannot establish
+causal benefit. General capability-builder/promotion support remains pending. Do not
+resume chair-specific construction as the primary work. The older next-step prose
+below is historical where it conflicts with this milestone.
+
 ## Objective and agreed design
 
 Build a repeatable task → modeling → independent evaluation → planning → bounded
