@@ -1,0 +1,324 @@
+{
+  "purpose": "Find cross-task workflow friction, not score modeling quality or claim improvement.",
+  "families": [
+    "layer-organization",
+    "photo-reconstruction",
+    "posed-solids",
+    "primitives",
+    "surface-construction"
+  ],
+  "runs": [
+    {
+      "id": "box",
+      "family": "primitives",
+      "available": true,
+      "source": "experiments/runs/20260905-184415-34495492",
+      "source_sha256": "45d28d3f910e18d7eaedeb6976339be221cf0e577c025b9c631fcedbc997c4bf",
+      "session_status": "completed",
+      "elapsed_seconds": 26.67646458300078,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "75bf079b7cefa27b0461b80ad1042c9eb8763e5de99a4e70c6956f2ec9798bc7",
+      "metrics": {
+        "mcp_attempts": 3,
+        "completed_calls": 3,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "translate_object": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 55595,
+          "cached_input_tokens": 42624,
+          "output_tokens": 549,
+          "reasoning_output_tokens": 107
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "prism",
+      "family": "posed-solids",
+      "available": true,
+      "source": "experiments/runs/20260905-205440-a9e6b334",
+      "source_sha256": "8b48987396b4f95d165859ea5e46e324b706775ad086fea5fe6a1cebd8aaf824",
+      "session_status": "completed",
+      "elapsed_seconds": 44.81406366699957,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "bff3ac62ddc7051000c23c4878b38462d8c421904eee1a6fdfe57e87a157287c",
+      "metrics": {
+        "mcp_attempts": 4,
+        "completed_calls": 4,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "extrude_curve": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 81034,
+          "cached_input_tokens": 50560,
+          "output_tokens": 694,
+          "reasoning_output_tokens": 104
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "assembly",
+      "family": "layer-organization",
+      "available": true,
+      "source": "experiments/runs/layer-model-20260906-162305-f09de086",
+      "source_sha256": "226cd0dc54e3094ee125539a5fd1b63727d0464f1fcf891c54c4a5384ad5c20f",
+      "session_status": "completed",
+      "elapsed_seconds": 63.825040084004286,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "77955cb3997de639d2bb89ba24f28b89be9654cb6e8f9c4150d3ab2a6511de10",
+      "metrics": {
+        "mcp_attempts": 24,
+        "completed_calls": 24,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "assembly_command": 19,
+          "describe_command": 5
+        },
+        "commands": {
+          "create_layer": 9,
+          "create_object": 3,
+          "get_object_attributes": 3,
+          "get_objects": 1,
+          "update_object_attributes": 3
+        },
+        "schema_queries": 5,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 142308,
+          "cached_input_tokens": 121216,
+          "output_tokens": 1237,
+          "reasoning_output_tokens": 214
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "closed-body",
+      "family": "surface-construction",
+      "available": true,
+      "source": "experiments/runs/cushion-body-model-20260906-170006-73abe04e",
+      "source_sha256": "08de376dc31c569afebe88c7356e62bf3e702bc7b2edc011ffcfbafcaaf05618",
+      "session_status": "completed",
+      "elapsed_seconds": 137.56760149999172,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "8c48585fdbd2fd0669f9e2cdc7227db4f314d4776ac1adf932ab8c6f41175567",
+      "metrics": {
+        "mcp_attempts": 28,
+        "completed_calls": 28,
+        "unfinished_calls": 0,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "assembly_command": 1
+        },
+        "tools": {
+          "assembly_command": 20,
+          "describe_command": 7,
+          "join_surfaces": 1
+        },
+        "commands": {
+          "create_layer": 3,
+          "create_object": 7,
+          "delete_object": 1,
+          "get_object_attributes": 2,
+          "get_objects": 5,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 7,
+        "delete_calls": 1,
+        "usage": {
+          "input_tokens": 266925,
+          "cached_input_tokens": 225536,
+          "output_tokens": 3584,
+          "reasoning_output_tokens": 1594
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "posed-body",
+      "family": "surface-construction",
+      "available": true,
+      "source": "experiments/runs/posed-cushion-model-20260906-175112-f2f8dd8d",
+      "source_sha256": "48d44aa97dc0df3f23273073c39c50c93e05f998d54b81bd50b9c9ffacc9a1bd",
+      "session_status": "completed",
+      "elapsed_seconds": 149.11216529199737,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "0884116a0ea4d639ce06e163d84d3882a3c5674c9965a7a7b6b8e185ff3fc36e",
+      "metrics": {
+        "mcp_attempts": 27,
+        "completed_calls": 27,
+        "unfinished_calls": 0,
+        "failed_calls": 5,
+        "failures_by_tool": {
+          "assembly_command": 1,
+          "describe_command": 4
+        },
+        "tools": {
+          "assembly_command": 17,
+          "describe_command": 9,
+          "join_surfaces": 1
+        },
+        "commands": {
+          "create_layer": 3,
+          "create_object": 6,
+          "get_object_attributes": 1,
+          "get_objects": 4,
+          "modify_object": 1,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 9,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 343337,
+          "cached_input_tokens": 310912,
+          "output_tokens": 3254,
+          "reasoning_output_tokens": 1259
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "alternate-body",
+      "family": "surface-construction",
+      "available": true,
+      "source": "experiments/runs/posed-cushion-model-20260906-175410-5bf01af5",
+      "source_sha256": "363d45edfd5fe536239ba4ab6e65f1e97c0987814c43962c86e158be2fda65a5",
+      "session_status": "completed",
+      "elapsed_seconds": 242.16046808299143,
+      "task_verdict": "fail",
+      "agent_claim_complete": false,
+      "evaluation_sha256": "31af4ff223dc3883da2f745fe2bf2b4228ddbc58c83d87b48f5c2fd4c8c1a47a",
+      "metrics": {
+        "mcp_attempts": 64,
+        "completed_calls": 64,
+        "unfinished_calls": 0,
+        "failed_calls": 7,
+        "failures_by_tool": {
+          "assembly_command": 4,
+          "describe_command": 3
+        },
+        "tools": {
+          "assembly_command": 55,
+          "describe_command": 9
+        },
+        "commands": {
+          "create_layer": 3,
+          "create_object": 47,
+          "delete_object": 2,
+          "get_objects": 3
+        },
+        "schema_queries": 9,
+        "delete_calls": 2,
+        "usage": {
+          "input_tokens": 415514,
+          "cached_input_tokens": 357248,
+          "output_tokens": 4798,
+          "reasoning_output_tokens": 2973
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "chair",
+      "family": "photo-reconstruction",
+      "available": true,
+      "source": "experiments/runs/integration-20260906-171254-6eb9935e",
+      "source_sha256": "fa93a41e183e79c217e8bf04227519f85a864448192fcdb076dd952ee1d51a0f",
+      "session_status": "completed",
+      "elapsed_seconds": 383.807418707991,
+      "task_verdict": "unscored",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "3e1be2ba8fda39b34661b181ab07fb2ba5b61ba1bf321a1402f16dfcccd3c375",
+      "metrics": {
+        "mcp_attempts": 95,
+        "completed_calls": 95,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "describe_modeling_command": 14,
+          "get_reference_image": 4,
+          "inspect_view": 5,
+          "join_surfaces": 2,
+          "modeling_command": 70
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "create_layer": 8,
+          "create_objects": 5,
+          "delete_object": 14,
+          "get_object_attributes": 4,
+          "get_objects": 3,
+          "modify_objects": 2,
+          "sweep1": 4,
+          "update_object_attributes": 28
+        },
+        "schema_queries": 14,
+        "delete_calls": 14,
+        "usage": {
+          "input_tokens": 1221370,
+          "cached_input_tokens": 1148544,
+          "output_tokens": 9223,
+          "reasoning_output_tokens": 2671
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    }
+  ],
+  "promotion_authorized": false,
+  "limitation": "Historical heterogeneous observations only. Missing data stays unknown; task success and efficiency are separate."
+}

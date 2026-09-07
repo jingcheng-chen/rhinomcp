@@ -1,0 +1,11 @@
+{
+  "runs": [
+    {"id":"box", "family":"primitives", "run":"experiments/runs/20260905-184415-34495492"},
+    {"id":"prism", "family":"posed-solids", "run":"experiments/runs/20260905-205440-a9e6b334"},
+    {"id":"assembly", "family":"layer-organization", "run":"experiments/runs/layer-model-20260906-162305-f09de086"},
+    {"id":"closed-body", "family":"surface-construction", "run":"experiments/runs/cushion-body-model-20260906-170006-73abe04e"},
+    {"id":"posed-body", "family":"surface-construction", "run":"experiments/runs/posed-cushion-model-20260906-175112-f2f8dd8d"},
+    {"id":"alternate-body", "family":"surface-construction", "run":"experiments/runs/posed-cushion-model-20260906-175410-5bf01af5"},
+    {"id":"chair", "family":"photo-reconstruction", "run":"experiments/runs/integration-20260906-171254-6eb9935e"}
+  ]
+}

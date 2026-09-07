@@ -1,8 +1,17 @@
 # Continue autonomous RhinoMCP improvement
 
 This is the entry point for a development agent with no prior chat context.
-Last updated: 2026-09-06. Verify repository and application state before acting;
+Last updated: 2026-09-07. Verify repository and application state before acting;
 the previous session's running processes and document selection are not assumptions.
+
+## Governing direction — user clarification, 2026-09-07
+
+Optimize the MCP toolset by inspecting agent workflows across tasks. Modeling is
+benchmark execution, not the product being optimized. Do not continue the historical
+chair/cushion progression as the main objective. Read `workflow/README.md` first for
+the revised cycle and implementation boundary. New capabilities, tool ergonomics and
+reusable workflows are legitimate proposals even when no command is defective.
+A task success or additional tests alone do not establish an improved MCP tool.
 
 ## Objective and agreed design
 
@@ -545,33 +554,35 @@ changing the artifact. See `summary-recovered.json` and `planner-recovery.json`.
 screenshots are distinct. This proves a planar-perimeter posed cushion workflow,
 not closure of the original chair's curved perimeter or accurate chair padding.
 
-## Next concrete milestone
+## Next concrete milestone — common workflow, not another model
 
-First investigate misleading initial SURFACE response bounds. Two minimal probes
-(`runs/surface-bounds-20260906-180014/` and `...-180231/`) return maximum Z=10 for
-an actual interpolated surface center Z=30. Subsequent direct Brep and surface
-bounds give maximum Z=30. Geometry is not flattened; timing/cache cause and other
-affected commands remain unverified. Reuse `surface_bounds_probe.py`, add fixed
-positive/negative and trimmed-surface regression coverage, and only then dispatch
-a bounded production repair if warranted. Do not naively use untrimmed surface bounds
-for all Breps. Retry the alternate pose after the feedback problem is understood.
+`workflow/audit.py` now audits recorded agent workflows independently of geometry.
+The registry spans seven historical runs across five families. It reports attempts,
+failures, schema queries, duration, usage and independent verdicts. Historical runs
+are explicitly not eligible for causal plugin-version comparisons. Missing data is
+unknown, not zero. A fresh workflow planner uses audited evidence to propose changes
+through a new contract supporting defects, capabilities, ergonomics and reusable
+workflows. Proposals require success/efficiency metrics, multiple validation families
+and held-out families; they grant no builder or installation permission.
 
-Then test curved-perimeter closure using shared boundary curves instead of fitting
-adjacent edges independently. Keep the 0.01 mm chair tolerance fixed; do not merely
-raise it to pass Join. Only revisit the chair back on a separate copy after focused
-tests pass. Preserve simpler contracts, hidden-object guards, saved files and actual
-phase screenshots. This remains a general suite; no extra user data is needed yet.
+Next implement a shared task/session contract and migrate a small non-chair pilot
+through common runner/gateway adapters, recording comparison pins. Use reliable
+geometry feedback as the first investigation: the existing surface-bounds probes
+are evidence, not the whole benchmark. Validate on genuinely different task families
+with fixed inputs/agent/evaluator before claiming broad benefit. Do not create more
+object-specific runners. Preserve old task evaluators and historical scripts.
 
-Latest validation: 465 developer tests (214 experiment, 238 server, 13 contract),
-13 expected posed-fixture verdicts twice, plus live hidden-object comparison cleanup.
-No production plugin/server/schema change or build/install occurred. The accepted
-61-case production contract is unchanged; its full live pass remains historical.
-Do not resume an old run whose source pins predate the corrected live enumeration.
-The roadmap includes 15 distinct modeling phases: one clean posed pass and two
-failed attempts are explicitly separate. Final runtime/artifact checks: `runs/posed-cushion-completion-20260906-180450/summary.json`.
-Runtime remains PID 84726 / document 268435457 / MVID
-`326aaa12-b851-4c6a-afcb-45291e734a5c`; actual all-object count zero, marker none,
-six layers, 0.001 mm tolerance, unsaved modified=true. Verify again before reuse.
+Then extend the bounded builder for explicitly declared new source files and protocol
+updates. The current repair.py/bounded_builder route remains defect-only/edit-only;
+new capability proposals must not be misrouted through it. See workflow/README.md.
+A shared comparison/promotion path is still pending. No plugin improvement is claimed
+from this workflow audit, and no Rhino modeling/build/install ran in this milestone.
+
+Historical runtime at the last live handoff (reverify before any live work): PID 84726,
+document 268435457, MVID `326aaa12-b851-4c6a-afcb-45291e734a5c`, empty including
+hidden objects, marker none. Original chair files remain reference benchmarks.
+The accepted 61-case production contract is unchanged; its live pass is historical.
+Screenshots remain visible for all 15 historical modeling phases.
 
 ## Requested visual progress policy
 
@@ -655,3 +666,14 @@ After each development milestone, update this file with what is implemented,
 verification results, unresolved issues and the next bounded step. Add a concise
 report for important live runs; leave detailed logs in the run directory. Preserve
 the distinction between implemented behavior and future roadmap items.
+
+## Representative-interface check (2026-09-07)
+
+The fresh workflow planner proposed batch schema discovery. Supervisor triage defers
+it: repeated schema calls were observed through our custom gateways, not ordinary
+production MCP usage. See [results](workflow/RESULTS.md) and
+[proposal triage](workflow/proposal-triage.json). A valid proposal is not an approved
+change. The next pilot must expose representative native MCP tool schemas and record
+comparison pins. Reuse existing tasks/evaluators; do not add another object-specific
+runner. Reliable surface feedback remains an independent investigation, suitable
+for the existing repair route once cross-task acceptance cases are fixed.

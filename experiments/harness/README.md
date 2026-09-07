@@ -1,5 +1,12 @@
 # Harness definition
 
+**Governing workflow (2026-09-07):** read [workflow/README.md](../workflow/README.md).
+Optimize agent effectiveness through MCP changes across tasks. The geometry planner
+below judges individual tasks; `roles/workflow_planner.md`, invoked by
+`workflow/plan.py`, proposes improvements from cross-task traces. These are distinct
+roles. The new proposal route does not yet dispatch a capability builder.
+
+
 This directory contains the active agents' role instructions. `../runner.py`
 loads these files when assembling each session prompt; they are executable
 configuration, not a second copy of instructions kept elsewhere.

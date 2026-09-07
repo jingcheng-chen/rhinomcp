@@ -1,14 +1,20 @@
 # RhinoMCP autonomous improvement plan
 
-Status: partial implementation in `experiments/`; a live box modeling/evaluation/planning loop has passed. See `experiments/README.md` for the startup runbook and `experiments/FIRST_LOOP.md` for evidence. Production plugin behavior is unchanged.
-
-Implemented so far: three analytic task types (axis-aligned box, posed triangular prism, and block with a through-hole), saved-file RhinoCommon evaluation, correct/incorrect live fixtures including equivalent representations and equal-volume flaws, fresh Codex modeler and planner sessions, a restricted modeling gateway, session timeouts, artifact records, evaluator snapshots, and explicit prior-feedback handoff. All three task types have passed live loops. The complete five-task suite, automatic recovery, plugin builder, candidate deployment/rollback, and visual reconstruction remain planned. Current isolation is a local prototype, not sufficient for accepting changes from an untrusted autonomous plugin builder.
+Current direction (2026-09-07): optimize RhinoMCP from evidence of agent workflow
+friction across tasks. Models are benchmark outputs; the chair is one case.
+See [the governing workflow](../experiments/workflow/README.md) for the active cycle,
+implemented audit/proposal layer, and remaining common-runner/builder/comparison work.
+See [the handoff](../experiments/CONTINUE.md) for current evidence. The phases below
+are historical design context, not an up-to-date implementation checklist.
 
 ## Objective
 
-Improve RhinoMCP through repeated modeling tasks, measured evaluation, failure diagnosis, bounded implementation changes, and regression testing. Keep the task evaluator independent from the agents that model objects or modify the plugin.
-
-The model weights remain fixed. Version plugin code, tool guidance, and modeling strategies separately so we can identify what produced an improvement.
+Improve MCP capabilities, feedback and reusable workflows, measuring task success,
+tool failures, call count, duration, tokens and recovery across a diverse suite.
+Support new tools and interface improvements as well as defect repairs. Keep agent
+model, task input, evaluator, environment and budget fixed across plugin comparisons.
+Require validation outside the task family that motivated a change. New test counts
+and a better single model do not establish general improvement.
 
 ## Existing foundation
 
