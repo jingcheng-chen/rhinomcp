@@ -29,19 +29,33 @@ TOOLS = (
 
 
 class Gateway:
-    def __init__(self, document, marker, budget, log, production=None, guard=None):
+    def __init__(
+        self,
+        document,
+        marker,
+        budget,
+        log,
+        production=None,
+        guard=None,
+        description_suffix="",
+    ):
         if budget < 1:
             raise ValueError("Positive call budget required")
         self.document, self.marker, self.budget = document, marker, budget
         self.log = Path(log)
         self.production = production or rhinomcp.mcp
         self.guard = guard or assert_document
+        self.description_suffix = description_suffix
         self.calls = 0
         self.lock = asyncio.Lock()
 
     async def definitions(self):
         available = {t.name: t for t in await self.production.list_tools()}
-        return [available[name] for name in TOOLS]
+        result = [available[name].model_copy(deep=True) for name in TOOLS]
+        if self.description_suffix:
+            tool = next(t for t in result if t.name == "create_object")
+            tool.description = (tool.description or "") + self.description_suffix
+        return result
 
     async def call(self, name, arguments):
         # Serialize document guard + operation, including concurrent client calls.
@@ -73,6 +87,9 @@ async def main():
         os.environ["EXPERIMENT_MARKER"],
         int(os.environ["EXPERIMENT_MAX_CALLS"]),
         os.environ["EXPERIMENT_CALL_LOG"],
+        description_suffix=Path(os.environ["EXPERIMENT_DESCRIPTION_FILE"]).read_text()
+        if os.environ.get("EXPERIMENT_DESCRIPTION_FILE")
+        else "",
     )
     server = Server("RhinoMCP workflow pilot")
     server.list_tools()(gateway.definitions)

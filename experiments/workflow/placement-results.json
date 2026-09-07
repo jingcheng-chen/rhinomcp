@@ -1,0 +1,386 @@
+{
+  "status": "criterion_met",
+  "families": {
+    "primitives": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "median_calls": 4.5,
+        "failed_calls": 0,
+        "median_seconds": 31.80300229149725
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "median_calls": 4.0,
+        "failed_calls": 0,
+        "median_seconds": 43.548563791497145
+      },
+      "criterion_met": true
+    },
+    "subtractive-solids": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "median_calls": 8.5,
+        "failed_calls": 0,
+        "median_seconds": 49.70038689549983
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "median_calls": 7.0,
+        "failed_calls": 0,
+        "median_seconds": 47.3744394164969
+      },
+      "criterion_met": true
+    }
+  },
+  "runs": [
+    {
+      "id": "task-1-pair-1-baseline",
+      "family": "primitives",
+      "available": true,
+      "source": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-1-pair-1-baseline",
+      "source_sha256": "31e601133204f7a6bc87b069f7e3a372c7311f014d9fbd8dd37806ba76f7f332",
+      "session_status": "completed",
+      "elapsed_seconds": 38.04596791700169,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "8315d39e21144a83b99354ec446de0d477c0a683125fa9fc0ed9661df7f86a20",
+      "metrics": {
+        "mcp_attempts": 5,
+        "completed_calls": 5,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 104259,
+          "cached_input_tokens": 83456,
+          "output_tokens": 535,
+          "reasoning_output_tokens": 89
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Requested model alias pinned; backend snapshot unavailable. Small discovery trial, not generalization."
+      ],
+      "arm": "baseline",
+      "pair": 1,
+      "task": "experiments/tasks/box.json"
+    },
+    {
+      "id": "task-1-pair-1-candidate",
+      "family": "primitives",
+      "available": true,
+      "source": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-1-pair-1-candidate",
+      "source_sha256": "4974114ae51eb0b93b17f90b69fe65496018da132d1b6a82dce827251cf64343",
+      "session_status": "completed",
+      "elapsed_seconds": 30.185296874988126,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "ea5b71cfa83a0ac67e0c97bd83910ab9c0ae6e4e7f671cbb7da3c0ccf85351f2",
+      "metrics": {
+        "mcp_attempts": 4,
+        "completed_calls": 4,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_objects": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 88743,
+          "cached_input_tokens": 68352,
+          "output_tokens": 460,
+          "reasoning_output_tokens": 75
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Requested model alias pinned; backend snapshot unavailable. Small discovery trial, not generalization."
+      ],
+      "arm": "candidate",
+      "pair": 1,
+      "task": "experiments/tasks/box.json"
+    },
+    {
+      "id": "task-1-pair-2-candidate",
+      "family": "primitives",
+      "available": true,
+      "source": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-1-pair-2-candidate",
+      "source_sha256": "6cac72524cf54231ecee72d3dfd9c1265ace4fd5a8084eb2723d13822e28bafa",
+      "session_status": "completed",
+      "elapsed_seconds": 56.911830708006164,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "823f9346671b9bbe612dd867c0b1352f14898a0b62865924416aaa8f5dba374f",
+      "metrics": {
+        "mcp_attempts": 4,
+        "completed_calls": 4,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_objects": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 73393,
+          "cached_input_tokens": 54272,
+          "output_tokens": 382,
+          "reasoning_output_tokens": 35
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Requested model alias pinned; backend snapshot unavailable. Small discovery trial, not generalization."
+      ],
+      "arm": "candidate",
+      "pair": 2,
+      "task": "experiments/tasks/box.json"
+    },
+    {
+      "id": "task-1-pair-2-baseline",
+      "family": "primitives",
+      "available": true,
+      "source": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-1-pair-2-baseline",
+      "source_sha256": "7df7cde1ce983fcb125df3bc4df0eaa5ec06637acce3e2e31d5f8006c27f9f27",
+      "session_status": "completed",
+      "elapsed_seconds": 25.56003666599281,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "4ca3f0ae2ce930f8d74155afe5a966081994c4e9d5ea289f9d5f52db30b1754e",
+      "metrics": {
+        "mcp_attempts": 4,
+        "completed_calls": 4,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_objects": 1,
+          "modify_object": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 71607,
+          "cached_input_tokens": 43264,
+          "output_tokens": 491,
+          "reasoning_output_tokens": 75
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Requested model alias pinned; backend snapshot unavailable. Small discovery trial, not generalization."
+      ],
+      "arm": "baseline",
+      "pair": 2,
+      "task": "experiments/tasks/box.json"
+    },
+    {
+      "id": "task-2-pair-1-baseline",
+      "family": "subtractive-solids",
+      "available": true,
+      "source": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-2-pair-1-baseline",
+      "source_sha256": "bf10cafe967c238b8ee69c2bd43bed76cfed85fe4fa86382680e21c632fa0883",
+      "session_status": "completed",
+      "elapsed_seconds": 53.55908008299593,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "bd85c82b1fe501f4de49e8c362bbcb4c5b3b44067952427c4053ff984525402f",
+      "metrics": {
+        "mcp_attempts": 9,
+        "completed_calls": 9,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "boolean_difference": 2,
+          "create_object": 2,
+          "get_object_info": 1,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 145713,
+          "cached_input_tokens": 110592,
+          "output_tokens": 1136,
+          "reasoning_output_tokens": 277
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Requested model alias pinned; backend snapshot unavailable. Small discovery trial, not generalization."
+      ],
+      "arm": "baseline",
+      "pair": 1,
+      "task": "experiments/tasks/through_hole.json"
+    },
+    {
+      "id": "task-2-pair-1-candidate",
+      "family": "subtractive-solids",
+      "available": true,
+      "source": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-2-pair-1-candidate",
+      "source_sha256": "6c062def3d93c3a972563e226f945cfb1b26545b97db9682f22de83fcf9b834d",
+      "session_status": "completed",
+      "elapsed_seconds": 47.516731665993575,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "fbf8d113fa21d017e00266af8c34def63690fddae98fff0ab56588e7fe876f01",
+      "metrics": {
+        "mcp_attempts": 7,
+        "completed_calls": 7,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "boolean_difference": 1,
+          "create_object": 2,
+          "get_object_info": 1,
+          "get_objects": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 145962,
+          "cached_input_tokens": 125696,
+          "output_tokens": 882,
+          "reasoning_output_tokens": 149
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Requested model alias pinned; backend snapshot unavailable. Small discovery trial, not generalization."
+      ],
+      "arm": "candidate",
+      "pair": 1,
+      "task": "experiments/tasks/through_hole.json"
+    },
+    {
+      "id": "task-2-pair-2-candidate",
+      "family": "subtractive-solids",
+      "available": true,
+      "source": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-2-pair-2-candidate",
+      "source_sha256": "9196815abca0c4e60d06e787661f8eacbaf1d3ddf4842bfd6ad13e5e97f68aee",
+      "session_status": "completed",
+      "elapsed_seconds": 47.23214716700022,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "3bfab94cf7fcc286a89ec0bd0db40ea37ffd46ffd3e905bc366736e3d08f6841",
+      "metrics": {
+        "mcp_attempts": 7,
+        "completed_calls": 7,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "boolean_difference": 2,
+          "create_object": 2,
+          "get_objects": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 144805,
+          "cached_input_tokens": 121856,
+          "output_tokens": 955,
+          "reasoning_output_tokens": 172
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Requested model alias pinned; backend snapshot unavailable. Small discovery trial, not generalization."
+      ],
+      "arm": "candidate",
+      "pair": 2,
+      "task": "experiments/tasks/through_hole.json"
+    },
+    {
+      "id": "task-2-pair-2-baseline",
+      "family": "subtractive-solids",
+      "available": true,
+      "source": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-2-pair-2-baseline",
+      "source_sha256": "eff89423175e3130a8a187b711684e5954ca7b3ee6251e2683ff1db3b86f1cf4",
+      "session_status": "completed",
+      "elapsed_seconds": 45.84169370800373,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "c84fad53e1b5cc54d318e4dbc0c308816d7fd4fd426ce9150229242f178676bc",
+      "metrics": {
+        "mcp_attempts": 8,
+        "completed_calls": 8,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "boolean_difference": 1,
+          "create_object": 2,
+          "get_object_info": 1,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 123174,
+          "cached_input_tokens": 100608,
+          "output_tokens": 968,
+          "reasoning_output_tokens": 223
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Requested model alias pinned; backend snapshot unavailable. Small discovery trial, not generalization."
+      ],
+      "arm": "baseline",
+      "pair": 2,
+      "task": "experiments/tasks/through_hole.json"
+    }
+  ],
+  "promotion_authorized": false,
+  "limitations": [
+    "Small discovery sample; no held-out validation",
+    "Requested model/effort pinned; backend model snapshot unavailable",
+    "Runtime and token counters include client/cache/guard effects; not dollar-cost estimates"
+  ]
+}

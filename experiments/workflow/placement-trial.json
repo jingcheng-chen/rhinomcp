@@ -1,0 +1,9 @@
+{
+  "id": "placement-guidance-v1",
+  "suite": "experiments/workflow/pilot.json",
+  "agent": {"model": "gpt-5.6-terra", "reasoning_effort": "medium"},
+  "description_suffix": "experiments/workflow/placement-guidance.txt",
+  "repeats": 2,
+  "design": "Within each task: baseline/candidate, then candidate/baseline. Fresh sessions, same task and tool catalog except create_object description.",
+  "acceptance": "All eight task verdicts must pass; median MCP calls must decrease in each task family, and candidate failed calls must not increase. Report time and tokens as secondary observations. This small discovery trial cannot establish generalization or authorize automatic promotion."
+}

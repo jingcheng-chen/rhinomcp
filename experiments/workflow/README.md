@@ -108,3 +108,30 @@ The run records CLI version, task, prompt, tool catalog, code and binary hashes,
 budgets and runtime identity. The resolved agent model version is still unavailable;
 these baseline observations cannot authorize comparison or promotion. Explicit agent
 configuration, repeated paired trials and held-out cases are the next comparison work.
+
+## Controlled description trial
+
+`placement-trial.json` freezes the requested model (`gpt-5.6-terra`), medium reasoning,
+intervention text, task suite, repeat count and acceptance rule. `compare.py` reuses
+`pilot.run_task`; it does not implement another geometry workflow. For each task it
+runs baseline/candidate, then candidate/baseline, with fresh sessions and identical
+inputs. Only `create_object.description` may differ in the exposed tool catalog.
+The proposed suffix is served from a frozen run artifact; production source remains
+unchanged while the experiment runs.
+
+```sh
+PYTHONPATH=/absolute/path/to/rhinomcp server/.venv/bin/python -m experiments.workflow.compare
+```
+
+Every session explicitly selects the same model alias and reasoning effort through
+the CLI. These settings are documented in the [official configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference).
+The invocation is retained; the backend model snapshot is not exposed. Alias pinning
+improves experimental control without proving immutable model weights. The CLI version,
+plugin binary/MVID, task inputs, evaluator/harness/production source hashes, descriptions
+and budgets must remain fixed throughout the comparison. An input/environment mismatch
+aborts the trial. Default historical runners retain their existing model behavior.
+
+Acceptance requires all task verdicts to pass, fewer median calls in each family,
+and no increase in failed calls. Time and token usage are reported separately.
+Neither faster failures nor incomplete runs pass. Even a positive small discovery
+trial does not authorize automatic promotion or establish held-out generalization.

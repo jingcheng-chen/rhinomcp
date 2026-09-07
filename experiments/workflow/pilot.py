@@ -92,8 +92,11 @@ doc.Strings.Delete("rhinomcp_experiment");
     return after
 
 
-def run_task(directory, entry, suite, definitions):
+def run_task(
+    directory, entry, suite, definitions, agent_config=None, description_file=None
+):
     task = load_task(ROOT / entry["path"])
+    marker = directory.parent.name + "-" + directory.name
     owner = runtime()
     require_owned(owner, owner)
     if owner["object_count"] or owner["marker"]:
@@ -116,7 +119,7 @@ def run_task(directory, entry, suite, definitions):
         "codex_version": subprocess.check_output(
             ["codex", "--version"], text=True
         ).strip(),
-        "model": "CLI default; resolved model version unavailable",
+        "model": agent_config or "CLI default; resolved model version unavailable",
         "comparison_eligible": False,
         "comparison_blockers": [
             "No pinned resolved model version or paired candidate/repeats"
@@ -126,17 +129,19 @@ def run_task(directory, entry, suite, definitions):
     }
     save(directory / "environment.json", environment)
     script(f"""
-doc.Strings.SetString("rhinomcp_experiment",{json.dumps(directory.name)});
+doc.Strings.SetString("rhinomcp_experiment",{json.dumps(marker)});
 doc.ModelUnitSystem=UnitSystem.Millimeters;
 doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
 """)
     env = {
         "PYTHONPATH": str(ROOT),
         "EXPERIMENT_DOCUMENT": str(owner["document"]),
-        "EXPERIMENT_MARKER": directory.name,
+        "EXPERIMENT_MARKER": marker,
         "EXPERIMENT_MAX_CALLS": str(suite["call_budget"]),
         "EXPERIMENT_CALL_LOG": str(directory / "calls.jsonl"),
     }
+    if description_file is not None:
+        env["EXPERIMENT_DESCRIPTION_FILE"] = str(description_file)
     config = {
         "command": json.dumps(sys.executable),
         "args": json.dumps(["-m", "experiments.workflow.native_mcp"]),
@@ -154,6 +159,7 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
             MODELER_SCHEMA,
             suite["timeout_seconds"],
             config,
+            agent_config=agent_config,
         )
         if source_pins() != pins:
             raise RuntimeError("Sources changed during modeling")
@@ -165,11 +171,11 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
         ):
             raise RuntimeError("Plugin identity changed")
         artifact = directory / "candidate.3dm"
-        artifact_hash = save_candidate(artifact, owner["document"], directory.name)
+        artifact_hash = save_candidate(artifact, owner["document"], marker)
         report = evaluate(task, measure(artifact))
         report["artifact_sha256"] = artifact_hash
         save(directory / "evaluation.json", report)
-        capture(directory, owner["document"], directory.name)
+        capture(directory, owner["document"], marker)
         save(
             directory / "summary.json",
             {
@@ -185,7 +191,7 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
         )
         raise
     finally:
-        after = cleanup(owner, directory.name, before)
+        after = cleanup(owner, marker, before)
         save(
             directory / "preservation.json",
             {"before": before, "after": after, "preserved": True},

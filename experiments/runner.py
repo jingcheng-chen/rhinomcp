@@ -108,7 +108,18 @@ def load_task(path):
     return task
 
 
-def run_session(directory, prompt, output_schema, timeout, mcp_config=None):
+def run_session(
+    directory, prompt, output_schema, timeout, mcp_config=None, agent_config=None
+):
+    if agent_config is not None:
+        if (
+            set(agent_config) != {"model", "reasoning_effort"}
+            or not isinstance(agent_config["model"], str)
+            or not agent_config["model"].strip()
+        ):
+            raise ValueError("Explicit model and reasoning effort required")
+        if agent_config["reasoning_effort"] not in {"low", "medium", "high", "xhigh"}:
+            raise ValueError("Unsupported reasoning effort")
     directory.mkdir()
     (directory / "prompt.txt").write_text(prompt)
     save(directory / "schema.json", output_schema)
@@ -134,6 +145,13 @@ def run_session(directory, prompt, output_schema, timeout, mcp_config=None):
         "--cd",
         str(directory),
     ]
+    if agent_config is not None:
+        command += [
+            "--model",
+            agent_config["model"],
+            "-c",
+            "model_reasoning_effort=" + json.dumps(agent_config["reasoning_effort"]),
+        ]
     # These sessions only reason and call the explicitly supplied MCP gateway.
     # No shell, patch, app, browser, plugin or child-agent tools are needed.
     for feature in (

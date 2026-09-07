@@ -13,24 +13,31 @@ the revised cycle and implementation boundary. New capabilities, tool ergonomics
 reusable workflows are legitimate proposals even when no command is defective.
 A task success or additional tests alone do not establish an improved MCP tool.
 
-## Latest milestone — native-interface baseline (2026-09-07)
+## Latest milestone — placement guidance comparison (2026-09-07)
 
-Read [workflow/NATIVE_BASELINE.md](workflow/NATIVE_BASELINE.md). One shared suite
-runner now executes existing box and through-hole tasks through 12 unchanged native
-production MCP tool definitions, with document/budget guards. Both fresh sessions
-pass independent saved-file evaluation: 5 and 9 calls, zero failures. Source snapshots,
-tool catalogs, artifacts, screenshots, CLI/runtime identities and cleanup evidence
-are retained. The dedicated document is empty and unclaimed after both runs.
+Read [workflow/PLACEMENT_TRIAL.md](workflow/PLACEMENT_TRIAL.md). The shared runner
+now accepts explicit model/reasoning settings. A description-only comparator reuses
+that runner with frozen inputs and counterbalanced order. Eight fresh sessions used
+`gpt-5.6-terra`, medium reasoning, the same 12 native tools and unchanged evaluators.
+All eight models pass; zero calls fail. Median calls decrease from 4.5 to 4 for the
+box and 8.5 to 7 for the through-hole task. The preset call-count criterion passes,
+but timing is mixed: the candidate box runs are slower. Do not claim overall speed,
+cost savings or generalization. Requested alias is pinned; backend snapshot is unknown.
 
-Next bounded step: pin the agent configuration and define repeated baseline/candidate
-trials for primitive placement guidance. Both agents corrected centered-box placement;
-the second also corrected the base-anchored cylinder. This is an interface hypothesis,
-not a demonstrated improvement. Keep semantics unchanged; compare production tool
-documentation as the intervention and reserve additional placement cases for validation.
-The resolved model version remains unpinned, so today's observations cannot establish
-causal benefit. General capability-builder/promotion support remains pending. Do not
-resume chair-specific construction as the primary work. The older next-step prose
-below is historical where it conflicts with this milestone.
+The candidate is a supervisor-authored description suffix explaining centered boxes
+and base-anchored cylinders. It was served as an experimental metadata intervention,
+not adopted into production. No builder, install or geometry change occurred. All
+487 tests pass. All eight artifacts/screenshots and preservation evidence remain
+recorded; the roadmap shows every output. Runtime was empty/unclaimed at completion.
+
+Next bounded step: freeze new placement cases with different dimensions and world
+offsets (including cutter placement) before running paired validation using the same
+agent settings. These are withheld cases within existing families, not a new held-out
+family. Review production adoption only after validation; do not silently change the
+candidate or acceptance rules. Preserve the current positive-but-limited trial.
+General capability-builder/promotion support and the surface-feedback investigation
+remain pending. Do not return to chair-specific construction as the primary work.
+Older next-step prose below is historical where it conflicts with this milestone.
 
 ## Objective and agreed design
 
