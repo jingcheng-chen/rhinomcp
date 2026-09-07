@@ -13,6 +13,21 @@ the revised cycle and implementation boundary. New capabilities, tool ergonomics
 reusable workflows are legitimate proposals even when no command is defective.
 A task success or additional tests alone do not establish an improved MCP tool.
 
+## Current handoff — validation prepared; Rhino availability pending
+
+Read [workflow/PLACEMENT_VALIDATION.md](workflow/PLACEMENT_VALIDATION.md). Two new
+placement cases, suite and eight-run contract are frozen. Independent in-memory
+fixtures prove correct cases pass and misplaced cases fail, twice each, without
+changing the active document. All 489 tests pass. Candidate wording, agent settings
+and acceptance rules match discovery; no agent validation runs have started.
+
+Rhino now has the user's saved packaging document open alongside the empty test
+window. The user was asked whether Rhino can be reserved for testing; no answer
+has arrived at this handoff. Do not close or clear the user's document or bypass
+single-document ownership checks. Recheck availability/runtime before dispatching
+`workflow/placement-validation-trial.json` through the existing comparator. Production
+adoption remains pending validation. No new modeled phase or screenshot is claimed.
+
 ## Latest milestone — placement guidance comparison (2026-09-07)
 
 Read [workflow/PLACEMENT_TRIAL.md](workflow/PLACEMENT_TRIAL.md). The shared runner

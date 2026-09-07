@@ -1,0 +1,72 @@
+{
+  "source": "experiments/runs/placement-validation-controls-20260907-160041",
+  "generator_sha256": "795bf1713c2ef44f07c609189f4d06e2d560f09bcc49a3f9c87c925ed18efe52",
+  "preserved": true,
+  "cases": {
+    "box-offset-validation-v1-correct": {
+      "status": "pass",
+      "checks": {
+        "units": true,
+        "object_count": true,
+        "valid": true,
+        "solid": true,
+        "minimum": true,
+        "dimensions": true,
+        "volume": true
+      }
+    },
+    "box-offset-validation-v1-wrong": {
+      "status": "fail",
+      "checks": {
+        "units": true,
+        "object_count": true,
+        "valid": true,
+        "solid": true,
+        "minimum": false,
+        "dimensions": true,
+        "volume": true
+      }
+    },
+    "hole-offset-validation-v1-correct": {
+      "status": "pass",
+      "checks": {
+        "units": true,
+        "object_count": true,
+        "valid": true,
+        "solid": true,
+        "minimum": true,
+        "dimensions": true,
+        "supported_faces": true,
+        "outer_boundary_planes": true,
+        "hole_axis": true,
+        "hole_radius": true,
+        "hole_full_height": true,
+        "hole_axis_clear": true,
+        "area": true,
+        "volume": true
+      }
+    },
+    "hole-offset-validation-v1-wrong": {
+      "status": "fail",
+      "checks": {
+        "units": true,
+        "object_count": true,
+        "valid": true,
+        "solid": true,
+        "minimum": true,
+        "dimensions": true,
+        "supported_faces": true,
+        "outer_boundary_planes": true,
+        "hole_axis": false,
+        "hole_radius": true,
+        "hole_full_height": true,
+        "hole_axis_clear": true,
+        "area": true,
+        "volume": true
+      }
+    }
+  },
+  "repeat_identical": true,
+  "agent_trials_run": 0,
+  "limitation": "Calibration only; live agent validation requires a dedicated Rhino session."
+}

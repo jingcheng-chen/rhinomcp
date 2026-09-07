@@ -135,3 +135,12 @@ Acceptance requires all task verdicts to pass, fewer median calls in each family
 and no increase in failed calls. Time and token usage are reported separately.
 Neither faster failures nor incomplete runs pass. Even a positive small discovery
 trial does not authorize automatic promotion or establish held-out generalization.
+
+
+## Reserved-case validation status
+
+[PLACEMENT_VALIDATION.md](PLACEMENT_VALIDATION.md) records two new placement cases
+and successful independent evaluator calibration. The unchanged candidate is ready
+for eight paired sessions using `placement-validation-trial.json`. Live sessions are
+pending a dedicated Rhino document; the user's packaging model is currently open.
+No agent validation result or production adoption is claimed from calibration alone.
