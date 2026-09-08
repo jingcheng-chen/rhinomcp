@@ -1,5 +1,6 @@
 """Shared creation-feedback regressions: extrema, pivots, and trimmed solids."""
 
+from contextlib import nullcontext
 import json
 import math
 import time
@@ -15,7 +16,7 @@ def near(a, b):
     return len(a) == len(b) and all(abs(x - y) < 1e-6 for x, y in zip(a, b))
 
 
-def run():
+def run(*, acquire_lock=True):
     directory = (
         ROOT / "experiments/runs" / time.strftime("surface-feedback-%Y%m%d-%H%M%S")
     )
@@ -39,7 +40,9 @@ def run():
         ),
     ]
     results = {}
-    with locked(ROOT / "experiments/runs/rhino.lock"):
+    with (
+        locked(ROOT / "experiments/runs/rhino.lock") if acquire_lock else nullcontext()
+    ):
         owner = runtime()
         require_owned(owner, owner)
         if owner["object_count"] or owner["marker"]:

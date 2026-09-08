@@ -290,6 +290,18 @@ def test_suite(request):
             "path": str(report_dir / "layer-parent/result.json"),
             "sha256": sha256(report_dir / "layer-parent/result.json"),
         }
+    if contract.get("surface_feedback_probe") is True:
+        from experiments.surface_feedback_probe import run as surface_feedback
+
+        surface_dir = surface_feedback(acquire_lock=False)
+        surface_path = surface_dir / "results.json"
+        for name, result in read(surface_path).items():
+            for check, passed in result["checks"].items():
+                cases[f"surface/{name}/{check}"] = passed
+        evidence["surface_feedback"] = {
+            "path": str(surface_path),
+            "sha256": sha256(surface_path),
+        }
     if set(cases) != set(contract["cases"]):
         raise ValueError("Live suite case names do not match the frozen contract")
     if probe(directory) != observed:

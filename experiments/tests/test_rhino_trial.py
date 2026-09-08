@@ -144,3 +144,29 @@ def test_host_pixel_scan_preserves_strict_rgb_threshold(tmp_path):
         "width": 4,
         "height": 3,
     }
+
+
+def test_surface_trial_preserves_contract_and_known_baseline_failures():
+    import json
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    old = json.loads((root / "harness/trial-preservation-v3.json").read_text())
+    new = json.loads((root / "harness/trial-surface-feedback.json").read_text())
+    baseline = json.loads(
+        (root / "workflow/surface-feedback-baseline.json").read_text()
+    )["results"]
+    surface = {
+        f"surface/{name}/{check}": passed
+        for name, result in baseline.items()
+        for check, passed in result["checks"].items()
+    }
+    assert len(surface) == 19
+    assert len(new["cases"]) == len(set(new["cases"])) == 80
+    assert set(new["cases"]) == set(old["cases"]) | set(surface)
+    assert new["baseline_expectations"] == {
+        key: value for key, value in surface.items() if not value
+    }
+    assert len(new["baseline_expectations"]) == 8
+    assert set(old["inputs"]) <= set(new["inputs"])
+    assert "../surface_feedback_probe.py" in new["inputs"]

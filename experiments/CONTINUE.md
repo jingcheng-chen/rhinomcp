@@ -1,7 +1,7 @@
 # Continue autonomous RhinoMCP improvement
 
 This is the entry point for a development agent with no prior chat context.
-Last updated: 2026-09-07. Verify repository and application state before acting;
+Last updated: 2026-09-08. Verify repository and application state before acting;
 the previous session's running processes and document selection are not assumptions.
 
 ## Governing direction — user clarification, 2026-09-07
@@ -12,6 +12,34 @@ chair/cushion progression as the main objective. Read `workflow/README.md` first
 the revised cycle and implementation boundary. New capabilities, tool ergonomics and
 reusable workflows are legitimate proposals even when no command is defective.
 A task success or additional tests alone do not establish an improved MCP tool.
+
+## Current handoff — surface trial accepted; baseline restored
+
+Read [workflow/SURFACE_FEEDBACK.md](workflow/SURFACE_FEEDBACK.md). The fresh builder's
+bounds patch passed all 80 live checks, fixing eight known failures while preserving
+the prior 61 requirements. Full baseline/candidate/restored suites completed, including
+21 fresh modeling sessions. Controller `accepted_trial`, `runtime_dirty=false`,
+`promoted=false`. Production source is unchanged; the repaired binary is NOT active.
+
+Trial: `runs/repair-20260907-171657-ec239178/trial-9983c15f`. Candidate MVID:
+`606ab732-416a-4b80-b041-19a264b21b2f`. Restored baseline MVID:
+`326aaa12-b851-4c6a-afcb-45291e734a5c`, PID 66421, empty unsaved unclaimed document
+268435457 at completion. Recheck state before proceeding. All 492 development tests
+pass; candidate build has zero warnings/errors, 251 candidate tests and lint pass.
+The roadmap saves images for every model/fixture in all three phases.
+
+The warmed operation probe (`runs/bounds-cost-20260908-090849`) measures roughly
+0.003–0.019 ms added per deep-copy bounds call on three small Breps. This is neither
+a large-model stress test nor an agent-efficiency claim. Full details/hashes are in
+`workflow/surface-feedback-trial.json`.
+
+Next bounded milestone: add generic curved-panel and trimmed-patch task/evaluator
+registrations to the shared native runner, calibrate correct and flawed fixtures,
+then run repeated baseline/candidate sessions with pinned agent settings. Keep the
+existing repair unchanged during comparison. Reuse the accepted binary only through
+a reviewed supervised runtime transition; preserve baseline recovery. Decide source
+adoption after workflow evidence. General new-tool builder and automatic promotion
+remain pending; do not resume chair-specific scripts as the optimization target.
 
 ## Current handoff — surface feedback candidate prepared
 
