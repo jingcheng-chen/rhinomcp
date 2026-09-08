@@ -2,55 +2,350 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
-    "id": {"type": "string", "minLength": 1},
-    "type": {"enum": ["axis_aligned_box", "triangular_prism_pose", "box_through_hole", "quarter_annular_strip"]},
-    "input_mode": {"enum": ["text", "generated_reference"]},
-    "instruction": {"type": "string", "minLength": 1},
-    "dimensions": {"$ref": "#/$defs/dimensions"},
-    "minimum": {"$ref": "#/$defs/vector"},
-    "translation": {"$ref": "#/$defs/vector"},
-    "rotation_z_degrees": {"type": "number"},
-    "hole_center": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}},
-    "hole_radius": {"type": "number", "exclusiveMinimum": 0},
-    "units": {"const": "Millimeters"},
-    "linear_tolerance": {"type": "number", "exclusiveMinimum": 0},
-    "volume_tolerance": {"type": "number", "exclusiveMinimum": 0},
-    "area_tolerance": {"type": "number", "exclusiveMinimum": 0}
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "enum": [
+        "axis_aligned_box",
+        "triangular_prism_pose",
+        "box_through_hole",
+        "quarter_annular_strip",
+        "biquadratic_panel"
+      ]
+    },
+    "input_mode": {
+      "enum": [
+        "text",
+        "generated_reference"
+      ]
+    },
+    "instruction": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dimensions": {
+      "$ref": "#/$defs/dimensions"
+    },
+    "minimum": {
+      "$ref": "#/$defs/vector"
+    },
+    "translation": {
+      "$ref": "#/$defs/vector"
+    },
+    "rotation_z_degrees": {
+      "type": "number"
+    },
+    "hole_center": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "number"
+      }
+    },
+    "hole_radius": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "units": {
+      "const": "Millimeters"
+    },
+    "linear_tolerance": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "volume_tolerance": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "area_tolerance": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "panel_height": {
+      "type": "number",
+      "not": {
+        "const": 0
+      }
+    },
+    "rotation_x_degrees": {
+      "type": "number"
+    }
   },
-  "required": ["id", "type", "instruction", "dimensions", "units", "linear_tolerance", "volume_tolerance"],
+  "required": [
+    "id",
+    "type",
+    "instruction",
+    "dimensions",
+    "units",
+    "linear_tolerance",
+    "volume_tolerance"
+  ],
   "additionalProperties": false,
   "oneOf": [
     {
-      "properties": {"type": {"const": "axis_aligned_box"}},
-      "required": ["minimum"],
-      "not": {"anyOf": [{"required": ["translation"]}, {"required": ["rotation_z_degrees"]}, {"required": ["area_tolerance"]}, {"required": ["hole_center"]}, {"required": ["hole_radius"]}]}
+      "properties": {
+        "type": {
+          "const": "axis_aligned_box"
+        }
+      },
+      "required": [
+        "minimum"
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "translation"
+            ]
+          },
+          {
+            "required": [
+              "rotation_z_degrees"
+            ]
+          },
+          {
+            "required": [
+              "area_tolerance"
+            ]
+          },
+          {
+            "required": [
+              "hole_center"
+            ]
+          },
+          {
+            "required": [
+              "hole_radius"
+            ]
+          }
+        ]
+      }
     },
     {
-      "properties": {"type": {"const": "triangular_prism_pose"}},
-      "required": ["translation", "rotation_z_degrees", "area_tolerance"],
-      "not": {"anyOf": [{"required": ["minimum"]}, {"required": ["hole_center"]}, {"required": ["hole_radius"]}]}
+      "properties": {
+        "type": {
+          "const": "triangular_prism_pose"
+        }
+      },
+      "required": [
+        "translation",
+        "rotation_z_degrees",
+        "area_tolerance"
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "minimum"
+            ]
+          },
+          {
+            "required": [
+              "hole_center"
+            ]
+          },
+          {
+            "required": [
+              "hole_radius"
+            ]
+          }
+        ]
+      }
     },
     {
-      "properties": {"type": {"const": "box_through_hole"}},
-      "required": ["minimum", "hole_center", "hole_radius", "area_tolerance"],
-      "not": {"anyOf": [{"required": ["translation"]}, {"required": ["rotation_z_degrees"]}]}
+      "properties": {
+        "type": {
+          "const": "box_through_hole"
+        }
+      },
+      "required": [
+        "minimum",
+        "hole_center",
+        "hole_radius",
+        "area_tolerance"
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "translation"
+            ]
+          },
+          {
+            "required": [
+              "rotation_z_degrees"
+            ]
+          }
+        ]
+      }
     },
     {
-      "properties": {"type": {"const": "quarter_annular_strip"}, "dimensions": {"const": [110, 110, 10]}},
-      "required": ["translation", "area_tolerance"],
-      "not": {"anyOf": [{"required": ["minimum"]}, {"required": ["rotation_z_degrees"]}, {"required": ["hole_center"]}, {"required": ["hole_radius"]}]}
+      "properties": {
+        "type": {
+          "const": "quarter_annular_strip"
+        },
+        "dimensions": {
+          "const": [
+            110,
+            110,
+            10
+          ]
+        }
+      },
+      "required": [
+        "translation",
+        "area_tolerance"
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "minimum"
+            ]
+          },
+          {
+            "required": [
+              "rotation_z_degrees"
+            ]
+          },
+          {
+            "required": [
+              "hole_center"
+            ]
+          },
+          {
+            "required": [
+              "hole_radius"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "properties": {
+        "type": {
+          "const": "biquadratic_panel"
+        }
+      },
+      "required": [
+        "panel_height",
+        "rotation_x_degrees",
+        "translation"
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "minimum"
+            ]
+          },
+          {
+            "required": [
+              "rotation_z_degrees"
+            ]
+          },
+          {
+            "required": [
+              "hole_center"
+            ]
+          },
+          {
+            "required": [
+              "hole_radius"
+            ]
+          },
+          {
+            "required": [
+              "area_tolerance"
+            ]
+          }
+        ]
+      }
     }
   ],
-  "allOf": [{
-    "if": {"properties": {"input_mode": {"const": "generated_reference"}}, "required": ["input_mode"]},
-    "then": {"properties": {
-      "type": {"const": "axis_aligned_box"},
-      "minimum": {"const": [0, 0, 0]},
-      "dimensions": {"items": {"type": "number", "minimum": 10, "maximum": 80, "multipleOf": 10}}
-    }}
-  }],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "input_mode": {
+            "const": "generated_reference"
+          }
+        },
+        "required": [
+          "input_mode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "type": {
+            "const": "axis_aligned_box"
+          },
+          "minimum": {
+            "const": [
+              0,
+              0,
+              0
+            ]
+          },
+          "dimensions": {
+            "items": {
+              "type": "number",
+              "minimum": 10,
+              "maximum": 80,
+              "multipleOf": 10
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "not": {
+              "const": "biquadratic_panel"
+            }
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "panel_height"
+              ]
+            },
+            {
+              "required": [
+                "rotation_x_degrees"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
   "$defs": {
-    "vector": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}},
-    "dimensions": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number", "exclusiveMinimum": 0}}
+    "vector": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "number"
+      }
+    },
+    "dimensions": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      }
+    }
   }
 }

@@ -150,3 +150,7 @@ already present in the native description. The generic pilot remains usable with
 an intervention. Automatic promotion and general capability-builder support are still
 pending. Next investigate the independent surface-feedback evidence through the shared
 workflow and existing bounded repair path.
+
+## Generic panel registration (2026-09-08)
+
+See [PANEL_BENCHMARKS.md](PANEL_BENCHMARKS.md). The shared pilot now accepts posed biquadratic panels with a saved-file evaluator and explicit CLI agent settings. Twenty-two calibration fixtures pass expected verdicts. Two fresh baseline discoveries produce one pass and one modeling failure; no candidate workflow comparison or adoption is claimed. Binary switching/recovery orchestration and trimmed-patch registration remain pending.

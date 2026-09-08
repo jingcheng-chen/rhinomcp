@@ -144,6 +144,11 @@ def through_hole_checks(task, obj):
 
 
 def evaluate(task, measurements):
+    if task["type"] == "biquadratic_panel":
+        from experiments.panel_task import evaluate as evaluate_panel
+
+        return evaluate_panel(task, measurements)
+
     if task["type"] == "quarter_annular_strip":
         from experiments.strip_task import evaluate as evaluate_strip
 

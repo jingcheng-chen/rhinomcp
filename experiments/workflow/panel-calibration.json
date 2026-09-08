@@ -1,0 +1,386 @@
+{
+  "run": "experiments/runs/panel-calibration-20260908-093337",
+  "fixtures": 22,
+  "unexpected": [],
+  "cases": {
+    "raised": {
+      "correct": {
+        "status": "pass",
+        "expected": "pass",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": true,
+          "reference_to_surface": true,
+          "surface_to_reference": true,
+          "rectangular_boundary": true
+        },
+        "artifact_sha256": "d615dfd00e772bb29cab40c51205477fa4c449920a60e30399532eec8fd30972"
+      },
+      "reparameterized": {
+        "status": "pass",
+        "expected": "pass",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": true,
+          "reference_to_surface": true,
+          "surface_to_reference": true,
+          "rectangular_boundary": true
+        },
+        "artifact_sha256": "ff09ce673a281578827ce687aa8e97cc9f3675c66dcdc6dfc932492fe327fc8d"
+      },
+      "flat": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": true
+        },
+        "artifact_sha256": "efaf7e1d2cc5483fcbede36c18630ac92a40accb5c1c511bb208689c375fddde"
+      },
+      "wrong_height": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": true
+        },
+        "artifact_sha256": "5d1f057e2440224e8d48f11376204a22ea2d0ca5da1a226c2dd91b76a4e93edc"
+      },
+      "wrong_sign": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": true
+        },
+        "artifact_sha256": "796becc96b6973b9ad44b0c891e19b1f0be4a2c8feaf37e21c31d39ffacb6dd6"
+      },
+      "wrong_pose": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": false
+        },
+        "artifact_sha256": "a07856204fec058a6166a032ce49d6ab86cd9dc6eb6810c99ce7cc7170dde2c0"
+      },
+      "wrong_scale": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": false
+        },
+        "artifact_sha256": "08585c039911324666e936a3fd70bb6248d4256f7fd3046c265fc2bc2581672d"
+      },
+      "extra_object": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": false,
+          "millimeters": true,
+          "valid": false,
+          "single_open_face": false,
+          "one_outer_no_inner_loops": false,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": false
+        },
+        "artifact_sha256": "491748d08316371dec9a87a1dad3f86a5bf9b26cae74a2fd3431de342d165210"
+      },
+      "hidden_extra": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": false,
+          "millimeters": true,
+          "valid": false,
+          "single_open_face": false,
+          "one_outer_no_inner_loops": false,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": false
+        },
+        "artifact_sha256": "fedf7e3a53aed2030e20c9d84350583fd395e71a85e147968ebf2359d7deb052"
+      },
+      "wrong_units": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": false,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": true,
+          "reference_to_surface": true,
+          "surface_to_reference": true,
+          "rectangular_boundary": true
+        },
+        "artifact_sha256": "913b60c9fd71ad14b1dd246a9240276b3d324316b8075cba8ee6a7ce7c79a6b9"
+      },
+      "clipped": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": true,
+          "rectangular_boundary": false
+        },
+        "artifact_sha256": "268125b51cc03b42f84acfae466748c4e1356466f2f558dfdb8b8d7c220c19ed"
+      }
+    },
+    "depressed": {
+      "correct": {
+        "status": "pass",
+        "expected": "pass",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": true,
+          "reference_to_surface": true,
+          "surface_to_reference": true,
+          "rectangular_boundary": true
+        },
+        "artifact_sha256": "620feda47c898950db5bf3994d8d5a478c427dae1895da1c75c83333a60380f7"
+      },
+      "reparameterized": {
+        "status": "pass",
+        "expected": "pass",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": true,
+          "reference_to_surface": true,
+          "surface_to_reference": true,
+          "rectangular_boundary": true
+        },
+        "artifact_sha256": "c7f8b311f1d6297e069f741731e62b14bd061e79ca2747ef99000215ffb3594a"
+      },
+      "flat": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": true
+        },
+        "artifact_sha256": "a0d5353144e009d529c0fe0a14c2a1928e51fcd5d6457ec8e738785fe036762c"
+      },
+      "wrong_height": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": true
+        },
+        "artifact_sha256": "32bca4901d3aa570e7ec62a5c31ffb28a2b025dbe222694dccb7dcc1398beedd"
+      },
+      "wrong_sign": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": true
+        },
+        "artifact_sha256": "f8e9027328b4356d67a7b2f573f8937158fb0eaf81896aa8205c1db9bab26f00"
+      },
+      "wrong_pose": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": false
+        },
+        "artifact_sha256": "7e2077c1dcd944f2b8ae4d22fada1458c45dbd1b4114ba98349a5f5f4f539377"
+      },
+      "wrong_scale": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": false
+        },
+        "artifact_sha256": "06651101393f9f0b0cfd35ea188cca1b88d93c24db5a1b1439ae726289c25511"
+      },
+      "extra_object": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": false,
+          "millimeters": true,
+          "valid": false,
+          "single_open_face": false,
+          "one_outer_no_inner_loops": false,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": false
+        },
+        "artifact_sha256": "982ad0d5e482b9613ea4fc1c1de2f9398a1a82a03b62ba0e437583a7a439ddde"
+      },
+      "hidden_extra": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": false,
+          "millimeters": true,
+          "valid": false,
+          "single_open_face": false,
+          "one_outer_no_inner_loops": false,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": false
+        },
+        "artifact_sha256": "139e404efeb5946cc27064a90bb881fad47bd996f1870094259a2cbe0be60927"
+      },
+      "wrong_units": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": false,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": true,
+          "reference_to_surface": true,
+          "surface_to_reference": true,
+          "rectangular_boundary": true
+        },
+        "artifact_sha256": "56897e62fdaf5ff0e9792ba7793df3f624e28c3aa8b5129e4fa367953016180a"
+      },
+      "clipped": {
+        "status": "fail",
+        "expected": "fail",
+        "repeat_identical": true,
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": true,
+          "rectangular_boundary": false
+        },
+        "artifact_sha256": "c8a8f8087af52aa0313c9abb08a4cc685a974af397ddc41bf2478302d1325e72"
+      }
+    }
+  },
+  "limitation": "Sampled surface fidelity; no continuous error guarantee. Four valid controls and 18 flawed controls. One family, two task poses."
+}

@@ -50,6 +50,7 @@ def load_suite(path):
             "axis_aligned_box",
             "box_through_hole",
             "triangular_prism_pose",
+            "biquadratic_panel",
         } or task.get("input_mode"):
             raise ValueError("No pilot evaluator adapter for this task")
     return suite
@@ -172,7 +173,7 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
             raise RuntimeError("Plugin identity changed")
         artifact = directory / "candidate.3dm"
         artifact_hash = save_candidate(artifact, owner["document"], marker)
-        report = evaluate(task, measure(artifact))
+        report = evaluate(task, measure(artifact, task))
         report["artifact_sha256"] = artifact_hash
         save(directory / "evaluation.json", report)
         capture(directory, owner["document"], marker)
@@ -198,7 +199,7 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
         )
 
 
-def run(path):
+def run(path, agent_config=None):
     suite = load_suite(path)
     runs = ROOT / "experiments/runs"
     runs.mkdir(exist_ok=True)
@@ -215,7 +216,7 @@ def run(path):
         registry = {"runs": []}
         for index, entry in enumerate(suite["tasks"]):
             child = directory / f"task-{index + 1}"
-            run_task(child, entry, suite, definitions)
+            run_task(child, entry, suite, definitions, agent_config=agent_config)
             registry["runs"].append(
                 {
                     "id": load_task(ROOT / entry["path"])["id"],
@@ -233,4 +234,16 @@ if __name__ == "__main__":
     parser.add_argument(
         "suite", type=Path, nargs="?", default=Path(__file__).with_name("pilot.json")
     )
-    print(run(parser.parse_args().suite))
+    parser.add_argument("--model")
+    parser.add_argument(
+        "--reasoning-effort", choices=["low", "medium", "high", "xhigh"]
+    )
+    args = parser.parse_args()
+    if bool(args.model) != bool(args.reasoning_effort):
+        parser.error("Provide both --model and --reasoning-effort")
+    config = (
+        {"model": args.model, "reasoning_effort": args.reasoning_effort}
+        if args.model
+        else None
+    )
+    print(run(args.suite, agent_config=config))

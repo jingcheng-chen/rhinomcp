@@ -1,0 +1,15 @@
+{
+  "id": "panel-discovery-v1",
+  "call_budget": 24,
+  "timeout_seconds": 240,
+  "tasks": [
+    {
+      "family": "curved-panels",
+      "path": "experiments/tasks/panel_raised.json"
+    },
+    {
+      "family": "curved-panels",
+      "path": "experiments/tasks/panel_depressed.json"
+    }
+  ]
+}

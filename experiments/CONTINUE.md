@@ -13,6 +13,30 @@ the revised cycle and implementation boundary. New capabilities, tool ergonomics
 reusable workflows are legitimate proposals even when no command is defective.
 A task success or additional tests alone do not establish an improved MCP tool.
 
+## Current handoff — panel evaluator calibrated; baseline discovery recorded
+
+Read [workflow/PANEL_BENCHMARKS.md](workflow/PANEL_BENCHMARKS.md). The shared native
+runner now dispatches a generic `biquadratic_panel` evaluator. All 22 independent
+fixtures produce expected verdicts twice. Both text tasks use the same 12 production
+tools, gpt-5.6-terra/medium, 24-call/240-second budgets. Raised panel passes; depressed
+panel fails (~4.15 mm sampled shape error), despite both completion claims and zero
+call errors. Each uses eight calls. Two screenshots and full source/model/evaluator
+pins are preserved in `workflow/panel-discovery.json`. This is one family, discovery
+only; trimmed-patch tasks/evaluators remain pending.
+
+The depressed trace contains an incorrectly transformed center point; no creation-time
+rotation/scale calls occur in either session. Do not claim that the bounds patch fixes
+this input error. Keep task/evaluator definitions unchanged for comparison.
+
+Next bounded step: freeze repeated baseline/candidate sessions and add a reviewed
+binary comparison orchestration route that reuses `pilot.run_task` plus existing
+runtime ownership, binary identity and supervised recovery. `compare.py` is still
+description-only, so do not pass a binary intervention through that route. The accepted
+surface candidate remains unpromoted; baseline is still loaded. Verify the empty
+unclaimed document and MVID before further work. Use unchanged candidate artifacts,
+report task success before efficiency, retain failures, and do not manufacture benefit
+by forcing an agent construction strategy. All 503 development tests pass.
+
 ## Current handoff — surface trial accepted; baseline restored
 
 Read [workflow/SURFACE_FEEDBACK.md](workflow/SURFACE_FEEDBACK.md). The fresh builder's
