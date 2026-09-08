@@ -41,6 +41,7 @@
             "boolean_intersection",
             "loft",
             "extrude_curve",
+            "create_planar_region",
             "sweep1",
             "offset_curve",
             "pipe",

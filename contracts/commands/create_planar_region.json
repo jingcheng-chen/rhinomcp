@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "create_planar_region.json",
+  "title": "Create Planar Region Command",
+  "description": "Create one planar Brep face from an outer closed planar curve and optional inner closed planar curves, preserving every input object",
+  "type": "object",
+  "properties": {
+    "outer_curve_id": {
+      "$ref": "../common/definitions.json#/$defs/guid"
+    },
+    "inner_curve_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/definitions.json#/$defs/guid"
+      },
+      "uniqueItems": true,
+      "default": [],
+      "description": "Distinct closed curves that become holes"
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "required": ["outer_curve_id"],
+  "additionalProperties": false
+}
