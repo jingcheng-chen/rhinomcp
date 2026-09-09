@@ -5,6 +5,33 @@ ordinary agents. Modeling outputs are benchmark evidence. The chair is one task,
 not the architecture or the primary progress metric. This direction supersedes
 chair-first next steps in historical reports (user clarification, 2026-09-07).
 
+## Direction — user clarification, 2026-09-09
+
+Enhance the overall Rhino modeling workflow by detecting flaws in agent runs and
+improving the MCP tools; do not chase precision. The 0.05 mm panel tolerance and the
+biquadratic surface recipe are historical; a valid, correctly posed result that
+misses a tight shape tolerance is a fidelity note, not a workflow flaw. The
+milestone queue (re-baseline on the released 0.4.0, flaw detection from traces,
+realistic workflow families, one improvement cycle per flaw, held-out bank,
+isolation, then a Grasshopper harness) is in [CONTINUE.md](../CONTINUE.md).
+
+## Tolerance policy — 2026-09-09
+
+Tolerances describe what a realistic modeling task needs and are fixed before a run:
+
+- analytic solids and posed geometry: the document absolute tolerance (0.001 mm at
+  task scale) for positions and dimensions; 1% for volume and area unless the task
+  says otherwise;
+- freeform surfaces and trimmed patches: linear deviation up to 0.5% of the object's
+  largest dimension (0.5 mm on a 100 mm panel); topology, pose and boundary checks
+  stay exact;
+- a run that passes topology, pose and bounds but misses a shape tolerance is
+  recorded as fidelity, not counted as friction, unless a tool response misled the
+  agent.
+
+Never change a tolerance to pass or fail a specific run. Re-declare the task as a
+new version and keep the old file for historical pins.
+
 ## Distribution requirement — user-approved 2026-09-09
 
 Reusable modeling knowledge ships with RhinoMCP. Keep essential semantics in tool
@@ -55,7 +82,25 @@ server/.venv/bin/python -m experiments.workflow.audit experiments/workflow/histo
 PYTHONPATH=/absolute/path/to/rhinomcp server/.venv/bin/python -m experiments.workflow.plan experiments/workflow/historical-audit.json
 ```
 
-## Current implementation — 2026-09-08
+## Baseline — released 0.4.0 (2026-09-09)
+
+rhinomcp 0.4.0 (server on PyPI, plugin on Yak, tag `releases/0.4.0`) is the
+baseline for every new comparison. It supersedes the planar-region selection and
+the local naked-edge overlay recorded in `current-baseline.json` until M0 re-records
+the released identity. Connections now read `describe_capabilities` once before
+the first command; treat that entry in traces as infrastructure, not agent behavior.
+
+## Later: Grasshopper harness
+
+The cycle above applies unchanged to Grasshopper once the Rhino queue has produced
+at least one kept improvement. Tasks describe small definitions with checkable
+outputs; agents get the `gh_*` tools only and start from `gh_create_document`; the
+evaluator reads the graph, runs the solution and checks output parameters, with
+previews as supplementary evidence. The design sketch and its open questions (a
+bake command for saved-file judging, Grasshopper-specific friction classes) are in
+[CONTINUE.md](../CONTINUE.md#m6--grasshopper-harness-later).
+
+## Current implementation — 2026-09-08 (historical)
 
 The shared runner now registers analytic solids, biquadratic panels and trimmed
 planar patches. It records explicit model alias/effort, task, catalog, evaluator,

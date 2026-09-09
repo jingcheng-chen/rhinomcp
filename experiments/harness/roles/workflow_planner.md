@@ -26,3 +26,11 @@ Every held_out_families entry must also appear in validation_families. For this
 discovery stage, held-out families must be absent from the entire supplied audit,
 not merely absent from your discovery_families list. Name prospective new families
 as planned validation, never as completed tests.
+
+Task tolerances state the realistic modeling need. A result that is valid, correctly
+posed and within bounds but outside a tight shape tolerance is fidelity, not friction,
+unless a tool response misled the agent. Rank friction by how often it recurs across
+runs times its cost in calls and seconds. Prefer proposals that remove a class of
+friction (a clearer response, a better default or anchor, a missing operation, a
+misleading description) over recipes for one shape. A fallback to run_command or
+script execution where a typed tool exists is friction in the typed tool.
