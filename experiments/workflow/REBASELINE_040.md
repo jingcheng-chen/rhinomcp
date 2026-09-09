@@ -1,7 +1,7 @@
 # Released 0.4.0 baseline preparation
 
-Status: M0 task declaration complete; runtime installation, identity selection and
-fresh agent observations remain pending. No effectiveness claim is made.
+Status: **M0 complete.** Released runtime selected and one fresh baseline run per
+family recorded. These are discovery observations, not an improvement comparison.
 
 ## Verified state (2026-09-09)
 
@@ -13,10 +13,26 @@ overlay. Rhino PID 58823 has one unsaved document (serial 268435457), zero objec
 no experiment marker, and **Modified=true**. This is an observation, not ongoing
 permission or a reusable ownership claim.
 
-The supervisor requested permission to close that session without saving, install
-0.4.0 and restart as a dedicated test session. Until permission arrives, do not
-build/install, reset the document, claim it, or launch live modeling. The current
-baseline registry stays unchanged until the released runtime is actually verified.
+The user subsequently authorized continuation. On recheck Rhino was already
+closed and the old app-bundle plugin file was absent. Production files matched
+`releases/0.4.0` (`a4bb8bbf00fc97bdf5d9b6dfab0c02b8c026dd3b`) with no differences.
+The Release build passed with zero warnings/errors and was copied into the local
+Rhino installation. A newly launched session and New Model were verified empty,
+unsaved, unclaimed and unmodified before claiming the dedicated test session.
+
+`describe_capabilities` now reports server and plugin 0.4.0, with no update advice.
+Loaded MVID: `ee66d5ce-fb32-4807-9d17-5af8fe1458d2`.
+Binary SHA256: `a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e`.
+The prior baseline, including its overlays, is preserved in `baseline-history.json`.
+
+The existing selection journal now has a `select_release` entry point for an
+already-installed release. It verifies tag/source equality, both runtime versions,
+fresh document state and expected binary identity, then uses the existing
+`confirm_runtime` transition. It makes no production source writes and grants no
+candidate promotion. Its journal is
+`experiments/runs/selection-release-20260909-224356-1a5b7a48`. Regression tests
+reject source edits, untracked production files, wrong versions/binaries,
+nonempty/claimed/modified documents and tampered snapshots.
 
 ## Frozen task declarations
 
@@ -59,20 +75,52 @@ boundary, holes and a 0.51 mm deviation under v2. Task validation rejects
 nonpositive/nonfinite shape tolerances and use on analytic solids. Suite tests
 check all five families and the declared percentage budgets.
 
-Full verification: 285 server tests, 363 experiment tests and 13 contract tests
+Full verification: 285 server tests, 371 experiment tests and 13 contract tests
 passed; server Ruff checks passed. Contract tests retain their pre-existing pytest
-return-value warnings. No plugin source changed and no plugin build was performed.
+return-value warnings. Plugin build passed with zero warnings/errors.
 
-Before running the following command, verify a dedicated fresh unmodified Rhino
-document, install the release from `releases/0.4.0`, restart, and record the actual
-loaded 0.4.0 identity through the selection flow. The pilot itself does not enforce
-a release version; its existing runtime and source pins detect changes during a run.
+## Fresh baseline observations
 
-```sh
-PYTHONPATH="$PWD" server/.venv/bin/python -m experiments.workflow.pilot experiments/workflow/release-pilot.json --model gpt-5.6-terra --reasoning-effort medium
-```
+One run per family, no retries, all with Codex `gpt-5.6-terra`, medium reasoning,
+a 30-call budget and 240-second timeout. The shared native gateway exposed the
+same 14 tools throughout. CLI version, source hashes, tool catalog, task, binary
+and evaluator pins are retained in [portable results](release-040-results.json).
+The resolved backend model snapshot remains unavailable.
 
-Keep every attempt, save portable verdicts and trace summaries, and add actual
-model screenshots to the roadmap when the modeling milestone completes. Do not
-rerun a failed task to obtain a pass. M0 is not complete until those observations
-and the released baseline identity are recorded.
+| Family | Saved-file verdict | Tool calls | Failed calls | Session seconds |
+| --- | --- | ---: | ---: | ---: |
+| Primitives | Pass | 3 | 0 | 21.7 |
+| Subtractive solids | Pass | 8 | 0 | 46.4 |
+| Posed solids | Pass | 8 | 0 | 37.5 |
+| Trimmed patches | Pass | 12 | 0 | 50.5 |
+| Curved panels | Pass | 9 | 0 | 50.9 |
+
+All 40 agent calls succeeded, and all independent saved-file predicates passed.
+Agent completion claims are retained separately. These five observations do not
+establish broad tool reliability or a gain against a candidate. Infrastructure
+capability handshakes are not included in the agent call count.
+
+The [run registry](release-040-runs.json) points to the retained local models,
+full agent traces, measurements, screenshots and preservation records under
+`experiments/runs/workflow-baseline-20260909-224405-9db2a702`. Actual screenshots
+for all five outputs are included in [the roadmap](../roadmap.html#model-progress)
+and `assets/model-progress.json`, with source paths and hashes.
+
+The pilot preserved its geometry/units/tolerance/layer fingerprint after every
+run. Its cleanup left the empty document marked modified. A supervisor attempt
+to clear that flag did not persist across the command; the empty checkpoint was
+saved and closed, then a fresh empty, unclaimed, unmodified document was opened
+and independently verified. The earlier `Objects.Count` guard counted deleted
+objects and refused before mutation; a nondeleted-object enumeration corrected
+that guard. These are supervisor/harness observations, not failed agent calls.
+The local checkpoint is `experiments/runs/release-040-install-20260909/empty-after-pilot.3dm`.
+No controller or modeler remains running. Rhino remains available with 0.4.0.
+
+## Next milestone
+
+Proceed to M1: classify and rank flaws from historical traces and this new
+registry. Investigate inspection redundancy and guidance discovery as hypotheses,
+not assumed defects: passing runs include repeated reads, and the panel consulted
+four guidance topics. The saved-file verdict must remain separate from friction.
+The modified-document cleanup issue belongs to harness recovery, not a production
+modeling defect. Do not rerun these tasks to manufacture failures or gains.

@@ -1,0 +1,29 @@
+{
+  "runs": [
+    {
+      "id": "box-v2",
+      "family": "primitives",
+      "run": "experiments/runs/workflow-baseline-20260909-224405-9db2a702/task-1"
+    },
+    {
+      "id": "through-hole-v2",
+      "family": "subtractive-solids",
+      "run": "experiments/runs/workflow-baseline-20260909-224405-9db2a702/task-2"
+    },
+    {
+      "id": "posed-prism-v2",
+      "family": "posed-solids",
+      "run": "experiments/runs/workflow-baseline-20260909-224405-9db2a702/task-3"
+    },
+    {
+      "id": "trimmed-offset-v2",
+      "family": "trimmed-patches",
+      "run": "experiments/runs/workflow-baseline-20260909-224405-9db2a702/task-4"
+    },
+    {
+      "id": "panel-raised-v2",
+      "family": "curved-panels",
+      "run": "experiments/runs/workflow-baseline-20260909-224405-9db2a702/task-5"
+    }
+  ]
+}

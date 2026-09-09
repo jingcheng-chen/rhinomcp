@@ -37,7 +37,7 @@ families. Panel tasks may declare `shape_tolerance` for sampled surface deviatio
 `linear_tolerance` still controls document tolerance, bounds and boundaries.
 Analytic trimmed patches retain strict plane/boundary checks and a 1% area budget.
 See [M0 preparation](REBASELINE_040.md) for declarations, verification and the
-pending runtime installation. Historical suite files remain replay inputs.
+completed released-runtime observations. Historical suite files remain replay inputs.
 
 ## Distribution requirement — user-approved 2026-09-09
 
@@ -92,9 +92,10 @@ PYTHONPATH=/absolute/path/to/rhinomcp server/.venv/bin/python -m experiments.wor
 ## Baseline — released 0.4.0 (2026-09-09)
 
 rhinomcp 0.4.0 (server on PyPI, plugin on Yak, tag `releases/0.4.0`) is the
-baseline for every new comparison. It supersedes the planar-region selection and
-the local naked-edge overlay recorded in `current-baseline.json` until M0 re-records
-the released identity. Connections now read `describe_capabilities` once before
+baseline for every new comparison. M0 has recorded the released identity in
+`current-baseline.json`, archived the planar selection and naked-edge overlay in
+`baseline-history.json`, and completed five fresh passing baseline observations.
+See [the report](REBASELINE_040.md) and [trace registry](release-040-runs.json). Connections now read `describe_capabilities` once before
 the first command; treat that entry in traces as infrastructure, not agent behavior.
 
 ## Later: Grasshopper harness

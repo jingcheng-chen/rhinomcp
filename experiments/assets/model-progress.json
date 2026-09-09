@@ -267,5 +267,60 @@
         "sha256": "afbd9946542ee1d3d628bd08bd67a6673ae0ba6ecea31554c1fb0c7509f3dcd7"
       }
     }
+  },
+  {
+    "id": "release-040-primitives",
+    "title": "0.4.0 \u00b7 primitives",
+    "image": "assets/release-040-primitives.png",
+    "source": "runs/workflow-baseline-20260909-224405-9db2a702/task-1/perspective.png",
+    "sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+    "report": "workflow/REBASELINE_040.md",
+    "status": "Geometry passed",
+    "caption": "Fresh v2 baseline attempt; saved-file verdict, not agent completion claim.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "release-040-subtractive-solids",
+    "title": "0.4.0 \u00b7 subtractive-solids",
+    "image": "assets/release-040-subtractive-solids.png",
+    "source": "runs/workflow-baseline-20260909-224405-9db2a702/task-2/perspective.png",
+    "sha256": "0138325a9506151d68c9298cf4fc35a28b4cbb18a5f74ed28d7e417c2a0130fe",
+    "report": "workflow/REBASELINE_040.md",
+    "status": "Geometry passed",
+    "caption": "Fresh v2 baseline attempt; saved-file verdict, not agent completion claim.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "release-040-posed-solids",
+    "title": "0.4.0 \u00b7 posed-solids",
+    "image": "assets/release-040-posed-solids.png",
+    "source": "runs/workflow-baseline-20260909-224405-9db2a702/task-3/perspective.png",
+    "sha256": "aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d",
+    "report": "workflow/REBASELINE_040.md",
+    "status": "Geometry passed",
+    "caption": "Fresh v2 baseline attempt; saved-file verdict, not agent completion claim.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "release-040-trimmed-patches",
+    "title": "0.4.0 \u00b7 trimmed-patches",
+    "image": "assets/release-040-trimmed-patches.png",
+    "source": "runs/workflow-baseline-20260909-224405-9db2a702/task-4/perspective.png",
+    "sha256": "3ea2e152039db704c01e2d4181a073726b4441bb2eca30195be66d7b5974368a",
+    "report": "workflow/REBASELINE_040.md",
+    "status": "Geometry passed",
+    "caption": "Fresh v2 baseline attempt; saved-file verdict, not agent completion claim.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "release-040-curved-panels",
+    "title": "0.4.0 \u00b7 curved-panels",
+    "image": "assets/release-040-curved-panels.png",
+    "source": "runs/workflow-baseline-20260909-224405-9db2a702/task-5/perspective.png",
+    "sha256": "de7d223c1e8aede9c7e466a0a3d880cd974e00a265d9be765bfddff5ac062256",
+    "report": "workflow/REBASELINE_040.md",
+    "status": "Geometry passed",
+    "caption": "Fresh v2 baseline attempt; saved-file verdict, not agent completion claim.",
+    "kind": "actual_rhino_capture"
   }
 ]

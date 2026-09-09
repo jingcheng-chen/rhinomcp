@@ -75,19 +75,21 @@ credentials anywhere; reinstall the plugin into a Rhino that holds user work.
   `CHANGELOG.md` has the details. The `harness` branch is merged; keep developing on it.
 - Every Rhino connection now reads `describe_capabilities` once before its first
   command. Traces show that call; it is not an agent decision.
-- `workflow/current-baseline.json` still names the pre-release planar build and a
-  local naked-edge overlay. Both are superseded by the released 0.4.0 plugin (M0).
-- Runtime rechecked 2026-09-09: server 0.4.0, loaded plugin 0.3.2, naked-edge
-  MVID `addb4d4c-9ce9-4021-b777-53b34874e663`. The sole unsaved empty Rhino
-  document is marked modified and unclaimed. Permission to close it without
-  saving and restart for dedicated 0.4.0 testing was requested, not yet granted.
-  Recheck state before acting; no installation or live modeling was performed.
-- M0 task preparation is complete: the native pilot defaults to
-  `workflow/release-pilot.json`, with five families using new v2 tasks and realistic
-  tolerances. Panel shape deviation is separate from document/boundary tolerance;
-  historical files remain intact and the precision panel is inactive. See
-  [M0 preparation and next command](workflow/REBASELINE_040.md). Runtime selection
-  and all five fresh baseline runs remain outstanding; M0 is not complete.
+- M0 is complete. `workflow/current-baseline.json` selects released 0.4.0; the
+  pre-release baseline and overlays are retained in `workflow/baseline-history.json`.
+  Loaded identity verified: MVID `ee66d5ce-fb32-4807-9d17-5af8fe1458d2`, SHA256
+  `a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e`.
+  Server and plugin both report 0.4.0 with no update advice.
+- Five fresh v2 baseline families all passed saved-file evaluation: primitives,
+  subtractive solids, posed solids, trimmed patches and curved panels. 40 agent
+  calls, zero failed calls; no reruns or improvement/generalization claims.
+  See [M0 report](workflow/REBASELINE_040.md), `workflow/release-040-results.json`
+  and `workflow/release-040-runs.json`. Next step is M1 trace classification.
+- The user authorized dedicated local testing. The completed pilot restored its
+  fingerprint but left the document marked modified; the supervisor saved an empty
+  checkpoint and opened a new empty, unmodified, unclaimed document. Rhino is left
+  on that dedicated 0.4.0 session; no controller/modeler is running. Reverify state
+  before live work. This is supervised local testing, not M5 unattended isolation.
 - Discovery so far: five families audited historically (primitives, posed solids,
   subtractive solids, surface construction, layer organization, plus photo
   reconstruction); the native pilot covers primitives, subtractive solids, posed
@@ -97,14 +99,14 @@ credentials anywhere; reinstall the plugin into a Rhino that holds user work.
   modeling validated; binary comparison orchestration remains Codex-only).
 - Pending user decision: the dedicated isolation environment (VM or machine) for
   unattended operation. Nothing else blocks M0 to M4.
-- Tests at last verification: 285 server, 363 experiments, 13 contracts; server lint passes.
+- Tests at last verification: 285 server, 371 experiments, 13 contracts; server lint passes.
 
 ## Milestones from here, in order
 
 Each milestone ends with tests green, a portable report under `workflow/`, the
 state section above updated, and a commit.
 
-### M0 — Re-baseline on the released 0.4.0
+### M0 — Re-baseline on the released 0.4.0 (complete, 2026-09-09)
 
 - Build the plugin from tag `releases/0.4.0`, or install it from the Package Manager
   into the dedicated Rhino; restart Rhino; record the loaded identity (MVID, SHA256)
