@@ -8,7 +8,7 @@ from experiments.workflow import pilot
 def pending(tmp_path, monkeypatch):
     (tmp_path / "candidate.3dm").write_bytes(b"frozen model")
     (tmp_path / "baseline.rhp").write_bytes(b"trusted binary")
-    persist(tmp_path / "task.json", {"id": "test"})
+    persist(tmp_path / "task.json", {"id": "test", "type": "axis_aligned_box"})
     persist(tmp_path / "pins.json", {"judge": "fixed"})
     persist(
         tmp_path / "summary.json",

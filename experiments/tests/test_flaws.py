@@ -382,3 +382,17 @@ def test_missing_response_is_not_evidence_of_an_identical_read(tmp_path):
     assert not findings(
         tmp_path, [event("a", "get_objects"), event("b", "get_objects")]
     )
+
+
+def test_missing_runtime_method_is_not_a_missing_object():
+    from experiments.workflow.flaws import cause
+
+    assert (
+        cause(
+            {
+                "error": "Error executing tool update_object_attributes: Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'."
+            }
+        )
+        == "runtime_exception"
+    )
+    assert cause({"error": "Object with given id not found"}) == "missing_object"

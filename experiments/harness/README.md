@@ -173,3 +173,13 @@ judge; `../validate_posed_cushion.py` checks independent positive/negative fixtu
 See `../POSED_CUSHION_LOOP.md` for limits, recovery evidence and live run results.
 
 Surface feedback repair scope: `repairs/surface-feedback.json`. Existing serializer files are eligible for explicitly listed repairs, alongside handler/wrapper/schema files. Eligibility never grants access to undeclared paths. See `../workflow/SURFACE_FEEDBACK.md` for the candidate-only status and live acceptance gate.
+
+## Prepared workflow scenes (M2)
+
+`roles/workflow_modeler.md` is the role for the shared pilot's `workflow_scene`
+tasks. `../tasks/workflow_scene.schema.json` is their input contract;
+`../scene_task.py` and `../scene_measure.cs` implement starting documents and
+independent saved-file evaluation. `../workflow/m2-pilot.json` registers four
+families. The same pilot supports the 17-tool native subset and `--full-catalog`
+(all production definitions, with document-scoped Rhino permissions). See
+[calibration, boundaries and results](../workflow/SCENE_BENCHMARKS.md).

@@ -100,3 +100,41 @@ def test_reviewed_extension_cannot_add_scripting_or_remove_native_tools(tmp_path
     ]:
         with pytest.raises(ValueError, match="reviewed tool extension"):
             Gateway(0, "", 1, tmp_path / "log", tool_names=names)
+
+
+def test_full_catalog_preserves_all_definitions_and_scripts(tmp_path):
+    async def check():
+        gateway = Gateway(1, "run", 10, tmp_path / "log", full_catalog=True)
+        definitions = await gateway.definitions()
+        production = await rhinomcp.mcp.list_tools()
+        assert {t.name: t.model_dump() for t in definitions} == {
+            t.name: t.model_dump() for t in production
+        }
+        assert {"run_command", "execute_rhinocommon_csharp_code"} <= set(
+            gateway.tool_names
+        )
+
+    asyncio.run(check())
+
+
+def test_full_catalog_still_enforces_rhino_ownership_and_excludes_unowned_gh(tmp_path):
+    async def check():
+        production = Mock(call_tool=AsyncMock(return_value={"success": True}))
+        guard = Mock()
+        gateway = Gateway(
+            1,
+            "run",
+            10,
+            tmp_path / "log",
+            production,
+            guard,
+            tool_names=("run_command", "gh_clear_canvas"),
+            full_catalog=True,
+        )
+        await gateway.call("run_command", {"command": "_Box"})
+        assert guard.call_count == 2
+        with pytest.raises(ValueError, match="Grasshopper"):
+            await gateway.call("gh_clear_canvas", {})
+        production.call_tool.assert_awaited_once()
+
+    asyncio.run(check())

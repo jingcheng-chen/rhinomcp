@@ -260,3 +260,13 @@ workflow and existing bounded repair path.
 ## Generic panel registration (2026-09-08)
 
 See [PANEL_BENCHMARKS.md](PANEL_BENCHMARKS.md). The shared pilot now accepts posed biquadratic panels with a saved-file evaluator and explicit CLI agent settings. Twenty-two calibration fixtures pass expected verdicts. Two fresh baseline discoveries produce one pass and one modeling failure; no candidate workflow comparison or adoption is claimed. Binary switching/recovery orchestration and trimmed-patch registration remain pending.
+
+## M2 workflow scenes
+
+Four prepared-scene families now reuse the native pilot and evaluator registry.
+The 17-tool subset and full 70-definition production catalog are both observed on
+released 0.4.0, with document-scoped Rhino permissions. Thirty saved-file fixtures
+calibrate the analytic scene, identity, layer and inspection checks. See
+[the M2 report](SCENE_BENCHMARKS.md), [suite](m2-pilot.json) and
+[reserved family allocation](HELD_OUT.md). This extends discovery coverage; it does
+not establish a candidate improvement or generalization claim.

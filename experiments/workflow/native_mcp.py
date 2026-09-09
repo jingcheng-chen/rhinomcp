@@ -1,4 +1,4 @@
-"""Guarded subset of production MCP tools, preserving their public definitions."""
+"""Guarded native subset or full production catalog with Rhino document ownership."""
 
 import asyncio
 import json
@@ -12,8 +12,8 @@ from mcp.types import CallToolResult, ListToolsResult, TextContent
 import rhinomcp
 from experiments.bridge import assert_document
 
-# One suite-wide interface, not a task-specific recipe. Arbitrary execution and
-# filesystem/desktop tools are outside this pilot's permissions.
+# Default suite-wide subset. Full-catalog mode separately permits task-scoped
+# Rhino scripts/macros under the supervised workflow modeler's instructions.
 TOOLS = (
     "create_object",
     "modify_object",
@@ -43,6 +43,7 @@ class Gateway:
         guard=None,
         description_suffix="",
         tool_names=None,
+        full_catalog=False,
     ):
         if budget < 1:
             raise ValueError("Positive call budget required")
@@ -51,8 +52,9 @@ class Gateway:
         self.production = production or rhinomcp.mcp
         self.guard = guard or assert_document
         self.description_suffix = description_suffix
+        self.full_catalog = full_catalog
         self.tool_names = tuple(tool_names) if tool_names is not None else TOOLS
-        if (
+        if not full_catalog and (
             self.tool_names[: len(TOOLS)] != TOOLS
             or len(set(self.tool_names)) != len(self.tool_names)
             or set(self.tool_names)
@@ -68,6 +70,8 @@ class Gateway:
 
     async def definitions(self):
         available = {t.name: t for t in await self.production.list_tools()}
+        if self.full_catalog:
+            self.tool_names = tuple(sorted(available))
         result = [available[name].model_copy(deep=True) for name in self.tool_names]
         if self.description_suffix:
             tool = next(t for t in result if t.name == "create_object")
@@ -89,8 +93,14 @@ class Gateway:
                     raise ValueError("Tool outside pilot scope")
                 if self.calls > self.budget:
                     raise RuntimeError("Task tool-call budget exhausted")
+                if self.full_catalog and name.startswith("gh_"):
+                    raise ValueError(
+                        "Grasshopper is outside this Rhino document task; its catalog is visible but its documents are not owned"
+                    )
                 self.guard(self.document, self.marker)
                 result = await self.production.call_tool(name, arguments)
+                if self.full_catalog:
+                    self.guard(self.document, self.marker)
                 event["status"] = "returned"
                 return result
             except Exception as error:
@@ -114,6 +124,7 @@ async def main():
         tool_names=json.loads(os.environ["EXPERIMENT_TOOL_NAMES"])
         if os.environ.get("EXPERIMENT_TOOL_NAMES")
         else None,
+        full_catalog=os.environ.get("EXPERIMENT_FULL_CATALOG") == "1",
     )
 
     async def list_tools(_context, _params):

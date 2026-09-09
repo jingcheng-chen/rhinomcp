@@ -181,7 +181,10 @@ def cause(row):
             "schema_input",
             r"validation error|unexpected token|error reading|must exceed|missing|required|invalid (?:argument|parameter)|unknown (?:argument|parameter)",
         ),
-        ("runtime_exception", r"object reference|exception|nullreference"),
+        (
+            "runtime_exception",
+            r"object reference|exception|nullreference|method not found",
+        ),
         ("transport", r"connection refused|timed? out|timeout|disconnected|socket"),
         ("missing_object", r"object.*not found|could not find.*object"),
         ("missing_layer", r"layer.*not found"),

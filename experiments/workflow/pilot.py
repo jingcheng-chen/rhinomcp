@@ -53,6 +53,7 @@ def load_suite(path):
             "triangular_prism_pose",
             "biquadratic_panel",
             "trimmed_planar_patch",
+            "workflow_scene",
         } or task.get("input_mode"):
             raise ValueError("No pilot evaluator adapter for this task")
     return suite
@@ -80,15 +81,16 @@ def source_pins(server_source=None):
             "experiments/strip_probe.py",
             "experiments/trial.py",
             "experiments/harness/roles/modeler.md",
+            "experiments/harness/roles/workflow_modeler.md",
         )
     ]
     return {str(p.relative_to(ROOT)): sha256(p) for p in sorted(set(files))}
 
 
-def cleanup(owner, marker, before):
+def cleanup(owner, marker, before, original_current_layer=None):
     require_owned(runtime(), owner)
     assert_document(owner["document"], marker)
-    # This runner claims only empty documents and exposes no layer-writing tools.
+    # The runner claims empty documents; prepared scenes may add layers.
     # Hidden construction objects must also be removed.
     script(f"""
 var settings=new Rhino.DocObjects.ObjectEnumeratorSettings {{ NormalObjects=true, HiddenObjects=true, LockedObjects=true, ReferenceObjects=true, IncludeLights=true }};
@@ -97,6 +99,16 @@ foreach(var obj in doc.Objects.GetObjectList(settings).Where(o=>o!=null && !o.Is
 doc.ModelUnitSystem=(UnitSystem)Enum.Parse(typeof(UnitSystem),{json.dumps(before["units"])});
 doc.ModelAbsoluteTolerance={before["tolerance"]};
 doc.Strings.Delete("rhinomcp_experiment");
+""")
+    if original_current_layer is not None:
+        keep = ",".join(
+            "new Guid(" + json.dumps(layer["Id"]) + ")" for layer in before["layers"]
+        )
+        script(f"""
+var keep=new System.Collections.Generic.HashSet<Guid>(new []{{{keep}}});
+doc.Layers.SetCurrentLayerIndex({original_current_layer},true);
+foreach(var layer in doc.Layers.Where(l=>!l.IsDeleted && !keep.Contains(l.Id)).OrderByDescending(l=>l.FullPath.Length).ToArray())
+ if(!doc.Layers.Delete(layer.Index,true)) throw new Exception("Layer cleanup failed");
 """)
     after = fingerprint()
     if before != after:
@@ -125,14 +137,21 @@ def run_task(
     defer_evaluation=False,
     server_source=None,
     tool_names=None,
+    full_catalog=False,
 ):
     task = load_task(ROOT / entry["path"])
+    scene = task["type"] == "workflow_scene"
     marker = directory.parent.name + "-" + directory.name
     owner = runtime()
     require_owned(owner, owner)
     if owner["object_count"] or owner["marker"]:
         raise RuntimeError("An empty unclaimed dedicated document is required")
     before = fingerprint()
+    original_current_layer = (
+        int(script("output.AppendLine(doc.Layers.CurrentLayerIndex.ToString());"))
+        if scene
+        else None
+    )
     directory.mkdir()
     print(directory, flush=True)
     pins = source_pins(server_source)
@@ -140,7 +159,11 @@ def run_task(
         p = directory / "sources" / name
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_bytes((ROOT / name).read_bytes())
-    prompt = task["instruction"] + "\n" + role_instructions("modeler")
+    prompt = (
+        task["instruction"]
+        + "\n"
+        + role_instructions("workflow_modeler" if scene else "modeler")
+    )
     save(directory / "task.json", task)
     save(directory / "tool-definitions.json", definitions)
     save(directory / "pins.json", pins)
@@ -162,6 +185,7 @@ def run_task(
         "call_budget": suite["call_budget"],
         "timeout_seconds": suite["timeout_seconds"],
         "server_source": str(server_source) if server_source is not None else None,
+        "catalog_mode": "full" if full_catalog else "native",
     }
     save(directory / "environment.json", environment)
     script(f"""
@@ -183,6 +207,8 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
         env["EXPERIMENT_DESCRIPTION_FILE"] = str(description_file)
     if tool_names is not None:
         env["EXPERIMENT_TOOL_NAMES"] = json.dumps(tool_names)
+    if full_catalog:
+        env["EXPERIMENT_FULL_CATALOG"] = "1"
     config = {
         "command": json.dumps(sys.executable),
         "args": json.dumps(["-m", "experiments.workflow.native_mcp"]),
@@ -196,16 +222,23 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
         },
     }
     try:
+        if scene:
+            from experiments.scene_task import seed, response_schema
+
+            seed(task, directory, owner, marker)
+            initial_metadata_sha256 = sha256(directory / "initial.json")
         result = run_session(
             directory / "modeler",
             prompt,
-            MODELER_SCHEMA,
+            response_schema() if scene else MODELER_SCHEMA,
             suite["timeout_seconds"],
             config,
             agent_config=agent_config,
         )
         if source_pins(server_source) != pins:
             raise RuntimeError("Sources changed during modeling")
+        if scene and sha256(directory / "initial.json") != initial_metadata_sha256:
+            raise RuntimeError("Starting measurements changed during modeling")
         current = runtime()
         require_owned(current, owner)
         if (
@@ -221,10 +254,16 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
                 "sha256": artifact_hash,
                 "task_sha256": sha256(directory / "task.json"),
                 "evaluation_pending": defer_evaluation,
+                "initial_metadata_sha256": initial_metadata_sha256 if scene else None,
             },
         )
         if not defer_evaluation:
-            report = evaluate(task, measure(artifact, task))
+            measurements = measure(artifact, task)
+            if scene:
+                from experiments.scene_task import evaluation_context
+
+                measurements = evaluation_context(directory, measurements, definitions)
+            report = evaluate(task, measurements)
             report["artifact_sha256"] = artifact_hash
             save(directory / "evaluation.json", report)
         capture(directory, owner["document"], marker)
@@ -255,7 +294,7 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
             )
         raise
     finally:
-        after = cleanup(owner, marker, before)
+        after = cleanup(owner, marker, before, original_current_layer)
         save(
             directory / "preservation.json",
             {"before": before, "after": after, "preserved": True},
@@ -296,7 +335,14 @@ def evaluate_saved(directory, expected_identity):
         raise RuntimeError("Evaluation requires the empty trusted baseline")
     fingerprint_before = fingerprint()
     task = read(directory / "task.json")
-    report = evaluate(task, measure(artifact, task))
+    measurements = measure(artifact, task)
+    if task["type"] == "workflow_scene":
+        from experiments.scene_task import evaluation_context
+
+        measurements = evaluation_context(
+            directory, measurements, read(directory / "tool-definitions.json")
+        )
+    report = evaluate(task, measurements)
     after = runtime()
     require_owned(after, before)
     if (
@@ -322,7 +368,7 @@ def evaluate_saved(directory, expected_identity):
     return report
 
 
-def run(path, agent_config=None):
+def run(path, agent_config=None, full_catalog=False):
     suite = load_suite(path)
     runs = ROOT / "experiments/runs"
     runs.mkdir(exist_ok=True)
@@ -332,18 +378,46 @@ def run(path, agent_config=None):
         )
         directory.mkdir()
         save(directory / "suite.json", suite)
+        scene_suite = any(
+            load_task(ROOT / e["path"])["type"] == "workflow_scene"
+            for e in suite["tasks"]
+        )
+        names = (
+            (
+                *TOOLS,
+                "create_layer",
+                "update_object_attributes",
+                "get_object_attributes",
+            )
+            if scene_suite
+            else TOOLS
+        )
+        gateway = Gateway(
+            0, "", 1, directory / "unused", tool_names=names, full_catalog=full_catalog
+        )
         definitions = [
             t.model_dump(mode="json", by_alias=True, exclude_none=True)
-            for t in asyncio.run(Gateway(0, "", 1, directory / "unused").definitions())
+            for t in asyncio.run(gateway.definitions())
         ]
         registry = {"runs": []}
         for index, entry in enumerate(suite["tasks"]):
             child = directory / f"task-{index + 1}"
-            run_task(child, entry, suite, definitions, agent_config=agent_config)
+            run_task(
+                child,
+                entry,
+                suite,
+                definitions,
+                agent_config=agent_config,
+                tool_names=gateway.tool_names,
+                full_catalog=full_catalog,
+            )
             registry["runs"].append(
                 {
-                    "id": load_task(ROOT / entry["path"])["id"],
+                    "id": directory.name + "-" + load_task(ROOT / entry["path"])["id"],
                     "family": entry["family"],
+                    "cohort": "released-0.4.0-full"
+                    if full_catalog
+                    else "released-0.4.0-native",
                     "run": str(child.relative_to(ROOT)),
                 }
             )
@@ -362,6 +436,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--provider", choices=["codex", "claude"], default="codex")
     parser.add_argument("--model")
+    parser.add_argument("--full-catalog", action="store_true")
     parser.add_argument(
         "--reasoning-effort", choices=["low", "medium", "high", "xhigh"]
     )
@@ -377,4 +452,4 @@ if __name__ == "__main__":
         if config is None:
             parser.error("Claude requires explicit model and reasoning effort")
         config["provider"] = "claude"
-    print(run(args.suite, agent_config=config))
+    print(run(args.suite, agent_config=config, full_catalog=args.full_catalog))

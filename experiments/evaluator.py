@@ -144,6 +144,10 @@ def through_hole_checks(task, obj):
 
 
 def evaluate(task, measurements):
+    if task["type"] == "workflow_scene":
+        from experiments.scene_task import evaluate as evaluate_scene
+
+        return evaluate_scene(task, measurements)
     if task["type"] == "trimmed_planar_patch":
         from experiments.trimmed_task import evaluate as evaluate_trimmed
 

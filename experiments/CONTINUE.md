@@ -1,7 +1,7 @@
 # Continue autonomous RhinoMCP improvement
 
 Entry point for a fresh development session (Codex CLI or Claude Code) with no
-chat context. Last updated 2026-09-09, after the 0.4.0 release. Verify repository
+chat context. Last updated 2026-09-10, after M2 on the 0.4.0 release. Verify repository
 and application state before acting; nothing below about running processes, open
 documents or loaded plugins is an assumption you may keep.
 
@@ -58,7 +58,7 @@ This supersedes the precision-oriented next steps in [HANDOFF_HISTORY.md](HANDOF
    test session. Decide and record everything else yourself.
 7. Before every commit: from `server/`, `.venv/bin/python -m pytest` (285 at last
    count) and `.venv/bin/ruff check src/rhinomcp`; from the repository root,
-   `server/.venv/bin/python -m pytest experiments/tests` (407) and
+   `server/.venv/bin/python -m pytest experiments/tests` (441) and
    `server/.venv/bin/python -m pytest contracts/test_schemas.py` (13); for plugin
    changes, `dotnet build plugin/rhinomcp.sln --configuration Release`.
 
@@ -67,7 +67,7 @@ construction recipes to guidance without a cross-task flaw that motivates them;
 promote a candidate automatically; leave a controller or agent running; paste
 credentials anywhere; reinstall the plugin into a Rhino that holds user work.
 
-## Current state — 2026-09-09
+## Current state — 2026-09-10
 
 - Released: rhinomcp 0.4.0 on PyPI and Yak from `releases/0.4.0`; `main` is at the
   merge of PR #52 (`a4bb8bb`). 0.4.0 includes MCP SDK 2.x, `create_planar_region`,
@@ -93,22 +93,32 @@ credentials anywhere; reinstall the plugin into a Rhino that holds user work.
   The leading same-day problems are surface-schema workarounds, ignored placement
   parameters and surface-input failures, all observed on pre-release 0.3.2.
   Released 0.4.0 shows two duplicate guidance reads, not three demonstrated product
-  defects. Fidelity misses stay separate. Next milestone is M2 workflow families.
-- The user authorized dedicated local testing. The completed pilot restored its
-  fingerprint but left the document marked modified; the supervisor saved an empty
-  checkpoint and opened a new empty, unmodified, unclaimed document. Rhino is left
-  on that dedicated 0.4.0 session; no controller/modeler is running. Reverify state
-  before live work. This is supervised local testing, not M5 unattended isolation.
+  defects. Fidelity misses stay separate. This remains the historical M1 corpus; M2 adds current-runtime evidence below.
+- M2 is complete: four scene families, 30 calibrated fixtures, eight fresh 0.4.0
+  observations using 17 native tools and the full 70-definition catalog. Six pass;
+  native assembly and recovery fail only layer assignment. 104 calls, 16 failures.
+  Fifteen failures expose a missing Newtonsoft method in `update_object_attributes`
+  across three families. Full-catalog agents recover through scripts in two cases.
+  See [M2 report](workflow/SCENE_BENCHMARKS.md), `workflow/m2-runs.json`,
+  `workflow/m2-results.json` and `workflow/m2-audit.json`. M3 is next; start with this
+  current-runtime defect, not the pre-release M1 leaders. No production code changed.
+- The user authorized dedicated local testing. All eight M2 runs restored their
+  original document fingerprint. Final verification: Rhino PID 66923, document
+  268435458, zero objects, no marker/path, original layers, modified flag true.
+  No controller/modeler remains running. Reverify state before live work; this is
+  supervised local testing, not M5 unattended isolation.
 - Discovery so far: five families audited historically (primitives, posed solids,
   subtractive solids, surface construction, layer organization, plus photo
   reconstruction); the native pilot covers primitives, subtractive solids, posed
   solids, trimmed patches and curved panels through a 14-tool subset. Held-out cases
   in those families are spent; new parameterizations of them are discovery cases.
+- Reserved curve-editing and section-extraction families remain unrun; see
+  [held-out allocation](workflow/HELD_OUT.md), declared before M2 discovery.
 - Agents available: the Codex adapter (default) and the Claude adapter (native
   modeling validated; binary comparison orchestration remains Codex-only).
 - Pending user decision: the dedicated isolation environment (VM or machine) for
   unattended operation. Nothing else blocks M0 to M4.
-- Tests at last verification: 285 server, 407 experiments, 13 contracts; server lint passes.
+- Tests at last verification: 285 server, 441 experiments, 13 contracts; server lint passes.
 
 ## Milestones from here, in order
 
@@ -145,7 +155,7 @@ Write `workflow/FLAW_TAXONOMY.md`.
 Done when one command produces a ranked flaw report from a set of runs, with tests,
 and the top three flaws on current traces are named with evidence.
 
-### M2 — Realistic workflow families
+### M2 — Realistic workflow families (complete, 2026-09-10)
 
 Add task families that reflect how people model in Rhino, each with a saved-file
 evaluator at realistic tolerances, and where useful a starting-document variant:

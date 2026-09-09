@@ -322,5 +322,93 @@
     "status": "Geometry passed",
     "caption": "Fresh v2 baseline attempt; saved-file verdict, not agent completion claim.",
     "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m2-native-editing-existing",
+    "title": "M2 \u00b7 native \u00b7 editing-existing",
+    "image": "assets/m2-native-editing-existing.png",
+    "source": "runs/workflow-baseline-20260909-235243-2ca8879e/task-1/perspective.png",
+    "sha256": "7760832a32fbaa228a9cfea94e160cb87436b957fc693aac873aa30f336fdb9d",
+    "report": "workflow/SCENE_BENCHMARKS.md",
+    "status": "Workflow passed",
+    "caption": "12 calls, 0 failures. Saved-file verdict: pass.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m2-native-small-assemblies",
+    "title": "M2 \u00b7 native \u00b7 small-assemblies",
+    "image": "assets/m2-native-small-assemblies.png",
+    "source": "runs/workflow-baseline-20260909-235243-2ca8879e/task-2/perspective.png",
+    "sha256": "b47161756723e091380e3406778e4498027085a578f65eb574b8efc567b4052d",
+    "report": "workflow/SCENE_BENCHMARKS.md",
+    "status": "Layer assignment failed",
+    "caption": "23 calls, 6 failures. Saved-file verdict: fail.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m2-native-document-inspection",
+    "title": "M2 \u00b7 native \u00b7 document-inspection",
+    "image": "assets/m2-native-document-inspection.png",
+    "source": "runs/workflow-baseline-20260909-235243-2ca8879e/task-3/perspective.png",
+    "sha256": "a5dc0417136f7a7d91ff045efd8234a37091381bd6ed04ba18c5dc637993932e",
+    "report": "workflow/SCENE_BENCHMARKS.md",
+    "status": "Workflow passed",
+    "caption": "5 calls, 0 failures. Saved-file verdict: pass.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m2-native-recovery",
+    "title": "M2 \u00b7 native \u00b7 recovery",
+    "image": "assets/m2-native-recovery.png",
+    "source": "runs/workflow-baseline-20260909-235243-2ca8879e/task-4/perspective.png",
+    "sha256": "08570fdb274e3bf5e1062d4f356cbabd091edfb7ffc10183ae9189a0294912f4",
+    "report": "workflow/SCENE_BENCHMARKS.md",
+    "status": "Layer assignment failed",
+    "caption": "9 calls, 2 failures. Saved-file verdict: fail.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m2-full-editing-existing",
+    "title": "M2 \u00b7 full \u00b7 editing-existing",
+    "image": "assets/m2-full-editing-existing.png",
+    "source": "runs/workflow-baseline-20260909-235618-5aa1776e/task-1/perspective.png",
+    "sha256": "7760832a32fbaa228a9cfea94e160cb87436b957fc693aac873aa30f336fdb9d",
+    "report": "workflow/SCENE_BENCHMARKS.md",
+    "status": "Workflow passed",
+    "caption": "14 calls, 1 failures. Saved-file verdict: pass.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m2-full-small-assemblies",
+    "title": "M2 \u00b7 full \u00b7 small-assemblies",
+    "image": "assets/m2-full-small-assemblies.png",
+    "source": "runs/workflow-baseline-20260909-235618-5aa1776e/task-2/perspective.png",
+    "sha256": "b47161756723e091380e3406778e4498027085a578f65eb574b8efc567b4052d",
+    "report": "workflow/SCENE_BENCHMARKS.md",
+    "status": "Workflow passed",
+    "caption": "24 calls, 5 failures. Saved-file verdict: pass.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m2-full-document-inspection",
+    "title": "M2 \u00b7 full \u00b7 document-inspection",
+    "image": "assets/m2-full-document-inspection.png",
+    "source": "runs/workflow-baseline-20260909-235618-5aa1776e/task-3/perspective.png",
+    "sha256": "a5dc0417136f7a7d91ff045efd8234a37091381bd6ed04ba18c5dc637993932e",
+    "report": "workflow/SCENE_BENCHMARKS.md",
+    "status": "Workflow passed",
+    "caption": "6 calls, 0 failures. Saved-file verdict: pass.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m2-full-recovery",
+    "title": "M2 \u00b7 full \u00b7 recovery",
+    "image": "assets/m2-full-recovery.png",
+    "source": "runs/workflow-baseline-20260909-235618-5aa1776e/task-4/perspective.png",
+    "sha256": "08570fdb274e3bf5e1062d4f356cbabd091edfb7ffc10183ae9189a0294912f4",
+    "report": "workflow/SCENE_BENCHMARKS.md",
+    "status": "Workflow passed",
+    "caption": "11 calls, 2 failures. Saved-file verdict: pass.",
+    "kind": "actual_rhino_capture"
   }
 ]
