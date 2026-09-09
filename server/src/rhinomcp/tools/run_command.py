@@ -1,6 +1,6 @@
 import os
 
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
 from rhinomcp import get_rhino_connection, mcp, logger
 
@@ -9,7 +9,7 @@ def _enabled() -> bool:
     return os.getenv("RHINO_MCP_ENABLE_RUN_COMMAND", "1").lower() not in ("0", "false", "no")
 
 
-@mcp.tool(annotations=ToolAnnotations(destructiveHint=True, openWorldHint=True))
+@mcp.tool(annotations=ToolAnnotations(destructive_hint=True, open_world_hint=True))
 def run_command(ctx: Context, command: str, echo: bool = False) -> str:
     """
     Execute a Rhino command string and return whatever the command window prints.

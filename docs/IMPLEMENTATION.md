@@ -17,7 +17,7 @@ Context Protocol (MCP).
 The runtime bridge is:
 
 ```text
-AI client -> Python FastMCP server -> TCP JSON on 127.0.0.1:1999 -> Rhino C# plugin -> Rhino + Grasshopper
+AI client -> Python MCP server -> TCP JSON on 127.0.0.1:1999 -> Rhino C# plugin -> Rhino + Grasshopper
 ```
 
 The Python server exposes MCP tools. Each tool sends a JSON command to the Rhino
@@ -36,7 +36,7 @@ result to the Python server.
                      v
 +--------------------+----------------------------------------+
 | Python MCP Server (server/)                                |
-| - FastMCP tool and resource registration                    |
+| - MCP SDK tool and resource registration                    |
 | - Thin tool wrappers                                        |
 | - Optional JSON Schema pre-flight validation                |
 | - Persistent TCP connection to Rhino                        |
@@ -80,7 +80,7 @@ rhinomcp/
 |   +-- tests/                       # Pytest tests and mock Rhino server
 |   +-- src/rhinomcp/
 |       +-- __init__.py              # Auto-discovers tool modules
-|       +-- server.py                # FastMCP app and TCP connection manager
+|       +-- server.py                # MCPServer app and TCP connection manager
 |       +-- validation.py            # Contract validation helper
 |       +-- prompts/                 # MCP prompts
 |       +-- static/                  # RhinoScript reference data
@@ -363,7 +363,7 @@ Main file: `server/src/rhinomcp/server.py`
 
 ### Responsibilities
 
-- Creates the FastMCP server: `mcp = FastMCP("RhinoMCP", lifespan=server_lifespan)`.
+- Creates the MCP server: `mcp = RhinoMCPServer("RhinoMCP", lifespan=server_lifespan, instructions=SERVER_INSTRUCTIONS)`. `RhinoMCPServer` subclasses the SDK's `MCPServer` and re-raises tool failures as `ToolError`, because SDK 2.x otherwise reports only "Error executing tool <name>" to the client.
 - Manages a persistent `RhinoConnection` to the plugin.
 - Serializes concurrent tool calls with a socket send lock.
 - Validates command params when `RHINO_MCP_VALIDATE` is not `off`.
@@ -769,7 +769,7 @@ dotnet build plugin/rhinomcp.sln --configuration Release -p:CopyToRhinoPluginDir
 Defined in `server/pyproject.toml`:
 
 - Python `>=3.10`
-- `mcp[cli]>=1.16.0`
+- `mcp[cli]>=2.0.0,<3` (MCP Python SDK 2.x)
 - Optional validation/dev: `jsonschema`, `pytest`, `pytest-cov`, `pytest-asyncio`, `ruff`
 
 ### C#

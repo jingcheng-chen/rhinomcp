@@ -42,7 +42,7 @@ async def verify():
                     result = await client.call_tool(
                         "get_modeling_guidance", {"topic": topic}
                     )
-                    assert not result.isError
+                    assert not result.is_error
                     data = json.loads(result.content[0].text)
                     assert data == modeling_guidance(topic)
                     resource = await client.read_resource(
@@ -54,7 +54,7 @@ async def verify():
                 bad = await client.call_tool(
                     "get_modeling_guidance", {"topic": "../../etc/passwd"}
                 )
-                assert bad.isError
+                assert bad.is_error
                 return {
                     "package": str(package),
                     "tool_count": len(tools),

@@ -2,14 +2,14 @@
 
 from typing import Any, Dict, List, Optional
 
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
 
 from rhinomcp.server import mcp
 from rhinomcp.tools._grasshopper_common import send_grasshopper_command
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def gh_search_components(
     ctx: Context,
     query: Optional[str] = None,
@@ -25,7 +25,7 @@ def gh_search_components(
     return send_grasshopper_command("gh_search_components", params)
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def gh_batch_search_components(
     ctx: Context,
     queries: List[str],
@@ -43,13 +43,13 @@ def gh_batch_search_components(
     )
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def gh_list_component_categories(ctx: Context) -> Dict[str, Any]:
     """List installed Grasshopper component categories and subcategories."""
     return send_grasshopper_command("gh_list_component_categories", {})
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def gh_get_available_components(
     ctx: Context,
     category: Optional[str] = None,
@@ -66,7 +66,7 @@ def gh_get_available_components(
     return send_grasshopper_command("gh_get_available_components", params)
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def gh_get_component_type_info(
     ctx: Context,
     name: Optional[str] = None,
@@ -81,7 +81,7 @@ def gh_get_component_type_info(
     return send_grasshopper_command("gh_get_component_type_info", params)
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def gh_batch_get_component_type_info(
     ctx: Context,
     components: List[Dict[str, str]],

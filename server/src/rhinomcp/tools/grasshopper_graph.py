@@ -2,14 +2,14 @@
 
 from typing import Any, Dict
 
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
 
 from rhinomcp.server import mcp
 from rhinomcp.tools._grasshopper_common import send_grasshopper_command
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def gh_get_graph(
     ctx: Context,
     graph_id: str,
@@ -27,7 +27,7 @@ def gh_get_graph(
     )
 
 
-@mcp.tool(annotations=ToolAnnotations(destructiveHint=True))
+@mcp.tool(annotations=ToolAnnotations(destructive_hint=True))
 def gh_clear_graph(
     ctx: Context,
     graph_id: str,

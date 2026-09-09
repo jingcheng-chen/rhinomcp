@@ -1,10 +1,10 @@
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
 import json
 from rhinomcp import get_rhino_connection, mcp, logger
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def get_document_summary(ctx: Context) -> str:
     """
     Get a lightweight summary of the current Rhino document.

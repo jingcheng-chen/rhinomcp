@@ -2,14 +2,14 @@
 
 from typing import Any, Dict, List, Optional
 
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
 
 from rhinomcp.server import mcp
 from rhinomcp.tools._grasshopper_common import JsonValue, send_grasshopper_command
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def gh_list_components(
     ctx: Context,
     category: Optional[str] = None,
@@ -25,7 +25,7 @@ def gh_list_components(
     return send_grasshopper_command("gh_list_components", params)
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def gh_get_component_info(
     ctx: Context,
     instance_id: Optional[str] = None,
@@ -107,7 +107,7 @@ def gh_layout_components(
     return send_grasshopper_command("gh_layout_components", params)
 
 
-@mcp.tool(annotations=ToolAnnotations(destructiveHint=True))
+@mcp.tool(annotations=ToolAnnotations(destructive_hint=True))
 def gh_delete_component(
     ctx: Context,
     instance_id: Optional[str] = None,
@@ -149,7 +149,7 @@ def gh_update_component(
     return send_grasshopper_command("gh_update_component", params)
 
 
-@mcp.tool(annotations=ToolAnnotations(destructiveHint=True))
+@mcp.tool(annotations=ToolAnnotations(destructive_hint=True))
 def gh_clear_canvas(
     ctx: Context,
     include_groups: bool = True,

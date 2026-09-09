@@ -1,8 +1,8 @@
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 
-@mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
+@mcp.tool(annotations=ToolAnnotations(destructive_hint=True, idempotent_hint=True))
 def delete_layer(
     ctx: Context,
     guid: str = None,

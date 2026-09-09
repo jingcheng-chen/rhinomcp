@@ -2,7 +2,7 @@
 
 from typing import Any, Dict, List, Optional
 
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 
 from rhinomcp.server import mcp
 from rhinomcp.tools._grasshopper_common import JsonValue, send_grasshopper_command

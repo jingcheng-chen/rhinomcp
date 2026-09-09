@@ -1,11 +1,11 @@
 from typing import Any, Dict
 
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp
 
 
-@mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
+@mcp.tool(annotations=ToolAnnotations(destructive_hint=True, idempotent_hint=True))
 def delete_object(
     ctx: Context, id: str = None, name: str = None, all: bool = None
 ) -> Dict[str, Any]:

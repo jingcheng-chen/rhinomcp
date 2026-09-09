@@ -1,4 +1,4 @@
-from mcp.server.fastmcp import Context, Image
+from mcp.server.mcpserver import Context, Image
 import base64
 from rhinomcp.server import get_rhino_connection, mcp, logger
 

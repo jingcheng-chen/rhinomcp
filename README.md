@@ -263,7 +263,7 @@ pattern with cylinders that have different heights."_
 AI client ──MCP (stdio)──► rhinomcp (Python) ──TCP 127.0.0.1:1999──► Rhino plugin ──► Rhino + Grasshopper
 ```
 
-1. `server/`: a Python [FastMCP](https://modelcontextprotocol.io) server that exposes each tool and forwards it to Rhino.
+1. `server/`: a Python [MCP](https://modelcontextprotocol.io) server (official Python SDK 2.x) that exposes each tool and forwards it to Rhino.
 2. `plugin/`: a RhinoCommon C# plugin that runs a TCP listener inside Rhino and executes commands on the main thread. Start and stop it with the `mcpstart` / `mcpstop` Rhino commands.
 3. `contracts/`: JSON Schema definitions that keep the wire protocol between the two tiers in sync.
 

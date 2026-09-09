@@ -259,7 +259,7 @@ that have different heights."_
 AI client --MCP (stdio)--> rhinomcp (Python) --TCP 127.0.0.1:1999--> Rhino plugin --> Rhino + Grasshopper
 ```
 
-1. `server/`：一个 Python [FastMCP](https://modelcontextprotocol.io) 服务器，对外暴露每个工具并转发给 Rhino。
+1. `server/`：一个 Python [MCP](https://modelcontextprotocol.io) 服务器（官方 Python SDK 2.x），对外暴露每个工具并转发给 Rhino。
 2. `plugin/`：一个 RhinoCommon C# 插件，在 Rhino 内运行 TCP 监听器，并在主线程上执行命令。用 Rhino 命令 `mcpstart` / `mcpstop` 启停。
 3. `contracts/`：JSON Schema 定义，确保两端之间的通信协议保持一致。
 

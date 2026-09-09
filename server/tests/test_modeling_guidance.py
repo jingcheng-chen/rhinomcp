@@ -39,9 +39,9 @@ async def test_mcp_discovery_exposes_readonly_guide_and_topic_enum():
     tool = next(
         t for t in await rhinomcp.mcp.list_tools() if t.name == "get_modeling_guidance"
     )
-    assert tool.annotations.readOnlyHint is True
-    assert tool.annotations.openWorldHint is False
-    assert set(tool.inputSchema["properties"]["topic"]["enum"]) == set(TOPICS)
+    assert tool.annotations.read_only_hint is True
+    assert tool.annotations.open_world_hint is False
+    assert set(tool.input_schema["properties"]["topic"]["enum"]) == set(TOPICS)
     assert rhinomcp.mcp.instructions == SERVER_INSTRUCTIONS
     templates = await rhinomcp.mcp.list_resource_templates()
-    assert "rhinomcp://guidance/{topic}" in {str(t.uriTemplate) for t in templates}
+    assert "rhinomcp://guidance/{topic}" in {str(t.uri_template) for t in templates}

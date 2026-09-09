@@ -9,7 +9,7 @@ These tools provide a simple, hallucination-free interface for:
 - Pipe: Create a pipe along a curve
 """
 
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from rhinomcp.server import get_rhino_connection, mcp, logger
 from typing import List, Optional, Dict, Any
 

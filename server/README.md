@@ -25,7 +25,7 @@ include both the guide revision and installed package version. Any future option
 client skill should derive its content from these files, not maintain another copy.
 The contributor experiment harness remains separate from normal modeling guidance.
 
-This implementation uses MCP Python SDK 1.x; the package requires `mcp<2` because
-2.x changes the server API. New guidance ships when this server version is released;
+This implementation uses MCP Python SDK 2.x (`mcp>=2.0.0,<3`); SDK 1.x is no
+longer supported. New guidance ships when this server version is released;
 local builds are not a PyPI publication. Restart an existing MCP server connection
 after upgrading so its tool descriptions and instructions refresh.

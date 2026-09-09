@@ -1,5 +1,9 @@
 # server.py
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
+from mcp.server.mcpserver.exceptions import ToolError
+from mcp.shared.exceptions import MCPError
+import functools
+import inspect
 import socket
 import json
 import logging
@@ -491,7 +495,7 @@ class RhinoConnection:
 
 
 @asynccontextmanager
-async def server_lifespan(server: FastMCP) -> AsyncIterator[Dict[str, Any]]:
+async def server_lifespan(server: MCPServer) -> AsyncIterator[Dict[str, Any]]:
     """Manage server startup and shutdown lifecycle"""
     # We don't need to create a connection here since we're using the global connection
     # for resources and tools
@@ -521,8 +525,51 @@ async def server_lifespan(server: FastMCP) -> AsyncIterator[Dict[str, Any]]:
         logger.info("RhinoMCP server shut down")
 
 
+def _reporting_errors(fn):
+    """Re-raise a tool's failure as ToolError so its message reaches the client.
+
+    MCP SDK 2.x reports any other exception to the client as only
+    "Error executing tool <name>". RhinoMCP's error text is the agent's recovery
+    path (start Rhino and run `mcpstart`, fix a parameter, retry after a dropped
+    connection), so it has to survive the trip. Only the callable handed to the
+    SDK is wrapped; the module-level tool function keeps raising its own types.
+    """
+    if inspect.iscoroutinefunction(fn):
+
+        @functools.wraps(fn)
+        async def async_wrapper(*args, **kwargs):
+            try:
+                return await fn(*args, **kwargs)
+            except (ToolError, MCPError):
+                raise
+            except Exception as e:
+                raise ToolError(str(e)) from e
+
+        return async_wrapper
+
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        try:
+            return fn(*args, **kwargs)
+        except (ToolError, MCPError):
+            raise
+        except Exception as e:
+            raise ToolError(str(e)) from e
+
+    return wrapper
+
+
+class RhinoMCPServer(MCPServer):
+    """MCPServer whose tools report their real error messages to the client."""
+
+    def add_tool(self, fn, *args, **kwargs):
+        return super().add_tool(_reporting_errors(fn), *args, **kwargs)
+
+
 # Create the MCP server with lifespan support
-mcp = FastMCP("RhinoMCP", lifespan=server_lifespan, instructions=SERVER_INSTRUCTIONS)
+mcp = RhinoMCPServer(
+    "RhinoMCP", lifespan=server_lifespan, instructions=SERVER_INSTRUCTIONS
+)
 
 
 # ============================================================================
