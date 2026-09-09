@@ -1,0 +1,28 @@
+{
+  "candidate_run": "experiments/runs/capability-20260908-185137-c39dd1c1",
+  "trial": "experiments/runs/capability-20260908-185137-c39dd1c1/trial-529ffc4d",
+  "patch_sha256": "48dc555adddb37c2233ef1d378a52aa8455e67d1916b89e28ae22360926d6d55",
+  "source_reviewed": true,
+  "python_and_schema_tests": 262,
+  "tested_source_unchanged": true,
+  "test_log_sha256": "003a4f474b37e7f86ef31f35b982c70f433cee62d9c270b058cea2330ae80456",
+  "native_catalog_only_declared_addition": true,
+  "baseline_probe_cases": 18,
+  "trial_case_count": 79,
+  "trial_stage": "accepted_trial",
+  "runtime_claimed": true,
+  "built": true,
+  "installed": true,
+  "promoted": true,
+  "blocker": null,
+  "candidate_identity": {
+    "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+    "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+  },
+  "candidate_live_cases_passed": 79,
+  "development_tests_passed": 589,
+  "restoration_verified": true,
+  "source_selected": true,
+  "runtime_selected": true,
+  "selection": "experiments/runs/selection-20260908-214357-b9bfc9f6"
+}

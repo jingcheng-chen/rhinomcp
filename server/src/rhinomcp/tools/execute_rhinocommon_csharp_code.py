@@ -1,6 +1,6 @@
 import os
 
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 from typing import Any, Dict
@@ -10,7 +10,7 @@ def _enabled() -> bool:
     return os.getenv("RHINO_MCP_ENABLE_CSHARP", "1").lower() not in ("0", "false", "no")
 
 
-@mcp.tool(annotations=ToolAnnotations(destructiveHint=True, openWorldHint=True))
+@mcp.tool(annotations=ToolAnnotations(destructive_hint=True, open_world_hint=True))
 def execute_rhinocommon_csharp_code(
     ctx: Context,
     code: str,

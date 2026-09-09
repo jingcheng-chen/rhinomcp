@@ -1,0 +1,613 @@
+{
+  "comparison": "experiments/runs/workflow-binary-20260908-210711-5aea4e1e",
+  "comparison_sha256": "46f7d671ca9a0e61c4ea39b66f06d2a1bb2cfb5569bc32535a88334177062f6b",
+  "status": "benefit_observed",
+  "evaluation_mode": "trusted_baseline",
+  "tasks": {
+    "experiments/tasks/trimmed_offset.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 0,
+        "failed_calls": 3,
+        "median_calls": 15.5,
+        "median_seconds": 139.72358645801432
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 11.0,
+        "median_seconds": 52.891509145498276
+      },
+      "family": "trimmed-patches",
+      "correctness_regression": false,
+      "observed_benefit": true
+    },
+    "experiments/tasks/trimmed_reserved.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 0,
+        "failed_calls": 3,
+        "median_calls": 25.5,
+        "median_seconds": 135.04554722899047
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 11.0,
+        "median_seconds": 55.756899520987645
+      },
+      "family": "trimmed-patches",
+      "correctness_regression": false,
+      "observed_benefit": true
+    },
+    "experiments/tasks/through_hole.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 7.0,
+        "median_seconds": 30.97060854198935
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 7.0,
+        "median_seconds": 39.886844979497255
+      },
+      "family": "through-holes",
+      "correctness_regression": false,
+      "observed_benefit": false
+    }
+  },
+  "runs": [
+    {
+      "id": "task-1-pair-1-baseline",
+      "family": "trimmed-patches",
+      "task": "experiments/tasks/trimmed_offset.json",
+      "arm": "baseline",
+      "pair": 1,
+      "task_verdict": "fail",
+      "metrics": {
+        "mcp_attempts": 5,
+        "completed_calls": 5,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "get_object_info": 1,
+          "get_objects": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 147865,
+          "cached_input_tokens": 120064,
+          "output_tokens": 3353,
+          "reasoning_output_tokens": 2706
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 76.7891084580042,
+      "image": "experiments/assets/planar-workflow-task-1-pair-1-baseline.png",
+      "image_sha256": "c86147fb57223c60b1c354a355e29f8a4e330db9cccd37b3e5a1f2d11c54c10b",
+      "model_sha256": "e4a787fab300865a1cd1958acd053046fd37a9b087066ba2888f570603c094b3",
+      "evaluation_sha256": "33bb6934aae1389bbf1bdadb851317100ea3b659f46555e219828c363c5e5b59",
+      "modeling_pid": 16830,
+      "judging_pid": 6706,
+      "failed_checks": [
+        "one_object",
+        "valid",
+        "one_open_planar_face",
+        "outer_and_hole",
+        "local_bounds",
+        "rectangular_outer_boundary",
+        "circular_inner_boundary",
+        "trimmed_area",
+        "trimmed_membership"
+      ]
+    },
+    {
+      "id": "task-1-pair-1-candidate",
+      "family": "trimmed-patches",
+      "task": "experiments/tasks/trimmed_offset.json",
+      "arm": "candidate",
+      "pair": 1,
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 10,
+        "completed_calls": 10,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 2,
+          "create_planar_region": 1,
+          "delete_object": 2,
+          "get_object_info": 1,
+          "get_objects": 1,
+          "modify_object": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 140762,
+          "cached_input_tokens": 95744,
+          "output_tokens": 1581,
+          "reasoning_output_tokens": 709
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 45.5072323330096,
+      "image": "experiments/assets/planar-workflow-task-1-pair-1-candidate.png",
+      "image_sha256": "3ea2e152039db704c01e2d4181a073726b4441bb2eca30195be66d7b5974368a",
+      "model_sha256": "83e76cc030e9402401eb2e36f09e38628bd91fa1b60a0d256d50fe5092660b5f",
+      "evaluation_sha256": "03f70ca95777f079b9cc73b1fc1e39e827b46d2a29cd3cb6034cff70892fcc80",
+      "modeling_pid": 46053,
+      "judging_pid": 6706,
+      "failed_checks": []
+    },
+    {
+      "id": "task-1-pair-2-candidate",
+      "family": "trimmed-patches",
+      "task": "experiments/tasks/trimmed_offset.json",
+      "arm": "candidate",
+      "pair": 2,
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 12,
+        "completed_calls": 12,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 4,
+          "create_planar_region": 1,
+          "delete_object": 3,
+          "get_object_info": 1,
+          "get_objects": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 184616,
+          "cached_input_tokens": 156416,
+          "output_tokens": 2159,
+          "reasoning_output_tokens": 1021
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 60.275785957986955,
+      "image": "experiments/assets/planar-workflow-task-1-pair-2-candidate.png",
+      "image_sha256": "3ea2e152039db704c01e2d4181a073726b4441bb2eca30195be66d7b5974368a",
+      "model_sha256": "bc65e7f281c049c15f3f7fe23ba65a08b2cdea8bed220c5e7908fff8819735d7",
+      "evaluation_sha256": "9e17279e31e185e491b1614d8616e0fb62fbe9c601295fb5d688c193d091c7bc",
+      "modeling_pid": 46053,
+      "judging_pid": 6706,
+      "failed_checks": []
+    },
+    {
+      "id": "task-1-pair-2-baseline",
+      "family": "trimmed-patches",
+      "task": "experiments/tasks/trimmed_offset.json",
+      "arm": "baseline",
+      "pair": 2,
+      "task_verdict": "fail",
+      "metrics": {
+        "mcp_attempts": 26,
+        "completed_calls": 26,
+        "unfinished_calls": 0,
+        "failed_calls": 3,
+        "failures_by_tool": {
+          "boolean_difference": 1,
+          "create_object": 1,
+          "get_objects": 1
+        },
+        "tools": {
+          "analyze_objects": 2,
+          "boolean_difference": 3,
+          "create_object": 9,
+          "delete_object": 5,
+          "extrude_curve": 3,
+          "get_object_info": 1,
+          "get_objects": 3
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 536296,
+          "cached_input_tokens": 493056,
+          "output_tokens": 8203,
+          "reasoning_output_tokens": 5747
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 202.65806445802446,
+      "image": "experiments/assets/planar-workflow-task-1-pair-2-baseline.png",
+      "image_sha256": "ee9b83fe940a916a41f721ff80e45180129278e35cd03ab2b436c3f4059b7c43",
+      "model_sha256": "b2809f1362bd7ed485ff131d539dc6cd2ece9d93baa4adee3eea6bbb0f458b0f",
+      "evaluation_sha256": "fd48e16e17a912594730c4d3c951405c269bdec0e2831c6c673d21776d2a285d",
+      "modeling_pid": 53997,
+      "judging_pid": 6706,
+      "failed_checks": [
+        "outer_and_hole",
+        "circular_inner_boundary",
+        "trimmed_area",
+        "trimmed_membership"
+      ]
+    },
+    {
+      "id": "task-2-pair-1-baseline",
+      "family": "trimmed-patches",
+      "task": "experiments/tasks/trimmed_reserved.json",
+      "arm": "baseline",
+      "pair": 1,
+      "task_verdict": "fail",
+      "metrics": {
+        "mcp_attempts": 26,
+        "completed_calls": 26,
+        "unfinished_calls": 0,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "boolean_difference": 1,
+          "get_objects": 1
+        },
+        "tools": {
+          "analyze_objects": 3,
+          "boolean_difference": 4,
+          "create_object": 9,
+          "delete_object": 3,
+          "extrude_curve": 1,
+          "get_object_info": 1,
+          "get_objects": 2,
+          "modify_object": 3
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 420204,
+          "cached_input_tokens": 366848,
+          "output_tokens": 6385,
+          "reasoning_output_tokens": 4332
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 151.98904895799933,
+      "image": "experiments/assets/planar-workflow-task-2-pair-1-baseline.png",
+      "image_sha256": "e1c8f11a510739335f728f157284b30ce51576cb42e962ea55c3c393790de6c1",
+      "model_sha256": "fe8fd13d5584e38f7d74622e5dac7d9c75649753fd726231bd079d5b0b1fb019",
+      "evaluation_sha256": "68c5bca0069e2aa91d557c71559b14db56e83c08116127c9399a05523c3923e5",
+      "modeling_pid": 53997,
+      "judging_pid": 6706,
+      "failed_checks": [
+        "one_object",
+        "valid",
+        "one_open_planar_face",
+        "outer_and_hole",
+        "local_bounds",
+        "rectangular_outer_boundary",
+        "circular_inner_boundary",
+        "trimmed_area",
+        "trimmed_membership"
+      ]
+    },
+    {
+      "id": "task-2-pair-1-candidate",
+      "family": "trimmed-patches",
+      "task": "experiments/tasks/trimmed_reserved.json",
+      "arm": "candidate",
+      "pair": 1,
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 11,
+        "completed_calls": 11,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 2,
+          "create_planar_region": 1,
+          "delete_object": 2,
+          "get_objects": 1,
+          "modify_object": 4
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 160663,
+          "cached_input_tokens": 140032,
+          "output_tokens": 1964,
+          "reasoning_output_tokens": 948
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 59.32776416698471,
+      "image": "experiments/assets/planar-workflow-task-2-pair-1-candidate.png",
+      "image_sha256": "97a638ce86e3a8281ac61d6467a9b79c1f5a4771b27dd2bc2e6edfbcc781f97f",
+      "model_sha256": "7d25ecdfe9ca899b2fac02b13a3bd4636b0f86913a39a3b55a1f4a2092b16fd8",
+      "evaluation_sha256": "196a36248c083c7092635e77983871c056802926c1fbe87bed5cc4be33835eb8",
+      "modeling_pid": 68833,
+      "judging_pid": 6706,
+      "failed_checks": []
+    },
+    {
+      "id": "task-2-pair-2-candidate",
+      "family": "trimmed-patches",
+      "task": "experiments/tasks/trimmed_reserved.json",
+      "arm": "candidate",
+      "pair": 2,
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 11,
+        "completed_calls": 11,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 2,
+          "create_planar_region": 1,
+          "delete_object": 2,
+          "get_object_info": 1,
+          "get_objects": 1,
+          "modify_object": 3
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 135028,
+          "cached_input_tokens": 99840,
+          "output_tokens": 1887,
+          "reasoning_output_tokens": 885
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 52.18603487499058,
+      "image": "experiments/assets/planar-workflow-task-2-pair-2-candidate.png",
+      "image_sha256": "97a638ce86e3a8281ac61d6467a9b79c1f5a4771b27dd2bc2e6edfbcc781f97f",
+      "model_sha256": "1906c0526839be3f36e3f8095076db75beac618fe5dd1320f9c1c3be888090e3",
+      "evaluation_sha256": "4c8b4329d6d9ee0256ee3eaebef580bcfccf929e88aee756a089b96853eeaf81",
+      "modeling_pid": 68833,
+      "judging_pid": 6706,
+      "failed_checks": []
+    },
+    {
+      "id": "task-2-pair-2-baseline",
+      "family": "trimmed-patches",
+      "task": "experiments/tasks/trimmed_reserved.json",
+      "arm": "baseline",
+      "pair": 2,
+      "task_verdict": "fail",
+      "metrics": {
+        "mcp_attempts": 25,
+        "completed_calls": 25,
+        "unfinished_calls": 0,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "create_object": 1
+        },
+        "tools": {
+          "analyze_objects": 3,
+          "boolean_difference": 3,
+          "create_object": 8,
+          "delete_object": 6,
+          "extrude_curve": 3,
+          "get_object_info": 1,
+          "get_objects": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 498526,
+          "cached_input_tokens": 465152,
+          "output_tokens": 4267,
+          "reasoning_output_tokens": 2335
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 118.10204549998161,
+      "image": "experiments/assets/planar-workflow-task-2-pair-2-baseline.png",
+      "image_sha256": "2d6b0fe3ae21358ea415bed439a8bc8a940e7f6c738168f69b7d727d7b45bee5",
+      "model_sha256": "ad5e12f6199b3547df2372ee3c153d656be105b83aeae9f3880bb213372297c5",
+      "evaluation_sha256": "15d457049b77b178ff8d374cefd773aafe933b73a5422912d3949842d50cd402",
+      "modeling_pid": 79513,
+      "judging_pid": 6706,
+      "failed_checks": [
+        "outer_and_hole",
+        "local_bounds",
+        "rectangular_outer_boundary",
+        "circular_inner_boundary",
+        "trimmed_area",
+        "trimmed_membership"
+      ]
+    },
+    {
+      "id": "task-3-pair-1-baseline",
+      "family": "through-holes",
+      "task": "experiments/tasks/through_hole.json",
+      "arm": "baseline",
+      "pair": 1,
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 7,
+        "completed_calls": 7,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "boolean_difference": 1,
+          "create_object": 2,
+          "get_object_info": 1,
+          "get_objects": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 124517,
+          "cached_input_tokens": 108544,
+          "output_tokens": 815,
+          "reasoning_output_tokens": 145
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 28.212025999993784,
+      "image": "experiments/assets/planar-workflow-task-3-pair-1-baseline.png",
+      "image_sha256": "0138325a9506151d68c9298cf4fc35a28b4cbb18a5f74ed28d7e417c2a0130fe",
+      "model_sha256": "bb9e40e15de29b3e602fe2197b515319a7ff8dc6d923c012df8f742f56d615a4",
+      "evaluation_sha256": "bff18d20a9fbce885edf1a67a15df987c9b27b6141d4dfe79192e4995c053c1d",
+      "modeling_pid": 79513,
+      "judging_pid": 6706,
+      "failed_checks": []
+    },
+    {
+      "id": "task-3-pair-1-candidate",
+      "family": "through-holes",
+      "task": "experiments/tasks/through_hole.json",
+      "arm": "candidate",
+      "pair": 1,
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 7,
+        "completed_calls": 7,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "boolean_difference": 1,
+          "create_object": 2,
+          "get_object_info": 1,
+          "get_objects": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 111686,
+          "cached_input_tokens": 96512,
+          "output_tokens": 923,
+          "reasoning_output_tokens": 190
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 31.793475541984662,
+      "image": "experiments/assets/planar-workflow-task-3-pair-1-candidate.png",
+      "image_sha256": "d8fa84a4d221772ed7bfde8790a9d78531a2c09840768519c9b5fa0722e00342",
+      "model_sha256": "8598e07bde082783c71d792089e37eb094d07d66ea719506bb86b98504ae26e3",
+      "evaluation_sha256": "6316a18494506a53b4ceb4af3ecb846fe7e3b14c4fa3376ae90a39e29f64d153",
+      "modeling_pid": 96508,
+      "judging_pid": 6706,
+      "failed_checks": []
+    },
+    {
+      "id": "task-3-pair-2-candidate",
+      "family": "through-holes",
+      "task": "experiments/tasks/through_hole.json",
+      "arm": "candidate",
+      "pair": 2,
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 7,
+        "completed_calls": 7,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "boolean_difference": 1,
+          "create_object": 2,
+          "get_object_info": 1,
+          "get_objects": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 141930,
+          "cached_input_tokens": 115968,
+          "output_tokens": 904,
+          "reasoning_output_tokens": 154
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 47.98021441700985,
+      "image": "experiments/assets/planar-workflow-task-3-pair-2-candidate.png",
+      "image_sha256": "0138325a9506151d68c9298cf4fc35a28b4cbb18a5f74ed28d7e417c2a0130fe",
+      "model_sha256": "1ddba691148f0f1444ba2064e6e501ceb585b4ac388815240033fb3811ce719f",
+      "evaluation_sha256": "d8b67ccfda80061c21269f441a4458e97ab17d730e2d94fc2be5ff044124ceea",
+      "modeling_pid": 96508,
+      "judging_pid": 6706,
+      "failed_checks": []
+    },
+    {
+      "id": "task-3-pair-2-baseline",
+      "family": "through-holes",
+      "task": "experiments/tasks/through_hole.json",
+      "arm": "baseline",
+      "pair": 2,
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 7,
+        "completed_calls": 7,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "boolean_difference": 1,
+          "create_object": 3,
+          "delete_object": 1,
+          "get_objects": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 126667,
+          "cached_input_tokens": 108544,
+          "output_tokens": 869,
+          "reasoning_output_tokens": 170
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 33.729191083984915,
+      "image": "experiments/assets/planar-workflow-task-3-pair-2-baseline.png",
+      "image_sha256": "0138325a9506151d68c9298cf4fc35a28b4cbb18a5f74ed28d7e417c2a0130fe",
+      "model_sha256": "dee586899f9ff8f5639eef306b08b3036e998ddef72ab6581e546eb6d6f571e7",
+      "evaluation_sha256": "23c7781da62238f2906302073b73e20e7f4e055b0c7d255ac1c8e250b1a852f4",
+      "modeling_pid": 6706,
+      "judging_pid": 6706,
+      "failed_checks": []
+    }
+  ],
+  "resources": {
+    "tool_attempts": 154,
+    "model_seconds": 908.5499917499546,
+    "sessions": 12
+  },
+  "limitations": [
+    "Two repeats per arm/task; descriptive evidence, not statistical proof.",
+    "Requested model alias/effort pinned; backend snapshot unavailable.",
+    "Panel discovery tasks are not held-out families.",
+    "Correctness precedes efficiency; tokens/time are secondary observations.",
+    "Evaluation uses a fresh trusted baseline process after candidate shutdown; this is not an adversarial OS sandbox."
+  ]
+}

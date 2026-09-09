@@ -673,9 +673,9 @@ class TestDryRunCapabilityGate:
         assert set(legacy_mock_server.objects) == before
 
     def test_old_plugin_serves_a_normal_boolean_unchanged(self, legacy_mock_server, monkeypatch):
-        """Without dry_run nothing is gated: the command goes straight out and
-        the capability lookup never happens, so the old plugin is served exactly
-        as it was before."""
+        """Without dry_run nothing else is gated: after the one capabilities read
+        every connection makes, the command goes straight out and the old plugin
+        is served exactly as it was before."""
         from rhinomcp.tools.boolean_operations import boolean_union
 
         conn = self._connection(monkeypatch, 19998)
@@ -684,7 +684,7 @@ class TestDryRunCapabilityGate:
         result = boolean_union(ctx=None, object_ids=[a, b], name="OldPluginUnion")
 
         assert "Boolean union created" in result
-        assert "describe_capabilities" not in legacy_mock_server.received_commands
+        assert legacy_mock_server.received_commands.count("describe_capabilities") == 1
 
     def test_dry_run_runs_end_to_end_when_the_plugin_advertises_it(self, mock_server, monkeypatch):
         from rhinomcp.tools.boolean_operations import boolean_union
@@ -705,8 +705,8 @@ class TestDryRunCapabilityGate:
         from rhinomcp.tools.boolean_operations import boolean_union
 
         conn = self._connection(monkeypatch, 19999)
-        a, b = self._two_boxes(conn)
         mock_server.received_commands.clear()
+        a, b = self._two_boxes(conn)
 
         for _ in range(3):
             boolean_union(ctx=None, object_ids=[a, b], dry_run=True)
@@ -720,8 +720,8 @@ class TestDryRunCapabilityGate:
         from rhinomcp.tools.boolean_operations import boolean_union
 
         conn = self._connection(monkeypatch, 19999)
-        a, b = self._two_boxes(conn)
         mock_server.received_commands.clear()
+        a, b = self._two_boxes(conn)
 
         boolean_union(ctx=None, object_ids=[a, b], dry_run=True)
         conn.disconnect()

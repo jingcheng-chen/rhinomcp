@@ -1,0 +1,257 @@
+{
+  "status": "baseline_discovery_only",
+  "run": "experiments/runs/workflow-baseline-20260908-093443-2dc0c8bc",
+  "audit": {
+    "purpose": "Find cross-task workflow friction, not score modeling quality or claim improvement.",
+    "families": [
+      "curved-panels"
+    ],
+    "runs": [
+      {
+        "id": "panel-raised-v1",
+        "family": "curved-panels",
+        "available": true,
+        "source": "experiments/runs/workflow-baseline-20260908-093443-2dc0c8bc/task-1",
+        "source_sha256": "ea6bf17bb62bf5289500964163faff2190d5b2003619b1baaeb3df94a97e7a70",
+        "session_status": "completed",
+        "elapsed_seconds": 140.29454612499103,
+        "task_verdict": "pass",
+        "agent_claim_complete": true,
+        "evaluation_sha256": "fc135c2f1f37cd1c3e0751e6fb31236f92310220b8ab0e61ec168afa64e1467c",
+        "metrics": {
+          "mcp_attempts": 8,
+          "completed_calls": 8,
+          "unfinished_calls": 0,
+          "failed_calls": 0,
+          "failures_by_tool": {},
+          "tools": {
+            "analyze_objects": 2,
+            "create_object": 2,
+            "delete_object": 1,
+            "get_object_info": 1,
+            "get_objects": 2
+          },
+          "commands": {},
+          "schema_queries": 0,
+          "delete_calls": 0,
+          "usage": {
+            "input_tokens": 176183,
+            "cached_input_tokens": 145408,
+            "output_tokens": 4383,
+            "reasoning_output_tokens": 3441
+          },
+          "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+        ]
+      },
+      {
+        "id": "panel-depressed-v1",
+        "family": "curved-panels",
+        "available": true,
+        "source": "experiments/runs/workflow-baseline-20260908-093443-2dc0c8bc/task-2",
+        "source_sha256": "da63e19b07f37d9bb7c385ac188c18dba6938830fae75e967bc9105d079c5497",
+        "session_status": "completed",
+        "elapsed_seconds": 114.58054854098009,
+        "task_verdict": "fail",
+        "agent_claim_complete": true,
+        "evaluation_sha256": "d194d07c3110ad442b3845613f22b4cb42d44dd8008bf214fcdff257f2fb2edb",
+        "metrics": {
+          "mcp_attempts": 8,
+          "completed_calls": 8,
+          "unfinished_calls": 0,
+          "failed_calls": 0,
+          "failures_by_tool": {},
+          "tools": {
+            "analyze_objects": 2,
+            "create_object": 2,
+            "delete_object": 1,
+            "get_objects": 3
+          },
+          "commands": {},
+          "schema_queries": 0,
+          "delete_calls": 0,
+          "usage": {
+            "input_tokens": 193232,
+            "cached_input_tokens": 148736,
+            "output_tokens": 3223,
+            "reasoning_output_tokens": 2248
+          },
+          "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+        ]
+      }
+    ],
+    "promotion_authorized": false,
+    "limitation": "Historical heterogeneous observations only. Missing data stays unknown; task success and efficiency are separate."
+  },
+  "images": [
+    {
+      "task": "raised",
+      "source": "experiments/runs/workflow-baseline-20260908-093443-2dc0c8bc/task-1/perspective.png",
+      "image": "experiments/assets/panel-baseline-raised.png",
+      "image_sha256": "eab60cd4565e7811fb71d632c7411eeb0f64c7bcd38d35d16dd6ba37965f6905",
+      "model_sha256": "1df2eeb92c4e3a32b28d8639fdd6c3a773aaad1096f3e5a6f962ccf47f03d8e2",
+      "evaluation": {
+        "status": "pass",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": true,
+          "reference_to_surface": true,
+          "surface_to_reference": true,
+          "rectangular_boundary": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "outer_loops": 1,
+              "inner_loops": 0,
+              "min": [
+                0.0,
+                0.0,
+                -6.843025372395452e-07
+              ],
+              "max": [
+                100.00000000000001,
+                80.00000005926657,
+                19.999999874200668
+              ],
+              "reference_error": 5.342365569834891e-07,
+              "surface_error": 6.841566157964047e-07,
+              "boundary_error": 6.841566157964047e-07
+            }
+          ]
+        },
+        "limitation": "41\u00d741 bidirectional samples and 41 samples per edge; not a continuous Hausdorff bound",
+        "artifact_sha256": "1df2eeb92c4e3a32b28d8639fdd6c3a773aaad1096f3e5a6f962ccf47f03d8e2"
+      },
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "326aaa12-b851-4c6a-afcb-45291e734a5c",
+          "version": "0.3.2.0",
+          "pid": 66421,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "a8791fdfd00500113f138375a6b196d32b191873a1c5ef228e4fe1fd1df193e1",
+        "codex_version": "codex-cli 0.144.1",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 24,
+        "timeout_seconds": 240
+      }
+    },
+    {
+      "task": "depressed",
+      "source": "experiments/runs/workflow-baseline-20260908-093443-2dc0c8bc/task-2/perspective.png",
+      "image": "experiments/assets/panel-baseline-depressed.png",
+      "image_sha256": "235e61fee979ecba27588af4e03f64ff434a6ec6d32d07a171bca2d1d322261b",
+      "model_sha256": "6556f3025fc3f485dd0f94c17492f4d9c4cf5c60924cff6126116a8120615560",
+      "evaluation": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "outer_loops": 1,
+              "inner_loops": 0,
+              "min": [
+                -3.552713678800501e-15,
+                0.0,
+                -11.279773585655017
+              ],
+              "max": [
+                100.0,
+                80.0000000000008,
+                4.4853010194856324e-13
+              ],
+              "reference_error": 4.094289531444477,
+              "surface_error": 4.146889715396897,
+              "boundary_error": 8.242295734817162e-13
+            }
+          ]
+        },
+        "limitation": "41\u00d741 bidirectional samples and 41 samples per edge; not a continuous Hausdorff bound",
+        "artifact_sha256": "6556f3025fc3f485dd0f94c17492f4d9c4cf5c60924cff6126116a8120615560"
+      },
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "326aaa12-b851-4c6a-afcb-45291e734a5c",
+          "version": "0.3.2.0",
+          "pid": 66421,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "a8791fdfd00500113f138375a6b196d32b191873a1c5ef228e4fe1fd1df193e1",
+        "codex_version": "codex-cli 0.144.1",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 24,
+        "timeout_seconds": 240
+      }
+    }
+  ],
+  "candidate_tested": false,
+  "promotion_authorized": false
+}

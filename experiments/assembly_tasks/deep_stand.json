@@ -1,0 +1,10 @@
+{
+  "id": "deep_stand",
+  "root": "Stand",
+  "layers": ["Stand", "Stand::Left", "Stand::Left::Support", "Stand::Left::Support::Part", "Stand::Right", "Stand::Right::Support", "Stand::Right::Support::Part", "Stand::Top", "Stand::Top::Part"],
+  "parts": [
+    {"name": "left_post", "layer": "Stand::Left::Support::Part", "min": [0, 0, 0], "max": [10, 20, 40]},
+    {"name": "right_post", "layer": "Stand::Right::Support::Part", "min": [60, 0, 0], "max": [70, 20, 40]},
+    {"name": "top", "layer": "Stand::Top::Part", "min": [-5, -5, 40], "max": [75, 25, 50]}
+  ]
+}

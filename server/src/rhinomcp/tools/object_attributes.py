@@ -1,4 +1,4 @@
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp
 from typing import Any, Dict, List, Optional, Union
@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, Union
 UserStringValue = Union[str, int, float, bool, None]
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def get_object_attributes(
     ctx: Context,
     id: Optional[str] = None,

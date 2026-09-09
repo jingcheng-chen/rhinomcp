@@ -180,7 +180,8 @@ public partial class RhinoMCPFunctions
         metrics["face_count"] = brep.Faces.Count;
         metrics["edge_count"] = brep.Edges.Count;
         metrics["vertex_count"] = brep.Vertices.Count;
-        metrics["naked_edge_count"] = brep.DuplicateNakedEdgeCurves(true, false)?.Length ?? 0;
+        // Count topology directly: inner hole boundaries are naked too; seams are not.
+        metrics["naked_edge_count"] = brep.Edges.Count(edge => edge.Valence == EdgeAdjacency.Naked);
 
         var area = AreaMassProperties.Compute(brep);
         if (area != null)

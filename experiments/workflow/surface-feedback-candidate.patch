@@ -1,0 +1,55 @@
+diff --git a/plugin/Functions/_utils.cs b/plugin/Functions/_utils.cs
+index 4b43eab..44b158c 100644
+--- a/plugin/Functions/_utils.cs
++++ b/plugin/Functions/_utils.cs
+@@ -137,7 +137,7 @@ public partial class RhinoMCPFunctions
+         var xform = Transform.Identity;
+ 
+         // Calculate the center for rotation
+-        BoundingBox bbox = geometry.GetBoundingBox(true);
++        BoundingBox bbox = Serializer.GetBoundingBox(geometry);
+         Point3d center = bbox.Center;
+ 
+         // Create rotation transformations (in radians)
+@@ -169,7 +169,7 @@ public partial class RhinoMCPFunctions
+         var xform = Transform.Identity;
+ 
+         // Calculate the min for scaling
+-        BoundingBox bbox = geometry.GetBoundingBox(true);
++        BoundingBox bbox = Serializer.GetBoundingBox(geometry);
+         Point3d anchor = bbox.Min;
+         Plane plane = Plane.WorldXY;
+         plane.Origin = anchor;
+diff --git a/plugin/Serializers/Serializer.cs b/plugin/Serializers/Serializer.cs
+index 0079289..8b5f238 100644
+--- a/plugin/Serializers/Serializer.cs
++++ b/plugin/Serializers/Serializer.cs
+@@ -54,6 +54,19 @@ namespace rhinomcp.Serializers
+             };
+         }
+ 
++        public static BoundingBox GetBoundingBox(GeometryBase geometry)
++        {
++            if (geometry is Brep brep)
++            {
++                using (Brep duplicate = brep.DuplicateBrep())
++                {
++                    return duplicate.GetBoundingBox(true);
++                }
++            }
++
++            return geometry.GetBoundingBox(true);
++        }
++
+         public static JArray SerializeBBox(BoundingBox bbox)
+         {
+             return new JArray
+@@ -99,7 +112,7 @@ namespace rhinomcp.Serializers
+             };
+ 
+             // add boundingbox
+-            BoundingBox bbox = obj.Geometry.GetBoundingBox(true);
++            BoundingBox bbox = GetBoundingBox(obj.Geometry);
+             objInfo["bounding_box"] = SerializeBBox(bbox);
+ 
+             // Add geometry data

@@ -9,7 +9,7 @@ These tools provide a simple, hallucination-free interface for:
 - Pipe: Create a pipe along a curve
 """
 
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from rhinomcp.server import get_rhino_connection, mcp, logger
 from typing import List, Optional, Dict, Any
 
@@ -121,6 +121,7 @@ def sweep1(
     profile_ids: List[str],
     name: Optional[str] = None,
     closed: bool = False,
+    cap_planar_ends: bool = False,
 ) -> Dict[str, Any]:
     """
     Sweep one or more profile curves along a rail curve.
@@ -130,6 +131,9 @@ def sweep1(
     - profile_ids: List of profile curve IDs (GUIDs) - the shapes to sweep
     - name: Optional name for the resulting surface
     - closed: If True, creates a closed sweep
+    - cap_planar_ends: If True, cap planar holes at document tolerance. Every
+      result must become a valid solid before any result is added; otherwise
+      the operation fails and leaves the document unchanged (default: False).
 
     Returns:
     - Dictionary with result_ids (list of created surface IDs) and message
@@ -149,6 +153,7 @@ def sweep1(
             "rail_id": rail_id,
             "profile_ids": profile_ids,
             "closed": closed,
+            "cap_planar_ends": cap_planar_ends,
         }
         if name:
             params["name"] = name

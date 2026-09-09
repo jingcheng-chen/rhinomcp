@@ -1,6 +1,6 @@
 [project]
 name = "rhinomcp"
-version = "0.3.2"
+version = "0.4.0"
 description = "Rhino integration through the Model Context Protocol"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -14,7 +14,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "mcp[cli]>=1.16.0",
+    "mcp[cli]>=2.0.0,<3",
 ]
 
 [project.optional-dependencies]
@@ -22,6 +22,7 @@ validation = [
     "jsonschema>=4.20.0",
 ]
 dev = [
+    "pillow>=11.0.0",
     "jsonschema>=4.20.0",
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
@@ -42,3 +43,6 @@ package-dir = {"" = "src"}
 [project.urls]
 "Homepage" = "https://github.com/jingcheng-chen/rhinomcp"
 "Bug Tracker" = "https://github.com/jingcheng-chen/rhinomcp/issues"
+
+[tool.setuptools.package-data]
+rhinomcp = ["guides/*.md"]

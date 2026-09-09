@@ -1,0 +1,4 @@
+{
+  "id": "continuous_cushion_top_v1",
+  "instruction": "Build one continuous smooth 2x2 cushion TOP surface, not a closed solid yet. Units mm. World footprint x=0..100, y=0..100. Target height z=10+20*f(x/100)*f(y/100), where f(t)=432*t*t*(t-0.5)*(t-0.5)*(t-1)*(t-1). This gives four rounded lobes, recessed crossing seams at x=50 and y=50, and perimeter at z=10. Match the height field within 1 mm across the patch; no faceting, interior creases, holes, separate panels or extra geometry. One valid untrimmed single-face surface with smooth first derivatives is the intended representation. Name it cushion_top and place it on Cushion::Upholstery::Top; all three layers and the object must be visible and unlocked. Preserve existing empty layers. Read available command schemas, use existing surface tools, inspect attributes and report honestly. The supervisor saves, measures and captures the model independently."
+}

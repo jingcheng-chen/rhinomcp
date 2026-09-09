@@ -1,10 +1,10 @@
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
-from rhinomcp.server import get_rhino_connection, mcp
+from rhinomcp.server import get_rhino_connection, mcp, version_skew_report
 from typing import Any, Dict
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def describe_capabilities(ctx: Context) -> Dict[str, Any]:
     """
     Describe what this MCP server itself can do.
@@ -21,6 +21,13 @@ def describe_capabilities(ctx: Context) -> Dict[str, Any]:
       supports_dry_run is absent on plugins older than the flag; read that as no.
     - perception: the opt-in envelope flags (include_delta, include_health) and
       what each attaches to a mutating command's result
+    - server_version: this Python server's version
+    - plugin_matches_server: whether plugin and server versions agree (null when
+      either is unknown)
+    - update_advice: which side is older and how to update it, or null
     """
     rhino = get_rhino_connection()
-    return rhino.send_command("describe_capabilities", {})
+    result = rhino.send_command("describe_capabilities", {})
+    if isinstance(result, dict):
+        result.update(version_skew_report(result.get("version")))
+    return result

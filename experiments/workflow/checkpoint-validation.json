@@ -1,0 +1,32 @@
+{
+  "id": "checkpoint-continuation-validation-v1",
+  "suite": "experiments/workflow/checkpoint-validation-suite.json",
+  "agent": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "medium"
+  },
+  "repeats": 2,
+  "acceptance": "correctness_then_calls_v1",
+  "evaluation_mode": "trusted_baseline",
+  "binaries": {
+    "baseline": {
+      "path": "experiments/runs/capability-20260908-185137-c39dd1c1/trial-529ffc4d/candidate.rhp",
+      "identity": {
+        "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+        "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+      }
+    },
+    "candidate": {
+      "path": "experiments/runs/capability-20260908-185137-c39dd1c1/trial-529ffc4d/baseline.rhp",
+      "identity": {
+        "sha256": "a8791fdfd00500113f138375a6b196d32b191873a1c5ef228e4fe1fd1df193e1",
+        "mvid": "326aaa12-b851-4c6a-afcb-45291e734a5c"
+      }
+    }
+  },
+  "resource_limits": {
+    "sessions": 4,
+    "tool_attempts": 60,
+    "model_seconds": 600
+  }
+}

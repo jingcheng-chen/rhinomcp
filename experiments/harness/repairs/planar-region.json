@@ -1,0 +1,31 @@
+{
+  "id": "planar-region-v1",
+  "baseline_revision": "af90db1a0cab300db4efa892a596aa473b49bc81",
+  "commands": {
+    "create_planar_region": "CreatePlanarRegion"
+  },
+  "create_paths": [
+    "server/src/rhinomcp/tools/create_planar_region.py",
+    "plugin/Functions/CreatePlanarRegion.cs",
+    "contracts/commands/create_planar_region.json",
+    "server/tests/test_create_planar_region.py"
+  ],
+  "write_paths": [
+    "contracts/protocol.json",
+    "contracts/test_schemas.py"
+  ],
+  "read_paths": [
+    "server/src/rhinomcp/tools/create_planar_region.py",
+    "plugin/Functions/CreatePlanarRegion.cs",
+    "contracts/commands/create_planar_region.json",
+    "server/tests/test_create_planar_region.py",
+    "contracts/protocol.json",
+    "contracts/test_schemas.py",
+    "plugin/Functions/CurveOperations.cs",
+    "plugin/Functions/_utils.cs",
+    "server/src/rhinomcp/tools/create_object.py",
+    "contracts/commands/sweep1.json",
+    "server/tests/test_curve_operations.py"
+  ],
+  "instructions": "Implement the reviewed typed create_planar_region tool. Inputs: outer_curve_id (GUID), inner_curve_ids (list of distinct GUIDs, default empty), name (optional). Produce exactly one valid open planar Brep face with one outer loop and exactly the supplied inner loops. Preserve all input objects; do not add a delete_sources option. Return the created object id, face/loop counts and a clear success result. Python must be a thin @mcp.tool wrapper forwarding the matching command through send_command; exceptions must remain tool errors. Add a closed params JSON schema, protocol enum entry, envelope coverage, and meaningful Python transport/default/error plus schema positive/negative tests in the declared new test file. C# validates existing curve objects, closure, valid geometry, common plane at document tolerance, no self-intersection, strict containment of every inner loop and pairwise disjoint nonnested inner loops. Reject duplicate IDs, open/nonplanar/crossing/touching/outside/nested loops. Use duplicated input curves and RhinoCommon planar-region construction; preserve input geometry/attributes on success and failure. Validate all geometry before adding one result; any invalid/failed construction leaves no output objects. Dispose temporary geometry. Preserve all other protocol definitions, prior envelope commands, tool descriptions and behavior. This is a generic planar-boundary capability, not a benchmark-specific recipe. You cannot run tests through this gateway: implement tests but state they are unrun. The supervisor will independently review, build, calibrate and compare; do not claim acceptance or installation."
+}

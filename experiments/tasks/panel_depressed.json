@@ -1,0 +1,20 @@
+{
+  "id": "panel-depressed-v1",
+  "type": "biquadratic_panel",
+  "instruction": "Build exactly one open rectangular curved panel as a single Brep face in millimeters. In its local coordinates, 0 <= x <= 100 and 0 <= y <= 80, the surface is z = 16 * (-15) * (x/100) * (1-x/100) * (y/80) * (1-y/80). All four edges have local z=0; the center has local z=-15. Rotate this local shape -30 degrees about the world X axis through the origin, then translate by [-60, 80, 45]. These define the final world coordinates, not a rotation about the shape center. Leave no other objects. The rectangular boundary must have no holes. Use the available RhinoMCP tools.",
+  "dimensions": [
+    100,
+    80,
+    15
+  ],
+  "panel_height": -15,
+  "rotation_x_degrees": -30,
+  "translation": [
+    -60,
+    80,
+    45
+  ],
+  "units": "Millimeters",
+  "linear_tolerance": 0.05,
+  "volume_tolerance": 0.01
+}

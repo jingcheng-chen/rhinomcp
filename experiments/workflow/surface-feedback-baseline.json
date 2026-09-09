@@ -1,0 +1,623 @@
+{
+  "status": "candidate_only_not_built_or_installed",
+  "baseline_run": "experiments/runs/surface-feedback-20260907-171728",
+  "builder_run": "experiments/runs/repair-20260907-171657-ec239178",
+  "patch_sha256": "33d8c31cd3074d890cc95de8eb3c96edf7921433644f6faeffe77ed60001a2b4",
+  "results": {
+    "raised": {
+      "request": {
+        "type": "SURFACE",
+        "name": "raised",
+        "params": {
+          "count": [
+            3,
+            3
+          ],
+          "degree": [
+            2,
+            2
+          ],
+          "closed": [
+            false,
+            false
+          ],
+          "points": [
+            [
+              0,
+              0,
+              10
+            ],
+            [
+              0,
+              50,
+              10
+            ],
+            [
+              0,
+              100,
+              10
+            ],
+            [
+              50,
+              0,
+              10
+            ],
+            [
+              50,
+              50,
+              30
+            ],
+            [
+              50,
+              100,
+              10
+            ],
+            [
+              100,
+              0,
+              10
+            ],
+            [
+              100,
+              50,
+              10
+            ],
+            [
+              100,
+              100,
+              10
+            ]
+          ]
+        }
+      },
+      "response": {
+        "id": "87b64468-1460-45c8-bd00-caee99e23c32",
+        "name": "raised",
+        "type": "Brep",
+        "layer": "Default",
+        "material": "-1",
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 0
+        },
+        "bounding_box": [
+          [
+            0.0,
+            0.0,
+            10.0
+          ],
+          [
+            100.0,
+            100.0,
+            10.0
+          ]
+        ]
+      },
+      "measured": {
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            10.0
+          ],
+          [
+            100.0,
+            100.0,
+            30.0
+          ]
+        ],
+        "center": [
+          50.0,
+          50.0,
+          30.0
+        ]
+      },
+      "expected_bounds": [
+        [
+          0,
+          0,
+          10
+        ],
+        [
+          100,
+          100,
+          30
+        ]
+      ],
+      "expected_center": [
+        50,
+        50,
+        30
+      ],
+      "checks": {
+        "response_bounds": false,
+        "geometry_bounds": true,
+        "geometry_center": true,
+        "repeat_identical": true
+      },
+      "artifact_sha256": "5cb8d376976cf702a7629bf8cd467b492a4dd05450b14a659843415bc59f2a15"
+    },
+    "depressed": {
+      "request": {
+        "type": "SURFACE",
+        "name": "depressed",
+        "params": {
+          "count": [
+            3,
+            3
+          ],
+          "degree": [
+            2,
+            2
+          ],
+          "closed": [
+            false,
+            false
+          ],
+          "points": [
+            [
+              0,
+              0,
+              10
+            ],
+            [
+              0,
+              50,
+              10
+            ],
+            [
+              0,
+              100,
+              10
+            ],
+            [
+              50,
+              0,
+              10
+            ],
+            [
+              50,
+              50,
+              -10
+            ],
+            [
+              50,
+              100,
+              10
+            ],
+            [
+              100,
+              0,
+              10
+            ],
+            [
+              100,
+              50,
+              10
+            ],
+            [
+              100,
+              100,
+              10
+            ]
+          ]
+        }
+      },
+      "response": {
+        "id": "b67930c1-b606-4dea-85fc-a819040a8aa0",
+        "name": "depressed",
+        "type": "Brep",
+        "layer": "Default",
+        "material": "-1",
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 0
+        },
+        "bounding_box": [
+          [
+            0.0,
+            0.0,
+            10.0
+          ],
+          [
+            100.0,
+            100.0,
+            10.0
+          ]
+        ]
+      },
+      "measured": {
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            -10.0
+          ],
+          [
+            100.0,
+            100.0,
+            10.0
+          ]
+        ],
+        "center": [
+          50.0,
+          50.0,
+          -10.0
+        ]
+      },
+      "expected_bounds": [
+        [
+          0,
+          0,
+          -10
+        ],
+        [
+          100,
+          100,
+          10
+        ]
+      ],
+      "expected_center": [
+        50,
+        50,
+        -10
+      ],
+      "checks": {
+        "response_bounds": false,
+        "geometry_bounds": true,
+        "geometry_center": true,
+        "repeat_identical": true
+      },
+      "artifact_sha256": "7685c6b36b4ef4be06208aa4398b06fdbe40a6e97ec37276005f1970f98ae257"
+    },
+    "rotated": {
+      "request": {
+        "type": "SURFACE",
+        "name": "rotated",
+        "params": {
+          "count": [
+            3,
+            3
+          ],
+          "degree": [
+            2,
+            2
+          ],
+          "closed": [
+            false,
+            false
+          ],
+          "points": [
+            [
+              0,
+              0,
+              10
+            ],
+            [
+              0,
+              50,
+              10
+            ],
+            [
+              0,
+              100,
+              10
+            ],
+            [
+              50,
+              0,
+              10
+            ],
+            [
+              50,
+              50,
+              30
+            ],
+            [
+              50,
+              100,
+              10
+            ],
+            [
+              100,
+              0,
+              10
+            ],
+            [
+              100,
+              50,
+              10
+            ],
+            [
+              100,
+              100,
+              10
+            ]
+          ]
+        },
+        "rotation": [
+          1.5707963267948966,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "id": "f7d4598d-22ad-4378-bfbe-b1d679f83fbf",
+        "name": "rotated",
+        "type": "Brep",
+        "layer": "Default",
+        "material": "-1",
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 0
+        },
+        "bounding_box": [
+          [
+            0.0,
+            50.0,
+            -40.0
+          ],
+          [
+            100.0,
+            50.0,
+            60.0
+          ]
+        ]
+      },
+      "measured": {
+        "bounds": [
+          [
+            0.0,
+            30.0,
+            -40.0
+          ],
+          [
+            100.0,
+            50.0,
+            60.0
+          ]
+        ],
+        "center": [
+          50.0,
+          30.0,
+          10.0
+        ]
+      },
+      "expected_bounds": [
+        [
+          0,
+          40,
+          -30
+        ],
+        [
+          100,
+          60,
+          70
+        ]
+      ],
+      "expected_center": [
+        50,
+        40,
+        20
+      ],
+      "checks": {
+        "response_bounds": false,
+        "geometry_bounds": false,
+        "geometry_center": false,
+        "repeat_identical": true
+      },
+      "artifact_sha256": "a184b9299299182f7813b35993d26712fb367b499cb1d82b04e48c48f1d4657c"
+    },
+    "scaled": {
+      "request": {
+        "type": "SURFACE",
+        "name": "scaled",
+        "params": {
+          "count": [
+            3,
+            3
+          ],
+          "degree": [
+            2,
+            2
+          ],
+          "closed": [
+            false,
+            false
+          ],
+          "points": [
+            [
+              0,
+              0,
+              10
+            ],
+            [
+              0,
+              50,
+              10
+            ],
+            [
+              0,
+              100,
+              10
+            ],
+            [
+              50,
+              0,
+              10
+            ],
+            [
+              50,
+              50,
+              -10
+            ],
+            [
+              50,
+              100,
+              10
+            ],
+            [
+              100,
+              0,
+              10
+            ],
+            [
+              100,
+              50,
+              10
+            ],
+            [
+              100,
+              100,
+              10
+            ]
+          ]
+        },
+        "scale": [
+          1,
+          1,
+          2
+        ]
+      },
+      "response": {
+        "id": "fc3296c0-ec1c-4215-b0f9-0462897db4bd",
+        "name": "scaled",
+        "type": "Brep",
+        "layer": "Default",
+        "material": "-1",
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 0
+        },
+        "bounding_box": [
+          [
+            0.0,
+            0.0,
+            10.0
+          ],
+          [
+            100.0,
+            100.0,
+            10.0
+          ]
+        ]
+      },
+      "measured": {
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            -30.0
+          ],
+          [
+            100.0,
+            100.0,
+            10.0
+          ]
+        ],
+        "center": [
+          50.0,
+          50.0,
+          -30.0
+        ]
+      },
+      "expected_bounds": [
+        [
+          0,
+          0,
+          -10
+        ],
+        [
+          100,
+          100,
+          30
+        ]
+      ],
+      "expected_center": [
+        50,
+        50,
+        -10
+      ],
+      "checks": {
+        "response_bounds": false,
+        "geometry_bounds": false,
+        "geometry_center": false,
+        "repeat_identical": true
+      },
+      "artifact_sha256": "4a88f09591b9b2d0cca4ea1078833e1e64fa422bba9c92e347c205fba1ea7f05"
+    },
+    "trimmed_solid": {
+      "measured": {
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            100.0,
+            60.0,
+            20.0
+          ]
+        ],
+        "source_unchanged": true,
+        "solid": true
+      },
+      "checks": {
+        "bounds": true,
+        "source_unchanged": true,
+        "solid": true
+      }
+    }
+  },
+  "images": {
+    "raised": {
+      "source": "experiments/runs/surface-feedback-20260907-171728/raised/perspective.png",
+      "image_sha256": "a76603729610ec711fb5f1051049c50066f4e56d4a46fbcfe336d1a7a78c663e",
+      "artifact_sha256": "5cb8d376976cf702a7629bf8cd467b492a4dd05450b14a659843415bc59f2a15",
+      "checks": {
+        "response_bounds": false,
+        "geometry_bounds": true,
+        "geometry_center": true,
+        "repeat_identical": true
+      }
+    },
+    "depressed": {
+      "source": "experiments/runs/surface-feedback-20260907-171728/depressed/perspective.png",
+      "image_sha256": "1b047f139672c58d4d182c5efa8a5249e67ba9be71fa1f43f1c3ecb1fbfc2e17",
+      "artifact_sha256": "7685c6b36b4ef4be06208aa4398b06fdbe40a6e97ec37276005f1970f98ae257",
+      "checks": {
+        "response_bounds": false,
+        "geometry_bounds": true,
+        "geometry_center": true,
+        "repeat_identical": true
+      }
+    },
+    "rotated": {
+      "source": "experiments/runs/surface-feedback-20260907-171728/rotated/perspective.png",
+      "image_sha256": "4f63e5ba994f68caf44b69d4d523cc6435303a575f515b836454eba9dc368f6a",
+      "artifact_sha256": "a184b9299299182f7813b35993d26712fb367b499cb1d82b04e48c48f1d4657c",
+      "checks": {
+        "response_bounds": false,
+        "geometry_bounds": false,
+        "geometry_center": false,
+        "repeat_identical": true
+      }
+    },
+    "scaled": {
+      "source": "experiments/runs/surface-feedback-20260907-171728/scaled/perspective.png",
+      "image_sha256": "65f508568edaded516d3e1ad93b29b5a3d7111a0ca7bfaa25ccee8f29bf556f7",
+      "artifact_sha256": "4a88f09591b9b2d0cca4ea1078833e1e64fa422bba9c92e347c205fba1ea7f05",
+      "checks": {
+        "response_bounds": false,
+        "geometry_bounds": false,
+        "geometry_center": false,
+        "repeat_identical": true
+      }
+    }
+  }
+}

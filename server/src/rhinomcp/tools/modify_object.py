@@ -1,4 +1,4 @@
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from rhinomcp.server import get_rhino_connection, mcp
 from typing import Any, List, Dict, Optional
 
@@ -13,7 +13,7 @@ def modify_object(
     translation: Optional[List[float]] = None,
     rotation: Optional[List[float]] = None,
     scale: Optional[List[float]] = None,
-    visible: Optional[bool] = None
+    visible: Optional[bool] = None,
 ) -> Dict[str, Any]:
     """
     Modify an existing object in the Rhino document.
@@ -24,9 +24,13 @@ def modify_object(
     - new_name: Optional new name for the object
     - new_color: Optional [r, g, b] color values (0-255) for the object
     - translation: Optional [x, y, z] translation vector
-    - rotation: Optional [x, y, z] rotation in radians
-    - scale: Optional [x, y, z] scale factors
+    - rotation: Optional [x, y, z] rotation in radians around the pre-edit
+      bounding-box center, not the world origin
+    - scale: Optional [x, y, z] scale factors anchored at the pre-edit bounding-box minimum
     - visible: Optional boolean to set visibility
+
+    Combined transforms apply scale, then Z/Y/X rotations, then translation.
+    For world-origin rotation or composed poses, read get_modeling_guidance("transforms").
 
     Returns a dict with success, id, name, message, plus bounding_box — the
     object's new post-edit axis-aligned extent — and, for curve-like types,
@@ -36,14 +40,22 @@ def modify_object(
     rhino = get_rhino_connection()
 
     params: Dict[str, Any] = {}
-    if id is not None: params["id"] = id
-    if name is not None: params["name"] = name
-    if new_name is not None: params["new_name"] = new_name
-    if new_color is not None: params["new_color"] = new_color
-    if translation is not None: params["translation"] = translation
-    if rotation is not None: params["rotation"] = rotation
-    if scale is not None: params["scale"] = scale
-    if visible is not None: params["visible"] = visible
+    if id is not None:
+        params["id"] = id
+    if name is not None:
+        params["name"] = name
+    if new_name is not None:
+        params["new_name"] = new_name
+    if new_color is not None:
+        params["new_color"] = new_color
+    if translation is not None:
+        params["translation"] = translation
+    if rotation is not None:
+        params["rotation"] = rotation
+    if scale is not None:
+        params["scale"] = scale
+    if visible is not None:
+        params["visible"] = visible
 
     result = rhino.send_command("modify_object", params)
     response: Dict[str, Any] = {

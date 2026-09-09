@@ -1,0 +1,82 @@
+[
+  {
+    "run": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-1-pair-1-baseline",
+    "file": "experiments/assets/placement-task-1-pair-1-baseline.png",
+    "sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+    "artifact_sha256": "a911b22a76d3583e0f218d8b6da1e856c391b06f543c79bdc1b62f97f1353b8a",
+    "verdict": "pass",
+    "arm": "baseline",
+    "pair": 1,
+    "family": "primitives"
+  },
+  {
+    "run": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-1-pair-1-candidate",
+    "file": "experiments/assets/placement-task-1-pair-1-candidate.png",
+    "sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+    "artifact_sha256": "fc11d3620cd7fa1514d952aa0179fb5c88fe32cb443b14d582101be72bd042c0",
+    "verdict": "pass",
+    "arm": "candidate",
+    "pair": 1,
+    "family": "primitives"
+  },
+  {
+    "run": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-1-pair-2-candidate",
+    "file": "experiments/assets/placement-task-1-pair-2-candidate.png",
+    "sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+    "artifact_sha256": "495bac39365afe498552b9f47feb2b26265899df0213c30ad13925ae837ae5a8",
+    "verdict": "pass",
+    "arm": "candidate",
+    "pair": 2,
+    "family": "primitives"
+  },
+  {
+    "run": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-1-pair-2-baseline",
+    "file": "experiments/assets/placement-task-1-pair-2-baseline.png",
+    "sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+    "artifact_sha256": "0d698198900fdd7e516c7343d98c70ede80aec7edd19439cfec7768fdce827ad",
+    "verdict": "pass",
+    "arm": "baseline",
+    "pair": 2,
+    "family": "primitives"
+  },
+  {
+    "run": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-2-pair-1-baseline",
+    "file": "experiments/assets/placement-task-2-pair-1-baseline.png",
+    "sha256": "0138325a9506151d68c9298cf4fc35a28b4cbb18a5f74ed28d7e417c2a0130fe",
+    "artifact_sha256": "0fe20a92752193cd0c10c204846fa962c02a9d33d097418e9d4f78fe21b2a959",
+    "verdict": "pass",
+    "arm": "baseline",
+    "pair": 1,
+    "family": "subtractive-solids"
+  },
+  {
+    "run": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-2-pair-1-candidate",
+    "file": "experiments/assets/placement-task-2-pair-1-candidate.png",
+    "sha256": "d8fa84a4d221772ed7bfde8790a9d78531a2c09840768519c9b5fa0722e00342",
+    "artifact_sha256": "9800ff66b86c39618ab7bdaf9c274ba13818dc4bb63b790b161925ed633e27e7",
+    "verdict": "pass",
+    "arm": "candidate",
+    "pair": 1,
+    "family": "subtractive-solids"
+  },
+  {
+    "run": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-2-pair-2-candidate",
+    "file": "experiments/assets/placement-task-2-pair-2-candidate.png",
+    "sha256": "d8fa84a4d221772ed7bfde8790a9d78531a2c09840768519c9b5fa0722e00342",
+    "artifact_sha256": "f2aace820854878a2d9c3f2899b2092c4c4ad3bd2abf2a3d2f50879dffd76c44",
+    "verdict": "pass",
+    "arm": "candidate",
+    "pair": 2,
+    "family": "subtractive-solids"
+  },
+  {
+    "run": "experiments/runs/workflow-comparison-20260907-101633-464f2821/task-2-pair-2-baseline",
+    "file": "experiments/assets/placement-task-2-pair-2-baseline.png",
+    "sha256": "d8fa84a4d221772ed7bfde8790a9d78531a2c09840768519c9b5fa0722e00342",
+    "artifact_sha256": "1eeb78f3a43507c493345edf89837e77d8d74d34d1506f9857d9b3ebf022dd07",
+    "verdict": "pass",
+    "arm": "baseline",
+    "pair": 2,
+    "family": "subtractive-solids"
+  }
+]

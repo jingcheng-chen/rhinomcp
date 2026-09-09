@@ -1,0 +1,2794 @@
+{
+  "status": "accepted_trial_baseline_restored_not_promoted",
+  "trial": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260907-171657-ec239178/trial-9983c15f",
+  "phases": {
+    "baseline": {
+      "identity": {
+        "sha256": "a8791fdfd00500113f138375a6b196d32b191873a1c5ef228e4fe1fd1df193e1",
+        "mvid": "326aaa12-b851-4c6a-afcb-45291e734a5c"
+      },
+      "cases": {
+        "geometry/box/correct": true,
+        "geometry/box/wrong_scale": true,
+        "geometry/box/wrong_position": true,
+        "geometry/box/extra_object": true,
+        "geometry/box/open_surface": true,
+        "geometry/box/wrong_units": true,
+        "geometry/prism/correct": true,
+        "geometry/prism/split_face": true,
+        "geometry/prism/wrong_rotation": true,
+        "geometry/prism/wrong_translation": true,
+        "geometry/prism/mirrored_triangle": true,
+        "geometry/prism/wrong_scale": true,
+        "geometry/prism/open_surface": true,
+        "geometry/prism/extra_object": true,
+        "geometry/prism/wrong_units": true,
+        "geometry/hole/correct_extrusion": true,
+        "geometry/hole/correct_brep": true,
+        "geometry/hole/correct_oversized_cutter": true,
+        "geometry/hole/wrong_location": true,
+        "geometry/hole/wrong_radius": true,
+        "geometry/hole/blind": true,
+        "geometry/hole/equal_volume_blind": true,
+        "geometry/hole/missing_hole": true,
+        "geometry/hole/extra_object": true,
+        "geometry/hole/open_surface": true,
+        "geometry/hole/wrong_units": true,
+        "capture/perspective-1000-750-fit-True": true,
+        "capture/perspective-400-1000-fit-True": true,
+        "capture/perspective-1000-400-fit-True": true,
+        "capture/top-1000-750-fit-True": true,
+        "capture/top-400-1000-fit-True": true,
+        "capture/top-1000-400-fit-True": true,
+        "capture/back-1000-750-fit-True": true,
+        "capture/back-400-1000-fit-True": true,
+        "capture/back-1000-400-fit-True": true,
+        "capture/perspective-1000-750-fit-False": true,
+        "capture/invalid-view": true,
+        "model/box": true,
+        "model/posed_prism": true,
+        "model/through_hole": true,
+        "model/reference_box": true,
+        "model/reference_box_swapped": true,
+        "control/reference_equal_volume_wrong_dimensions": true,
+        "model/quarter_strip_origin": true,
+        "model/quarter_strip_translated": true,
+        "sweep/default_open": true,
+        "sweep/false_open": true,
+        "sweep/cap_closed_false": true,
+        "sweep/cap_closed_true": true,
+        "sweep/reject_open_profile": true,
+        "sweep/closed_rail_default": true,
+        "sweep/closed_rail_cap": true,
+        "layers/root": true,
+        "layers/unique_short_parent": true,
+        "layers/full_path_parent": true,
+        "layers/saved_assembly": true,
+        "layers/automatic_name": true,
+        "layers/case_insensitive_path": true,
+        "layers/missing_parent": true,
+        "layers/ambiguous_parent": true,
+        "layers/duplicate_sibling": true,
+        "surface/raised/response_bounds": false,
+        "surface/raised/geometry_bounds": true,
+        "surface/raised/geometry_center": true,
+        "surface/raised/repeat_identical": true,
+        "surface/depressed/response_bounds": false,
+        "surface/depressed/geometry_bounds": true,
+        "surface/depressed/geometry_center": true,
+        "surface/depressed/repeat_identical": true,
+        "surface/rotated/response_bounds": false,
+        "surface/rotated/geometry_bounds": false,
+        "surface/rotated/geometry_center": false,
+        "surface/rotated/repeat_identical": true,
+        "surface/scaled/response_bounds": false,
+        "surface/scaled/geometry_bounds": false,
+        "surface/scaled/geometry_center": false,
+        "surface/scaled/repeat_identical": true,
+        "surface/trimmed_solid/bounds": true,
+        "surface/trimmed_solid/source_unchanged": true,
+        "surface/trimmed_solid/solid": true
+      },
+      "evidence": {
+        "box": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084100-c8e512e1/summary.json",
+          "sha256": "ef949f77158b0a50e65bd317a5d5dac0e1e99bd60a6ea1c606c97c5d7eb8fe0e"
+        },
+        "prism": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/evaluator-prism-20260908-084045/validation.json",
+          "sha256": "626d123ff5e23454c555dab626bd4874aab04d2765754f1df0502ed4116a1ede"
+        },
+        "hole": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/evaluator-hole-20260908-084049/validation.json",
+          "sha256": "39a5db26f1a5efc14adb7ecae5e0257d18e38156c71d62ac7dfd2bafc8e71024"
+        },
+        "capture": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/capture-validation-20260908-084054/validation.json",
+          "sha256": "467dc09b9590526b46b7366ac9448642c6f9f35a45d6beadf3201e10ceb905cf"
+        },
+        "posed_prism": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084136-a6f884e0/summary.json",
+          "sha256": "94a82ef7bdbd962ffa87a3b48295c520226d4a4500e8dfe3166eb9bfe6cdc06a"
+        },
+        "through_hole": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084246-cd48ad8d/summary.json",
+          "sha256": "e66402dfe505c8048e445654d2586ff300b712da3dfb3ecf00f308c19d93120a"
+        },
+        "reference_box": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084345-0a5f2c4c/summary.json",
+          "sha256": "7b108d338ebb641858667d30a15e50b5312006f522fd96b01bdb84c31ba7d987"
+        },
+        "reference_box_swapped": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084502-9828bd7b/summary.json",
+          "sha256": "4d5fe3845e3c8d9c776950b1755ef35da00ddd70dc9be0956bf03a5bb6704c5c"
+        },
+        "quarter_strip_origin": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084615-527f097b/summary.json",
+          "sha256": "f0104b6480808256b6f638977d0f7612b19a6840408b82f59d5efc1ccf1e89c2"
+        },
+        "quarter_strip_translated": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084724-3ab8818a/summary.json",
+          "sha256": "47fe78e1e5ffc9629e714564ae169ab6c77ce2523b9789d71ab98bc34206a38c"
+        },
+        "sweep_cap": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260907-171657-ec239178/trial-9983c15f/live-615e844d/sweep-cap/result.json",
+          "sha256": "10e0f02850c2a817daf2f4893f282f1b59a874db1591184fd7b5fd5a4b45638f"
+        },
+        "layer_parent": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260907-171657-ec239178/trial-9983c15f/live-615e844d/layer-parent/result.json",
+          "sha256": "03b7b6554a74e94edf778a984b2c06b2fec797fcc355acef6fe5750c22dcb366"
+        },
+        "surface_feedback": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-084857/results.json",
+          "sha256": "ab49a8060265becf83097aeff2d96060461128b0193a4519ad25b249294895aa"
+        }
+      },
+      "surface_results": {
+        "raised": {
+          "request": {
+            "type": "SURFACE",
+            "name": "raised",
+            "params": {
+              "count": [
+                3,
+                3
+              ],
+              "degree": [
+                2,
+                2
+              ],
+              "closed": [
+                false,
+                false
+              ],
+              "points": [
+                [
+                  0,
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  50,
+                  10
+                ],
+                [
+                  0,
+                  100,
+                  10
+                ],
+                [
+                  50,
+                  0,
+                  10
+                ],
+                [
+                  50,
+                  50,
+                  30
+                ],
+                [
+                  50,
+                  100,
+                  10
+                ],
+                [
+                  100,
+                  0,
+                  10
+                ],
+                [
+                  100,
+                  50,
+                  10
+                ],
+                [
+                  100,
+                  100,
+                  10
+                ]
+              ]
+            }
+          },
+          "response": {
+            "id": "a34b201c-ee8d-4c9c-91c0-9c1137e9a847",
+            "name": "raised",
+            "type": "Brep",
+            "layer": "Default",
+            "material": "-1",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            "bounding_box": [
+              [
+                0.0,
+                0.0,
+                10.0
+              ],
+              [
+                100.0,
+                100.0,
+                10.0
+              ]
+            ]
+          },
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                0.0,
+                10.0
+              ],
+              [
+                100.0,
+                100.0,
+                30.0
+              ]
+            ],
+            "center": [
+              50.0,
+              50.0,
+              30.0
+            ]
+          },
+          "expected_bounds": [
+            [
+              0,
+              0,
+              10
+            ],
+            [
+              100,
+              100,
+              30
+            ]
+          ],
+          "expected_center": [
+            50,
+            50,
+            30
+          ],
+          "checks": {
+            "response_bounds": false,
+            "geometry_bounds": true,
+            "geometry_center": true,
+            "repeat_identical": true
+          },
+          "artifact_sha256": "802e63cd241b9dede2ae352903de5d373c5fa3e939cbd5c00624bb52af73e451"
+        },
+        "depressed": {
+          "request": {
+            "type": "SURFACE",
+            "name": "depressed",
+            "params": {
+              "count": [
+                3,
+                3
+              ],
+              "degree": [
+                2,
+                2
+              ],
+              "closed": [
+                false,
+                false
+              ],
+              "points": [
+                [
+                  0,
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  50,
+                  10
+                ],
+                [
+                  0,
+                  100,
+                  10
+                ],
+                [
+                  50,
+                  0,
+                  10
+                ],
+                [
+                  50,
+                  50,
+                  -10
+                ],
+                [
+                  50,
+                  100,
+                  10
+                ],
+                [
+                  100,
+                  0,
+                  10
+                ],
+                [
+                  100,
+                  50,
+                  10
+                ],
+                [
+                  100,
+                  100,
+                  10
+                ]
+              ]
+            }
+          },
+          "response": {
+            "id": "d7adebc4-7bc7-4595-bb92-ddab6f23b124",
+            "name": "depressed",
+            "type": "Brep",
+            "layer": "Default",
+            "material": "-1",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            "bounding_box": [
+              [
+                0.0,
+                0.0,
+                10.0
+              ],
+              [
+                100.0,
+                100.0,
+                10.0
+              ]
+            ]
+          },
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                0.0,
+                -10.0
+              ],
+              [
+                100.0,
+                100.0,
+                10.0
+              ]
+            ],
+            "center": [
+              50.0,
+              50.0,
+              -10.0
+            ]
+          },
+          "expected_bounds": [
+            [
+              0,
+              0,
+              -10
+            ],
+            [
+              100,
+              100,
+              10
+            ]
+          ],
+          "expected_center": [
+            50,
+            50,
+            -10
+          ],
+          "checks": {
+            "response_bounds": false,
+            "geometry_bounds": true,
+            "geometry_center": true,
+            "repeat_identical": true
+          },
+          "artifact_sha256": "f259c02938c0f8b5084dd34a4866d8b5fc69b5f0c0f7612f83797938eddb2239"
+        },
+        "rotated": {
+          "request": {
+            "type": "SURFACE",
+            "name": "rotated",
+            "params": {
+              "count": [
+                3,
+                3
+              ],
+              "degree": [
+                2,
+                2
+              ],
+              "closed": [
+                false,
+                false
+              ],
+              "points": [
+                [
+                  0,
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  50,
+                  10
+                ],
+                [
+                  0,
+                  100,
+                  10
+                ],
+                [
+                  50,
+                  0,
+                  10
+                ],
+                [
+                  50,
+                  50,
+                  30
+                ],
+                [
+                  50,
+                  100,
+                  10
+                ],
+                [
+                  100,
+                  0,
+                  10
+                ],
+                [
+                  100,
+                  50,
+                  10
+                ],
+                [
+                  100,
+                  100,
+                  10
+                ]
+              ]
+            },
+            "rotation": [
+              1.5707963267948966,
+              0,
+              0
+            ]
+          },
+          "response": {
+            "id": "d7ec1948-54bf-4791-b7c4-bda42f492af4",
+            "name": "rotated",
+            "type": "Brep",
+            "layer": "Default",
+            "material": "-1",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            "bounding_box": [
+              [
+                0.0,
+                50.0,
+                -40.0
+              ],
+              [
+                100.0,
+                50.0,
+                60.0
+              ]
+            ]
+          },
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                30.0,
+                -40.0
+              ],
+              [
+                100.0,
+                50.0,
+                60.0
+              ]
+            ],
+            "center": [
+              50.0,
+              30.0,
+              10.0
+            ]
+          },
+          "expected_bounds": [
+            [
+              0,
+              40,
+              -30
+            ],
+            [
+              100,
+              60,
+              70
+            ]
+          ],
+          "expected_center": [
+            50,
+            40,
+            20
+          ],
+          "checks": {
+            "response_bounds": false,
+            "geometry_bounds": false,
+            "geometry_center": false,
+            "repeat_identical": true
+          },
+          "artifact_sha256": "b6ffcd4c0b7b7e0d7343086fe0851c7b58a93e68890acdb2959471e3e37c17a5"
+        },
+        "scaled": {
+          "request": {
+            "type": "SURFACE",
+            "name": "scaled",
+            "params": {
+              "count": [
+                3,
+                3
+              ],
+              "degree": [
+                2,
+                2
+              ],
+              "closed": [
+                false,
+                false
+              ],
+              "points": [
+                [
+                  0,
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  50,
+                  10
+                ],
+                [
+                  0,
+                  100,
+                  10
+                ],
+                [
+                  50,
+                  0,
+                  10
+                ],
+                [
+                  50,
+                  50,
+                  -10
+                ],
+                [
+                  50,
+                  100,
+                  10
+                ],
+                [
+                  100,
+                  0,
+                  10
+                ],
+                [
+                  100,
+                  50,
+                  10
+                ],
+                [
+                  100,
+                  100,
+                  10
+                ]
+              ]
+            },
+            "scale": [
+              1,
+              1,
+              2
+            ]
+          },
+          "response": {
+            "id": "b75e8d90-6800-471e-ba00-edc81102431d",
+            "name": "scaled",
+            "type": "Brep",
+            "layer": "Default",
+            "material": "-1",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            "bounding_box": [
+              [
+                0.0,
+                0.0,
+                10.0
+              ],
+              [
+                100.0,
+                100.0,
+                10.0
+              ]
+            ]
+          },
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                0.0,
+                -30.0
+              ],
+              [
+                100.0,
+                100.0,
+                10.0
+              ]
+            ],
+            "center": [
+              50.0,
+              50.0,
+              -30.0
+            ]
+          },
+          "expected_bounds": [
+            [
+              0,
+              0,
+              -10
+            ],
+            [
+              100,
+              100,
+              30
+            ]
+          ],
+          "expected_center": [
+            50,
+            50,
+            -10
+          ],
+          "checks": {
+            "response_bounds": false,
+            "geometry_bounds": false,
+            "geometry_center": false,
+            "repeat_identical": true
+          },
+          "artifact_sha256": "4517045e89993afb53c277844934f85dcc9c24356c4ee1eb02fd4be845fd5b56"
+        },
+        "trimmed_solid": {
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                100.0,
+                60.0,
+                20.0
+              ]
+            ],
+            "source_unchanged": true,
+            "solid": true
+          },
+          "checks": {
+            "bounds": true,
+            "source_unchanged": true,
+            "solid": true
+          }
+        }
+      }
+    },
+    "candidate": {
+      "identity": {
+        "sha256": "3a79ef7ffde3194d21ffca8274b58837c7eade562c5e9c6d630b18de88a74677",
+        "mvid": "606ab732-416a-4b80-b041-19a264b21b2f"
+      },
+      "cases": {
+        "geometry/box/correct": true,
+        "geometry/box/wrong_scale": true,
+        "geometry/box/wrong_position": true,
+        "geometry/box/extra_object": true,
+        "geometry/box/open_surface": true,
+        "geometry/box/wrong_units": true,
+        "geometry/prism/correct": true,
+        "geometry/prism/split_face": true,
+        "geometry/prism/wrong_rotation": true,
+        "geometry/prism/wrong_translation": true,
+        "geometry/prism/mirrored_triangle": true,
+        "geometry/prism/wrong_scale": true,
+        "geometry/prism/open_surface": true,
+        "geometry/prism/extra_object": true,
+        "geometry/prism/wrong_units": true,
+        "geometry/hole/correct_extrusion": true,
+        "geometry/hole/correct_brep": true,
+        "geometry/hole/correct_oversized_cutter": true,
+        "geometry/hole/wrong_location": true,
+        "geometry/hole/wrong_radius": true,
+        "geometry/hole/blind": true,
+        "geometry/hole/equal_volume_blind": true,
+        "geometry/hole/missing_hole": true,
+        "geometry/hole/extra_object": true,
+        "geometry/hole/open_surface": true,
+        "geometry/hole/wrong_units": true,
+        "capture/perspective-1000-750-fit-True": true,
+        "capture/perspective-400-1000-fit-True": true,
+        "capture/perspective-1000-400-fit-True": true,
+        "capture/top-1000-750-fit-True": true,
+        "capture/top-400-1000-fit-True": true,
+        "capture/top-1000-400-fit-True": true,
+        "capture/back-1000-750-fit-True": true,
+        "capture/back-400-1000-fit-True": true,
+        "capture/back-1000-400-fit-True": true,
+        "capture/perspective-1000-750-fit-False": true,
+        "capture/invalid-view": true,
+        "model/box": true,
+        "model/posed_prism": true,
+        "model/through_hole": true,
+        "model/reference_box": true,
+        "model/reference_box_swapped": true,
+        "control/reference_equal_volume_wrong_dimensions": true,
+        "model/quarter_strip_origin": true,
+        "model/quarter_strip_translated": true,
+        "sweep/default_open": true,
+        "sweep/false_open": true,
+        "sweep/cap_closed_false": true,
+        "sweep/cap_closed_true": true,
+        "sweep/reject_open_profile": true,
+        "sweep/closed_rail_default": true,
+        "sweep/closed_rail_cap": true,
+        "layers/root": true,
+        "layers/unique_short_parent": true,
+        "layers/full_path_parent": true,
+        "layers/saved_assembly": true,
+        "layers/automatic_name": true,
+        "layers/case_insensitive_path": true,
+        "layers/missing_parent": true,
+        "layers/ambiguous_parent": true,
+        "layers/duplicate_sibling": true,
+        "surface/raised/response_bounds": true,
+        "surface/raised/geometry_bounds": true,
+        "surface/raised/geometry_center": true,
+        "surface/raised/repeat_identical": true,
+        "surface/depressed/response_bounds": true,
+        "surface/depressed/geometry_bounds": true,
+        "surface/depressed/geometry_center": true,
+        "surface/depressed/repeat_identical": true,
+        "surface/rotated/response_bounds": true,
+        "surface/rotated/geometry_bounds": true,
+        "surface/rotated/geometry_center": true,
+        "surface/rotated/repeat_identical": true,
+        "surface/scaled/response_bounds": true,
+        "surface/scaled/geometry_bounds": true,
+        "surface/scaled/geometry_center": true,
+        "surface/scaled/repeat_identical": true,
+        "surface/trimmed_solid/bounds": true,
+        "surface/trimmed_solid/source_unchanged": true,
+        "surface/trimmed_solid/solid": true
+      },
+      "evidence": {
+        "box": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085125-c3f0f5e3/summary.json",
+          "sha256": "138d755d57abc6bbe75c3621e08310c37299f65954964abe23e3dacfecf7bff3"
+        },
+        "prism": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/evaluator-prism-20260908-085114/validation.json",
+          "sha256": "626d123ff5e23454c555dab626bd4874aab04d2765754f1df0502ed4116a1ede"
+        },
+        "hole": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/evaluator-hole-20260908-085117/validation.json",
+          "sha256": "39a5db26f1a5efc14adb7ecae5e0257d18e38156c71d62ac7dfd2bafc8e71024"
+        },
+        "capture": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/capture-validation-20260908-085120/validation.json",
+          "sha256": "82599296dfba08bed0563262b95b6c41f6c24c23ada44ea0fa0ff04600e585a2"
+        },
+        "posed_prism": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085202-05830734/summary.json",
+          "sha256": "0e19f454b55efd36021af04bd2fd29cd04d2a43e858bb8878c7eeb8430526f53"
+        },
+        "through_hole": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085309-5e41ccaf/summary.json",
+          "sha256": "52d27112f1cf60373ebca764f5f16320118b66c3f61a70861a020e2762e82bd1"
+        },
+        "reference_box": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085404-ae4b5e4f/summary.json",
+          "sha256": "28e2e6119c99e2e94471d2b9978d25ced103f8085c6497d6d751c8a687fff47d"
+        },
+        "reference_box_swapped": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085502-cff3fbd2/summary.json",
+          "sha256": "060b7d35c997ebadd72ebbb78d9ccaf3178676035d2ac18a3dcf199def124c9e"
+        },
+        "quarter_strip_origin": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085607-0888a42c/summary.json",
+          "sha256": "2828828c5216f33f81d0fe056d1edbad4b5ad52378d4b4d9a6693802e0e4577a"
+        },
+        "quarter_strip_translated": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085714-4a11e2fe/summary.json",
+          "sha256": "abf92f48ef6f288b1bc9765bed957c5eec24b660564820d927a069d3326ff2ae"
+        },
+        "sweep_cap": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260907-171657-ec239178/trial-9983c15f/live-945072a1/sweep-cap/result.json",
+          "sha256": "10e0f02850c2a817daf2f4893f282f1b59a874db1591184fd7b5fd5a4b45638f"
+        },
+        "layer_parent": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260907-171657-ec239178/trial-9983c15f/live-945072a1/layer-parent/result.json",
+          "sha256": "03b7b6554a74e94edf778a984b2c06b2fec797fcc355acef6fe5750c22dcb366"
+        },
+        "surface_feedback": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-085842/results.json",
+          "sha256": "1c608060e442576258cc6469052c4b0cf30780ac1bc1f9d16578ba5e1d556e91"
+        }
+      },
+      "surface_results": {
+        "raised": {
+          "request": {
+            "type": "SURFACE",
+            "name": "raised",
+            "params": {
+              "count": [
+                3,
+                3
+              ],
+              "degree": [
+                2,
+                2
+              ],
+              "closed": [
+                false,
+                false
+              ],
+              "points": [
+                [
+                  0,
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  50,
+                  10
+                ],
+                [
+                  0,
+                  100,
+                  10
+                ],
+                [
+                  50,
+                  0,
+                  10
+                ],
+                [
+                  50,
+                  50,
+                  30
+                ],
+                [
+                  50,
+                  100,
+                  10
+                ],
+                [
+                  100,
+                  0,
+                  10
+                ],
+                [
+                  100,
+                  50,
+                  10
+                ],
+                [
+                  100,
+                  100,
+                  10
+                ]
+              ]
+            }
+          },
+          "response": {
+            "id": "2a7b8d81-8183-4e4c-9d6a-5cd543001248",
+            "name": "raised",
+            "type": "Brep",
+            "layer": "Default",
+            "material": "-1",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            "bounding_box": [
+              [
+                0.0,
+                0.0,
+                10.0
+              ],
+              [
+                100.0,
+                100.0,
+                30.0
+              ]
+            ]
+          },
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                0.0,
+                10.0
+              ],
+              [
+                100.0,
+                100.0,
+                30.0
+              ]
+            ],
+            "center": [
+              50.0,
+              50.0,
+              30.0
+            ]
+          },
+          "expected_bounds": [
+            [
+              0,
+              0,
+              10
+            ],
+            [
+              100,
+              100,
+              30
+            ]
+          ],
+          "expected_center": [
+            50,
+            50,
+            30
+          ],
+          "checks": {
+            "response_bounds": true,
+            "geometry_bounds": true,
+            "geometry_center": true,
+            "repeat_identical": true
+          },
+          "artifact_sha256": "73b0e021e127e9075bf7789a8a55d7c814d3f070d0cf2639aef6d804512c7ef9"
+        },
+        "depressed": {
+          "request": {
+            "type": "SURFACE",
+            "name": "depressed",
+            "params": {
+              "count": [
+                3,
+                3
+              ],
+              "degree": [
+                2,
+                2
+              ],
+              "closed": [
+                false,
+                false
+              ],
+              "points": [
+                [
+                  0,
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  50,
+                  10
+                ],
+                [
+                  0,
+                  100,
+                  10
+                ],
+                [
+                  50,
+                  0,
+                  10
+                ],
+                [
+                  50,
+                  50,
+                  -10
+                ],
+                [
+                  50,
+                  100,
+                  10
+                ],
+                [
+                  100,
+                  0,
+                  10
+                ],
+                [
+                  100,
+                  50,
+                  10
+                ],
+                [
+                  100,
+                  100,
+                  10
+                ]
+              ]
+            }
+          },
+          "response": {
+            "id": "1b3b1aed-08f8-4121-a4d5-eebd8a85f2ef",
+            "name": "depressed",
+            "type": "Brep",
+            "layer": "Default",
+            "material": "-1",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            "bounding_box": [
+              [
+                0.0,
+                0.0,
+                -10.0
+              ],
+              [
+                100.0,
+                100.0,
+                10.0
+              ]
+            ]
+          },
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                0.0,
+                -10.0
+              ],
+              [
+                100.0,
+                100.0,
+                10.0
+              ]
+            ],
+            "center": [
+              50.0,
+              50.0,
+              -10.0
+            ]
+          },
+          "expected_bounds": [
+            [
+              0,
+              0,
+              -10
+            ],
+            [
+              100,
+              100,
+              10
+            ]
+          ],
+          "expected_center": [
+            50,
+            50,
+            -10
+          ],
+          "checks": {
+            "response_bounds": true,
+            "geometry_bounds": true,
+            "geometry_center": true,
+            "repeat_identical": true
+          },
+          "artifact_sha256": "37705af9caf1ff18cfb00d8595f26c4420ab06f1bbe6847770d2d64fbdd69ace"
+        },
+        "rotated": {
+          "request": {
+            "type": "SURFACE",
+            "name": "rotated",
+            "params": {
+              "count": [
+                3,
+                3
+              ],
+              "degree": [
+                2,
+                2
+              ],
+              "closed": [
+                false,
+                false
+              ],
+              "points": [
+                [
+                  0,
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  50,
+                  10
+                ],
+                [
+                  0,
+                  100,
+                  10
+                ],
+                [
+                  50,
+                  0,
+                  10
+                ],
+                [
+                  50,
+                  50,
+                  30
+                ],
+                [
+                  50,
+                  100,
+                  10
+                ],
+                [
+                  100,
+                  0,
+                  10
+                ],
+                [
+                  100,
+                  50,
+                  10
+                ],
+                [
+                  100,
+                  100,
+                  10
+                ]
+              ]
+            },
+            "rotation": [
+              1.5707963267948966,
+              0,
+              0
+            ]
+          },
+          "response": {
+            "id": "e33e7006-6777-4429-89d1-4e5100f219cb",
+            "name": "rotated",
+            "type": "Brep",
+            "layer": "Default",
+            "material": "-1",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            "bounding_box": [
+              [
+                0.0,
+                40.0,
+                -30.0
+              ],
+              [
+                100.0,
+                60.0,
+                70.0
+              ]
+            ]
+          },
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                40.0,
+                -30.0
+              ],
+              [
+                100.0,
+                60.0,
+                70.0
+              ]
+            ],
+            "center": [
+              50.0,
+              40.0,
+              20.0
+            ]
+          },
+          "expected_bounds": [
+            [
+              0,
+              40,
+              -30
+            ],
+            [
+              100,
+              60,
+              70
+            ]
+          ],
+          "expected_center": [
+            50,
+            40,
+            20
+          ],
+          "checks": {
+            "response_bounds": true,
+            "geometry_bounds": true,
+            "geometry_center": true,
+            "repeat_identical": true
+          },
+          "artifact_sha256": "2a908ea0cb027279af730d38a84e270c250ab1da93afe38a255dcaa79478b58e"
+        },
+        "scaled": {
+          "request": {
+            "type": "SURFACE",
+            "name": "scaled",
+            "params": {
+              "count": [
+                3,
+                3
+              ],
+              "degree": [
+                2,
+                2
+              ],
+              "closed": [
+                false,
+                false
+              ],
+              "points": [
+                [
+                  0,
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  50,
+                  10
+                ],
+                [
+                  0,
+                  100,
+                  10
+                ],
+                [
+                  50,
+                  0,
+                  10
+                ],
+                [
+                  50,
+                  50,
+                  -10
+                ],
+                [
+                  50,
+                  100,
+                  10
+                ],
+                [
+                  100,
+                  0,
+                  10
+                ],
+                [
+                  100,
+                  50,
+                  10
+                ],
+                [
+                  100,
+                  100,
+                  10
+                ]
+              ]
+            },
+            "scale": [
+              1,
+              1,
+              2
+            ]
+          },
+          "response": {
+            "id": "6f136cce-252f-460c-869a-d3114c92344a",
+            "name": "scaled",
+            "type": "Brep",
+            "layer": "Default",
+            "material": "-1",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            "bounding_box": [
+              [
+                0.0,
+                0.0,
+                -10.0
+              ],
+              [
+                100.0,
+                100.0,
+                30.0
+              ]
+            ]
+          },
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                0.0,
+                -10.0
+              ],
+              [
+                100.0,
+                100.0,
+                30.0
+              ]
+            ],
+            "center": [
+              50.0,
+              50.0,
+              -10.0
+            ]
+          },
+          "expected_bounds": [
+            [
+              0,
+              0,
+              -10
+            ],
+            [
+              100,
+              100,
+              30
+            ]
+          ],
+          "expected_center": [
+            50,
+            50,
+            -10
+          ],
+          "checks": {
+            "response_bounds": true,
+            "geometry_bounds": true,
+            "geometry_center": true,
+            "repeat_identical": true
+          },
+          "artifact_sha256": "302bff05589ad3663a7666273c2fe203ad2215f07dc406d21263c1e6483a4d06"
+        },
+        "trimmed_solid": {
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                100.0,
+                60.0,
+                20.0
+              ]
+            ],
+            "source_unchanged": true,
+            "solid": true
+          },
+          "checks": {
+            "bounds": true,
+            "source_unchanged": true,
+            "solid": true
+          }
+        }
+      }
+    },
+    "restored": {
+      "identity": {
+        "sha256": "a8791fdfd00500113f138375a6b196d32b191873a1c5ef228e4fe1fd1df193e1",
+        "mvid": "326aaa12-b851-4c6a-afcb-45291e734a5c"
+      },
+      "cases": {
+        "geometry/box/correct": true,
+        "geometry/box/wrong_scale": true,
+        "geometry/box/wrong_position": true,
+        "geometry/box/extra_object": true,
+        "geometry/box/open_surface": true,
+        "geometry/box/wrong_units": true,
+        "geometry/prism/correct": true,
+        "geometry/prism/split_face": true,
+        "geometry/prism/wrong_rotation": true,
+        "geometry/prism/wrong_translation": true,
+        "geometry/prism/mirrored_triangle": true,
+        "geometry/prism/wrong_scale": true,
+        "geometry/prism/open_surface": true,
+        "geometry/prism/extra_object": true,
+        "geometry/prism/wrong_units": true,
+        "geometry/hole/correct_extrusion": true,
+        "geometry/hole/correct_brep": true,
+        "geometry/hole/correct_oversized_cutter": true,
+        "geometry/hole/wrong_location": true,
+        "geometry/hole/wrong_radius": true,
+        "geometry/hole/blind": true,
+        "geometry/hole/equal_volume_blind": true,
+        "geometry/hole/missing_hole": true,
+        "geometry/hole/extra_object": true,
+        "geometry/hole/open_surface": true,
+        "geometry/hole/wrong_units": true,
+        "capture/perspective-1000-750-fit-True": true,
+        "capture/perspective-400-1000-fit-True": true,
+        "capture/perspective-1000-400-fit-True": true,
+        "capture/top-1000-750-fit-True": true,
+        "capture/top-400-1000-fit-True": true,
+        "capture/top-1000-400-fit-True": true,
+        "capture/back-1000-750-fit-True": true,
+        "capture/back-400-1000-fit-True": true,
+        "capture/back-1000-400-fit-True": true,
+        "capture/perspective-1000-750-fit-False": true,
+        "capture/invalid-view": true,
+        "model/box": true,
+        "model/posed_prism": true,
+        "model/through_hole": true,
+        "model/reference_box": true,
+        "model/reference_box_swapped": true,
+        "control/reference_equal_volume_wrong_dimensions": true,
+        "model/quarter_strip_origin": true,
+        "model/quarter_strip_translated": true,
+        "sweep/default_open": true,
+        "sweep/false_open": true,
+        "sweep/cap_closed_false": true,
+        "sweep/cap_closed_true": true,
+        "sweep/reject_open_profile": true,
+        "sweep/closed_rail_default": true,
+        "sweep/closed_rail_cap": true,
+        "layers/root": true,
+        "layers/unique_short_parent": true,
+        "layers/full_path_parent": true,
+        "layers/saved_assembly": true,
+        "layers/automatic_name": true,
+        "layers/case_insensitive_path": true,
+        "layers/missing_parent": true,
+        "layers/ambiguous_parent": true,
+        "layers/duplicate_sibling": true,
+        "surface/raised/response_bounds": false,
+        "surface/raised/geometry_bounds": true,
+        "surface/raised/geometry_center": true,
+        "surface/raised/repeat_identical": true,
+        "surface/depressed/response_bounds": false,
+        "surface/depressed/geometry_bounds": true,
+        "surface/depressed/geometry_center": true,
+        "surface/depressed/repeat_identical": true,
+        "surface/rotated/response_bounds": false,
+        "surface/rotated/geometry_bounds": false,
+        "surface/rotated/geometry_center": false,
+        "surface/rotated/repeat_identical": true,
+        "surface/scaled/response_bounds": false,
+        "surface/scaled/geometry_bounds": false,
+        "surface/scaled/geometry_center": false,
+        "surface/scaled/repeat_identical": true,
+        "surface/trimmed_solid/bounds": true,
+        "surface/trimmed_solid/source_unchanged": true,
+        "surface/trimmed_solid/solid": true
+      },
+      "evidence": {
+        "box": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090045-5f22ad53/summary.json",
+          "sha256": "b0fea6843363fbe2b482b760f7145ad0edb58303b0f4c9c1ac213b9bbefb451a"
+        },
+        "prism": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/evaluator-prism-20260908-090034/validation.json",
+          "sha256": "626d123ff5e23454c555dab626bd4874aab04d2765754f1df0502ed4116a1ede"
+        },
+        "hole": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/evaluator-hole-20260908-090036/validation.json",
+          "sha256": "39a5db26f1a5efc14adb7ecae5e0257d18e38156c71d62ac7dfd2bafc8e71024"
+        },
+        "capture": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/capture-validation-20260908-090040/validation.json",
+          "sha256": "085e68e8f5a5a633a001670060a0f47eca53bd004fbdfdc160829f4091453830"
+        },
+        "posed_prism": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090126-d7b406b7/summary.json",
+          "sha256": "cde96c09d5dd01bac33133120f92949a2957ac2f6f91a46a253d0e9aa5c9ce66"
+        },
+        "through_hole": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090231-16ed5925/summary.json",
+          "sha256": "cfb46a020f83a9fc3edaaab9b49ba8196539e892874ba620475a0e28e3ef8114"
+        },
+        "reference_box": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090330-99539df7/summary.json",
+          "sha256": "7dfef393451f24874e52a25217e2d769d11e669ad471b579b0b3675e710ca282"
+        },
+        "reference_box_swapped": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090432-38db872c/summary.json",
+          "sha256": "2c077cd9289d86394fdeb20c84c4cdc010a3f27434e244880e9bddb08fd9978e"
+        },
+        "quarter_strip_origin": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090524-4965eb4b/summary.json",
+          "sha256": "9c2a7a15a777d6b14a710f89fb8cc3377eb9169bf9a334a6fcf55f5c79379d2d"
+        },
+        "quarter_strip_translated": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090629-18e1d7cf/summary.json",
+          "sha256": "7c7efbf9e3473642cd43d036b7e1bdcb436526dc711aa67b8d144ec30e2a5464"
+        },
+        "sweep_cap": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260907-171657-ec239178/trial-9983c15f/live-30fb2b65/sweep-cap/result.json",
+          "sha256": "10e0f02850c2a817daf2f4893f282f1b59a874db1591184fd7b5fd5a4b45638f"
+        },
+        "layer_parent": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260907-171657-ec239178/trial-9983c15f/live-30fb2b65/layer-parent/result.json",
+          "sha256": "03b7b6554a74e94edf778a984b2c06b2fec797fcc355acef6fe5750c22dcb366"
+        },
+        "surface_feedback": {
+          "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-090759/results.json",
+          "sha256": "a8c48fe664f1ed8662b9effe5a807781c46cfa9a1c24bc70d92dd13947b78ad8"
+        }
+      },
+      "surface_results": {
+        "raised": {
+          "request": {
+            "type": "SURFACE",
+            "name": "raised",
+            "params": {
+              "count": [
+                3,
+                3
+              ],
+              "degree": [
+                2,
+                2
+              ],
+              "closed": [
+                false,
+                false
+              ],
+              "points": [
+                [
+                  0,
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  50,
+                  10
+                ],
+                [
+                  0,
+                  100,
+                  10
+                ],
+                [
+                  50,
+                  0,
+                  10
+                ],
+                [
+                  50,
+                  50,
+                  30
+                ],
+                [
+                  50,
+                  100,
+                  10
+                ],
+                [
+                  100,
+                  0,
+                  10
+                ],
+                [
+                  100,
+                  50,
+                  10
+                ],
+                [
+                  100,
+                  100,
+                  10
+                ]
+              ]
+            }
+          },
+          "response": {
+            "id": "3385bf27-f7c3-4578-8493-4327ca8fdcec",
+            "name": "raised",
+            "type": "Brep",
+            "layer": "Default",
+            "material": "-1",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            "bounding_box": [
+              [
+                0.0,
+                0.0,
+                10.0
+              ],
+              [
+                100.0,
+                100.0,
+                10.0
+              ]
+            ]
+          },
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                0.0,
+                10.0
+              ],
+              [
+                100.0,
+                100.0,
+                30.0
+              ]
+            ],
+            "center": [
+              50.0,
+              50.0,
+              30.0
+            ]
+          },
+          "expected_bounds": [
+            [
+              0,
+              0,
+              10
+            ],
+            [
+              100,
+              100,
+              30
+            ]
+          ],
+          "expected_center": [
+            50,
+            50,
+            30
+          ],
+          "checks": {
+            "response_bounds": false,
+            "geometry_bounds": true,
+            "geometry_center": true,
+            "repeat_identical": true
+          },
+          "artifact_sha256": "9120596a4243005732070ef944d78e21214bfc571e99f4a8208e38725d402eb8"
+        },
+        "depressed": {
+          "request": {
+            "type": "SURFACE",
+            "name": "depressed",
+            "params": {
+              "count": [
+                3,
+                3
+              ],
+              "degree": [
+                2,
+                2
+              ],
+              "closed": [
+                false,
+                false
+              ],
+              "points": [
+                [
+                  0,
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  50,
+                  10
+                ],
+                [
+                  0,
+                  100,
+                  10
+                ],
+                [
+                  50,
+                  0,
+                  10
+                ],
+                [
+                  50,
+                  50,
+                  -10
+                ],
+                [
+                  50,
+                  100,
+                  10
+                ],
+                [
+                  100,
+                  0,
+                  10
+                ],
+                [
+                  100,
+                  50,
+                  10
+                ],
+                [
+                  100,
+                  100,
+                  10
+                ]
+              ]
+            }
+          },
+          "response": {
+            "id": "ad2d7a1e-a687-455d-ba43-d8ee8e21692e",
+            "name": "depressed",
+            "type": "Brep",
+            "layer": "Default",
+            "material": "-1",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            "bounding_box": [
+              [
+                0.0,
+                0.0,
+                10.0
+              ],
+              [
+                100.0,
+                100.0,
+                10.0
+              ]
+            ]
+          },
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                0.0,
+                -10.0
+              ],
+              [
+                100.0,
+                100.0,
+                10.0
+              ]
+            ],
+            "center": [
+              50.0,
+              50.0,
+              -10.0
+            ]
+          },
+          "expected_bounds": [
+            [
+              0,
+              0,
+              -10
+            ],
+            [
+              100,
+              100,
+              10
+            ]
+          ],
+          "expected_center": [
+            50,
+            50,
+            -10
+          ],
+          "checks": {
+            "response_bounds": false,
+            "geometry_bounds": true,
+            "geometry_center": true,
+            "repeat_identical": true
+          },
+          "artifact_sha256": "f7d96d9c4618a28602242f7c95acd55254e1d8d467f90c6a27ca67ec23c34247"
+        },
+        "rotated": {
+          "request": {
+            "type": "SURFACE",
+            "name": "rotated",
+            "params": {
+              "count": [
+                3,
+                3
+              ],
+              "degree": [
+                2,
+                2
+              ],
+              "closed": [
+                false,
+                false
+              ],
+              "points": [
+                [
+                  0,
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  50,
+                  10
+                ],
+                [
+                  0,
+                  100,
+                  10
+                ],
+                [
+                  50,
+                  0,
+                  10
+                ],
+                [
+                  50,
+                  50,
+                  30
+                ],
+                [
+                  50,
+                  100,
+                  10
+                ],
+                [
+                  100,
+                  0,
+                  10
+                ],
+                [
+                  100,
+                  50,
+                  10
+                ],
+                [
+                  100,
+                  100,
+                  10
+                ]
+              ]
+            },
+            "rotation": [
+              1.5707963267948966,
+              0,
+              0
+            ]
+          },
+          "response": {
+            "id": "90f29949-dc7d-41de-a66d-5848f9ce81ce",
+            "name": "rotated",
+            "type": "Brep",
+            "layer": "Default",
+            "material": "-1",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            "bounding_box": [
+              [
+                0.0,
+                50.0,
+                -40.0
+              ],
+              [
+                100.0,
+                50.0,
+                60.0
+              ]
+            ]
+          },
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                30.0,
+                -40.0
+              ],
+              [
+                100.0,
+                50.0,
+                60.0
+              ]
+            ],
+            "center": [
+              50.0,
+              30.0,
+              10.0
+            ]
+          },
+          "expected_bounds": [
+            [
+              0,
+              40,
+              -30
+            ],
+            [
+              100,
+              60,
+              70
+            ]
+          ],
+          "expected_center": [
+            50,
+            40,
+            20
+          ],
+          "checks": {
+            "response_bounds": false,
+            "geometry_bounds": false,
+            "geometry_center": false,
+            "repeat_identical": true
+          },
+          "artifact_sha256": "e344b54207f18bca4c005d6d2cb04e8f149e8511af20952bc1087dfdb3c39a35"
+        },
+        "scaled": {
+          "request": {
+            "type": "SURFACE",
+            "name": "scaled",
+            "params": {
+              "count": [
+                3,
+                3
+              ],
+              "degree": [
+                2,
+                2
+              ],
+              "closed": [
+                false,
+                false
+              ],
+              "points": [
+                [
+                  0,
+                  0,
+                  10
+                ],
+                [
+                  0,
+                  50,
+                  10
+                ],
+                [
+                  0,
+                  100,
+                  10
+                ],
+                [
+                  50,
+                  0,
+                  10
+                ],
+                [
+                  50,
+                  50,
+                  -10
+                ],
+                [
+                  50,
+                  100,
+                  10
+                ],
+                [
+                  100,
+                  0,
+                  10
+                ],
+                [
+                  100,
+                  50,
+                  10
+                ],
+                [
+                  100,
+                  100,
+                  10
+                ]
+              ]
+            },
+            "scale": [
+              1,
+              1,
+              2
+            ]
+          },
+          "response": {
+            "id": "0abdd5dd-a860-4645-a3da-54e2d69e134b",
+            "name": "scaled",
+            "type": "Brep",
+            "layer": "Default",
+            "material": "-1",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            "bounding_box": [
+              [
+                0.0,
+                0.0,
+                10.0
+              ],
+              [
+                100.0,
+                100.0,
+                10.0
+              ]
+            ]
+          },
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                0.0,
+                -30.0
+              ],
+              [
+                100.0,
+                100.0,
+                10.0
+              ]
+            ],
+            "center": [
+              50.0,
+              50.0,
+              -30.0
+            ]
+          },
+          "expected_bounds": [
+            [
+              0,
+              0,
+              -10
+            ],
+            [
+              100,
+              100,
+              30
+            ]
+          ],
+          "expected_center": [
+            50,
+            50,
+            -10
+          ],
+          "checks": {
+            "response_bounds": false,
+            "geometry_bounds": false,
+            "geometry_center": false,
+            "repeat_identical": true
+          },
+          "artifact_sha256": "911f396ccbd545446c74fe110568586cd4463370545cde6593e3242d9c17f0ed"
+        },
+        "trimmed_solid": {
+          "measured": {
+            "bounds": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                100.0,
+                60.0,
+                20.0
+              ]
+            ],
+            "source_unchanged": true,
+            "solid": true
+          },
+          "checks": {
+            "bounds": true,
+            "source_unchanged": true,
+            "solid": true
+          }
+        }
+      }
+    }
+  },
+  "images": [
+    {
+      "phase": "baseline",
+      "task": "raised",
+      "kind": "diagnostic fixture",
+      "image": "experiments/assets/surface-trial-baseline-raised.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-084857/raised/perspective.png",
+      "sha256": "a76603729610ec711fb5f1051049c50066f4e56d4a46fbcfe336d1a7a78c663e",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-084857/raised/candidate.3dm",
+      "model_sha256": "802e63cd241b9dede2ae352903de5d373c5fa3e939cbd5c00624bb52af73e451"
+    },
+    {
+      "phase": "baseline",
+      "task": "depressed",
+      "kind": "diagnostic fixture",
+      "image": "experiments/assets/surface-trial-baseline-depressed.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-084857/depressed/perspective.png",
+      "sha256": "1b047f139672c58d4d182c5efa8a5249e67ba9be71fa1f43f1c3ecb1fbfc2e17",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-084857/depressed/candidate.3dm",
+      "model_sha256": "f259c02938c0f8b5084dd34a4866d8b5fc69b5f0c0f7612f83797938eddb2239"
+    },
+    {
+      "phase": "baseline",
+      "task": "rotated",
+      "kind": "diagnostic fixture",
+      "image": "experiments/assets/surface-trial-baseline-rotated.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-084857/rotated/perspective.png",
+      "sha256": "4f63e5ba994f68caf44b69d4d523cc6435303a575f515b836454eba9dc368f6a",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-084857/rotated/candidate.3dm",
+      "model_sha256": "b6ffcd4c0b7b7e0d7343086fe0851c7b58a93e68890acdb2959471e3e37c17a5"
+    },
+    {
+      "phase": "baseline",
+      "task": "scaled",
+      "kind": "diagnostic fixture",
+      "image": "experiments/assets/surface-trial-baseline-scaled.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-084857/scaled/perspective.png",
+      "sha256": "65f508568edaded516d3e1ad93b29b5a3d7111a0ca7bfaa25ccee8f29bf556f7",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-084857/scaled/candidate.3dm",
+      "model_sha256": "4517045e89993afb53c277844934f85dcc9c24356c4ee1eb02fd4be845fd5b56"
+    },
+    {
+      "phase": "baseline",
+      "task": "box",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-baseline-box.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084100-c8e512e1/perspective.png",
+      "sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084100-c8e512e1/candidate.3dm",
+      "model_sha256": "c4c72b1cc39088e9fbec6dcf4ac614bef36b86763a77c02bb72f1b4344a9d889"
+    },
+    {
+      "phase": "baseline",
+      "task": "posed_prism",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-baseline-posed_prism.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084136-a6f884e0/perspective.png",
+      "sha256": "aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084136-a6f884e0/candidate.3dm",
+      "model_sha256": "7b26c616ebab39318ff25438687b49d5a5e4221f54d208cbe70178911625b36a"
+    },
+    {
+      "phase": "baseline",
+      "task": "through_hole",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-baseline-through_hole.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084246-cd48ad8d/perspective.png",
+      "sha256": "0138325a9506151d68c9298cf4fc35a28b4cbb18a5f74ed28d7e417c2a0130fe",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084246-cd48ad8d/candidate.3dm",
+      "model_sha256": "3db33296e071215ea297d8bfe8b406c3799bb2adeadfa070abccf2ac2eab0bc7"
+    },
+    {
+      "phase": "baseline",
+      "task": "reference_box",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-baseline-reference_box.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084345-0a5f2c4c/perspective.png",
+      "sha256": "518c6589313a94560c8182dad93783e46b362947e377bc20881cd7e2b54e261d",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084345-0a5f2c4c/candidate.3dm",
+      "model_sha256": "b617fcafd3aa973a70d756af05b7cd9cbd22fa86be82a59e242422ccd4b9caf4"
+    },
+    {
+      "phase": "baseline",
+      "task": "reference_box_swapped",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-baseline-reference_box_swapped.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084502-9828bd7b/perspective.png",
+      "sha256": "53219e63ce98d3b14146d1961969685183191d2dbeb20c5cd20be56603b8e00c",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084502-9828bd7b/candidate.3dm",
+      "model_sha256": "eb643426d814f66fe037766d7719a10dde0a76b731088d8d40299559a1801a65"
+    },
+    {
+      "phase": "baseline",
+      "task": "quarter_strip_origin",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-baseline-quarter_strip_origin.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084615-527f097b/perspective.png",
+      "sha256": "50c21e7841d3e42f85eab2bbfb34f2ca6dda34b680238d4fbac042c765010020",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084615-527f097b/candidate.3dm",
+      "model_sha256": "2260e8c46bfd211e986dba6097ab99c8ff15c0e2ef2fd41726f4dfeab6764efd"
+    },
+    {
+      "phase": "baseline",
+      "task": "quarter_strip_translated",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-baseline-quarter_strip_translated.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084724-3ab8818a/perspective.png",
+      "sha256": "ed372ef38abaac889c6fca72848e65308107efea323cddac89b2ccde68eb4f0e",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-084724-3ab8818a/candidate.3dm",
+      "model_sha256": "37ca46c5ab18824132a9870421127f98f389536894bc02f332d5a32194d1a361"
+    },
+    {
+      "phase": "candidate",
+      "task": "raised",
+      "kind": "diagnostic fixture",
+      "image": "experiments/assets/surface-trial-candidate-raised.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-085842/raised/perspective.png",
+      "sha256": "a76603729610ec711fb5f1051049c50066f4e56d4a46fbcfe336d1a7a78c663e",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-085842/raised/candidate.3dm",
+      "model_sha256": "73b0e021e127e9075bf7789a8a55d7c814d3f070d0cf2639aef6d804512c7ef9"
+    },
+    {
+      "phase": "candidate",
+      "task": "depressed",
+      "kind": "diagnostic fixture",
+      "image": "experiments/assets/surface-trial-candidate-depressed.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-085842/depressed/perspective.png",
+      "sha256": "1b047f139672c58d4d182c5efa8a5249e67ba9be71fa1f43f1c3ecb1fbfc2e17",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-085842/depressed/candidate.3dm",
+      "model_sha256": "37705af9caf1ff18cfb00d8595f26c4420ab06f1bbe6847770d2d64fbdd69ace"
+    },
+    {
+      "phase": "candidate",
+      "task": "rotated",
+      "kind": "diagnostic fixture",
+      "image": "experiments/assets/surface-trial-candidate-rotated.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-085842/rotated/perspective.png",
+      "sha256": "4f63e5ba994f68caf44b69d4d523cc6435303a575f515b836454eba9dc368f6a",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-085842/rotated/candidate.3dm",
+      "model_sha256": "2a908ea0cb027279af730d38a84e270c250ab1da93afe38a255dcaa79478b58e"
+    },
+    {
+      "phase": "candidate",
+      "task": "scaled",
+      "kind": "diagnostic fixture",
+      "image": "experiments/assets/surface-trial-candidate-scaled.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-085842/scaled/perspective.png",
+      "sha256": "7cc1babc1627bcfb52dc5eb83be0f7ea7f0806e1c9971f1325a152ba3caee82a",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-085842/scaled/candidate.3dm",
+      "model_sha256": "302bff05589ad3663a7666273c2fe203ad2215f07dc406d21263c1e6483a4d06"
+    },
+    {
+      "phase": "candidate",
+      "task": "box",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-candidate-box.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085125-c3f0f5e3/perspective.png",
+      "sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085125-c3f0f5e3/candidate.3dm",
+      "model_sha256": "96fe048f5c057be7ef4c3da1052257784185e1a72d8782de1fc10567466a4493"
+    },
+    {
+      "phase": "candidate",
+      "task": "posed_prism",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-candidate-posed_prism.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085202-05830734/perspective.png",
+      "sha256": "aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085202-05830734/candidate.3dm",
+      "model_sha256": "b9ce5e0fa806642629b4daa4dfd5f7a0dc5d9fbb32d6946985bc3f6150d6c2c4"
+    },
+    {
+      "phase": "candidate",
+      "task": "through_hole",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-candidate-through_hole.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085309-5e41ccaf/perspective.png",
+      "sha256": "0138325a9506151d68c9298cf4fc35a28b4cbb18a5f74ed28d7e417c2a0130fe",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085309-5e41ccaf/candidate.3dm",
+      "model_sha256": "47ced4058d4ce67495e4214bad5c788b4ae9f20c711229b9b62840dbe43b77fe"
+    },
+    {
+      "phase": "candidate",
+      "task": "reference_box",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-candidate-reference_box.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085404-ae4b5e4f/perspective.png",
+      "sha256": "518c6589313a94560c8182dad93783e46b362947e377bc20881cd7e2b54e261d",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085404-ae4b5e4f/candidate.3dm",
+      "model_sha256": "28e90b7460cfd2527cbaf451e71ffdf46fc36b1d6b0b0d9259886d09acd2889e"
+    },
+    {
+      "phase": "candidate",
+      "task": "reference_box_swapped",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-candidate-reference_box_swapped.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085502-cff3fbd2/perspective.png",
+      "sha256": "53219e63ce98d3b14146d1961969685183191d2dbeb20c5cd20be56603b8e00c",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085502-cff3fbd2/candidate.3dm",
+      "model_sha256": "3e049a8d34ebfee16ccdac25a81a5d9526dd59e6f28159ba3c9e1ec018853a68"
+    },
+    {
+      "phase": "candidate",
+      "task": "quarter_strip_origin",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-candidate-quarter_strip_origin.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085607-0888a42c/perspective.png",
+      "sha256": "50c21e7841d3e42f85eab2bbfb34f2ca6dda34b680238d4fbac042c765010020",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085607-0888a42c/candidate.3dm",
+      "model_sha256": "a9cb43c346bde99a776b9255c5ca8f7e6d30c8b1bb7ca792ce09caee041bb754"
+    },
+    {
+      "phase": "candidate",
+      "task": "quarter_strip_translated",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-candidate-quarter_strip_translated.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085714-4a11e2fe/perspective.png",
+      "sha256": "191f54be4eec7731b8cf355421ce737ebce31015ccfe1c56d25cb62cf3c89001",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085714-4a11e2fe/candidate.3dm",
+      "model_sha256": "0a7567a24e517196ac7fbb4f70e431969d221c01bd81ca040365dceda45a0219"
+    },
+    {
+      "phase": "restored",
+      "task": "raised",
+      "kind": "diagnostic fixture",
+      "image": "experiments/assets/surface-trial-restored-raised.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-090759/raised/perspective.png",
+      "sha256": "a76603729610ec711fb5f1051049c50066f4e56d4a46fbcfe336d1a7a78c663e",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-090759/raised/candidate.3dm",
+      "model_sha256": "9120596a4243005732070ef944d78e21214bfc571e99f4a8208e38725d402eb8"
+    },
+    {
+      "phase": "restored",
+      "task": "depressed",
+      "kind": "diagnostic fixture",
+      "image": "experiments/assets/surface-trial-restored-depressed.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-090759/depressed/perspective.png",
+      "sha256": "1b047f139672c58d4d182c5efa8a5249e67ba9be71fa1f43f1c3ecb1fbfc2e17",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-090759/depressed/candidate.3dm",
+      "model_sha256": "f7d96d9c4618a28602242f7c95acd55254e1d8d467f90c6a27ca67ec23c34247"
+    },
+    {
+      "phase": "restored",
+      "task": "rotated",
+      "kind": "diagnostic fixture",
+      "image": "experiments/assets/surface-trial-restored-rotated.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-090759/rotated/perspective.png",
+      "sha256": "4f63e5ba994f68caf44b69d4d523cc6435303a575f515b836454eba9dc368f6a",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-090759/rotated/candidate.3dm",
+      "model_sha256": "e344b54207f18bca4c005d6d2cb04e8f149e8511af20952bc1087dfdb3c39a35"
+    },
+    {
+      "phase": "restored",
+      "task": "scaled",
+      "kind": "diagnostic fixture",
+      "image": "experiments/assets/surface-trial-restored-scaled.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-090759/scaled/perspective.png",
+      "sha256": "65f508568edaded516d3e1ad93b29b5a3d7111a0ca7bfaa25ccee8f29bf556f7",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-090759/scaled/candidate.3dm",
+      "model_sha256": "911f396ccbd545446c74fe110568586cd4463370545cde6593e3242d9c17f0ed"
+    },
+    {
+      "phase": "restored",
+      "task": "box",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-restored-box.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090045-5f22ad53/perspective.png",
+      "sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090045-5f22ad53/candidate.3dm",
+      "model_sha256": "38806ee2d39674c74badc371f5c6f312994292e95dad5bd32ee0faf0f2d3b2ac"
+    },
+    {
+      "phase": "restored",
+      "task": "posed_prism",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-restored-posed_prism.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090126-d7b406b7/perspective.png",
+      "sha256": "aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090126-d7b406b7/candidate.3dm",
+      "model_sha256": "75de60177bf22a8dd0ab253edaf247a30486f66f78dc772b0851b5889c5f1e22"
+    },
+    {
+      "phase": "restored",
+      "task": "through_hole",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-restored-through_hole.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090231-16ed5925/perspective.png",
+      "sha256": "0138325a9506151d68c9298cf4fc35a28b4cbb18a5f74ed28d7e417c2a0130fe",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090231-16ed5925/candidate.3dm",
+      "model_sha256": "aaedbd15138620069480a288cccd750ca5b4e60872cdb97e396c1394df71ac36"
+    },
+    {
+      "phase": "restored",
+      "task": "reference_box",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-restored-reference_box.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090330-99539df7/perspective.png",
+      "sha256": "518c6589313a94560c8182dad93783e46b362947e377bc20881cd7e2b54e261d",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090330-99539df7/candidate.3dm",
+      "model_sha256": "7b8c7ba2c8eb055a263b3fa517a4f3dcdfa8df46468535e018f3515e02ca1ddf"
+    },
+    {
+      "phase": "restored",
+      "task": "reference_box_swapped",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-restored-reference_box_swapped.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090432-38db872c/perspective.png",
+      "sha256": "53219e63ce98d3b14146d1961969685183191d2dbeb20c5cd20be56603b8e00c",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090432-38db872c/candidate.3dm",
+      "model_sha256": "ff036f1561664bb4b4ff8e350933cf767d80672550ac6ca967c193d9bdd23292"
+    },
+    {
+      "phase": "restored",
+      "task": "quarter_strip_origin",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-restored-quarter_strip_origin.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090524-4965eb4b/perspective.png",
+      "sha256": "50c21e7841d3e42f85eab2bbfb34f2ca6dda34b680238d4fbac042c765010020",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090524-4965eb4b/candidate.3dm",
+      "model_sha256": "359119c1dd966ed3995ac92721b83863c2d7f45fc12518597b30509afa896347"
+    },
+    {
+      "phase": "restored",
+      "task": "quarter_strip_translated",
+      "kind": "agent model",
+      "image": "experiments/assets/surface-trial-restored-quarter_strip_translated.png",
+      "source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090629-18e1d7cf/perspective.png",
+      "sha256": "191f54be4eec7731b8cf355421ce737ebce31015ccfe1c56d25cb62cf3c89001",
+      "model": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-090629-18e1d7cf/candidate.3dm",
+      "model_sha256": "fc278356d8eaa1c0fa7e62affd15b3ed8b7f3a626e136282d1f2cc6573aa6475"
+    }
+  ],
+  "controller": {
+    "stage": "accepted_trial",
+    "runtime_dirty": false,
+    "promoted": false
+  },
+  "comparison": {
+    "baseline": {
+      "geometry/box/correct": true,
+      "geometry/box/wrong_scale": true,
+      "geometry/box/wrong_position": true,
+      "geometry/box/extra_object": true,
+      "geometry/box/open_surface": true,
+      "geometry/box/wrong_units": true,
+      "geometry/prism/correct": true,
+      "geometry/prism/split_face": true,
+      "geometry/prism/wrong_rotation": true,
+      "geometry/prism/wrong_translation": true,
+      "geometry/prism/mirrored_triangle": true,
+      "geometry/prism/wrong_scale": true,
+      "geometry/prism/open_surface": true,
+      "geometry/prism/extra_object": true,
+      "geometry/prism/wrong_units": true,
+      "geometry/hole/correct_extrusion": true,
+      "geometry/hole/correct_brep": true,
+      "geometry/hole/correct_oversized_cutter": true,
+      "geometry/hole/wrong_location": true,
+      "geometry/hole/wrong_radius": true,
+      "geometry/hole/blind": true,
+      "geometry/hole/equal_volume_blind": true,
+      "geometry/hole/missing_hole": true,
+      "geometry/hole/extra_object": true,
+      "geometry/hole/open_surface": true,
+      "geometry/hole/wrong_units": true,
+      "capture/perspective-1000-750-fit-True": true,
+      "capture/perspective-400-1000-fit-True": true,
+      "capture/perspective-1000-400-fit-True": true,
+      "capture/top-1000-750-fit-True": true,
+      "capture/top-400-1000-fit-True": true,
+      "capture/top-1000-400-fit-True": true,
+      "capture/back-1000-750-fit-True": true,
+      "capture/back-400-1000-fit-True": true,
+      "capture/back-1000-400-fit-True": true,
+      "capture/perspective-1000-750-fit-False": true,
+      "capture/invalid-view": true,
+      "model/box": true,
+      "model/posed_prism": true,
+      "model/through_hole": true,
+      "model/reference_box": true,
+      "model/reference_box_swapped": true,
+      "control/reference_equal_volume_wrong_dimensions": true,
+      "model/quarter_strip_origin": true,
+      "model/quarter_strip_translated": true,
+      "sweep/default_open": true,
+      "sweep/false_open": true,
+      "sweep/cap_closed_false": true,
+      "sweep/cap_closed_true": true,
+      "sweep/reject_open_profile": true,
+      "sweep/closed_rail_default": true,
+      "sweep/closed_rail_cap": true,
+      "layers/root": true,
+      "layers/unique_short_parent": true,
+      "layers/full_path_parent": true,
+      "layers/saved_assembly": true,
+      "layers/automatic_name": true,
+      "layers/case_insensitive_path": true,
+      "layers/missing_parent": true,
+      "layers/ambiguous_parent": true,
+      "layers/duplicate_sibling": true,
+      "surface/raised/response_bounds": false,
+      "surface/raised/geometry_bounds": true,
+      "surface/raised/geometry_center": true,
+      "surface/raised/repeat_identical": true,
+      "surface/depressed/response_bounds": false,
+      "surface/depressed/geometry_bounds": true,
+      "surface/depressed/geometry_center": true,
+      "surface/depressed/repeat_identical": true,
+      "surface/rotated/response_bounds": false,
+      "surface/rotated/geometry_bounds": false,
+      "surface/rotated/geometry_center": false,
+      "surface/rotated/repeat_identical": true,
+      "surface/scaled/response_bounds": false,
+      "surface/scaled/geometry_bounds": false,
+      "surface/scaled/geometry_center": false,
+      "surface/scaled/repeat_identical": true,
+      "surface/trimmed_solid/bounds": true,
+      "surface/trimmed_solid/source_unchanged": true,
+      "surface/trimmed_solid/solid": true
+    },
+    "candidate": {
+      "geometry/box/correct": true,
+      "geometry/box/wrong_scale": true,
+      "geometry/box/wrong_position": true,
+      "geometry/box/extra_object": true,
+      "geometry/box/open_surface": true,
+      "geometry/box/wrong_units": true,
+      "geometry/prism/correct": true,
+      "geometry/prism/split_face": true,
+      "geometry/prism/wrong_rotation": true,
+      "geometry/prism/wrong_translation": true,
+      "geometry/prism/mirrored_triangle": true,
+      "geometry/prism/wrong_scale": true,
+      "geometry/prism/open_surface": true,
+      "geometry/prism/extra_object": true,
+      "geometry/prism/wrong_units": true,
+      "geometry/hole/correct_extrusion": true,
+      "geometry/hole/correct_brep": true,
+      "geometry/hole/correct_oversized_cutter": true,
+      "geometry/hole/wrong_location": true,
+      "geometry/hole/wrong_radius": true,
+      "geometry/hole/blind": true,
+      "geometry/hole/equal_volume_blind": true,
+      "geometry/hole/missing_hole": true,
+      "geometry/hole/extra_object": true,
+      "geometry/hole/open_surface": true,
+      "geometry/hole/wrong_units": true,
+      "capture/perspective-1000-750-fit-True": true,
+      "capture/perspective-400-1000-fit-True": true,
+      "capture/perspective-1000-400-fit-True": true,
+      "capture/top-1000-750-fit-True": true,
+      "capture/top-400-1000-fit-True": true,
+      "capture/top-1000-400-fit-True": true,
+      "capture/back-1000-750-fit-True": true,
+      "capture/back-400-1000-fit-True": true,
+      "capture/back-1000-400-fit-True": true,
+      "capture/perspective-1000-750-fit-False": true,
+      "capture/invalid-view": true,
+      "model/box": true,
+      "model/posed_prism": true,
+      "model/through_hole": true,
+      "model/reference_box": true,
+      "model/reference_box_swapped": true,
+      "control/reference_equal_volume_wrong_dimensions": true,
+      "model/quarter_strip_origin": true,
+      "model/quarter_strip_translated": true,
+      "sweep/default_open": true,
+      "sweep/false_open": true,
+      "sweep/cap_closed_false": true,
+      "sweep/cap_closed_true": true,
+      "sweep/reject_open_profile": true,
+      "sweep/closed_rail_default": true,
+      "sweep/closed_rail_cap": true,
+      "layers/root": true,
+      "layers/unique_short_parent": true,
+      "layers/full_path_parent": true,
+      "layers/saved_assembly": true,
+      "layers/automatic_name": true,
+      "layers/case_insensitive_path": true,
+      "layers/missing_parent": true,
+      "layers/ambiguous_parent": true,
+      "layers/duplicate_sibling": true,
+      "surface/raised/response_bounds": true,
+      "surface/raised/geometry_bounds": true,
+      "surface/raised/geometry_center": true,
+      "surface/raised/repeat_identical": true,
+      "surface/depressed/response_bounds": true,
+      "surface/depressed/geometry_bounds": true,
+      "surface/depressed/geometry_center": true,
+      "surface/depressed/repeat_identical": true,
+      "surface/rotated/response_bounds": true,
+      "surface/rotated/geometry_bounds": true,
+      "surface/rotated/geometry_center": true,
+      "surface/rotated/repeat_identical": true,
+      "surface/scaled/response_bounds": true,
+      "surface/scaled/geometry_bounds": true,
+      "surface/scaled/geometry_center": true,
+      "surface/scaled/repeat_identical": true,
+      "surface/trimmed_solid/bounds": true,
+      "surface/trimmed_solid/source_unchanged": true,
+      "surface/trimmed_solid/solid": true
+    },
+    "regressions": [],
+    "improvements": [
+      "surface/raised/response_bounds",
+      "surface/depressed/response_bounds",
+      "surface/rotated/response_bounds",
+      "surface/rotated/geometry_bounds",
+      "surface/rotated/geometry_center",
+      "surface/scaled/response_bounds",
+      "surface/scaled/geometry_bounds",
+      "surface/scaled/geometry_center"
+    ],
+    "unmet_requirements": []
+  },
+  "copy_cost_microbenchmark": {
+    "runtime": {
+      "document": 268435457,
+      "marker": null,
+      "object_count": 0,
+      "path": null,
+      "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+      "mvid": "326aaa12-b851-4c6a-afcb-45291e734a5c",
+      "version": "0.3.2.0",
+      "pid": 66421,
+      "docs": [
+        {
+          "serial": 268435457,
+          "path": null,
+          "count": 0,
+          "modified": true
+        }
+      ]
+    },
+    "inputs": [
+      {
+        "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/surface-feedback-20260908-085842/raised/candidate.3dm",
+        "sha256": "73b0e021e127e9075bf7789a8a55d7c814d3f070d0cf2639aef6d804512c7ef9",
+        "measurements": [
+          {
+            "faces": 1,
+            "direct_ms": [
+              0.00364,
+              0.0037140000000000003,
+              0.0038229999999999996,
+              0.0038640000000000002,
+              0.003792,
+              0.00368,
+              0.004077,
+              0.0036940000000000002,
+              0.0038030000000000004,
+              0.003765
+            ],
+            "copy_ms": [
+              0.0064600000000000005,
+              0.006475,
+              0.006489,
+              0.006731,
+              0.007331,
+              0.006246000000000001,
+              0.006346000000000001,
+              0.006311,
+              0.006339,
+              0.0064849999999999994
+            ],
+            "source_unchanged": true,
+            "sink": 60000.0,
+            "direct_median_ms": 0.0037784999999999997,
+            "copy_median_ms": 0.0064675
+          }
+        ]
+      },
+      {
+        "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085309-5e41ccaf/candidate.3dm",
+        "sha256": "47ced4058d4ce67495e4214bad5c788b4ae9f20c711229b9b62840dbe43b77fe",
+        "measurements": [
+          {
+            "faces": 7,
+            "direct_ms": [
+              0.008173,
+              0.008181,
+              0.008191,
+              0.008331,
+              0.008295,
+              0.008437,
+              0.008417000000000001,
+              0.009533,
+              0.00801,
+              0.008072000000000001
+            ],
+            "copy_ms": [
+              0.027564,
+              0.027690000000000003,
+              0.026974,
+              0.027486,
+              0.027238000000000002,
+              0.027069999999999997,
+              0.027341999999999998,
+              0.027559999999999998,
+              0.027441,
+              0.026896
+            ],
+            "source_unchanged": true,
+            "sink": 40000.0,
+            "direct_median_ms": 0.008243,
+            "copy_median_ms": 0.0273915
+          }
+        ]
+      },
+      {
+        "path": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/20260908-085607-0888a42c/candidate.3dm",
+        "sha256": "a9cb43c346bde99a776b9255c5ca8f7e6d30c8b1bb7ca792ce09caee041bb754",
+        "measurements": [
+          {
+            "faces": 6,
+            "direct_ms": [
+              0.059214,
+              0.05962100000000001,
+              0.059517,
+              0.056325,
+              0.056363,
+              0.059074999999999996,
+              0.056992,
+              0.057765000000000004,
+              0.057914,
+              0.057984999999999995
+            ],
+            "copy_ms": [
+              0.074874,
+              0.074775,
+              0.076837,
+              0.074151,
+              0.075361,
+              0.075442,
+              0.07538299999999999,
+              0.074107,
+              0.074247,
+              0.074982
+            ],
+            "source_unchanged": true,
+            "sink": 20000.000000000004,
+            "direct_median_ms": 0.0579495,
+            "copy_median_ms": 0.074928
+          }
+        ]
+      }
+    ],
+    "preserved": true
+  }
+}

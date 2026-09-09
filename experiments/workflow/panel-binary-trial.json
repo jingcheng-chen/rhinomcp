@@ -1,0 +1,26 @@
+{
+  "id": "surface-panel-binary-v1",
+  "suite": "experiments/workflow/panel-pilot.json",
+  "agent": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "medium"
+  },
+  "repeats": 2,
+  "acceptance": "correctness_then_calls_v1",
+  "binaries": {
+    "baseline": {
+      "path": "experiments/runs/repair-20260907-171657-ec239178/trial-9983c15f/baseline.rhp",
+      "identity": {
+        "sha256": "a8791fdfd00500113f138375a6b196d32b191873a1c5ef228e4fe1fd1df193e1",
+        "mvid": "326aaa12-b851-4c6a-afcb-45291e734a5c"
+      }
+    },
+    "candidate": {
+      "path": "experiments/runs/repair-20260907-171657-ec239178/trial-9983c15f/candidate.rhp",
+      "identity": {
+        "sha256": "3a79ef7ffde3194d21ffca8274b58837c7eade562c5e9c6d630b18de88a74677",
+        "mvid": "606ab732-416a-4b80-b041-19a264b21b2f"
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "placement-validation-v1",
+  "call_budget": 30,
+  "timeout_seconds": 180,
+  "tasks": [
+    {
+      "family": "primitives",
+      "path": "experiments/tasks/box_offset_validation.json"
+    },
+    {
+      "family": "subtractive-solids",
+      "path": "experiments/tasks/hole_offset_validation.json"
+    }
+  ]
+}

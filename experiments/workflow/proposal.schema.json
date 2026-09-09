@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "kind",
+    "target",
+    "friction",
+    "evidence",
+    "hypothesis",
+    "discovery_families",
+    "validation_families",
+    "held_out_families",
+    "metrics",
+    "preserve",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "enum": [
+        "defect",
+        "new_capability",
+        "tool_ergonomics",
+        "reusable_workflow"
+      ],
+      "type": "string"
+    },
+    "target": {
+      "enum": [
+        "mcp_plugin",
+        "mcp_interface",
+        "shared_tool_guidance"
+      ],
+      "type": "string"
+    },
+    "friction": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "hypothesis": {
+      "type": "string",
+      "minLength": 1
+    },
+    "discovery_families": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "validation_families": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "held_out_families": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "task_success",
+          "failed_tool_calls",
+          "mcp_calls",
+          "elapsed_seconds",
+          "tokens",
+          "recovery_success"
+        ],
+        "type": "string"
+      }
+    },
+    "preserve": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "status": {
+      "const": "proposed",
+      "type": "string"
+    }
+  }
+}

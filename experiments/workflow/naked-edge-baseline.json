@@ -1,0 +1,175 @@
+{
+  "rows": [
+    {
+      "name": "outer_boundary",
+      "valid": true,
+      "metrics": {
+        "is_solid": false,
+        "face_count": 1,
+        "edge_count": 4,
+        "vertex_count": 4,
+        "naked_edge_count": 4,
+        "area": 7000.0,
+        "area_centroid": [
+          50.0,
+          35.0,
+          0.0
+        ],
+        "volume": 0.0,
+        "volume_centroid": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "expected": 4,
+      "pass": true
+    },
+    {
+      "name": "one_hole",
+      "valid": true,
+      "metrics": {
+        "is_solid": false,
+        "face_count": 1,
+        "edge_count": 5,
+        "vertex_count": 5,
+        "naked_edge_count": 4,
+        "area": 6798.938070199972,
+        "area_centroid": [
+          50.59,
+          35.15,
+          0.0
+        ],
+        "volume": 0.0,
+        "volume_centroid": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "expected": 5,
+      "pass": false
+    },
+    {
+      "name": "two_holes",
+      "valid": true,
+      "metrics": {
+        "is_solid": false,
+        "face_count": 1,
+        "edge_count": 6,
+        "vertex_count": 6,
+        "naked_edge_count": 4,
+        "area": 6720.398253871836,
+        "area_centroid": [
+          50.36,
+          35.21,
+          0.0
+        ],
+        "volume": 0.0,
+        "volume_centroid": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "expected": 6,
+      "pass": false
+    },
+    {
+      "name": "closed_box",
+      "valid": true,
+      "metrics": {
+        "is_solid": true,
+        "face_count": 6,
+        "edge_count": 12,
+        "vertex_count": 8,
+        "naked_edge_count": 0,
+        "area": 2200.0,
+        "area_centroid": [
+          5.0,
+          10.0,
+          15.0
+        ],
+        "volume": 6000.000000000004,
+        "volume_centroid": [
+          5.0,
+          10.0,
+          15.0
+        ]
+      },
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "name": "closed_sphere",
+      "valid": true,
+      "metrics": {
+        "is_solid": true,
+        "face_count": 1,
+        "edge_count": 1,
+        "vertex_count": 2,
+        "naked_edge_count": 0,
+        "area": 1256.6370621306546,
+        "area_centroid": [
+          0.0,
+          -0.0,
+          -0.0
+        ],
+        "volume": 4188.7902047984735,
+        "volume_centroid": [
+          -0.0,
+          -0.0,
+          -0.0
+        ]
+      },
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "name": "open_cylinder_seam",
+      "valid": true,
+      "metrics": {
+        "is_solid": false,
+        "face_count": 1,
+        "edge_count": 3,
+        "vertex_count": 2,
+        "naked_edge_count": 2,
+        "area": 1256.6370614359175,
+        "area_centroid": [
+          -0.0,
+          0.0,
+          10.0
+        ],
+        "volume": 4188.79020478639,
+        "volume_centroid": [
+          -0.0,
+          -0.0,
+          10.0
+        ]
+      },
+      "expected": 2,
+      "pass": true
+    }
+  ],
+  "pass": false,
+  "runtime": {
+    "document": 268435457,
+    "marker": null,
+    "object_count": 0,
+    "path": null,
+    "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+    "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+    "version": "0.3.2.0",
+    "pid": 12790,
+    "docs": [
+      {
+        "serial": 268435457,
+        "path": null,
+        "count": 0,
+        "modified": true
+      }
+    ]
+  },
+  "plugin_sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+  "document_preserved": true
+}

@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 using Rhino;
 using Rhino.DocObjects;
@@ -49,34 +50,29 @@ public partial class RhinoMCPFunctions
         width = Math.Max(width, 100);
         height = Math.Max(height, 100);
 
-        // capture_viewport is ReadOnly, so it must leave every viewport exactly as it
-        // found it. Resolving a projection target (top/front/...) reprojects AND renames
-        // the active view, and zoom_to_fit moves the camera, so snapshot the projection
-        // and name of the views we might touch and restore them in the finally below.
-        RhinoView activeView = doc.Views.ActiveView;
-        ViewportInfo savedActiveState = activeView != null
-            ? new ViewportInfo(activeView.ActiveViewport)
-            : null;
-        string savedActiveName = activeView?.ActiveViewport.Name;
-
-        // Find the target view (may temporarily reproject the active view)
-        RhinoView targetView = GetTargetView(doc, viewportTarget);
-        if (targetView == null)
+        // Refreshing display caches can also adjust clipping/camera state in views
+        // other than the capture target. Snapshot every view before any refresh or
+        // temporary projection change, and restore without triggering another redraw.
+        var savedViews = doc.Views.Select(view => new
         {
-            throw new InvalidOperationException($"Viewport '{viewportTarget}' not found. Available viewports: Perspective, Top, Front, Right, Back, Left, Bottom, or use 'active' for the current view.");
-        }
-
-        // A named projection view (e.g. an existing "Top") is a different view than the
-        // active one; snapshot it too since zoom_to_fit would otherwise leave it zoomed.
-        bool targetIsActive = activeView != null
-            && targetView.ActiveViewportID == activeView.ActiveViewportID;
-        ViewportInfo savedTargetState = !targetIsActive
-            ? new ViewportInfo(targetView.ActiveViewport)
-            : null;
-        string savedTargetName = !targetIsActive ? targetView.ActiveViewport.Name : null;
+            View = view,
+            Projection = new ViewportInfo(view.ActiveViewport),
+            Name = view.ActiveViewport.Name,
+            Target = view.ActiveViewport.CameraTarget
+        }).ToArray();
 
         try
         {
+            RhinoView targetView = GetTargetView(doc, viewportTarget);
+            if (targetView == null)
+                throw new InvalidOperationException($"Viewport '{viewportTarget}' not found. Available viewports: Perspective, Top, Front, Right, Back, Left, Bottom, or use 'active' for the current view.");
+
+            // Refresh the current document display before capturing.
+            doc.Views.Redraw();
+            // Rhino queues redraws on Mac. Finish them before fitting/restoring;
+            // otherwise a queued redraw changes cameras after this method returns.
+            RhinoApp.Wait();
+
             // Store viewport name
             string viewportName = targetView.ActiveViewport.Name ?? viewportTarget;
 
@@ -85,8 +81,25 @@ public partial class RhinoMCPFunctions
             int activeCount = CountActiveObjects(doc);
             if (zoomToFit && activeCount > 0)
             {
-                targetView.ActiveViewport.ZoomExtents();
-                doc.Views.Redraw();
+                // ZoomExtents fits the on-screen aspect ratio. CaptureToBitmap uses
+                // the requested aspect instead, which can crop a previously fitted
+                // model. Fit a temporary projection to the output dimensions first.
+                var viewport = targetView.ActiveViewport;
+                var visibleGeometry = doc.Objects.GetObjectList(new ObjectEnumeratorSettings
+                {
+                    VisibleFilter = true,
+                    ViewportFilter = viewport,
+                    NormalObjects = true,
+                    LockedObjects = true
+                }).Select(obj => obj.Geometry).ToArray();
+                if (visibleGeometry.Length > 0)
+                {
+                    using var fitted = new ViewportInfo(viewport);
+                    fitted.FrustumAspect = (double)width / height;
+                    if (!fitted.DollyExtents(visibleGeometry, 1.1)
+                        || !viewport.SetViewProjection(fitted, true))
+                        throw new InvalidOperationException("Could not fit geometry to capture dimensions.");
+                }
             }
 
             string base64Data = CaptureViewToPngBase64(
@@ -116,21 +129,17 @@ public partial class RhinoMCPFunctions
         }
         finally
         {
-            // Restore any viewport we may have changed (projection and name) so the
-            // capture leaves no visible side effect on the user's views.
-            if (savedActiveState != null)
+            foreach (var saved in savedViews)
             {
-                activeView.ActiveViewport.SetViewProjection(savedActiveState, true);
-                if (savedActiveName != null && activeView.ActiveViewport.Name != savedActiveName)
-                    activeView.ActiveViewport.Name = savedActiveName;
+                using (saved.Projection)
+                {
+                    var viewport = saved.View.ActiveViewport;
+                    viewport.SetViewProjection(saved.Projection, false);
+                    viewport.SetCameraTarget(saved.Target, false);
+                    if (viewport.Name != saved.Name)
+                        viewport.Name = saved.Name;
+                }
             }
-            if (savedTargetState != null)
-            {
-                targetView.ActiveViewport.SetViewProjection(savedTargetState, true);
-                if (savedTargetName != null && targetView.ActiveViewport.Name != savedTargetName)
-                    targetView.ActiveViewport.Name = savedTargetName;
-            }
-            doc.Views.Redraw();
         }
     }
 
@@ -242,7 +251,6 @@ public partial class RhinoMCPFunctions
         if (activeView != null)
         {
             activeView.ActiveViewport.SetProjection(projection, projectionName, false);
-            doc.Views.Redraw();
 
             return activeView;
         }

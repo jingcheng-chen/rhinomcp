@@ -1,0 +1,23 @@
+{
+  "id": "barcelona-chair-integration-v2",
+  "purpose": "One complex benchmark for general RhinoMCP improvement; diagnose reusable capability gaps across a growing suite.",
+  "instruction": "Reconstruct only the chair with a backrest shown in the four screenshots; exclude the separate ottoman. Use screenshots only, not a downloaded source mesh or outside references. Model the curved crossing metal frame, seat cushion, reclined back cushion and supporting straps as organized editable Rhino geometry. Capture the visible proportions and curvature before decorative details. Use X for left-right width, +Y toward the back, +Z up, with the lowest feet at Z=0. Normalize overall chair width to 1000 mm as a coordinate convention, not a claim about real dimensions. Name objects by their functional part, beginning frame_, seat_, back_ or straps_. Remove construction curves. Inspect your own model from multiple views and report missing details and tool failures honestly. Do not replace curved metal strips with round pipes without recording that approximation. Apply these verified general workflows: use a continuous smooth top skin for each cushion, with rounded padded cells and recessed seams inferred from the screenshots; do not stack separate hard boxes as tuft panels. Close each main seat/back cushion with side and underside surfaces using join_surfaces. Name the resulting solids exactly seat_body and back_body. SURFACE uses interpolation points, count must exceed degree; a sufficiently dense grid can represent curved padding. Work in a convenient local orientation then transform if useful. The join helper is a fixed recipe through the existing run_command; it exposes no arbitrary scripts. Inspect the resulting IDs and assign final attributes. Use sweep1 cap_planar_ends=true for solid rectangular metal strips with planar ends; remove source curves. Create exactly these eight visible/unlocked layers: Chair, Chair::Frame, Chair::Frame::Left, Chair::Frame::Right, Chair::Upholstery, Chair::Upholstery::Seat, Chair::Upholstery::Back, Chair::Straps. Put seat_body on Seat and back_body on Back; frame_ objects on Frame or its Left/Right children; straps_ on Straps. Existing empty layers are outside the task and must be preserved. Every final object must be visible and unlocked. get_object_attributes is also available through modeling_command for checking full layer paths. Prioritize silhouette, seat/back proportions and frame curvature over small decorative details. These are workflow hints, not a prescribed chair geometry: infer dimensions, pose and cell layout from the public screenshots. Report any simplifications honestly.",
+  "public_views": [
+    "front",
+    "front-oblique",
+    "side",
+    "back-detail"
+  ],
+  "part_prefixes": [
+    "frame_",
+    "seat_",
+    "back_",
+    "straps_"
+  ],
+  "normalized_width": 1000,
+  "width_tolerance": 20,
+  "max_calls": 160,
+  "timeout_seconds": 900,
+  "visual_acceptance": "uncalibrated; qualitative diagnostic only, never automatic promotion",
+  "reference_limitations": "Approximate perspective views, unknown camera parameters and scale; ottoman remains visible but is excluded. Back-detail and held-out rear-oblique crop some feet. Hidden surfaces are inferred. No target mesh is provided."
+}

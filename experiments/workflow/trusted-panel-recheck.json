@@ -1,0 +1,91 @@
+{
+  "source_run": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/workflow-binary-20260908-181813-4eec688b",
+  "expected_baseline": {
+    "sha256": "a8791fdfd00500113f138375a6b196d32b191873a1c5ef228e4fe1fd1df193e1",
+    "mvid": "326aaa12-b851-4c6a-afcb-45291e734a5c"
+  },
+  "runs": [
+    {
+      "id": "task-1-pair-1-baseline",
+      "arm": "baseline",
+      "original_evaluation_sha256": "27c5e222e5e2a0d879f6300aa7116e6eda1d5d9f7faaa0ffe98a120a17abe9d6",
+      "artifact_sha256": "76073d7af220b9d5681a4545a8b492a63bc877d5d54c1510dd9db3d4a3eb6d8e",
+      "verdict": "pass",
+      "same_verdict_and_checks": true,
+      "modeling_pid": 66421,
+      "evaluation_pid": 46932
+    },
+    {
+      "id": "task-1-pair-1-candidate",
+      "arm": "candidate",
+      "original_evaluation_sha256": "c28b60573b2a542aa9d66a1548bc31344b5416bb63eb678389d6204949c09ce9",
+      "artifact_sha256": "d94c816f46acef0d4521da12e34872089d9c9659f5280490f56ed359c6eb944d",
+      "verdict": "fail",
+      "same_verdict_and_checks": true,
+      "modeling_pid": 19809,
+      "evaluation_pid": 46932
+    },
+    {
+      "id": "task-1-pair-2-candidate",
+      "arm": "candidate",
+      "original_evaluation_sha256": "c6cff891dbfb7de7c7ce6c24228b78675ee73a719b37e3cd8c04d885cd46d641",
+      "artifact_sha256": "e51bce2d7ff6e56d32a90aab90668e797511e644ef77c568a6ca47969107a56b",
+      "verdict": "pass",
+      "same_verdict_and_checks": true,
+      "modeling_pid": 19809,
+      "evaluation_pid": 46932
+    },
+    {
+      "id": "task-1-pair-2-baseline",
+      "arm": "baseline",
+      "original_evaluation_sha256": "af4fd3b01c85472e9bbe322b20338b8c01dbf4ee7bce14a0c7892789dd5cb95f",
+      "artifact_sha256": "bca37a2f4ec929d32ae2ec3ee4599ab554b501440e0b3eea278eb3a250fbb4d9",
+      "verdict": "pass",
+      "same_verdict_and_checks": true,
+      "modeling_pid": 28160,
+      "evaluation_pid": 46932
+    },
+    {
+      "id": "task-2-pair-1-baseline",
+      "arm": "baseline",
+      "original_evaluation_sha256": "cc3d3531cb165dc0d2f44bba315880b3d51490294db5535aaa3d6ae4beac1691",
+      "artifact_sha256": "fb8522607bceca183a779fa62bd2c17de49d2d16c1098daf8dea10d57c80faaf",
+      "verdict": "pass",
+      "same_verdict_and_checks": true,
+      "modeling_pid": 28160,
+      "evaluation_pid": 46932
+    },
+    {
+      "id": "task-2-pair-1-candidate",
+      "arm": "candidate",
+      "original_evaluation_sha256": "5c30a303baf9ac22eda0d86b8a61be0dda68729332beca45669a0d7796a5d9af",
+      "artifact_sha256": "aba8257c02d778d14b87e7e96588c917ba117009fb1b40cdbd8c951726f9022b",
+      "verdict": "fail",
+      "same_verdict_and_checks": true,
+      "modeling_pid": 41090,
+      "evaluation_pid": 46932
+    },
+    {
+      "id": "task-2-pair-2-candidate",
+      "arm": "candidate",
+      "original_evaluation_sha256": "735875155d1462a3b54b54f83c118a55f1b5aa6ee8710b2f271f33e413d12a61",
+      "artifact_sha256": "573d1e9adda14c5d80b7a01b989841bf5eb43560b6e39157e75abd4e2be61e1b",
+      "verdict": "pass",
+      "same_verdict_and_checks": true,
+      "modeling_pid": 41090,
+      "evaluation_pid": 46932
+    },
+    {
+      "id": "task-2-pair-2-baseline",
+      "arm": "baseline",
+      "original_evaluation_sha256": "ce151ed20585e471980885c0dbe4e981a325007fef61144e0d2a685a3cd039e9",
+      "artifact_sha256": "0356c323c46de51b9d249ef0234e9a5242856fdb792a1f49429da0f79f764937",
+      "verdict": "pass",
+      "same_verdict_and_checks": true,
+      "modeling_pid": 46932,
+      "evaluation_pid": 46932
+    }
+  ],
+  "all_agree": true,
+  "promotion_authorized": false
+}

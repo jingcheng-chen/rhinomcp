@@ -17,7 +17,7 @@ Context Protocol (MCP).
 The runtime bridge is:
 
 ```text
-AI client -> Python FastMCP server -> TCP JSON on 127.0.0.1:1999 -> Rhino C# plugin -> Rhino + Grasshopper
+AI client -> Python MCP server -> TCP JSON on 127.0.0.1:1999 -> Rhino C# plugin -> Rhino + Grasshopper
 ```
 
 The Python server exposes MCP tools. Each tool sends a JSON command to the Rhino
@@ -36,7 +36,7 @@ result to the Python server.
                      v
 +--------------------+----------------------------------------+
 | Python MCP Server (server/)                                |
-| - FastMCP tool and resource registration                    |
+| - MCP SDK tool and resource registration                    |
 | - Thin tool wrappers                                        |
 | - Optional JSON Schema pre-flight validation                |
 | - Persistent TCP connection to Rhino                        |
@@ -80,7 +80,7 @@ rhinomcp/
 |   +-- tests/                       # Pytest tests and mock Rhino server
 |   +-- src/rhinomcp/
 |       +-- __init__.py              # Auto-discovers tool modules
-|       +-- server.py                # FastMCP app and TCP connection manager
+|       +-- server.py                # MCPServer app and TCP connection manager
 |       +-- validation.py            # Contract validation helper
 |       +-- prompts/                 # MCP prompts
 |       +-- static/                  # RhinoScript reference data
@@ -363,7 +363,7 @@ Main file: `server/src/rhinomcp/server.py`
 
 ### Responsibilities
 
-- Creates the FastMCP server: `mcp = FastMCP("RhinoMCP", lifespan=server_lifespan)`.
+- Creates the MCP server: `mcp = RhinoMCPServer("RhinoMCP", lifespan=server_lifespan, instructions=SERVER_INSTRUCTIONS)`. `RhinoMCPServer` subclasses the SDK's `MCPServer` and re-raises tool failures as `ToolError`, because SDK 2.x otherwise reports only "Error executing tool <name>" to the client.
 - Manages a persistent `RhinoConnection` to the plugin.
 - Serializes concurrent tool calls with a socket send lock.
 - Validates command params when `RHINO_MCP_VALIDATE` is not `off`.
@@ -724,7 +724,7 @@ rhinomcp = rhinomcp.server:main
 Published installs are intended to run with:
 
 ```bash
-uvx rhinomcp
+uvx rhinomcp@latest
 ```
 
 ### Rhino Plugin
@@ -762,6 +762,27 @@ dotnet build plugin/rhinomcp.sln --configuration Release -p:CopyToRhinoPluginDir
 | `.github/workflows/mcp-server-publish.yml`   | Build and publish the Python package to PyPI.                   |
 | `.github/workflows/rhino-plugin-publish.yml` | Build and publish the Yak package for Rhino Package Manager.    |
 
+## Version compatibility
+
+The server and the plugin are released together but update separately: `uvx
+rhinomcp@latest` re-resolves on every client launch, while the Package Manager
+updates the plugin on a Rhino restart. `RhinoConnection` therefore reads the
+plugin's `describe_capabilities` answer once per socket and:
+
+- logs a version-skew warning when the two versions differ (the
+  `describe_capabilities` tool also reports `server_version`,
+  `plugin_matches_server` and `update_advice`);
+- refuses a command the plugin does not list, with update instructions, instead
+  of forwarding it to a bare "Unknown command type" error;
+- refuses a parameter registered in `PARAMS_SINCE` when it is actually used and
+  the plugin predates it, because a plugin silently ignores parameters it does
+  not know (an old plugin would return an uncapped sweep for `cap_planar_ends`).
+
+When you add a parameter to an existing command, register it in `PARAMS_SINCE` in
+`server.py` with the plugin version that introduces it and the value that means
+"not used". When you add a command, register it in `COMMANDS_SINCE` so plugins too
+old to report their command table are still refused with the right advice.
+
 ## Dependencies
 
 ### Python
@@ -769,7 +790,7 @@ dotnet build plugin/rhinomcp.sln --configuration Release -p:CopyToRhinoPluginDir
 Defined in `server/pyproject.toml`:
 
 - Python `>=3.10`
-- `mcp[cli]>=1.16.0`
+- `mcp[cli]>=2.0.0,<3` (MCP Python SDK 2.x)
 - Optional validation/dev: `jsonschema`, `pytest`, `pytest-cov`, `pytest-asyncio`, `ruff`
 
 ### C#

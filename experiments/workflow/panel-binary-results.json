@@ -1,0 +1,580 @@
+{
+  "status": "no_benefit_established",
+  "tasks": {
+    "experiments/tasks/panel_raised.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 17.0,
+        "median_seconds": 152.0977226459945
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 1,
+        "failed_calls": 0,
+        "median_calls": 6.5,
+        "median_seconds": 79.32559537499037
+      },
+      "family": "curved-panels",
+      "correctness_regression": true,
+      "observed_benefit": false
+    },
+    "experiments/tasks/panel_depressed.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 10.5,
+        "median_seconds": 94.34676968799613
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 1,
+        "failed_calls": 0,
+        "median_calls": 3.5,
+        "median_seconds": 37.06612812449748
+      },
+      "family": "curved-panels",
+      "correctness_regression": true,
+      "observed_benefit": false
+    }
+  },
+  "runs": [
+    {
+      "id": "task-1-pair-1-baseline",
+      "family": "curved-panels",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-1-pair-1-baseline",
+      "source_sha256": "4eb90e76376624e42fcc0cbc22292b50fa9aade6b982a4c517bb29b75aea1f97",
+      "session_status": "completed",
+      "elapsed_seconds": 124.93954754198785,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "27c5e222e5e2a0d879f6300aa7116e6eda1d5d9f7faaa0ffe98a120a17abe9d6",
+      "metrics": {
+        "mcp_attempts": 14,
+        "completed_calls": 14,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 2,
+          "create_object": 3,
+          "delete_object": 2,
+          "get_object_info": 3,
+          "get_objects": 4
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 218354,
+          "cached_input_tokens": 163584,
+          "output_tokens": 4892,
+          "reasoning_output_tokens": 3663
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "baseline",
+      "pair": 1,
+      "task": "experiments/tasks/panel_raised.json"
+    },
+    {
+      "id": "task-1-pair-1-candidate",
+      "family": "curved-panels",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-1-pair-1-candidate",
+      "source_sha256": "51b4ae18420ce713135292760f6edeeb13b57d09f00608a38d2631e8f0bb5fdb",
+      "session_status": "completed",
+      "elapsed_seconds": 55.18760270799976,
+      "task_verdict": "fail",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "c28b60573b2a542aa9d66a1548bc31344b5416bb63eb678389d6204949c09ce9",
+      "metrics": {
+        "mcp_attempts": 5,
+        "completed_calls": 5,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "get_object_info": 1,
+          "get_objects": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 151015,
+          "cached_input_tokens": 129024,
+          "output_tokens": 1455,
+          "reasoning_output_tokens": 812
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "candidate",
+      "pair": 1,
+      "task": "experiments/tasks/panel_raised.json"
+    },
+    {
+      "id": "task-1-pair-2-candidate",
+      "family": "curved-panels",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-1-pair-2-candidate",
+      "source_sha256": "40ec358092bbe0ffe99ac07c20eb53f0e3ef5849164829bc1486835dae49830c",
+      "session_status": "completed",
+      "elapsed_seconds": 103.46358804198098,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "c6cff891dbfb7de7c7ce6c24228b78675ee73a719b37e3cd8c04d885cd46d641",
+      "metrics": {
+        "mcp_attempts": 8,
+        "completed_calls": 8,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 2,
+          "create_object": 2,
+          "delete_object": 1,
+          "get_object_info": 1,
+          "get_objects": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 135572,
+          "cached_input_tokens": 93696,
+          "output_tokens": 3828,
+          "reasoning_output_tokens": 2977
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "candidate",
+      "pair": 2,
+      "task": "experiments/tasks/panel_raised.json"
+    },
+    {
+      "id": "task-1-pair-2-baseline",
+      "family": "curved-panels",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-1-pair-2-baseline",
+      "source_sha256": "3a1232b94476590e25c01256f127939dead5786820003398dab18c3f149bc6a4",
+      "session_status": "completed",
+      "elapsed_seconds": 179.25589775000117,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "af4fd3b01c85472e9bbe322b20338b8c01dbf4ee7bce14a0c7892789dd5cb95f",
+      "metrics": {
+        "mcp_attempts": 20,
+        "completed_calls": 20,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 4,
+          "create_object": 5,
+          "delete_object": 4,
+          "get_object_info": 1,
+          "get_objects": 6
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 349133,
+          "cached_input_tokens": 303872,
+          "output_tokens": 7028,
+          "reasoning_output_tokens": 4976
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "baseline",
+      "pair": 2,
+      "task": "experiments/tasks/panel_raised.json"
+    },
+    {
+      "id": "task-2-pair-1-baseline",
+      "family": "curved-panels",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-2-pair-1-baseline",
+      "source_sha256": "bddb335209c9273c2231e27684e4eb70697d9693e01b66a4a4070ad83d26fc7b",
+      "session_status": "completed",
+      "elapsed_seconds": 79.40435379199334,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "cc3d3531cb165dc0d2f44bba315880b3d51490294db5535aaa3d6ae4beac1691",
+      "metrics": {
+        "mcp_attempts": 8,
+        "completed_calls": 8,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 2,
+          "create_object": 2,
+          "delete_object": 1,
+          "get_object_info": 1,
+          "get_objects": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 145226,
+          "cached_input_tokens": 118016,
+          "output_tokens": 2926,
+          "reasoning_output_tokens": 2024
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "baseline",
+      "pair": 1,
+      "task": "experiments/tasks/panel_depressed.json"
+    },
+    {
+      "id": "task-2-pair-1-candidate",
+      "family": "curved-panels",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-2-pair-1-candidate",
+      "source_sha256": "c976c10b0266e98b7ae83ba549af44d080d546733b0a503decfae8f462403dd5",
+      "session_status": "completed",
+      "elapsed_seconds": 37.54427904100157,
+      "task_verdict": "fail",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "5c30a303baf9ac22eda0d86b8a61be0dda68729332beca45669a0d7796a5d9af",
+      "metrics": {
+        "mcp_attempts": 3,
+        "completed_calls": 3,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_objects": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 57773,
+          "cached_input_tokens": 38144,
+          "output_tokens": 1221,
+          "reasoning_output_tokens": 820
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "candidate",
+      "pair": 1,
+      "task": "experiments/tasks/panel_depressed.json"
+    },
+    {
+      "id": "task-2-pair-2-candidate",
+      "family": "curved-panels",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-2-pair-2-candidate",
+      "source_sha256": "9b9be4d4ab98222e4388fba1e2aa70efe3823b2bbeeaada6365895e98b29588c",
+      "session_status": "completed",
+      "elapsed_seconds": 36.58797720799339,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "735875155d1462a3b54b54f83c118a55f1b5aa6ee8710b2f271f33e413d12a61",
+      "metrics": {
+        "mcp_attempts": 4,
+        "completed_calls": 4,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_object_info": 1,
+          "get_objects": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 58883,
+          "cached_input_tokens": 40192,
+          "output_tokens": 1256,
+          "reasoning_output_tokens": 790
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "candidate",
+      "pair": 2,
+      "task": "experiments/tasks/panel_depressed.json"
+    },
+    {
+      "id": "task-2-pair-2-baseline",
+      "family": "curved-panels",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-2-pair-2-baseline",
+      "source_sha256": "227ec15078fd704ecc4bc02d991da2bf62127b546c0e0d5a7ada927d0ac3a6eb",
+      "session_status": "completed",
+      "elapsed_seconds": 109.28918558399891,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "ce151ed20585e471980885c0dbe4e981a325007fef61144e0d2a685a3cd039e9",
+      "metrics": {
+        "mcp_attempts": 13,
+        "completed_calls": 13,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 3,
+          "create_object": 3,
+          "delete_object": 2,
+          "get_object_info": 2,
+          "get_objects": 3
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 209847,
+          "cached_input_tokens": 185600,
+          "output_tokens": 3699,
+          "reasoning_output_tokens": 2504
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "baseline",
+      "pair": 2,
+      "task": "experiments/tasks/panel_depressed.json"
+    }
+  ],
+  "promotion_authorized": false,
+  "limitations": [
+    "Two repeats per arm/task; descriptive evidence, not statistical proof.",
+    "Requested model alias/effort pinned; backend snapshot unavailable.",
+    "Panel discovery tasks are not held-out families.",
+    "Evaluation runs in the reviewed candidate process; no adversarial isolation.",
+    "Correctness precedes efficiency; tokens/time are secondary observations."
+  ],
+  "controller": {
+    "stage": "complete",
+    "runtime_dirty": false,
+    "promoted": false
+  },
+  "run": "experiments/runs/workflow-binary-20260908-181813-4eec688b",
+  "contract": {
+    "id": "surface-panel-binary-v1",
+    "suite": "experiments/workflow/panel-pilot.json",
+    "agent": {
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "medium"
+    },
+    "repeats": 2,
+    "acceptance": "correctness_then_calls_v1",
+    "binaries": {
+      "baseline": {
+        "path": "experiments/runs/repair-20260907-171657-ec239178/trial-9983c15f/baseline.rhp",
+        "identity": {
+          "sha256": "a8791fdfd00500113f138375a6b196d32b191873a1c5ef228e4fe1fd1df193e1",
+          "mvid": "326aaa12-b851-4c6a-afcb-45291e734a5c"
+        }
+      },
+      "candidate": {
+        "path": "experiments/runs/repair-20260907-171657-ec239178/trial-9983c15f/candidate.rhp",
+        "identity": {
+          "sha256": "3a79ef7ffde3194d21ffca8274b58837c7eade562c5e9c6d630b18de88a74677",
+          "mvid": "606ab732-416a-4b80-b041-19a264b21b2f"
+        }
+      }
+    }
+  },
+  "source_pins": {
+    "experiments/bridge.py": "6c1eb15594b82b63f22fe6193101679cc49ecaab6c78d732552ea497cd52207b",
+    "experiments/evaluate.cs": "419ccf07914aa8c1b906bf60fb2880a4843702605652672ef0d9389d1548e703",
+    "experiments/evaluator.py": "3fc92bd23da4b39c129a6b528ac7d3a7864bea70a465bf745de7d68375cb38ff",
+    "experiments/harness/roles/modeler.md": "88a568140e4c04f81f56279af0145478dcf049b2fb61ecc68c50a47cbc9106a5",
+    "experiments/panel_measure.cs": "0c5cc7f240aa79e3082620c23bbcf731c38f5718760de3e58dce922d2f87159d",
+    "experiments/panel_task.py": "7ee77b2e6074b76cd6242905da71c30f608dc342d84302a08cfafb138b99f5b2",
+    "experiments/rhino_trial.py": "81e8c10c0e00e763ac4dbe7ec1db65dffb3e62663585086298919859377a9ca0",
+    "experiments/runner.py": "cb5cbe48a9714fee8c90768b7dc556e183fceda1ebe0b258fc91efddd735450c",
+    "experiments/strip_measure.cs": "64970d46fb431b6f8e9cf770c994261af5f6e44d6e354fd01daacf77e983031f",
+    "experiments/strip_probe.py": "233a8718b8a7df0cbdcf947990b36233090b90ed2cca4a97928e3bc9c23eecc2",
+    "experiments/strip_task.py": "b9c32f7e5f1f7f1640ed1f37f7a51c7b42a47044fc26452026a7741fdf48158c",
+    "experiments/tasks/schema.json": "111f8f6fa40a0f5333bb15f59cb82d246cc4135697d22c0e1344d1777239d75e",
+    "experiments/trial.py": "aa23dd3fba8f3d36ff733306fa1a63bb496f80a37996cffbb2400b5cc03035d3",
+    "experiments/workflow/audit.py": "ea29bdc9153053ac4a06988e4c8334c8a1c7d4b9d02f52c78f7d713094055620",
+    "experiments/workflow/binary_compare.py": "a81ac7ab3607b682ce035d0275f3164019c75a07f148638c1ebf17f4fd56d695",
+    "experiments/workflow/compare.py": "b9e612de3871ffde79feacd90ff525e6c0ac0e773ec5dc857be2d95f93a2be9b",
+    "experiments/workflow/native_mcp.py": "7734a8d0efdadf3cebc2ce04fe3e2c2d7f8ffeac3fa6a2a1e94ecdd464212ca9",
+    "experiments/workflow/pilot.py": "3f2a65b680196470477a7c883a206a9968d426359a27549b79148b997ec765d5",
+    "experiments/workflow/plan.py": "ba3dbee1a1ea34a61115c8b872f8a360cf9d352cb2e7d9cf1e5fa8430f31b1a7",
+    "experiments/workflow/proposals.py": "f492ca23f75cb418606c6bbd991eaa6bd7bc0f9cc0115d9d81b1c97b10499fac",
+    "server/src/rhinomcp/__init__.py": "82f2f13fb3c43381f165b53777f06ee9467f27a8ab3835958f15a95d1eec6375",
+    "server/src/rhinomcp/prompts/assert_general_strategy.py": "88902fea723b94c403726fe825d0d51518de7d76b5534fe373e8e9d3c1f087a6",
+    "server/src/rhinomcp/server.py": "675f68d3567378350a5b8c314ea497385570e1ff57a827f469342addaff64bb8",
+    "server/src/rhinomcp/static/rhinoscriptsyntax.py": "c6b20133156cf6a4d72330d04f78cb20b1784d2fbb31b34ca89ac16392a53949",
+    "server/src/rhinomcp/tools/_grasshopper_common.py": "2cb0d5df8d9ff96eb0de9b0e08766d4f65670047b3c68b74a75e6e6821f74557",
+    "server/src/rhinomcp/tools/advanced_geometry.py": "18784e7e3c7bc2b84718f8e869577ae53e8bd46c2244f960157df9046d5096e5",
+    "server/src/rhinomcp/tools/analyze_objects.py": "7a16dbdb027afc8e2a754187cb849c43f52673e9f510f4e5436d94784096b41e",
+    "server/src/rhinomcp/tools/boolean_operations.py": "d0c413d17590b65e30ae9d6c08940f2455c3c96736139a026676fee464daced7",
+    "server/src/rhinomcp/tools/capture_viewport.py": "05695d15fd0837abb7c056b86419f587fe5cf432369c2a940d94b49b94407aa9",
+    "server/src/rhinomcp/tools/create_layer.py": "7cd0f53a1eb40164550a45587c3bb939a6f1fdb64f35dbb1c674327c07051e5f",
+    "server/src/rhinomcp/tools/create_object.py": "65bafaaba1cbb3d29368d95d2c036ebc1e52dc620c1e5ce2be36f7a245258a94",
+    "server/src/rhinomcp/tools/create_objects.py": "ff5fb9709fca269d1ce0c1383e706b831bc51323d064e40a2852c355066e9e54",
+    "server/src/rhinomcp/tools/curve_operations.py": "aeac424910c4573287607a293ce4186442efce24cd3eb0b3e843d9ea55a3bf6f",
+    "server/src/rhinomcp/tools/delete_layer.py": "0a96f8d4ac8d3506d0a57da6c1729d24d8119583821921d22ec3d6fb627d6950",
+    "server/src/rhinomcp/tools/delete_object.py": "f33a694258be82ac4545a4936716b86e50bdada780edd4ea13dd93a359acea38",
+    "server/src/rhinomcp/tools/describe_capabilities.py": "c7a84fca990baaafa75948399070f10d571d2650ef2bab14fe97cbf29879fb32",
+    "server/src/rhinomcp/tools/execute_rhinocommon_csharp_code.py": "8cbf1ee359aaa2c479b97e0dc1a35130346dcd42fc25737d6046da3f81353930",
+    "server/src/rhinomcp/tools/execute_rhinoscript_python_code.py": "fcb97fb32d552be4c96fff1358863dbb066dbf10a4f16b214261f1761d13fe92",
+    "server/src/rhinomcp/tools/get_commands.py": "f2a9b99c4de7607fa390a09be49dfae16e6d5b4de1633adcc032e4781a75c025",
+    "server/src/rhinomcp/tools/get_document_summary.py": "4ed3a90eaba4c61b6acb5750a29b0e09bffda4b4419162a21ab3b6a0bee91324",
+    "server/src/rhinomcp/tools/get_object_info.py": "0df2e8e093a9a72432ce8a484c3df79e19597258e84617d96dc231a5ada79c99",
+    "server/src/rhinomcp/tools/get_objects.py": "be44109ddcd404ac749f32a3929edc147e81559febf47a63a4ab2be8f93452f8",
+    "server/src/rhinomcp/tools/get_or_set_current_layer.py": "8bfe33ae84d88fb405fd746ba142f6fb98771b1a990c6f054cc31e0b2578b9f2",
+    "server/src/rhinomcp/tools/get_selected_objects_info.py": "6192784ec7da3b4f12e70a035575ba8a09669bc20c1c6e286352427d55de7899",
+    "server/src/rhinomcp/tools/grasshopper_build.py": "d76b35b6e5a132e49c8546c1c06643baa4f22e7f1e3b35fbff02fbb5131ea1a6",
+    "server/src/rhinomcp/tools/grasshopper_catalog.py": "e2a146371171b1e2492879c3e25738e08161370f65922f9fededcd9e6b236ce0",
+    "server/src/rhinomcp/tools/grasshopper_components.py": "6cedad90b6d2a18d3b1b6b6559b78396076aad5995ffc06f23bca39c071fea3b",
+    "server/src/rhinomcp/tools/grasshopper_connections.py": "96b5eaa90112664f999036a2eed724b76f8794f53960282537e3ef79deb76f6e",
+    "server/src/rhinomcp/tools/grasshopper_document.py": "fa4704c7a1918cc6431c265eb8b65b8fcbe68236a81b66979adfa9094e2d459a",
+    "server/src/rhinomcp/tools/grasshopper_graph.py": "27f437dfa0d1702c0aa1f6b656150ad2e7e27077631d0b2f356d9f633b9f90a9",
+    "server/src/rhinomcp/tools/grasshopper_mutation.py": "905db9ef8688fb6aa25b5ff259bb5eb0e6d03faeb627366e51b86d6d10fe9b33",
+    "server/src/rhinomcp/tools/grasshopper_parameters.py": "9166fe48bf6740efb962c3b01cb99e8eaa0f61a9118cd57f013add69b422c668",
+    "server/src/rhinomcp/tools/grasshopper_preview.py": "dfa4209d753983c0d0262585bfa2b1a93bb775861a8b72bd20623d25cdf36603",
+    "server/src/rhinomcp/tools/grasshopper_solution.py": "1376a74060d00aa7bb0391385054e137101fb1b4be975c9459ec66ebda12b806",
+    "server/src/rhinomcp/tools/measure_objects.py": "aa62fbf7c9f2d1c4f738d2cf221267e8fe4c781d6d0bbcc508a6b2a0f0e981a4",
+    "server/src/rhinomcp/tools/modify_object.py": "1580d9ac9b29bb92b1b236df65481cd739f3b69bd2a8b53bea5702f9230d94b7",
+    "server/src/rhinomcp/tools/modify_objects.py": "be12f1d8d9a64304f42efdad74c9d6fa0b43aff54b60724ae01e2be7d1349f41",
+    "server/src/rhinomcp/tools/object_attributes.py": "bb29326f7dde5a0751f73dfca4bcdeabf2d8efb3a8fcfd912cfc2beb0b88aa76",
+    "server/src/rhinomcp/tools/rhinoscript_docs.py": "1d76bde716ee46442f03cb7fe5b65e2ecd32e05f9a466c845c281b2072975787",
+    "server/src/rhinomcp/tools/run_command.py": "0cd964df12f2aaa68e718181c39d6c7c44602a8eefdb6acd894d23bca247293c",
+    "server/src/rhinomcp/tools/section_profile.py": "d8ceee24eee216b875b4306b932b58a85e54431b9a0f6a50e2c07c1506033fc7",
+    "server/src/rhinomcp/tools/select_objects.py": "74e9a18ffd20e6e7e231f460b04bed17e1de3c0d1e34433f62ba70bc5ae6d2ce",
+    "server/src/rhinomcp/tools/undo.py": "e8671922371fe19068220abcfd233189068af84bad7a167fa02adf0b1149afe6",
+    "server/src/rhinomcp/validation.py": "e1d30f3f4e658486616be4417d093a5c8756def1dadb30242fc31f2573b378ad",
+    "experiments/workflow/panel-binary-trial.json": "a8cf6c216fa24c17c480c6f5e8056bcf5c18834f553a384b94e3eeb12df5673f",
+    "experiments/workflow/panel-pilot.json": "c1fd2c3f79fc8e1bfc78d095c403e0a2bd736c45ac907fd6d7858e3cb61f46a7",
+    "experiments/tasks/panel_raised.json": "e2d97c3c17c23b2c23ad5030d0fac088149bcbb149ecb6178b583da0a5b859f4",
+    "experiments/tasks/panel_depressed.json": "a238ef3443c3752342e358163cec2db562543ceac0ca26430512a75d40714f1f"
+  },
+  "final_runtime": {
+    "document": 268435457,
+    "marker": null,
+    "object_count": 0,
+    "path": null,
+    "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+    "mvid": "326aaa12-b851-4c6a-afcb-45291e734a5c",
+    "version": "0.3.2.0",
+    "pid": 46932,
+    "docs": [
+      {
+        "serial": 268435457,
+        "path": null,
+        "count": 0,
+        "modified": true
+      }
+    ]
+  },
+  "images": [
+    {
+      "run": "task-1-pair-1-baseline",
+      "image": "experiments/assets/panel-binary-task-1-pair-1-baseline.png",
+      "sha256": "5489b245aa1d590d2bb727cdd37dcb179976255cbeec789f9ccaed5ceb46ad36",
+      "model": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-1-pair-1-baseline/candidate.3dm",
+      "model_sha256": "76073d7af220b9d5681a4545a8b492a63bc877d5d54c1510dd9db3d4a3eb6d8e",
+      "verdict": "pass"
+    },
+    {
+      "run": "task-1-pair-1-candidate",
+      "image": "experiments/assets/panel-binary-task-1-pair-1-candidate.png",
+      "sha256": "c2ea7a14c7397c00e45792c8bd17fcbc0dd17089e04cc777cde3676b425b0e2f",
+      "model": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-1-pair-1-candidate/candidate.3dm",
+      "model_sha256": "d94c816f46acef0d4521da12e34872089d9c9659f5280490f56ed359c6eb944d",
+      "verdict": "fail"
+    },
+    {
+      "run": "task-1-pair-2-candidate",
+      "image": "experiments/assets/panel-binary-task-1-pair-2-candidate.png",
+      "sha256": "41009333f4f427b5b5a9d23429558a0e4437fdcd6befff52423514fb3d066dac",
+      "model": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-1-pair-2-candidate/candidate.3dm",
+      "model_sha256": "e51bce2d7ff6e56d32a90aab90668e797511e644ef77c568a6ca47969107a56b",
+      "verdict": "pass"
+    },
+    {
+      "run": "task-1-pair-2-baseline",
+      "image": "experiments/assets/panel-binary-task-1-pair-2-baseline.png",
+      "sha256": "41009333f4f427b5b5a9d23429558a0e4437fdcd6befff52423514fb3d066dac",
+      "model": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-1-pair-2-baseline/candidate.3dm",
+      "model_sha256": "bca37a2f4ec929d32ae2ec3ee4599ab554b501440e0b3eea278eb3a250fbb4d9",
+      "verdict": "pass"
+    },
+    {
+      "run": "task-2-pair-1-baseline",
+      "image": "experiments/assets/panel-binary-task-2-pair-1-baseline.png",
+      "sha256": "b464d5383550163e3ee82e43999d5f3d5e8e550d3115a7c1e46815f63a6abcbf",
+      "model": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-2-pair-1-baseline/candidate.3dm",
+      "model_sha256": "fb8522607bceca183a779fa62bd2c17de49d2d16c1098daf8dea10d57c80faaf",
+      "verdict": "pass"
+    },
+    {
+      "run": "task-2-pair-1-candidate",
+      "image": "experiments/assets/panel-binary-task-2-pair-1-candidate.png",
+      "sha256": "9ca92253b5d259d8f180ecfc9ea0a7cacca4b155870f53715e35351d23fb77b7",
+      "model": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-2-pair-1-candidate/candidate.3dm",
+      "model_sha256": "aba8257c02d778d14b87e7e96588c917ba117009fb1b40cdbd8c951726f9022b",
+      "verdict": "fail"
+    },
+    {
+      "run": "task-2-pair-2-candidate",
+      "image": "experiments/assets/panel-binary-task-2-pair-2-candidate.png",
+      "sha256": "b464d5383550163e3ee82e43999d5f3d5e8e550d3115a7c1e46815f63a6abcbf",
+      "model": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-2-pair-2-candidate/candidate.3dm",
+      "model_sha256": "573d1e9adda14c5d80b7a01b989841bf5eb43560b6e39157e75abd4e2be61e1b",
+      "verdict": "pass"
+    },
+    {
+      "run": "task-2-pair-2-baseline",
+      "image": "experiments/assets/panel-binary-task-2-pair-2-baseline.png",
+      "sha256": "b464d5383550163e3ee82e43999d5f3d5e8e550d3115a7c1e46815f63a6abcbf",
+      "model": "experiments/runs/workflow-binary-20260908-181813-4eec688b/task-2-pair-2-baseline/candidate.3dm",
+      "model_sha256": "0356c323c46de51b9d249ef0234e9a5242856fdb792a1f49429da0f79f764937",
+      "verdict": "pass"
+    }
+  ]
+}

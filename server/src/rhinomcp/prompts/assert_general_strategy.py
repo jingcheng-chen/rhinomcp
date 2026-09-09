@@ -3,92 +3,10 @@ from rhinomcp.server import mcp
 
 @mcp.prompt()
 def asset_general_strategy() -> str:
-    """Defines the preferred strategy for working with Rhino objects"""
-    return """
-    ============================================================
-    RHINO MCP STRATEGY GUIDE
-    ============================================================
+    """Inspect, construct and verify Rhino geometry with the bundled modeling guide."""
+    from rhinomcp.guidance import modeling_guidance
 
-    STEP 1: UNDERSTAND THE DOCUMENT
-    -------------------------------
-    Always start by calling get_document_summary() to understand:
-    - What objects already exist
-    - Available layers
-    - Current document state
-
-
-    STEP 2: CHOOSE THE RIGHT TOOL
-    -----------------------------
-    Use this decision tree:
-
-    Creating geometry:
-    ├─ Simple primitives (box, sphere, cylinder, cone, point, line, circle, arc)?
-    │   └─ YES → Use create_object() or create_objects()
-    │
-    ├─ Multiple similar objects (>3)?
-    │   └─ YES → Use create_objects() in batches of 50 max
-    │
-    ├─ Loft surface through curves?
-    │   └─ YES → Use loft(curve_ids=[...])
-    │
-    ├─ Extrude a curve along a direction?
-    │   └─ YES → Use extrude_curve(curve_id, direction=[x,y,z])
-    │
-    ├─ Sweep profiles along a rail?
-    │   └─ YES → Use sweep1(rail_id, profile_ids=[...])
-    │
-    ├─ Offset a curve?
-    │   └─ YES → Use offset_curve(curve_id, distance)
-    │
-    ├─ Create a pipe/tube along a curve?
-    │   └─ YES → Use pipe(curve_id, radius)
-    │
-    ├─ Boolean operations (union, difference, intersection)?
-    │   └─ YES → Use boolean_union(), boolean_difference(), boolean_intersection()
-    │
-    └─ Other complex geometry (NURBS editing, mesh operations)?
-        └─ YES → Use execute_rhinoscript_python_code()
-                 (MUST call get_rhinoscript_docs() first!)
-
-    Modifying geometry:
-    ├─ Simple changes (rename, color, transform)?
-    │   └─ YES → Use modify_object() or modify_objects()
-    │
-    └─ Complex modifications (rebuild, edit points, trim)?
-        └─ YES → Use execute_rhinoscript_python_code()
-
-    Querying:
-    ├─ Know the object ID?
-    │   └─ YES → Use get_object_info(id=...)
-    │
-    ├─ Know the object name?
-    │   └─ YES → Use get_object_info(name=...)
-    │
-    ├─ Need objects by criteria (type, layer, bbox)?
-    │   └─ YES → Use get_objects(type_filter=..., layer_filter=..., bbox_filter=...)
-    │
-    └─ Need selected objects?
-        └─ YES → Use get_selected_objects_info()
-
-
-    STEP 3: BEST PRACTICES
-    ----------------------
-    1. NAMING: Always give objects meaningful names for future reference
-
-    2. BATCHING: For many objects, use create_objects() with max 50 per call
-
-    3. LAYERS: Organize objects on appropriate layers using create_layer()
-       and set layer with modify_object()
-
-    4. UNDO SAFETY: Complex operations can be undone with undo()
-
-    5. VERIFICATION: After creation, use get_object_info() to verify success
-
-    6. RHINOSCRIPT: When using execute_rhinoscript_python_code():
-       - ALWAYS call get_rhinoscript_docs() first to verify syntax
-       - See rhinoscript_workflow prompt for detailed steps
-       - Never guess function names or parameters
-    """
+    return modeling_guidance("overview")["content"]
 
 
 @mcp.prompt()

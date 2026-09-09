@@ -1,6 +1,7 @@
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from rhinomcp.server import get_rhino_connection, mcp
 from typing import Any, List, Dict, Optional
+
 
 @mcp.tool()
 def create_object(
@@ -15,7 +16,7 @@ def create_object(
 ) -> Dict[str, Any]:
     """
     Create a new object in the Rhino document.
-    
+
     Parameters:
     - type: Object type ("POINT", "LINE", "POLYLINE", "CIRCLE", "ARC", "ELLIPSE", "CURVE", "BOX", "SPHERE", "CONE", "CYLINDER", "SURFACE"). For pipes, use the dedicated `pipe` tool.
     - name: Optional name for the object
@@ -77,15 +78,16 @@ def create_object(
 
     For SURFACE, the params dictionary should contain the following keys:
     - count : ([number, number]) Tuple of two numbers defining number of points in the u,v directions
-    - points: List of [x, y, z] points that define the surface
+    - points: Flattened interpolation points (not control vertices), with the second grid index varying fastest.
+      For degree selection and a validated biquadratic panel recipe, consult get_modeling_guidance("verification").
     - degree: ([number, number], optional) Degree of the surface (default is 3, if user asked for smoother surface, degree can be higher)
     - closed: ([bool, bool], optional) Two booleans defining if the surface is closed in the u,v directions
-    
+
     Returns:
     A dict with success, id, name, type, message, plus bounding_box (the new
     object's axis-aligned extent) and, for curve-like types, geometry — each
     present only when the plugin reported it. Exceptions propagate as MCP tool errors.
-    
+
     Examples of params:
     - POINT: {"x": 0, "y": 0, "z": 0}
     - LINE: {"start": [0, 0, 0], "end": [1, 1, 1]}
@@ -97,15 +99,25 @@ def create_object(
     - CONE: {"radius": 1.0, "height": 1.0, "cap": True}
     - CYLINDER: {"radius": 1.0, "height": 1.0, "cap": True}
     - SURFACE: {"count": (3, 3), "points": [[0, 0, 0], [1, 0, 0], [2, 0, 0], [0, 1, 0], [1, 1, 0], [2, 1, 0], [0, 2, 0], [1, 2, 0], [2, 2, 0]], "degree": (3, 3), "closed": (False, False)}
+
+    Primitive placement before optional transforms:
+    - BOX is centered at world origin. Its bounds are [-width/2, -length/2, -height/2] to [width/2, length/2, height/2]. For an unrotated box whose minimum corner is [x,y,z], pass translation=[x+width/2, y+length/2, z+height/2] during creation.
+    - CYLINDER has its base-circle center at world origin and extends along +Z from 0 to height. Translation places the base center, not the middle of the cylinder. To span Z from z0 to z1, use height=z1-z0 and translation=[center_x, center_y, z0].
+    These rules describe unrotated, unscaled primitives. Inspect the returned bounding_box when applying additional transforms.
     """
     rhino = get_rhino_connection()
 
     command_params: Dict[str, Any] = {"type": type, "params": params or {}}
-    if translation is not None: command_params["translation"] = translation
-    if rotation is not None: command_params["rotation"] = rotation
-    if scale is not None: command_params["scale"] = scale
-    if name: command_params["name"] = name
-    if color: command_params["color"] = color
+    if translation is not None:
+        command_params["translation"] = translation
+    if rotation is not None:
+        command_params["rotation"] = rotation
+    if scale is not None:
+        command_params["scale"] = scale
+    if name:
+        command_params["name"] = name
+    if color:
+        command_params["color"] = color
 
     # Errors propagate so MCP clients see a real tool error instead of a
     # successful string starting with "Error ...".

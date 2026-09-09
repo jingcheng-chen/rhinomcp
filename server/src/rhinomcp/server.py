@@ -1,5 +1,10 @@
 # server.py
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
+from mcp.server.mcpserver.exceptions import ToolError
+from mcp.shared.exceptions import MCPError
+import functools
+import inspect
+import re
 import socket
 import json
 import logging
@@ -7,10 +12,12 @@ import os
 import threading
 import time
 from dataclasses import dataclass
+from importlib.metadata import PackageNotFoundError, version as _pkg_version
 from contextlib import asynccontextmanager
 from typing import AsyncIterator, Dict, Any
 
 from rhinomcp.static.rhinoscriptsyntax import rhinoscriptsyntax_json
+from rhinomcp.guidance import SERVER_INSTRUCTIONS
 
 # Configuration from environment variables
 RHINO_HOST = os.getenv("RHINO_MCP_HOST", "127.0.0.1")
@@ -121,6 +128,96 @@ READONLY_RETRY_COMMANDS = {
 
 CAPABILITIES_COMMAND = "describe_capabilities"
 
+# Server and plugin are released together but update on different schedules:
+# `uvx rhinomcp@latest` re-resolves on every client launch, while the Package
+# Manager updates the plugin on a Rhino restart. A plugin silently ignores
+# parameters it has never heard of and answers an unknown command with a bare
+# error, so the server checks the plugin actually connected before sending.
+#
+# When you add a parameter to an existing command, register it here with the
+# plugin version that introduces it and the value that means "not used".
+PARAMS_SINCE: Dict[str, Dict[str, tuple]] = {
+    "sweep1": {"cap_planar_ends": ("0.4.0", False)},
+}
+# Commands added after describe_capabilities (0.3.2) existed, so a plugin too
+# old to report its command table is still refused with the right advice.
+COMMANDS_SINCE: Dict[str, str] = {
+    "create_planar_region": "0.4.0",
+}
+PLUGIN_UPDATE_ADVICE = (
+    "Update rhinomcp in Rhino's Package Manager (Tools > Package Manager > "
+    "Installed), then restart Rhino and run mcpstart."
+)
+SERVER_UPDATE_ADVICE = (
+    "Restart the MCP client so `uvx rhinomcp@latest` picks up the newer server, "
+    "or run `uv tool upgrade rhinomcp` if it is installed as a tool."
+)
+_VERSION_PREFIX = re.compile(r"\s*v?(\d+(?:\.\d+)*)")
+_UNKNOWN_COMMAND_ANSWER = re.compile(r"^Unknown command( type)?\b")
+
+
+def server_version() -> str | None:
+    """This package's installed version, or None outside an installed package."""
+    try:
+        return _pkg_version("rhinomcp")
+    except PackageNotFoundError:
+        return None
+
+
+def parse_version(text) -> tuple | None:
+    """The leading dotted integers of a version string as a 3-tuple, or None.
+
+    "0.4.0", "0.4.0.0" and "0.4.0+abc" all read as (0, 4, 0); "unknown" as None.
+    """
+    match = _VERSION_PREFIX.match(str(text)) if text else None
+    if not match:
+        return None
+    parts = [int(part) for part in match.group(1).split(".")][:3]
+    return tuple(parts + [0] * (3 - len(parts)))
+
+
+def version_skew_report(plugin_version) -> Dict[str, Any]:
+    """Compare the plugin's reported version with this server's.
+
+    Returns server_version, plugin_matches_server (None when either side is
+    unknown) and update_advice naming the older side, or None when they match.
+    """
+    server = server_version()
+    report: Dict[str, Any] = {
+        "server_version": server,
+        "plugin_matches_server": None,
+        "update_advice": None,
+    }
+    plugin, mine = parse_version(plugin_version), parse_version(server)
+    if plugin is None or mine is None:
+        return report
+    report["plugin_matches_server"] = plugin == mine
+    if plugin < mine:
+        report["update_advice"] = (
+            f"The Rhino plugin ({plugin_version}) is older than this server "
+            f"({server}). {PLUGIN_UPDATE_ADVICE}"
+        )
+    elif plugin > mine:
+        report["update_advice"] = (
+            f"This server ({server}) is older than the Rhino plugin "
+            f"({plugin_version}). {SERVER_UPDATE_ADVICE}"
+        )
+    return report
+
+
+def unsupported_command_message(command_type: str, plugin_version: str, since) -> str:
+    """Actionable text for a command the connected plugin cannot run."""
+    added = f", which was added in plugin {since}" if since else ""
+    return (
+        f"The connected rhinomcp plugin ({plugin_version}) does not support "
+        f"'{command_type}'{added}; this server is {server_version() or 'unknown'}. "
+        f"{PLUGIN_UPDATE_ADVICE}"
+    )
+
+
+class UnsupportedCommandError(Exception):
+    """The connected plugin cannot run this command; the socket itself is fine."""
+
 
 class TransientRhinoConnectionError(ConnectionError):
     """A connected Rhino socket dropped while a command was in flight."""
@@ -154,6 +251,9 @@ class RhinoConnection:
         # None means "not asked yet"; connecting and dropping both reset it, so an
         # answer from one plugin is never reused for another.
         self._dry_run_commands: set[str] | None = None
+        # The plugin's whole describe_capabilities answer, read once per socket:
+        # None until read; {} when the plugin definitively has no such command.
+        self._capabilities: Dict[str, Any] | None = None
         self._capabilities_lock = threading.Lock()
 
     def connect(self) -> bool:
@@ -165,6 +265,7 @@ class RhinoConnection:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.sock.connect((self.host, self.port))
             self._dry_run_commands = None
+            self._capabilities = None
             logger.info(f"Connected to Rhino at {self.host}:{self.port}")
             return True
         except Exception as e:
@@ -182,6 +283,7 @@ class RhinoConnection:
             finally:
                 self.sock = None
                 self._dry_run_commands = None
+                self._capabilities = None
 
     def _recv_exact(self, sock, num_bytes, buffer_size=8192):
         """Receive exactly num_bytes from sock.
@@ -237,22 +339,111 @@ class RhinoConnection:
         self, command_type: str, params: Dict[str, Any] = {}
     ) -> Dict[str, Any]:
         """Send a command to Rhino and return the response. Thread-safe: serialized
-        across concurrent callers so request/response framing isn't interleaved."""
-        if (params or {}).get("dry_run"):
-            self._require_dry_run_support(command_type)
+        across concurrent callers so request/response framing isn't interleaved.
+
+        Before a command leaves the client it is checked against the plugin
+        actually connected (see _check_plugin_compatibility); the capabilities
+        read that check relies on is itself exempt so it cannot recurse.
+        """
+        params = params or {}
+        self._preflight_validate(command_type, params)
+        if command_type != CAPABILITIES_COMMAND:
+            self._check_plugin_compatibility(command_type, params)
         with self._send_lock:
             return self._send_command_locked(command_type, params)
 
-    def _require_dry_run_support(self, command_type: str):
+    def _preflight_validate(self, command_type: str, params: Dict[str, Any]):
+        """Validate params against the JSON Schema contract before anything
+        touches the socket. In 'warn' mode log and continue (safe default); in
+        'strict' raise so the bad payload never reaches Rhino. validate_command
+        no-ops if jsonschema is missing or the command has no schema yet.
+        """
+        if RHINO_VALIDATE == "off":
+            return
+        from rhinomcp.validation import validate_command
+
+        try:
+            validate_command(command_type, params, raise_on_error=True)
+        except Exception as ve:
+            # validate_command raises jsonschema.ValidationError on schema
+            # failures (FileNotFoundError is handled internally). The broad
+            # except keeps a missing jsonschema install from needing an import
+            # here; the only expected type is ValidationError.
+            if RHINO_VALIDATE == "strict":
+                raise ValueError(f"Invalid params for '{command_type}': {ve}") from ve
+            logger.warning(f"Pre-flight validation failed for {command_type}: {ve}")
+
+    def _check_plugin_compatibility(self, command_type: str, params: Dict[str, Any]):
+        """Refuse what the connected plugin cannot do, before the socket send.
+
+        All three checks read the plugin's own describe_capabilities answer,
+        fetched once per connection:
+
+        - a command the plugin does not list is refused with update advice
+          instead of being forwarded to a bare "Unknown command type" error;
+        - a PARAMS_SINCE parameter that is actually used is refused when the
+          plugin predates it, or when its version could not be read, because a
+          plugin silently ignores parameters it does not know;
+        - dry_run keeps its explicit opt-in gate.
+        """
+        capabilities = self._plugin_capabilities()
+        version_text = self._plugin_version_text()
+        since = COMMANDS_SINCE.get(command_type)
+
+        if capabilities == {}:
+            # Definitive: the plugin predates describe_capabilities, so it also
+            # predates everything registered in the tables above.
+            if since:
+                raise UnsupportedCommandError(
+                    unsupported_command_message(command_type, version_text, since)
+                )
+        elif capabilities:
+            advertised = {
+                entry.get("name")
+                for entry in capabilities.get("commands", [])
+                if isinstance(entry, dict)
+            }
+            if advertised and command_type not in advertised:
+                raise UnsupportedCommandError(
+                    unsupported_command_message(command_type, version_text, since)
+                )
+
+        for name, (introduced, unused) in PARAMS_SINCE.get(command_type, {}).items():
+            value = params.get(name)
+            if value is None or value == unused:
+                continue
+            if capabilities is None:
+                raise Exception(
+                    "Could not read the plugin's capabilities, so support for "
+                    f"'{name}' on '{command_type}' cannot be confirmed and an older "
+                    "plugin would silently ignore it. The command was not sent. "
+                    f"Retry, or call without {name}."
+                )
+            plugin = (
+                parse_version(capabilities.get("version")) if capabilities else None
+            )
+            if plugin is None or plugin < parse_version(introduced):
+                raise Exception(
+                    f"'{command_type}' parameter '{name}' needs plugin {introduced}; "
+                    f"the connected rhinomcp plugin ({version_text}) would silently "
+                    f"ignore it. The command was not sent. {PLUGIN_UPDATE_ADVICE} "
+                    f"Or call without {name}."
+                )
+
+        if params.get("dry_run"):
+            self._require_dry_run_support(command_type, capabilities)
+
+    def _require_dry_run_support(self, command_type: str, capabilities):
         """Refuse a preview the connected plugin cannot give.
 
         Server and plugin ship separately, so a new server can meet an old
         plugin. That plugin drops the dry_run param it has never heard of, runs
         the real boolean, and deletes the source objects, while the caller reads
         the reply as a preview. So the check happens here, before the send, and
-        only an explicit yes lets the command through.
+        only an explicit yes lets the command through: a command the list doesn't
+        mention, an entry without the field, or an unreadable answer is a no.
         """
-        if command_type in self._dry_run_capable_commands():
+        if capabilities and command_type in (self._dry_run_commands or set()):
             return
 
         raise Exception(
@@ -262,36 +453,49 @@ class RhinoConnection:
             "the plugin to match this server version, or retry without dry_run."
         )
 
-    def _dry_run_capable_commands(self) -> set[str]:
-        """Commands this plugin advertises a dry_run preview for.
+    def _plugin_capabilities(self) -> Dict[str, Any] | None:
+        """The connected plugin's describe_capabilities answer, read once per
+        connection and dropped with the socket, since the next socket may reach
+        a different plugin.
 
-        Read once per connection and cached, so a caller that never previews
-        pays nothing and one that does pays a single extra round trip. The fetch
-        sends no dry_run of its own, so it cannot re-enter the gate. Only an
-        answer that arrived is remembered, and it is taken at its word: a command
-        the list doesn't mention, or an entry without the field, is a real no. A
-        fetch that fails refuses the call in hand without being remembered, so a
-        dropped frame costs one preview rather than every preview left on this
-        connection.
+        Returns the answer; {} when the plugin definitively has no such command
+        (it predates 0.3.2); None when the read failed for another reason (a
+        dropped frame, a timeout). A failure is not remembered, so the next
+        command asks again instead of the connection being stuck on a socket
+        that merely hiccuped. The read sends no gated parameters of its own.
         """
         with self._capabilities_lock:
-            if self._dry_run_commands is None:
+            if self._capabilities is None:
                 try:
-                    capabilities = self.send_command(CAPABILITIES_COMMAND, {})
-                    advertised = {
-                        entry.get("name")
-                        for entry in capabilities.get("commands", [])
-                        if isinstance(entry, dict)
-                        and entry.get("supports_dry_run") is True
-                    }
+                    answer = self.send_command(CAPABILITIES_COMMAND, {})
+                except UnsupportedCommandError:
+                    answer = {}
                 except Exception as e:
                     logger.warning(
                         f"Could not read the plugin's capabilities ({str(e)}); "
-                        "refusing this dry_run, the next one will ask again."
+                        "the next command will ask again."
                     )
-                    return set()
-                self._dry_run_commands = advertised
-            return self._dry_run_commands
+                    return None
+                if not isinstance(answer, dict):
+                    answer = {}
+                self._capabilities = answer
+                self._dry_run_commands = {
+                    entry.get("name")
+                    for entry in answer.get("commands", [])
+                    if isinstance(entry, dict) and entry.get("supports_dry_run") is True
+                }
+                advice = version_skew_report(answer.get("version"))["update_advice"]
+                if answer and advice:
+                    logger.warning(f"Version skew: {advice}")
+            return self._capabilities
+
+    def _plugin_version_text(self) -> str:
+        """The plugin version for messages, or what is known in its place."""
+        if self._capabilities is None:
+            return "version not read"
+        if not self._capabilities:
+            return "older than 0.3.2"
+        return str(self._capabilities.get("version") or "unknown version")
 
     def _send_command_locked(
         self, command_type: str, params: Dict[str, Any] = {}
@@ -337,31 +541,6 @@ class RhinoConnection:
             logger.info(f"Sending command: {command_type}")
             logger.debug(f"Command params: {json.dumps(params, indent=2)}")
 
-            # Pre-flight: validate against the JSON Schema contract before touching
-            # the socket. In 'warn' mode we log and continue (safe default); in
-            # 'strict' we raise so the bad payload never reaches Rhino.
-            # validate_command no-ops if jsonschema is missing or the command has
-            # no schema yet.
-            if RHINO_VALIDATE != "off":
-                from rhinomcp.validation import validate_command
-
-                try:
-                    validate_command(
-                        command_type, command["params"], raise_on_error=True
-                    )
-                except Exception as ve:
-                    # validate_command raises jsonschema.ValidationError on schema
-                    # failures (FileNotFoundError is handled internally). We keep
-                    # the broad except so a missing jsonschema install doesn't
-                    # require importing it here — but the only expected type is
-                    # ValidationError.
-                    msg = f"Pre-flight validation failed for {command_type}: {ve}"
-                    if RHINO_VALIDATE == "strict":
-                        raise ValueError(
-                            f"Invalid params for '{command_type}': {ve}"
-                        ) from ve
-                    logger.warning(msg)
-
             if self.sock is None:
                 raise Exception("Socket is not connected")
 
@@ -387,8 +566,19 @@ class RhinoConnection:
             logger.debug(f"Full response: {json.dumps(response, indent=2)[:1000]}...")
 
             if response.get("status") == "error":
-                logger.error(f"Rhino error: {response.get('message')}")
-                raise Exception(response.get("message", "Unknown error from Rhino"))
+                message = response.get("message", "Unknown error from Rhino")
+                logger.error(f"Rhino error: {message}")
+                if _UNKNOWN_COMMAND_ANSWER.match(message):
+                    # An old plugin cannot list its commands, so this is where
+                    # its refusal is turned into something a person can act on.
+                    raise UnsupportedCommandError(
+                        unsupported_command_message(
+                            command_type,
+                            self._plugin_version_text(),
+                            COMMANDS_SINCE.get(command_type),
+                        )
+                    )
+                raise Exception(message)
 
             result = response.get("result", {})
 
@@ -482,6 +672,9 @@ class RhinoConnection:
             # Pre/post-flight validation failures — local, not a transport
             # issue. Propagate.
             raise
+        except UnsupportedCommandError:
+            # The plugin answered; the socket is healthy. Propagate as-is.
+            raise
         except Exception as e:
             logger.error(f"Error communicating with Rhino: {str(e)}")
             # Don't try to reconnect here - let the get_rhino_connection handle reconnection
@@ -490,7 +683,7 @@ class RhinoConnection:
 
 
 @asynccontextmanager
-async def server_lifespan(server: FastMCP) -> AsyncIterator[Dict[str, Any]]:
+async def server_lifespan(server: MCPServer) -> AsyncIterator[Dict[str, Any]]:
     """Manage server startup and shutdown lifecycle"""
     # We don't need to create a connection here since we're using the global connection
     # for resources and tools
@@ -520,8 +713,51 @@ async def server_lifespan(server: FastMCP) -> AsyncIterator[Dict[str, Any]]:
         logger.info("RhinoMCP server shut down")
 
 
+def _reporting_errors(fn):
+    """Re-raise a tool's failure as ToolError so its message reaches the client.
+
+    MCP SDK 2.x reports any other exception to the client as only
+    "Error executing tool <name>". RhinoMCP's error text is the agent's recovery
+    path (start Rhino and run `mcpstart`, fix a parameter, retry after a dropped
+    connection), so it has to survive the trip. Only the callable handed to the
+    SDK is wrapped; the module-level tool function keeps raising its own types.
+    """
+    if inspect.iscoroutinefunction(fn):
+
+        @functools.wraps(fn)
+        async def async_wrapper(*args, **kwargs):
+            try:
+                return await fn(*args, **kwargs)
+            except (ToolError, MCPError):
+                raise
+            except Exception as e:
+                raise ToolError(str(e)) from e
+
+        return async_wrapper
+
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        try:
+            return fn(*args, **kwargs)
+        except (ToolError, MCPError):
+            raise
+        except Exception as e:
+            raise ToolError(str(e)) from e
+
+    return wrapper
+
+
+class RhinoMCPServer(MCPServer):
+    """MCPServer whose tools report their real error messages to the client."""
+
+    def add_tool(self, fn, *args, **kwargs):
+        return super().add_tool(_reporting_errors(fn), *args, **kwargs)
+
+
 # Create the MCP server with lifespan support
-mcp = FastMCP("RhinoMCP", lifespan=server_lifespan)
+mcp = RhinoMCPServer(
+    "RhinoMCP", lifespan=server_lifespan, instructions=SERVER_INSTRUCTIONS
+)
 
 
 # ============================================================================

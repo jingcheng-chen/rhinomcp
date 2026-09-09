@@ -1,0 +1,14 @@
+{
+ "id":"reliable-surface-feedback",
+ "kind":"defect",
+ "target":"mcp_interface",
+ "friction":"An agent discarded a curved surface after interpreting the creation response's flat bounding box as flat geometry, then exhausted its tool budget.",
+ "evidence":["POSED_CUSHION_LOOP.md","runs/surface-bounds-20260906-180014/measurement.json","runs/surface-bounds-20260906-180231/measurement.json","runs/posed-cushion-model-20260906-175410-5bf01af5/modeler/events.jsonl"],
+ "hypothesis":"Reliable immediately returned geometry information will reduce unnecessary reconstruction and failed tool sequences across surface-based tasks. Cross-task benefit remains unmeasured.",
+ "discovery_families":["surface-construction"],
+ "validation_families":["surface-construction","curved-panels","trimmed-patches"],
+ "held_out_families":["curved-panels","trimmed-patches"],
+ "metrics":["task_success","failed_tool_calls","mcp_calls","elapsed_seconds","tokens"],
+ "preserve":["Existing 61-case production contract","Correct trimmed geometry bounds","Existing command defaults","Fixed agent, task inputs and evaluators during comparison"],
+ "status":"proposed"
+}

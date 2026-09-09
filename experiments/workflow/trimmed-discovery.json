@@ -1,0 +1,277 @@
+{
+  "run": "experiments/runs/workflow-baseline-20260908-184425-6035a018",
+  "audit": {
+    "purpose": "Find cross-task workflow friction, not score modeling quality or claim improvement.",
+    "families": [
+      "trimmed-patches"
+    ],
+    "runs": [
+      {
+        "id": "trimmed-offset-v1",
+        "family": "trimmed-patches",
+        "available": true,
+        "source": "experiments/runs/workflow-baseline-20260908-184425-6035a018/task-1",
+        "source_sha256": "248e0c49bf036bc2bfc4012a65e5fbb15b7fbe4fd36f2d63a7e544822fcd0a82",
+        "session_status": "completed",
+        "elapsed_seconds": 237.54891991597833,
+        "task_verdict": "fail",
+        "agent_claim_complete": true,
+        "evaluation_sha256": "efdc5c78f2db6b3f9d70ba7d7cbf19e5ea4c9c82a7a1d671365855f99de3372e",
+        "metrics": {
+          "mcp_attempts": 25,
+          "completed_calls": 25,
+          "unfinished_calls": 0,
+          "failed_calls": 4,
+          "failures_by_tool": {
+            "analyze_objects": 1,
+            "boolean_difference": 1,
+            "create_object": 1,
+            "delete_object": 1
+          },
+          "tools": {
+            "analyze_objects": 3,
+            "boolean_difference": 4,
+            "create_object": 9,
+            "delete_object": 5,
+            "extrude_curve": 1,
+            "get_object_info": 2,
+            "get_objects": 1
+          },
+          "commands": {},
+          "schema_queries": 0,
+          "delete_calls": 0,
+          "usage": {
+            "input_tokens": 550566,
+            "cached_input_tokens": 500992,
+            "output_tokens": 9320,
+            "reasoning_output_tokens": 7127
+          },
+          "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+        ]
+      }
+    ],
+    "promotion_authorized": false,
+    "limitation": "Historical heterogeneous observations only. Missing data stays unknown; task success and efficiency are separate."
+  },
+  "evaluation": {
+    "status": "fail",
+    "checks": {
+      "one_object": true,
+      "millimeters": true,
+      "valid": true,
+      "one_open_planar_face": false,
+      "outer_and_hole": false,
+      "local_bounds": false,
+      "rectangular_outer_boundary": false,
+      "circular_inner_boundary": false,
+      "trimmed_area": false,
+      "trimmed_membership": false
+    },
+    "measurements": {
+      "units": "Millimeters",
+      "objects": [
+        {
+          "valid": true,
+          "solid": false,
+          "faces": 2,
+          "planar": false,
+          "outer_loops": 2,
+          "inner_loops": 1,
+          "min": [
+            0.0,
+            0.0,
+            -4.508666245507583e-07
+          ],
+          "max": [
+            100.0,
+            80.00000000000001,
+            3.999999549133372
+          ],
+          "outer_error": 1e+99,
+          "inner_error": 1e+99,
+          "area": -1.0,
+          "membership_errors": 0,
+          "membership_samples": 0
+        }
+      ]
+    },
+    "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+    "artifact_sha256": "ab013935f2a1904c2e218635a5a47ec55ac42127bcc43994408e117a75d33259"
+  },
+  "preservation": {
+    "before": {
+      "objects": [],
+      "layers": [
+        {
+          "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+          "Name": "Default",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+          "Name": "Layer 01",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+          "Name": "Layer 02",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+          "Name": "Layer 03",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+          "Name": "Layer 04",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+          "Name": "Layer 05",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        }
+      ],
+      "units": "Millimeters",
+      "tolerance": 0.001
+    },
+    "after": {
+      "objects": [],
+      "layers": [
+        {
+          "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+          "Name": "Default",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+          "Name": "Layer 01",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+          "Name": "Layer 02",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+          "Name": "Layer 03",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+          "Name": "Layer 04",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+          "Name": "Layer 05",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        }
+      ],
+      "units": "Millimeters",
+      "tolerance": 0.001
+    },
+    "preserved": true
+  },
+  "image": "experiments/assets/trimmed-discovery-failed.png",
+  "image_sha256": "cd899f799ddba6653c426a13346adff6ae441f76327ff78eb570dfd6ad6e8d75",
+  "artifact_sha256": "ab013935f2a1904c2e218635a5a47ec55ac42127bcc43994408e117a75d33259",
+  "source_pins": {
+    "experiments/bridge.py": "6c1eb15594b82b63f22fe6193101679cc49ecaab6c78d732552ea497cd52207b",
+    "experiments/evaluate.cs": "419ccf07914aa8c1b906bf60fb2880a4843702605652672ef0d9389d1548e703",
+    "experiments/evaluator.py": "d9b9410abdbcc8fffce8a033e104b2b93a740e6409e33c103ece740a9fade3d4",
+    "experiments/harness/roles/modeler.md": "88a568140e4c04f81f56279af0145478dcf049b2fb61ecc68c50a47cbc9106a5",
+    "experiments/panel_measure.cs": "0c5cc7f240aa79e3082620c23bbcf731c38f5718760de3e58dce922d2f87159d",
+    "experiments/panel_task.py": "7ee77b2e6074b76cd6242905da71c30f608dc342d84302a08cfafb138b99f5b2",
+    "experiments/rhino_trial.py": "81e8c10c0e00e763ac4dbe7ec1db65dffb3e62663585086298919859377a9ca0",
+    "experiments/runner.py": "40abe21d74d15d4b0ae39e144f463cc84d61e3d8f1e400767ba5070e64ebfb1b",
+    "experiments/strip_measure.cs": "64970d46fb431b6f8e9cf770c994261af5f6e44d6e354fd01daacf77e983031f",
+    "experiments/strip_probe.py": "233a8718b8a7df0cbdcf947990b36233090b90ed2cca4a97928e3bc9c23eecc2",
+    "experiments/strip_task.py": "b9c32f7e5f1f7f1640ed1f37f7a51c7b42a47044fc26452026a7741fdf48158c",
+    "experiments/tasks/schema.json": "c20cec0684f75ac4fd497b1877981f74e5ebce0bb4565c47df23e80724718f2f",
+    "experiments/trial.py": "aa23dd3fba8f3d36ff733306fa1a63bb496f80a37996cffbb2400b5cc03035d3",
+    "experiments/trimmed_measure.cs": "3b3076d109716cace7cb2ee70fdcd9d851b6425e3b030b12e2e1f8b178e8d0f3",
+    "experiments/trimmed_task.py": "af4dde88ade00c09b0113b2c77b2e269d749aaf658a142a1e9c2a89d055a05f5",
+    "experiments/workflow/audit.py": "ea29bdc9153053ac4a06988e4c8334c8a1c7d4b9d02f52c78f7d713094055620",
+    "experiments/workflow/binary_compare.py": "26e3939ac22a4ea042f881fd2349031958370edbf582cc76d5e45563f43a80c3",
+    "experiments/workflow/compare.py": "b9e612de3871ffde79feacd90ff525e6c0ac0e773ec5dc857be2d95f93a2be9b",
+    "experiments/workflow/native_mcp.py": "7734a8d0efdadf3cebc2ce04fe3e2c2d7f8ffeac3fa6a2a1e94ecdd464212ca9",
+    "experiments/workflow/pilot.py": "3b1257ab2520af00779310e892d7294f467368d0d9bbbf72434d286caea897ef",
+    "experiments/workflow/plan.py": "ba3dbee1a1ea34a61115c8b872f8a360cf9d352cb2e7d9cf1e5fa8430f31b1a7",
+    "experiments/workflow/proposals.py": "f492ca23f75cb418606c6bbd991eaa6bd7bc0f9cc0115d9d81b1c97b10499fac",
+    "server/src/rhinomcp/__init__.py": "82f2f13fb3c43381f165b53777f06ee9467f27a8ab3835958f15a95d1eec6375",
+    "server/src/rhinomcp/prompts/assert_general_strategy.py": "88902fea723b94c403726fe825d0d51518de7d76b5534fe373e8e9d3c1f087a6",
+    "server/src/rhinomcp/server.py": "675f68d3567378350a5b8c314ea497385570e1ff57a827f469342addaff64bb8",
+    "server/src/rhinomcp/static/rhinoscriptsyntax.py": "c6b20133156cf6a4d72330d04f78cb20b1784d2fbb31b34ca89ac16392a53949",
+    "server/src/rhinomcp/tools/_grasshopper_common.py": "2cb0d5df8d9ff96eb0de9b0e08766d4f65670047b3c68b74a75e6e6821f74557",
+    "server/src/rhinomcp/tools/advanced_geometry.py": "18784e7e3c7bc2b84718f8e869577ae53e8bd46c2244f960157df9046d5096e5",
+    "server/src/rhinomcp/tools/analyze_objects.py": "7a16dbdb027afc8e2a754187cb849c43f52673e9f510f4e5436d94784096b41e",
+    "server/src/rhinomcp/tools/boolean_operations.py": "d0c413d17590b65e30ae9d6c08940f2455c3c96736139a026676fee464daced7",
+    "server/src/rhinomcp/tools/capture_viewport.py": "05695d15fd0837abb7c056b86419f587fe5cf432369c2a940d94b49b94407aa9",
+    "server/src/rhinomcp/tools/create_layer.py": "7cd0f53a1eb40164550a45587c3bb939a6f1fdb64f35dbb1c674327c07051e5f",
+    "server/src/rhinomcp/tools/create_object.py": "65bafaaba1cbb3d29368d95d2c036ebc1e52dc620c1e5ce2be36f7a245258a94",
+    "server/src/rhinomcp/tools/create_objects.py": "ff5fb9709fca269d1ce0c1383e706b831bc51323d064e40a2852c355066e9e54",
+    "server/src/rhinomcp/tools/curve_operations.py": "aeac424910c4573287607a293ce4186442efce24cd3eb0b3e843d9ea55a3bf6f",
+    "server/src/rhinomcp/tools/delete_layer.py": "0a96f8d4ac8d3506d0a57da6c1729d24d8119583821921d22ec3d6fb627d6950",
+    "server/src/rhinomcp/tools/delete_object.py": "f33a694258be82ac4545a4936716b86e50bdada780edd4ea13dd93a359acea38",
+    "server/src/rhinomcp/tools/describe_capabilities.py": "c7a84fca990baaafa75948399070f10d571d2650ef2bab14fe97cbf29879fb32",
+    "server/src/rhinomcp/tools/execute_rhinocommon_csharp_code.py": "8cbf1ee359aaa2c479b97e0dc1a35130346dcd42fc25737d6046da3f81353930",
+    "server/src/rhinomcp/tools/execute_rhinoscript_python_code.py": "fcb97fb32d552be4c96fff1358863dbb066dbf10a4f16b214261f1761d13fe92",
+    "server/src/rhinomcp/tools/get_commands.py": "f2a9b99c4de7607fa390a09be49dfae16e6d5b4de1633adcc032e4781a75c025",
+    "server/src/rhinomcp/tools/get_document_summary.py": "4ed3a90eaba4c61b6acb5750a29b0e09bffda4b4419162a21ab3b6a0bee91324",
+    "server/src/rhinomcp/tools/get_object_info.py": "0df2e8e093a9a72432ce8a484c3df79e19597258e84617d96dc231a5ada79c99",
+    "server/src/rhinomcp/tools/get_objects.py": "be44109ddcd404ac749f32a3929edc147e81559febf47a63a4ab2be8f93452f8",
+    "server/src/rhinomcp/tools/get_or_set_current_layer.py": "8bfe33ae84d88fb405fd746ba142f6fb98771b1a990c6f054cc31e0b2578b9f2",
+    "server/src/rhinomcp/tools/get_selected_objects_info.py": "6192784ec7da3b4f12e70a035575ba8a09669bc20c1c6e286352427d55de7899",
+    "server/src/rhinomcp/tools/grasshopper_build.py": "d76b35b6e5a132e49c8546c1c06643baa4f22e7f1e3b35fbff02fbb5131ea1a6",
+    "server/src/rhinomcp/tools/grasshopper_catalog.py": "e2a146371171b1e2492879c3e25738e08161370f65922f9fededcd9e6b236ce0",
+    "server/src/rhinomcp/tools/grasshopper_components.py": "6cedad90b6d2a18d3b1b6b6559b78396076aad5995ffc06f23bca39c071fea3b",
+    "server/src/rhinomcp/tools/grasshopper_connections.py": "96b5eaa90112664f999036a2eed724b76f8794f53960282537e3ef79deb76f6e",
+    "server/src/rhinomcp/tools/grasshopper_document.py": "fa4704c7a1918cc6431c265eb8b65b8fcbe68236a81b66979adfa9094e2d459a",
+    "server/src/rhinomcp/tools/grasshopper_graph.py": "27f437dfa0d1702c0aa1f6b656150ad2e7e27077631d0b2f356d9f633b9f90a9",
+    "server/src/rhinomcp/tools/grasshopper_mutation.py": "905db9ef8688fb6aa25b5ff259bb5eb0e6d03faeb627366e51b86d6d10fe9b33",
+    "server/src/rhinomcp/tools/grasshopper_parameters.py": "9166fe48bf6740efb962c3b01cb99e8eaa0f61a9118cd57f013add69b422c668",
+    "server/src/rhinomcp/tools/grasshopper_preview.py": "dfa4209d753983c0d0262585bfa2b1a93bb775861a8b72bd20623d25cdf36603",
+    "server/src/rhinomcp/tools/grasshopper_solution.py": "1376a74060d00aa7bb0391385054e137101fb1b4be975c9459ec66ebda12b806",
+    "server/src/rhinomcp/tools/measure_objects.py": "aa62fbf7c9f2d1c4f738d2cf221267e8fe4c781d6d0bbcc508a6b2a0f0e981a4",
+    "server/src/rhinomcp/tools/modify_object.py": "1580d9ac9b29bb92b1b236df65481cd739f3b69bd2a8b53bea5702f9230d94b7",
+    "server/src/rhinomcp/tools/modify_objects.py": "be12f1d8d9a64304f42efdad74c9d6fa0b43aff54b60724ae01e2be7d1349f41",
+    "server/src/rhinomcp/tools/object_attributes.py": "bb29326f7dde5a0751f73dfca4bcdeabf2d8efb3a8fcfd912cfc2beb0b88aa76",
+    "server/src/rhinomcp/tools/rhinoscript_docs.py": "1d76bde716ee46442f03cb7fe5b65e2ecd32e05f9a466c845c281b2072975787",
+    "server/src/rhinomcp/tools/run_command.py": "0cd964df12f2aaa68e718181c39d6c7c44602a8eefdb6acd894d23bca247293c",
+    "server/src/rhinomcp/tools/section_profile.py": "d8ceee24eee216b875b4306b932b58a85e54431b9a0f6a50e2c07c1506033fc7",
+    "server/src/rhinomcp/tools/select_objects.py": "74e9a18ffd20e6e7e231f460b04bed17e1de3c0d1e34433f62ba70bc5ae6d2ce",
+    "server/src/rhinomcp/tools/undo.py": "e8671922371fe19068220abcfd233189068af84bad7a167fa02adf0b1149afe6",
+    "server/src/rhinomcp/validation.py": "e1d30f3f4e658486616be4417d093a5c8756def1dadb30242fc31f2573b378ad"
+  }
+}

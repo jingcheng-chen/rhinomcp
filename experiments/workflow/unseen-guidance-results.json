@@ -1,0 +1,1213 @@
+{
+  "run": "experiments/runs/workflow-baseline-20260909-182654-2ada6f48",
+  "sessions": 4,
+  "task_passes": 3,
+  "mcp_attempts": 46,
+  "failed_calls": 0,
+  "model_seconds": 281.39746591699077,
+  "rows": [
+    {
+      "id": "offset_bore-v1",
+      "family": "subtractive-solids",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-182654-2ada6f48/task-1",
+      "source_sha256": "00cd4f56eeace21eb95bb01f120e0caf701fd489bc5a7c6cdc6f4846e3854ecd",
+      "session_status": "completed",
+      "elapsed_seconds": 28.233345667016692,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "5f41bb2a32d958b1aedbcd4584f4ce7d5136d40ac053afc783ce384509ca48c9",
+      "metrics": {
+        "mcp_attempts": 8,
+        "completed_calls": 8,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "boolean_difference": 1,
+          "create_object": 2,
+          "get_modeling_guidance": 2,
+          "get_objects": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 10,
+          "cache_creation_input_tokens": 18668,
+          "cache_read_input_tokens": 66707,
+          "output_tokens": 2251,
+          "output_tokens_details": {
+            "thinking_tokens": 582
+          },
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 18668,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": "not_available",
+          "iterations": [
+            {
+              "input_tokens": 2,
+              "output_tokens": 1019,
+              "cache_read_input_tokens": 17839,
+              "cache_creation_input_tokens": 829,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 829
+              },
+              "type": "message"
+            }
+          ],
+          "speed": "standard"
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "evaluation": {
+        "status": "pass",
+        "checks": {
+          "units": true,
+          "object_count": true,
+          "valid": true,
+          "solid": true,
+          "minimum": true,
+          "dimensions": true,
+          "supported_faces": true,
+          "outer_boundary_planes": true,
+          "hole_axis": true,
+          "hole_radius": true,
+          "hole_full_height": true,
+          "hole_axis_clear": true,
+          "area": true,
+          "volume": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": true,
+              "minimum": [
+                -62.0,
+                23.0,
+                -11.0
+              ],
+              "dimensions": [
+                86.0,
+                48.0,
+                17.000000000000004
+              ],
+              "volume": 67559.05332020568,
+              "area": 13251.822971756943,
+              "vertices": [
+                [
+                  -62.0,
+                  23.0,
+                  -11.0
+                ],
+                [
+                  24.0,
+                  23.0,
+                  -11.0
+                ],
+                [
+                  24.0,
+                  23.0,
+                  6.0
+                ],
+                [
+                  -62.0,
+                  23.0,
+                  6.0
+                ],
+                [
+                  24.0,
+                  71.0,
+                  -11.0
+                ],
+                [
+                  24.0,
+                  71.0,
+                  6.0
+                ],
+                [
+                  -62.0,
+                  71.0,
+                  -11.0
+                ],
+                [
+                  -62.0,
+                  71.0,
+                  6.0
+                ],
+                [
+                  -32.0,
+                  54.0,
+                  -11.0
+                ],
+                [
+                  -31.999999999999996,
+                  54.0,
+                  6.0
+                ]
+              ],
+              "planar_faces": false,
+              "straight_edges": false,
+              "faces": [
+                {
+                  "kind": "plane",
+                  "origin": [
+                    -19.0,
+                    23.0,
+                    -2.5
+                  ],
+                  "normal": [
+                    0.0,
+                    -1.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    24.0,
+                    47.0,
+                    -2.5
+                  ],
+                  "normal": [
+                    1.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    -19.0,
+                    71.0,
+                    -2.5
+                  ],
+                  "normal": [
+                    0.0,
+                    1.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    -62.0,
+                    47.0,
+                    -2.5
+                  ],
+                  "normal": [
+                    -1.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    -62.0,
+                    23.0,
+                    -11.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    -62.0,
+                    23.0,
+                    6.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                {
+                  "kind": "cylinder",
+                  "radius": 7.0,
+                  "center": [
+                    -39.0,
+                    54.0,
+                    -2.5
+                  ],
+                  "axis": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "z_range": [
+                    -11.0,
+                    6.000000000000003
+                  ],
+                  "axis_probe_ok": true,
+                  "axis_hits": 0,
+                  "axis_overlaps": 0
+                }
+              ]
+            }
+          ]
+        },
+        "artifact_sha256": "3589bb6881b03cb8fa65cd3c78f955bccf450d1c6f43b7c1dc3bdde06c002548"
+      },
+      "agent_result": {
+        "summary": "Created a single valid closed rectangular BREP solid from (-62,23,-11) to (24,71,6) mm with a 7mm-radius circular through-hole along Z at X=-39,Y=54. Verified via analyze_objects: bounding box exact match, is_solid=true, naked_edge_count=0, face_count=7 (box+cylindrical hole face), volume \u224867,559 mm\u00b3 matching expected box-minus-cylinder volume (~67,558 mm\u00b3). get_objects confirms only this one object exists in the document, no leftover cutters/profiles.",
+        "complete": true
+      },
+      "agent_text": [
+        "I'll start by reviewing modeling guidance and the current document state.",
+        "Box bounds match exactly. Cylinder bounds are [-46,47,-12]-[-32,61,7], centered at X=-39, Y=54, radius 7 \u2014 correct. Now performing the boolean difference.",
+        "The result checks out: single BREP object named \"block\", valid solid, bounding box exactly [-62,23,-11] to [24,71,6] (86\u00d748\u00d717 mm), 0 naked edges, volume \u224867,559 mm\u00b3 (matches expected 70,176 \u2212 \u03c0\u00b77\u00b2\u00b717 \u2248 67,558, within rounding), face count 7 (6 box faces + 1 cylindrical through-hole face) confirming the hole passes through both top and bottom with constant radius. Document contains only this one object \u2014 no leftover cutters.\n\n**Guidance consulted:** `transforms` (for box-centered / cylinder-based anchor conventions) and `verification` (for the closure+volume+bounds+topology check approach).\n\n**Confusing behavior / gaps:** None severe. Minor note: the box creation response's `bounding_box` field already reflected final world coordinates even before I ran analyze_objects, which was convenient but per guidance I still independently verified rather than trusting it. The boolean difference tool gives no dry-run volume feedback by default \u2014 I used `analyze_objects` afterward instead, which worked fine but required an extra round-trip.\n\n**Suggested improvement:** Have `boolean_difference` (and other boolean ops) optionally return post-operation metrics (bounding box, volume, face/naked-edge count) directly in the response, eliminating the need for a separate `analyze_objects` call to confirm success.\n\nI did not check for hidden/locked objects beyond the default `get_objects` listing, but that call returned only the one final block, consistent with an empty starting document."
+      ],
+      "guidance_topics": [
+        "transforms",
+        "verification"
+      ],
+      "preservation": {
+        "before": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "after": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "preserved": true
+      },
+      "image": "assets/unseen-guidance-task-1.png"
+    },
+    {
+      "id": "negative_prism-v1",
+      "family": "posed-solids",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-182654-2ada6f48/task-2",
+      "source_sha256": "20005284fe410a0ade204e51781d62261c23c6f498caca6d1793efc99cff8c64",
+      "session_status": "completed",
+      "elapsed_seconds": 57.346060707990546,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "b6ea739c4ab0a03d23428c4b08e16709672fe2b7875f6ab9c4857d111fbef50d",
+      "metrics": {
+        "mcp_attempts": 8,
+        "completed_calls": 8,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "extrude_curve": 1,
+          "get_modeling_guidance": 2,
+          "get_object_info": 1,
+          "get_objects": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 24,
+          "cache_creation_input_tokens": 10061,
+          "cache_read_input_tokens": 219402,
+          "output_tokens": 5035,
+          "output_tokens_details": {
+            "thinking_tokens": 1559
+          },
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 10061,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": "not_available",
+          "iterations": [
+            {
+              "input_tokens": 2,
+              "output_tokens": 181,
+              "cache_read_input_tokens": 22211,
+              "cache_creation_input_tokens": 464,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 464
+              },
+              "type": "message"
+            }
+          ],
+          "speed": "standard"
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "evaluation": {
+        "status": "pass",
+        "checks": {
+          "units": true,
+          "object_count": true,
+          "valid": true,
+          "solid": true,
+          "pose_corners": true,
+          "vertices_inside": true,
+          "planar_faces": true,
+          "straight_edges": true,
+          "area": true,
+          "volume": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": true,
+              "minimum": [
+                -75.0,
+                -9.60658279,
+                -16.0
+              ],
+              "dimensions": [
+                36.13531669,
+                68.24029944,
+                18.0
+              ],
+              "volume": 16443.001036027752,
+              "area": 4731.3752047978005,
+              "vertices": [
+                [
+                  -75.0,
+                  42.0,
+                  -16.0
+                ],
+                [
+                  -75.0,
+                  42.0,
+                  2.0
+                ],
+                [
+                  -51.24459071,
+                  58.63371665,
+                  2.0
+                ],
+                [
+                  -38.86468331,
+                  -9.60658279,
+                  2.0
+                ],
+                [
+                  -38.86468331,
+                  -9.60658279,
+                  -16.0
+                ],
+                [
+                  -51.24459071,
+                  58.63371665,
+                  -16.0
+                ]
+              ],
+              "planar_faces": true,
+              "straight_edges": true,
+              "faces": [
+                {
+                  "kind": "plane",
+                  "origin": [
+                    -63.12229535499998,
+                    50.316858325,
+                    -6.999999999999999
+                  ],
+                  "normal": [
+                    0.5735764361632794,
+                    -0.8191520444204673,
+                    -6.279827385713471e-17
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    -75.0,
+                    42.0,
+                    2.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    -75.0,
+                    42.0,
+                    -16.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    -1.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    -56.932341655,
+                    16.196708604999998,
+                    -7.0
+                  ],
+                  "normal": [
+                    0.8191520562275728,
+                    0.573576419300985,
+                    -3.436873472038313e-17
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    -45.05463701,
+                    24.513566930000007,
+                    -7.0
+                  ],
+                  "normal": [
+                    -0.9839394187913352,
+                    -0.17850271748230992,
+                    -5.00044112523501e-17
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "artifact_sha256": "9ab39bbcac0ce430138d6eb903532944017eb600a51001933442e909eb687a87"
+      },
+      "agent_result": {
+        "summary": "Test",
+        "complete": true
+      },
+      "agent_text": [
+        "I'll check the transforms guidance first since this involves rotation about world origin followed by translation.",
+        "Now extrude along world +Z by 18mm (unaffected by the Z-axis rotation).",
+        "Now let me verify the result and clean up the construction curve.",
+        "The construction polyline still exists \u2014 I need to delete it to leave only the prism.",
+        "Confirmed: exactly one object remains in the document, the closed solid prism."
+      ],
+      "guidance_topics": [
+        "transforms",
+        "verification"
+      ],
+      "preservation": {
+        "before": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "after": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "preserved": true
+      },
+      "image": "assets/unseen-guidance-task-2.png"
+    },
+    {
+      "id": "steep_patch-v1",
+      "family": "trimmed-planar-patches",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-182654-2ada6f48/task-3",
+      "source_sha256": "6e2ff8acd5d76af428319edde84fefcff923c363d11be51c41b7cd2a5d2e1230",
+      "session_status": "completed",
+      "elapsed_seconds": 45.148663875006605,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "ee0348f5585a4b364fe76b0d14caaa511beb5c4d53fc7df7327812fdff4fdacd",
+      "metrics": {
+        "mcp_attempts": 9,
+        "completed_calls": 9,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 2,
+          "create_planar_region": 1,
+          "delete_object": 2,
+          "get_modeling_guidance": 2,
+          "modify_object": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 12,
+          "cache_creation_input_tokens": 6756,
+          "cache_read_input_tokens": 97703,
+          "output_tokens": 3797,
+          "output_tokens_details": {
+            "thinking_tokens": 1675
+          },
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 6756,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": "not_available",
+          "iterations": [
+            {
+              "input_tokens": 2,
+              "output_tokens": 1931,
+              "cache_read_input_tokens": 18318,
+              "cache_creation_input_tokens": 1052,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 1052
+              },
+              "type": "message"
+            }
+          ],
+          "speed": "standard"
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "evaluation": {
+        "status": "pass",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": true,
+          "rectangular_outer_boundary": true,
+          "circular_inner_boundary": true,
+          "trimmed_area": true,
+          "trimmed_membership": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                1.0340506685517254e-05,
+                -1.364969132778195e-06
+              ],
+              "max": [
+                92.0,
+                38.00001034050668,
+                -1.3649691277936385e-06
+              ],
+              "outer_error": 1.0340506685517254e-05,
+              "inner_error": 1.0340506683803596e-05,
+              "area": 3241.5309950968394,
+              "membership_errors": 0,
+              "membership_samples": 1677
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "artifact_sha256": "d59746ed4816b4881d7035986643e809aeea83df78508bee2f103b969efa5a32"
+      },
+      "agent_result": {
+        "summary": "Created a single open planar Brep face (id 9b3af2c1) with one rectangular outer loop (92x38mm) and one circular inner-loop opening (r=9, local center 24,23), via create_planar_region on a polyline+circle boundary. Applied the world pose (+72\u00b0 rotation about X through the origin, then translate [18,-67,24]) using modify_object, with the translation adjusted per the transforms guidance formula (t + R*c - c) to compensate for modify_object rotating about the object's pre-edit bbox center rather than the world origin. Deleted the two construction curves, leaving only the patch.\n\nVerification performed: analyze_objects confirmed valid:true, face_count:1, is_solid:false (correctly open), and area = 3241.531, exactly matching the hand-computed expected area (92*38 - pi*9^2). The post-transform bounding box [[18,-67,24],[110,-55.26,60.14]] matches manual computation of the two rectangle corners passed through the same rotation+translation, confirming correct world placement and orientation.\n\nGuidance consulted: transforms and planar_regions (both read before modeling).\n\nConfusing/uncertain point: analyze_objects reported edge_count=5 but naked_edge_count=4 for this open single-face patch with a hole; I expected all 5 boundary edges (4 rectangle + 1 circle) to be naked. I did not find a tool to explain this and am not fully certain of its cause, though the independently-verified area strongly suggests the hole geometry itself is correct.\n\nSuggested improvement: the transforms guidance's world-origin-rotation formula (t + R*c - c) is correct but requires manually computing R*c by hand each time; a tool option to rotate/translate directly in world/origin space (or an analyze_objects field reporting the applied transform matrix) would reduce the risk of arithmetic error in this common workflow.",
+        "complete": true
+      },
+      "agent_text": [
+        "I'll start by consulting the transforms and planar_regions guidance since this task involves both.",
+        "Now creating the planar region with the hole.",
+        "Face created with 1 inner loop as expected. Now applying the rotation and computed translation.",
+        "Bounding box matches expected world corners exactly. Now verifying the object and cleaning up construction curves.",
+        "The patch matches expectations: the analyzed area (3241.531) exactly equals rectangle minus circle area (92\u00d738 \u2212 \u03c0\u00b79\u00b2 = 3241.531), confirming the hole is a true opening of the correct size, and the bounding box corners (18,-67,24) to (110,-55.26,60.14) match my hand-computed world transform of the two rectangle corners through the +72\u00b0 X-rotation and translation. The object is valid, single Brep face, not solid (correctly open), and construction curves are deleted, leaving only the patch.\n\nOne caveat: `naked_edge_count` reported 4 while `edge_count` is 5 \u2014 I'd have expected all 5 boundary edges (4 rectangle + 1 circle) to be naked on an open surface. I didn't get a further tool to explain this discrepancy; since the area check independently confirms the hole geometry is correct, I'm treating it as a quirk of how the circle edge is counted rather than a modeling defect, but I can't fully explain it."
+      ],
+      "guidance_topics": [
+        "transforms",
+        "planar_regions"
+      ],
+      "preservation": {
+        "before": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "after": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "preserved": true
+      },
+      "image": "assets/unseen-guidance-task-3.png"
+    },
+    {
+      "id": "shallow_panel-v1",
+      "family": "curved-panels",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-182654-2ada6f48/task-4",
+      "source_sha256": "227ca1e0b7e0ddfbe2feb4ae8ecefee6fdf6cf92ae2d0cf3c3a869215df25800",
+      "session_status": "completed",
+      "elapsed_seconds": 150.66939566697692,
+      "task_verdict": "fail",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "5c51df1b8b22297b9ff8ebbcef52c7ebe4f7d0671ea0b8b779b7ba7a30f18588",
+      "metrics": {
+        "mcp_attempts": 21,
+        "completed_calls": 21,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 7,
+          "delete_object": 7,
+          "get_modeling_guidance": 3,
+          "get_object_info": 1,
+          "get_objects": 1,
+          "loft": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 16,
+          "cache_creation_input_tokens": 22234,
+          "cache_read_input_tokens": 201102,
+          "output_tokens": 15510,
+          "output_tokens_details": {
+            "thinking_tokens": 11208
+          },
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 22234,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": "not_available",
+          "iterations": [
+            {
+              "input_tokens": 2,
+              "output_tokens": 1315,
+              "cache_read_input_tokens": 33614,
+              "cache_creation_input_tokens": 1234,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 1234
+              },
+              "type": "message"
+            }
+          ],
+          "speed": "standard"
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "evaluation": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": false,
+          "reference_to_surface": false,
+          "surface_to_reference": false,
+          "rectangular_boundary": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "outer_loops": 1,
+              "inner_loops": 0,
+              "min": [
+                0.0,
+                -5.847813553693254e-15,
+                -1.2330470172738187e-06
+              ],
+              "max": [
+                72.0,
+                45.99999659405422,
+                8.666685449747254
+              ],
+              "reference_error": 0.3943716891254345,
+              "surface_error": 0.43981834801081554,
+              "boundary_error": 1.791053646928781e-05
+            }
+          ]
+        },
+        "limitation": "41\u00d741 bidirectional samples and 41 samples per edge; not a continuous Hausdorff bound",
+        "artifact_sha256": "c36a1421510e266246d2e5f1b593b8f7de4e125624d94fe75212d230095246cb"
+      },
+      "agent_result": {
+        "summary": "Built a single open Brep face (\"curved_panel\") in the Rhino document: a 72\u00d746 mm doubly-curved panel following z=16\u00b79\u00b7(x/72)(1-x/72)(y/46)(1-y/46) locally, rotated -37\u00b0 about world X and translated by [-28,65,14], with all four boundary edges straight (local z=0) and no holes. Constructed via a 7\u00d77 grid of world-space points (rotation/translation applied analytically per point) lofted into one surface; construction curves were deleted afterward, leaving only this one object in the document. Verified via analyze_objects (1 face, 4 naked edges, not solid, valid) and by hand-checking the transformed corner and center points and overall bounding box against the analytic formula. Consulted the overview, transforms, and verification guidance topics. Caveat: the surface is a 7\u00d77-sample loft interpolation of the analytic formula, not an exact closed-form reproduction\u2014deviation at non-sampled points was not numerically bounded. Suggested improvement: the create_object SURFACE type's parameter docs were truncated/unclear on whether it accepts a direct control-point grid, which would allow exact (non-approximated) construction of such doubly-curved panels.",
+        "complete": true
+      },
+      "agent_text": [
+        "I'll start by consulting the modeling guidance for transforms, since this involves a world-origin rotation followed by translation.",
+        "I'll consult the planar_regions and verification guidance briefly, then build the surface directly in world coordinates via a grid of cross-section curves lofted together, since the panel is doubly-curved (not planar).",
+        "Now I'll build the 7 cross-section curves (already computed in world coordinates via the rotation+translation) and loft them into a single surface.",
+        "All 7 curves created correctly. Now lofting them into a single surface.",
+        "Now I'll delete the construction curves and verify the resulting surface.",
+        "Only the panel remains \u2014 one Brep, single face, 4 naked edges, all construction curves removed.\n\n**Verification performed:**\n- `analyze_objects`: single BREP, `is_solid=false`, `face_count=1`, `edge_count=4`, `vertex_count=4`, `naked_edge_count=4` (open panel, no holes), `valid=true`.\n- Bounding box: X \u2208 [-28, 44] (width 72 \u2713), Y \u2208 [65, 101.737], Z \u2208 [-13.683, 14] \u2014 matches hand-computed rotation (-37\u00b0 about world X) + translation [-28,65,14] applied to the local corners/edges.\n- Spot-checked two known points against the transform math: local corner (0,0,0) \u2192 world (-28,65,14) \u2713, local center (36,23,9) \u2192 world (8, 88.785, 7.346) \u2713 (both lie exactly on constructed geometry).\n- `get_objects`: confirmed only this one object exists in the document.\n\n**Method:** Since the surface is doubly-curved (not planar), I built it as a loft through 7 cross-section curves (7\u00d77 grid) with coordinates computed directly in the final world frame \u2014 sampling the local `z=16\u00b79\u00b7(x/72)(1-x/72)(y/46)(1-y/46)` formula and applying the rotation/translation analytically per point, per the transforms guidance's recommendation to construct directly in the target frame rather than compose pivot-based edits. The four boundary edges are exactly straight (local z=0 throughout each edge), matching the requirement.\n\n**Honesty caveat:** The loft is an interpolation through a 7\u00d77 sample grid, not an exact closed-form reproduction of the polynomial surface. For this smooth, low-degree (biquadratic) function the interpolation error should be very small, but I did not compute a numeric bound on deviation between the loft and the analytic surface at intermediate points \u2014 only the sampled grid points are guaranteed exact.\n\n**Guidance consulted:** `overview`, `transforms`, `verification`. `planar_regions` was not applicable since this panel is curved, not planar.\n\n**Feedback on tooling:** `create_object` type \"SURFACE\" is mentioned in the schema but its truncated description didn't show whether it accepts a direct control-point grid (which would let me build this as an exact single surface rather than an interpolated loft approximation). If it supports that, better in-line documentation would help; if it doesn't exist, a native \"surface from point grid\" tool would let curved panels like this be built exactly rather than approximated."
+      ],
+      "guidance_topics": [
+        "transforms",
+        "overview",
+        "verification"
+      ],
+      "preservation": {
+        "before": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "after": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "preserved": true
+      },
+      "image": "assets/unseen-guidance-task-4.png"
+    }
+  ],
+  "edge_count_probe": {
+    "outer_only": 4,
+    "inner_only": 1,
+    "all_naked": 5,
+    "topological_naked": 5,
+    "edge_count": 5,
+    "artifact_sha256": "d59746ed4816b4881d7035986643e809aeea83df78508bee2f103b969efa5a32",
+    "document_preserved": true
+  },
+  "completion": {
+    "complete": true,
+    "source_pins_preserved": true,
+    "runtime": {
+      "document": 268435457,
+      "marker": null,
+      "object_count": 0,
+      "path": null,
+      "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+      "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+      "version": "0.3.2.0",
+      "pid": 12790,
+      "docs": [
+        {
+          "serial": 268435457,
+          "path": null,
+          "count": 0,
+          "modified": true
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Fresh task instances in existing families, not previously untouched families.",
+    "Single run per task; no causal A/B or repeatability claim.",
+    "Prism returned summary Test and omitted requested qualitative feedback; its independent geometry pass is retained.",
+    "Surface comparisons use finite sampling."
+  ],
+  "panel_input_check": {
+    "points": 49,
+    "max_vertical_formula_residual_mm": 2.7367866881178315e-05,
+    "inference": "Supplied sample coordinates are accurate; between-sample surface construction is the leading source of deviation."
+  }
+}

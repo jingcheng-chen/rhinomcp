@@ -1,0 +1,20 @@
+{
+  "run": "experiments/runs/workflow-baseline-20260907-094247-98d5be10",
+  "scope": "Two prospective baseline tasks, restricted native interface; no candidate comparison",
+  "images": [
+    {
+      "image": "experiments/assets/workflow-native-box.png",
+      "sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+      "artifact_sha256": "6abb6e9e31e6320a0d768bebc7953e19e3f8c33cc01a7908fd6091ab07d05d16",
+      "task": "box-v1",
+      "evaluation": "pass"
+    },
+    {
+      "image": "experiments/assets/workflow-native-through-hole.png",
+      "sha256": "0138325a9506151d68c9298cf4fc35a28b4cbb18a5f74ed28d7e417c2a0130fe",
+      "artifact_sha256": "a5a9961283120716e9d79240960e0d697bff2571b749fb152608ad7d58fcbc61",
+      "task": "through-hole-v1",
+      "evaluation": "pass"
+    }
+  ]
+}

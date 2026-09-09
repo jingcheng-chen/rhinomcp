@@ -1,0 +1,1174 @@
+{
+  "run": "experiments/runs/trimmed-calibration-20260908-183943",
+  "summary": {
+    "fixtures": 24,
+    "unexpected": []
+  },
+  "results": {
+    "offset": {
+      "correct": {
+        "status": "pass",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": true,
+          "rectangular_outer_boundary": true,
+          "circular_inner_boundary": true,
+          "trimmed_area": true,
+          "trimmed_membership": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.2563542192004888e-15
+              ],
+              "max": [
+                100.0,
+                79.99999999999999,
+                6.184990549319743e-15
+              ],
+              "outer_error": 1.4210854715202004e-14,
+              "inner_error": 1.5987211554602254e-14,
+              "area": 7547.610657949946,
+              "membership_errors": 0,
+              "membership_samples": 1679
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "pass",
+        "repeat_identical": true,
+        "artifact_sha256": "9494b07fcdb0e082b46769c2f0a044c131b0715d7bc9899c6c73aff885b75f7c"
+      },
+      "reversed_loops": {
+        "status": "pass",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": true,
+          "rectangular_outer_boundary": true,
+          "circular_inner_boundary": true,
+          "trimmed_area": true,
+          "trimmed_membership": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.2563542192004888e-15
+              ],
+              "max": [
+                100.0,
+                79.99999999999999,
+                6.184990549319743e-15
+              ],
+              "outer_error": 1.4210854715202004e-14,
+              "inner_error": 1.5987211554602254e-14,
+              "area": 7547.610657949946,
+              "membership_errors": 0,
+              "membership_samples": 1679
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "pass",
+        "repeat_identical": true,
+        "artifact_sha256": "25929ccbede4bf580a9f646b6670fc8a7edbdec8247d14e379d49ce3446483bf"
+      },
+      "wrong_radius": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": true,
+          "rectangular_outer_boundary": true,
+          "circular_inner_boundary": false,
+          "trimmed_area": false,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.256315999380317e-15
+              ],
+              "max": [
+                100.0,
+                79.99999999999999,
+                6.184990549319743e-15
+              ],
+              "outer_error": 1.4210854715202004e-14,
+              "inner_error": 2.4000000000000163,
+              "area": 7710.470821251527,
+              "membership_errors": 35,
+              "membership_samples": 1679
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "63c5f872b4ec13a1fa17dafbb5222cebe7e0d46c0476a4010dafd83a8b9f43ac"
+      },
+      "wrong_hole_location": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": true,
+          "rectangular_outer_boundary": true,
+          "circular_inner_boundary": false,
+          "trimmed_area": true,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.2563542192004888e-15
+              ],
+              "max": [
+                100.0,
+                79.99999999999999,
+                6.184990549319743e-15
+              ],
+              "outer_error": 1.4210854715202004e-14,
+              "inner_error": 5.0,
+              "area": 7547.610658223658,
+              "membership_errors": 48,
+              "membership_samples": 1679
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "06fc3eb44af5b6adce5f3de3eda50bc6070b4845d16b2bb9f00d915e112841ce"
+      },
+      "missing_hole": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": false,
+          "local_bounds": true,
+          "rectangular_outer_boundary": true,
+          "circular_inner_boundary": false,
+          "trimmed_area": false,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 0,
+              "min": [
+                0.0,
+                0.0,
+                -3.2258388581134025e-17
+              ],
+              "max": [
+                100.0,
+                80.0,
+                6.184990549319743e-15
+              ],
+              "outer_error": 1.4210854715202004e-14,
+              "inner_error": 1e+99,
+              "area": 8000.0,
+              "membership_errors": 95,
+              "membership_samples": 1679
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "7724a325a223839826cefc567b16e1f1a49c87a34cd6025c72ba7fcd986ffeb5"
+      },
+      "wrong_pose": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": false,
+          "rectangular_outer_boundary": false,
+          "circular_inner_boundary": false,
+          "trimmed_area": true,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                5.0,
+                0.0,
+                -2.2563542192004888e-15
+              ],
+              "max": [
+                105.0,
+                79.99999999999999,
+                6.184990549319743e-15
+              ],
+              "outer_error": 5.0,
+              "inner_error": 5.0,
+              "area": 7547.610657949946,
+              "membership_errors": 130,
+              "membership_samples": 1679
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "03d4c11cad3127b1742fe706e7b9ceb61eafd884d3c4bc14a9f8b7bbed12af70"
+      },
+      "wrong_scale": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": false,
+          "rectangular_outer_boundary": false,
+          "circular_inner_boundary": false,
+          "trimmed_area": false,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -1.6781479917250284e-15
+              ],
+              "max": [
+                90.0,
+                72.0,
+                1.3032350798271672e-15
+              ],
+              "outer_error": 10.0,
+              "inner_error": 6.6078905528364995,
+              "area": 6113.564632939451,
+              "membership_errors": 365,
+              "membership_samples": 1679
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "872b1d83adbc0310aa975d2dc856fbcec3e93e4e3417ab95f1ae185d1d0b0bd5"
+      },
+      "extra_object": {
+        "status": "fail",
+        "checks": {
+          "one_object": false,
+          "millimeters": true,
+          "valid": false,
+          "one_open_planar_face": false,
+          "outer_and_hole": false,
+          "local_bounds": false,
+          "rectangular_outer_boundary": false,
+          "circular_inner_boundary": false,
+          "trimmed_area": false,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.2563542192004888e-15
+              ],
+              "max": [
+                100.0,
+                79.99999999999999,
+                6.184990549319743e-15
+              ],
+              "outer_error": 1.4210854715202004e-14,
+              "inner_error": 1.5987211554602254e-14,
+              "area": 7547.610657949946,
+              "membership_errors": 0,
+              "membership_samples": 1679
+            },
+            {
+              "valid": false
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "9bdc2fc0c87ae67f2a209e36268fcc674a32a4709e32516f7bc11ac078b75274"
+      },
+      "hidden_extra": {
+        "status": "fail",
+        "checks": {
+          "one_object": false,
+          "millimeters": true,
+          "valid": false,
+          "one_open_planar_face": false,
+          "outer_and_hole": false,
+          "local_bounds": false,
+          "rectangular_outer_boundary": false,
+          "circular_inner_boundary": false,
+          "trimmed_area": false,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.2563542192004888e-15
+              ],
+              "max": [
+                100.0,
+                79.99999999999999,
+                6.184990549319743e-15
+              ],
+              "outer_error": 1.4210854715202004e-14,
+              "inner_error": 1.5987211554602254e-14,
+              "area": 7547.610657949946,
+              "membership_errors": 0,
+              "membership_samples": 1679
+            },
+            {
+              "valid": false
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "9f582875947e3dbd8435dab4dc55b8234fa65b3cc5986de794a77639d4bf8f8d"
+      },
+      "wrong_units": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": false,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": true,
+          "rectangular_outer_boundary": true,
+          "circular_inner_boundary": true,
+          "trimmed_area": true,
+          "trimmed_membership": true
+        },
+        "measurements": {
+          "units": "Meters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.2563542192004888e-15
+              ],
+              "max": [
+                100.0,
+                79.99999999999999,
+                6.184990549319743e-15
+              ],
+              "outer_error": 1.4210854715202004e-14,
+              "inner_error": 1.5987211554602254e-14,
+              "area": 7547.610657949946,
+              "membership_errors": 0,
+              "membership_samples": 1679
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "eacbd0a183a824e01bfebf69cba8ee9c18925f80303d1968c31cc45d28e9a77f"
+      },
+      "solid": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": false,
+          "outer_and_hole": false,
+          "local_bounds": false,
+          "rectangular_outer_boundary": false,
+          "circular_inner_boundary": false,
+          "trimmed_area": false,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": true,
+              "faces": 6,
+              "planar": false,
+              "outer_loops": 6,
+              "inner_loops": 0,
+              "min": [
+                -60.0,
+                11.875154561959103,
+                -32.36245593662149
+              ],
+              "max": [
+                -50.0,
+                25.802439368359483,
+                -18.43517113022111
+              ],
+              "outer_error": 1e+99,
+              "inner_error": 1e+99,
+              "area": -1.0,
+              "membership_errors": 0,
+              "membership_samples": 0
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "bf2c22ce03ee23324e81e9a028ecfd0e33288035dfc983012106c3e76dc5a379"
+      },
+      "clipped": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": false,
+          "rectangular_outer_boundary": false,
+          "circular_inner_boundary": true,
+          "trimmed_area": false,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.2563542192004888e-15
+              ],
+              "max": [
+                90.0,
+                79.99999999999999,
+                6.184990549319743e-15
+              ],
+              "outer_error": 10.0,
+              "inner_error": 1.5987211554602254e-14,
+              "area": 6747.610658223649,
+              "membership_errors": 164,
+              "membership_samples": 1679
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "2fbbfaf6487a7c709abb2e10cb15f7b7b466976b9bdf673f4ef3ea5d2ec195e2"
+      }
+    },
+    "reserved": {
+      "correct": {
+        "status": "pass",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": true,
+          "rectangular_outer_boundary": true,
+          "circular_inner_boundary": true,
+          "trimmed_area": true,
+          "trimmed_membership": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.34261720724212e-15
+              ],
+              "max": [
+                75.0,
+                54.99999999999999,
+                1.1087187969659777e-15
+              ],
+              "outer_error": 7.105427357601002e-15,
+              "inner_error": 1.0658141036401503e-14,
+              "area": 3923.9380689445047,
+              "membership_errors": 0,
+              "membership_samples": 1678
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "pass",
+        "repeat_identical": true,
+        "artifact_sha256": "58248173063980c3a156be2c7b740b7a5afdfcc4920c3df6e84a680b6e0fb465"
+      },
+      "reversed_loops": {
+        "status": "pass",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": true,
+          "rectangular_outer_boundary": true,
+          "circular_inner_boundary": true,
+          "trimmed_area": true,
+          "trimmed_membership": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.34261720724212e-15
+              ],
+              "max": [
+                75.0,
+                54.99999999999999,
+                1.1087187969659777e-15
+              ],
+              "outer_error": 7.105427357601002e-15,
+              "inner_error": 1.0658141036401503e-14,
+              "area": 3923.938068944505,
+              "membership_errors": 0,
+              "membership_samples": 1678
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "pass",
+        "repeat_identical": true,
+        "artifact_sha256": "711cc971645d44bfee16ace445ba5c9f7a9caa978db343aa756c3b82f504440b"
+      },
+      "wrong_radius": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": true,
+          "rectangular_outer_boundary": true,
+          "circular_inner_boundary": false,
+          "trimmed_area": false,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.34261720724212e-15
+              ],
+              "max": [
+                75.0,
+                54.99999999999999,
+                6.076066273845422e-16
+              ],
+              "outer_error": 7.105427357601002e-15,
+              "inner_error": 1.6000000000000156,
+              "area": 3996.320364124483,
+              "membership_errors": 27,
+              "membership_samples": 1678
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "dcac3c4f65cad8342b667859f7dce5d5867e6c22e3b59f536b5aeb199eb223f9"
+      },
+      "wrong_hole_location": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": true,
+          "rectangular_outer_boundary": true,
+          "circular_inner_boundary": false,
+          "trimmed_area": true,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.34261720724212e-15
+              ],
+              "max": [
+                75.0,
+                54.99999999999999,
+                1.1087187969659777e-15
+              ],
+              "outer_error": 7.105427357601002e-15,
+              "inner_error": 5.0,
+              "area": 3923.938070199972,
+              "membership_errors": 65,
+              "membership_samples": 1678
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "2b2b3059df1b139ad3c459bff49b49aac79c5fe25fe4ca24acd66de771580f90"
+      },
+      "missing_hole": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": false,
+          "local_bounds": true,
+          "rectangular_outer_boundary": true,
+          "circular_inner_boundary": false,
+          "trimmed_area": false,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 0,
+              "min": [
+                0.0,
+                0.0,
+                -2.34261720724212e-15
+              ],
+              "max": [
+                75.0,
+                55.0,
+                5.126269570670553e-17
+              ],
+              "outer_error": 7.105427357601002e-15,
+              "inner_error": 1e+99,
+              "area": 4125.0,
+              "membership_errors": 81,
+              "membership_samples": 1678
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "be174187aefda2c0867bb5195de5a85167d1b913d24f3a163ec2e0971ffd1896"
+      },
+      "wrong_pose": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": false,
+          "rectangular_outer_boundary": false,
+          "circular_inner_boundary": false,
+          "trimmed_area": true,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                5.0,
+                0.0,
+                -2.34261720724212e-15
+              ],
+              "max": [
+                80.0,
+                54.99999999999999,
+                1.1087187969659777e-15
+              ],
+              "outer_error": 5.0,
+              "inner_error": 5.0,
+              "area": 3923.9380689445047,
+              "membership_errors": 188,
+              "membership_samples": 1678
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "4256268f231dbe0850e8e83c86d37bbf095ef70fea372c6dbfd2c2e32501f08e"
+      },
+      "wrong_scale": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": false,
+          "rectangular_outer_boundary": false,
+          "circular_inner_boundary": false,
+          "trimmed_area": false,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.763047526013075e-15
+              ],
+              "max": [
+                67.5,
+                49.5,
+                2.285787746152787e-15
+              ],
+              "outer_error": 7.5,
+              "inner_error": 5.723849022151903,
+              "area": 3178.3898358450488,
+              "membership_errors": 372,
+              "membership_samples": 1678
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "1f5c1e42622766d405903ff419cfbe22864c2aba133f5c57b7bcc98bac47645b"
+      },
+      "extra_object": {
+        "status": "fail",
+        "checks": {
+          "one_object": false,
+          "millimeters": true,
+          "valid": false,
+          "one_open_planar_face": false,
+          "outer_and_hole": false,
+          "local_bounds": false,
+          "rectangular_outer_boundary": false,
+          "circular_inner_boundary": false,
+          "trimmed_area": false,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.34261720724212e-15
+              ],
+              "max": [
+                75.0,
+                54.99999999999999,
+                1.1087187969659777e-15
+              ],
+              "outer_error": 7.105427357601002e-15,
+              "inner_error": 1.0658141036401503e-14,
+              "area": 3923.9380689445047,
+              "membership_errors": 0,
+              "membership_samples": 1678
+            },
+            {
+              "valid": false
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "77aa0aeecda37c53e8ace39fca61372e4709c186a15980c3c0be550f42dafbc1"
+      },
+      "hidden_extra": {
+        "status": "fail",
+        "checks": {
+          "one_object": false,
+          "millimeters": true,
+          "valid": false,
+          "one_open_planar_face": false,
+          "outer_and_hole": false,
+          "local_bounds": false,
+          "rectangular_outer_boundary": false,
+          "circular_inner_boundary": false,
+          "trimmed_area": false,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.34261720724212e-15
+              ],
+              "max": [
+                75.0,
+                54.99999999999999,
+                1.1087187969659777e-15
+              ],
+              "outer_error": 7.105427357601002e-15,
+              "inner_error": 1.0658141036401503e-14,
+              "area": 3923.9380689445047,
+              "membership_errors": 0,
+              "membership_samples": 1678
+            },
+            {
+              "valid": false
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "c6ba71c01151ba075db4e1936e90f113860a3856bf0458053d642bd880ad6bff"
+      },
+      "wrong_units": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": false,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": true,
+          "rectangular_outer_boundary": true,
+          "circular_inner_boundary": true,
+          "trimmed_area": true,
+          "trimmed_membership": true
+        },
+        "measurements": {
+          "units": "Meters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.34261720724212e-15
+              ],
+              "max": [
+                75.0,
+                54.99999999999999,
+                1.1087187969659777e-15
+              ],
+              "outer_error": 7.105427357601002e-15,
+              "inner_error": 1.0658141036401503e-14,
+              "area": 3923.9380689445047,
+              "membership_errors": 0,
+              "membership_samples": 1678
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "8a551b51fb57f29d4ed796d6139681dded52a6e6d5d7a7d9f0e63c1ee4398b93"
+      },
+      "solid": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": false,
+          "outer_and_hole": false,
+          "local_bounds": false,
+          "rectangular_outer_boundary": false,
+          "circular_inner_boundary": false,
+          "trimmed_area": false,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": true,
+              "faces": 6,
+              "planar": false,
+              "outer_loops": 6,
+              "inner_loops": 0,
+              "min": [
+                40.0,
+                -10.589859459247776,
+                -69.17010638312348
+              ],
+              "max": [
+                50.0,
+                2.6994010285257195,
+                -55.880845895349985
+              ],
+              "outer_error": 1e+99,
+              "inner_error": 1e+99,
+              "area": -1.0,
+              "membership_errors": 0,
+              "membership_samples": 0
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "21bc5271a42377fb0a77c698e10fb04091b935dbdfd9e2944fb4e3ba389bf15e"
+      },
+      "clipped": {
+        "status": "fail",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": false,
+          "rectangular_outer_boundary": false,
+          "circular_inner_boundary": true,
+          "trimmed_area": false,
+          "trimmed_membership": false
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                0.0,
+                -2.34261720724212e-15
+              ],
+              "max": [
+                67.5,
+                54.99999999999999,
+                1.1087187969659777e-15
+              ],
+              "outer_error": 7.5,
+              "inner_error": 1.0658141036401503e-14,
+              "area": 3511.4380701999717,
+              "membership_errors": 164,
+              "membership_samples": 1678
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "expected": "fail",
+        "repeat_identical": true,
+        "artifact_sha256": "cdec660c5b7a1a7c528a37d7a645c0a1c98dbcf9e81924e167fc1ac97aa24bf4"
+      }
+    }
+  },
+  "preservation": {
+    "preserved": true,
+    "runtime": {
+      "document": 268435457,
+      "marker": null,
+      "object_count": 0,
+      "path": null,
+      "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+      "mvid": "326aaa12-b851-4c6a-afcb-45291e734a5c",
+      "version": "0.3.2.0",
+      "pid": 46932,
+      "docs": [
+        {
+          "serial": 268435457,
+          "path": null,
+          "count": 0,
+          "modified": true
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "campaign-controller-prism-v1",
+  "call_budget": 20,
+  "timeout_seconds": 150,
+  "tasks": [
+    {
+      "family": "posed-solids",
+      "path": "experiments/tasks/posed_prism.json"
+    }
+  ]
+}

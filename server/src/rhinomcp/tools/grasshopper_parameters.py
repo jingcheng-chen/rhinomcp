@@ -2,7 +2,7 @@
 
 from typing import Any, Dict, Optional
 
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
 
 from rhinomcp.server import mcp
@@ -38,7 +38,7 @@ def gh_set_parameter_value(
     return send_grasshopper_command("gh_set_parameter_value", params)
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def gh_get_parameter_value(
     ctx: Context,
     instance_id: Optional[str] = None,

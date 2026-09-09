@@ -1,0 +1,15 @@
+{
+  "proposal": "batch-command-schema-discovery",
+  "decision": "defer_pending_representative_interface_baseline",
+  "mechanically_valid": true,
+  "builder_dispatched": false,
+  "reason": "The observed describe_command and describe_modeling_command operations exist in experiment gateways, not production server tools. Production MCP exposes individually typed tool signatures. Historical schema-query counts cannot establish a missing batch-discovery capability in ordinary RhinoMCP usage.",
+  "next": "Use a shared session/task adapter with representative native MCP schemas, explicit comparison pins and at least two existing non-chair tasks before proposing a production tool change. Keep the surface-response bounds discrepancy as an independent evidence-backed investigation.",
+  "evidence": [
+    "experiments/layer_modeler_mcp.py",
+    "experiments/visual_mcp.py",
+    "server/src/rhinomcp/tools/advanced_geometry.py",
+    "server/src/rhinomcp/tools/create_layer.py"
+  ],
+  "source_run": "experiments/runs/workflow-plan-20260907-090526-07b1654d"
+}

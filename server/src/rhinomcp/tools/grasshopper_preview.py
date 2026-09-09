@@ -3,7 +3,7 @@
 import base64
 from typing import Any, Dict, List, Optional
 
-from mcp.server.fastmcp import Context, Image
+from mcp.server.mcpserver import Context, Image
 
 from rhinomcp.server import logger, mcp
 from rhinomcp.tools._grasshopper_common import send_grasshopper_command

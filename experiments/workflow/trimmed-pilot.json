@@ -1,0 +1,11 @@
+{
+  "id": "trimmed-discovery-v1",
+  "call_budget": 24,
+  "timeout_seconds": 240,
+  "tasks": [
+    {
+      "family": "trimmed-patches",
+      "path": "experiments/tasks/trimmed_offset.json"
+    }
+  ]
+}

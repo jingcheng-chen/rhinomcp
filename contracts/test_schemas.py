@@ -230,6 +230,7 @@ def test_new_commands():
         ("commands/create_objects.json", {"Box1": {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}}}),
         ("commands/execute_rhinocommon_csharp_code.json", {"code": "doc.Objects.AddPoint(0,0,0);"}),
         ("commands/extrude_curve.json", {"curve_id": GUID, "direction": [0, 0, 10]}),
+        ("commands/create_planar_region.json", {"outer_curve_id": GUID, "inner_curve_ids": []}),
         ("commands/loft.json", {"curve_ids": [GUID, GUID]}),
         ("commands/modify_objects.json", {"objects": [{"id": GUID, "new_name": "X"}]}),
         ("commands/offset_curve.json", {"curve_id": GUID, "distance": 1.5}),
@@ -866,6 +867,9 @@ def test_invalid_examples():
         ("commands/boolean_difference.json", {"base_id": "12345678-1234-1234-1234-123456789012", "subtract_ids": ["12345678-1234-1234-1234-123456789012"], "dry_run": 1}, "boolean_difference dry_run not boolean"),
         ("commands/boolean_intersection.json", {"object_ids": ["12345678-1234-1234-1234-123456789012", "12345678-1234-1234-1234-123456789012"], "dry_run": "no"}, "boolean_intersection dry_run not boolean"),
         ("commands/extrude_curve.json", {"curve_id": "12345678-1234-1234-1234-123456789012", "direction": [0, 0, 0]}, "extrude_curve zero direction"),
+        ("commands/create_planar_region.json", {}, "create_planar_region missing outer curve"),
+        ("commands/create_planar_region.json", {"outer_curve_id": "12345678-1234-1234-1234-123456789012", "inner_curve_ids": ["12345678-1234-1234-1234-123456789013", "12345678-1234-1234-1234-123456789013"]}, "create_planar_region duplicate inner ids"),
+        ("commands/create_planar_region.json", {"outer_curve_id": "12345678-1234-1234-1234-123456789012", "delete_sources": True}, "create_planar_region unreviewed delete option"),
         ("commands/pipe.json", {"curve_id": "12345678-1234-1234-1234-123456789012", "radius": 0}, "pipe non-positive radius"),
         ("commands/undo.json", {"steps": 0}, "undo zero steps"),
         ("commands/loft.json", {"curve_ids": ["12345678-1234-1234-1234-123456789012"]}, "loft single curve"),
@@ -1081,7 +1085,7 @@ def test_protocol_envelope():
         "execute_rhinoscript_python_code", "execute_rhinocommon_csharp_code",
         "capture_viewport", "undo", "redo",
         "boolean_union", "boolean_difference", "boolean_intersection",
-        "loft", "extrude_curve", "sweep1", "offset_curve", "pipe",
+        "loft", "extrude_curve", "create_planar_region", "sweep1", "offset_curve", "pipe",
         "project_curve", "intersect_curves", "split_curve",
         "run_command", "get_commands",
         "gh_create_document",
@@ -1120,6 +1124,25 @@ def test_protocol_envelope():
     return all_passed
 
 
+def test_sweep_planar_cap_schema():
+    """Caps are optional booleans and remain independent from rail closure."""
+    schema = load_schema_with_refs("commands/sweep1.json")
+    validator = Draft202012Validator(schema)
+    payload = {
+        "rail_id": "00000000-0000-0000-0000-000000000001",
+        "profile_ids": ["00000000-0000-0000-0000-000000000002"],
+    }
+    assert not list(validator.iter_errors(payload))
+    assert schema["properties"]["cap_planar_ends"]["default"] is False
+    for cap in (False, True):
+        for closed in (False, True):
+            assert not list(validator.iter_errors(
+                {**payload, "cap_planar_ends": cap, "closed": closed}
+            ))
+    for invalid in (None, 0, 1, "true", [], {}):
+        assert list(validator.iter_errors({**payload, "cap_planar_ends": invalid}))
+
+
 def main():
     """Run all tests."""
     print("RhinoMCP Schema Validation Tests")
@@ -1138,6 +1161,8 @@ def main():
     results.append(("schema coverage", test_schema_coverage_against_protocol()))
     results.append(("contract sync (3 tiers)", test_contract_synchronization_across_tiers()))
     results.append(("protocol envelope", test_protocol_envelope()))
+    test_sweep_planar_cap_schema()
+    results.append(("sweep planar caps", True))
 
     print("\n" + "=" * 40)
     print("SUMMARY")

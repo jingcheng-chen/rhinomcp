@@ -1,0 +1,641 @@
+{
+  "run": "runs/workflow-baseline-20260909-125308-0fc34223",
+  "rows": [
+    {
+      "id": "box-v1",
+      "family": "primitives",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-125308-0fc34223/task-1",
+      "source_sha256": "03d54ab041716b3f3cba00873dc582ed674eb4d3bd70382f8910ecac711a1ee5",
+      "session_status": "completed",
+      "elapsed_seconds": 11.326492207997944,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "e9736eecc9b0408224ffefc1c17e6773f6e49c7cb3747ffb631fbfa3e5e39d2b",
+      "metrics": {
+        "mcp_attempts": 3,
+        "completed_calls": 3,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "modify_object": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 8,
+          "cache_creation_input_tokens": 15727,
+          "cache_read_input_tokens": 45078,
+          "output_tokens": 667,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 15727,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": "not_available",
+          "iterations": [
+            {
+              "input_tokens": 2,
+              "output_tokens": 236,
+              "cache_read_input_tokens": 15320,
+              "cache_creation_input_tokens": 407,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 407
+              },
+              "type": "message"
+            }
+          ],
+          "speed": "standard"
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "image": "assets/guided-claude-task-1.png",
+      "image_sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+      "model_sha256": "dea09103f53c6e92572564af44e3c2c6fe93940600f5eda03472c9eba5bf0370",
+      "evaluation": {
+        "status": "pass",
+        "checks": {
+          "units": true,
+          "object_count": true,
+          "valid": true,
+          "solid": true,
+          "minimum": true,
+          "dimensions": true,
+          "volume": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": true,
+              "minimum": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "dimensions": [
+                100.0,
+                50.0,
+                30.0
+              ],
+              "volume": 150000.0,
+              "area": 19000.0,
+              "vertices": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  0.0,
+                  30.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  30.0
+                ],
+                [
+                  100.0,
+                  50.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  50.0,
+                  30.0
+                ],
+                [
+                  0.0,
+                  50.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  50.0,
+                  30.0
+                ]
+              ],
+              "planar_faces": true,
+              "straight_edges": true,
+              "faces": [
+                {
+                  "kind": "plane",
+                  "origin": [
+                    50.0,
+                    0.0,
+                    15.0
+                  ],
+                  "normal": [
+                    0.0,
+                    -1.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    100.0,
+                    25.0,
+                    15.0
+                  ],
+                  "normal": [
+                    1.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    50.0,
+                    50.0,
+                    15.0
+                  ],
+                  "normal": [
+                    0.0,
+                    1.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    25.0,
+                    15.0
+                  ],
+                  "normal": [
+                    -1.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    0.0,
+                    30.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "artifact_sha256": "dea09103f53c6e92572564af44e3c2c6fe93940600f5eda03472c9eba5bf0370"
+      },
+      "preserved": true
+    },
+    {
+      "id": "through-hole-v1",
+      "family": "subtractive-solids",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-125308-0fc34223/task-2",
+      "source_sha256": "90c4cc6fab5828f1a7f84e85361fd14df0d7fa5ffe387946e667c0e789976720",
+      "session_status": "completed",
+      "elapsed_seconds": 27.417820666974876,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "631bce665bb4a6320d282deee1a9badd4ae2dac9a2a9eeda599f75e537bb65dd",
+      "metrics": {
+        "mcp_attempts": 7,
+        "completed_calls": 7,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "boolean_difference": 1,
+          "create_object": 2,
+          "get_objects": 1,
+          "modify_object": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 12,
+          "cache_creation_input_tokens": 4855,
+          "cache_read_input_tokens": 92580,
+          "output_tokens": 1792,
+          "output_tokens_details": {
+            "thinking_tokens": 470
+          },
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 4855,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": "not_available",
+          "iterations": [
+            {
+              "input_tokens": 2,
+              "output_tokens": 438,
+              "cache_read_input_tokens": 16915,
+              "cache_creation_input_tokens": 554,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 554
+              },
+              "type": "message"
+            }
+          ],
+          "speed": "standard"
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "image": "assets/guided-claude-task-2.png",
+      "image_sha256": "0138325a9506151d68c9298cf4fc35a28b4cbb18a5f74ed28d7e417c2a0130fe",
+      "model_sha256": "7fe171490087ca8a9d6d440271f69922a0b247c566eafe79a60df14354b4056b",
+      "evaluation": {
+        "status": "pass",
+        "checks": {
+          "units": true,
+          "object_count": true,
+          "valid": true,
+          "solid": true,
+          "minimum": true,
+          "dimensions": true,
+          "supported_faces": true,
+          "outer_boundary_planes": true,
+          "hole_axis": true,
+          "hole_radius": true,
+          "hole_full_height": true,
+          "hole_axis_clear": true,
+          "area": true,
+          "volume": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": true,
+              "minimum": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "dimensions": [
+                100.0,
+                60.0,
+                20.0
+              ],
+              "volume": 117738.053289983,
+              "area": 18927.787565973376,
+              "vertices": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  0.0,
+                  20.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  20.0
+                ],
+                [
+                  100.0,
+                  60.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  60.0,
+                  20.0
+                ],
+                [
+                  0.0,
+                  60.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  60.0,
+                  20.0
+                ],
+                [
+                  36.0,
+                  20.0,
+                  0.0
+                ],
+                [
+                  36.0,
+                  20.0,
+                  20.0
+                ]
+              ],
+              "planar_faces": false,
+              "straight_edges": false,
+              "faces": [
+                {
+                  "kind": "plane",
+                  "origin": [
+                    50.0,
+                    0.0,
+                    10.0
+                  ],
+                  "normal": [
+                    0.0,
+                    -1.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    100.0,
+                    30.0,
+                    10.0
+                  ],
+                  "normal": [
+                    1.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    50.0,
+                    60.0,
+                    10.0
+                  ],
+                  "normal": [
+                    0.0,
+                    1.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    30.0,
+                    10.0
+                  ],
+                  "normal": [
+                    -1.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    0.0,
+                    20.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                {
+                  "kind": "cylinder",
+                  "radius": 6.0,
+                  "center": [
+                    30.0,
+                    20.0,
+                    10.0
+                  ],
+                  "axis": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "z_range": [
+                    0.0,
+                    20.000000000000004
+                  ],
+                  "axis_probe_ok": true,
+                  "axis_hits": 0,
+                  "axis_overlaps": 0
+                }
+              ]
+            }
+          ]
+        },
+        "artifact_sha256": "7fe171490087ca8a9d6d440271f69922a0b247c566eafe79a60df14354b4056b"
+      },
+      "preserved": true
+    },
+    {
+      "id": "trimmed-reserved-v1",
+      "family": "trimmed-planar-patches",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-125308-0fc34223/task-3",
+      "source_sha256": "52e0218e44fcfaf595cdb45fc3449f532f23f2d72a7056eea829696a79351204",
+      "session_status": "completed",
+      "elapsed_seconds": 59.71179845900042,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "5591869d09499cb20685d9f39253f53b143d2a668f9dd9b861165eb5011d0353",
+      "metrics": {
+        "mcp_attempts": 10,
+        "completed_calls": 10,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 2,
+          "create_planar_region": 1,
+          "delete_object": 2,
+          "get_modeling_guidance": 2,
+          "get_objects": 1,
+          "modify_object": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 12,
+          "cache_creation_input_tokens": 8458,
+          "cache_read_input_tokens": 101901,
+          "output_tokens": 4470,
+          "output_tokens_details": {
+            "thinking_tokens": 2752
+          },
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 8458,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": "not_available",
+          "iterations": [
+            {
+              "input_tokens": 2,
+              "output_tokens": 1238,
+              "cache_read_input_tokens": 20037,
+              "cache_creation_input_tokens": 1035,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 1035
+              },
+              "type": "message"
+            }
+          ],
+          "speed": "standard"
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "image": "assets/guided-claude-task-3.png",
+      "image_sha256": "97a638ce86e3a8281ac61d6467a9b79c1f5a4771b27dd2bc2e6edfbcc781f97f",
+      "model_sha256": "1ce04bcb6317b84fb8d37a466da78cbc2bb1fedc445d54e912ca1a21a33b65c9",
+      "evaluation": {
+        "status": "pass",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "one_open_planar_face": true,
+          "outer_and_hole": true,
+          "local_bounds": true,
+          "rectangular_outer_boundary": true,
+          "circular_inner_boundary": true,
+          "trimmed_area": true,
+          "trimmed_membership": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "planar": true,
+              "outer_loops": 1,
+              "inner_loops": 1,
+              "min": [
+                0.0,
+                6.784366176764294e-09,
+                8.125646589337588e-10
+              ],
+              "max": [
+                75.0,
+                55.000000006784376,
+                8.125688832547096e-10
+              ],
+              "outer_error": 6.784375727875158e-09,
+              "inner_error": 6.784365069734122e-09,
+              "area": 3923.938068944505,
+              "membership_errors": 0,
+              "membership_samples": 1678
+            }
+          ]
+        },
+        "limitation": "129 points per loop and a 41x41 occupancy grid; finite sampling, not a continuous shape guarantee.",
+        "artifact_sha256": "1ce04bcb6317b84fb8d37a466da78cbc2bb1fedc445d54e912ca1a21a33b65c9"
+      },
+      "preserved": true
+    }
+  ],
+  "task_passes": 3,
+  "sessions": 3,
+  "mcp_attempts": 20,
+  "failed_calls": 0,
+  "model_seconds": 98.45611133397324,
+  "runtime": {
+    "document": 268435457,
+    "marker": null,
+    "object_count": 0,
+    "path": null,
+    "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+    "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+    "version": "0.3.2.0",
+    "pid": 12790,
+    "docs": [
+      {
+        "serial": 268435457,
+        "path": null,
+        "count": 0,
+        "modified": true
+      }
+    ]
+  },
+  "claim": "Initial guided usability observation; not a repeated controlled comparison or broad benefit claim."
+}

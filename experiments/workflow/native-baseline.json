@@ -1,0 +1,91 @@
+{
+  "purpose": "Find cross-task workflow friction, not score modeling quality or claim improvement.",
+  "families": [
+    "primitives",
+    "subtractive-solids"
+  ],
+  "runs": [
+    {
+      "id": "box-v1",
+      "family": "primitives",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260907-094247-98d5be10/task-1",
+      "source_sha256": "e3c5511c504c18fe26abd0bac4a382997cef474be43e1b61bc8c16835159e975",
+      "session_status": "completed",
+      "elapsed_seconds": 45.352997708003386,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "32766722c54d8cf2ec73d431a5673f5b10b0bce7174b3284c42104df8a129641",
+      "metrics": {
+        "mcp_attempts": 5,
+        "completed_calls": 5,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 99001,
+          "cached_input_tokens": 81664,
+          "output_tokens": 601,
+          "reasoning_output_tokens": 55
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "through-hole-v1",
+      "family": "subtractive-solids",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260907-094247-98d5be10/task-2",
+      "source_sha256": "3a876bbbe33ccb4448370dd71086708fb9947d3177b69123fda20a6e48b515b0",
+      "session_status": "completed",
+      "elapsed_seconds": 77.9161941249913,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "d891ed6a35d6df0989bdfadfda118a8b9b3379b8945f5bdcac02dc159372947b",
+      "metrics": {
+        "mcp_attempts": 9,
+        "completed_calls": 9,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "boolean_difference": 2,
+          "create_object": 2,
+          "get_object_info": 1,
+          "get_objects": 1,
+          "modify_object": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 201000,
+          "cached_input_tokens": 176896,
+          "output_tokens": 1297,
+          "reasoning_output_tokens": 234
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    }
+  ],
+  "promotion_authorized": false,
+  "limitation": "Historical heterogeneous observations only. Missing data stays unknown; task success and efficiency are separate."
+}

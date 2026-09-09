@@ -1,0 +1,32 @@
+{
+  "date": "2026-09-09",
+  "tests_passed": 629,
+  "test_warnings": 14,
+  "lint": "pass",
+  "changed_files_format": "pass",
+  "diff_whitespace": "pass",
+  "repository_format": "17 unchanged server files would be reformatted",
+  "roadmap_images": 144,
+  "roadmap_local_references": 381,
+  "broken_references": [],
+  "duplicate_ids": [],
+  "selected_baseline_mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+  "last_runtime_pid": 58823,
+  "remaining": [
+    "Claude comparison/planner/builder provider integration",
+    "Controlled repeated and withheld-task guidance bundle comparison",
+    "Hard judge isolation in a dedicated environment",
+    "Broader unseen-family transfer evidence",
+    "Unattended acceptance and installation validation"
+  ],
+  "active_controllers": false,
+  "live_validation_date": "2026-09-09",
+  "claude_native_modeling": "validated: 20 successful calls, two model passes and one retained pose failure",
+  "guided_claude_native_modeling": "3/3 saved models pass; 20 calls, zero errors; initial usability observation",
+  "guidance_distribution": "Version 2 wheel and sdist verified; clean stdio smoke passes; not published",
+  "unseen_guidance": "4 fresh cases: 3 passes, 1 shape failure; 46 calls, 0 failed calls; source and document preservation pass",
+  "active_runtime_mvid": "addb4d4c-9ce9-4021-b777-53b34874e663",
+  "naked_edge_regression": "6/6 pass",
+  "deterministic_panel_precision": "3/3 pass; sampled error below 7e-14 mm",
+  "fresh_precision_agent": "timeout before construction; not scored"
+}

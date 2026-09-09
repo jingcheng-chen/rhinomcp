@@ -1,0 +1,12 @@
+{
+  "decision": "supervisor_adopted_description",
+  "production_file": "server/src/rhinomcp/tools/create_object.py",
+  "production_sha256": "65bafaaba1cbb3d29368d95d2c036ebc1e52dc620c1e5ce2be36f7a245258a94",
+  "discovery_run": "experiments/runs/workflow-comparison-20260907-101633-464f2821",
+  "validation_run": "experiments/runs/workflow-comparison-20260907-162356-15ca48a3",
+  "validation_status": "criterion_met",
+  "catalog_check": "Published native tool catalog equals tested candidate after terminal whitespace normalization; parameters, defaults and other fields identical",
+  "behavior_check": "AST comparison confirms only create_object docstring changed",
+  "scope": "Supervised description-only adoption; not automatic promotion or broad performance proof",
+  "replay": "Use pre-adoption commit 6265121 in an isolated checkout for the historical baseline. Current gateway rejects duplicating already-adopted guidance."
+}

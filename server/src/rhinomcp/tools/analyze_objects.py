@@ -1,10 +1,10 @@
-from mcp.server.fastmcp import Context
+from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp
 from typing import Any, Dict, List, Optional
 
 
-@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def analyze_objects(
     ctx: Context,
     id: Optional[str] = None,
@@ -26,6 +26,8 @@ def analyze_objects(
     - analyses: Per-object reports with validity, bounding box dimensions,
       and type-specific measurements such as length, area, volume, centroid,
       closed/solid flags, and Brep/Mesh counts where available.
+      For Breps, naked_edge_count counts all naked topological edges, including
+      inner hole boundaries and excluding joined edges and seams.
     """
     selectors = [
         id is not None,

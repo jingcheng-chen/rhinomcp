@@ -1,0 +1,9 @@
+{
+  "id": "native-interface-baseline-v1",
+  "call_budget": 30,
+  "timeout_seconds": 180,
+  "tasks": [
+    {"family": "primitives", "path": "experiments/tasks/box.json"},
+    {"family": "subtractive-solids", "path": "experiments/tasks/through_hole.json"}
+  ]
+}

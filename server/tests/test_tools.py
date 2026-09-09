@@ -2252,7 +2252,7 @@ class TestToolAnnotations:
             "tools/grasshopper_parameters.py",
         ]:
             src = self._module_source(rel)
-            assert "readOnlyHint=True" in src, f"{rel} missing readOnlyHint annotation"
+            assert "read_only_hint=True" in src, f"{rel} missing read_only_hint annotation"
 
     def test_destructive_tools_marked(self):
         for rel in [
@@ -2265,7 +2265,7 @@ class TestToolAnnotations:
             "tools/grasshopper_graph.py",
         ]:
             src = self._module_source(rel)
-            assert "destructiveHint=True" in src, f"{rel} missing destructiveHint annotation"
+            assert "destructive_hint=True" in src, f"{rel} missing destructive_hint annotation"
 
 
 class TestPackageApi:

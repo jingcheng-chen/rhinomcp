@@ -1,0 +1,15 @@
+{
+  "baseline_revision": "4af72cde8db7a7794ae09991255526decd29168c",
+  "read_paths": [
+    "plugin/Functions/AdvancedGeometry.cs",
+    "server/src/rhinomcp/tools/advanced_geometry.py",
+    "contracts/commands/sweep1.json"
+  ],
+  "write_paths": [
+    "plugin/Functions/AdvancedGeometry.cs",
+    "server/src/rhinomcp/tools/advanced_geometry.py",
+    "contracts/commands/sweep1.json"
+  ],
+  "requirements": "Add sweep1 cap_planar_ends boolean default false, independent of existing closed. Preserve defaults and RoadlikeTop; do not fix the unused closed flag in this repair. When true, cap planar holes at document tolerance and validate all results as valid solids before adding any. Already valid solids are accepted. If any cap cannot produce a valid solid, fail clearly with no added results. Roll back added IDs if document insertion fails. Keep source rail/profiles. Dispose temporary geometry. Python transport and schema must match; document strict failure semantics. No chair-specific dimensions or logic.",
+  "acceptance": "Preserve the fixed 43 live verdicts. Independently verify default/false open quarter-strip, true produces correct solid under both closed values, uncapable profile failure leaves document unchanged, closed-rail compatibility, and schema/transport behavior. Do not promote without supervisory review."
+}

@@ -1,0 +1,24 @@
+{
+  "id": "hole-offset-validation-v1",
+  "type": "box_through_hole",
+  "instruction": "Create exactly one valid closed solid: an axis-aligned block from world (140,-80,35) to (212,-36,53) mm, with one straight circular THROUGH-HOLE of diameter 9 mm. The hole axis is parallel to world Z at world X=161, Y=-63. The hole must be open through BOTH Z=35 and Z=53, with constant radius 4.5 mm throughout. Leave no cutter, construction profile or extra geometry. Use the available RhinoMCP tools and verify the result.",
+  "dimensions": [
+    72,
+    44,
+    18
+  ],
+  "minimum": [
+    140,
+    -80,
+    35
+  ],
+  "hole_center": [
+    161,
+    -63
+  ],
+  "hole_radius": 4.5,
+  "units": "Millimeters",
+  "linear_tolerance": 0.001,
+  "volume_tolerance": 0.01,
+  "area_tolerance": 0.01
+}

@@ -15,7 +15,8 @@
     },
     "parent": {
       "type": "string",
-      "description": "Name of parent layer"
+      "description": "Parent layer reference. Full paths such as Assembly::Left are matched case-insensitively; a simple name must identify exactly one nondeleted layer."
     }
-  }
+  },
+  "additionalProperties": false
 }

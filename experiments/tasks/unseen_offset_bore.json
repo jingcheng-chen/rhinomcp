@@ -1,0 +1,24 @@
+{
+  "id": "offset_bore-v1",
+  "type": "box_through_hole",
+  "instruction": "Create exactly one valid closed rectangular solid block from world (-62,23,-11) to (24,71,6) millimeters. Make one straight circular through-hole of radius 7 mm along world Z at X=-39,Y=54, open through both bottom and top with constant radius. Leave only the final block, no cutters or profiles. Verify the result with available tools. After modeling, include in your final summary which guidance topics you consulted, any confusing tool behavior or missing capability, and one specific improvement you would suggest. Report uncertainty honestly; do not claim checks you did not perform.",
+  "dimensions": [
+    86,
+    48,
+    17
+  ],
+  "minimum": [
+    -62,
+    23,
+    -11
+  ],
+  "hole_center": [
+    -39,
+    54
+  ],
+  "hole_radius": 7,
+  "units": "Millimeters",
+  "linear_tolerance": 0.001,
+  "volume_tolerance": 0.01,
+  "area_tolerance": 0.01
+}

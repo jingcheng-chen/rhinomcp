@@ -26,6 +26,9 @@ Grasshopper definitions for you, just by chatting.
 
 ## Highlights
 
+For development of the autonomous improvement experiments, start with the
+[continuation guide](experiments/CONTINUE.md).
+
 - Describe what you want and the assistant builds it in Rhino.
 - It reads your document and can capture the viewport, so it works from what is actually on screen.
 - It scripts Grasshopper for you: finding components, wiring them, setting sliders, and solving.
@@ -108,13 +111,13 @@ Please install https://github.com/jingcheng-chen/rhinomcp as a local MCP server 
 **Codex**, in one command:
 
 ```bash
-codex mcp add rhino --env RHINO_MCP_HOST=127.0.0.1 -- uvx rhinomcp
+codex mcp add rhino --env RHINO_MCP_HOST=127.0.0.1 -- uvx rhinomcp@latest
 ```
 
 **Claude Code**, in one command:
 
 ```bash
-claude mcp add rhino -- uvx rhinomcp
+claude mcp add rhino -- uvx rhinomcp@latest
 ```
 
 **ChatGPT:** use Codex for the local setup above. ChatGPT apps/MCP connectors currently connect
@@ -128,7 +131,7 @@ You can also manually edit the config yourself:
   "mcpServers": {
     "rhino": {
       "command": "uvx",
-      "args": ["rhinomcp"],
+      "args": ["rhinomcp@latest"],
       "env": {
         "RHINO_MCP_HOST": "127.0.0.1"
       }
@@ -155,7 +158,7 @@ To clean up a stale `rhinomcp` process each time your client launches:
   "mcpServers": {
     "rhino": {
       "command": "sh",
-      "args": ["-c", "killall rhinomcp 2>/dev/null; uvx rhinomcp"]
+      "args": ["-c", "killall rhinomcp 2>/dev/null; uvx rhinomcp@latest"]
     }
   }
 }
@@ -168,7 +171,7 @@ To clean up a stale `rhinomcp` process each time your client launches:
   "mcpServers": {
     "rhino": {
       "command": "cmd",
-      "args": ["/c", "taskkill /F /IM rhinomcp.exe 2>nul & uvx rhinomcp"]
+      "args": ["/c", "taskkill /F /IM rhinomcp.exe 2>nul & uvx rhinomcp@latest"]
     }
   }
 }
@@ -180,6 +183,24 @@ To clean up a stale `rhinomcp` process each time your client launches:
 
 With Rhino open, type **`mcpstart`** in the command line. This starts the TCP bridge the server
 connects to (`mcpstop` ends it). Run it once per Rhino session.
+
+### Staying up to date
+
+RhinoMCP has three parts that update separately:
+
+- **Python server.** `uvx rhinomcp@latest` asks PyPI for the newest release every time your
+  client starts the server; plain `uvx rhinomcp` keeps the first version it downloaded. If you
+  work offline, install it once with `uv tool install rhinomcp` and run `uv tool upgrade rhinomcp`
+  when convenient.
+- **Rhino plugin.** Installed through the Package Manager, Rhino checks for updates at startup and
+  installs them when "Automatically update packages when Rhino starts" is enabled; the new version
+  loads on the next restart. A plugin installed by dragging a `.rhp` into Rhino is not updated.
+- **AI client.** It reads the tool list when it launches the server, so restart the client (or
+  reconnect the server) after an update.
+
+The server reads the plugin's version when it connects and warns in its log when the two differ.
+A tool that needs a newer plugin fails with an update instruction instead of silently doing
+something else, and `describe_capabilities` reports both versions.
 
 ## Usage
 
@@ -260,7 +281,7 @@ pattern with cylinders that have different heights."_
 AI client ──MCP (stdio)──► rhinomcp (Python) ──TCP 127.0.0.1:1999──► Rhino plugin ──► Rhino + Grasshopper
 ```
 
-1. `server/`: a Python [FastMCP](https://modelcontextprotocol.io) server that exposes each tool and forwards it to Rhino.
+1. `server/`: a Python [MCP](https://modelcontextprotocol.io) server (official Python SDK 2.x) that exposes each tool and forwards it to Rhino.
 2. `plugin/`: a RhinoCommon C# plugin that runs a TCP listener inside Rhino and executes commands on the main thread. Start and stop it with the `mcpstart` / `mcpstop` Rhino commands.
 3. `contracts/`: JSON Schema definitions that keep the wire protocol between the two tiers in sync.
 
@@ -329,3 +350,12 @@ This is a third-party integration and is not made by McNeel. Built by
 ## Star history
 
 [![Star History Chart](https://api.star-history.com/svg?repos=jingcheng-chen/rhinomcp&type=Date)](https://www.star-history.com/#jingcheng-chen/rhinomcp&Date)
+
+### Modeling guidance distributed with the server
+
+The Python package includes reusable guidance for transforms, planar regions,
+organization, verification and recovery. Use `get_modeling_guidance("overview")`,
+the `asset_general_strategy` MCP prompt, or the `rhinomcp://guidance/{topic}` resource.
+Essential tool semantics stay in tool descriptions. No local experiment folder or
+separate skill is needed. See [packaged guidance](server/README.md#bundled-modeling-guidance)
+for available topics and release details.
