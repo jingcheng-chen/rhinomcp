@@ -21,6 +21,15 @@ install resolves the 2.x SDK and fails at import. 0.4.0 moves the server to the
   the client as only `Error executing tool <name>`; RhinoMCP re-raises failures
   as `ToolError` so messages such as "start Rhino and run `mcpstart`" still reach
   the agent.
+- Version compatibility guard. The server reads the plugin's version once per
+  connection and warns when the two differ; `describe_capabilities` now also
+  reports `server_version`, `plugin_matches_server` and `update_advice`. A
+  command the connected plugin does not support fails with update instructions
+  instead of a bare "Unknown command type", and a parameter an older plugin would
+  silently ignore (`sweep1.cap_planar_ends`) is refused rather than dropped.
+- Client configuration in the README now launches `uvx rhinomcp@latest`, so the
+  server is re-resolved on every client start instead of staying on the first
+  version uv downloaded. See "Staying up to date" in the README.
 - New `create_planar_region` tool: builds a planar face from closed boundary
   curves, with inner boundaries as holes. Requires plugin 0.4.0.
 - New `get_modeling_guidance` tool, the `rhinomcp://guidance/{topic}` resource and

@@ -724,7 +724,7 @@ rhinomcp = rhinomcp.server:main
 Published installs are intended to run with:
 
 ```bash
-uvx rhinomcp
+uvx rhinomcp@latest
 ```
 
 ### Rhino Plugin
@@ -761,6 +761,27 @@ dotnet build plugin/rhinomcp.sln --configuration Release -p:CopyToRhinoPluginDir
 | `.github/workflows/ci.yml`                   | Python tests, schema validation, lint, and plugin build checks. |
 | `.github/workflows/mcp-server-publish.yml`   | Build and publish the Python package to PyPI.                   |
 | `.github/workflows/rhino-plugin-publish.yml` | Build and publish the Yak package for Rhino Package Manager.    |
+
+## Version compatibility
+
+The server and the plugin are released together but update separately: `uvx
+rhinomcp@latest` re-resolves on every client launch, while the Package Manager
+updates the plugin on a Rhino restart. `RhinoConnection` therefore reads the
+plugin's `describe_capabilities` answer once per socket and:
+
+- logs a version-skew warning when the two versions differ (the
+  `describe_capabilities` tool also reports `server_version`,
+  `plugin_matches_server` and `update_advice`);
+- refuses a command the plugin does not list, with update instructions, instead
+  of forwarding it to a bare "Unknown command type" error;
+- refuses a parameter registered in `PARAMS_SINCE` when it is actually used and
+  the plugin predates it, because a plugin silently ignores parameters it does
+  not know (an old plugin would return an uncapped sweep for `cap_planar_ends`).
+
+When you add a parameter to an existing command, register it in `PARAMS_SINCE` in
+`server.py` with the plugin version that introduces it and the value that means
+"not used". When you add a command, register it in `COMMANDS_SINCE` so plugins too
+old to report their command table are still refused with the right advice.
 
 ## Dependencies
 

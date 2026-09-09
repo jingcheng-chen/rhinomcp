@@ -27,6 +27,20 @@ def buffered_recv(wire_bytes: bytes):
     return recv
 
 
+def capabilities_frame(*commands, version="0.4.0"):
+    """The plugin's describe_capabilities answer. Every connection reads it once
+    before its first command, so tests serve it ahead of the command's reply."""
+    return frame(json.dumps({
+        "status": "success",
+        "result": {
+            "version": version,
+            "command_count": len(commands),
+            "commands": [{"name": name, "read_only": False} for name in commands],
+            "perception": {"description": "none", "envelope_flags": []},
+        },
+    }).encode("utf-8"))
+
+
 class TestRhinoConnection:
     """Tests for the RhinoConnection class."""
 
@@ -314,6 +328,8 @@ class TestDryRunCapabilityGate:
 
     @patch("socket.socket")
     def test_refused_when_the_command_is_absent_from_the_list(self, mock_socket_class):
+        """A plugin that lists its commands and leaves this one out cannot run
+        it at all, preview or not; the refusal says so and how to update."""
         conn, mock_sock = self._connected(
             mock_socket_class,
             self._capabilities([
@@ -321,7 +337,7 @@ class TestDryRunCapabilityGate:
             ]),
         )
 
-        with pytest.raises(Exception, match="does not report dry_run support"):
+        with pytest.raises(Exception, match="does not support 'boolean_union'"):
             conn.send_command(
                 "boolean_union", {"object_ids": self.IDS, "dry_run": True}
             )
@@ -360,20 +376,28 @@ class TestDryRunCapabilityGate:
         assert mock_sock.sendall.call_count == 2
 
     @patch("socket.socket")
-    def test_a_command_without_dry_run_never_asks(self, mock_socket_class):
-        """Nothing changes for callers who don't preview: no lookup, no extra
-        round trip."""
+    def test_a_command_without_dry_run_probes_once_and_never_asks_again(
+        self, mock_socket_class
+    ):
+        """Callers who don't preview pay one capabilities read per connection
+        (the version and command check), never a per-call lookup."""
         committed = frame(json.dumps({
             "status": "success",
             "result": {"result_ids": [self.IDS[0]], "count": 1,
                        "message": "Boolean union created 1 object(s)"},
         }).encode("utf-8"))
-        conn, mock_sock = self._connected(mock_socket_class, committed)
+        conn, mock_sock = self._connected(
+            mock_socket_class,
+            self._capabilities([
+                {"name": "boolean_union", "read_only": False, "supports_dry_run": True},
+            ]) + committed + committed,
+        )
 
         conn.send_command("boolean_union", {"object_ids": self.IDS})
+        conn.send_command("boolean_union", {"object_ids": self.IDS})
 
-        assert mock_sock.sendall.call_count == 1
-        assert conn._dry_run_commands is None
+        assert mock_sock.sendall.call_count == 3
+        assert conn._dry_run_commands == {"boolean_union"}
 
     @patch("socket.socket")
     def test_a_failed_probe_is_not_remembered(self, mock_socket_class):
@@ -471,8 +495,17 @@ class TestRuntimeValidation:
 
         mock_sock = MagicMock()
         mock_socket_class.return_value = mock_sock
+        # The connection's one-time capabilities read comes first, then the
+        # answer to the command itself.
+        capabilities = frame(json.dumps({
+            "status": "success",
+            "result": {"version": "0.4.0", "command_count": 1,
+                       "commands": [{"name": "create_object", "read_only": False}],
+                       "perception": {"description": "none", "envelope_flags": []}},
+        }).encode("utf-8"))
         mock_sock.recv.side_effect = buffered_recv(
-            frame(json.dumps({"status": "success", "result": {}}).encode("utf-8"))
+            capabilities
+            + frame(json.dumps({"status": "success", "result": {}}).encode("utf-8"))
         )
 
         conn = RhinoConnection(host="127.0.0.1", port=1999)
@@ -485,7 +518,8 @@ class TestRuntimeValidation:
         finally:
             srv.RHINO_VALIDATE = original_mode
 
-        mock_sock.sendall.assert_called_once()
+        sent = [json.loads(c.args[0][4:])["type"] for c in mock_sock.sendall.call_args_list]
+        assert sent == ["describe_capabilities", "create_object"]
 
     def test_unrecognized_validate_value_falls_back_to_warn(self):
         """Unknown RHINO_MCP_VALIDATE values must not NameError during import:
@@ -737,7 +771,8 @@ class TestPerceptionForwarding:
         # Responses are length-prefixed on the wire (framing), so frame the
         # canned response the way the plugin would.
         mock_sock.recv.side_effect = buffered_recv(
-            frame(json.dumps({"status": "success", "result": result}).encode("utf-8"))
+            capabilities_frame("create_object")
+            + frame(json.dumps({"status": "success", "result": result}).encode("utf-8"))
         )
         conn = RhinoConnection(host="127.0.0.1", port=1999)
         conn.connect()
@@ -814,7 +849,8 @@ class TestSendCommand:
 
         response = {"status": "success", "result": {"name": "Box1", "id": "abc-123"}}
         mock_sock.recv.side_effect = buffered_recv(
-            frame(json.dumps(response).encode("utf-8"))
+            capabilities_frame("create_object")
+            + frame(json.dumps(response).encode("utf-8"))
         )
 
         conn = RhinoConnection(host="127.0.0.1", port=1999)
@@ -845,7 +881,8 @@ class TestSendCommand:
 
         response = {"status": "error", "message": "Object not found"}
         mock_sock.recv.side_effect = buffered_recv(
-            frame(json.dumps(response).encode("utf-8"))
+            capabilities_frame("get_object_info")
+            + frame(json.dumps(response).encode("utf-8"))
         )
 
         conn = RhinoConnection(host="127.0.0.1", port=1999)
@@ -905,7 +942,10 @@ class TestSendCommand:
         from rhinomcp.server import RhinoConnection
 
         first_sock = MagicMock()
-        first_sock.recv.return_value = b""
+        # Serves the capabilities read, then the peer closes (b"") mid-command.
+        first_sock.recv.side_effect = buffered_recv(
+            capabilities_frame("gh_batch_search_components")
+        )
         second_sock = MagicMock()
         second_sock.recv.side_effect = buffered_recv(
             frame(
@@ -923,7 +963,7 @@ class TestSendCommand:
 
         assert result == {"found_count": 1}
         assert mock_socket_class.call_count == 2
-        first_sock.sendall.assert_called_once()
+        assert first_sock.sendall.call_count == 2  # capabilities read + first try
         second_sock.sendall.assert_called_once()
 
     @patch("socket.socket")
@@ -934,7 +974,8 @@ class TestSendCommand:
         from rhinomcp.server import RhinoConnection
 
         mock_sock = MagicMock()
-        mock_sock.recv.return_value = b""
+        # Serves the capabilities read, then the peer closes (b"") mid-command.
+        mock_sock.recv.side_effect = buffered_recv(capabilities_frame("create_object"))
         mock_socket_class.return_value = mock_sock
 
         conn = RhinoConnection(host="127.0.0.1", port=1999)
@@ -946,7 +987,7 @@ class TestSendCommand:
             )
 
         assert mock_socket_class.call_count == 1
-        mock_sock.sendall.assert_called_once()
+        assert mock_sock.sendall.call_count == 2  # capabilities read + the command
         assert conn.sock is None
 
     @patch("socket.socket")

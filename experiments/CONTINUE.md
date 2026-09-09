@@ -35,6 +35,15 @@ migration), then the version bump and this docs update. Verified locally: 264
 server, 355 experiment and 13 contract tests; Release build 0 warnings/errors;
 clean wheel install exercised over real stdio with mcp 2.2.0 and no Rhino.
 
+Added afterwards: a plugin compatibility guard in `RhinoConnection`. Each socket
+reads describe_capabilities once (after local pre-flight validation, before the
+first command), logs version skew with update advice, refuses commands the plugin
+does not list and PARAMS_SINCE parameters an older plugin would silently drop, and
+rewrites a bare "Unknown command type" answer into the same advice. The
+describe_capabilities tool reports server_version, plugin_matches_server and
+update_advice. README client configs launch `uvx rhinomcp@latest`. Harness traces
+now show one extra describe_capabilities call per Rhino connection. 285 server tests.
+
 Needs the user: push `harness` and open a PR to main; create GitHub release 0.4.0
 (both publish workflows trigger on `release: published`); decide the dedicated
 isolation environment (VM or machine); name genuinely new held-out task families

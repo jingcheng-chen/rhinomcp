@@ -107,13 +107,13 @@ AI 智能体，让 Claude、Cursor 等助手只需对话，就能建模、读取
 **Codex**，一条命令：
 
 ```bash
-codex mcp add rhino --env RHINO_MCP_HOST=127.0.0.1 -- uvx rhinomcp
+codex mcp add rhino --env RHINO_MCP_HOST=127.0.0.1 -- uvx rhinomcp@latest
 ```
 
 **Claude Code**，一条命令：
 
 ```bash
-claude mcp add rhino -- uvx rhinomcp
+claude mcp add rhino -- uvx rhinomcp@latest
 ```
 
 **ChatGPT：** 本地安装请使用上面的 Codex 方式。ChatGPT apps/MCP connectors 目前连接的是远程
@@ -127,7 +127,7 @@ MCP 服务器，而不是 `uvx rhinomcp` 这种本地 stdio 命令。如果你�
   "mcpServers": {
     "rhino": {
       "command": "uvx",
-      "args": ["rhinomcp"],
+      "args": ["rhinomcp@latest"],
       "env": {
         "RHINO_MCP_HOST": "127.0.0.1"
       }
@@ -154,7 +154,7 @@ MCP 服务器，而不是 `uvx rhinomcp` 这种本地 stdio 命令。如果你�
   "mcpServers": {
     "rhino": {
       "command": "sh",
-      "args": ["-c", "killall rhinomcp 2>/dev/null; uvx rhinomcp"]
+      "args": ["-c", "killall rhinomcp 2>/dev/null; uvx rhinomcp@latest"]
     }
   }
 }
@@ -167,7 +167,7 @@ MCP 服务器，而不是 `uvx rhinomcp` 这种本地 stdio 命令。如果你�
   "mcpServers": {
     "rhino": {
       "command": "cmd",
-      "args": ["/c", "taskkill /F /IM rhinomcp.exe 2>nul & uvx rhinomcp"]
+      "args": ["/c", "taskkill /F /IM rhinomcp.exe 2>nul & uvx rhinomcp@latest"]
     }
   }
 }
@@ -179,6 +179,21 @@ MCP 服务器，而不是 `uvx rhinomcp` 这种本地 stdio 命令。如果你�
 
 打开 Rhino 后，在命令行输入 **`mcpstart`**。这会启动 MCP 服务器要连接的 TCP 桥接
 （用 `mcpstop` 结束）。每个 Rhino 会话运行一次即可。
+
+### 保持更新
+
+RhinoMCP 由三个各自独立更新的部分组成：
+
+- **Python 服务器。** `uvx rhinomcp@latest` 会在客户端每次启动服务器时向 PyPI 查询最新版本；
+  不带 `@latest` 的 `uvx rhinomcp` 会一直使用第一次下载的版本。如果需要离线使用，可先执行
+  `uv tool install rhinomcp` 安装，之后方便时运行 `uv tool upgrade rhinomcp` 升级。
+- **Rhino 插件。** 通过 Package Manager 安装的插件，Rhino 会在启动时检查更新；启用
+  "Automatically update packages when Rhino starts" 后会自动安装，新版本在下次重启时生效。
+  直接拖入 `.rhp` 安装的插件不会自动更新。
+- **AI 客户端。** 客户端在启动服务器时读取工具列表，因此更新后请重启客户端（或重新连接服务器）。
+
+服务器连接时会读取插件版本，两者不一致时会在日志中给出警告；需要更新插件的工具会直接返回更新
+提示，而不是悄悄返回不同的结果。`describe_capabilities` 会同时报告两端的版本。
 
 ## 使用
 
