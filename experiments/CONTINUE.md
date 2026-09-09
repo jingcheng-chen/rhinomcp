@@ -13,6 +13,36 @@ the revised cycle and implementation boundary. New capabilities, tool ergonomics
 reusable workflows are legitimate proposals even when no command is defective.
 A task success or additional tests alone do not establish an improved MCP tool.
 
+## Current handoff — SDK 2.x migration and 0.4.0 prepared; release pending
+
+Session 2026-09-09 (evening). Published rhinomcp 0.3.2 fails on fresh installs:
+its open-ended `mcp` dependency now resolves SDK 2.x, which removed
+`mcp.server.fastmcp` (reproduced in a clean environment). Rather than keep the
+`<2` pin, the server and the harness gateways were migrated to MCP SDK 2.x
+(`mcp>=2.0.0,<3`). `RhinoMCPServer` in server.py re-raises tool exceptions as
+`ToolError` because SDK 2.x otherwise reports only "Error executing tool <name>"
+to clients; the 70-tool catalog, prompts, resources and instructions are
+byte-identical to the 1.x server. Harness catalogs are serialized by alias to keep
+the camelCase wire format; comparisons against earlier runs must use archived
+sources. The native pilot registers low-level on_list_tools/on_call_tool handlers
+and returns gateway rejections as is_error results, as the recorded runs did.
+
+Versions bumped together to 0.4.0 (server/pyproject.toml, plugin/manifest.yml,
+plugin/rhinomcp.csproj); Newtonsoft.Json 13.0.4; dev dependencies refreshed; ruff
+rules pinned in the root ruff.toml because ruff 0.16 widened its defaults.
+CHANGELOG.md added. Commits: 270b6ea (server migration), dc85abd (harness
+migration), then the version bump and this docs update. Verified locally: 264
+server, 355 experiment and 13 contract tests; Release build 0 warnings/errors;
+clean wheel install exercised over real stdio with mcp 2.2.0 and no Rhino.
+
+Needs the user: push `harness` and open a PR to main; create GitHub release 0.4.0
+(both publish workflows trigger on `release: published`); decide the dedicated
+isolation environment (VM or machine); name genuinely new held-out task families
+before further guidance tuning. The rebuilt 0.4.0 plugin was NOT installed into
+Rhino this session; the active local runtime remains the naked-edge build from
+the handoff below. No controller is running. Ruff on tests/experiments reports
+two pre-existing findings outside CI's checked path; they were left unchanged.
+
 ## Current handoff — coherent commits, edge repair and precision feasibility
 
 User requested meaningful commits, then continuation and a tolerance strategy.
