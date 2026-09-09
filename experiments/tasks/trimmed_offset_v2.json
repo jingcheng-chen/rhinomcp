@@ -1,0 +1,25 @@
+{
+  "id": "trimmed-offset-v2",
+  "type": "trimmed_planar_patch",
+  "instruction": "Build exactly one open planar rectangular patch with a circular opening, as a single Brep face, in millimeters. In local coordinates its outer rectangle runs from (0,0,0) to (100,80,0). Remove the interior of the circle centered at (30,45,0) with radius 12. The opening must be an actual hole through the surface. Rotate this local shape 35 degrees about the world X axis through the origin, then translate by [60, -25, 15]. These define the final world coordinates, not rotation about the shape center. Leave only the final patch and no curves, cutters, solids or other objects. Choose your construction with the available RhinoMCP tools. Match the analytic plane, local bounds and circular/rectangular boundaries within 0.001 mm; area may differ by up to 1%. The opening and prescribed pose remain required.",
+  "dimensions": [
+    100,
+    80,
+    0
+  ],
+  "hole_radius": 12,
+  "hole_center": [
+    30,
+    45
+  ],
+  "rotation_x_degrees": 35,
+  "translation": [
+    60,
+    -25,
+    15
+  ],
+  "units": "Millimeters",
+  "linear_tolerance": 0.001,
+  "volume_tolerance": 0.01,
+  "area_tolerance": 75.4761065788307
+}

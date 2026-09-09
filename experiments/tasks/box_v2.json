@@ -1,0 +1,18 @@
+{
+  "id": "box-v2",
+  "type": "axis_aligned_box",
+  "instruction": "Create exactly one axis-aligned closed solid box, 100 mm along world X, 50 mm along world Y, and 30 mm along world Z. Its minimum corner must be at world (0, 0, 0). Leave no other objects. Use the available RhinoMCP tools. Match positions and dimensions within 0.001 mm; volume may differ by up to 1%.",
+  "dimensions": [
+    100,
+    50,
+    30
+  ],
+  "minimum": [
+    0,
+    0,
+    0
+  ],
+  "units": "Millimeters",
+  "linear_tolerance": 0.001,
+  "volume_tolerance": 1500.0
+}

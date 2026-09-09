@@ -39,6 +39,7 @@ def evaluate(task, measured):
     rows = measured.get("objects", [])
     obj = rows[0] if len(rows) == 1 else {}
     tol = task["linear_tolerance"]
+    shape_tol = task.get("shape_tolerance", tol)
     w, d, _ = task["dimensions"]
     h = task["panel_height"]
     bounds = obj.get("min", []) + obj.get("max", [])
@@ -53,8 +54,8 @@ def evaluate(task, measured):
         and all(
             near(a, b, tol) for a, b in zip(bounds, [0, 0, min(0, h), w, d, max(0, h)])
         ),
-        "reference_to_surface": near(obj.get("reference_error"), 0, tol),
-        "surface_to_reference": near(obj.get("surface_error"), 0, tol),
+        "reference_to_surface": near(obj.get("reference_error"), 0, shape_tol),
+        "surface_to_reference": near(obj.get("surface_error"), 0, shape_tol),
         "rectangular_boundary": near(obj.get("boundary_error"), 0, tol),
     }
     return {

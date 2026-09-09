@@ -1,0 +1,27 @@
+{
+  "id": "released-0.4.0-baseline-v2",
+  "call_budget": 30,
+  "timeout_seconds": 240,
+  "tasks": [
+    {
+      "family": "primitives",
+      "path": "experiments/tasks/box_v2.json"
+    },
+    {
+      "family": "subtractive-solids",
+      "path": "experiments/tasks/through_hole_v2.json"
+    },
+    {
+      "family": "posed-solids",
+      "path": "experiments/tasks/posed_prism_v2.json"
+    },
+    {
+      "family": "trimmed-patches",
+      "path": "experiments/tasks/trimmed_offset_v2.json"
+    },
+    {
+      "family": "curved-panels",
+      "path": "experiments/tasks/panel_raised_v2.json"
+    }
+  ]
+}

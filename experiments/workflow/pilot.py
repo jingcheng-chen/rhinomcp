@@ -355,7 +355,10 @@ def run(path, agent_config=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "suite", type=Path, nargs="?", default=Path(__file__).with_name("pilot.json")
+        "suite",
+        type=Path,
+        nargs="?",
+        default=Path(__file__).with_name("release-pilot.json"),
     )
     parser.add_argument("--provider", choices=["codex", "claude"], default="codex")
     parser.add_argument("--model")

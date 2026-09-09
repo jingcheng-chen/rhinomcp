@@ -1,0 +1,24 @@
+{
+  "id": "through-hole-v2",
+  "type": "box_through_hole",
+  "instruction": "Create exactly one valid closed solid: an axis-aligned rectangular block from world (0,0,0) to (100,60,20) mm with one straight circular THROUGH-HOLE of diameter 12 mm. The hole axis is parallel to world Z and passes through world X=30, Y=20. It must be open through BOTH the bottom face at Z=0 and the top face at Z=20, with constant radius 6 mm for the entire height. Leave no cutter, construction profile, or other geometry. Use the available RhinoMCP tools, inspect their results and verify the solid. Match positions and dimensions within 0.001 mm; volume and area may differ by up to 1%.",
+  "dimensions": [
+    100,
+    60,
+    20
+  ],
+  "minimum": [
+    0,
+    0,
+    0
+  ],
+  "hole_center": [
+    30,
+    20
+  ],
+  "hole_radius": 6,
+  "units": "Millimeters",
+  "linear_tolerance": 0.001,
+  "volume_tolerance": 1177.3805328941535,
+  "area_tolerance": 189.27787565803087
+}

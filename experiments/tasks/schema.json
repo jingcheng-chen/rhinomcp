@@ -80,6 +80,10 @@
     },
     "rotation_x_degrees": {
       "type": "number"
+    },
+    "shape_tolerance": {
+      "type": "number",
+      "exclusiveMinimum": 0
     }
   },
   "required": [
@@ -396,6 +400,20 @@
         "properties": {
           "dimensions": {
             "$ref": "#/$defs/dimensions"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "shape_tolerance"
+        ]
+      },
+      "then": {
+        "properties": {
+          "type": {
+            "const": "biquadratic_panel"
           }
         }
       }

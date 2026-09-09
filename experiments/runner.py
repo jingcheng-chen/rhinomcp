@@ -100,6 +100,7 @@ def load_task(path):
             task.get("hole_radius", 0),
             task.get("panel_height", 0),
             task.get("rotation_x_degrees", 0),
+            task.get("shape_tolerance", 0),
         ]
     )
     if not all(math.isfinite(value) for value in numbers):

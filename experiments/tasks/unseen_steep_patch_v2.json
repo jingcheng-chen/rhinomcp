@@ -1,0 +1,25 @@
+{
+  "id": "steep_patch-v2",
+  "type": "trimmed_planar_patch",
+  "instruction": "Build exactly one open planar rectangular patch as a single Brep face. In local millimeter coordinates its rectangle runs from (0,0,0) to (92,38,0), with a circular opening centered at (24,23,0), radius 9. The opening must be an actual hole through the surface. Rotate the local shape +72 degrees about world X through the origin, then translate by [18,-67,24]. These specify final world coordinates, not rotation about the center. Leave only the patch, no curves or cutters. Verify the result. After modeling, include in your final summary which guidance topics you consulted, any confusing tool behavior or missing capability, and one specific improvement you would suggest. Report uncertainty honestly; do not claim checks you did not perform. Match the analytic plane, local bounds and circular/rectangular boundaries within 0.001 mm; area may differ by up to 1%. The opening and prescribed pose remain required.",
+  "dimensions": [
+    92,
+    38,
+    0
+  ],
+  "hole_radius": 9,
+  "hole_center": [
+    24,
+    23
+  ],
+  "rotation_x_degrees": 72,
+  "translation": [
+    18,
+    -67,
+    24
+  ],
+  "units": "Millimeters",
+  "linear_tolerance": 0.001,
+  "volume_tolerance": 0.01,
+  "area_tolerance": 32.41530995059227
+}

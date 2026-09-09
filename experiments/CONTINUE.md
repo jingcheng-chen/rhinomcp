@@ -77,9 +77,17 @@ credentials anywhere; reinstall the plugin into a Rhino that holds user work.
   command. Traces show that call; it is not an agent decision.
 - `workflow/current-baseline.json` still names the pre-release planar build and a
   local naked-edge overlay. Both are superseded by the released 0.4.0 plugin (M0).
-- Last known local runtime, to re-verify: the naked-edge build
-  (MVID `addb4d4c-9ce9-4021-b777-53b34874e663`), not the released binary. The
-  release session did not install 0.4.0 into Rhino.
+- Runtime rechecked 2026-09-09: server 0.4.0, loaded plugin 0.3.2, naked-edge
+  MVID `addb4d4c-9ce9-4021-b777-53b34874e663`. The sole unsaved empty Rhino
+  document is marked modified and unclaimed. Permission to close it without
+  saving and restart for dedicated 0.4.0 testing was requested, not yet granted.
+  Recheck state before acting; no installation or live modeling was performed.
+- M0 task preparation is complete: the native pilot defaults to
+  `workflow/release-pilot.json`, with five families using new v2 tasks and realistic
+  tolerances. Panel shape deviation is separate from document/boundary tolerance;
+  historical files remain intact and the precision panel is inactive. See
+  [M0 preparation and next command](workflow/REBASELINE_040.md). Runtime selection
+  and all five fresh baseline runs remain outstanding; M0 is not complete.
 - Discovery so far: five families audited historically (primitives, posed solids,
   subtractive solids, surface construction, layer organization, plus photo
   reconstruction); the native pilot covers primitives, subtractive solids, posed
@@ -89,7 +97,7 @@ credentials anywhere; reinstall the plugin into a Rhino that holds user work.
   modeling validated; binary comparison orchestration remains Codex-only).
 - Pending user decision: the dedicated isolation environment (VM or machine) for
   unattended operation. Nothing else blocks M0 to M4.
-- Tests at last verification: 285 server, 355 experiments, 13 contracts.
+- Tests at last verification: 285 server, 363 experiments, 13 contracts; server lint passes.
 
 ## Milestones from here, in order
 

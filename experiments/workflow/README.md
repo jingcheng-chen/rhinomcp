@@ -32,6 +32,13 @@ Tolerances describe what a realistic modeling task needs and are fixed before a 
 Never change a tolerance to pass or fail a specific run. Re-declare the task as a
 new version and keep the old file for historical pins.
 
+The default pilot now uses `release-pilot.json` and versioned tasks for five
+families. Panel tasks may declare `shape_tolerance` for sampled surface deviation;
+`linear_tolerance` still controls document tolerance, bounds and boundaries.
+Analytic trimmed patches retain strict plane/boundary checks and a 1% area budget.
+See [M0 preparation](REBASELINE_040.md) for declarations, verification and the
+pending runtime installation. Historical suite files remain replay inputs.
+
 ## Distribution requirement — user-approved 2026-09-09
 
 Reusable modeling knowledge ships with RhinoMCP. Keep essential semantics in tool

@@ -1,0 +1,20 @@
+{
+  "id": "posed-prism-v2",
+  "type": "triangular_prism_pose",
+  "instruction": "Create exactly one valid closed solid triangular prism. In local coordinates its base triangle is (0,0,0), (80,0,0), (0,40,0), closed back to the start, and it extends 25 mm along local +Z. Rotate this geometry +30 degrees about the WORLD Z axis through world (0,0,0), then translate it by world vector (120,-40,15) mm. These operations specify the final pose, not a mandatory tool sequence. Preserve the triangle's handedness. Remove the construction profile and leave no other objects. All units are millimeters. Verify your work using available tools. Match positions and dimensions within 0.001 mm; volume and area may differ by up to 1%.",
+  "dimensions": [
+    80,
+    40,
+    25
+  ],
+  "translation": [
+    120,
+    -40,
+    15
+  ],
+  "rotation_z_degrees": 30,
+  "units": "Millimeters",
+  "linear_tolerance": 0.001,
+  "volume_tolerance": 400.0,
+  "area_tolerance": 84.3606797749979
+}
