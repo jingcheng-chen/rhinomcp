@@ -4,9 +4,10 @@ import hashlib
 import json
 import os
 from pathlib import Path
-from mcp.server.fastmcp import FastMCP, Image
+from mcp.server.mcpserver import Image, MCPServer
+from mcp.types import ToolAnnotations
 
-mcp = FastMCP("Saved model image review")
+mcp = MCPServer("Saved model image review")
 calls = 0
 
 
@@ -34,7 +35,7 @@ def read_image(pack, image_id):
     return data, digest
 
 
-@mcp.tool(annotations={"readOnlyHint": True})
+@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
 def get_review_image(image_id: str) -> Image:
     """Receive one saved reference or candidate PNG. Use only exact image IDs
     listed in the review prompt. No live Rhino operations or arbitrary file paths.

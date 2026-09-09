@@ -169,7 +169,7 @@ def native_catalog(server_source, extra_tools):
     source.relative_to(ROOT)
     source_pins(source)  # Validate the declared package path before importing it.
     names = [*TOOLS, *extra_tools]
-    code = "import asyncio,json,sys,pathlib,rhinomcp; assert pathlib.Path(rhinomcp.__file__).resolve().parent == pathlib.Path(sys.argv[2])/'rhinomcp'; from experiments.workflow.native_mcp import Gateway; print(json.dumps([t.model_dump(mode='json',exclude_none=True) for t in asyncio.run(Gateway(0,'',1,'unused',tool_names=json.loads(sys.argv[1])).definitions())]))"
+    code = "import asyncio,json,sys,pathlib,rhinomcp; assert pathlib.Path(rhinomcp.__file__).resolve().parent == pathlib.Path(sys.argv[2])/'rhinomcp'; from experiments.workflow.native_mcp import Gateway; print(json.dumps([t.model_dump(mode='json',by_alias=True,exclude_none=True) for t in asyncio.run(Gateway(0,'',1,'unused',tool_names=json.loads(sys.argv[1])).definitions())]))"
     output = subprocess.check_output(
         [sys.executable, "-c", code, json.dumps(names), str(source)],
         cwd=ROOT,
@@ -281,7 +281,7 @@ def prepare(path, review):
             raise RuntimeError("Initial runtime is not the empty reviewed baseline")
         persist(directory / "initial-runtime.json", initial)
         definitions = [
-            t.model_dump(mode="json", exclude_none=True)
+            t.model_dump(mode="json", by_alias=True, exclude_none=True)
             for t in asyncio.run(Gateway(0, "", 1, directory / "unused").definitions())
         ]
         persist(directory / "tools.json", definitions)

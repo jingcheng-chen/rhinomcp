@@ -6,9 +6,9 @@ import os
 from pathlib import Path
 from threading import Lock
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
-mcp = FastMCP("RhinoMCP bounded builder")
+mcp = MCPServer("RhinoMCP bounded builder")
 calls = 0
 source_lock = Lock()
 

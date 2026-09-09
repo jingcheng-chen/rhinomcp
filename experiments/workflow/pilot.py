@@ -333,7 +333,7 @@ def run(path, agent_config=None):
         directory.mkdir()
         save(directory / "suite.json", suite)
         definitions = [
-            t.model_dump(mode="json", exclude_none=True)
+            t.model_dump(mode="json", by_alias=True, exclude_none=True)
             for t in asyncio.run(Gateway(0, "", 1, directory / "unused").definitions())
         ]
         registry = {"runs": []}

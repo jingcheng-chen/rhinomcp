@@ -2,13 +2,13 @@
 
 import json
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 from rhinomcp.server import get_rhino_connection
 from rhinomcp.validation import validate_command
 from experiments.runner import ROOT
 from experiments.visual_mcp import guard, record
 
-mcp = FastMCP("RhinoMCP layer assembly")
+mcp = MCPServer("RhinoMCP layer assembly")
 COMMANDS = frozenset(
     {
         "create_layer",

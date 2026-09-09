@@ -7,6 +7,8 @@ from pathlib import Path
 import time
 from mcp.server.lowlevel import Server
 from mcp.server.stdio import stdio_server
+from mcp.shared.exceptions import MCPError
+from mcp.types import CallToolResult, ListToolsResult, TextContent
 import rhinomcp
 from experiments.bridge import assert_document
 
@@ -113,11 +115,33 @@ async def main():
         if os.environ.get("EXPERIMENT_TOOL_NAMES")
         else None,
     )
-    server = Server("RhinoMCP workflow pilot", instructions=rhinomcp.mcp.instructions)
-    server.list_tools()(gateway.definitions)
-    # FastMCP performs its normal argument validation. Disabling the extra layer
-    # also means malformed calls consume budget and are recorded by our observer.
-    server.call_tool(validate_input=False)(gateway.call)
+
+    async def list_tools(_context, _params):
+        return ListToolsResult(tools=await gateway.definitions())
+
+    async def call_tool(_context, params):
+        # The production server performs its normal argument validation; the
+        # low-level server adds no second layer, so malformed calls still consume
+        # budget and are recorded by our observer. SDK 2.x no longer turns handler
+        # exceptions into tool errors, so every gateway rejection or production
+        # failure is returned here as an is_error result carrying its text, as
+        # the recorded 1.x runs did.
+        try:
+            return await gateway.call(params.name, params.arguments or {})
+        except MCPError:
+            raise
+        except Exception as error:
+            return CallToolResult(
+                is_error=True,
+                content=[TextContent(type="text", text=str(error))],
+            )
+
+    server = Server(
+        name="RhinoMCP workflow pilot",
+        instructions=rhinomcp.mcp.instructions,
+        on_list_tools=list_tools,
+        on_call_tool=call_tool,
+    )
     async with stdio_server() as (reader, writer):
         await server.run(reader, writer, server.create_initialization_options())
 

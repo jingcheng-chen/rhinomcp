@@ -80,7 +80,7 @@ using(var model = Rhino.FileIO.File3dm.Read({json.dumps(str(model))})) {{
 def reference_image(view):
     """Only fixed public PNGs are exposed; the saved reference model stays private."""
     import os
-    from mcp.server.fastmcp import Image
+    from mcp.server.mcpserver import Image
     from experiments.runner import sha256
 
     if view not in VIEWS:

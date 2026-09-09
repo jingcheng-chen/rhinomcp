@@ -2,7 +2,7 @@
 
 import os
 from typing import Literal
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 from rhinomcp.tools.create_object import create_object as original_create
 from rhinomcp.tools.analyze_objects import analyze_objects as original_analyze
 from rhinomcp.tools.modify_object import modify_object as original_modify
@@ -12,7 +12,7 @@ from rhinomcp.tools.delete_object import delete_object as original_delete
 from rhinomcp.tools.boolean_operations import boolean_difference as original_difference
 from experiments.bridge import assert_document
 
-mcp = FastMCP("RhinoMCP experiment")
+mcp = MCPServer("RhinoMCP experiment")
 calls = 0
 
 

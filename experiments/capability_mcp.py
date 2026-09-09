@@ -4,11 +4,11 @@ import os
 from pathlib import Path
 from threading import Lock
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 from experiments.capability import load_manifest
 from experiments.runner import sha256
 
-mcp = FastMCP("RhinoMCP capability builder")
+mcp = MCPServer("RhinoMCP capability builder")
 source_lock = Lock()
 calls = 0
 

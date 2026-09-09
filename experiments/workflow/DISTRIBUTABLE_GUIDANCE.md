@@ -34,6 +34,9 @@ This exposed an existing open-ended dependency installing incompatible MCP 2.x.
 The package and lock now constrain the SDK to >=1.16.0,<2, matching the existing
 FastMCP-based implementation. The repeated clean installation succeeds.
 
+Superseded 2026-09-09: the server now targets MCP SDK 2.x (`mcp>=2.0.0,<3`)
+and the harness gateways moved with it; see the repository `CHANGELOG.md`.
+
 629 development tests pass; source lint passes. See guidance-distribution.json for
 artifact hashes, and runs/guidance-distribution-20260909 for wheel/sdist and logs.
 Artifacts still use the current package version 0.3.2 and are LOCAL UNRELEASED BUILDS.

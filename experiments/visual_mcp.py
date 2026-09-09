@@ -5,14 +5,14 @@ import json
 import os
 from pathlib import Path
 
-from mcp.server.fastmcp import FastMCP, Image
+from mcp.server.mcpserver import Image, MCPServer
 from rhinomcp.server import get_rhino_connection
 from rhinomcp.validation import validate_command
 from experiments.bridge import assert_document
 from experiments.rhino_trial import runtime, require_owned
 from experiments.runner import ROOT, sha256
 
-mcp = FastMCP("RhinoMCP visual benchmark")
+mcp = MCPServer("RhinoMCP visual benchmark")
 COMMANDS = frozenset(
     {
         "create_object",

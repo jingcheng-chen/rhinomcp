@@ -12,11 +12,11 @@ from experiments.workflow.native_mcp import Gateway
 def test_suffix_changes_only_description(tmp_path):
     async def check():
         a = [
-            t.model_dump()
+            t.model_dump(by_alias=True)
             for t in await Gateway(1, "a", 2, tmp_path / "log").definitions()
         ]
         b = [
-            t.model_dump()
+            t.model_dump(by_alias=True)
             for t in await Gateway(
                 1, "b", 2, tmp_path / "log", description_suffix="\nAnchor guidance"
             ).definitions()

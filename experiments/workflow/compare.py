@@ -121,7 +121,7 @@ def run(path):
         catalogs = {}
         for arm, text in [("baseline", ""), ("candidate", suffix)]:
             catalogs[arm] = [
-                t.model_dump(mode="json", exclude_none=True)
+                t.model_dump(mode="json", by_alias=True, exclude_none=True)
                 for t in asyncio.run(
                     Gateway(
                         0, "", 1, directory / "unused", description_suffix=text
