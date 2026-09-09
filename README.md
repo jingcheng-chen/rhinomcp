@@ -332,3 +332,12 @@ This is a third-party integration and is not made by McNeel. Built by
 ## Star history
 
 [![Star History Chart](https://api.star-history.com/svg?repos=jingcheng-chen/rhinomcp&type=Date)](https://www.star-history.com/#jingcheng-chen/rhinomcp&Date)
+
+### Modeling guidance distributed with the server
+
+The Python package includes reusable guidance for transforms, planar regions,
+organization, verification and recovery. Use `get_modeling_guidance("overview")`,
+the `asset_general_strategy` MCP prompt, or the `rhinomcp://guidance/{topic}` resource.
+Essential tool semantics stay in tool descriptions. No local experiment folder or
+separate skill is needed. See [packaged guidance](server/README.md#bundled-modeling-guidance)
+for available topics and release details.

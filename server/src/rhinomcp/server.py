@@ -11,6 +11,7 @@ from contextlib import asynccontextmanager
 from typing import AsyncIterator, Dict, Any
 
 from rhinomcp.static.rhinoscriptsyntax import rhinoscriptsyntax_json
+from rhinomcp.guidance import SERVER_INSTRUCTIONS
 
 # Configuration from environment variables
 RHINO_HOST = os.getenv("RHINO_MCP_HOST", "127.0.0.1")
@@ -521,7 +522,7 @@ async def server_lifespan(server: FastMCP) -> AsyncIterator[Dict[str, Any]]:
 
 
 # Create the MCP server with lifespan support
-mcp = FastMCP("RhinoMCP", lifespan=server_lifespan)
+mcp = FastMCP("RhinoMCP", lifespan=server_lifespan, instructions=SERVER_INSTRUCTIONS)
 
 
 # ============================================================================

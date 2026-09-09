@@ -24,9 +24,13 @@ def modify_object(
     - new_name: Optional new name for the object
     - new_color: Optional [r, g, b] color values (0-255) for the object
     - translation: Optional [x, y, z] translation vector
-    - rotation: Optional [x, y, z] rotation in radians
-    - scale: Optional [x, y, z] scale factors
+    - rotation: Optional [x, y, z] rotation in radians around the pre-edit
+      bounding-box center, not the world origin
+    - scale: Optional [x, y, z] scale factors anchored at the pre-edit bounding-box minimum
     - visible: Optional boolean to set visibility
+
+    Combined transforms apply scale, then Z/Y/X rotations, then translation.
+    For world-origin rotation or composed poses, read get_modeling_guidance("transforms").
 
     Returns a dict with success, id, name, message, plus bounding_box — the
     object's new post-edit axis-aligned extent — and, for curve-like types,
