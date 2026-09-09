@@ -118,9 +118,9 @@ No controller or modeler remains running. Rhino remains available with 0.4.0.
 
 ## Next milestone
 
-Proceed to M1: classify and rank flaws from historical traces and this new
-registry. Investigate inspection redundancy and guidance discovery as hypotheses,
-not assumed defects: passing runs include repeated reads, and the panel consulted
-four guidance topics. The saved-file verdict must remain separate from friction.
+M1 is now complete; see [the taxonomy and findings](FLAW_TAXONOMY.md). Its audit
+classified historical traces and this new registry. Investigate inspection redundancy and guidance discovery as hypotheses,
+not assumed defects: passing runs include repeated reads, and the panel made four guidance calls covering two topics (corrected by the M1
+trace audit). The saved-file verdict must remain separate from friction.
 The modified-document cleanup issue belongs to harness recovery, not a production
 modeling defect. Do not rerun these tasks to manufacture failures or gains.

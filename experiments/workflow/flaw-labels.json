@@ -1,0 +1,172 @@
+{
+  "review": "Supervisor-reviewed event counts and semantic annotations. Calibration on discovery traces, not held-out classifier accuracy. Synthetic controls test unobserved taxonomy cases.",
+  "runs": [
+    {
+      "id": "box",
+      "calls": 3,
+      "counts": {}
+    },
+    {
+      "id": "prism",
+      "calls": 4,
+      "counts": {}
+    },
+    {
+      "id": "assembly",
+      "calls": 24,
+      "counts": {
+        "discovery": 5
+      }
+    },
+    {
+      "id": "closed-body",
+      "calls": 28,
+      "counts": {
+        "discovery": 7,
+        "failed_call": 1,
+        "recovery_loop": 1,
+        "redundant_read": 1,
+        "retry_after_error": 1
+      }
+    },
+    {
+      "id": "posed-body",
+      "calls": 27,
+      "counts": {
+        "discovery": 9,
+        "failed_call": 5,
+        "retry_after_error": 1
+      }
+    },
+    {
+      "id": "alternate-body",
+      "calls": 64,
+      "counts": {
+        "discovery": 9,
+        "failed_call": 7
+      }
+    },
+    {
+      "id": "chair",
+      "calls": 95,
+      "counts": {
+        "discovery": 14,
+        "redundant_read": 3
+      }
+    },
+    {
+      "id": "20260909-084123-58e4041b-task-1",
+      "calls": 4,
+      "counts": {
+        "wrong_default": 1
+      }
+    },
+    {
+      "id": "20260909-084123-58e4041b-task-2",
+      "calls": 7,
+      "counts": {
+        "wrong_default": 2
+      }
+    },
+    {
+      "id": "20260909-084123-58e4041b-task-3",
+      "calls": 9,
+      "counts": {
+        "completion_contradiction": 1,
+        "misleading_response": 1,
+        "wrong_default": 1
+      }
+    },
+    {
+      "id": "20260909-125308-0fc34223-task-1",
+      "calls": 3,
+      "counts": {
+        "wrong_default": 1
+      }
+    },
+    {
+      "id": "20260909-125308-0fc34223-task-2",
+      "calls": 7,
+      "counts": {
+        "wrong_default": 2
+      }
+    },
+    {
+      "id": "20260909-125308-0fc34223-task-3",
+      "calls": 10,
+      "counts": {
+        "discovery": 2
+      }
+    },
+    {
+      "id": "20260909-182654-2ada6f48-task-1",
+      "calls": 8,
+      "counts": {
+        "discovery": 2
+      }
+    },
+    {
+      "id": "20260909-182654-2ada6f48-task-2",
+      "calls": 8,
+      "counts": {
+        "discovery": 2
+      }
+    },
+    {
+      "id": "20260909-182654-2ada6f48-task-3",
+      "calls": 9,
+      "counts": {
+        "discovery": 2
+      }
+    },
+    {
+      "id": "20260909-182654-2ada6f48-task-4",
+      "calls": 21,
+      "counts": {
+        "discovery": 3,
+        "orchestration": 1
+      }
+    },
+    {
+      "id": "20260909-184415-0e2b7f48-task-1",
+      "calls": 7,
+      "counts": {
+        "discovery": 2,
+        "failed_call": 5,
+        "retry_after_error": 4
+      }
+    },
+    {
+      "id": "20260909-224405-9db2a702-task-1",
+      "calls": 3,
+      "counts": {}
+    },
+    {
+      "id": "20260909-224405-9db2a702-task-2",
+      "calls": 8,
+      "counts": {}
+    },
+    {
+      "id": "20260909-224405-9db2a702-task-3",
+      "calls": 8,
+      "counts": {
+        "discovery": 1
+      }
+    },
+    {
+      "id": "20260909-224405-9db2a702-task-4",
+      "calls": 12,
+      "counts": {
+        "discovery": 2
+      }
+    },
+    {
+      "id": "20260909-224405-9db2a702-task-5",
+      "calls": 9,
+      "counts": {
+        "discovery": 4,
+        "redundant_read": 2
+      }
+    }
+  ]
+}

@@ -58,7 +58,7 @@ This supersedes the precision-oriented next steps in [HANDOFF_HISTORY.md](HANDOF
    test session. Decide and record everything else yourself.
 7. Before every commit: from `server/`, `.venv/bin/python -m pytest` (285 at last
    count) and `.venv/bin/ruff check src/rhinomcp`; from the repository root,
-   `server/.venv/bin/python -m pytest experiments/tests` (355) and
+   `server/.venv/bin/python -m pytest experiments/tests` (407) and
    `server/.venv/bin/python -m pytest contracts/test_schemas.py` (13); for plugin
    changes, `dotnet build plugin/rhinomcp.sln --configuration Release`.
 
@@ -84,7 +84,16 @@ credentials anywhere; reinstall the plugin into a Rhino that holds user work.
   subtractive solids, posed solids, trimmed patches and curved panels. 40 agent
   calls, zero failed calls; no reruns or improvement/generalization claims.
   See [M0 report](workflow/REBASELINE_040.md), `workflow/release-040-results.json`
-  and `workflow/release-040-runs.json`. Next step is M1 trace classification.
+  and `workflow/release-040-runs.json`.
+- M1 is complete: `workflow/audit.py` produces a fixed-taxonomy, evidence-linked
+  ranking by tool, family and cohort. `workflow/flaw-runs.json` registers all seven
+  historical and sixteen 2026-09-09 agent runs (including the timeout); all 23
+  reviewed calibration labels match. Corpus: 378 calls, 18 failures. See
+  [taxonomy and top findings](workflow/FLAW_TAXONOMY.md) and `workflow/flaw-report.json`.
+  The leading same-day problems are surface-schema workarounds, ignored placement
+  parameters and surface-input failures, all observed on pre-release 0.3.2.
+  Released 0.4.0 shows two duplicate guidance reads, not three demonstrated product
+  defects. Fidelity misses stay separate. Next milestone is M2 workflow families.
 - The user authorized dedicated local testing. The completed pilot restored its
   fingerprint but left the document marked modified; the supervisor saved an empty
   checkpoint and opened a new empty, unmodified, unclaimed document. Rhino is left
@@ -99,7 +108,7 @@ credentials anywhere; reinstall the plugin into a Rhino that holds user work.
   modeling validated; binary comparison orchestration remains Codex-only).
 - Pending user decision: the dedicated isolation environment (VM or machine) for
   unattended operation. Nothing else blocks M0 to M4.
-- Tests at last verification: 285 server, 371 experiments, 13 contracts; server lint passes.
+- Tests at last verification: 285 server, 407 experiments, 13 contracts; server lint passes.
 
 ## Milestones from here, in order
 
@@ -120,7 +129,7 @@ state section above updated, and a commit.
 Done when `current-baseline.json` points at 0.4.0, every active task states a
 realistic tolerance, and one fresh baseline run per family is recorded.
 
-### M1 — Flaw detection from traces
+### M1 — Flaw detection from traces (complete, 2026-09-09)
 
 Turn `workflow/audit.py` into a flaw report. For each run, classify friction into a
 fixed taxonomy and count it: failed calls and their causes; retries after an error;

@@ -66,6 +66,25 @@ See [implemented distribution and live checks](DISTRIBUTABLE_GUIDANCE.md).
    changes with demonstrated benefit and no unacceptable regressions. Keep inconclusive
    changes unpromoted; record task-specific benefit without generalizing it.
 
+## M1 trace classification — complete, 2026-09-09
+
+The audit now produces evidence-linked flaw counts and rankings by tool, family
+and cohort. It normalizes native and wrapped calls, separates discovery from
+redundancy, preserves unknown timing, and uses hash-bound reviewed annotations for
+semantic claims. The seven historical and sixteen same-day runs are registered,
+including the timed-out surface attempt. All 23 calibration labels match; portable
+synthetic tests cover the taxonomy's additional cases. These are discovery
+observations, not held-out classifier accuracy or candidate-effectiveness claims.
+
+```sh
+server/.venv/bin/python -m experiments.workflow.audit experiments/workflow/flaw-runs.json --labels experiments/workflow/flaw-labels.json --output experiments/workflow/flaw-report.json
+```
+
+See [the taxonomy, ranking limits and top findings](FLAW_TAXONOMY.md). The largest
+same-day problems were observed on pre-release 0.3.2. The five released runs still
+pass, with two repeated guidance reads in the panel. Next is M2's broader families.
+The older audit artifacts below remain historical snapshots.
+
 ## Implemented in this milestone
 
 - `historical.json`: explicit run registry spanning five task families. Files missing

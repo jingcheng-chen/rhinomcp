@@ -1,0 +1,626 @@
+{
+  "runs": [
+    {
+      "id": "box",
+      "family": "primitives",
+      "run": "experiments/runs/20260905-184415-34495492",
+      "cohort": "historical"
+    },
+    {
+      "id": "prism",
+      "family": "posed-solids",
+      "run": "experiments/runs/20260905-205440-a9e6b334",
+      "cohort": "historical"
+    },
+    {
+      "id": "assembly",
+      "family": "layer-organization",
+      "run": "experiments/runs/layer-model-20260906-162305-f09de086",
+      "cohort": "historical"
+    },
+    {
+      "id": "closed-body",
+      "family": "surface-construction",
+      "run": "experiments/runs/cushion-body-model-20260906-170006-73abe04e",
+      "cohort": "historical"
+    },
+    {
+      "id": "posed-body",
+      "family": "surface-construction",
+      "run": "experiments/runs/posed-cushion-model-20260906-175112-f2f8dd8d",
+      "cohort": "historical"
+    },
+    {
+      "id": "alternate-body",
+      "family": "surface-construction",
+      "run": "experiments/runs/posed-cushion-model-20260906-175410-5bf01af5",
+      "cohort": "historical"
+    },
+    {
+      "id": "chair",
+      "family": "photo-reconstruction",
+      "run": "experiments/runs/integration-20260906-171254-6eb9935e",
+      "cohort": "historical"
+    },
+    {
+      "id": "20260909-084123-58e4041b-task-1",
+      "family": "primitives",
+      "run": "experiments/runs/workflow-baseline-20260909-084123-58e4041b/task-1",
+      "cohort": "2026-09-09-pre-release",
+      "review": {
+        "events_sha256": "660409cf36f2b6e34871dca841bfad99f1b39c5620a377bb88b4f33f7cd445f2",
+        "findings": [
+          {
+            "category": "wrong_default",
+            "subtype": "ignored_placement_parameter",
+            "tool": "create_object",
+            "confidence": "reviewed",
+            "call_ids": [
+              "toolu_01GqsmykcDdnMs7WAM6d2JUi",
+              "toolu_01FV95yYkNu26GuVemGz2uVB"
+            ],
+            "cost_call_ids": [
+              "toolu_01FV95yYkNu26GuVemGz2uVB"
+            ],
+            "reason": "Nested base/base_point was accepted without applying placement. Returned bounds show the default anchor; a later translation corrects it. Charge the corrective call, not the successful creation.",
+            "evidence": [
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "660409cf36f2b6e34871dca841bfad99f1b39c5620a377bb88b4f33f7cd445f2",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_01GqsmykcDdnMs7WAM6d2JUi\", \"type\": \"mcp_tool_call\", \"tool\": \"create_object\", \"arguments\": {\"type\": \"BOX\", \"params\": {\"width\": 100, \"length\": 50, \"height\": 30, \"base\": [0, 0, 0]}, \"name\": \"Box\"}}}"
+              },
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "660409cf36f2b6e34871dca841bfad99f1b39c5620a377bb88b4f33f7cd445f2",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_01FV95yYkNu26GuVemGz2uVB\", \"type\": \"mcp_tool_call\", \"tool\": \"modify_object\", \"arguments\": {\"id\": \"757a4940-12a2-4fda-8426-e49e85be19da\", \"translation\": [50, 25, 15]}}}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260909-084123-58e4041b-task-2",
+      "family": "subtractive-solids",
+      "run": "experiments/runs/workflow-baseline-20260909-084123-58e4041b/task-2",
+      "cohort": "2026-09-09-pre-release",
+      "review": {
+        "events_sha256": "8c1d1addb0a66b89211825b8e98cc06b282a7772a06cd2289ee029ab7941a189",
+        "findings": [
+          {
+            "category": "wrong_default",
+            "subtype": "ignored_placement_parameter",
+            "tool": "create_object",
+            "confidence": "reviewed",
+            "call_ids": [
+              "toolu_01NFBADqg3MqnECQNiLUvYGd",
+              "toolu_016NafHUrMRkBHyBWgRx3v45"
+            ],
+            "cost_call_ids": [
+              "toolu_016NafHUrMRkBHyBWgRx3v45"
+            ],
+            "reason": "Nested base/base_point was accepted without applying placement. Returned bounds show the default anchor; a later translation corrects it. Charge the corrective call, not the successful creation.",
+            "evidence": [
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "8c1d1addb0a66b89211825b8e98cc06b282a7772a06cd2289ee029ab7941a189",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_01NFBADqg3MqnECQNiLUvYGd\", \"type\": \"mcp_tool_call\", \"tool\": \"create_object\", \"arguments\": {\"type\": \"BOX\", \"name\": \"block\", \"params\": {\"width\": 100, \"length\": 60, \"height\": 20, \"base\": [0, 0, 0]}}}}"
+              },
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "8c1d1addb0a66b89211825b8e98cc06b282a7772a06cd2289ee029ab7941a189",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_016NafHUrMRkBHyBWgRx3v45\", \"type\": \"mcp_tool_call\", \"tool\": \"modify_object\", \"arguments\": {\"id\": \"3c5e14c4-c3c7-4ac9-8ab2-99facf71f757\", \"translation\": [50, 30, 10]}}}"
+              }
+            ]
+          },
+          {
+            "category": "wrong_default",
+            "subtype": "ignored_placement_parameter",
+            "tool": "create_object",
+            "confidence": "reviewed",
+            "call_ids": [
+              "toolu_01RJ4VcdGEYDcHisSJDzfMBA",
+              "toolu_01Le8fZMpuGppTUVWs82Rsoq"
+            ],
+            "cost_call_ids": [
+              "toolu_01Le8fZMpuGppTUVWs82Rsoq"
+            ],
+            "reason": "Nested base/base_point was accepted without applying placement. Returned bounds show the default anchor; a later translation corrects it. Charge the corrective call, not the successful creation.",
+            "evidence": [
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "8c1d1addb0a66b89211825b8e98cc06b282a7772a06cd2289ee029ab7941a189",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_01RJ4VcdGEYDcHisSJDzfMBA\", \"type\": \"mcp_tool_call\", \"tool\": \"create_object\", \"arguments\": {\"type\": \"CYLINDER\", \"name\": \"cutter\", \"params\": {\"base\": [30, 20, -5], \"height\": 30, \"radius\": 6}}}}"
+              },
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "8c1d1addb0a66b89211825b8e98cc06b282a7772a06cd2289ee029ab7941a189",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_01Le8fZMpuGppTUVWs82Rsoq\", \"type\": \"mcp_tool_call\", \"tool\": \"modify_object\", \"arguments\": {\"id\": \"207fc0a2-9373-476e-961c-d5afea4cf705\", \"translation\": [30, 20, -5]}}}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260909-084123-58e4041b-task-3",
+      "family": "trimmed-patches",
+      "run": "experiments/runs/workflow-baseline-20260909-084123-58e4041b/task-3",
+      "cohort": "2026-09-09-pre-release",
+      "review": {
+        "events_sha256": "8eec3ec22f29a0df204066d28b9674dc114b6cdf0089562ed45408a8601d0eb7",
+        "findings": [
+          {
+            "category": "wrong_default",
+            "subtype": "rotation_pivot_mismatch",
+            "tool": "modify_object",
+            "confidence": "reviewed",
+            "call_ids": [
+              "toolu_01CpwE4uvuX8TA2bZJRnXobV"
+            ],
+            "cost_call_ids": [
+              "toolu_01CpwE4uvuX8TA2bZJRnXobV"
+            ],
+            "reason": "Requested world-origin rotation was applied about the bounding-box center. Returned symmetric Z bounds expose the pivot; independent pose/boundary checks fail.",
+            "evidence": [
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "8eec3ec22f29a0df204066d28b9674dc114b6cdf0089562ed45408a8601d0eb7",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_01CpwE4uvuX8TA2bZJRnXobV\", \"type\": \"mcp_tool_call\", \"tool\": \"modify_object\", \"arguments\": {\"id\": \"5c44feb8-5faa-4206-bb2d-03bc2f43a5cb\", \"rotation\": [-0.4363323129985824, 0, 0]}}}"
+              },
+              {
+                "path": "modeler/result.json",
+                "sha256": "7fc4a5afa14eb7db0e79a1ddcbff4a245272670fcbf737fab0c3e3441c2f8396",
+                "quote": "bounding box matches expected post-transform placement"
+              },
+              {
+                "path": "evaluation.json",
+                "sha256": "8ad1592adf49e8157b0a16dc256ac44814093c497ba132a9c84776afc3a79a4f",
+                "quote": "\"local_bounds\": false"
+              }
+            ]
+          },
+          {
+            "category": "misleading_response",
+            "subtype": "agent_misread_transform_success",
+            "tool": "modify_object",
+            "confidence": "reviewed",
+            "call_ids": [
+              "toolu_01CpwE4uvuX8TA2bZJRnXobV"
+            ],
+            "cost_call_ids": [],
+            "reason": "Tool reports operation success, not target-pose success. Agent final statement incorrectly says the returned bounds match the required origin rotation; evaluator contradicts that interpretation. Not a claim that the response geometry was false.",
+            "evidence": [
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "8eec3ec22f29a0df204066d28b9674dc114b6cdf0089562ed45408a8601d0eb7",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_01CpwE4uvuX8TA2bZJRnXobV\", \"type\": \"mcp_tool_call\", \"tool\": \"modify_object\", \"arguments\": {\"id\": \"5c44feb8-5faa-4206-bb2d-03bc2f43a5cb\", \"rotation\": [-0.4363323129985824, 0, 0]}}}"
+              },
+              {
+                "path": "modeler/result.json",
+                "sha256": "7fc4a5afa14eb7db0e79a1ddcbff4a245272670fcbf737fab0c3e3441c2f8396",
+                "quote": "bounding box matches expected post-transform placement"
+              },
+              {
+                "path": "evaluation.json",
+                "sha256": "8ad1592adf49e8157b0a16dc256ac44814093c497ba132a9c84776afc3a79a4f",
+                "quote": "\"local_bounds\": false"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260909-125308-0fc34223-task-1",
+      "family": "primitives",
+      "run": "experiments/runs/workflow-baseline-20260909-125308-0fc34223/task-1",
+      "cohort": "2026-09-09-pre-release",
+      "review": {
+        "events_sha256": "03d54ab041716b3f3cba00873dc582ed674eb4d3bd70382f8910ecac711a1ee5",
+        "findings": [
+          {
+            "category": "wrong_default",
+            "subtype": "ignored_placement_parameter",
+            "tool": "create_object",
+            "confidence": "reviewed",
+            "call_ids": [
+              "toolu_01GR35LvnvxuKY9iJ2HGhKzJ",
+              "toolu_01Vavn1pmK1ZkRX6pcs1wUFo"
+            ],
+            "cost_call_ids": [
+              "toolu_01Vavn1pmK1ZkRX6pcs1wUFo"
+            ],
+            "reason": "Nested base/base_point was accepted without applying placement. Returned bounds show the default anchor; a later translation corrects it. Charge the corrective call, not the successful creation.",
+            "evidence": [
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "03d54ab041716b3f3cba00873dc582ed674eb4d3bd70382f8910ecac711a1ee5",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_01GR35LvnvxuKY9iJ2HGhKzJ\", \"type\": \"mcp_tool_call\", \"tool\": \"create_object\", \"arguments\": {\"type\": \"BOX\", \"params\": {\"width\": 100, \"length\": 50, \"height\": 30, \"base_point\": [0, 0, 0]}, \"name\": \"Box\"}}}"
+              },
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "03d54ab041716b3f3cba00873dc582ed674eb4d3bd70382f8910ecac711a1ee5",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_01Vavn1pmK1ZkRX6pcs1wUFo\", \"type\": \"mcp_tool_call\", \"tool\": \"modify_object\", \"arguments\": {\"id\": \"1053c1eb-d619-4aaf-ae1d-c14c5acd9f8f\", \"translation\": [50, 25, 15]}}}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260909-125308-0fc34223-task-2",
+      "family": "subtractive-solids",
+      "run": "experiments/runs/workflow-baseline-20260909-125308-0fc34223/task-2",
+      "cohort": "2026-09-09-pre-release",
+      "review": {
+        "events_sha256": "90c4cc6fab5828f1a7f84e85361fd14df0d7fa5ffe387946e667c0e789976720",
+        "findings": [
+          {
+            "category": "wrong_default",
+            "subtype": "ignored_placement_parameter",
+            "tool": "create_object",
+            "confidence": "reviewed",
+            "call_ids": [
+              "toolu_017MAdYHYGa6aWVd8ws1ewav",
+              "toolu_01D8cCSaGN7CPJ8nsYYswKC5"
+            ],
+            "cost_call_ids": [
+              "toolu_01D8cCSaGN7CPJ8nsYYswKC5"
+            ],
+            "reason": "Nested base/base_point was accepted without applying placement. Returned bounds show the default anchor; a later translation corrects it. Charge the corrective call, not the successful creation.",
+            "evidence": [
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "90c4cc6fab5828f1a7f84e85361fd14df0d7fa5ffe387946e667c0e789976720",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_017MAdYHYGa6aWVd8ws1ewav\", \"type\": \"mcp_tool_call\", \"tool\": \"create_object\", \"arguments\": {\"type\": \"BOX\", \"name\": \"block\", \"params\": {\"width\": 100, \"length\": 60, \"height\": 20, \"base\": [0, 0, 0]}}}}"
+              },
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "90c4cc6fab5828f1a7f84e85361fd14df0d7fa5ffe387946e667c0e789976720",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_01D8cCSaGN7CPJ8nsYYswKC5\", \"type\": \"mcp_tool_call\", \"tool\": \"modify_object\", \"arguments\": {\"id\": \"94621c3d-3765-42ba-aace-740d8038b6bf\", \"translation\": [50, 30, 10]}}}"
+              }
+            ]
+          },
+          {
+            "category": "wrong_default",
+            "subtype": "ignored_placement_parameter",
+            "tool": "create_object",
+            "confidence": "reviewed",
+            "call_ids": [
+              "toolu_012oQnwtH4WihkKnuWXLvkS5",
+              "toolu_014CZ4o7g16oHDzAPbGtuihw"
+            ],
+            "cost_call_ids": [
+              "toolu_014CZ4o7g16oHDzAPbGtuihw"
+            ],
+            "reason": "Nested base/base_point was accepted without applying placement. Returned bounds show the default anchor; a later translation corrects it. Charge the corrective call, not the successful creation.",
+            "evidence": [
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "90c4cc6fab5828f1a7f84e85361fd14df0d7fa5ffe387946e667c0e789976720",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_012oQnwtH4WihkKnuWXLvkS5\", \"type\": \"mcp_tool_call\", \"tool\": \"create_object\", \"arguments\": {\"type\": \"CYLINDER\", \"name\": \"hole_cutter\", \"params\": {\"base\": [30, 20, -5], \"height\": 30, \"radius\": 6}}}}"
+              },
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "90c4cc6fab5828f1a7f84e85361fd14df0d7fa5ffe387946e667c0e789976720",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_014CZ4o7g16oHDzAPbGtuihw\", \"type\": \"mcp_tool_call\", \"tool\": \"modify_object\", \"arguments\": {\"id\": \"7fda41f1-7501-46b2-a125-81dcd856e25d\", \"translation\": [30, 20, -5]}}}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260909-125308-0fc34223-task-3",
+      "family": "trimmed-patches",
+      "run": "experiments/runs/workflow-baseline-20260909-125308-0fc34223/task-3",
+      "cohort": "2026-09-09-pre-release"
+    },
+    {
+      "id": "20260909-182654-2ada6f48-task-1",
+      "family": "subtractive-solids",
+      "run": "experiments/runs/workflow-baseline-20260909-182654-2ada6f48/task-1",
+      "cohort": "2026-09-09-pre-release"
+    },
+    {
+      "id": "20260909-182654-2ada6f48-task-2",
+      "family": "posed-solids",
+      "run": "experiments/runs/workflow-baseline-20260909-182654-2ada6f48/task-2",
+      "cohort": "2026-09-09-pre-release"
+    },
+    {
+      "id": "20260909-182654-2ada6f48-task-3",
+      "family": "trimmed-patches",
+      "run": "experiments/runs/workflow-baseline-20260909-182654-2ada6f48/task-3",
+      "cohort": "2026-09-09-pre-release"
+    },
+    {
+      "id": "20260909-182654-2ada6f48-task-4",
+      "family": "curved-panels",
+      "run": "experiments/runs/workflow-baseline-20260909-182654-2ada6f48/task-4",
+      "cohort": "2026-09-09-pre-release",
+      "review": {
+        "events_sha256": "227ca1e0b7e0ddfbe2feb4ae8ecefee6fdf6cf92ae2d0cf3c3a869215df25800",
+        "findings": [
+          {
+            "category": "orchestration",
+            "subtype": "surface_schema_workaround",
+            "tool": "create_object",
+            "confidence": "reviewed",
+            "call_ids": [
+              "toolu_01NZbkeVsyVm5i1Gd3tVjAEF",
+              "toolu_01WTGmUfZiqtoEjeYVfTHb6k",
+              "toolu_0198pFxGdMeMCQf8ankuWbEx",
+              "toolu_01AGnzGDqctKGmaZXXiKdouh",
+              "toolu_01J5ACeCZxS3UemzFsRk5aXA",
+              "toolu_01XioYEfAuyLSa4FmgGdc87U",
+              "toolu_01GwE3vFWNWN2asg2Z6Qee3i",
+              "toolu_01GozjiTxv9q5ryEDRno2gEq",
+              "toolu_01Uzjz5qMrJbyTaJwN82VqJ7",
+              "toolu_01C4iMCAM6MhgdGx8FgLV1LS",
+              "toolu_01Tc94Xi8UUujCmxeUNZzrU5",
+              "toolu_015KQcCanGZg66xTipsMp7VT",
+              "toolu_01SAawwMMGiahEH7Cmv3UbFT",
+              "toolu_013Efswb5Gmu7AtzCtxKTeNn",
+              "toolu_01Ge9XVfbBWEDcjarFT7YqQs"
+            ],
+            "cost_call_ids": [
+              "toolu_01NZbkeVsyVm5i1Gd3tVjAEF",
+              "toolu_01WTGmUfZiqtoEjeYVfTHb6k",
+              "toolu_0198pFxGdMeMCQf8ankuWbEx",
+              "toolu_01AGnzGDqctKGmaZXXiKdouh",
+              "toolu_01J5ACeCZxS3UemzFsRk5aXA",
+              "toolu_01XioYEfAuyLSa4FmgGdc87U",
+              "toolu_01GwE3vFWNWN2asg2Z6Qee3i",
+              "toolu_01GozjiTxv9q5ryEDRno2gEq",
+              "toolu_01Uzjz5qMrJbyTaJwN82VqJ7",
+              "toolu_01C4iMCAM6MhgdGx8FgLV1LS",
+              "toolu_01Tc94Xi8UUujCmxeUNZzrU5",
+              "toolu_015KQcCanGZg66xTipsMp7VT",
+              "toolu_01SAawwMMGiahEH7Cmv3UbFT",
+              "toolu_013Efswb5Gmu7AtzCtxKTeNn",
+              "toolu_01Ge9XVfbBWEDcjarFT7YqQs"
+            ],
+            "reason": "Agent explicitly reports unclear/truncated SURFACE parameter docs and uses 7 curve creations, a loft, and 7 cleanup calls for one surface. This is the observed construction cost, not a measured 14-call saving or a recommended construction recipe.",
+            "evidence": [
+              {
+                "path": "modeler/result.json",
+                "sha256": "079e7245b2d837a12ccbb09ffec537e5603b171176c00b64acc3b2d80bb46f3e",
+                "quote": "parameter docs were truncated/unclear"
+              },
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "227ca1e0b7e0ddfbe2feb4ae8ecefee6fdf6cf92ae2d0cf3c3a869215df25800",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_01NZbkeVsyVm5i1Gd3tVjAEF\", \"type\": \"mcp_tool_call\", \"tool\": \"create_object\", \"arguments\": {\"type\": \"CURVE\", \"name\": \"row0\", \"params\": {\"degree\": 3, \"points\": [[-28, 65, 14], [-28, 71.12287, 9.38609], [-28, 77.24574, 4.77218], [-28, 83.36866, 0.15825], [-28, 89.49148, -4.45564], [-28, 95.61435, -9.06955], [-28, 101.73723, -13.68349]]}}}}"
+              },
+              {
+                "path": "modeler/events.jsonl",
+                "sha256": "227ca1e0b7e0ddfbe2feb4ae8ecefee6fdf6cf92ae2d0cf3c3a869215df25800",
+                "quote": "{\"type\": \"item.started\", \"item\": {\"id\": \"toolu_01GozjiTxv9q5ryEDRno2gEq\", \"type\": \"mcp_tool_call\", \"tool\": \"loft\", \"arguments\": {\"curve_ids\": [\"fc583866-4e27-4dc7-8e1e-cd2a3a20544e\", \"c12706b7-89ed-4de9-8a46-2460bb565ea0\", \"8fe10198-d6d0-4a84-adb9-a1169418934c\", \"ce5fc0cd-b6c2-46a2-a45d-8fb3a7dd9aed\", \"6bac0b70-b275-4b08-8d9c-268096a56e5b\", \"3a888e77-1d18-400d-ac1c-c2cdaf6c6e3d\", \"871cbb04-4294-4760-a17d-8c1447db12a5\"], \"name\": \"curved_panel\", \"closed\": false, \"loft_type\": 0}}}"
+              }
+            ]
+          }
+        ],
+        "fidelity": {
+          "evaluation_sha256": "5c51df1b8b22297b9ff8ebbcef52c7ebe4f7d0671ea0b8b779b7ba7a30f18588",
+          "reason": "Valid one-face surface with correct boundary/pose; the 0.05 mm v1 deviation test and interior height bound fail (peak 8.6667 vs 9 mm, sampled deviation 0.4398 mm). Keep geometry verdict fail; do not count this approximation miss as a workflow completion contradiction."
+        }
+      }
+    },
+    {
+      "id": "20260909-184415-0e2b7f48-task-1",
+      "family": "curved-panels",
+      "run": "experiments/runs/workflow-baseline-20260909-184415-0e2b7f48/task-1",
+      "cohort": "2026-09-09-pre-release"
+    },
+    {
+      "id": "20260909-224405-9db2a702-task-1",
+      "family": "primitives",
+      "run": "experiments/runs/workflow-baseline-20260909-224405-9db2a702/task-1",
+      "cohort": "released-0.4.0",
+      "review": {
+        "events_sha256": "1c7c6c8da4eb8db598d48ee9cd559df00985bab0a192b5a81e1bbd4724557ac7",
+        "findings": [],
+        "required_operations": [
+          {
+            "id": "construct_required_geometry",
+            "call_ids": [
+              "item_1"
+            ],
+            "role": "required_result"
+          },
+          {
+            "id": "verify_required_result",
+            "call_ids": [
+              "item_2",
+              "item_3"
+            ],
+            "role": "support"
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260909-224405-9db2a702-task-2",
+      "family": "subtractive-solids",
+      "run": "experiments/runs/workflow-baseline-20260909-224405-9db2a702/task-2",
+      "cohort": "released-0.4.0",
+      "review": {
+        "events_sha256": "f7a1dd751ec0a119af77818c337ecc8124ed4126c5d1314885df5a6673700661",
+        "findings": [],
+        "required_operations": [
+          {
+            "id": "verify_required_result",
+            "call_ids": [
+              "item_1",
+              "item_4",
+              "item_7",
+              "item_8",
+              "item_9"
+            ],
+            "role": "support"
+          },
+          {
+            "id": "construct_required_geometry",
+            "call_ids": [
+              "item_2",
+              "item_3"
+            ],
+            "role": "required_result"
+          },
+          {
+            "id": "make_required_opening",
+            "call_ids": [
+              "item_6"
+            ],
+            "role": "required_result"
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260909-224405-9db2a702-task-3",
+      "family": "posed-solids",
+      "run": "experiments/runs/workflow-baseline-20260909-224405-9db2a702/task-3",
+      "cohort": "released-0.4.0",
+      "review": {
+        "events_sha256": "102d0620a66c627efb50dbb02cd5df43219a246054dbc69bafd814ce2a18233c",
+        "findings": [],
+        "required_operations": [
+          {
+            "id": "consult_guidance",
+            "call_ids": [
+              "item_1"
+            ],
+            "role": "support"
+          },
+          {
+            "id": "verify_required_result",
+            "call_ids": [
+              "item_2",
+              "item_7",
+              "item_8",
+              "item_9"
+            ],
+            "role": "support"
+          },
+          {
+            "id": "construct_required_geometry",
+            "call_ids": [
+              "item_3",
+              "item_4"
+            ],
+            "role": "required_result"
+          },
+          {
+            "id": "remove_construction_geometry",
+            "call_ids": [
+              "item_5"
+            ],
+            "role": "required_result"
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260909-224405-9db2a702-task-4",
+      "family": "trimmed-patches",
+      "run": "experiments/runs/workflow-baseline-20260909-224405-9db2a702/task-4",
+      "cohort": "released-0.4.0",
+      "review": {
+        "events_sha256": "ae9d1be804050244fa2969e76e72705904dcc334ae2194adc48a284a1a6aed98",
+        "findings": [],
+        "required_operations": [
+          {
+            "id": "consult_guidance",
+            "call_ids": [
+              "item_1",
+              "item_2"
+            ],
+            "role": "support"
+          },
+          {
+            "id": "verify_required_result",
+            "call_ids": [
+              "item_3",
+              "item_11",
+              "item_12",
+              "item_13"
+            ],
+            "role": "support"
+          },
+          {
+            "id": "construct_required_geometry",
+            "call_ids": [
+              "item_4",
+              "item_5"
+            ],
+            "role": "required_result"
+          },
+          {
+            "id": "make_required_opening",
+            "call_ids": [
+              "item_6"
+            ],
+            "role": "required_result"
+          },
+          {
+            "id": "apply_required_pose",
+            "call_ids": [
+              "item_8"
+            ],
+            "role": "required_result"
+          },
+          {
+            "id": "remove_construction_geometry",
+            "call_ids": [
+              "item_9",
+              "item_10"
+            ],
+            "role": "required_result"
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260909-224405-9db2a702-task-5",
+      "family": "curved-panels",
+      "run": "experiments/runs/workflow-baseline-20260909-224405-9db2a702/task-5",
+      "cohort": "released-0.4.0",
+      "review": {
+        "events_sha256": "d8274372710988fc820dc1931d0d1bc0cdb177e7dc192f2ee5ee26944de749e4",
+        "findings": [],
+        "required_operations": [
+          {
+            "id": "consult_guidance",
+            "call_ids": [
+              "item_1",
+              "item_2",
+              "item_3",
+              "item_4"
+            ],
+            "role": "support"
+          },
+          {
+            "id": "verify_required_result",
+            "call_ids": [
+              "item_5",
+              "item_7",
+              "item_8",
+              "item_9"
+            ],
+            "role": "support"
+          },
+          {
+            "id": "construct_required_geometry",
+            "call_ids": [
+              "item_6"
+            ],
+            "role": "required_result"
+          }
+        ]
+      }
+    }
+  ]
+}

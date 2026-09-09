@@ -10,6 +10,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from experiments.workflow.flaws import trace, report_run, rank
+
 
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -20,37 +22,22 @@ def read(path):
 
 
 def summarize_events(path):
-    started, completed = {}, {}
-    usage = None
-    with path.open() as stream:
-        for line in stream:
-            event = json.loads(line)
-            if event.get("type") == "turn.completed":
-                usage = event.get("usage")  # Never infer missing usage as zero.
-            item = event.get("item", {})
-            if item.get("type") != "mcp_tool_call":
-                continue
-            if event["type"] == "item.started":
-                started[item["id"]] = item
-            elif event["type"] == "item.completed":
-                completed[item["id"]] = item
+    rows, usage, _ = trace(path)
     tools, commands, failed = Counter(), Counter(), Counter()
-    ids = set(started) | set(completed)
-    for key in ids:
-        item = completed.get(key, started.get(key))
-        tool = item.get("tool", "unknown")
+    for item in rows:
+        tool = item["tool"]
         tools[tool] += 1
-        command = item.get("arguments", {}).get("command")
-        # Schema discovery is not execution of the described command.
-        if isinstance(command, str) and not tool.startswith("describe_"):
-            commands[command] += 1
-        result = item.get("result") or {}
-        if item.get("status") == "failed" or item.get("error") or result.get("isError"):
+        if not tool.startswith("describe_") and item["command"] not in {
+            "assembly_command",
+            "modeling_command",
+        }:
+            commands[item["command"]] += 1
+        if item["failed"]:
             failed[tool] += 1
     return {
-        "mcp_attempts": len(ids),
-        "completed_calls": len(completed),
-        "unfinished_calls": len(set(started) - set(completed)),
+        "mcp_attempts": len(rows),
+        "completed_calls": sum(r["completed"] for r in rows),
+        "unfinished_calls": sum(not r["completed"] for r in rows),
         "failed_calls": sum(failed.values()),
         "failures_by_tool": dict(sorted(failed.items())),
         "tools": dict(sorted(tools.items())),
@@ -88,7 +75,22 @@ def audit_run(root, entry):
         "task_verdict": verdict,
         "agent_claim_complete": result.get("complete"),
         "evaluation_sha256": digest(path / "evaluation.json") if evaluation else None,
+        "result_sha256": digest(path / "modeler/result.json")
+        if (path / "modeler/result.json").exists()
+        else None,
+        "status_sha256": digest(path / "modeler/status.json")
+        if (path / "modeler/status.json").exists()
+        else None,
+        "environment_sha256": digest(path / "environment.json")
+        if (path / "environment.json").exists()
+        else None,
         "metrics": stats,
+        "flaws": report_run(path, entry, evaluation, result),
+        "cohort": entry.get("cohort", "unspecified"),
+        "environment": read(path / "environment.json"),
+        "timing_sha256": digest(path / "calls.jsonl")
+        if (path / "calls.jsonl").exists()
+        else None,
         "comparison_eligible": False,
         "comparison_blockers": [
             "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
@@ -100,8 +102,44 @@ def audit(root, registry):
     entries = registry["runs"]
     if len({e["id"] for e in entries}) != len(entries):
         raise ValueError("Duplicate run ID")
+    if len({(root / e["run"]).resolve() for e in entries}) != len(entries):
+        raise ValueError("Duplicate run path")
     runs = [audit_run(root, e) for e in entries]
+    confirmed = [
+        {
+            **r,
+            "flaws": {
+                **r.get("flaws", {}),
+                "findings": [
+                    f
+                    for f in r.get("flaws", {}).get("findings", [])
+                    if f["confidence"] in {"observed", "reviewed"}
+                ],
+            },
+        }
+        for r in runs
+    ]
     return {
+        "taxonomy_version": 1,
+        "rankings": {
+            "overall": rank(runs),
+            "observed_or_reviewed_flaws": rank(confirmed),
+            "observed_flaws_by_cohort": {
+                cohort: rank([r for r in confirmed if r.get("cohort") == cohort])
+                for cohort in sorted({r.get("cohort", "unspecified") for r in runs})
+            },
+            "by_seconds_complete_only": sorted(
+                [r for r in rank(confirmed) if r["score_seconds"] is not None],
+                key=lambda r: -r["score_seconds"],
+            ),
+            "by_tool": rank(runs, "tool"),
+            "by_family": rank(runs, "family"),
+            "by_cohort": {
+                cohort: rank([r for r in runs if r.get("cohort") == cohort])
+                for cohort in sorted({r.get("cohort", "unspecified") for r in runs})
+            },
+        },
+        "ranking_policy": "Frequency times mean charged calls; seconds reported only with complete timing coverage. Categories overlap and must not be summed. Observation/candidate rows are not confirmed product flaws.",
         "purpose": "Find cross-task workflow friction, not score modeling quality or claim improvement.",
         "families": sorted({r["family"] for r in runs if r["available"]}),
         "runs": runs,
@@ -110,11 +148,55 @@ def audit(root, registry):
     }
 
 
+def validate_labels(report, labels):
+    """Check separately reviewed labels; unavailable evidence never counts as a pass."""
+    runs = {r["id"]: r for r in report["runs"]}
+    checked, unavailable = [], []
+    for label in labels["runs"]:
+        run = runs.get(label["id"])
+        if run is None or not run["available"]:
+            unavailable.append(label["id"])
+            continue
+        if (
+            run["metrics"]["mcp_attempts"] != label["calls"]
+            or run["flaws"]["counts"] != label["counts"]
+        ):
+            raise ValueError(
+                "Classifier disagrees with reviewed labels: " + label["id"]
+            )
+        checked.append(label["id"])
+    return {
+        "checked": checked,
+        "unavailable": unavailable,
+        "status": "matched" if not unavailable else "incomplete",
+    }
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("registry", type=Path)
+    parser.add_argument("registry", type=Path, nargs="+")
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--labels", type=Path)
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
-    report = audit(root, json.loads(args.registry.read_text()))
+    report = audit(
+        root,
+        {
+            "runs": [
+                entry
+                for path in args.registry
+                for entry in json.loads(path.read_text())["runs"]
+            ]
+        },
+    )
+    report["input_hashes"] = {str(p): digest(p) for p in args.registry}
+    report["classifier_hashes"] = {
+        p.name: digest(p)
+        for p in (Path(__file__), Path(__file__).with_name("flaws.py"))
+    }
+    if args.labels:
+        report["validation"] = validate_labels(
+            report, json.loads(args.labels.read_text())
+        )
+        report["input_hashes"][str(args.labels)] = digest(args.labels)
     args.output.write_text(json.dumps(report, indent=2) + "\n")
