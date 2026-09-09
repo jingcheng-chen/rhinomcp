@@ -302,6 +302,14 @@ def test_suite(request):
             "path": str(surface_path),
             "sha256": sha256(surface_path),
         }
+    if contract.get("planar_region_probe") is True:
+        from experiments.planar_region_probe import run_checks as planar_checks
+
+        cases.update(planar_checks(report_dir / "planar-region", runtime()))
+        evidence["planar_region"] = {
+            "path": str(report_dir / "planar-region/result.json"),
+            "sha256": sha256(report_dir / "planar-region/result.json"),
+        }
     if set(cases) != set(contract["cases"]):
         raise ValueError("Live suite case names do not match the frozen contract")
     if probe(directory) != observed:

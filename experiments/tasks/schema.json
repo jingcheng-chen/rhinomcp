@@ -12,7 +12,8 @@
         "triangular_prism_pose",
         "box_through_hole",
         "quarter_annular_strip",
-        "biquadratic_panel"
+        "biquadratic_panel",
+        "trimmed_planar_patch"
       ]
     },
     "input_mode": {
@@ -26,7 +27,14 @@
       "minLength": 1
     },
     "dimensions": {
-      "$ref": "#/$defs/dimensions"
+      "oneOf": [
+        {
+          "$ref": "#/$defs/dimensions"
+        },
+        {
+          "$ref": "#/$defs/planar_dimensions"
+        }
+      ]
     },
     "minimum": {
       "$ref": "#/$defs/vector"
@@ -264,6 +272,44 @@
           }
         ]
       }
+    },
+    {
+      "properties": {
+        "type": {
+          "const": "trimmed_planar_patch"
+        }
+      },
+      "required": [
+        "hole_center",
+        "hole_radius",
+        "rotation_x_degrees",
+        "translation",
+        "area_tolerance"
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "minimum"
+            ]
+          },
+          {
+            "required": [
+              "rotation_z_degrees"
+            ]
+          },
+          {
+            "required": [
+              "panel_height"
+            ]
+          },
+          {
+            "required": [
+              "input_mode"
+            ]
+          }
+        ]
+      }
     }
   ],
   "allOf": [
@@ -306,7 +352,10 @@
         "properties": {
           "type": {
             "not": {
-              "const": "biquadratic_panel"
+              "enum": [
+                "biquadratic_panel",
+                "trimmed_planar_patch"
+              ]
             }
           }
         }
@@ -325,6 +374,29 @@
               ]
             }
           ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "trimmed_planar_patch"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "dimensions": {
+            "$ref": "#/$defs/planar_dimensions"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "dimensions": {
+            "$ref": "#/$defs/dimensions"
+          }
         }
       }
     }
@@ -346,6 +418,24 @@
         "type": "number",
         "exclusiveMinimum": 0
       }
+    },
+    "planar_dimensions": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        {
+          "const": 0
+        }
+      ]
     }
   }
 }

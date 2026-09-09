@@ -85,3 +85,18 @@ def test_invalid_suite_rejected_before_rhino(tmp_path, change):
     path.write_text(json.dumps(suite))
     with pytest.raises(ValueError):
         load_suite(path)
+
+
+def test_reviewed_extension_cannot_add_scripting_or_remove_native_tools(tmp_path):
+    from experiments.workflow.native_mcp import Gateway, TOOLS
+    import pytest
+
+    for names in [
+        TOOLS[:-1],
+        (*TOOLS, "run_command"),
+        (*TOOLS, "execute_rhinocommon_csharp_code"),
+        (*TOOLS, "execute_rhinoscript_python_code"),
+        (*TOOLS, TOOLS[0]),
+    ]:
+        with pytest.raises(ValueError, match="reviewed tool extension"):
+            Gateway(0, "", 1, tmp_path / "log", tool_names=names)

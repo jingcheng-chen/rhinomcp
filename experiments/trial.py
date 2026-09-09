@@ -92,15 +92,25 @@ def prepare(repair, baseline, baseline_mvid, suite, adapter, runtime_lock, revie
             "executed"
         ):
             raise ValueError("Trial requires an unexecuted candidate ready for review")
-        scope = repair_scope(repair, checkpoint)
-        check_candidate(
-            source, read(repair / "baseline_inventory.json"), scope["write_paths"]
+        declared = (
+            read(repair / "manifest.json")
+            if (repair / "manifest.json").exists()
+            else {}
         )
-        if inventory(source) != checkpoint["candidate_inventory"]:
-            raise ValueError("Candidate changed since builder checkpoint")
-        patch = subprocess.check_output(
-            ["git", "diff", "--no-ext-diff", "--binary"], cwd=source
-        )
+        if declared.get("scope_version") == 2:
+            from experiments.capability import reviewed_source
+
+            scope, patch = reviewed_source(repair, checkpoint)
+        else:
+            scope = repair_scope(repair, checkpoint)
+            check_candidate(
+                source, read(repair / "baseline_inventory.json"), scope["write_paths"]
+            )
+            if inventory(source) != checkpoint["candidate_inventory"]:
+                raise ValueError("Candidate changed since builder checkpoint")
+            patch = subprocess.check_output(
+                ["git", "diff", "--no-ext-diff", "--binary"], cwd=source
+            )
         patch_hash = hashlib.sha256(patch).hexdigest()
         if (
             patch_hash != checkpoint["patch_sha256"]

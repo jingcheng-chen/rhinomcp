@@ -144,6 +144,11 @@ def through_hole_checks(task, obj):
 
 
 def evaluate(task, measurements):
+    if task["type"] == "trimmed_planar_patch":
+        from experiments.trimmed_task import evaluate as evaluate_trimmed
+
+        return evaluate_trimmed(task, measurements)
+
     if task["type"] == "biquadratic_panel":
         from experiments.panel_task import evaluate as evaluate_panel
 

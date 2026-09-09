@@ -47,6 +47,8 @@ def evaluator_versions():
             "strip_measure.cs",
             "panel_task.py",
             "panel_measure.cs",
+            "trimmed_task.py",
+            "trimmed_measure.cs",
             "strip_probe.py",
         )
     }
@@ -111,12 +113,23 @@ def load_task(path):
             margin = task["hole_radius"] + task["linear_tolerance"]
             if not minimum + margin < center < minimum + size - margin:
                 raise ValueError("Hole must lie strictly inside the block's XY bounds")
+    if task["type"] == "trimmed_planar_patch":
+        for center, size in zip(task["hole_center"], task["dimensions"][:2]):
+            margin = task["hole_radius"] + task["linear_tolerance"]
+            if not margin < center < size - margin:
+                raise ValueError("Opening must lie strictly inside the local patch")
     return task
 
 
 def run_session(
     directory, prompt, output_schema, timeout, mcp_config=None, agent_config=None
 ):
+    if agent_config is not None and agent_config.get("provider") == "claude":
+        from experiments.claude_provider import run as run_claude
+
+        return run_claude(
+            directory, prompt, output_schema, timeout, mcp_config, agent_config
+        )
     if agent_config is not None:
         if (
             set(agent_config) != {"model", "reasoning_effort"}
@@ -234,6 +247,11 @@ if (!doc.WriteFile({json.dumps(str(path))}, new Rhino.FileIO.FileWriteOptions())
 
 
 def measure(path, task=None):
+    if task and task["type"] == "trimmed_planar_patch":
+        from experiments.trimmed_task import measure as measure_trimmed
+
+        return measure_trimmed(path, task)
+
     if task and task["type"] == "biquadratic_panel":
         from experiments.panel_task import measure as measure_panel
 

@@ -3,6 +3,7 @@
 import argparse
 import asyncio
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -51,19 +52,29 @@ def load_suite(path):
             "box_through_hole",
             "triangular_prism_pose",
             "biquadratic_panel",
+            "trimmed_planar_patch",
         } or task.get("input_mode"):
             raise ValueError("No pilot evaluator adapter for this task")
     return suite
 
 
-def source_pins():
+def source_pins(server_source=None):
     files = list((ROOT / "server/src/rhinomcp").rglob("*.py"))
+    files += list((ROOT / "server/src/rhinomcp/guides").glob("*.md"))
+    if server_source is not None:
+        selected = Path(server_source).resolve(strict=True)
+        selected.relative_to(ROOT)
+        if not (selected / "rhinomcp/__init__.py").is_file():
+            raise ValueError("Selected native server source is absent")
+        files += list((selected / "rhinomcp").rglob("*.py"))
+        files += list((selected / "rhinomcp/guides").glob("*.md"))
     files += list((ROOT / "experiments/workflow").glob("*.py"))
     files += [ROOT / "experiments" / name for name in evaluator_versions()]
     files += [
         ROOT / name
         for name in (
             "experiments/runner.py",
+            "experiments/claude_provider.py",
             "experiments/bridge.py",
             "experiments/rhino_trial.py",
             "experiments/strip_probe.py",
@@ -93,8 +104,27 @@ doc.Strings.Delete("rhinomcp_experiment");
     return after
 
 
+def retain_failed_model(directory, owner, marker):
+    """Retain owned partial work without turning a failed session into a verdict."""
+    require_owned(runtime(), owner)
+    assert_document(owner["document"], marker)
+    target = directory / "failed-artifact"
+    target.mkdir()  # Never replace an earlier failure snapshot.
+    digest = save_candidate(target / "partial.3dm", owner["document"], marker)
+    save(target / "artifact.json", {"sha256": digest, "scored": False})
+    capture(target, owner["document"], marker)
+
+
 def run_task(
-    directory, entry, suite, definitions, agent_config=None, description_file=None
+    directory,
+    entry,
+    suite,
+    definitions,
+    agent_config=None,
+    description_file=None,
+    defer_evaluation=False,
+    server_source=None,
+    tool_names=None,
 ):
     task = load_task(ROOT / entry["path"])
     marker = directory.parent.name + "-" + directory.name
@@ -105,7 +135,7 @@ def run_task(
     before = fingerprint()
     directory.mkdir()
     print(directory, flush=True)
-    pins = source_pins()
+    pins = source_pins(server_source)
     for name in pins:
         p = directory / "sources" / name
         p.parent.mkdir(parents=True, exist_ok=True)
@@ -117,6 +147,10 @@ def run_task(
     environment = {
         "rhino": owner,
         "plugin_sha256": sha256(Path(owner["assembly"])),
+        "provider": (agent_config or {}).get("provider", "codex"),
+        "provider_version": subprocess.check_output(
+            [(agent_config or {}).get("provider", "codex"), "--version"], text=True
+        ).strip(),
         "codex_version": subprocess.check_output(
             ["codex", "--version"], text=True
         ).strip(),
@@ -127,6 +161,7 @@ def run_task(
         ],
         "call_budget": suite["call_budget"],
         "timeout_seconds": suite["timeout_seconds"],
+        "server_source": str(server_source) if server_source is not None else None,
     }
     save(directory / "environment.json", environment)
     script(f"""
@@ -135,7 +170,10 @@ doc.ModelUnitSystem=UnitSystem.Millimeters;
 doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
 """)
     env = {
-        "PYTHONPATH": str(ROOT),
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": os.pathsep.join([str(server_source), str(ROOT)])
+        if server_source is not None
+        else str(ROOT),
         "EXPERIMENT_DOCUMENT": str(owner["document"]),
         "EXPERIMENT_MARKER": marker,
         "EXPERIMENT_MAX_CALLS": str(suite["call_budget"]),
@@ -143,6 +181,8 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
     }
     if description_file is not None:
         env["EXPERIMENT_DESCRIPTION_FILE"] = str(description_file)
+    if tool_names is not None:
+        env["EXPERIMENT_TOOL_NAMES"] = json.dumps(tool_names)
     config = {
         "command": json.dumps(sys.executable),
         "args": json.dumps(["-m", "experiments.workflow.native_mcp"]),
@@ -151,7 +191,9 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
         "env": "{ "
         + ", ".join(f"{k} = {json.dumps(v)}" for k, v in env.items())
         + " }",
-        **{f"tools.{name}.approval_mode": '"approve"' for name in TOOLS},
+        **{
+            f"tools.{name}.approval_mode": '"approve"' for name in (tool_names or TOOLS)
+        },
     }
     try:
         result = run_session(
@@ -162,7 +204,7 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
             config,
             agent_config=agent_config,
         )
-        if source_pins() != pins:
+        if source_pins(server_source) != pins:
             raise RuntimeError("Sources changed during modeling")
         current = runtime()
         require_owned(current, owner)
@@ -173,14 +215,25 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
             raise RuntimeError("Plugin identity changed")
         artifact = directory / "candidate.3dm"
         artifact_hash = save_candidate(artifact, owner["document"], marker)
-        report = evaluate(task, measure(artifact, task))
-        report["artifact_sha256"] = artifact_hash
-        save(directory / "evaluation.json", report)
+        save(
+            directory / "artifact.json",
+            {
+                "sha256": artifact_hash,
+                "task_sha256": sha256(directory / "task.json"),
+                "evaluation_pending": defer_evaluation,
+            },
+        )
+        if not defer_evaluation:
+            report = evaluate(task, measure(artifact, task))
+            report["artifact_sha256"] = artifact_hash
+            save(directory / "evaluation.json", report)
         capture(directory, owner["document"], marker)
         save(
             directory / "summary.json",
             {
-                "status": report["status"],
+                "status": "evaluation_pending"
+                if defer_evaluation
+                else report["status"],
                 "modeler": result,
                 "promotion_authorized": False,
             },
@@ -190,6 +243,16 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
             directory / "failure.json",
             {"error": str(error), "type": type(error).__name__},
         )
+        try:
+            retain_failed_model(directory, owner, marker)
+        except BaseException as retention_error:
+            save(
+                directory / "failure-retention-error.json",
+                {
+                    "error": str(retention_error),
+                    "type": type(retention_error).__name__,
+                },
+            )
         raise
     finally:
         after = cleanup(owner, marker, before)
@@ -197,6 +260,66 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
             directory / "preservation.json",
             {"before": before, "after": after, "preserved": True},
         )
+
+
+def evaluate_saved(directory, expected_identity):
+    """Evaluate only a frozen pending artifact in the explicitly trusted runtime.
+
+    The caller owns the Rhino lock and has stopped candidate execution. This
+    separates processes for reviewed code; it is not a hostile-code OS sandbox.
+    """
+    from experiments.trial import read
+
+    artifact = directory / "candidate.3dm"
+    record = read(directory / "artifact.json")
+    if not record["evaluation_pending"] or (directory / "evaluation.json").exists():
+        raise RuntimeError("Artifact is not pending evaluation")
+    pins = read(directory / "pins.json")
+    env_path = directory / "environment.json"
+    server_source = read(env_path).get("server_source") if env_path.exists() else None
+
+    def current_pins():
+        return (
+            source_pins(server_source) if server_source is not None else source_pins()
+        )
+
+    if (
+        current_pins() != pins
+        or sha256(artifact) != record["sha256"]
+        or sha256(directory / "task.json") != record["task_sha256"]
+    ):
+        raise RuntimeError("Frozen evaluation source/artifact changed")
+    before = runtime()
+    require_owned(before, before)
+    observed = {"mvid": before["mvid"], "sha256": sha256(Path(before["assembly"]))}
+    if observed != expected_identity or before["object_count"] or before["marker"]:
+        raise RuntimeError("Evaluation requires the empty trusted baseline")
+    fingerprint_before = fingerprint()
+    task = read(directory / "task.json")
+    report = evaluate(task, measure(artifact, task))
+    after = runtime()
+    require_owned(after, before)
+    if (
+        after["mvid"] != before["mvid"]
+        or sha256(Path(after["assembly"])) != expected_identity["sha256"]
+        or current_pins() != pins
+        or fingerprint() != fingerprint_before
+        or sha256(artifact) != record["sha256"]
+    ):
+        raise RuntimeError("Evaluation environment or artifact changed")
+    report.update(
+        artifact_sha256=record["sha256"],
+        evaluation_runtime=before,
+        evaluation_binary=expected_identity,
+        mode="trusted_baseline",
+    )
+    save(directory / "evaluation.json", report)
+    summary = read(directory / "summary.json")
+    summary["status"] = report["status"]
+    save(directory / "summary.json", summary)
+    record["evaluation_pending"] = False
+    save(directory / "artifact.json", record)
+    return report
 
 
 def run(path, agent_config=None):
@@ -234,6 +357,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "suite", type=Path, nargs="?", default=Path(__file__).with_name("pilot.json")
     )
+    parser.add_argument("--provider", choices=["codex", "claude"], default="codex")
     parser.add_argument("--model")
     parser.add_argument(
         "--reasoning-effort", choices=["low", "medium", "high", "xhigh"]
@@ -246,4 +370,8 @@ if __name__ == "__main__":
         if args.model
         else None
     )
+    if args.provider == "claude":
+        if config is None:
+            parser.error("Claude requires explicit model and reasoning effort")
+        config["provider"] = "claude"
     print(run(args.suite, agent_config=config))

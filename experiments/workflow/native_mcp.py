@@ -25,6 +25,8 @@ TOOLS = (
     "boolean_difference",
     "boolean_union",
     "boolean_intersection",
+    "create_planar_region",
+    "get_modeling_guidance",
 )
 
 
@@ -38,6 +40,7 @@ class Gateway:
         production=None,
         guard=None,
         description_suffix="",
+        tool_names=None,
     ):
         if budget < 1:
             raise ValueError("Positive call budget required")
@@ -46,12 +49,24 @@ class Gateway:
         self.production = production or rhinomcp.mcp
         self.guard = guard or assert_document
         self.description_suffix = description_suffix
+        self.tool_names = tuple(tool_names) if tool_names is not None else TOOLS
+        if (
+            self.tool_names[: len(TOOLS)] != TOOLS
+            or len(set(self.tool_names)) != len(self.tool_names)
+            or set(self.tool_names)
+            & {
+                "run_command",
+                "execute_rhinocommon_csharp_code",
+                "execute_rhinoscript_python_code",
+            }
+        ):
+            raise ValueError("Invalid reviewed tool extension")
         self.calls = 0
         self.lock = asyncio.Lock()
 
     async def definitions(self):
         available = {t.name: t for t in await self.production.list_tools()}
-        result = [available[name].model_copy(deep=True) for name in TOOLS]
+        result = [available[name].model_copy(deep=True) for name in self.tool_names]
         if self.description_suffix:
             tool = next(t for t in result if t.name == "create_object")
             if self.description_suffix.strip() in (tool.description or ""):
@@ -68,7 +83,7 @@ class Gateway:
             event = {"attempt": self.calls, "tool": name, "arguments": arguments}
             started = time.monotonic()
             try:
-                if name not in TOOLS:
+                if name not in self.tool_names:
                     raise ValueError("Tool outside pilot scope")
                 if self.calls > self.budget:
                     raise RuntimeError("Task tool-call budget exhausted")
@@ -94,8 +109,11 @@ async def main():
         description_suffix=Path(os.environ["EXPERIMENT_DESCRIPTION_FILE"]).read_text()
         if os.environ.get("EXPERIMENT_DESCRIPTION_FILE")
         else "",
+        tool_names=json.loads(os.environ["EXPERIMENT_TOOL_NAMES"])
+        if os.environ.get("EXPERIMENT_TOOL_NAMES")
+        else None,
     )
-    server = Server("RhinoMCP workflow pilot")
+    server = Server("RhinoMCP workflow pilot", instructions=rhinomcp.mcp.instructions)
     server.list_tools()(gateway.definitions)
     # FastMCP performs its normal argument validation. Disabling the extra layer
     # also means malformed calls consume budget and are recorded by our observer.
