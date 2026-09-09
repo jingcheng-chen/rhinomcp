@@ -26,6 +26,8 @@ def analyze_objects(
     - analyses: Per-object reports with validity, bounding box dimensions,
       and type-specific measurements such as length, area, volume, centroid,
       closed/solid flags, and Brep/Mesh counts where available.
+      For Breps, naked_edge_count counts all naked topological edges, including
+      inner hole boundaries and excluding joined edges and seams.
     """
     selectors = [
         id is not None,
