@@ -1,0 +1,11 @@
+{
+  "id": "checkpoint-continuation-validation-v1",
+  "call_budget": 12,
+  "timeout_seconds": 120,
+  "tasks": [
+    {
+      "family": "primitives",
+      "path": "experiments/tasks/box.json"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "investigate-typed-planar-region-from-boundaries",
+  "kind": "new_capability",
+  "target": "mcp_interface",
+  "friction": "Observation: in the only supplied trimmed-patches run, the restricted typed interface offered no direct operation for constructing one planar Brep face from an outer boundary and inner closed loops. The agent instead tried three surface-and-cylinder boolean workflows, then a circle/zero-length-extrusion recovery sequence, consuming the 25-call budget and leaving a valid but incorrect two-face, non-planar Brep. This is evidence of an expensive, fragile workflow under the benchmark interface, not proof of a plugin defect or proof that arbitrary scripting is required.",
+  "evidence": [
+    "The deterministic verdict failed one_open_planar_face and outer_and_hole; the artifact contained one valid Brep but had faces=2 and planar=false.",
+    "The trace contains three boolean_difference attempts using recreated planar surfaces and cylindrical cutters; two completed but analyze_objects reported face_count=3 and then face_count=2 rather than the required single trimmed face.",
+    "The recovery path attempted a zero-height cylinder, a curve as a boolean operand, and a zero-vector extrusion. These produced explicit creation, operand-type, and extrusion failures before the call budget was exhausted.",
+    "The run used 25 MCP attempts, four failed calls, 237.55 elapsed seconds, and 550566 input tokens. Cleanup and reconstruction account for multiple create/delete calls, but deletion volume alone is not treated as a defect.",
+    "The final analyze_objects call was rejected because the task tool-call budget was exhausted, preventing verification of the last construction attempt.",
+    "The audit contains only one family and is comparison-ineligible because the agent model/version and identical task, evaluator, and environment are not pinned across plugin versions; therefore it supports an investigation, not a causal improvement claim.",
+    "Arbitrary scripting and run_command were deliberately excluded by the gateway even though they exist in production. The observed limitation is attributed to the restricted typed interface, not to a broken scripting or command facility."
+  ],
+  "hypothesis": "A bounded typed operation that creates a planar region Brep from one closed coplanar outer loop plus zero or more closed coplanar inner loops\u2014or an equivalent extension to an existing typed surface tool\u2014may let agents express intended topology directly and receive structured validation for coplanarity, loop closure, containment, orientation, and result face/loop counts. Under fixed benchmark conditions, this may improve correctness and recovery while reducing reconstruct/boolean/analyze sequences. The investigation should first confirm RhinoCommon feasibility and define failure semantics; the single supplied failure is insufficient to conclude the capability is necessary or superior.",
+  "discovery_families": [
+    "trimmed-patches"
+  ],
+  "validation_families": [
+    "trimmed-patches",
+    "multi-hole-planar-regions",
+    "non-coplanar-boundary-rejection"
+  ],
+  "held_out_families": [
+    "non-coplanar-boundary-rejection"
+  ],
+  "metrics": [
+    "task_success",
+    "failed_tool_calls",
+    "mcp_calls",
+    "elapsed_seconds",
+    "tokens",
+    "recovery_success"
+  ],
+  "preserve": [
+    "Task correctness and all existing deterministic acceptance criteria; efficiency gains do not compensate for an incorrect Brep.",
+    "The agent model/version, task prompts, evaluator, tool-call and token budgets, Rhino version, document units and tolerances, environment, and gateway tool allowlist must be pinned identically for baseline and candidate comparisons; unknown pins or missing results block causal claims.",
+    "Existing typed tools and their protocol behavior unless a separately reviewed builder scope explicitly names every production Python wrapper, C# handler, command schema, and protocol-enum path to add or change.",
+    "The restriction excluding arbitrary scripting and run_command; candidate validation must test the typed interface rather than widening the benchmark gateway.",
+    "Structured errors must distinguish invalid input such as open, non-coplanar, intersecting, or uncontained loops from transport/runtime failures and must not leave partial document objects on failure.",
+    "Source geometry and cleanup semantics must be explicit and deterministic, with the successful result independently checked as exactly one valid open planar Brep face with the requested outer and inner loops.",
+    "Validation must include at least the supplied trimmed-patches family and the prospective multi-hole-planar-regions family; non-coplanar-boundary-rejection remains held out from design and tuning because it is absent from the supplied audit.",
+    "No evaluator, acceptance criterion, prompt, model recipe, budget, or environment change may be used to favor the candidate."
+  ],
+  "status": "proposed"
+}

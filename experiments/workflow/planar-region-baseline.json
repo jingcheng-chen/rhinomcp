@@ -1,0 +1,380 @@
+{
+  "cases": {
+    "planar_region/outer_only": false,
+    "planar_region/one_hole": false,
+    "planar_region/two_holes": false,
+    "planar_region/reversed": false,
+    "planar_region/posed": false,
+    "planar_region/open_outer": false,
+    "planar_region/nonplanar_outer": false,
+    "planar_region/offset_inner": false,
+    "planar_region/tilted_inner": false,
+    "planar_region/outside_inner": false,
+    "planar_region/touching_inner": false,
+    "planar_region/crossing_inner": false,
+    "planar_region/nested_inners": false,
+    "planar_region/overlapping_inners": false,
+    "planar_region/duplicate_ids": false,
+    "planar_region/missing_id": false,
+    "planar_region/noncurve": false,
+    "planar_region/self_intersecting": false
+  },
+  "details": {
+    "outer_only": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "one_hole": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "two_holes": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "reversed": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "posed": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "open_outer": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "nonplanar_outer": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "offset_inner": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "tilted_inner": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "outside_inner": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "touching_inner": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "crossing_inner": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "nested_inners": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "overlapping_inners": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "duplicate_ids": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "missing_id": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "noncurve": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    },
+    "self_intersecting": {
+      "supported": false,
+      "passed": false,
+      "error": "Communication error with Rhino: Unknown command type: create_planar_region",
+      "response": null,
+      "sources_preserved": true,
+      "added_ids": [],
+      "measurements": null
+    }
+  },
+  "images": [
+    {
+      "case": "outer_only",
+      "image": "experiments/assets/planar-region-baseline-outer_only.png",
+      "sha256": "3dfe77a50af8963d401ed3c4f05d708dac929963f8928c9e66df8b2995ad586f"
+    },
+    {
+      "case": "one_hole",
+      "image": "experiments/assets/planar-region-baseline-one_hole.png",
+      "sha256": "bdc2a555c1964940fcc95ebe5726a8b79000977791edfaca2f85df30005307bf"
+    },
+    {
+      "case": "two_holes",
+      "image": "experiments/assets/planar-region-baseline-two_holes.png",
+      "sha256": "2739cda8bcb2c602c41012f0eb4db4d8df9603bb4fe735b5750479f0e51b7f2e"
+    },
+    {
+      "case": "reversed",
+      "image": "experiments/assets/planar-region-baseline-reversed.png",
+      "sha256": "b152690c878503fcc71742491f9a13f75a76796081548dbc38c8f1f6b4078951"
+    },
+    {
+      "case": "posed",
+      "image": "experiments/assets/planar-region-baseline-posed.png",
+      "sha256": "5c2df6597ae7da394badd9cd7c3f068965af7ad919b66a45092415f5ea1301cc"
+    },
+    {
+      "case": "open_outer",
+      "image": "experiments/assets/planar-region-baseline-open_outer.png",
+      "sha256": "18feee7011c8f71265321011308c73bf2afcd7b9856acb643a088aea21f51e7c"
+    },
+    {
+      "case": "nonplanar_outer",
+      "image": "experiments/assets/planar-region-baseline-nonplanar_outer.png",
+      "sha256": "328bba413b503171793e6c0b112f1a077e99af606fa0f96e30306fd0ce345d57"
+    },
+    {
+      "case": "offset_inner",
+      "image": "experiments/assets/planar-region-baseline-offset_inner.png",
+      "sha256": "aa0c573c5eeedf37f7ee7a8bccd4a8b2f9e1b55bb5f2a976485cbe38e15fc814"
+    },
+    {
+      "case": "tilted_inner",
+      "image": "experiments/assets/planar-region-baseline-tilted_inner.png",
+      "sha256": "93710071c0728735453c629c3f3b7d5ec08306c957c7393a496da14ed6a552b1"
+    },
+    {
+      "case": "outside_inner",
+      "image": "experiments/assets/planar-region-baseline-outside_inner.png",
+      "sha256": "914b702d375d4773f6b74b11da18ca781b11e7992724417a38ebda3acd897cc6"
+    },
+    {
+      "case": "touching_inner",
+      "image": "experiments/assets/planar-region-baseline-touching_inner.png",
+      "sha256": "42855ce1bf157d9f4ee9ac9c35f680e3f8d63d943480525fa97b5baa2bd72583"
+    },
+    {
+      "case": "crossing_inner",
+      "image": "experiments/assets/planar-region-baseline-crossing_inner.png",
+      "sha256": "8040129f16642cac5d8d021932555352654a2aa7ca25da068d3c06c6bff2d8a8"
+    },
+    {
+      "case": "nested_inners",
+      "image": "experiments/assets/planar-region-baseline-nested_inners.png",
+      "sha256": "b48d1a3486bf8d4166c8376cb45f03beb91266a016fae1ecb52853e236f17067"
+    },
+    {
+      "case": "overlapping_inners",
+      "image": "experiments/assets/planar-region-baseline-overlapping_inners.png",
+      "sha256": "49aca95e9768f1fe77fb1bad0b660ddbbf8f63c6064c837868ae8d2eaec27284"
+    },
+    {
+      "case": "duplicate_ids",
+      "image": "experiments/assets/planar-region-baseline-duplicate_ids.png",
+      "sha256": "bdc2a555c1964940fcc95ebe5726a8b79000977791edfaca2f85df30005307bf"
+    },
+    {
+      "case": "missing_id",
+      "image": "experiments/assets/planar-region-baseline-missing_id.png",
+      "sha256": "bdc2a555c1964940fcc95ebe5726a8b79000977791edfaca2f85df30005307bf"
+    },
+    {
+      "case": "noncurve",
+      "image": "experiments/assets/planar-region-baseline-noncurve.png",
+      "sha256": "6d019949c3b0d212deba0c3e2648a6a6e9b554c9263855910f29b9781457db69"
+    },
+    {
+      "case": "self_intersecting",
+      "image": "experiments/assets/planar-region-baseline-self_intersecting.png",
+      "sha256": "205ec341bdee3d4ef9b07c29578d8a48c5816cce452d57a465608c160d89dc35"
+    }
+  ],
+  "run": "experiments/runs/planar-region-baseline-20260908-190023",
+  "preservation": {
+    "before": {
+      "objects": [],
+      "layers": [
+        {
+          "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+          "Name": "Default",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+          "Name": "Layer 01",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+          "Name": "Layer 02",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+          "Name": "Layer 03",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+          "Name": "Layer 04",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+          "Name": "Layer 05",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        }
+      ],
+      "units": "Millimeters",
+      "tolerance": 0.001
+    },
+    "after": {
+      "objects": [],
+      "layers": [
+        {
+          "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+          "Name": "Default",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+          "Name": "Layer 01",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+          "Name": "Layer 02",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+          "Name": "Layer 03",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+          "Name": "Layer 04",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+          "Name": "Layer 05",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        }
+      ],
+      "units": "Millimeters",
+      "tolerance": 0.001
+    },
+    "preserved": true
+  }
+}

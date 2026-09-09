@@ -1,0 +1,37 @@
+{
+  "guidance_version": "1",
+  "package_version": "0.3.2",
+  "publication_status": "local_release_artifacts_only_not_published",
+  "wheel": "experiments/runs/guidance-distribution-20260909/rhinomcp-0.3.2-py3-none-any.whl",
+  "wheel_sha256": "27c579ca77b00b122ef0d30a8c92ef1a92c3ab90b1669db1e8cd7bc47f6d0c67",
+  "sdist": "experiments/runs/guidance-distribution-20260909/rhinomcp-0.3.2.tar.gz",
+  "sdist_sha256": "d0985f79b3c98287e84b2d78f7f8e8144025f26de519ebb73b8dff66c35a9586",
+  "all_six_topics_in_both_artifacts": true,
+  "clean_stdio_smoke": {
+    "package": "/private/tmp/rhinomcp-guidance-clean/lib/python3.13/site-packages/rhinomcp/__init__.py",
+    "tool_count": 70,
+    "topics": [
+      "overview",
+      "transforms",
+      "planar_regions",
+      "organization",
+      "verification",
+      "recovery"
+    ],
+    "offline_mcp_interfaces": "pass",
+    "invalid_topic_rejected": true
+  },
+  "tests_passed": 629,
+  "mcp_dependency": ">=1.16.0,<2",
+  "full_tool_count": 70,
+  "native_pilot_tools": 14,
+  "canonical_sources": {
+    "server/src/rhinomcp/guides/overview.md": "6879116ce3165a094f0182b1994cf13daff24ddc330c7a8bd20cc18178370d71",
+    "server/src/rhinomcp/guides/planar_regions.md": "863bb9de8416f8444e4e29bf7693daa944cdb03a4f2cbff1998d3ce0ec20880a",
+    "server/src/rhinomcp/guides/recovery.md": "b5a9a08104a1c161585f9ea0003a2771c9c330dd0df5e04912d900fc40fc218f",
+    "server/src/rhinomcp/guides/verification.md": "d5551604c8cd6067e0c87d517b1d38336e7bb35b42878f3d8641ac3edb6e22d2",
+    "server/src/rhinomcp/guides/transforms.md": "4de1664700419613ddcf3093fd1c5c9c169ba05be4f87bf6d4d2c7bf200a1205",
+    "server/src/rhinomcp/guides/organization.md": "a9660bf87bb50d4983fbad8079ff89bafe105c7ee66e96940159bdf8e1a5876e"
+  },
+  "optional_skill": "Not required; any future skill must derive from canonical guides."
+}

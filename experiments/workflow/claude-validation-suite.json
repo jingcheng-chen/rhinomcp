@@ -1,0 +1,19 @@
+{
+  "id": "claude-native-validation-v1",
+  "call_budget": 24,
+  "timeout_seconds": 180,
+  "tasks": [
+    {
+      "family": "primitives",
+      "path": "experiments/tasks/box.json"
+    },
+    {
+      "family": "subtractive-solids",
+      "path": "experiments/tasks/through_hole.json"
+    },
+    {
+      "family": "trimmed-planar-patches",
+      "path": "experiments/tasks/trimmed_reserved.json"
+    }
+  ]
+}

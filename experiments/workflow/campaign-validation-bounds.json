@@ -1,0 +1,32 @@
+{
+  "id": "campaign-controller-bounds-v1",
+  "suite": "experiments/workflow/campaign-validation-suite.json",
+  "agent": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "medium"
+  },
+  "repeats": 2,
+  "acceptance": "correctness_then_calls_v1",
+  "evaluation_mode": "trusted_baseline",
+  "binaries": {
+    "baseline": {
+      "path": "experiments/runs/capability-20260908-185137-c39dd1c1/trial-529ffc4d/candidate.rhp",
+      "identity": {
+        "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+        "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+      }
+    },
+    "candidate": {
+      "path": "experiments/runs/repair-20260907-171657-ec239178/trial-9983c15f/candidate.rhp",
+      "identity": {
+        "sha256": "3a79ef7ffde3194d21ffca8274b58837c7eade562c5e9c6d630b18de88a74677",
+        "mvid": "606ab732-416a-4b80-b041-19a264b21b2f"
+      }
+    }
+  },
+  "resource_limits": {
+    "sessions": 4,
+    "tool_attempts": 100,
+    "model_seconds": 700
+  }
+}

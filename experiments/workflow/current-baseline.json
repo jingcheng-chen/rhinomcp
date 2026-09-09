@@ -1,0 +1,39 @@
+{
+  "id": "planar-region-selected-v1",
+  "source_revision": "22ffe046f42b96a58aff8dd56f6eb06080f2bc7e",
+  "identity": {
+    "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+    "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+  },
+  "selection": "experiments/runs/selection-20260908-214357-b9bfc9f6",
+  "selection_state_required": "selected",
+  "runtime_verification_required": true,
+  "preservation_suite": "experiments/harness/trial-preservation-v4.json",
+  "preservation_cases": 79,
+  "native_tools": [
+    "create_object",
+    "modify_object",
+    "delete_object",
+    "analyze_objects",
+    "get_object_info",
+    "get_objects",
+    "extrude_curve",
+    "loft",
+    "sweep1",
+    "boolean_difference",
+    "boolean_union",
+    "boolean_intersection",
+    "create_planar_region",
+    "get_modeling_guidance"
+  ],
+  "comparison": "experiments/runs/workflow-binary-20260908-210711-5aea4e1e",
+  "claim": "Scoped trimmed-patch benefit with reserved-case validation and through-hole preservation; no broad generalization or adversarial isolation claim.",
+  "unreleased_python_overlay": {
+    "kind": "bundled_modeling_guidance",
+    "guide_version": "1",
+    "full_tools": 70,
+    "native_tools": 14,
+    "report": "experiments/workflow/guidance-distribution.json",
+    "publication": "not_published"
+  }
+}

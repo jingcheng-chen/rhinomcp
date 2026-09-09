@@ -5,6 +5,14 @@ ordinary agents. Modeling outputs are benchmark evidence. The chair is one task,
 not the architecture or the primary progress metric. This direction supersedes
 chair-first next steps in historical reports (user clarification, 2026-09-07).
 
+## Distribution requirement — user-approved 2026-09-09
+
+Reusable modeling knowledge ships with RhinoMCP. Keep essential semantics in tool
+descriptions and longer guidance in the packaged canonical guide, exposed by a
+read-only MCP tool/resource and shared prompts. Optional skills derive from that
+same source. Validate wheel installation without experiment files or local memory.
+See [implemented distribution and live checks](DISTRIBUTABLE_GUIDANCE.md).
+
 ## Cycle
 
 1. Observe fresh agents across a diverse registered suite. Keep task verdicts separate
@@ -47,7 +55,33 @@ server/.venv/bin/python -m experiments.workflow.audit experiments/workflow/histo
 PYTHONPATH=/absolute/path/to/rhinomcp server/.venv/bin/python -m experiments.workflow.plan experiments/workflow/historical-audit.json
 ```
 
-## Remaining implementation — do not confuse with the existing defect pilot
+## Current implementation — 2026-09-08
+
+The shared runner now registers analytic solids, biquadratic panels and trimmed
+planar patches. It records explicit model alias/effort, task, catalog, evaluator,
+budget and runtime pins. Backend model snapshots remain unavailable.
+
+The declared-file capability builder, reviewed trial intake and supervised binary
+comparator are implemented. The panel comparison rejected the bounds candidate.
+The planar-region trial passes all 79 checks; the completed 12-session comparison
+improves trimmed-patch success from 0/4 to 4/4 while preserving through-hole success.
+All artifacts were evaluated after trusted-baseline restoration. Guarded source
+and runtime selection, rollback and reactivation are verified. The selected tool
+is now part of the 13-tool default benchmark interface (69 full production tools).
+See [selection evidence](PLANAR_REGION_SELECTION.md), [current baseline](current-baseline.json)
+and [evaluation boundary](EVALUATION_ISOLATION.md).
+
+Durable resource limits, verified checkpoint continuation and a finite reviewed
+comparison queue are implemented and live-validated. See [continuation](CONTINUATION.md)
+and [campaign evidence](CAMPAIGN.md). The [Claude adapter](CLAUDE_PROVIDER.md) is
+live-validated for native modeling: 20 successful calls across three fresh sessions,
+with independent verdicts of two passes and one detected pose failure. Binary
+comparison orchestration remains Codex-only.
+Remaining work includes broader family coverage, hard adversarial judge isolation
+and unattended operation in a [dedicated environment](ISOLATED_ENVIRONMENT.md). Scoped supervised
+selection is not general automatic promotion.
+
+## Historical implementation plan — superseded by the status above
 
 - Extend the shared pilot beyond its existing analytic solid evaluator adapter.
   Keep task definitions as inputs and evaluator registrations, rather than forking

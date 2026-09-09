@@ -1,0 +1,76 @@
+{
+  "selection": "experiments/runs/selection-20260908-214357-b9bfc9f6",
+  "manifest_sha256": "240f95532f1b45c86484643f30dbff7839b731c50ad2c2fab91d37adcc52bebc",
+  "state": "selected",
+  "runtime_verified": true,
+  "active_identity": {
+    "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+    "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+  },
+  "rollback_verified": true,
+  "production_tools_before": 68,
+  "production_tools_after": 69,
+  "source_files": {
+    "contracts/commands/create_planar_region.json": {
+      "before": null,
+      "after": {
+        "kind": "file",
+        "sha256": "76b2d89579e25f4b25a397036ac4d38fec9a671bafbc9a978ed21a7cf043ebf5",
+        "mode": 420
+      }
+    },
+    "contracts/protocol.json": {
+      "before": {
+        "kind": "file",
+        "sha256": "4bc18baaf6ae714261df49955e823e5f9f544dc52c4c063e15e7ab73b4deb476",
+        "mode": 420
+      },
+      "after": {
+        "kind": "file",
+        "sha256": "91738afaf59e568cc2fa1772a3525da40c9aa0452336e0032c85f2a3ec716a31",
+        "mode": 420
+      }
+    },
+    "contracts/test_schemas.py": {
+      "before": {
+        "kind": "file",
+        "sha256": "7343c270d7fc9f29369228c8e337249a4c4160ef453333da259dbd9dd5b730c2",
+        "mode": 420
+      },
+      "after": {
+        "kind": "file",
+        "sha256": "4db0223932a5cf57577bf4bfde1c933acf777906b485d0cb53c3d6796b9bd0df",
+        "mode": 420
+      }
+    },
+    "plugin/Functions/CreatePlanarRegion.cs": {
+      "before": null,
+      "after": {
+        "kind": "file",
+        "sha256": "370664c176df13a0b5e5994449b929742b19f9acfaf04726f157a8f259e2cad0",
+        "mode": 420
+      }
+    },
+    "server/src/rhinomcp/tools/create_planar_region.py": {
+      "before": null,
+      "after": {
+        "kind": "file",
+        "sha256": "98a2cc7823e727f3d1b0786ac61dd1a7381bb8dd889575d3d3da430f1489e091",
+        "mode": 420
+      }
+    },
+    "server/tests/test_create_planar_region.py": {
+      "before": null,
+      "after": {
+        "kind": "file",
+        "sha256": "c7739ad26106c3f934f4da6e73fb9f324d41114d1ce25c3e3c4c853fc3bedc70",
+        "mode": 420
+      }
+    }
+  },
+  "development_tests_passed": 589,
+  "activation_receipt_sha256": "8bde9f78a3df387161fa5472a817203539c2c1c26df88261ef1acdb4f2b4d13a",
+  "rollback_receipt_sha256": "d369a6f9fbab17d0e4220dedf828345260d0f660a1af7abf557983b191282df5",
+  "source_revision": "22ffe046f42b96a58aff8dd56f6eb06080f2bc7e",
+  "native_benchmark_tools": 13
+}

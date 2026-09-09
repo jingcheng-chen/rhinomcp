@@ -1,0 +1,998 @@
+{
+  "run": "runs/workflow-binary-20260908-220720-3c737caa",
+  "status": "complete",
+  "purpose": "Controller pause/resume validation, not capability benefit evidence",
+  "rows": [
+    {
+      "id": "task-1-pair-1-baseline",
+      "family": "primitives",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260908-220720-3c737caa/task-1-pair-1-baseline",
+      "source_sha256": "3fcdd007c9e0ce986f1c618753cef97bad23f932fe222f0ed958a4b94954b946",
+      "session_status": "completed",
+      "elapsed_seconds": 16.137206125014927,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "29df65203117c6b14d7cd0b672a05d8307b1528281c6d22cdbd6f648aa0d857a",
+      "metrics": {
+        "mcp_attempts": 3,
+        "completed_calls": 3,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_objects": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 56764,
+          "cached_input_tokens": 45056,
+          "output_tokens": 323,
+          "reasoning_output_tokens": 34
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "baseline",
+      "pair": 1,
+      "task": "experiments/tasks/box.json",
+      "image": "assets/checkpoint-task-1-pair-1-baseline.png",
+      "image_sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+      "model_sha256": "e1c5ad3921dc2b35c5adc9d0905f98450a46c6521429e561e83d14489dbfc278",
+      "evaluation": {
+        "status": "pass",
+        "checks": {
+          "units": true,
+          "object_count": true,
+          "valid": true,
+          "solid": true,
+          "minimum": true,
+          "dimensions": true,
+          "volume": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": true,
+              "minimum": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "dimensions": [
+                100.0,
+                50.0,
+                30.0
+              ],
+              "volume": 150000.0,
+              "area": 19000.0,
+              "vertices": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  0.0,
+                  30.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  30.0
+                ],
+                [
+                  100.0,
+                  50.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  50.0,
+                  30.0
+                ],
+                [
+                  0.0,
+                  50.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  50.0,
+                  30.0
+                ]
+              ],
+              "planar_faces": true,
+              "straight_edges": true,
+              "faces": [
+                {
+                  "kind": "plane",
+                  "origin": [
+                    50.0,
+                    0.0,
+                    15.0
+                  ],
+                  "normal": [
+                    0.0,
+                    -1.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    100.0,
+                    25.0,
+                    15.0
+                  ],
+                  "normal": [
+                    1.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    50.0,
+                    50.0,
+                    15.0
+                  ],
+                  "normal": [
+                    0.0,
+                    1.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    25.0,
+                    15.0
+                  ],
+                  "normal": [
+                    -1.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    0.0,
+                    30.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "artifact_sha256": "e1c5ad3921dc2b35c5adc9d0905f98450a46c6521429e561e83d14489dbfc278",
+        "evaluation_runtime": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+          "version": "0.3.2.0",
+          "pid": 72350,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "evaluation_binary": {
+          "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+          "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+        },
+        "mode": "trusted_baseline"
+      }
+    },
+    {
+      "id": "task-1-pair-1-candidate",
+      "family": "primitives",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260908-220720-3c737caa/task-1-pair-1-candidate",
+      "source_sha256": "f04629aa0cff9faa0988e74ba84e9dc68fa3e2f33830f7944dbb48ac097474ba",
+      "session_status": "completed",
+      "elapsed_seconds": 16.73225216602441,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "8717d0bf0ed6027e6b981eb6bbaeb355e18bcd885f54ef2509b1be3594dd2f7c",
+      "metrics": {
+        "mcp_attempts": 3,
+        "completed_calls": 3,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_objects": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 71533,
+          "cached_input_tokens": 59136,
+          "output_tokens": 393,
+          "reasoning_output_tokens": 67
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "candidate",
+      "pair": 1,
+      "task": "experiments/tasks/box.json",
+      "image": "assets/checkpoint-task-1-pair-1-candidate.png",
+      "image_sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+      "model_sha256": "30c9c4291b5fb2bfff180590c735f7d1fbd107d02ca71fccc38324dcccd74959",
+      "evaluation": {
+        "status": "pass",
+        "checks": {
+          "units": true,
+          "object_count": true,
+          "valid": true,
+          "solid": true,
+          "minimum": true,
+          "dimensions": true,
+          "volume": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": true,
+              "minimum": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "dimensions": [
+                100.0,
+                50.0,
+                30.0
+              ],
+              "volume": 150000.0,
+              "area": 19000.0,
+              "vertices": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  0.0,
+                  30.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  30.0
+                ],
+                [
+                  100.0,
+                  50.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  50.0,
+                  30.0
+                ],
+                [
+                  0.0,
+                  50.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  50.0,
+                  30.0
+                ]
+              ],
+              "planar_faces": true,
+              "straight_edges": true,
+              "faces": [
+                {
+                  "kind": "plane",
+                  "origin": [
+                    50.0,
+                    0.0,
+                    15.0
+                  ],
+                  "normal": [
+                    0.0,
+                    -1.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    100.0,
+                    25.0,
+                    15.0
+                  ],
+                  "normal": [
+                    1.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    50.0,
+                    50.0,
+                    15.0
+                  ],
+                  "normal": [
+                    0.0,
+                    1.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    25.0,
+                    15.0
+                  ],
+                  "normal": [
+                    -1.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    0.0,
+                    30.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "artifact_sha256": "30c9c4291b5fb2bfff180590c735f7d1fbd107d02ca71fccc38324dcccd74959",
+        "evaluation_runtime": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+          "version": "0.3.2.0",
+          "pid": 72350,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "evaluation_binary": {
+          "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+          "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+        },
+        "mode": "trusted_baseline"
+      }
+    },
+    {
+      "id": "task-1-pair-2-candidate",
+      "family": "primitives",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260908-220720-3c737caa/task-1-pair-2-candidate",
+      "source_sha256": "cda40df67692b690c0241a72ac885ec5f16505ed5a6ce90a6668db0e04490f01",
+      "session_status": "completed",
+      "elapsed_seconds": 17.16613408300327,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "8dc7c67a3f40628f645fff0a1ca206d00ff1ad7c0a7e929b5def0bb056a0c33b",
+      "metrics": {
+        "mcp_attempts": 3,
+        "completed_calls": 3,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_objects": 1
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 73243,
+          "cached_input_tokens": 60160,
+          "output_tokens": 389,
+          "reasoning_output_tokens": 57
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "candidate",
+      "pair": 2,
+      "task": "experiments/tasks/box.json",
+      "image": "assets/checkpoint-task-1-pair-2-candidate.png",
+      "image_sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+      "model_sha256": "84cecaefea9504c5a671ced976bb9930019fbb622cbd1b341dc31691c143aa8d",
+      "evaluation": {
+        "status": "pass",
+        "checks": {
+          "units": true,
+          "object_count": true,
+          "valid": true,
+          "solid": true,
+          "minimum": true,
+          "dimensions": true,
+          "volume": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": true,
+              "minimum": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "dimensions": [
+                100.0,
+                50.0,
+                30.0
+              ],
+              "volume": 150000.0,
+              "area": 19000.0,
+              "vertices": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  0.0,
+                  30.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  30.0
+                ],
+                [
+                  100.0,
+                  50.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  50.0,
+                  30.0
+                ],
+                [
+                  0.0,
+                  50.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  50.0,
+                  30.0
+                ]
+              ],
+              "planar_faces": true,
+              "straight_edges": true,
+              "faces": [
+                {
+                  "kind": "plane",
+                  "origin": [
+                    50.0,
+                    0.0,
+                    15.0
+                  ],
+                  "normal": [
+                    0.0,
+                    -1.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    100.0,
+                    25.0,
+                    15.0
+                  ],
+                  "normal": [
+                    1.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    50.0,
+                    50.0,
+                    15.0
+                  ],
+                  "normal": [
+                    0.0,
+                    1.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    25.0,
+                    15.0
+                  ],
+                  "normal": [
+                    -1.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    0.0,
+                    30.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "artifact_sha256": "84cecaefea9504c5a671ced976bb9930019fbb622cbd1b341dc31691c143aa8d",
+        "evaluation_runtime": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+          "version": "0.3.2.0",
+          "pid": 72350,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "evaluation_binary": {
+          "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+          "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+        },
+        "mode": "trusted_baseline"
+      }
+    },
+    {
+      "id": "task-1-pair-2-baseline",
+      "family": "primitives",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260908-220720-3c737caa/task-1-pair-2-baseline",
+      "source_sha256": "b185490a8239445bd6b1f56fb44d17d0a4d9cfcb303092fe51dd065f4ffbc207",
+      "session_status": "completed",
+      "elapsed_seconds": 21.90645408400451,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "e8785488943fe8ca5420e23df4c02658b767f04a927bb7efbe6e67a897b3b699",
+      "metrics": {
+        "mcp_attempts": 4,
+        "completed_calls": 4,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_objects": 2
+        },
+        "commands": {},
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 106548,
+          "cached_input_tokens": 84480,
+          "output_tokens": 574,
+          "reasoning_output_tokens": 124
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "baseline",
+      "pair": 2,
+      "task": "experiments/tasks/box.json",
+      "image": "assets/checkpoint-task-1-pair-2-baseline.png",
+      "image_sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+      "model_sha256": "bc9211ec81887dc1eac67736e9d231443eb2aad41aa27505b0fe53c7f8e11505",
+      "evaluation": {
+        "status": "pass",
+        "checks": {
+          "units": true,
+          "object_count": true,
+          "valid": true,
+          "solid": true,
+          "minimum": true,
+          "dimensions": true,
+          "volume": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": true,
+              "minimum": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "dimensions": [
+                100.0,
+                50.0,
+                30.0
+              ],
+              "volume": 150000.0,
+              "area": 19000.0,
+              "vertices": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  0.0,
+                  30.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  30.0
+                ],
+                [
+                  100.0,
+                  50.0,
+                  0.0
+                ],
+                [
+                  100.0,
+                  50.0,
+                  30.0
+                ],
+                [
+                  0.0,
+                  50.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  50.0,
+                  30.0
+                ]
+              ],
+              "planar_faces": true,
+              "straight_edges": true,
+              "faces": [
+                {
+                  "kind": "plane",
+                  "origin": [
+                    50.0,
+                    0.0,
+                    15.0
+                  ],
+                  "normal": [
+                    0.0,
+                    -1.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    100.0,
+                    25.0,
+                    15.0
+                  ],
+                  "normal": [
+                    1.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    50.0,
+                    50.0,
+                    15.0
+                  ],
+                  "normal": [
+                    0.0,
+                    1.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    25.0,
+                    15.0
+                  ],
+                  "normal": [
+                    -1.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                },
+                {
+                  "kind": "plane",
+                  "origin": [
+                    0.0,
+                    0.0,
+                    30.0
+                  ],
+                  "normal": [
+                    0.0,
+                    0.0,
+                    1.0
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "artifact_sha256": "bc9211ec81887dc1eac67736e9d231443eb2aad41aa27505b0fe53c7f8e11505",
+        "evaluation_runtime": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+          "version": "0.3.2.0",
+          "pid": 72350,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "evaluation_binary": {
+          "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+          "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+        },
+        "mode": "trusted_baseline"
+      }
+    }
+  ],
+  "resources": {
+    "limits": {
+      "sessions": 4,
+      "tool_attempts": 60,
+      "model_seconds": 600
+    },
+    "used": {
+      "tool_attempts": 13,
+      "model_seconds": 71.94204645804712,
+      "sessions": 4
+    },
+    "pending": null,
+    "completed": [
+      {
+        "name": "task-1-pair-1-baseline",
+        "actual": {
+          "sessions": 1,
+          "tool_attempts": 3,
+          "model_seconds": 16.137206125014927
+        },
+        "allowance": {
+          "sessions": 1,
+          "tool_attempts": 13,
+          "model_seconds": 130
+        }
+      },
+      {
+        "name": "task-1-pair-1-candidate",
+        "actual": {
+          "sessions": 1,
+          "tool_attempts": 3,
+          "model_seconds": 16.73225216602441
+        },
+        "allowance": {
+          "sessions": 1,
+          "tool_attempts": 13,
+          "model_seconds": 130
+        }
+      },
+      {
+        "name": "task-1-pair-2-candidate",
+        "actual": {
+          "sessions": 1,
+          "tool_attempts": 3,
+          "model_seconds": 17.16613408300327
+        },
+        "allowance": {
+          "sessions": 1,
+          "tool_attempts": 13,
+          "model_seconds": 130
+        }
+      },
+      {
+        "name": "task-1-pair-2-baseline",
+        "actual": {
+          "sessions": 1,
+          "tool_attempts": 4,
+          "model_seconds": 21.90645408400451
+        },
+        "allowance": {
+          "sessions": 1,
+          "tool_attempts": 13,
+          "model_seconds": 130
+        }
+      }
+    ],
+    "stopped": false
+  },
+  "first_checkpoint_unchanged": true,
+  "session_dispatches": 4,
+  "paused_after": 1,
+  "resumed_remaining": 3,
+  "runtime": {
+    "document": 268435457,
+    "marker": null,
+    "object_count": 0,
+    "path": null,
+    "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+    "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+    "version": "0.3.2.0",
+    "pid": 72350,
+    "docs": [
+      {
+        "serial": 268435457,
+        "path": null,
+        "count": 0,
+        "modified": true
+      }
+    ]
+  },
+  "test_count": 601
+}

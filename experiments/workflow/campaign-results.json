@@ -1,0 +1,2163 @@
+{
+  "campaign": "runs/campaign-20260908-222059-6176f1bc",
+  "stage": "exhausted",
+  "used": {
+    "sessions": 8,
+    "model_seconds": 247.54726545908488,
+    "tool_attempts": 49
+  },
+  "limits": {
+    "sessions": 8,
+    "tool_attempts": 200,
+    "model_seconds": 1400
+  },
+  "purpose": "Live finite reviewed queue validation; no source adoption",
+  "handoff": {
+    "previous": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/workflow-binary-20260908-222035-fbf21e63",
+    "runtime": {
+      "document": 268435457,
+      "marker": null,
+      "object_count": 0,
+      "path": null,
+      "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+      "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+      "version": "0.3.2.0",
+      "pid": 1665,
+      "docs": [
+        {
+          "serial": 268435457,
+          "path": null,
+          "count": 0,
+          "modified": true
+        }
+      ]
+    },
+    "baseline": {
+      "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+      "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+    }
+  },
+  "comparisons": [
+    {
+      "run": "runs/workflow-binary-20260908-222035-fbf21e63",
+      "comparison": {
+        "status": "no_benefit_established",
+        "tasks": {
+          "experiments/tasks/posed_prism.json": {
+            "baseline": {
+              "runs": 2,
+              "passes": 2,
+              "failed_calls": 0,
+              "median_calls": 6.0,
+              "median_seconds": 29.79420904201106
+            },
+            "candidate": {
+              "runs": 2,
+              "passes": 2,
+              "failed_calls": 0,
+              "median_calls": 6.0,
+              "median_seconds": 27.116560667011072
+            },
+            "family": "posed-solids",
+            "correctness_regression": false,
+            "observed_benefit": false
+          }
+        },
+        "runs": [
+          {
+            "id": "task-1-pair-1-baseline",
+            "family": "posed-solids",
+            "available": true,
+            "source": "experiments/runs/workflow-binary-20260908-222035-fbf21e63/task-1-pair-1-baseline",
+            "source_sha256": "a235ea091ac979de6d517dcff206a61730c9b59fd9304f641b68085211b1e1e0",
+            "session_status": "completed",
+            "elapsed_seconds": 30.941790334007237,
+            "task_verdict": "pass",
+            "agent_claim_complete": true,
+            "evaluation_sha256": "faa8a2321e18101e70fd3e41828336270adf2df8486d2347fbd8bd5d885a2384",
+            "metrics": {
+              "mcp_attempts": 6,
+              "completed_calls": 6,
+              "unfinished_calls": 0,
+              "failed_calls": 0,
+              "failures_by_tool": {},
+              "tools": {
+                "analyze_objects": 1,
+                "create_object": 1,
+                "delete_object": 1,
+                "extrude_curve": 1,
+                "get_objects": 2
+              },
+              "commands": {},
+              "schema_queries": 0,
+              "delete_calls": 0,
+              "usage": {
+                "input_tokens": 136379,
+                "cached_input_tokens": 112896,
+                "output_tokens": 775,
+                "reasoning_output_tokens": 164
+              },
+              "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+            },
+            "comparison_eligible": false,
+            "comparison_blockers": [
+              "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+            ],
+            "arm": "baseline",
+            "pair": 1,
+            "task": "experiments/tasks/posed_prism.json"
+          },
+          {
+            "id": "task-1-pair-1-candidate",
+            "family": "posed-solids",
+            "available": true,
+            "source": "experiments/runs/workflow-binary-20260908-222035-fbf21e63/task-1-pair-1-candidate",
+            "source_sha256": "6ac47fc5894687988e213213e965e91e507b3be929d204c279b5de649a167625",
+            "session_status": "completed",
+            "elapsed_seconds": 27.09420650001266,
+            "task_verdict": "pass",
+            "agent_claim_complete": true,
+            "evaluation_sha256": "a90677cb50e1dc0678df22d6bcf4bd24d7d048e3f2bcbd67cff4c6fb2d497eab",
+            "metrics": {
+              "mcp_attempts": 6,
+              "completed_calls": 6,
+              "unfinished_calls": 0,
+              "failed_calls": 0,
+              "failures_by_tool": {},
+              "tools": {
+                "analyze_objects": 1,
+                "create_object": 1,
+                "delete_object": 1,
+                "extrude_curve": 1,
+                "get_objects": 2
+              },
+              "commands": {},
+              "schema_queries": 0,
+              "delete_calls": 0,
+              "usage": {
+                "input_tokens": 126911,
+                "cached_input_tokens": 95488,
+                "output_tokens": 768,
+                "reasoning_output_tokens": 183
+              },
+              "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+            },
+            "comparison_eligible": false,
+            "comparison_blockers": [
+              "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+            ],
+            "arm": "candidate",
+            "pair": 1,
+            "task": "experiments/tasks/posed_prism.json"
+          },
+          {
+            "id": "task-1-pair-2-candidate",
+            "family": "posed-solids",
+            "available": true,
+            "source": "experiments/runs/workflow-binary-20260908-222035-fbf21e63/task-1-pair-2-candidate",
+            "source_sha256": "bfbb13176997fa33cd0fb960141ecc011f963fa69f1b7a5bc305c8494dcf739d",
+            "session_status": "completed",
+            "elapsed_seconds": 27.138914834009483,
+            "task_verdict": "pass",
+            "agent_claim_complete": true,
+            "evaluation_sha256": "16ad5f840bfe8912ca9399372dbfa3c2c7a4f838ce1b82485822e6b0f4636c32",
+            "metrics": {
+              "mcp_attempts": 6,
+              "completed_calls": 6,
+              "unfinished_calls": 0,
+              "failed_calls": 0,
+              "failures_by_tool": {},
+              "tools": {
+                "analyze_objects": 1,
+                "create_object": 1,
+                "delete_object": 1,
+                "extrude_curve": 1,
+                "get_objects": 2
+              },
+              "commands": {},
+              "schema_queries": 0,
+              "delete_calls": 0,
+              "usage": {
+                "input_tokens": 109236,
+                "cached_input_tokens": 94464,
+                "output_tokens": 736,
+                "reasoning_output_tokens": 169
+              },
+              "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+            },
+            "comparison_eligible": false,
+            "comparison_blockers": [
+              "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+            ],
+            "arm": "candidate",
+            "pair": 2,
+            "task": "experiments/tasks/posed_prism.json"
+          },
+          {
+            "id": "task-1-pair-2-baseline",
+            "family": "posed-solids",
+            "available": true,
+            "source": "experiments/runs/workflow-binary-20260908-222035-fbf21e63/task-1-pair-2-baseline",
+            "source_sha256": "091570e426fd2bf8b5026714dd9e2fb087f5972dfc8f3c0d4d91b9ecb11665b3",
+            "session_status": "completed",
+            "elapsed_seconds": 28.646627750014886,
+            "task_verdict": "pass",
+            "agent_claim_complete": true,
+            "evaluation_sha256": "e67bd6ec1e2644ad1ae5ce0b52e58733a2a411a1c97de784837e1bdaced30e1e",
+            "metrics": {
+              "mcp_attempts": 6,
+              "completed_calls": 6,
+              "unfinished_calls": 0,
+              "failed_calls": 0,
+              "failures_by_tool": {},
+              "tools": {
+                "analyze_objects": 1,
+                "create_object": 1,
+                "delete_object": 1,
+                "extrude_curve": 1,
+                "get_objects": 2
+              },
+              "commands": {},
+              "schema_queries": 0,
+              "delete_calls": 0,
+              "usage": {
+                "input_tokens": 125377,
+                "cached_input_tokens": 102656,
+                "output_tokens": 759,
+                "reasoning_output_tokens": 151
+              },
+              "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+            },
+            "comparison_eligible": false,
+            "comparison_blockers": [
+              "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+            ],
+            "arm": "baseline",
+            "pair": 2,
+            "task": "experiments/tasks/posed_prism.json"
+          }
+        ],
+        "promotion_authorized": false,
+        "limitations": [
+          "Two repeats per arm/task; descriptive evidence, not statistical proof.",
+          "Requested model alias/effort pinned; backend snapshot unavailable.",
+          "Panel discovery tasks are not held-out families.",
+          "Correctness precedes efficiency; tokens/time are secondary observations.",
+          "Evaluation uses a fresh trusted baseline process after candidate shutdown; this is not an adversarial OS sandbox."
+        ],
+        "evaluation_mode": "trusted_baseline"
+      },
+      "rows": [
+        {
+          "id": "task-1-pair-1-baseline",
+          "family": "posed-solids",
+          "available": true,
+          "source": "experiments/runs/workflow-binary-20260908-222035-fbf21e63/task-1-pair-1-baseline",
+          "source_sha256": "a235ea091ac979de6d517dcff206a61730c9b59fd9304f641b68085211b1e1e0",
+          "session_status": "completed",
+          "elapsed_seconds": 30.941790334007237,
+          "task_verdict": "pass",
+          "agent_claim_complete": true,
+          "evaluation_sha256": "faa8a2321e18101e70fd3e41828336270adf2df8486d2347fbd8bd5d885a2384",
+          "metrics": {
+            "mcp_attempts": 6,
+            "completed_calls": 6,
+            "unfinished_calls": 0,
+            "failed_calls": 0,
+            "failures_by_tool": {},
+            "tools": {
+              "analyze_objects": 1,
+              "create_object": 1,
+              "delete_object": 1,
+              "extrude_curve": 1,
+              "get_objects": 2
+            },
+            "commands": {},
+            "schema_queries": 0,
+            "delete_calls": 0,
+            "usage": {
+              "input_tokens": 136379,
+              "cached_input_tokens": 112896,
+              "output_tokens": 775,
+              "reasoning_output_tokens": 164
+            },
+            "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+          },
+          "comparison_eligible": false,
+          "comparison_blockers": [
+            "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+          ],
+          "arm": "baseline",
+          "pair": 1,
+          "task": "experiments/tasks/posed_prism.json",
+          "image": "assets/campaign-1-task-1-pair-1-baseline.png",
+          "image_sha256": "aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d",
+          "model_sha256": "4502ddbd1a033a7d3835e46dfcc9458ee7e346ae7b6f89d56aeab602a49a1ee1",
+          "evaluation": {
+            "status": "pass",
+            "checks": {
+              "units": true,
+              "object_count": true,
+              "valid": true,
+              "solid": true,
+              "pose_corners": true,
+              "vertices_inside": true,
+              "planar_faces": true,
+              "straight_edges": true,
+              "area": true,
+              "volume": true
+            },
+            "measurements": {
+              "units": "Millimeters",
+              "objects": [
+                {
+                  "valid": true,
+                  "solid": true,
+                  "minimum": [
+                    100.0,
+                    -40.0,
+                    15.0
+                  ],
+                  "dimensions": [
+                    89.28203230275511,
+                    40.0,
+                    25.0
+                  ],
+                  "volume": 40000.00000000001,
+                  "area": 8436.067977499792,
+                  "vertices": [
+                    [
+                      120.0,
+                      -40.0,
+                      15.0
+                    ],
+                    [
+                      120.0,
+                      -40.0,
+                      40.0
+                    ],
+                    [
+                      100.0,
+                      -5.358983848622458,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      15.0
+                    ],
+                    [
+                      100.0,
+                      -5.358983848622458,
+                      15.0
+                    ]
+                  ],
+                  "planar_faces": true,
+                  "straight_edges": true,
+                  "faces": [
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        110.0,
+                        -22.67949192431123,
+                        27.5
+                      ],
+                      "normal": [
+                        0.8660254037844386,
+                        0.5000000000000001,
+                        2.5052958156992557e-16
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        40.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        15.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        -1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        154.64101615137756,
+                        -20.0,
+                        27.5
+                      ],
+                      "normal": [
+                        -0.49999999999999983,
+                        0.8660254037844387,
+                        4.201055721315194e-17
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        144.64101615137756,
+                        -2.6794919243112285,
+                        27.500000000000004
+                      ],
+                      "normal": [
+                        0.05991526087921627,
+                        -0.9982034669914622,
+                        -1.3593177149227623e-17
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "artifact_sha256": "4502ddbd1a033a7d3835e46dfcc9458ee7e346ae7b6f89d56aeab602a49a1ee1",
+            "evaluation_runtime": {
+              "document": 268435457,
+              "marker": null,
+              "object_count": 0,
+              "path": null,
+              "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+              "version": "0.3.2.0",
+              "pid": 1665,
+              "docs": [
+                {
+                  "serial": 268435457,
+                  "path": null,
+                  "count": 0,
+                  "modified": true
+                }
+              ]
+            },
+            "evaluation_binary": {
+              "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+            },
+            "mode": "trusted_baseline"
+          }
+        },
+        {
+          "id": "task-1-pair-1-candidate",
+          "family": "posed-solids",
+          "available": true,
+          "source": "experiments/runs/workflow-binary-20260908-222035-fbf21e63/task-1-pair-1-candidate",
+          "source_sha256": "6ac47fc5894687988e213213e965e91e507b3be929d204c279b5de649a167625",
+          "session_status": "completed",
+          "elapsed_seconds": 27.09420650001266,
+          "task_verdict": "pass",
+          "agent_claim_complete": true,
+          "evaluation_sha256": "a90677cb50e1dc0678df22d6bcf4bd24d7d048e3f2bcbd67cff4c6fb2d497eab",
+          "metrics": {
+            "mcp_attempts": 6,
+            "completed_calls": 6,
+            "unfinished_calls": 0,
+            "failed_calls": 0,
+            "failures_by_tool": {},
+            "tools": {
+              "analyze_objects": 1,
+              "create_object": 1,
+              "delete_object": 1,
+              "extrude_curve": 1,
+              "get_objects": 2
+            },
+            "commands": {},
+            "schema_queries": 0,
+            "delete_calls": 0,
+            "usage": {
+              "input_tokens": 126911,
+              "cached_input_tokens": 95488,
+              "output_tokens": 768,
+              "reasoning_output_tokens": 183
+            },
+            "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+          },
+          "comparison_eligible": false,
+          "comparison_blockers": [
+            "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+          ],
+          "arm": "candidate",
+          "pair": 1,
+          "task": "experiments/tasks/posed_prism.json",
+          "image": "assets/campaign-1-task-1-pair-1-candidate.png",
+          "image_sha256": "aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d",
+          "model_sha256": "272f66956a7271cc59fbfa2dcd1a9b47a47a17dcb5b2356edde81ef7d62ac359",
+          "evaluation": {
+            "status": "pass",
+            "checks": {
+              "units": true,
+              "object_count": true,
+              "valid": true,
+              "solid": true,
+              "pose_corners": true,
+              "vertices_inside": true,
+              "planar_faces": true,
+              "straight_edges": true,
+              "area": true,
+              "volume": true
+            },
+            "measurements": {
+              "units": "Millimeters",
+              "objects": [
+                {
+                  "valid": true,
+                  "solid": true,
+                  "minimum": [
+                    100.0,
+                    -40.0,
+                    15.0
+                  ],
+                  "dimensions": [
+                    89.28203230275511,
+                    40.0,
+                    25.0
+                  ],
+                  "volume": 40000.00000000001,
+                  "area": 8436.067977499792,
+                  "vertices": [
+                    [
+                      120.0,
+                      -40.0,
+                      15.0
+                    ],
+                    [
+                      120.0,
+                      -40.0,
+                      40.0
+                    ],
+                    [
+                      100.0,
+                      -5.358983848622458,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      15.0
+                    ],
+                    [
+                      100.0,
+                      -5.358983848622458,
+                      15.0
+                    ]
+                  ],
+                  "planar_faces": true,
+                  "straight_edges": true,
+                  "faces": [
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        110.0,
+                        -22.67949192431123,
+                        27.5
+                      ],
+                      "normal": [
+                        0.8660254037844386,
+                        0.5000000000000001,
+                        2.5052958156992557e-16
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        40.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        15.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        -1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        154.64101615137756,
+                        -20.0,
+                        27.5
+                      ],
+                      "normal": [
+                        -0.49999999999999983,
+                        0.8660254037844387,
+                        4.201055721315194e-17
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        144.64101615137756,
+                        -2.6794919243112285,
+                        27.500000000000004
+                      ],
+                      "normal": [
+                        0.05991526087921627,
+                        -0.9982034669914622,
+                        -1.3593177149227623e-17
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "artifact_sha256": "272f66956a7271cc59fbfa2dcd1a9b47a47a17dcb5b2356edde81ef7d62ac359",
+            "evaluation_runtime": {
+              "document": 268435457,
+              "marker": null,
+              "object_count": 0,
+              "path": null,
+              "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+              "version": "0.3.2.0",
+              "pid": 1665,
+              "docs": [
+                {
+                  "serial": 268435457,
+                  "path": null,
+                  "count": 0,
+                  "modified": true
+                }
+              ]
+            },
+            "evaluation_binary": {
+              "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+            },
+            "mode": "trusted_baseline"
+          }
+        },
+        {
+          "id": "task-1-pair-2-candidate",
+          "family": "posed-solids",
+          "available": true,
+          "source": "experiments/runs/workflow-binary-20260908-222035-fbf21e63/task-1-pair-2-candidate",
+          "source_sha256": "bfbb13176997fa33cd0fb960141ecc011f963fa69f1b7a5bc305c8494dcf739d",
+          "session_status": "completed",
+          "elapsed_seconds": 27.138914834009483,
+          "task_verdict": "pass",
+          "agent_claim_complete": true,
+          "evaluation_sha256": "16ad5f840bfe8912ca9399372dbfa3c2c7a4f838ce1b82485822e6b0f4636c32",
+          "metrics": {
+            "mcp_attempts": 6,
+            "completed_calls": 6,
+            "unfinished_calls": 0,
+            "failed_calls": 0,
+            "failures_by_tool": {},
+            "tools": {
+              "analyze_objects": 1,
+              "create_object": 1,
+              "delete_object": 1,
+              "extrude_curve": 1,
+              "get_objects": 2
+            },
+            "commands": {},
+            "schema_queries": 0,
+            "delete_calls": 0,
+            "usage": {
+              "input_tokens": 109236,
+              "cached_input_tokens": 94464,
+              "output_tokens": 736,
+              "reasoning_output_tokens": 169
+            },
+            "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+          },
+          "comparison_eligible": false,
+          "comparison_blockers": [
+            "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+          ],
+          "arm": "candidate",
+          "pair": 2,
+          "task": "experiments/tasks/posed_prism.json",
+          "image": "assets/campaign-1-task-1-pair-2-candidate.png",
+          "image_sha256": "aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d",
+          "model_sha256": "069bbdd4687c25053ae2ae4b801d54fc224bc4c3d8325fba925c32be0a9ef28a",
+          "evaluation": {
+            "status": "pass",
+            "checks": {
+              "units": true,
+              "object_count": true,
+              "valid": true,
+              "solid": true,
+              "pose_corners": true,
+              "vertices_inside": true,
+              "planar_faces": true,
+              "straight_edges": true,
+              "area": true,
+              "volume": true
+            },
+            "measurements": {
+              "units": "Millimeters",
+              "objects": [
+                {
+                  "valid": true,
+                  "solid": true,
+                  "minimum": [
+                    100.0,
+                    -40.0,
+                    15.0
+                  ],
+                  "dimensions": [
+                    89.28203230275511,
+                    40.0,
+                    25.0
+                  ],
+                  "volume": 40000.00000000001,
+                  "area": 8436.067977499793,
+                  "vertices": [
+                    [
+                      120.0,
+                      -40.0,
+                      15.0
+                    ],
+                    [
+                      120.0,
+                      -40.0,
+                      40.0
+                    ],
+                    [
+                      100.0,
+                      -5.35898384862245,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      15.0
+                    ],
+                    [
+                      100.0,
+                      -5.35898384862245,
+                      15.0
+                    ]
+                  ],
+                  "planar_faces": true,
+                  "straight_edges": true,
+                  "faces": [
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        110.0,
+                        -22.679491924311225,
+                        27.5
+                      ],
+                      "normal": [
+                        0.8660254037844386,
+                        0.5,
+                        2.5052958156992557e-16
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        40.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        15.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        -1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        154.64101615137756,
+                        -20.0,
+                        27.5
+                      ],
+                      "normal": [
+                        -0.49999999999999983,
+                        0.8660254037844387,
+                        4.201055721315194e-17
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        144.64101615137756,
+                        -2.6794919243112245,
+                        27.500000000000004
+                      ],
+                      "normal": [
+                        0.059915260879216184,
+                        -0.9982034669914622,
+                        -6.389692079182873e-18
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "artifact_sha256": "069bbdd4687c25053ae2ae4b801d54fc224bc4c3d8325fba925c32be0a9ef28a",
+            "evaluation_runtime": {
+              "document": 268435457,
+              "marker": null,
+              "object_count": 0,
+              "path": null,
+              "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+              "version": "0.3.2.0",
+              "pid": 1665,
+              "docs": [
+                {
+                  "serial": 268435457,
+                  "path": null,
+                  "count": 0,
+                  "modified": true
+                }
+              ]
+            },
+            "evaluation_binary": {
+              "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+            },
+            "mode": "trusted_baseline"
+          }
+        },
+        {
+          "id": "task-1-pair-2-baseline",
+          "family": "posed-solids",
+          "available": true,
+          "source": "experiments/runs/workflow-binary-20260908-222035-fbf21e63/task-1-pair-2-baseline",
+          "source_sha256": "091570e426fd2bf8b5026714dd9e2fb087f5972dfc8f3c0d4d91b9ecb11665b3",
+          "session_status": "completed",
+          "elapsed_seconds": 28.646627750014886,
+          "task_verdict": "pass",
+          "agent_claim_complete": true,
+          "evaluation_sha256": "e67bd6ec1e2644ad1ae5ce0b52e58733a2a411a1c97de784837e1bdaced30e1e",
+          "metrics": {
+            "mcp_attempts": 6,
+            "completed_calls": 6,
+            "unfinished_calls": 0,
+            "failed_calls": 0,
+            "failures_by_tool": {},
+            "tools": {
+              "analyze_objects": 1,
+              "create_object": 1,
+              "delete_object": 1,
+              "extrude_curve": 1,
+              "get_objects": 2
+            },
+            "commands": {},
+            "schema_queries": 0,
+            "delete_calls": 0,
+            "usage": {
+              "input_tokens": 125377,
+              "cached_input_tokens": 102656,
+              "output_tokens": 759,
+              "reasoning_output_tokens": 151
+            },
+            "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+          },
+          "comparison_eligible": false,
+          "comparison_blockers": [
+            "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+          ],
+          "arm": "baseline",
+          "pair": 2,
+          "task": "experiments/tasks/posed_prism.json",
+          "image": "assets/campaign-1-task-1-pair-2-baseline.png",
+          "image_sha256": "aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d",
+          "model_sha256": "197f00f3dbcc1a66720c149e6b235362fd0aa6fcd5bbd156aa766342b12b874e",
+          "evaluation": {
+            "status": "pass",
+            "checks": {
+              "units": true,
+              "object_count": true,
+              "valid": true,
+              "solid": true,
+              "pose_corners": true,
+              "vertices_inside": true,
+              "planar_faces": true,
+              "straight_edges": true,
+              "area": true,
+              "volume": true
+            },
+            "measurements": {
+              "units": "Millimeters",
+              "objects": [
+                {
+                  "valid": true,
+                  "solid": true,
+                  "minimum": [
+                    100.0,
+                    -40.0,
+                    15.0
+                  ],
+                  "dimensions": [
+                    89.28203230275511,
+                    40.0,
+                    25.0
+                  ],
+                  "volume": 40000.00000000001,
+                  "area": 8436.067977499792,
+                  "vertices": [
+                    [
+                      120.0,
+                      -40.0,
+                      15.0
+                    ],
+                    [
+                      120.0,
+                      -40.0,
+                      40.0
+                    ],
+                    [
+                      100.0,
+                      -5.358983848622458,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      15.0
+                    ],
+                    [
+                      100.0,
+                      -5.358983848622458,
+                      15.0
+                    ]
+                  ],
+                  "planar_faces": true,
+                  "straight_edges": true,
+                  "faces": [
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        110.0,
+                        -22.67949192431123,
+                        27.5
+                      ],
+                      "normal": [
+                        0.8660254037844386,
+                        0.5000000000000001,
+                        2.5052958156992557e-16
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        40.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        15.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        -1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        154.64101615137756,
+                        -20.0,
+                        27.5
+                      ],
+                      "normal": [
+                        -0.49999999999999983,
+                        0.8660254037844387,
+                        4.201055721315194e-17
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        144.64101615137756,
+                        -2.6794919243112285,
+                        27.500000000000004
+                      ],
+                      "normal": [
+                        0.05991526087921627,
+                        -0.9982034669914622,
+                        -1.3593177149227623e-17
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "artifact_sha256": "197f00f3dbcc1a66720c149e6b235362fd0aa6fcd5bbd156aa766342b12b874e",
+            "evaluation_runtime": {
+              "document": 268435457,
+              "marker": null,
+              "object_count": 0,
+              "path": null,
+              "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+              "version": "0.3.2.0",
+              "pid": 1665,
+              "docs": [
+                {
+                  "serial": 268435457,
+                  "path": null,
+                  "count": 0,
+                  "modified": true
+                }
+              ]
+            },
+            "evaluation_binary": {
+              "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+            },
+            "mode": "trusted_baseline"
+          }
+        }
+      ],
+      "final_runtime": {
+        "document": 268435457,
+        "marker": null,
+        "object_count": 0,
+        "path": null,
+        "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+        "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+        "version": "0.3.2.0",
+        "pid": 1665,
+        "docs": [
+          {
+            "serial": 268435457,
+            "path": null,
+            "count": 0,
+            "modified": true
+          }
+        ]
+      }
+    },
+    {
+      "run": "runs/workflow-binary-20260908-222036-73d328c7",
+      "comparison": {
+        "status": "no_benefit_established",
+        "tasks": {
+          "experiments/tasks/posed_prism.json": {
+            "baseline": {
+              "runs": 2,
+              "passes": 2,
+              "failed_calls": 0,
+              "median_calls": 6.0,
+              "median_seconds": 32.40432647900889
+            },
+            "candidate": {
+              "runs": 2,
+              "passes": 2,
+              "failed_calls": 0,
+              "median_calls": 6.5,
+              "median_seconds": 34.45853654151142
+            },
+            "family": "posed-solids",
+            "correctness_regression": false,
+            "observed_benefit": false
+          }
+        },
+        "runs": [
+          {
+            "id": "task-1-pair-1-baseline",
+            "family": "posed-solids",
+            "available": true,
+            "source": "experiments/runs/workflow-binary-20260908-222036-73d328c7/task-1-pair-1-baseline",
+            "source_sha256": "c97166163d7d4e3ab94d1fee99b176111c585b9fa524e171e4fe3956fbd40de5",
+            "session_status": "completed",
+            "elapsed_seconds": 30.788242750015343,
+            "task_verdict": "pass",
+            "agent_claim_complete": true,
+            "evaluation_sha256": "a622d7326e367021fe072e531900738048a1523ed90f7be1635ab4ae841f1ba0",
+            "metrics": {
+              "mcp_attempts": 7,
+              "completed_calls": 7,
+              "unfinished_calls": 0,
+              "failed_calls": 0,
+              "failures_by_tool": {},
+              "tools": {
+                "analyze_objects": 1,
+                "create_object": 1,
+                "delete_object": 1,
+                "extrude_curve": 1,
+                "get_object_info": 1,
+                "get_objects": 2
+              },
+              "commands": {},
+              "schema_queries": 0,
+              "delete_calls": 0,
+              "usage": {
+                "input_tokens": 149637,
+                "cached_input_tokens": 121088,
+                "output_tokens": 871,
+                "reasoning_output_tokens": 190
+              },
+              "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+            },
+            "comparison_eligible": false,
+            "comparison_blockers": [
+              "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+            ],
+            "arm": "baseline",
+            "pair": 1,
+            "task": "experiments/tasks/posed_prism.json"
+          },
+          {
+            "id": "task-1-pair-1-candidate",
+            "family": "posed-solids",
+            "available": true,
+            "source": "experiments/runs/workflow-binary-20260908-222036-73d328c7/task-1-pair-1-candidate",
+            "source_sha256": "0ad4ec01e82314544a9050e54b0741f48db536a53ee5bad61fda2d25449c901b",
+            "session_status": "completed",
+            "elapsed_seconds": 32.21369012500509,
+            "task_verdict": "pass",
+            "agent_claim_complete": true,
+            "evaluation_sha256": "606d388863bb8ac2eb74f0e112a2006d10611e4b151ba97cfeb88186dd819a8d",
+            "metrics": {
+              "mcp_attempts": 7,
+              "completed_calls": 7,
+              "unfinished_calls": 0,
+              "failed_calls": 0,
+              "failures_by_tool": {},
+              "tools": {
+                "analyze_objects": 1,
+                "create_object": 1,
+                "delete_object": 1,
+                "extrude_curve": 1,
+                "get_object_info": 1,
+                "get_objects": 2
+              },
+              "commands": {},
+              "schema_queries": 0,
+              "delete_calls": 0,
+              "usage": {
+                "input_tokens": 171403,
+                "cached_input_tokens": 149248,
+                "output_tokens": 984,
+                "reasoning_output_tokens": 263
+              },
+              "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+            },
+            "comparison_eligible": false,
+            "comparison_blockers": [
+              "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+            ],
+            "arm": "candidate",
+            "pair": 1,
+            "task": "experiments/tasks/posed_prism.json"
+          },
+          {
+            "id": "task-1-pair-2-candidate",
+            "family": "posed-solids",
+            "available": true,
+            "source": "experiments/runs/workflow-binary-20260908-222036-73d328c7/task-1-pair-2-candidate",
+            "source_sha256": "8516f63ab5c0e2279e42cbb6dacf264e3fc63cb0dfee217d889268cb96ad36be",
+            "session_status": "completed",
+            "elapsed_seconds": 36.703382958017755,
+            "task_verdict": "pass",
+            "agent_claim_complete": true,
+            "evaluation_sha256": "1c03b66a0b96e46b87c499872e6938a7ceb89a2563335f0159b32f69addb69e2",
+            "metrics": {
+              "mcp_attempts": 6,
+              "completed_calls": 6,
+              "unfinished_calls": 0,
+              "failed_calls": 0,
+              "failures_by_tool": {},
+              "tools": {
+                "analyze_objects": 1,
+                "create_object": 1,
+                "delete_object": 1,
+                "extrude_curve": 1,
+                "get_objects": 2
+              },
+              "commands": {},
+              "schema_queries": 0,
+              "delete_calls": 0,
+              "usage": {
+                "input_tokens": 164088,
+                "cached_input_tokens": 145152,
+                "output_tokens": 876,
+                "reasoning_output_tokens": 214
+              },
+              "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+            },
+            "comparison_eligible": false,
+            "comparison_blockers": [
+              "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+            ],
+            "arm": "candidate",
+            "pair": 2,
+            "task": "experiments/tasks/posed_prism.json"
+          },
+          {
+            "id": "task-1-pair-2-baseline",
+            "family": "posed-solids",
+            "available": true,
+            "source": "experiments/runs/workflow-binary-20260908-222036-73d328c7/task-1-pair-2-baseline",
+            "source_sha256": "e73eeb8cd18af22675193c9ae8fd3a87603d1eef0b38193144b0904a6bedc75d",
+            "session_status": "completed",
+            "elapsed_seconds": 34.02041020800243,
+            "task_verdict": "pass",
+            "agent_claim_complete": true,
+            "evaluation_sha256": "2f3aca7f80f799567b02e760e186388f43b330f2b3284f507eaedf3fb7bfe1fd",
+            "metrics": {
+              "mcp_attempts": 5,
+              "completed_calls": 5,
+              "unfinished_calls": 0,
+              "failed_calls": 0,
+              "failures_by_tool": {},
+              "tools": {
+                "analyze_objects": 1,
+                "create_object": 1,
+                "delete_object": 1,
+                "extrude_curve": 1,
+                "get_objects": 1
+              },
+              "commands": {},
+              "schema_queries": 0,
+              "delete_calls": 0,
+              "usage": {
+                "input_tokens": 94832,
+                "cached_input_tokens": 79360,
+                "output_tokens": 691,
+                "reasoning_output_tokens": 160
+              },
+              "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+            },
+            "comparison_eligible": false,
+            "comparison_blockers": [
+              "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+            ],
+            "arm": "baseline",
+            "pair": 2,
+            "task": "experiments/tasks/posed_prism.json"
+          }
+        ],
+        "promotion_authorized": false,
+        "limitations": [
+          "Two repeats per arm/task; descriptive evidence, not statistical proof.",
+          "Requested model alias/effort pinned; backend snapshot unavailable.",
+          "Panel discovery tasks are not held-out families.",
+          "Correctness precedes efficiency; tokens/time are secondary observations.",
+          "Evaluation uses a fresh trusted baseline process after candidate shutdown; this is not an adversarial OS sandbox."
+        ],
+        "evaluation_mode": "trusted_baseline"
+      },
+      "rows": [
+        {
+          "id": "task-1-pair-1-baseline",
+          "family": "posed-solids",
+          "available": true,
+          "source": "experiments/runs/workflow-binary-20260908-222036-73d328c7/task-1-pair-1-baseline",
+          "source_sha256": "c97166163d7d4e3ab94d1fee99b176111c585b9fa524e171e4fe3956fbd40de5",
+          "session_status": "completed",
+          "elapsed_seconds": 30.788242750015343,
+          "task_verdict": "pass",
+          "agent_claim_complete": true,
+          "evaluation_sha256": "a622d7326e367021fe072e531900738048a1523ed90f7be1635ab4ae841f1ba0",
+          "metrics": {
+            "mcp_attempts": 7,
+            "completed_calls": 7,
+            "unfinished_calls": 0,
+            "failed_calls": 0,
+            "failures_by_tool": {},
+            "tools": {
+              "analyze_objects": 1,
+              "create_object": 1,
+              "delete_object": 1,
+              "extrude_curve": 1,
+              "get_object_info": 1,
+              "get_objects": 2
+            },
+            "commands": {},
+            "schema_queries": 0,
+            "delete_calls": 0,
+            "usage": {
+              "input_tokens": 149637,
+              "cached_input_tokens": 121088,
+              "output_tokens": 871,
+              "reasoning_output_tokens": 190
+            },
+            "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+          },
+          "comparison_eligible": false,
+          "comparison_blockers": [
+            "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+          ],
+          "arm": "baseline",
+          "pair": 1,
+          "task": "experiments/tasks/posed_prism.json",
+          "image": "assets/campaign-2-task-1-pair-1-baseline.png",
+          "image_sha256": "aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d",
+          "model_sha256": "67895e71a9bacc0f3fd74bde90abddbae0fe0fdb480ebdd6590f66a474d53610",
+          "evaluation": {
+            "status": "pass",
+            "checks": {
+              "units": true,
+              "object_count": true,
+              "valid": true,
+              "solid": true,
+              "pose_corners": true,
+              "vertices_inside": true,
+              "planar_faces": true,
+              "straight_edges": true,
+              "area": true,
+              "volume": true
+            },
+            "measurements": {
+              "units": "Millimeters",
+              "objects": [
+                {
+                  "valid": true,
+                  "solid": true,
+                  "minimum": [
+                    100.0,
+                    -40.0,
+                    15.0
+                  ],
+                  "dimensions": [
+                    89.28203230275511,
+                    40.0,
+                    25.0
+                  ],
+                  "volume": 40000.00000000001,
+                  "area": 8436.067977499792,
+                  "vertices": [
+                    [
+                      120.0,
+                      -40.0,
+                      15.0
+                    ],
+                    [
+                      120.0,
+                      -40.0,
+                      40.0
+                    ],
+                    [
+                      100.0,
+                      -5.358983848622458,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      15.0
+                    ],
+                    [
+                      100.0,
+                      -5.358983848622458,
+                      15.0
+                    ]
+                  ],
+                  "planar_faces": true,
+                  "straight_edges": true,
+                  "faces": [
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        110.0,
+                        -22.67949192431123,
+                        27.5
+                      ],
+                      "normal": [
+                        0.8660254037844386,
+                        0.5000000000000001,
+                        2.5052958156992557e-16
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        40.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        15.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        -1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        154.64101615137756,
+                        -20.0,
+                        27.5
+                      ],
+                      "normal": [
+                        -0.49999999999999983,
+                        0.8660254037844387,
+                        4.201055721315194e-17
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        144.64101615137756,
+                        -2.6794919243112285,
+                        27.500000000000004
+                      ],
+                      "normal": [
+                        0.05991526087921627,
+                        -0.9982034669914622,
+                        -1.3593177149227623e-17
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "artifact_sha256": "67895e71a9bacc0f3fd74bde90abddbae0fe0fdb480ebdd6590f66a474d53610",
+            "evaluation_runtime": {
+              "document": 268435457,
+              "marker": null,
+              "object_count": 0,
+              "path": null,
+              "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+              "version": "0.3.2.0",
+              "pid": 12790,
+              "docs": [
+                {
+                  "serial": 268435457,
+                  "path": null,
+                  "count": 0,
+                  "modified": true
+                }
+              ]
+            },
+            "evaluation_binary": {
+              "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+            },
+            "mode": "trusted_baseline"
+          }
+        },
+        {
+          "id": "task-1-pair-1-candidate",
+          "family": "posed-solids",
+          "available": true,
+          "source": "experiments/runs/workflow-binary-20260908-222036-73d328c7/task-1-pair-1-candidate",
+          "source_sha256": "0ad4ec01e82314544a9050e54b0741f48db536a53ee5bad61fda2d25449c901b",
+          "session_status": "completed",
+          "elapsed_seconds": 32.21369012500509,
+          "task_verdict": "pass",
+          "agent_claim_complete": true,
+          "evaluation_sha256": "606d388863bb8ac2eb74f0e112a2006d10611e4b151ba97cfeb88186dd819a8d",
+          "metrics": {
+            "mcp_attempts": 7,
+            "completed_calls": 7,
+            "unfinished_calls": 0,
+            "failed_calls": 0,
+            "failures_by_tool": {},
+            "tools": {
+              "analyze_objects": 1,
+              "create_object": 1,
+              "delete_object": 1,
+              "extrude_curve": 1,
+              "get_object_info": 1,
+              "get_objects": 2
+            },
+            "commands": {},
+            "schema_queries": 0,
+            "delete_calls": 0,
+            "usage": {
+              "input_tokens": 171403,
+              "cached_input_tokens": 149248,
+              "output_tokens": 984,
+              "reasoning_output_tokens": 263
+            },
+            "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+          },
+          "comparison_eligible": false,
+          "comparison_blockers": [
+            "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+          ],
+          "arm": "candidate",
+          "pair": 1,
+          "task": "experiments/tasks/posed_prism.json",
+          "image": "assets/campaign-2-task-1-pair-1-candidate.png",
+          "image_sha256": "aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d",
+          "model_sha256": "110b80097097ac88b2731fbca4d1ebae98d33819546bb09ea844184d542f6230",
+          "evaluation": {
+            "status": "pass",
+            "checks": {
+              "units": true,
+              "object_count": true,
+              "valid": true,
+              "solid": true,
+              "pose_corners": true,
+              "vertices_inside": true,
+              "planar_faces": true,
+              "straight_edges": true,
+              "area": true,
+              "volume": true
+            },
+            "measurements": {
+              "units": "Millimeters",
+              "objects": [
+                {
+                  "valid": true,
+                  "solid": true,
+                  "minimum": [
+                    100.0,
+                    -40.0,
+                    15.0
+                  ],
+                  "dimensions": [
+                    89.28203230275511,
+                    40.0,
+                    25.0
+                  ],
+                  "volume": 40000.0,
+                  "area": 8436.067977499793,
+                  "vertices": [
+                    [
+                      120.0,
+                      -40.0,
+                      15.0
+                    ],
+                    [
+                      120.0,
+                      -40.0,
+                      40.0
+                    ],
+                    [
+                      100.0,
+                      -5.358983848622451,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      15.0
+                    ],
+                    [
+                      100.0,
+                      -5.358983848622451,
+                      15.0
+                    ]
+                  ],
+                  "planar_faces": true,
+                  "straight_edges": true,
+                  "faces": [
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        110.0,
+                        -22.679491924311225,
+                        27.5
+                      ],
+                      "normal": [
+                        0.8660254037844386,
+                        0.5,
+                        2.5052958156992557e-16
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        40.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        15.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        -1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        154.64101615137756,
+                        -20.0,
+                        27.5
+                      ],
+                      "normal": [
+                        -0.49999999999999983,
+                        0.8660254037844387,
+                        4.201055721315194e-17
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        144.64101615137756,
+                        -2.679491924311225,
+                        27.500000000000004
+                      ],
+                      "normal": [
+                        0.05991526087921619,
+                        -0.9982034669914622,
+                        -1.0268491732283898e-17
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "artifact_sha256": "110b80097097ac88b2731fbca4d1ebae98d33819546bb09ea844184d542f6230",
+            "evaluation_runtime": {
+              "document": 268435457,
+              "marker": null,
+              "object_count": 0,
+              "path": null,
+              "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+              "version": "0.3.2.0",
+              "pid": 12790,
+              "docs": [
+                {
+                  "serial": 268435457,
+                  "path": null,
+                  "count": 0,
+                  "modified": true
+                }
+              ]
+            },
+            "evaluation_binary": {
+              "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+            },
+            "mode": "trusted_baseline"
+          }
+        },
+        {
+          "id": "task-1-pair-2-candidate",
+          "family": "posed-solids",
+          "available": true,
+          "source": "experiments/runs/workflow-binary-20260908-222036-73d328c7/task-1-pair-2-candidate",
+          "source_sha256": "8516f63ab5c0e2279e42cbb6dacf264e3fc63cb0dfee217d889268cb96ad36be",
+          "session_status": "completed",
+          "elapsed_seconds": 36.703382958017755,
+          "task_verdict": "pass",
+          "agent_claim_complete": true,
+          "evaluation_sha256": "1c03b66a0b96e46b87c499872e6938a7ceb89a2563335f0159b32f69addb69e2",
+          "metrics": {
+            "mcp_attempts": 6,
+            "completed_calls": 6,
+            "unfinished_calls": 0,
+            "failed_calls": 0,
+            "failures_by_tool": {},
+            "tools": {
+              "analyze_objects": 1,
+              "create_object": 1,
+              "delete_object": 1,
+              "extrude_curve": 1,
+              "get_objects": 2
+            },
+            "commands": {},
+            "schema_queries": 0,
+            "delete_calls": 0,
+            "usage": {
+              "input_tokens": 164088,
+              "cached_input_tokens": 145152,
+              "output_tokens": 876,
+              "reasoning_output_tokens": 214
+            },
+            "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+          },
+          "comparison_eligible": false,
+          "comparison_blockers": [
+            "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+          ],
+          "arm": "candidate",
+          "pair": 2,
+          "task": "experiments/tasks/posed_prism.json",
+          "image": "assets/campaign-2-task-1-pair-2-candidate.png",
+          "image_sha256": "aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d",
+          "model_sha256": "eb05a2080550080ff71627b9e18812ca0d7ed2034aa8ad1ca06f5d09f317f8e6",
+          "evaluation": {
+            "status": "pass",
+            "checks": {
+              "units": true,
+              "object_count": true,
+              "valid": true,
+              "solid": true,
+              "pose_corners": true,
+              "vertices_inside": true,
+              "planar_faces": true,
+              "straight_edges": true,
+              "area": true,
+              "volume": true
+            },
+            "measurements": {
+              "units": "Millimeters",
+              "objects": [
+                {
+                  "valid": true,
+                  "solid": true,
+                  "minimum": [
+                    100.0,
+                    -40.0,
+                    15.0
+                  ],
+                  "dimensions": [
+                    89.28203230275511,
+                    40.0,
+                    25.0
+                  ],
+                  "volume": 40000.0,
+                  "area": 8436.067977499793,
+                  "vertices": [
+                    [
+                      120.0,
+                      -40.0,
+                      15.0
+                    ],
+                    [
+                      120.0,
+                      -40.0,
+                      40.0
+                    ],
+                    [
+                      100.0,
+                      -5.358983848622451,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      15.0
+                    ],
+                    [
+                      100.0,
+                      -5.358983848622451,
+                      15.0
+                    ]
+                  ],
+                  "planar_faces": true,
+                  "straight_edges": true,
+                  "faces": [
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        110.0,
+                        -22.679491924311225,
+                        27.5
+                      ],
+                      "normal": [
+                        0.8660254037844386,
+                        0.5,
+                        2.5052958156992557e-16
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        40.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        15.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        -1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        154.64101615137756,
+                        -20.0,
+                        27.5
+                      ],
+                      "normal": [
+                        -0.49999999999999983,
+                        0.8660254037844387,
+                        4.201055721315194e-17
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        144.64101615137756,
+                        -2.679491924311225,
+                        27.500000000000004
+                      ],
+                      "normal": [
+                        0.05991526087921619,
+                        -0.9982034669914622,
+                        -1.0268491732283898e-17
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "artifact_sha256": "eb05a2080550080ff71627b9e18812ca0d7ed2034aa8ad1ca06f5d09f317f8e6",
+            "evaluation_runtime": {
+              "document": 268435457,
+              "marker": null,
+              "object_count": 0,
+              "path": null,
+              "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+              "version": "0.3.2.0",
+              "pid": 12790,
+              "docs": [
+                {
+                  "serial": 268435457,
+                  "path": null,
+                  "count": 0,
+                  "modified": true
+                }
+              ]
+            },
+            "evaluation_binary": {
+              "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+            },
+            "mode": "trusted_baseline"
+          }
+        },
+        {
+          "id": "task-1-pair-2-baseline",
+          "family": "posed-solids",
+          "available": true,
+          "source": "experiments/runs/workflow-binary-20260908-222036-73d328c7/task-1-pair-2-baseline",
+          "source_sha256": "e73eeb8cd18af22675193c9ae8fd3a87603d1eef0b38193144b0904a6bedc75d",
+          "session_status": "completed",
+          "elapsed_seconds": 34.02041020800243,
+          "task_verdict": "pass",
+          "agent_claim_complete": true,
+          "evaluation_sha256": "2f3aca7f80f799567b02e760e186388f43b330f2b3284f507eaedf3fb7bfe1fd",
+          "metrics": {
+            "mcp_attempts": 5,
+            "completed_calls": 5,
+            "unfinished_calls": 0,
+            "failed_calls": 0,
+            "failures_by_tool": {},
+            "tools": {
+              "analyze_objects": 1,
+              "create_object": 1,
+              "delete_object": 1,
+              "extrude_curve": 1,
+              "get_objects": 1
+            },
+            "commands": {},
+            "schema_queries": 0,
+            "delete_calls": 0,
+            "usage": {
+              "input_tokens": 94832,
+              "cached_input_tokens": 79360,
+              "output_tokens": 691,
+              "reasoning_output_tokens": 160
+            },
+            "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+          },
+          "comparison_eligible": false,
+          "comparison_blockers": [
+            "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+          ],
+          "arm": "baseline",
+          "pair": 2,
+          "task": "experiments/tasks/posed_prism.json",
+          "image": "assets/campaign-2-task-1-pair-2-baseline.png",
+          "image_sha256": "aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d",
+          "model_sha256": "a1963057fe4f8668a790df52cad56abd2f10a141fb13d621ad9341f90ab0faa8",
+          "evaluation": {
+            "status": "pass",
+            "checks": {
+              "units": true,
+              "object_count": true,
+              "valid": true,
+              "solid": true,
+              "pose_corners": true,
+              "vertices_inside": true,
+              "planar_faces": true,
+              "straight_edges": true,
+              "area": true,
+              "volume": true
+            },
+            "measurements": {
+              "units": "Millimeters",
+              "objects": [
+                {
+                  "valid": true,
+                  "solid": true,
+                  "minimum": [
+                    100.0,
+                    -40.0,
+                    15.0
+                  ],
+                  "dimensions": [
+                    89.28203230275511,
+                    40.0,
+                    25.0
+                  ],
+                  "volume": 40000.00000000001,
+                  "area": 8436.067977499793,
+                  "vertices": [
+                    [
+                      120.0,
+                      -40.0,
+                      15.0
+                    ],
+                    [
+                      120.0,
+                      -40.0,
+                      40.0
+                    ],
+                    [
+                      100.0,
+                      -5.35898384862245,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      40.0
+                    ],
+                    [
+                      189.2820323027551,
+                      0.0,
+                      15.0
+                    ],
+                    [
+                      100.0,
+                      -5.35898384862245,
+                      15.0
+                    ]
+                  ],
+                  "planar_faces": true,
+                  "straight_edges": true,
+                  "faces": [
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        110.0,
+                        -22.679491924311225,
+                        27.5
+                      ],
+                      "normal": [
+                        0.8660254037844386,
+                        0.5,
+                        2.5052958156992557e-16
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        40.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        120.0,
+                        -40.0,
+                        15.0
+                      ],
+                      "normal": [
+                        -0.0,
+                        0.0,
+                        -1.0
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        154.64101615137756,
+                        -20.0,
+                        27.5
+                      ],
+                      "normal": [
+                        -0.49999999999999983,
+                        0.8660254037844387,
+                        4.201055721315194e-17
+                      ]
+                    },
+                    {
+                      "kind": "plane",
+                      "origin": [
+                        144.64101615137756,
+                        -2.6794919243112245,
+                        27.500000000000004
+                      ],
+                      "normal": [
+                        0.059915260879216184,
+                        -0.9982034669914622,
+                        -6.389692079182873e-18
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "artifact_sha256": "a1963057fe4f8668a790df52cad56abd2f10a141fb13d621ad9341f90ab0faa8",
+            "evaluation_runtime": {
+              "document": 268435457,
+              "marker": null,
+              "object_count": 0,
+              "path": null,
+              "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+              "version": "0.3.2.0",
+              "pid": 12790,
+              "docs": [
+                {
+                  "serial": 268435457,
+                  "path": null,
+                  "count": 0,
+                  "modified": true
+                }
+              ]
+            },
+            "evaluation_binary": {
+              "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+              "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+            },
+            "mode": "trusted_baseline"
+          }
+        }
+      ],
+      "final_runtime": {
+        "document": 268435457,
+        "marker": null,
+        "object_count": 0,
+        "path": null,
+        "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+        "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70",
+        "version": "0.3.2.0",
+        "pid": 12790,
+        "docs": [
+          {
+            "serial": 268435457,
+            "path": null,
+            "count": 0,
+            "modified": true
+          }
+        ]
+      }
+    }
+  ],
+  "source_selected": false
+}
