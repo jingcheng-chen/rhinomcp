@@ -30,10 +30,17 @@
   "claim": "Scoped trimmed-patch benefit with reserved-case validation and through-hole preservation; no broad generalization or adversarial isolation claim.",
   "unreleased_python_overlay": {
     "kind": "bundled_modeling_guidance",
-    "guide_version": "1",
+    "guide_version": "2",
     "full_tools": 70,
     "native_tools": 14,
-    "report": "experiments/workflow/guidance-distribution.json",
+    "report": "experiments/workflow/guidance-v2-distribution.json",
     "publication": "not_published"
+  },
+  "active_local_runtime_overlay": {
+    "source_revision": "47cb752",
+    "mvid": "addb4d4c-9ce9-4021-b777-53b34874e663",
+    "sha256": "309144c7118f9f7e56a4b76f3c0e50fbbef7e7a39176a77e481cca4acb5b8d70",
+    "report": "experiments/workflow/naked-edge-candidate.json",
+    "status": "supervisor_validated_edge_reporting_fix; historical planar selection journal unchanged"
   }
 }

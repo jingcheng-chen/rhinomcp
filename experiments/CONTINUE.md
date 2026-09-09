@@ -13,6 +13,33 @@ the revised cycle and implementation boundary. New capabilities, tool ergonomics
 reusable workflows are legitimate proposals even when no command is defective.
 A task success or additional tests alone do not establish an improved MCP tool.
 
+## Current handoff — coherent commits, edge repair and precision feasibility
+
+User requested meaningful commits, then continuation and a tolerance strategy.
+Existing work committed: 6754ca8 packaged guidance; bbd1cf1 infrastructure;
+c4f2bfc historical validation; a84d1bf fresh-task findings. Edge reporting fix
+47cb752 counts all topological naked Brep edges; loaded-plugin fixtures pass6/6.
+Build passed 0 warnings/errors. Prior empty document saved under
+runs/naked-edge-repair-20260909; previous binary archived there. Rhino restarted,
+local active MVID addb4d4c-9ce9-4021-b777-53b34874e663, PID58823,
+empty unsaved unclaimed doc268435457. Historical planar selection journal is
+unchanged; current-baseline.json records the new active local runtime overlay.
+
+Read workflow/PANEL_PRECISION.md and NAKED_EDGE_REPAIR.md. The existing SURFACE
+command with 3x3 interpolation points and degree[2,2] passes all3 deterministic
+posed polynomial panel checks at sampled errors below7e-14mm. Recipe distributed
+in guidance v2 verification topic, with clearer SURFACE interpolation semantics.
+Clean wheel/sdist smoke passes;629 developer tests pass. Local artifacts only.
+Fresh reserved agent run workflow-baseline-20260909-184415-0e2b7f48 timed out
+at180sec after reading overview/transforms, before construction. No geometry
+verdict; all traces/partial artifact preserved and cleanup verified. It did not
+read the recipe, so agent transfer remains unproven. No controller active.
+
+Next: investigate guidance discovery and bounded repeated agent use of the
+precision recipe; generic numerical shape comparison remains a product gap.
+Exact representations where possible, measured adaptive refinement otherwise;
+finite sampled checks are not continuous certified tolerance bounds.
+
 ## Current handoff — fresh-task discovery completed
 
 Four new parameterized tasks with the unchanged guidance: 3/4 geometry passes,

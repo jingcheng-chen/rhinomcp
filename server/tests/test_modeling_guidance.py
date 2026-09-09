@@ -17,7 +17,7 @@ def test_offline_interfaces_share_packaged_content(topic, monkeypatch):
 
     monkeypatch.setattr("rhinomcp.server.get_rhino_connection", fail)
     result = get_modeling_guidance(topic)
-    assert result["guidance_version"] == "1"
+    assert result["guidance_version"] == "2"
     assert result["package_version"]
     assert result["content"].startswith("# ")
     assert result["content"] == modeling_guidance_resource(topic)

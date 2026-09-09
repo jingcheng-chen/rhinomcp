@@ -1,0 +1,156 @@
+{
+  "rows": [
+    {
+      "task": "panel_raised",
+      "evaluation": {
+        "status": "pass",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": true,
+          "reference_to_surface": true,
+          "surface_to_reference": true,
+          "rectangular_boundary": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "outer_loops": 1,
+              "inner_loops": 0,
+              "min": [
+                0.0,
+                0.0,
+                -4.575184690983942e-15
+              ],
+              "max": [
+                100.0,
+                79.99999999999999,
+                19.999999999999993
+              ],
+              "reference_error": 6.453824896576403e-14,
+              "surface_error": 2.842170943040401e-14,
+              "boundary_error": 2.842170943040401e-14
+            }
+          ]
+        },
+        "limitation": "41\u00d741 bidirectional samples and 41 samples per edge; not a continuous Hausdorff bound",
+        "artifact_sha256": "04e4e87a48550a2098300474bad47f261de1f3c2d75ea925dbfc1c1c25c6f4fe"
+      }
+    },
+    {
+      "task": "panel_depressed",
+      "evaluation": {
+        "status": "pass",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": true,
+          "reference_to_surface": true,
+          "surface_to_reference": true,
+          "rectangular_boundary": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "outer_loops": 1,
+              "inner_loops": 0,
+              "min": [
+                -1.4210854715202004e-14,
+                8.754247514054309e-15,
+                -14.99999999999999
+              ],
+              "max": [
+                100.0,
+                80.00000000000006,
+                2.8357941088930533e-14
+              ],
+              "reference_error": 6.370784376638489e-14,
+              "surface_error": 5.684341886080802e-14,
+              "boundary_error": 5.684341886080802e-14
+            }
+          ]
+        },
+        "limitation": "41\u00d741 bidirectional samples and 41 samples per edge; not a continuous Hausdorff bound",
+        "artifact_sha256": "1684565f85aecaa2abdecbf2c4c0620b21bca78b3501ccf2722b0a61708e8d93"
+      }
+    },
+    {
+      "task": "unseen_shallow_panel",
+      "evaluation": {
+        "status": "pass",
+        "checks": {
+          "one_object": true,
+          "millimeters": true,
+          "valid": true,
+          "single_open_face": true,
+          "one_outer_no_inner_loops": true,
+          "local_bounds": true,
+          "reference_to_surface": true,
+          "surface_to_reference": true,
+          "rectangular_boundary": true
+        },
+        "measurements": {
+          "units": "Millimeters",
+          "objects": [
+            {
+              "valid": true,
+              "solid": false,
+              "faces": 1,
+              "outer_loops": 1,
+              "inner_loops": 0,
+              "min": [
+                -1.7763568394002505e-15,
+                0.0,
+                -6.4946379754758296e-15
+              ],
+              "max": [
+                72.0,
+                46.0,
+                8.999999999999993
+              ],
+              "reference_error": 3.177954017774959e-14,
+              "surface_error": 2.2648549702353193e-14,
+              "boundary_error": 2.842170943040401e-14
+            }
+          ]
+        },
+        "limitation": "41\u00d741 bidirectional samples and 41 samples per edge; not a continuous Hausdorff bound",
+        "artifact_sha256": "1d101e2c539371ddac78813cec955d748201c2418b58c45bbf317d6cd92e6c42"
+      }
+    }
+  ],
+  "pass": true,
+  "claim": "Deterministic construction feasibility; no agent transfer claim.",
+  "runtime": {
+    "document": 268435457,
+    "marker": null,
+    "object_count": 0,
+    "path": null,
+    "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+    "mvid": "addb4d4c-9ce9-4021-b777-53b34874e663",
+    "version": "0.3.2.0",
+    "pid": 58823,
+    "docs": [
+      {
+        "serial": 268435457,
+        "path": null,
+        "count": 0,
+        "modified": true
+      }
+    ]
+  }
+}

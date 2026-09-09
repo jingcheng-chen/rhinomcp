@@ -1,0 +1,27 @@
+{
+  "guidance_version": "2",
+  "package_version": "0.3.2",
+  "publication": "local_unreleased_only",
+  "artifact_directory": "experiments/runs/guidance-v2-distribution-20260909",
+  "artifact_hashes": {
+    "rhinomcp-0.3.2.tar.gz": "25b1cbab1b0513e605e893c967dd50acfca71586f7c1795fcee29c5a2b522b4c",
+    ".gitignore": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+    "rhinomcp-0.3.2-py3-none-any.whl": "78b3f631e6568bded6aadd34d7397a5171310bb22f666b50addc772dcc1c0cbb"
+  },
+  "all_guides_match": true,
+  "clean_stdio": {
+    "package": "/private/tmp/rhinomcp-guidance-clean/lib/python3.13/site-packages/rhinomcp/__init__.py",
+    "tool_count": 70,
+    "topics": [
+      "overview",
+      "transforms",
+      "planar_regions",
+      "organization",
+      "verification",
+      "recovery"
+    ],
+    "offline_mcp_interfaces": "pass",
+    "invalid_topic_rejected": true
+  },
+  "tests_passed": 629
+}

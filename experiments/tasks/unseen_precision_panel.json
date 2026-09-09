@@ -1,0 +1,20 @@
+{
+  "id": "precision-panel-reserved-v1",
+  "type": "biquadratic_panel",
+  "instruction": "Build exactly one open curved panel as a single Brep face in millimeters. Locally, 0<=x<=84 and 0<=y<=52, its surface is z=16*12*(x/84)*(1-x/84)*(y/52)*(1-y/52). All four edges have local z=0 and the center has local z=12. Rotate the local shape +28 degrees about world X through the origin, then translate by [35,-22,41]. These specify final world coordinates. Shape tolerance is 0.05 mm. Leave no other objects. Verify the result and state which checks you performed and which remain unverified. Include guidance consulted and tool feedback in your summary.",
+  "dimensions": [
+    84,
+    52,
+    12
+  ],
+  "panel_height": 12,
+  "rotation_x_degrees": 28,
+  "translation": [
+    35,
+    -22,
+    41
+  ],
+  "units": "Millimeters",
+  "linear_tolerance": 0.05,
+  "volume_tolerance": 0.01
+}

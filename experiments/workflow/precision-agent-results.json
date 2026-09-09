@@ -1,0 +1,417 @@
+{
+  "run": "experiments/runs/workflow-baseline-20260909-184415-0e2b7f48",
+  "status": "timeout",
+  "task_verdict": "not_scored",
+  "calls": [
+    {
+      "attempt": 1,
+      "tool": "get_modeling_guidance",
+      "arguments": {
+        "topic": "overview"
+      },
+      "status": "returned",
+      "elapsed_seconds": 0.09805437497561797
+    },
+    {
+      "attempt": 2,
+      "tool": "get_modeling_guidance",
+      "arguments": {
+        "topic": "transforms"
+      },
+      "status": "returned",
+      "elapsed_seconds": 0.07877479097805917
+    },
+    {
+      "attempt": 3,
+      "tool": "create_object",
+      "arguments": {
+        "type": "SURFACE",
+        "params": {}
+      },
+      "status": "error",
+      "error": "Error executing tool create_object: Communication error with Rhino: Object reference not set to an instance of an object.",
+      "elapsed_seconds": 0.1300942919915542
+    },
+    {
+      "attempt": 4,
+      "tool": "create_object",
+      "arguments": {
+        "type": "SURFACE",
+        "params": {
+          "points": [
+            [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                26,
+                0
+              ],
+              [
+                0,
+                52,
+                0
+              ]
+            ],
+            [
+              [
+                42,
+                0,
+                0
+              ],
+              [
+                42,
+                26,
+                48
+              ],
+              [
+                42,
+                52,
+                0
+              ]
+            ],
+            [
+              [
+                84,
+                0,
+                0
+              ],
+              [
+                84,
+                26,
+                0
+              ],
+              [
+                84,
+                52,
+                0
+              ]
+            ]
+          ],
+          "count_u": 3,
+          "count_v": 3,
+          "degree_u": 2,
+          "degree_v": 2
+        }
+      },
+      "status": "error",
+      "error": "Error executing tool create_object: Communication error with Rhino: Error reading double. Unexpected token: StartArray. Path 'params.params.points[0][0]', line 1, position 80.",
+      "elapsed_seconds": 0.11669479100964963
+    },
+    {
+      "attempt": 5,
+      "tool": "create_object",
+      "arguments": {
+        "type": "SURFACE",
+        "params": {
+          "points": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              26,
+              0
+            ],
+            [
+              0,
+              52,
+              0
+            ],
+            [
+              42,
+              0,
+              0
+            ],
+            [
+              42,
+              26,
+              48
+            ],
+            [
+              42,
+              52,
+              0
+            ],
+            [
+              84,
+              0,
+              0
+            ],
+            [
+              84,
+              26,
+              0
+            ],
+            [
+              84,
+              52,
+              0
+            ]
+          ],
+          "count_u": 3,
+          "count_v": 3,
+          "degree_u": 2,
+          "degree_v": 2
+        }
+      },
+      "status": "error",
+      "error": "Error executing tool create_object: Communication error with Rhino: SURFACE 'count' must exceed 'degree' in each direction.",
+      "elapsed_seconds": 0.11766595899825916
+    },
+    {
+      "attempt": 6,
+      "tool": "create_object",
+      "arguments": {
+        "type": "SURFACE",
+        "params": {
+          "points": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              26,
+              0
+            ],
+            [
+              0,
+              52,
+              0
+            ],
+            [
+              42,
+              0,
+              0
+            ],
+            [
+              42,
+              26,
+              48
+            ],
+            [
+              42,
+              52,
+              0
+            ],
+            [
+              84,
+              0,
+              0
+            ],
+            [
+              84,
+              26,
+              0
+            ],
+            [
+              84,
+              52,
+              0
+            ]
+          ],
+          "count_u": 3,
+          "count_v": 3,
+          "degree": [
+            2,
+            2
+          ]
+        }
+      },
+      "status": "error",
+      "error": "Error executing tool create_object: Communication error with Rhino: SURFACE 'count' must exceed 'degree' in each direction.",
+      "elapsed_seconds": 0.15437729202676564
+    },
+    {
+      "attempt": 7,
+      "tool": "create_object",
+      "arguments": {
+        "type": "SURFACE",
+        "params": {
+          "points": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              26,
+              0
+            ],
+            [
+              0,
+              52,
+              0
+            ],
+            [
+              42,
+              0,
+              0
+            ],
+            [
+              42,
+              26,
+              48
+            ],
+            [
+              42,
+              52,
+              0
+            ],
+            [
+              84,
+              0,
+              0
+            ],
+            [
+              84,
+              26,
+              0
+            ],
+            [
+              84,
+              52,
+              0
+            ]
+          ],
+          "count_u": 3,
+          "count_v": 3,
+          "u_degree": 2,
+          "v_degree": 2
+        }
+      },
+      "status": "error",
+      "error": "Error executing tool create_object: Communication error with Rhino: SURFACE 'count' must exceed 'degree' in each direction.",
+      "elapsed_seconds": 0.1171255839872174
+    }
+  ],
+  "preservation": {
+    "before": {
+      "objects": [],
+      "layers": [
+        {
+          "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+          "Name": "Default",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+          "Name": "Layer 01",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+          "Name": "Layer 02",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+          "Name": "Layer 03",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+          "Name": "Layer 04",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+          "Name": "Layer 05",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        }
+      ],
+      "units": "Millimeters",
+      "tolerance": 0.001
+    },
+    "after": {
+      "objects": [],
+      "layers": [
+        {
+          "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+          "Name": "Default",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+          "Name": "Layer 01",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+          "Name": "Layer 02",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+          "Name": "Layer 03",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+          "Name": "Layer 04",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        },
+        {
+          "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+          "Name": "Layer 05",
+          "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+          "IsVisible": true,
+          "IsLocked": false
+        }
+      ],
+      "units": "Millimeters",
+      "tolerance": 0.001
+    },
+    "preserved": true
+  },
+  "source_pins_preserved": true,
+  "runtime": {
+    "document": 268435457,
+    "marker": null,
+    "object_count": 0,
+    "path": null,
+    "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+    "mvid": "addb4d4c-9ce9-4021-b777-53b34874e663",
+    "version": "0.3.2.0",
+    "pid": 58823,
+    "docs": [
+      {
+        "serial": 268435457,
+        "path": null,
+        "count": 0,
+        "modified": true
+      }
+    ]
+  },
+  "claim": "Incomplete fresh-agent session after 180 seconds; no geometry constructed. Not a geometric verdict or evidence of transfer."
+}

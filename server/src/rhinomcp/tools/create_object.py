@@ -78,7 +78,8 @@ def create_object(
 
     For SURFACE, the params dictionary should contain the following keys:
     - count : ([number, number]) Tuple of two numbers defining number of points in the u,v directions
-    - points: List of [x, y, z] points that define the surface
+    - points: Flattened interpolation points (not control vertices), with the second grid index varying fastest.
+      For degree selection and a validated biquadratic panel recipe, consult get_modeling_guidance("verification").
     - degree: ([number, number], optional) Degree of the surface (default is 3, if user asked for smoother surface, degree can be higher)
     - closed: ([bool, bool], optional) Two booleans defining if the surface is closed in the u,v directions
 

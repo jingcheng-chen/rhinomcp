@@ -1,0 +1,11 @@
+{
+  "id": "precision-guidance-v2-reserved",
+  "call_budget": 24,
+  "timeout_seconds": 180,
+  "tasks": [
+    {
+      "family": "curved-panels",
+      "path": "experiments/tasks/unseen_precision_panel.json"
+    }
+  ]
+}
