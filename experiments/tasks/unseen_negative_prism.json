@@ -1,0 +1,20 @@
+{
+  "id": "negative_prism-v1",
+  "type": "triangular_prism_pose",
+  "instruction": "Create exactly one valid closed triangular prism. Its local base is (0,0,0),(63,0,0),(0,29,0), closed to the start, extruded 18 mm along local +Z. Rotate the local geometry -55 degrees about world Z through the origin, then translate by [-75,42,-16] mm. These specify final world coordinates, not rotation about the shape center. Preserve handedness and leave no construction objects. Verify the result. After modeling, include in your final summary which guidance topics you consulted, any confusing tool behavior or missing capability, and one specific improvement you would suggest. Report uncertainty honestly; do not claim checks you did not perform.",
+  "dimensions": [
+    63,
+    29,
+    18
+  ],
+  "translation": [
+    -75,
+    42,
+    -16
+  ],
+  "rotation_z_degrees": -55,
+  "units": "Millimeters",
+  "linear_tolerance": 0.001,
+  "volume_tolerance": 0.01,
+  "area_tolerance": 0.01
+}

@@ -1,7 +1,7 @@
 # Continue autonomous RhinoMCP improvement
 
 This is the entry point for a development agent with no prior chat context.
-Last updated: 2026-09-08. Verify repository and application state before acting;
+Last updated: 2026-09-09. Verify repository and application state before acting;
 the previous session's running processes and document selection are not assumptions.
 
 ## Governing direction — user clarification, 2026-09-07
@@ -12,6 +12,274 @@ chair/cushion progression as the main objective. Read `workflow/README.md` first
 the revised cycle and implementation boundary. New capabilities, tool ergonomics and
 reusable workflows are legitimate proposals even when no command is defective.
 A task success or additional tests alone do not establish an improved MCP tool.
+
+## Current handoff — fresh-task discovery completed
+
+Four new parameterized tasks with the unchanged guidance: 3/4 geometry passes,
+46 calls, no failed agent calls. Read workflow/UNSEEN_GUIDANCE.md and
+unseen-guidance-results.json. Run workflow-baseline-20260909-182654-2ada6f48.
+The curved panel fails shape tolerance (0.44 mm vs 0.05); its sample points were
+accurate. A read-only saved-patch probe confirms AnalyzeObjects.cs excludes inner
+naked edges (reports 4 instead of 5). Prioritize a bounded reporting repair, then
+a tested curved construction/verification workflow. No production code changed.
+All sources/document state preserved; PID12790 and selected MVID unchanged,
+empty unclaimed document. No controller active. Prism qualitative feedback was
+omitted (summary Test); preserve this limitation. New task instances are now
+discovery cases, not eligible to be labeled future withheld cases.
+
+## Current handoff — distributable guidance implemented and live-checked
+
+User approved distributing reusable knowledge with MCP, with optional skills deriving
+from the same canonical source. This is now a roadmap acceptance requirement; read
+workflow/DISTRIBUTABLE_GUIDANCE.md. Six Markdown topics are packaged in server/src/
+rhinomcp/guides. Read-only get_modeling_guidance, a resource template, shared strategy
+prompt and server initialization instructions expose them. modify_object now states
+actual pivots and transform order. Layer guidance uses update_object_attributes.
+No geometry, TCP protocol or plugin code changed; no plugin build/install was needed.
+
+Clean wheel + sdist include every guide byte. A fresh wheel-installed environment
+outside the repo passes real stdio initialize/list/call/read/prompt checks without
+Rhino. The clean test found MCP 2.x incompatible with existing FastMCP code; pyproject
+and uv.lock now constrain mcp>=1.16.0,<2. Reusable check:
+server/verify_guidance_install.py. 629 developer tests and lint pass. Artifacts/logs:
+runs/guidance-distribution-20260909; portable guidance-distribution.json. Version
+remains 0.3.2 in these LOCAL UNRELEASED builds. No publishing/push occurred.
+
+Fresh guided Claude pilot completes: runs/workflow-baseline-20260909-125308-0fc34223.
+Same sonnet/medium, unchanged three tasks; all three models pass, 20 attempts, zero
+failed calls, 98.46 modeling seconds. Patch agent reads transforms and planar_regions
+and passes the formerly failed pose. All source pins and document fingerprints
+preserved; images on roadmap #distributed-guidance. This is initial usability,
+not a repeated controlled comparison; catalog, instructions and wording changed
+as one bundle. Old failure remains retained. No controller remains running.
+
+Full MCP catalog now 70 tools; native pilot 14. Benchmark instructions match production,
+and source pins include guide Markdown. Historical comparisons must use archived
+sources. Current selected binary remains planar MVID f2c73913-0e83-4d95-9eb5-273420f8ca70,
+PID 12790, empty unsaved unclaimed doc 268435457, modified=true after cleanup.
+Production Python has an uncommitted guidance overlay beyond source commit22ffe04;
+do not represent the working tree as that commit alone. Preserve existing changes.
+
+Next: controlled repeated/withheld comparison of the declared guidance bundle,
+provider-role coverage and dedicated environment for hard isolation/unattended
+operation. Optional skill generation is not required for normal users and is not
+yet implemented. A new release version/publication is also not performed. Existing
+VM is untouched; environment choice remains pending.
+
+## Current handoff — Claude native modeling validated, pose failure retained
+
+User signed in locally; auth is confirmed. The three-task native pilot completed:
+runs/workflow-baseline-20260909-084123-58e4041b, log /tmp/rhinomcp-claude-live.log.
+Requested sonnet/medium; actual init model claude-sonnet-5. Exactly 13 approved MCP
+tools plus StructuredOutput, connected gateway, dontAsk. All 20 calls complete with
+zero failures; raw/normalized/gateway counts agree. Box and through-hole models pass;
+trimmed reserved patch fails world pose despite completion claim. All document
+fingerprints and source pins are preserved. Total modeling time 95.84 seconds.
+
+The patch topology, actual hole and area pass. Calls rotate about object center,
+then translate [-40,35,60] without world-origin compensation. Expected local residual
+[0,-2.5765358565,11.6220021979] matches saved-file measurements to <1e-10.
+Public modify_object description omits the bbox-center pivot in _utils.cs:134.
+No planar-region defect is established. Next workflow experiment can compare generic
+pivot guidance on unchanged posed tasks; do not fix the task or retroactively pass
+this failure. No production changes/builds/installs occurred during this validation.
+
+Three actual images and portable evidence: workflow/claude-validation-results.json,
+workflow/CLAUDE_PROVIDER.md, roadmap #claude-validation. Full source snapshots and
+completed evidence hashes remain in the run. No controller remains active. Native
+modeling interoperability is validated; Claude binary comparison orchestration and
+planner/builder provider integration are not claimed. Hard isolation and unattended
+operation still require a dedicated environment; pending environment choice is
+unanswered and the existing VM is untouched.
+
+Final runtime verified: selected planar MVID f2c73913-0e83-4d95-9eb5-273420f8ca70,
+PID 12790, empty unsaved unclaimed doc 268435457, modified=true from cleanup.
+Prior signed-out/pilot-running statements below are historical. No source code
+changed this turn, so the previous 617 developer-test result was not rerun.
+
+## Latest retry — 2026-09-09
+
+User asked to try again. Claude Code 2.1.263 at /Users/chen/.local/bin/claude
+still reports loggedIn=false/authMethod=none. No API-key, auth-token, OAuth-token,
+base-URL override or alternate config-directory environment variable is present
+(only presence checked; no credential values read). No Claude agent was launched.
+Rhino responds with the selected planar MVID, PID 12790, empty unsaved unclaimed
+document 268435457, modified=true. No source/build/runtime change was needed.
+Authenticated Claude validation and the dedicated-environment choice remain pending.
+
+## Current handoff — campaign completed; environment validation remains
+
+User still requests continuation until the workflow-led roadmap is done. Do not
+resume historical chair construction. The roadmap is NOT fully done: authenticated
+Claude validation, hard judge isolation, broader transfer and unattended operation
+remain. No background controller or automation is intentionally left running.
+
+Selected production capability: create_planar_region, six production files committed
+locally as 22ffe046f42b96a58aff8dd56f6eb06080f2bc7e (no push). Full catalog 69, native
+benchmark interface 13, preservation-v4 79 checks. Runtime MVID
+f2c73913-0e83-4d95-9eb5-273420f8ca70, SHA256
+85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c.
+Last verified PID 12790, empty unsaved unclaimed document 268435457, modified=true
+from verified cleanup. Recheck before live work; use a new dedicated unmodified
+document for fresh preparation. Existing worktree infrastructure/docs are uncommitted.
+
+Completed capability evidence: trial runs/capability-20260908-185137-c39dd1c1/trial-529ffc4d
+passes 79 candidate checks, baseline/restored 61/79 as expected. Twelve-session
+comparison runs/workflow-binary-20260908-210711-5aea4e1e improves patches 0/4→4/4,
+solid preservation 2/2 per arm; 154 attempts, 908.55 seconds. Reserved cases are the
+same patch family. Source/runtime selection, rollback and reactivation pass in
+runs/selection-20260908-214357-b9bfc9f6. Read PLANAR_REGION_SELECTION.md.
+
+Completed checkpoint validation: runs/workflow-binary-20260908-220720-3c737caa.
+Paused after one session; a new controller resumed exactly three remaining sessions.
+First checkpoint unchanged, four models pass; 13 attempts, 71.94 modeling seconds.
+Selected baseline restored before judging. Eleven tests cover changed evidence,
+ledger drift, uncertain dispatch, replay and partially started judging refusal.
+Read workflow/CONTINUATION.md and checkpoint-results.json. Interrupted provider
+conversations and incomplete judging are not automatically resumed.
+
+Completed campaign: runs/campaign-20260908-222059-6176f1bc, stage exhausted.
+Children: runs/workflow-binary-20260908-222035-fbf21e63 and
+runs/workflow-binary-20260908-222036-73d328c7. Eight fresh posed-prism models pass;
+both older diagnostic binaries show no benefit. Ten controller tests pass. Aggregate
+49 attempts and 247.55 modeling seconds, within 8/200/1400 limits. Four supervised
+transitions and the verified document handoff pass; selected baseline is restored.
+No diagnostic source adoption. Every model screenshot is on the roadmap; portable
+results in workflow/campaign-results.json. Original source snapshots and completed
+evidence hashes archived before subsequent development. Do not rerun completed
+comparisons against evolved source pins. The first two incomplete preparations
+correctly rejected a modified document and remain preserved separately.
+
+Claude adapter: experiments/claude_provider.py via runner.run_session and native
+pilot --provider claude. Six tests pass; Python 3.11+ and explicit model/effort required.
+Raw and normalized events retained. Signed-out preflight blocks dispatch. Binary
+comparisons remain Codex-only until live Claude/environment equivalence is validated.
+Claude local auth remains loggedIn=false; an existing asynchronous question asks the
+user to sign in locally. Never request pasted credentials. Another pending question
+asks whether to provision a dedicated disposable VM or use a dedicated machine.
+The existing stopped Windows 11 VM is untouched. No reply has arrived. Read
+workflow/ISOLATED_ENVIRONMENT.md for the concrete provisioning and denial-test boundary.
+Do not claim process separation protects against hostile same-user native code.
+
+Final verification: **617 tests pass** (14 dependency warnings), lint passes and
+format checks pass for all experiment files plus the selected production wrapper.
+Repository-wide format check still flags 17 unchanged pre-existing server files;
+these were not reformatted outside the reviewed scope. git diff --check passes.
+The final roadmap has 133 actual images and 348 local references, with no broken
+links or duplicate IDs. Full log: /tmp/rhinomcp-final-tests.log. No active controller
+remains. Pending sign-in/environment questions require user input before their
+respective live validations; do not mark the full roadmap done.
+
+All sections below are historical where they conflict with this handoff.
+
+## Historical handoff — capability trial prepared; Mac locked
+
+**External blocker:** the native UI tool reported "The Mac is locked and automatic
+unlock could not unlock it" while creating a fresh trial document. Ask the user to
+unlock manually. Do not bypass the desktop lock or claim that the roadmap is done.
+The active user request remains to continue until the workflow-led roadmap is done.
+No future automation was installed. No agent/controller is intentionally left running.
+
+The new typed `create_planar_region` capability came from a fresh workflow planner,
+then a fresh bounded builder and a fresh review revision. Six exact files comprise
+the patch: Python wrapper, C# handler, command schema, command tests, protocol enum
+and envelope coverage. The coplanarity review was corrected with direct IsInPlane
+at linear tolerance and an explicit planar-face check. Inputs are preserved.
+Read `workflow/PLANAR_REGION_REVIEW.md`, `CAPABILITY_BUILDER.md`, and
+`workflow/planar-region-status.json`. Portable patch: `workflow/planar-region-candidate.patch`.
+
+Builder: `runs/capability-20260908-185137-c39dd1c1`.
+Prepared trial: `runs/capability-20260908-185137-c39dd1c1/trial-529ffc4d`.
+Stage **ready**, no runtime owner yet, candidate unbuilt/uninstalled/unadopted.
+Source/input hashes are now frozen by that trial; do not change pinned source while
+attempting to reuse it. Its scope/patch intake now supports declared new files while
+keeping the old defect gate unchanged. Thirteen capability gate tests pass.
+
+**Resume:** once the Mac is unlocked, verify current Rhino state, create a fresh
+empty unsaved dedicated document, then call `rhino_trial.claim_empty(trial_directory)`.
+Start the existing `experiments.trial run <absolute-trial-path> --timeout 1800` with
+absolute repository PYTHONPATH. Service hash-bound lifecycle tickets through the
+supervised desktop process in LIVE_TRIAL.md. The frozen suite has the prior 61
+preservation cases plus 18 planar-region cases; observed baseline expectations for
+the new unsupported command are false, and the candidate must pass all 79. An
+independent baseline probe preserved sources in all cases and retained 18 screenshots.
+The build/install step must follow local AGENTS.md copy instructions. No plugin was
+built during this development session, so the recorded baseline is still installed.
+
+Development suite: **548 pass**, plus the final focused 25 tests after selecting
+candidate-native sources without writing bytecode into frozen checkouts. Candidate
+Python/schema checks: **262 pass** in a separate scratch copy, with every source
+hash reverified afterward. Candidate C# compilation/live validity are NOT established.
+The candidate-native catalog was loaded from its selected source, all 12 pre-existing
+tool definitions match baseline exactly, and only create_planar_region is added.
+The new interface selection and deferred baseline evaluation support are ready for
+a prospective live comparison after the 79-case trial. Full deferred comparison is
+not yet live-validated; the separate eight-artifact trusted recheck did pass.
+
+Trimmed discovery completed: `runs/workflow-baseline-20260908-184425-6035a018`.
+It fails with two faces/extra cutter wall after 25 attempts, four failed calls and
+237.55 seconds, despite the completion claim. Saved model/image/trace and preservation
+are retained in `workflow/trimmed-discovery.json`; the roadmap shows the failure.
+Twenty-four fixture verdicts match twice; reserved modeling case remains unused.
+
+Last verified runtime before the lock: baseline MVID
+`326aaa12-b851-4c6a-afcb-45291e734a5c`, PID 46932, empty unclaimed unsaved document
+268435457, modified=true from test cleanup. Verify again; never assume user work is
+absent on resume. The failed UI call did not create a fresh document.
+
+Remaining roadmap work after unlock: complete capability live validation, then freeze
+repeated candidate-native comparisons using trusted-baseline evaluation and reserved
+cases; build further evaluator registrations for genuinely distinct validation tasks
+if warranted. Implement and validate guarded experimental selection/rollback and its
+resource/stop policy. Hard adversarial judge isolation, general automatic promotion,
+provider adapter/resume and the historical chair acceptance work remain incomplete.
+Do not promote the bounds candidate: completed panel comparison is baseline 4/4,
+candidate 2/4; all verdicts were independently reproduced after restoration.
+
+## Current handoff — binary comparison completed; trimmed discovery running
+
+User request (2026-09-08): continue until the active workflow-led roadmap is done.
+Do not stop after one bounded milestone merely to report progress. Historical chair
+scope was asked separately; absent a reply, continue the active MCP roadmap.
+
+Read `workflow/BINARY_COMPARISON.md`, `CAPABILITY_BUILDER.md`, and
+`workflow/EVALUATION_ISOLATION.md`. The reviewed binary comparator completed eight
+unchanged panel sessions: baseline 4/4 passes, bounds candidate 2/4. No benefit is
+established, and the candidate remains unadopted. All eight model images and portable
+pins/results are on the roadmap. Four supervised transitions succeeded; baseline
+was restored with `runtime_dirty=false`, `promoted=false`. Trial:
+`runs/workflow-binary-20260908-181813-4eec688b`. Do not rerun or alter it.
+
+A separate trusted-baseline recheck reproduced all eight verdicts after candidate
+shutdown (`runs/trusted-panel-recheck-20260908-184332`). `pilot.evaluate_saved` now
+supports deferred evaluation of hash-pinned artifacts; binary contracts may select
+`evaluation_mode: trusted_baseline`. Historical immediate evaluation remains the
+default. This separates reviewed modeling/evaluation processes; it is NOT an
+adversarial OS security sandbox. Full deferred comparator integration still needs
+live validation. Seven focused tests pass.
+
+`trimmed_planar_patch` now registers with the shared runner. Both offset and reserved
+analytic planar-with-hole fixtures calibrate: 24/24 expected verdicts, each repeated.
+The reserved modeling task has not been sent to an agent. Current discovery uses
+only `trimmed_offset.json`, the same 12 tools and pinned terra/medium settings.
+Its active controller log is `/tmp/rhinomcp-trimmed-discovery.log`. Do not modify
+pinned source/task/evaluator files until that session completes; inspect process,
+logs and runtime before any continuation. All 538 development tests passed before
+seven additional deferred-evaluation tests; relevant lint passes.
+
+A new exact-declaration capability builder/gateway exists outside the old defect
+route. Twelve integrity tests pass. It can generate the declared new Python/C#/schema
+files and protocol/envelope edits, but no fresh proposal has yet completed this
+route or its subsequent build/live validation. The existing trial controller does
+not yet accept these new-file candidates; integrate it without relaxing old gates.
+
+Next: record trimmed discovery, diagnose missing capability or workflow friction,
+complete a reviewed capability trial if evidence warrants it, validate held-out
+cases and the deferred comparison path, then complete guarded selection/recovery
+and update the roadmap's stale historical wording. Surface interpolation semantics
+are a separately recorded wording hypothesis; do not combine it with the unchanged
+bounds repair or rewrite completed failures. General automatic promotion and hard
+judge isolation are still incomplete. Production sources remain unchanged.
 
 ## Current handoff — panel evaluator calibrated; baseline discovery recorded
 
