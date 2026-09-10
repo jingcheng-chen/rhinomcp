@@ -800,7 +800,7 @@ Defined in `plugin/rhinomcp.csproj`:
 - Target framework: `net8.0`
 - `RhinoCommon` `8.17.25066.7001`
 - `Grasshopper` `8.17.25066.7001`
-- `Newtonsoft.Json` `13.0.3`
+- `Newtonsoft.Json` `13.0.3`, pinned to the version Rhino 8 bundles; the plugin binds to Rhino's copy at runtime, so never compile against a newer one
 - `Microsoft.CodeAnalysis.CSharp.Scripting` `4.8.0`
 - `System.Drawing.Common` `8.0.0`
 
