@@ -76,6 +76,15 @@ credentials anywhere; reinstall the plugin into a Rhino that holds user work.
   `CHANGELOG.md` has the details. The `harness` branch continues experimental work after that release.
 - Every Rhino connection now reads `describe_capabilities` once before its first
   command. Traces show that call; it is not an agent decision.
+- 2026-09-10 review: `main` was merged into `harness` (`4547c7d`), so this checkout's
+  production source is the unreleased 0.4.1 (attribute fix, lookup wording). The
+  selected runtime baseline stays the released 0.4.0 plugin; `select_release` will
+  refuse until 0.4.1 is tagged, then repeat M0 on it. PR #55 pins Newtonsoft.Json
+  to Rhino's bundled 13.0.3: the attribute failure was a 0.4.0 regression caused by
+  compiling against 13.0.4, whose new `JToken.ToString(Formatting)` overload Rhino's
+  loaded copy lacks. Never compile the plugin against a newer Newtonsoft than Rhino
+  bundles. In full-catalog runs, refusing and recording the three execution tools
+  (instead of executing them) is the recommended mitigation until M5.
 - M0 is complete. `workflow/current-baseline.json` selects released 0.4.0; the
   pre-release baseline and overlays are retained in `workflow/baseline-history.json`.
   Loaded identity verified: MVID `ee66d5ce-fb32-4807-9d17-5af8fe1458d2`, SHA256
