@@ -108,14 +108,25 @@ server/.venv/bin/python -m experiments.workflow.audit experiments/workflow/histo
 PYTHONPATH=/absolute/path/to/rhinomcp server/.venv/bin/python -m experiments.workflow.plan experiments/workflow/historical-audit.json
 ```
 
-## Baseline — released 0.4.0 (2026-09-09)
+## Baseline — released 0.4.1 (2026-09-10); recorded baseline still 0.4.0
 
-rhinomcp 0.4.0 (server on PyPI, plugin on Yak, tag `releases/0.4.0`) is the
-baseline for every new comparison. M0 has recorded the released identity in
-`current-baseline.json`, archived the planar selection and naked-edge overlay in
-`baseline-history.json`, and completed five fresh passing baseline observations.
-See [the report](REBASELINE_040.md) and [trace registry](release-040-runs.json). Connections now read `describe_capabilities` once before
-the first command; treat that entry in traces as infrastructure, not agent behavior.
+rhinomcp 0.4.1 (tag `releases/0.4.1`) is the baseline for every new comparison
+once M0b records its identity. Until then `current-baseline.json` names the
+released 0.4.0 recorded by M0 ([report](REBASELINE_040.md),
+[trace registry](release-040-runs.json)). 0.4.1 fixes `update_object_attributes`,
+which failed on every call in 0.4.0 and dominated the M2 flaw ranking, so rankings
+built from 0.4.0 runs are stale. Connections read `describe_capabilities` once
+before the first command; treat that entry in traces as infrastructure, not agent
+behavior.
+
+## Isolation — Parallels VM (decided 2026-09-10)
+
+Unattended operation runs candidates in a fresh Parallels guest restored from a
+clean snapshot; the host keeps the controller, evaluators and the trusted judge.
+The boundary, network policy and transport rules are in
+[ISOLATED_ENVIRONMENT.md](ISOLATED_ENVIRONMENT.md); the implementation steps M5a to
+M5d are in [CONTINUE.md](../CONTINUE.md). Until M5d is done, full-catalog runs on the
+host must refuse and record the three execution tools instead of running them.
 
 ## Later: Grasshopper harness
 
