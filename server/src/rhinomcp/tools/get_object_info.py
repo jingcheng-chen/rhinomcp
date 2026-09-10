@@ -8,8 +8,9 @@ def get_object_info(ctx: Context, id: str = None, name: str = None) -> Dict[str,
     """
     Get detailed information about a specific object in the Rhino document.
     The information contains the object's id, name, type, all custom user attributes and geometry info.
-    You can either provide the id or the object_name of the object to get information about.
-    If both are provided, the id will be used.
+    Provide at least one selector: id or name of the object to get information about.
+    If both are provided, id takes priority.
+    If neither selector is known, use get_objects first to discover objects and their ids or names.
 
     Returns:
     - A dictionary containing the object's information
