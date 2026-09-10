@@ -1,0 +1,466 @@
+{
+  "cycle": "M3b-2",
+  "decision": "reject",
+  "reason": "All 16 Codex saved models pass, but failed calls increase in both discovery tasks (4 to 5; 0 to 1). The generic comparator benefit_observed flag is not the stricter predeclared keep decision.",
+  "comparison": "experiments/runs/workflow-binary-20260910-150113-c655917f",
+  "comparison_sha256": "f844f8d2f5e5e02154b153e43b77dde6bebd927881514bcc113ba6329b996683",
+  "tasks": {
+    "experiments/tasks/join_closed_network.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 4,
+        "median_calls": 18.5,
+        "median_seconds": 101.68556716648163
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 5,
+        "median_calls": 21.0,
+        "median_seconds": 106.66732491648872
+      },
+      "family": "curve-network-joining",
+      "correctness_regression": false,
+      "observed_benefit": false
+    },
+    "experiments/tasks/table_assembly.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 15.5,
+        "median_seconds": 61.34997812547954
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 1,
+        "median_calls": 14.5,
+        "median_seconds": 59.11538768748869
+      },
+      "family": "small-assemblies",
+      "correctness_regression": false,
+      "observed_benefit": false
+    },
+    "experiments/tasks/projection_vertical.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 2,
+        "median_calls": 10.5,
+        "median_seconds": 65.06661566600087
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 2,
+        "median_calls": 11.0,
+        "median_seconds": 63.449893103999784
+      },
+      "family": "directional-curve-projection",
+      "correctness_regression": false,
+      "observed_benefit": false
+    },
+    "experiments/tasks/projection_oblique.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 1,
+        "median_calls": 13.0,
+        "median_seconds": 66.21566102051293
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 1,
+        "median_calls": 12.5,
+        "median_seconds": 61.5390805619827
+      },
+      "family": "directional-curve-projection",
+      "correctness_regression": false,
+      "observed_benefit": true
+    }
+  },
+  "runs": [
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-1-pair-1-baseline",
+      "family": "curve-network-joining",
+      "cohort": "released-0.4.1-m3b2-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-1-pair-1-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 94.3256473329966,
+      "source_sha256": "f85c633bfcdfda58aeebda6ea4f26a2ec07978fd52de86f53043f44e20c92f5c",
+      "evaluation_sha256": "630a95e33cc9aad0d38750b55a459ae666524347bebe1134a4f41dcc753945c9",
+      "metrics": {
+        "mcp_attempts": 17,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "execute_rhinoscript_python_code": 1,
+          "run_command": 1
+        }
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-1-pair-1-candidate",
+      "family": "curve-network-joining",
+      "cohort": "released-0.4.1-m3b2-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-1-pair-1-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 103.2923977500177,
+      "source_sha256": "3bb9bef4e39dd81b49d6acce1728a991101089e5e5b96d84c01723db49a1f32b",
+      "evaluation_sha256": "c1313c9f6fe287b36329f946da7615bed57ad04903d6f7e5d5aed6562f7f879e",
+      "metrics": {
+        "mcp_attempts": 19,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "execute_rhinoscript_python_code": 1,
+          "run_command": 1
+        }
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-1-pair-2-candidate",
+      "family": "curve-network-joining",
+      "cohort": "released-0.4.1-m3b2-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-1-pair-2-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 110.04225208295975,
+      "source_sha256": "4d3965297f378b162f23729fbca07eeb7ae9d71449ceb279d79d3ba4ac7c04ca",
+      "evaluation_sha256": "305f1149cd4d77aa61c66758b02b393cb3bc7f67ecab38b582fbb44244bb82bb",
+      "metrics": {
+        "mcp_attempts": 23,
+        "failed_calls": 3,
+        "failures_by_tool": {
+          "execute_rhinoscript_python_code": 1,
+          "run_command": 1,
+          "update_object_attributes": 1
+        }
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-1-pair-2-baseline",
+      "family": "curve-network-joining",
+      "cohort": "released-0.4.1-m3b2-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-1-pair-2-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 109.04548699996667,
+      "source_sha256": "36d8a2f66dae224516b98127f2d83f090ed69930a844bb12a4439214113f29d0",
+      "evaluation_sha256": "c49cc94806872ca31f233717bf7773c565eead646dc65bcbe614f48ba26c1916",
+      "metrics": {
+        "mcp_attempts": 20,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "execute_rhinocommon_csharp_code": 1,
+          "run_command": 1
+        }
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-2-pair-1-baseline",
+      "family": "small-assemblies",
+      "cohort": "released-0.4.1-m3b2-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-2-pair-1-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 60.96041166695068,
+      "source_sha256": "36dd31d38b366b8959692d0464e7556cb5162304eb3ec55f1d4534c90c186068",
+      "evaluation_sha256": "485072317cff7a3715888a520a23eee47592af9383f42592f2628e8b80adbead",
+      "metrics": {
+        "mcp_attempts": 16,
+        "failed_calls": 0,
+        "failures_by_tool": {}
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-2-pair-1-candidate",
+      "family": "small-assemblies",
+      "cohort": "released-0.4.1-m3b2-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-2-pair-1-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 63.300038832996506,
+      "source_sha256": "516b15c81b0b2fbe7528a0f5387e6fb9e4d8a3379db7d7cbe17c9fdce249c9b6",
+      "evaluation_sha256": "c583685451db715dcf5b726d5fdf22b6b19ea57fb173046e83eb00271718f931",
+      "metrics": {
+        "mcp_attempts": 16,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "get_object_info": 1
+        }
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-2-pair-2-candidate",
+      "family": "small-assemblies",
+      "cohort": "released-0.4.1-m3b2-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-2-pair-2-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 54.93073654198088,
+      "source_sha256": "5cfcfc5dc90a09a1206b77764464950334b86b0b9073dc74fffd39e8537e7032",
+      "evaluation_sha256": "68d45e05a64233e724d753a71c1aa72bc89bb50a13c555452088fdaf47cf1cc9",
+      "metrics": {
+        "mcp_attempts": 13,
+        "failed_calls": 0,
+        "failures_by_tool": {}
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-2-pair-2-baseline",
+      "family": "small-assemblies",
+      "cohort": "released-0.4.1-m3b2-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-2-pair-2-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 61.7395445840084,
+      "source_sha256": "ed3b676f46a5c2558794d9278888b51419a3030c153a4fc760fa8079a6740c74",
+      "evaluation_sha256": "d4aec69047695bf658b4db9fb419c9369c41a6f67a8c12c29e99cbfb5a990425",
+      "metrics": {
+        "mcp_attempts": 15,
+        "failed_calls": 0,
+        "failures_by_tool": {}
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-3-pair-1-baseline",
+      "family": "directional-curve-projection",
+      "cohort": "released-0.4.1-m3b2-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-3-pair-1-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 62.73644704098115,
+      "source_sha256": "4712d5d5a51a76c4107964cc73c7638925148dcaad3ccb38b6cc8bf75fae930e",
+      "evaluation_sha256": "14c7e2daaa0a5b581ed9b46d1f0778b3b9d610c836e2ac891961c7e3625cce64",
+      "metrics": {
+        "mcp_attempts": 11,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "update_object_attributes": 1
+        }
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-3-pair-1-candidate",
+      "family": "directional-curve-projection",
+      "cohort": "released-0.4.1-m3b2-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-3-pair-1-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 70.38267333299154,
+      "source_sha256": "d361a274f4b4db0d665f4f967483329431075c9c4073d332d5f64097543a8b86",
+      "evaluation_sha256": "dd4b6aa7fab66c9c1349d051ecdc070a44f241e666dac04258d402cd11cfd897",
+      "metrics": {
+        "mcp_attempts": 13,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "update_object_attributes": 1
+        }
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-3-pair-2-candidate",
+      "family": "directional-curve-projection",
+      "cohort": "released-0.4.1-m3b2-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-3-pair-2-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 56.517112875008024,
+      "source_sha256": "32420c98c3178f765e066b4731ac88a99e744f770b72727f6454386794ef841c",
+      "evaluation_sha256": "f0b250f202aec44e31ba00f04f6cdaa414a04d7c3860762683c34e7e165313b1",
+      "metrics": {
+        "mcp_attempts": 9,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "update_object_attributes": 1
+        }
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-3-pair-2-baseline",
+      "family": "directional-curve-projection",
+      "cohort": "released-0.4.1-m3b2-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-3-pair-2-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 67.3967842910206,
+      "source_sha256": "ae378a17b6309ef7074450dd62ab4cd363bd9b44d11f25e18617bf955e013018",
+      "evaluation_sha256": "a462774158991d169494eb80581b6bb9a4ff192d7c8085a0fced4e9603d1dc11",
+      "metrics": {
+        "mcp_attempts": 10,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "update_object_attributes": 1
+        }
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-4-pair-1-baseline",
+      "family": "directional-curve-projection",
+      "cohort": "released-0.4.1-m3b2-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-4-pair-1-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 63.58925650001038,
+      "source_sha256": "0df4294cf30f39c0e99d6135af0a73cf3e9cb0829e91da5cecf1855a79fff923",
+      "evaluation_sha256": "e91eda74fb6ead991b77eeff88dd0488572c6df7f587d2f2a3d4dfacefc7a847",
+      "metrics": {
+        "mcp_attempts": 12,
+        "failed_calls": 0,
+        "failures_by_tool": {}
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-4-pair-1-candidate",
+      "family": "directional-curve-projection",
+      "cohort": "released-0.4.1-m3b2-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-4-pair-1-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 67.75983508297941,
+      "source_sha256": "69284badf988faeb06a53f8d8e1e6b29e51f728b5118c45750dacbb510a4bb40",
+      "evaluation_sha256": "1edabe506313dea11c7cc427fff583988324706298b3f7dd46b97b154b258420",
+      "metrics": {
+        "mcp_attempts": 11,
+        "failed_calls": 0,
+        "failures_by_tool": {}
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-4-pair-2-candidate",
+      "family": "directional-curve-projection",
+      "cohort": "released-0.4.1-m3b2-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-4-pair-2-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 55.318326040985994,
+      "source_sha256": "64ac553f28b93366aee7be189e1e6f6701f0ded3ad62c6a37724432e673cebbe",
+      "evaluation_sha256": "8a06a00242c1339676868961ccc649621b940f5a506bce78d144eb3272865100",
+      "metrics": {
+        "mcp_attempts": 14,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "update_object_attributes": 1
+        }
+      },
+      "preserved": true
+    },
+    {
+      "id": "workflow-binary-20260910-150113-c655917f-task-4-pair-2-baseline",
+      "family": "directional-curve-projection",
+      "cohort": "released-0.4.1-m3b2-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-150113-c655917f/task-4-pair-2-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 68.84206554101547,
+      "source_sha256": "a7c7da8bb21aabe3b31978bf2fadfb65d10eec60248d68b083b92139797e563a",
+      "evaluation_sha256": "a7ae6468b28ee53a3704bd1357e4901aefd583097ddf99e38362034ed01a44b9",
+      "metrics": {
+        "mcp_attempts": 14,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "update_object_attributes": 1
+        }
+      },
+      "preserved": true
+    }
+  ],
+  "cross_agent": {
+    "registry": "experiments/runs/m3b2-claude-20260910-152822-18fd9d03/registry.json",
+    "runs": [
+      {
+        "id": "m3b2-claude-20260910-152822-18fd9d03-task-1-baseline",
+        "family": "curve-network-joining",
+        "cohort": "claude-baseline",
+        "source": "experiments/runs/m3b2-claude-20260910-152822-18fd9d03/task-1-baseline",
+        "session_status": "completed",
+        "task_verdict": "pass",
+        "elapsed_seconds": 35.41453041700879,
+        "source_sha256": "94ffe74ac4260c4cccbbe8fba76c49fa82bff3890fe50e36e8abac63e90b625c",
+        "evaluation_sha256": "a72dca081d2e5114fce5dde17b982915d01f232a315f5edbc4b80240d9caaca3",
+        "metrics": {
+          "mcp_attempts": 14,
+          "failed_calls": 0,
+          "failures_by_tool": {}
+        },
+        "preserved": true
+      },
+      {
+        "id": "m3b2-claude-20260910-152822-18fd9d03-task-1-candidate",
+        "family": "curve-network-joining",
+        "cohort": "claude-candidate",
+        "source": "experiments/runs/m3b2-claude-20260910-152822-18fd9d03/task-1-candidate",
+        "session_status": "completed",
+        "task_verdict": "pass",
+        "elapsed_seconds": 36.02663920796476,
+        "source_sha256": "cbd5c1280d43ac56c9dc016cea1bfda4c2b580b2680915bb79114cc5b5214bc7",
+        "evaluation_sha256": "85f1d2717ccb56151ebd88be479fd4a2b880fe8aed8d91051e6de6e2fedbd4f4",
+        "metrics": {
+          "mcp_attempts": 14,
+          "failed_calls": 0,
+          "failures_by_tool": {}
+        },
+        "preserved": true
+      },
+      {
+        "id": "m3b2-claude-20260910-152822-18fd9d03-task-2-baseline",
+        "family": "small-assemblies",
+        "cohort": "claude-baseline",
+        "source": "experiments/runs/m3b2-claude-20260910-152822-18fd9d03/task-2-baseline",
+        "session_status": "completed",
+        "task_verdict": "pass",
+        "elapsed_seconds": 51.4905164159718,
+        "source_sha256": "f650910b47e24a6a66ce0dc610eff6beacf46c01b7a1e62e8eae8cc26d91fe0a",
+        "evaluation_sha256": "6f75d74c86d7178579b349a08451a0d6ace15df70d376c62daaff13a1f4947a6",
+        "metrics": {
+          "mcp_attempts": 14,
+          "failed_calls": 0,
+          "failures_by_tool": {}
+        },
+        "preserved": true
+      },
+      {
+        "id": "m3b2-claude-20260910-152822-18fd9d03-task-2-candidate",
+        "family": "small-assemblies",
+        "cohort": "claude-candidate",
+        "source": "experiments/runs/m3b2-claude-20260910-152822-18fd9d03/task-2-candidate",
+        "session_status": "completed",
+        "task_verdict": "pass",
+        "elapsed_seconds": 56.501650833000895,
+        "source_sha256": "ea360e0e81c88f33cab4d49046c8d7c9749fb9931b7fe9a25fc45223deebe2fe",
+        "evaluation_sha256": "c9f0bf303e74fd155d06acf5cc01ff1afd52e0140a839e76d1ec6a7de5f00a88",
+        "metrics": {
+          "mcp_attempts": 17,
+          "failed_calls": 0,
+          "failures_by_tool": {}
+        },
+        "preserved": true
+      }
+    ]
+  },
+  "candidate_shipped": false,
+  "limitations": [
+    "Two repeats per arm/task; descriptive evidence only.",
+    "Model alias and effort pinned; backend weights unavailable.",
+    "Held-out projection allocated before disclosure; fixed checks calibrated before agents.",
+    "Supervised host with execution refusals; M5 remains deferred."
+  ]
+}

@@ -166,5 +166,16 @@
       "replaces": "directional-curve-projection-v1"
     },
     "sha256": "e8b48642e95389ae9a99b31592c82601d20c3c7b7fa17e37085861ac1906c6ed"
+  },
+  {
+    "previous": "e8b48642e95389ae9a99b31592c82601d20c3c7b7fa17e37085861ac1906c6ed",
+    "at": "2026-09-10T13:32:43.884538+00:00",
+    "body": {
+      "kind": "close",
+      "id": "directional-curve-projection-v1",
+      "outcome": "rejected",
+      "report_sha256": "156e3d444bb62768e8cdad3c323d75f35515c17f93cfce4bb3ef5ac85a6d17ae"
+    },
+    "sha256": "962d6af98bfe3071142c2e8ae85b0a81dbba7be3ddfe3afd79cbe2a115027df4"
   }
 ]

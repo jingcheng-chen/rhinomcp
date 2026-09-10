@@ -641,5 +641,49 @@
     "status": "Geometry passed; intervention rejected",
     "caption": "First prespecified pair; saved-file pass does not establish improvement.",
     "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3b2-assembly-baseline",
+    "title": "M3b-2 \u00b7 assembly \u00b7 baseline",
+    "image": "assets/m3b2-assembly-baseline.png",
+    "source": "runs/workflow-binary-20260910-150113-c655917f/task-2-pair-1-baseline/perspective.png",
+    "sha256": "b47161756723e091380e3406778e4498027085a578f65eb574b8efc567b4052d",
+    "report": "workflow/M3B.md",
+    "status": "Geometry passed",
+    "caption": "First fixed pair; intervention rejected under the failed-call gate.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3b2-assembly-candidate",
+    "title": "M3b-2 \u00b7 assembly \u00b7 candidate",
+    "image": "assets/m3b2-assembly-candidate.png",
+    "source": "runs/workflow-binary-20260910-150113-c655917f/task-2-pair-1-candidate/perspective.png",
+    "sha256": "b47161756723e091380e3406778e4498027085a578f65eb574b8efc567b4052d",
+    "report": "workflow/M3B.md",
+    "status": "Geometry passed",
+    "caption": "First fixed pair; intervention rejected under the failed-call gate.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3b2-projection-baseline",
+    "title": "M3b-2 \u00b7 projection \u00b7 baseline",
+    "image": "assets/m3b2-projection-baseline.png",
+    "source": "runs/workflow-binary-20260910-150113-c655917f/task-3-pair-1-baseline/perspective.png",
+    "sha256": "53819b378ab27ae3a65adda7e969b4fa134ec5c020eb34aeac1c169b63cd9116",
+    "report": "workflow/M3B.md",
+    "status": "Geometry passed",
+    "caption": "First fixed pair; intervention rejected under the failed-call gate.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3b2-projection-candidate",
+    "title": "M3b-2 \u00b7 projection \u00b7 candidate",
+    "image": "assets/m3b2-projection-candidate.png",
+    "source": "runs/workflow-binary-20260910-150113-c655917f/task-3-pair-1-candidate/perspective.png",
+    "sha256": "53819b378ab27ae3a65adda7e969b4fa134ec5c020eb34aeac1c169b63cd9116",
+    "report": "workflow/M3B.md",
+    "status": "Geometry passed",
+    "caption": "First fixed pair; intervention rejected under the failed-call gate.",
+    "kind": "actual_rhino_capture"
   }
 ]

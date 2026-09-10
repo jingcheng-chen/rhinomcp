@@ -135,3 +135,11 @@ faithful shared-scene task adapters. Thirty-two saved controls match expected
 verdicts, including reversed equivalents and direction, height, source/target,
 edge and layer failures. See `M3B_CYCLE2_REVIEW.md` and
 `m3b-projection-calibration.json`. No comparison modeler has run at allocation.
+
+## M3b closure, 2026-09-10
+
+Both joining and directional projection are spent and closed as rejected. Their
+immutable outcome reports are `m3b-cycle1-results.json` and
+`m3b-cycle2-results.json`. Projection replaced joining, and mesh connectivity
+repair replaced projection before closure. Instance/block reuse and mesh repair
+remain unopened and require future shared-adapter calibration. M5 is deferred.

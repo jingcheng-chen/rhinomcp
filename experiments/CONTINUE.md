@@ -82,14 +82,14 @@ fails bounds/boundary despite completion, retained without retry. Four full-cata
 scenes pass; execution tools are now refused and recorded by the host gateway.
 `flaw-report.json` ranks only 0.4.1 runs; `flaw-runs.json` remains historical, and
 `release-041-runs.json` is the current registry. See [M0b](workflow/REBASELINE_041.md).
-M3b is next, then M6; M5 remains deferred. M3b-1 is complete and rejected: all 16 Codex saved files pass, but the candidate
-increases failed calls in every task and has no discovery benefit. The fixed
-Claude check records one baseline timeout, three passes, and a panel failed-call
-increase (2 to 4). See `workflow/M3B.md`. The joining family is closed/replaced;
-directional-curve-projection remains sealed for M3b-2. Cycle2 has a fresh planner,
-bounded layer-precondition description candidate, unchanged AST/catalog review,
-and 285 passing candidate server tests. Its directional-projection allocation is spent and 32 saved controls pass;
-comparison is ready to start from `workflow/m3b-cycle2-trial.json`. Worktree housekeeping was already complete at entry (only `harness`).
+M3b is complete: two server-only description cycles, both rejected after frozen
+Codex comparisons and fixed Claude checks. All 32 Codex saved models pass, but
+both candidates fail the reviewed failed-call gate. Cycle1 Claude retains one
+baseline timeout and three passes; cycle2 all four pass with zero failures.
+See [M3b](workflow/M3B.md). Joining and directional projection are spent/closed;
+instance/block reuse and mesh connectivity repair remain sealed. No candidate is
+adopted. M6 is next; M5 stays deferred. Worktree housekeeping was complete at entry.
+Latest checks: 285 server, 493 experiments, 13 contracts, Ruff green.
 
 
 - Released: rhinomcp 0.4.0 on PyPI and Yak from `releases/0.4.0`; `main` is at the
@@ -286,7 +286,7 @@ come from the new ranking, not the old one.
 Done when `current-baseline.json` points at 0.4.1 and `flaw-report.json` is rebuilt
 from runs on 0.4.1.
 
-### M3b — Continued cycles on the host (after M0b)
+### M3b — Continued cycles on the host (complete, 2026-09-10)
 
 Same loop as M3, on the 0.4.1 ranking, with these rules:
 
