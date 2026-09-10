@@ -143,7 +143,7 @@ Phases 1 to 3 are complete, phase 4 is supervised rather than unattended, and ph
 | M2 Realistic families | Editing, pipeline, assembly, inspection and recovery tasks with calibrated evaluators |
 | M3 Improvement cycles | Proposal, bounded change, comparison and keep/reject per top-ranked flaw; kept changes ship via PR |
 | M4 Held-out bank | Sealed families spent one per validation and replaced |
-| M5 Unattended operation | Fresh Parallels VM (decided 2026-09-10): feasibility spike, guest lifecycle, trusted-judge separation, denial tests, then unattended acceptance |
+| M5 Unattended operation | Fresh Parallels VM (decided 2026-09-10, deferred until a setup exists): feasibility spike, guest lifecycle, trusted-judge separation, denial tests, then unattended acceptance |
 | M6 Grasshopper harness | Same cycle over the `gh_*` tools |
 
 ## Phase 6: Grasshopper harness

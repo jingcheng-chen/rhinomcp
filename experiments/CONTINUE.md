@@ -1,7 +1,8 @@
 # Continue autonomous RhinoMCP improvement
 
 Entry point for a fresh development session (Codex CLI or Claude Code) with no
-chat context. Last updated 2026-09-10, after the 0.4.1 release and the VM decision. Verify repository
+chat context. Last updated 2026-09-10, after the 0.4.1 release; the VM is decided but
+deferred. Verify repository
 and application state before acting; nothing below about running processes, open
 documents or loaded plugins is an assumption you may keep.
 
@@ -56,8 +57,8 @@ This supersedes the precision-oriented next steps in [HANDOFF_HISTORY.md](HANDOF
    (the guest's Rhino account, the guest's Codex login, Parallels prompts); any
    change to a released tool's wire contract that would break older clients or
    plugins; and anything touching user documents or the installed Rhino outside the
-   dedicated test session. The isolation environment is decided (Parallels VM, see
-   M5). Decide and record everything else yourself.
+   dedicated test session. The isolation environment is decided (Parallels VM) but deferred: do not start
+   M5 without an explicit go from the user. Decide and record everything else yourself.
 7. Before every commit: from `server/`, `.venv/bin/python -m pytest` (285 at last
    count) and `.venv/bin/ruff check src/rhinomcp`; from the repository root,
    `server/.venv/bin/python -m pytest experiments/tests` (471) and
@@ -164,9 +165,10 @@ clone or boot the user's personal `Windows 11.pvm`.
   wording and the Newtonsoft pin. `harness` is merged with that `main` (`b9d4bdb`).
   The runtime baseline recorded in `current-baseline.json` is still the released
   0.4.0 plugin; M0b below moves it.
-- Decided 2026-09-10 by the user: unattended operation runs in a fresh Parallels VM
-  on this Mac (`prlctl` is installed). See M5 and
-  [ISOLATED_ENVIRONMENT.md](workflow/ISOLATED_ENVIRONMENT.md). No decision is pending.
+- Decided 2026-09-10 by the user: unattended operation will run in a fresh Parallels
+  VM on this Mac, but the user deferred it the same day because the setup is not
+  ready. M5 is parked; everything else proceeds supervised on the host, as M3 did.
+  See [ISOLATED_ENVIRONMENT.md](workflow/ISOLATED_ENVIRONMENT.md).
 - Housekeeping: two stale worktrees from the merged PR branches remain under
   `/private/tmp` (`git worktree list`); remove them. Tracked evidence JSON grew by
   3.4 MB in one day; keep hashes and summaries in the tree and compress or drop
@@ -175,8 +177,9 @@ clone or boot the user's personal `Windows 11.pvm`.
 
 ## Milestones from here, in order
 
-Each milestone ends with tests green, a portable report under `workflow/`, the
-state section above updated, and a commit.
+Order as of 2026-09-10: **M0b, then M3b, then M6**. M5 is deferred by the user and
+stays parked until an explicit go. Each milestone ends with tests green, a portable
+report under `workflow/`, the state section above updated, and a commit.
 
 ### M0 — Re-baseline on the released 0.4.0 (complete, 2026-09-09)
 
@@ -264,7 +267,9 @@ come from the new ranking, not the old one.
 Done when `current-baseline.json` points at 0.4.1 and `flaw-report.json` is rebuilt
 from runs on 0.4.1.
 
-### M3 continued — rules added 2026-09-10
+### M3b — Continued cycles on the host (after M0b)
+
+Same loop as M3, on the 0.4.1 ranking, with these rules:
 
 - **Fast lane.** Server-only interventions (descriptions, packaged guidance,
   response shaping, Python-side validation) need no Rhino restart. Run those cycles
@@ -277,8 +282,17 @@ from runs on 0.4.1.
   regression on the Claude adapter (task success and failed calls) before it ships.
   Comparison orchestration stays Codex-only; the Claude check is a fixed pilot run
   on the frozen candidate.
+- **Plugin candidates.** They still go through the existing supervised lifecycle,
+  as in M3, when a person is available for the install and restart tickets. When
+  nobody is, run server-only cycles.
 
-### M5 — Unattended operation in a Parallels VM (decided 2026-09-10)
+Done when two more cycles have completed end to end on the 0.4.1 ranking, kept or
+rejected, at least one of them server-only, each with the cross-agent check recorded.
+
+### M5 — Unattended operation in a Parallels VM (decided 2026-09-10, deferred)
+
+**Deferred by the user on 2026-09-10 until a proper setup exists. Do not start M5a
+without an explicit go. The plan below stays as written for when that comes.**
 
 The candidate side (plugin build, candidate Python server, modeling agent, Rhino)
 runs in a fresh Parallels guest restored from a clean snapshot for every trial. The
@@ -330,9 +344,9 @@ shipping; nothing publishes automatically.
 Done when `workflow/ISOLATION_EVIDENCE.md` records all five items with hashes and a
 campaign of at least three comparisons has run overnight without a person.
 
-### M6 — Grasshopper harness (later)
+### M6 — Grasshopper harness (after M3b; ahead of M5 while M5 is deferred)
 
-Same cycle, different surface; refine once M1 to M3 have run at least once.
+Same cycle, different surface, on the host, supervised like M3.
 
 - Tasks: text descriptions of small definitions with checkable outputs, such as a
   grid of N cylinders whose height follows a point attractor, a lofted surface from
@@ -349,6 +363,27 @@ Same cycle, different surface; refine once M1 to M3 have run at least once.
   indices, wiring errors, repeated expire/run loops, layout thrash.
 - Reuse the runner, gateway pattern, audit and comparison code; add a Grasshopper
   evaluator adapter and task type, and nothing else new in orchestration.
+
+First steps, in order:
+
+1. Ownership and cleanup for Grasshopper documents in the gateway: an equivalent
+   of `assert_document` for the active Grasshopper document, every attempt starting
+   from `gh_create_document` and ending with `gh_clear_canvas`, while the Rhino
+   document stays owned and empty as today. Today's full-catalog gateway refuses
+   `gh_*` calls; the Grasshopper gateway exposes only them.
+2. A `gh_definition` task type and schema: text instruction, required outputs
+   (parameter names, expected counts, values or bounds with tolerances), budgets.
+   The saved artifact is the graph from `gh_get_graph` plus the output values after
+   `gh_run_solution`, hashed the way `.3dm` files are.
+3. An evaluator adapter registered like `workflow_scene`: the solution runs without
+   errors, required components and connections exist, no orphan components, outputs
+   within tolerance. Calibrate with correct and flawed fixtures before any discovery.
+4. Fresh discovery runs with the `gh_*` tools only, then the flaw ranking with the
+   Grasshopper classes added. A bake-to-document command is the expected first
+   capability proposal, so the saved-file evaluators can judge the geometry.
+
+Done when at least three definition families are calibrated, have fresh baseline
+runs on 0.4.1, and one Grasshopper improvement cycle has completed end to end.
 
 ## Pointers
 

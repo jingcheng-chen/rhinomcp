@@ -121,8 +121,10 @@ behavior.
 
 ## Isolation — Parallels VM (decided 2026-09-10)
 
-Unattended operation runs candidates in a fresh Parallels guest restored from a
-clean snapshot; the host keeps the controller, evaluators and the trusted judge.
+Unattended operation will run candidates in a fresh Parallels guest restored from
+a clean snapshot; the host keeps the controller, evaluators and the trusted judge.
+The user deferred this on 2026-09-10 until a proper setup exists; M5 is parked and
+work continues supervised on the host (M0b, M3b, then M6).
 The boundary, network policy and transport rules are in
 [ISOLATED_ENVIRONMENT.md](ISOLATED_ENVIRONMENT.md); the implementation steps M5a to
 M5d are in [CONTINUE.md](../CONTINUE.md). Until M5d is done, full-catalog runs on the
