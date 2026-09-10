@@ -1,7 +1,7 @@
 # Continue autonomous RhinoMCP improvement
 
 Entry point for a fresh development session (Codex CLI or Claude Code) with no
-chat context. Last updated 2026-09-10, after M4 with the 0.4.0 experimental baseline. Verify repository
+chat context. Last updated 2026-09-10, after the 0.4.1 release and the VM decision. Verify repository
 and application state before acting; nothing below about running processes, open
 documents or loaded plugins is an assumption you may keep.
 
@@ -52,10 +52,12 @@ This supersedes the precision-oriented next steps in [HANDOFF_HISTORY.md](HANDOF
 5. Tolerances describe realistic modeling needs and are fixed before a run. Never
    loosen one to pass a run or tighten one to manufacture a flaw; re-declare the task
    as a new version instead. The policy is in `workflow/README.md`.
-6. Ask the user only for: the dedicated isolation environment (M5); any change to a
-   released tool's wire contract that would break older clients or plugins; and
-   anything touching user documents or the installed Rhino outside the dedicated
-   test session. Decide and record everything else yourself.
+6. Ask the user only for: logins and licenses that must be entered by a person
+   (the guest's Rhino account, the guest's Codex login, Parallels prompts); any
+   change to a released tool's wire contract that would break older clients or
+   plugins; and anything touching user documents or the installed Rhino outside the
+   dedicated test session. The isolation environment is decided (Parallels VM, see
+   M5). Decide and record everything else yourself.
 7. Before every commit: from `server/`, `.venv/bin/python -m pytest` (285 at last
    count) and `.venv/bin/ruff check src/rhinomcp`; from the repository root,
    `server/.venv/bin/python -m pytest experiments/tests` (471) and
@@ -65,7 +67,8 @@ This supersedes the precision-oriented next steps in [HANDOFF_HISTORY.md](HANDOF
 Do not: build object-specific runners; resume chair or cushion work; add
 construction recipes to guidance without a cross-task flaw that motivates them;
 promote a candidate automatically; leave a controller or agent running; paste
-credentials anywhere; reinstall the plugin into a Rhino that holds user work.
+credentials anywhere; reinstall the plugin into a Rhino that holds user work; touch,
+clone or boot the user's personal `Windows 11.pvm`.
 
 ## Current state — 2026-09-10
 
@@ -157,8 +160,17 @@ credentials anywhere; reinstall the plugin into a Rhino that holds user work.
   See [held-out allocation](workflow/HELD_OUT.md), declared before M2 discovery.
 - Agents available: the Codex adapter (default) and the Claude adapter (native
   modeling validated; binary comparison orchestration remains Codex-only).
-- Pending user decision: the dedicated isolation environment (VM or machine) for
-  unattended operation. M0 through M4 are complete.
+- 0.4.1 is released (`releases/0.4.1`, 2026-09-10) with the attribute fix, the lookup
+  wording and the Newtonsoft pin. `harness` is merged with that `main` (`b9d4bdb`).
+  The runtime baseline recorded in `current-baseline.json` is still the released
+  0.4.0 plugin; M0b below moves it.
+- Decided 2026-09-10 by the user: unattended operation runs in a fresh Parallels VM
+  on this Mac (`prlctl` is installed). See M5 and
+  [ISOLATED_ENVIRONMENT.md](workflow/ISOLATED_ENVIRONMENT.md). No decision is pending.
+- Housekeeping: two stale worktrees from the merged PR branches remain under
+  `/private/tmp` (`git worktree list`); remove them. Tracked evidence JSON grew by
+  3.4 MB in one day; keep hashes and summaries in the tree and compress or drop
+  per-call dumps from now on.
 - Tests at last verification: 285 server, 471 experiments, 13 contracts; server lint passes.
 
 ## Milestones from here, in order
@@ -241,10 +253,82 @@ Implemented with two locally verified sealed families, immutable payload hashes,
 a durable allocation/closure ledger, and fourteen lifecycle tests. Read
 [HELD_OUT.md](workflow/HELD_OUT.md) before any future validation allocation.
 
-### M5 — Unattended operation and hard isolation (blocked on the user)
+### M0b — Re-baseline on the released 0.4.1 (next, supervised)
 
-Needs the dedicated environment decision. Until then run supervised only; do not
-enable automatic promotion or installation. See `workflow/ISOLATED_ENVIRONMENT.md`.
+Update the plugin in the dedicated Rhino through the Package Manager, restart it,
+run `select_release` against `releases/0.4.1`, and run the release pilot once per
+family. Then re-rank the flaws: fifteen of the nineteen M2 failures were the
+attribute defect 0.4.1 fixes, so the M1/M2 ranking is stale. The next M3 cycles
+come from the new ranking, not the old one.
+
+Done when `current-baseline.json` points at 0.4.1 and `flaw-report.json` is rebuilt
+from runs on 0.4.1.
+
+### M3 continued — rules added 2026-09-10
+
+- **Fast lane.** Server-only interventions (descriptions, packaged guidance,
+  response shaping, Python-side validation) need no Rhino restart. Run those cycles
+  on the host now, without waiting for M5. Plugin candidates wait for M5.
+- **Execution tools in full-catalog runs.** Until M5 is complete, the gateway must
+  refuse and record `run_command`, `execute_rhinoscript_python_code` and
+  `execute_rhinocommon_csharp_code` instead of executing them. The attempt is the
+  flaw signal; running agent-authored code in the supervisor's Rhino is not.
+- **Cross-agent transfer.** A kept description or guidance change must also show no
+  regression on the Claude adapter (task success and failed calls) before it ships.
+  Comparison orchestration stays Codex-only; the Claude check is a fixed pilot run
+  on the frozen candidate.
+
+### M5 — Unattended operation in a Parallels VM (decided 2026-09-10)
+
+The candidate side (plugin build, candidate Python server, modeling agent, Rhino)
+runs in a fresh Parallels guest restored from a clean snapshot for every trial. The
+host keeps the controller, evaluators, journals and the trusted judge: the host's
+dedicated Rhino on the released baseline, whose listener binds loopback only.
+Candidate code never runs on the host. Full boundary and evidence list:
+[ISOLATED_ENVIRONMENT.md](workflow/ISOLATED_ENVIRONMENT.md).
+
+**M5a — Feasibility spike (supervised, time-boxed to one day).** Create a fresh
+guest with `prlctl` (never the personal `Windows 11.pvm`); prove snapshot restore,
+`prlctl exec`, shared folders off, and a network policy that allows Rhino licensing
+but nothing on the host except the controller's channel. Inside the guest install
+Rhino 8 with a dedicated login, rhinomcp 0.4.1 from the Package Manager, Python and
+uv, and the Codex CLI; prove `mcpstart` and `describe_capabilities`; prove Rhino
+starts from a command line with `mcpstart` in a startup script, so the lifecycle
+needs no desktop clicks. Record the clean snapshot's identity (snapshot id, Rhino
+version, plugin SHA and MVID). Pick the guest OS by what passes the spike; Windows
+11 ARM is the likely choice on this hypervisor. Check whether one Rhino license lets
+host and guest run at the same time; if not, sequence them (the design already
+stops the guest before judging) or ask the user for a second seat.
+Done when two restores in a row reproduce the identity and a working `mcpstart`.
+
+**M5b — Guest transport and lifecycle.** Add a guest module (for example
+`experiments/guest.py`) with restore, start, push-bundle, exec, pull-artifacts and
+stop, built on `prlctl`. Bundles carry a reviewed source tree, tasks, tool catalog
+and prompts inward; only `.3dm`, `.png`, `.json` and `.jsonl` under the run
+directory come back, size-capped, path-checked and hashed on arrival. Replace the
+supervised lifecycle tickets in `rhino_trial.py` and `trial.py` with these guest
+operations; the host's own Rhino is never restarted by a trial.
+Done when the controller installs and exercises a candidate build in the guest end
+to end with no desktop interaction, and the restored identity matches.
+
+**M5c — Trusted judge separation.** Models pulled from the guest are hashed, the
+guest is stopped, and the host's Rhino measures them with the existing saved-file
+evaluators (`evaluate_saved`, trusted-baseline mode). Guest-declared verdicts are
+observations only.
+Done when the calibration fixtures evaluated through this path reproduce their
+known verdicts, and an altered guest verdict file cannot change the host verdict.
+
+**M5d — Denial tests and unattended enablement.** Automate the five evidence
+items in ISOLATED_ENVIRONMENT.md with recorded actual denials: guest code trying to
+read host user files, alter controller journals, reach the host listener or read
+judge inputs; killing guest Rhino, Python and the VM mid-run leaves the host and the
+selected baseline intact and the run resumable; a restored snapshot keeps its
+identity; one complete capability comparison passes through the isolated path.
+Add wall-clock and provider-cost caps to campaigns. Only then enable unattended
+acceptance for this environment. A PR to `main` remains the human gate for
+shipping; nothing publishes automatically.
+Done when `workflow/ISOLATION_EVIDENCE.md` records all five items with hashes and a
+campaign of at least three comparisons has run overnight without a person.
 
 ### M6 — Grasshopper harness (later)
 

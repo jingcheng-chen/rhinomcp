@@ -42,11 +42,45 @@ this role. No user credentials should be pasted into the conversation.
 5. Only after those checks should unattended acceptance/installation be enabled for
    this environment. The current reviewed desktop workflow remains supervised.
 
+## Decision — 2026-09-10: a fresh Parallels VM on this Mac
+
+The user chose a VM. Parallels Desktop and `prlctl` are installed on the host
+(Apple Silicon, macOS 26). Constraints and plan:
+
+- **Fresh guest only.** Create a new VM from an installer image; never clone, boot
+  or mount the personal `Windows 11.pvm`. Shared folders, clipboard and drag-and-drop
+  off. No host directory is ever mounted.
+- **Roles.** Guest: candidate plugin build, candidate Python server, modeling agent
+  (Codex CLI with its own login), Rhino 8 with a dedicated Rhino account. Host:
+  controller, evaluators, journals, held-out bank, and the trusted judge, which is
+  the host's dedicated Rhino on the released baseline. Its listener binds
+  127.0.0.1 and is unreachable from the guest by construction; the denial test
+  still has to record the failed attempt.
+- **Network.** The guest needs the internet for Rhino licensing and the agent
+  provider. It must not reach host services except the channel the host itself
+  opens toward the guest (`prlctl exec` or host-initiated SSH). Record the policy and
+  test it, do not assume it.
+- **Snapshots.** One `clean-baseline` snapshot holds Rhino, the released plugin,
+  Python, uv and the CLI, with identity recorded (snapshot id, Rhino version, plugin
+  SHA and MVID). Every trial starts from a restore and ends with the guest stopped.
+- **Transport.** Reviewed bundles go in; only model, image and trace files come out,
+  size-capped, path-checked and hashed on arrival. Guest-declared verdicts are
+  observations, never verdicts.
+- **Licensing.** Verify whether one Rhino license permits host and guest to run at
+  once. If not, the lifecycle runs them in sequence (the guest is stopped before
+  judging anyway), or the user provides a second seat.
+- **Lifecycle without a desktop.** Rhino must start from a command line with
+  `mcpstart` in a startup script inside the guest. Prove this in the spike; it is
+  what turns supervised tickets into unattended operations.
+
+The steps M5a to M5d with their done criteria are in [CONTINUE.md](../CONTINUE.md).
+Items a person must supply when reached: the guest OS installer, the guest's Rhino
+login, the guest's Codex login, and any Parallels prompt. Nobody pastes a credential
+into a session; the user enters them in the guest directly.
+
 ## Current external dependencies
 
-No dedicated isolated Rhino environment has been provisioned. The existing stopped
-Windows 11 VM is personal and untouched. The user has been asked whether to provision
-a separate disposable VM or use an existing dedicated machine. Claude Code on the
-host is also signed out. These are pending environment choices/access, not passing
-milestones. VM and guest licensing, authentication and the host/guest transfer route
-must be resolved before this design can be tested end to end.
+No dedicated isolated Rhino environment has been provisioned yet; the decision
+above (2026-09-10) settles what to provision. The existing stopped Windows 11 VM is
+personal and untouched. Guest licensing, the two logins and the transfer route are
+resolved during M5a and M5b, not assumed.
