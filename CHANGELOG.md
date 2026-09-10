@@ -8,6 +8,9 @@ parameters it does not know.
 
 ### Fixed
 
+- `get_object_info` guidance now names the accepted `id` and `name` selectors,
+  states that at least one is needed, and explains ID precedence and discovery.
+  The signature, response and execution behavior are unchanged.
 - `update_object_attributes` works with the Newtonsoft assembly loaded by Rhino 8
   on macOS. A missing overload previously prevented all updates, including calls
   that only changed an object's layer.
