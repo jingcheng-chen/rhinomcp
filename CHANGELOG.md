@@ -11,12 +11,20 @@ parameters it does not know.
 - `get_object_info` guidance now names the accepted `id` and `name` selectors,
   states that at least one is needed, and explains ID precedence and discovery.
   The signature, response and execution behavior are unchanged.
-- `update_object_attributes` works with the Newtonsoft assembly loaded by Rhino 8
-  on macOS. A missing overload previously prevented all updates, including calls
-  that only changed an object's layer.
+- `update_object_attributes` works again with the Newtonsoft assembly loaded by
+  Rhino 8. A missing overload prevented all updates in 0.4.0, including calls that
+  only changed an object's layer. This was a 0.4.0 regression; see Changed below.
 - Attribute edits use a detached copy before committing, preserving existing and
   newly assigned user strings. Scalar encoding, null deletion and validation stay
-  unchanged; no wire-contract or dependency change is required.
+  unchanged; no wire-contract change is required.
+
+### Changed
+
+- Newtonsoft.Json is pinned to 13.0.3, the version Rhino 8 bundles and loads
+  before any plugin. 0.4.0 compiled against 13.0.4, whose new
+  `JToken.ToString(Formatting)` overload the compiler chose for an unchanged call;
+  Rhino's 13.0.3 has no such overload, so every attribute update failed at runtime.
+  Compiling against the bundled version keeps that class of mismatch impossible.
 
 ## 0.4.0 — unreleased (prepared 2026-09-09)
 
@@ -79,7 +87,7 @@ install resolves the 2.x SDK and fails at import. 0.4.0 moves the server to the
   redraws on Mac before capturing.
 - `analyze_objects`: Brep naked edges are counted from edge valence, so inner
   loops are included and seams are not.
-- Newtonsoft.Json 13.0.4.
+- Newtonsoft.Json 13.0.4 (reverted in 0.4.1: Rhino 8 loads its own 13.0.3).
 
 ### Experiments harness (contributors)
 
