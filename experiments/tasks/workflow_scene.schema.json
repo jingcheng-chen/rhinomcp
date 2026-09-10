@@ -15,7 +15,8 @@
         "document-inspection",
         "recovery",
         "planar-curve-editing",
-        "section-extraction"
+        "section-extraction",
+        "curve-network-joining"
       ]
     },
     "instruction": {
@@ -72,8 +73,22 @@
           "shape": {
             "enum": [
               "box",
-              "rectangle_curve"
+              "rectangle_curve",
+              "polyline",
+              "point"
             ]
+          },
+          "points": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "number"
+              }
+            }
           }
         },
         "required": [
@@ -124,8 +139,22 @@
           "shape": {
             "enum": [
               "box",
-              "rectangle_curve"
+              "rectangle_curve",
+              "polyline",
+              "point"
             ]
+          },
+          "points": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "number"
+              }
+            }
           }
         },
         "required": [
@@ -150,6 +179,11 @@
         "type": "string"
       },
       "uniqueItems": true
+    },
+    "relative_length_tolerance": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 0.1
     }
   },
   "required": [

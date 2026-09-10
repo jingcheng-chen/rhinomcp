@@ -1,0 +1,11 @@
+{
+  "cycle": "M3b-1",
+  "runtime": "Released 0.4.1 on supervised host; M5 deferred. Server-only intervention required.",
+  "scope": "Investigate the current observed completion contradiction and verification workflow. The panel supplied geometrically wrong points: local Y extent 160 instead of 80 and incorrect rectangular boundary. Creation and analysis correctly returned observed geometry; no evidence of a surface construction defect. Agent arithmetic alone is not a product defect. Consider whether generic verification descriptions help agents compare returned measurements against requested bounds, dimensions and pose, rather than treating valid topology as task completion. Do not add object-specific recipes, tight precision requirements, or geometry fixes. Prefer a bounded description-only change, executable AST and schema unchanged, that the existing comparator can validate.",
+  "evidence": "Nine 0.4.1 baseline observations: 78 calls, zero failures, eight passes. Seven native guidance reads and one editing guidance read are not automatically defects. Full-catalog editing used 14 calls including individual analysis/attribute inspection; assembly 12, inspection 4, recovery 8. No current attribute defect or wrong selector failure. The attached ranking has only the completion contradiction as confirmed flaw.",
+  "validation": "Two discovery families (curved-panels and editing-existing) plus a separately calibrated held-out family; two AB/BA pairs, gpt-5.6-terra medium, 50 calls and 240 seconds. Fixed Claude sonnet medium baseline/candidate pilot must show no task-success or failed-call regression before any kept description ships. Every candidate saved-file task must pass, no per-family correctness/failed-call regression, and benefit in at least one discovery family; otherwise reject. No retries.",
+  "held_out_families": [
+    "curve-network-joining"
+  ],
+  "preserve": "No plugin changes, wire/schema changes, scripts or macros. No held-out parameters to planner or builder. No candidate promotion, merge or publication. Distinguish testable hypothesis from proof that tools caused the failure."
+}

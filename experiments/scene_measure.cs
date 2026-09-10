@@ -12,7 +12,7 @@ using(var file=Rhino.FileIO.File3dm.Read(ARTIFACT_PATH)) {
   if(curve!=null && curve.TryGetPolyline(out polyline)) points=polyline.Select(p=>new[]{p.X,p.Y,p.Z}).ToArray();
   var curveArea=curve!=null && curve.IsClosed && curve.IsPlanar() ? AreaMassProperties.Compute(curve) : null;
   objects.Add(new {id=o.Attributes.ObjectId.ToString(),name=o.Attributes.Name,layer=o.Attributes.LayerIndex,
-   visible=o.Attributes.Visible,mode=o.Attributes.Mode.ToString(),valid=o.Geometry.IsValid,
+   is_point=o.Geometry is Rhino.Geometry.Point,visible=o.Attributes.Visible,mode=o.Attributes.Mode.ToString(),valid=o.Geometry.IsValid,
    solid=brep!=null && brep.IsSolid,volume=volume?.Volume,
    planar_faces=brep!=null && brep.Faces.All(f=>f.IsPlanar(0.001)),
    vertices=brep?.Vertices.Select(v=>new[]{v.Location.X,v.Location.Y,v.Location.Z}).ToArray(),

@@ -58,6 +58,18 @@ def run(task_names=None):
                 variants.append("wrong_intermediate_retained")
             if task["family"] == "document-inspection":
                 variants += ["wrong_report", "write_attempt"]
+            polylines = task["family"] == "curve-network-joining"
+            if polylines:
+                variants += [
+                    "missing_edge",
+                    "duplicate_fragment",
+                    "false_closure",
+                    "reference_mutation",
+                    "reversed_order_equivalent",
+                    "duplicate_output",
+                ]
+                if len([t for t in task["targets"] if not t.get("unchanged")]) > 1:
+                    variants.append("bridged_components")
             for variant in variants:
                 path = directory / f"{name}-{variant}.3dm"
                 targets = copy.deepcopy(task["targets"])
@@ -72,7 +84,33 @@ def run(task_names=None):
                     curve["min"][2] += 3
                     curve["max"][2] += 3
                 if variant == "wrong_bounds":
-                    targets[0]["max"][0] += 3
+                    if polylines:
+                        targets[0]["points"][0][0] += 3
+                    else:
+                        targets[0]["max"][0] += 3
+                if variant == "missing_edge":
+                    targets[0]["points"].pop(1)
+                if variant == "duplicate_fragment":
+                    targets.append(copy.deepcopy(task["initial"][0]))
+                if variant == "false_closure":
+                    pts = targets[0]["points"]
+                    if pts[0] == pts[-1]:
+                        pts.pop()
+                    else:
+                        pts.append(pts[0])
+                if variant == "reference_mutation":
+                    next(t for t in targets if t.get("unchanged"))["points"][0][0] += 3
+                if variant == "reversed_order_equivalent":
+                    for t in targets:
+                        if not t.get("unchanged"):
+                            t["points"].reverse()
+                if variant == "duplicate_output":
+                    duplicate = copy.deepcopy(targets[0])
+                    duplicate["name"] = "duplicate_output"
+                    targets.append(duplicate)
+                if variant == "bridged_components":
+                    targets[0]["points"].extend(targets[1]["points"])
+                    targets.pop(1)
                 if variant == "extra_object":
                     targets.append(
                         {
@@ -126,7 +164,9 @@ def run(task_names=None):
                     {
                         "task": task["id"],
                         "variant": variant,
-                        "expected": "pass" if variant == "correct" else "fail",
+                        "expected": "pass"
+                        if variant in {"correct", "reversed_order_equivalent"}
+                        else "fail",
                         "actual": verdict["status"],
                         "checks": verdict["checks"],
                         "repeat_identical": repeat,

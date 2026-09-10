@@ -1,0 +1,11 @@
+{
+  "unchanged_executable_ast": true,
+  "catalog_only_changed": [
+    "analyze_objects.description"
+  ],
+  "candidate_source_sha256": "889a38624e928733a84e6ffb56a36700ba9a80c4fc7e25bdcad419a5e92facf7",
+  "candidate_patch_sha256": "8513585125b4cda2ea0011c0f93e52963b511b79b2df63cf8eedc0549b1c5c80",
+  "baseline_catalog_sha256": "db23f545884586d69d32f2ff7bc0d6c4da8d43aad52747de8a5ac1a2708cfadb",
+  "candidate_catalog_sha256": "2e90bbc370da5cb59d88f4983b7a4e4a751ab87d2c2c787e5f447a2305b65771",
+  "candidate": "experiments/runs/repair-20260910-141837-8597e500"
+}

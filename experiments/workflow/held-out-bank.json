@@ -103,5 +103,16 @@
       "report_sha256": "37984264195ed71733a5ed855d3957301341e85ab81eb1a4c5e009580a4eaec7"
     },
     "sha256": "02e6c9cb4a3ee252543eb1deb28e02f04522fb44f2cd8c8db6d2230458888923"
+  },
+  {
+    "previous": "02e6c9cb4a3ee252543eb1deb28e02f04522fb44f2cd8c8db6d2230458888923",
+    "at": "2026-09-10T12:20:20.099150+00:00",
+    "body": {
+      "kind": "spend",
+      "id": "curve-network-joining-v1",
+      "validation": "m3b-cycle1",
+      "review_sha256": "f0ec10487e044704fc9c8f70c20a025a01fd5b750acfbfcde0a44fcac7aad236"
+    },
+    "sha256": "1d1e0f0d10f1c68abc80a8ac0de3c16ad8f8dd78cd9e0b533f18070e1c81a199"
   }
 ]

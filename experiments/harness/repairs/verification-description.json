@@ -1,0 +1,11 @@
+{
+  "baseline_revision": "releases/0.4.1",
+  "read_paths": [
+    "server/src/rhinomcp/tools/analyze_objects.py"
+  ],
+  "write_paths": [
+    "server/src/rhinomcp/tools/analyze_objects.py"
+  ],
+  "requirements": "Change only the analyze_objects function docstring. Add concise generic verification guidance: reported valid/closed/solid flags and successful calls do not certify task correctness; compare observed bounds, dimensions, counts and applicable metrics against explicit task requirements before claiming completion. Bounds are world-axis-aligned and do not directly equal local dimensions on rotated geometry; compare in a consistent coordinate frame. Do not imply this tool verifies a target pose or arbitrary surface shape. Preserve existing selector and measurement documentation. No construction recipes, arithmetic examples, task/family names, claimed performance, executable AST/signature/schema/decorator changes, or other file changes.",
+  "acceptance": "Independent unchanged AST and catalog equality except analyze_objects description; server tests and a fixed cross-family AB/BA comparison plus Claude no-regression pilot. Do not run or install candidate."
+}

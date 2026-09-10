@@ -82,8 +82,10 @@ fails bounds/boundary despite completion, retained without retry. Four full-cata
 scenes pass; execution tools are now refused and recorded by the host gateway.
 `flaw-report.json` ranks only 0.4.1 runs; `flaw-runs.json` remains historical, and
 `release-041-runs.json` is the current registry. See [M0b](workflow/REBASELINE_041.md).
-M3b is next, then M6; M5 remains deferred. No candidate work or held-out disclosure
-has begun. Worktree housekeeping was already complete at entry (only `harness`).
+M3b is next, then M6; M5 remains deferred. M3b-1 has a fresh planner and bounded description-only builder, unchanged AST/
+catalog checks, and 27 passing saved-file calibration controls. Curve-network-
+joining is spent for its fixed validation. Comparison has not yet started; see
+`workflow/M3B_CYCLE1_REVIEW.md` and `workflow/m3b-cycle1-trial.json`. Worktree housekeeping was already complete at entry (only `harness`).
 
 
 - Released: rhinomcp 0.4.0 on PyPI and Yak from `releases/0.4.0`; `main` is at the

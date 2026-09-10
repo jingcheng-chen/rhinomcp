@@ -110,3 +110,13 @@ ledger edits or payload mismatches are not repaired by regenerating parameters.
 The CLI enforces allocation state and byte identity. It does not prove semantic
 novelty, calibrate geometry, prevent a supervisor from bypassing it, or replace the
 comparison controller's immutable schedule. See [M4 validation](M4.md).
+
+## M3b-1 allocation — 2026-09-10
+
+`curve-network-joining-v1` was spent through the ledger after the fresh planner,
+bounded builder and independent description-only source review. Both cases are
+fixed in the shared scene schema; 27 saved controls match their expected verdicts,
+including reversed-order equivalents and connectivity/reference failures. The
+predeclared review is `M3B_CYCLE1_REVIEW.md`; source/catalog checks are in
+`m3b-cycle1-source-validation.json`, calibration in `m3b-curve-calibration.json`.
+The family is spent for this validation only; no replacement or closure yet.

@@ -20,6 +20,26 @@ def validate(task):
         if len({p["name"] for p in parts}) != len(parts):
             raise ValueError("Scene object names must be unique")
         for p in parts:
+            if p.get("shape") in {"polyline", "point"}:
+                points = p.get("points", [])
+                if not points or not all(math.isfinite(v) for pt in points for v in pt):
+                    raise ValueError("Finite explicit points required")
+                if p["shape"] == "point" and len(points) != 1:
+                    raise ValueError("Point shape needs one point")
+                if p["shape"] == "polyline" and (
+                    len(points) < 2
+                    or any(math.dist(a, b) == 0 for a, b in zip(points, points[1:]))
+                ):
+                    raise ValueError("Polyline needs nonzero segments")
+                if p["min"] != [min(pt[i] for pt in points) for i in range(3)] or p[
+                    "max"
+                ] != [max(pt[i] for pt in points) for i in range(3)]:
+                    raise ValueError("Explicit point bounds disagree")
+                if p["layer"] not in task["layers"]:
+                    raise ValueError("Every object needs a declared layer")
+                continue
+            if "points" in p:
+                raise ValueError("Explicit points require a point or polyline shape")
             curve = p.get("shape") == "rectangle_curve"
             if not all(
                 math.isfinite(a) and math.isfinite(b) and b > a
@@ -50,6 +70,10 @@ def validate(task):
     for k in ("linear_tolerance", "relative_volume_tolerance"):
         if not math.isfinite(task[k]):
             raise ValueError("Finite tolerance required")
+    if "relative_length_tolerance" in task and not math.isfinite(
+        task["relative_length_tolerance"]
+    ):
+        raise ValueError("Finite length tolerance required")
     return task
 
 
@@ -82,6 +106,29 @@ def measure(path, task=None):
     if sha256(path) != before:
         raise RuntimeError("Scene artifact changed during measurement")
     return result
+
+
+def same_edges(actual, expected, tolerance):
+    """One-to-one undirected segment matching; duplicates and bridges fail."""
+    if len(actual) != len(expected) or len(actual) < 2:
+        return False
+    if any(len(p) != 3 for p in actual):
+        return False
+    remaining = list(zip(expected, expected[1:]))
+
+    def close(a, b):
+        return near(math.dist(a, b), 0, tolerance)
+
+    for a, b in zip(actual, actual[1:]):
+        matches = [
+            i
+            for i, (c, d) in enumerate(remaining)
+            if (close(a, c) and close(b, d)) or (close(a, d) and close(b, c))
+        ]
+        if len(matches) != 1:
+            return False
+        remaining.pop(matches[0])
+    return not remaining
 
 
 def evaluate(task, measured):
@@ -166,6 +213,29 @@ def evaluate(task, measured):
                 width * height,
                 width * height * task["relative_volume_tolerance"],
             )
+        if target.get("shape") in {"polyline", "point"}:
+            del checks[name + "/solid_box"], checks[name + "/volume"]
+            expected = target["points"]
+            if target["shape"] == "point":
+                checks[name + "/point"] = (
+                    o.get("valid") is True and o.get("is_point") is True
+                )
+            else:
+                checks[name + "/edges"] = o.get("valid") is True and same_edges(
+                    o.get("polyline") or [], expected, tol
+                )
+                checks[name + "/closure"] = o.get("curve_closed") is (
+                    expected[0] == expected[-1]
+                )
+                length = sum(math.dist(a, b) for a, b in zip(expected, expected[1:]))
+                checks[name + "/curve_length"] = near(
+                    o.get("curve_length"),
+                    length,
+                    length
+                    * task.get(
+                        "relative_length_tolerance", task["relative_volume_tolerance"]
+                    ),
+                )
         checks[name + "/attributes"] = (
             paths.get(o.get("layer")) == target["layer"]
             and o.get("visible") is True
@@ -218,7 +288,7 @@ def evaluate(task, measured):
         "status": "pass" if all(checks.values()) else "fail",
         "checks": checks,
         "measurements": measured,
-        "limitation": "Analytic eight-corner boxes and closed axis-aligned rectangular curves. Identity/CRC checks compare saved states; mutating-tool attempts are audited separately for inspection. Supervised local execution, not adversarial isolation.",
+        "limitation": "Analytic boxes, rectangular curves, explicit polyline edge sets and points. Identity/CRC checks compare saved states; mutating-tool attempts are audited separately for inspection. Supervised local execution, not adversarial isolation.",
     }
 
 
@@ -259,7 +329,15 @@ def creation_code(parts, destination="doc", preserved_ids=None):
                 + json.dumps(preserved_ids[p["preserve_from"]])
                 + ");"
             )
-        if p.get("shape") == "rectangle_curve":
+        if p.get("shape") in {"polyline", "point"}:
+            literal = ",".join(f"new Point3d({x},{y},{z})" for x, y, z in p["points"])
+            if p["shape"] == "point":
+                code.append(f"{destination}.Objects.AddPoint({literal},attr);}}")
+            else:
+                code.append(
+                    f"{destination}.Objects.AddCurve(new PolylineCurve(new []{{{literal}}}),attr);}}"
+                )
+        elif p.get("shape") == "rectangle_curve":
             points = [
                 (a[0], a[1], a[2]),
                 (b[0], a[1], a[2]),
