@@ -1,0 +1,19 @@
+{
+  "id": "gh-discovery-041-v1",
+  "call_budget": 40,
+  "timeout_seconds": 240,
+  "tasks": [
+    {
+      "path": "experiments/tasks/gh_point_array.json",
+      "family": "gh-point-array"
+    },
+    {
+      "path": "experiments/tasks/gh_circle_profiles.json",
+      "family": "gh-circle-profiles"
+    },
+    {
+      "path": "experiments/tasks/gh_loft_sections.json",
+      "family": "gh-loft-sections"
+    }
+  ]
+}

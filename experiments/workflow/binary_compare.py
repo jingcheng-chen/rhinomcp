@@ -524,7 +524,15 @@ def resume_index(directory, plan):
             raise RuntimeError("Completed modeling evidence changed")
         record = read(child / "artifact.json")
         if (
-            sha256(child / "candidate.3dm") != record["sha256"]
+            sha256(
+                child
+                / (
+                    "candidate.gh.json"
+                    if read(child / "task.json").get("type") == "gh_definition"
+                    else "candidate.3dm"
+                )
+            )
+            != record["sha256"]
             or sha256(child / "task.json") != record["task_sha256"]
             or (
                 deferred

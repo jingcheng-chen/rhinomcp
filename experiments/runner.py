@@ -50,6 +50,9 @@ def evaluator_versions():
             "trimmed_task.py",
             "trimmed_measure.cs",
             "strip_probe.py",
+            "gh_task.py",
+            "tasks/gh_definition.schema.json",
+            "workflow/gh-reviewed-components.json",
             "scene_task.py",
             "scene_measure.cs",
             "tasks/workflow_scene.schema.json",
@@ -90,6 +93,10 @@ PLANNER_SCHEMA = schema(
 
 def load_task(path):
     task = json.loads(path.read_text())
+    if task.get("type") == "gh_definition":
+        from experiments.gh_task import validate
+
+        return validate(task)
     if task.get("type") == "workflow_scene":
         from experiments.scene_task import validate
 

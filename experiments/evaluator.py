@@ -144,6 +144,10 @@ def through_hole_checks(task, obj):
 
 
 def evaluate(task, measurements):
+    if task["type"] == "gh_definition":
+        from experiments.gh_task import evaluate as evaluate_gh
+
+        return evaluate_gh(task, measurements)
     if task["type"] == "workflow_scene":
         from experiments.scene_task import evaluate as evaluate_scene
 

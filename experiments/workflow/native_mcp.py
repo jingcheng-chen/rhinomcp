@@ -53,6 +53,7 @@ class Gateway:
         description_suffix="",
         tool_names=None,
         full_catalog=False,
+        gh_document=None,
     ):
         if budget < 1:
             raise ValueError("Positive call budget required")
@@ -61,17 +62,23 @@ class Gateway:
         self.production = production or rhinomcp.mcp
         self.guard = guard or assert_document
         self.description_suffix = description_suffix
+        self.gh_document = gh_document
+        self.gh_started = False
         self.full_catalog = full_catalog
         self.tool_names = tuple(tool_names) if tool_names is not None else TOOLS
-        if not full_catalog and (
-            self.tool_names[: len(TOOLS)] != TOOLS
-            or len(set(self.tool_names)) != len(self.tool_names)
-            or set(self.tool_names)
-            & {
-                "run_command",
-                "execute_rhinocommon_csharp_code",
-                "execute_rhinoscript_python_code",
-            }
+        if (
+            not full_catalog
+            and gh_document is None
+            and (
+                self.tool_names[: len(TOOLS)] != TOOLS
+                or len(set(self.tool_names)) != len(self.tool_names)
+                or set(self.tool_names)
+                & {
+                    "run_command",
+                    "execute_rhinocommon_csharp_code",
+                    "execute_rhinoscript_python_code",
+                }
+            )
         ):
             raise ValueError("Invalid reviewed tool extension")
         self.calls = 0
@@ -79,7 +86,11 @@ class Gateway:
 
     async def definitions(self):
         available = {t.name: t for t in await self.production.list_tools()}
-        if self.full_catalog:
+        if self.gh_document is not None:
+            from experiments.workflow.gh_scope import REVIEWED_TOOLS
+
+            self.tool_names = tuple(sorted(set(available) & REVIEWED_TOOLS))
+        elif self.full_catalog:
             self.tool_names = tuple(sorted(available))
         result = [available[name].model_copy(deep=True) for name in self.tool_names]
         if self.description_suffix:
@@ -102,7 +113,21 @@ class Gateway:
                     raise ValueError("Tool outside pilot scope")
                 if self.calls > self.budget:
                     raise RuntimeError("Task tool-call budget exhausted")
-                if self.full_catalog and name.startswith("gh_"):
+                if self.gh_document is not None:
+                    from experiments.workflow.gh_ownership import guard as gh_guard
+                    from experiments.workflow.gh_scope import validate_call
+
+                    if not self.gh_started and name != "gh_create_document":
+                        raise ValueError(
+                            "Every Grasshopper attempt must start with gh_create_document"
+                        )
+                    current = gh_guard(self.document, self.marker, self.gh_document)
+                    validate_call(name, arguments, current["objects"])
+                if (
+                    self.gh_document is None
+                    and self.full_catalog
+                    and name.startswith("gh_")
+                ):
                     raise ValueError(
                         "Grasshopper is outside this Rhino document task; its catalog is visible but its documents are not owned"
                     )
@@ -111,8 +136,15 @@ class Gateway:
                         "Execution tools are refused during supervised host trials until M5 isolation is verified; attempt recorded"
                     )
                 self.guard(self.document, self.marker)
-                result = await self.production.call_tool(name, arguments)
-                if self.full_catalog:
+                try:
+                    result = await self.production.call_tool(name, arguments)
+                finally:
+                    if self.gh_document is not None:
+                        gh_guard(self.document, self.marker, self.gh_document)
+                if self.gh_document is not None:
+                    if name == "gh_create_document":
+                        self.gh_started = True
+                elif self.full_catalog:
                     self.guard(self.document, self.marker)
                 event["status"] = "returned"
                 return result
@@ -138,6 +170,7 @@ async def main():
         if os.environ.get("EXPERIMENT_TOOL_NAMES")
         else None,
         full_catalog=os.environ.get("EXPERIMENT_FULL_CATALOG") == "1",
+        gh_document=os.environ.get("EXPERIMENT_GH_DOCUMENT"),
     )
 
     async def list_tools(_context, _params):

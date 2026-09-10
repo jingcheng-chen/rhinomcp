@@ -54,6 +54,7 @@ def load_suite(path):
             "biquadratic_panel",
             "trimmed_planar_patch",
             "workflow_scene",
+            "gh_definition",
         } or task.get("input_mode"):
             raise ValueError("No pilot evaluator adapter for this task")
     return suite
@@ -82,6 +83,7 @@ def source_pins(server_source=None):
             "experiments/trial.py",
             "experiments/harness/roles/modeler.md",
             "experiments/harness/roles/workflow_modeler.md",
+            "experiments/harness/roles/gh_modeler.md",
         )
     ]
     return {str(p.relative_to(ROOT)): sha256(p) for p in sorted(set(files))}
@@ -141,6 +143,15 @@ def run_task(
 ):
     task = load_task(ROOT / entry["path"])
     scene = task["type"] == "workflow_scene"
+    gh = task["type"] == "gh_definition"
+    gh_document = None
+    if gh:
+        from experiments.workflow.gh_scope import REVIEWED_TOOLS
+
+        definitions = [d for d in definitions if d["name"] in REVIEWED_TOOLS]
+        tool_names = [d["name"] for d in definitions]
+        if not definitions:
+            raise ValueError("GH task requires its native production catalog")
     marker = directory.parent.name + "-" + directory.name
     owner = runtime()
     require_owned(owner, owner)
@@ -162,7 +173,9 @@ def run_task(
     prompt = (
         task["instruction"]
         + "\n"
-        + role_instructions("workflow_modeler" if scene else "modeler")
+        + role_instructions(
+            "gh_modeler" if gh else "workflow_modeler" if scene else "modeler"
+        )
     )
     save(directory / "task.json", task)
     save(directory / "tool-definitions.json", definitions)
@@ -222,6 +235,17 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
         },
     }
     try:
+        if gh:
+            from experiments.workflow import gh_ownership
+
+            gh_document = gh_ownership.claim(owner["document"], marker)
+            save(directory / "gh-ownership.json", {"document_id": gh_document})
+            env["EXPERIMENT_GH_DOCUMENT"] = gh_document
+            config["env"] = (
+                "{ "
+                + ", ".join(f"{k} = {json.dumps(v)}" for k, v in env.items())
+                + " }"
+            )
         if scene:
             from experiments.scene_task import seed, response_schema
 
@@ -246,8 +270,17 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
             or sha256(Path(current["assembly"])) != environment["plugin_sha256"]
         ):
             raise RuntimeError("Plugin identity changed")
-        artifact = directory / "candidate.3dm"
-        artifact_hash = save_candidate(artifact, owner["document"], marker)
+        if gh:
+            from experiments import gh_task
+
+            artifact = directory / "candidate.gh.json"
+            save(
+                artifact, gh_task.snapshot(task, owner["document"], marker, gh_document)
+            )
+            artifact_hash = sha256(artifact)
+        else:
+            artifact = directory / "candidate.3dm"
+            artifact_hash = save_candidate(artifact, owner["document"], marker)
         save(
             directory / "artifact.json",
             {
@@ -258,7 +291,9 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
             },
         )
         if not defer_evaluation:
-            measurements = measure(artifact, task)
+            measurements = (
+                json.loads(artifact.read_text()) if gh else measure(artifact, task)
+            )
             if scene:
                 from experiments.scene_task import evaluation_context
 
@@ -266,7 +301,10 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
             report = evaluate(task, measurements)
             report["artifact_sha256"] = artifact_hash
             save(directory / "evaluation.json", report)
-        capture(directory, owner["document"], marker)
+        if gh:
+            gh_task.capture(directory, owner["document"], marker, gh_document)
+        else:
+            capture(directory, owner["document"], marker)
         save(
             directory / "summary.json",
             {
@@ -283,7 +321,22 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
             {"error": str(error), "type": type(error).__name__},
         )
         try:
-            retain_failed_model(directory, owner, marker)
+            if gh and gh_document:
+                from experiments import gh_task
+
+                target = directory / "failed-artifact"
+                target.mkdir()
+                save(
+                    target / "partial.gh.json",
+                    gh_task.snapshot(task, owner["document"], marker, gh_document),
+                )
+                save(
+                    target / "artifact.json",
+                    {"sha256": sha256(target / "partial.gh.json"), "scored": False},
+                )
+                gh_task.capture(target, owner["document"], marker, gh_document)
+            else:
+                retain_failed_model(directory, owner, marker)
         except BaseException as retention_error:
             save(
                 directory / "failure-retention-error.json",
@@ -294,6 +347,11 @@ doc.ModelAbsoluteTolerance={task["linear_tolerance"]};
             )
         raise
     finally:
+        if gh_document:
+            save(
+                directory / "gh-cleanup.json",
+                gh_ownership.cleanup(owner["document"], marker, gh_document),
+            )
         after = cleanup(owner, marker, before, original_current_layer)
         save(
             directory / "preservation.json",
@@ -309,8 +367,11 @@ def evaluate_saved(directory, expected_identity):
     """
     from experiments.trial import read
 
-    artifact = directory / "candidate.3dm"
     record = read(directory / "artifact.json")
+    if sha256(directory / "task.json") != record["task_sha256"]:
+        raise RuntimeError("Frozen task changed")
+    gh = read(directory / "task.json")["type"] == "gh_definition"
+    artifact = directory / ("candidate.gh.json" if gh else "candidate.3dm")
     if not record["evaluation_pending"] or (directory / "evaluation.json").exists():
         raise RuntimeError("Artifact is not pending evaluation")
     pins = read(directory / "pins.json")
@@ -335,7 +396,7 @@ def evaluate_saved(directory, expected_identity):
         raise RuntimeError("Evaluation requires the empty trusted baseline")
     fingerprint_before = fingerprint()
     task = read(directory / "task.json")
-    measurements = measure(artifact, task)
+    measurements = read(artifact) if gh else measure(artifact, task)
     if task["type"] == "workflow_scene":
         from experiments.scene_task import evaluation_context
 
@@ -392,8 +453,18 @@ def run(path, agent_config=None, full_catalog=False):
             if scene_suite
             else TOOLS
         )
+        gh_suite = all(
+            load_task(ROOT / e["path"])["type"] == "gh_definition"
+            for e in suite["tasks"]
+        )
         gateway = Gateway(
-            0, "", 1, directory / "unused", tool_names=names, full_catalog=full_catalog
+            0,
+            "",
+            1,
+            directory / "unused",
+            tool_names=names,
+            full_catalog=full_catalog,
+            gh_document="catalog-only" if gh_suite else None,
         )
         definitions = [
             t.model_dump(mode="json", by_alias=True, exclude_none=True)

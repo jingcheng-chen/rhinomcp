@@ -1,0 +1,388 @@
+{
+  "directory": "experiments/runs/gh-calibration-20260910-154424",
+  "rows": [
+    {
+      "task": "m6-point_array-v1",
+      "variant": "correct",
+      "expected_pass": true,
+      "actual": "pass",
+      "matched": true,
+      "failed": [],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-point_array-v1/correct.gh.json",
+      "sha256": "e7286493d42a0eddcfa9626c2ee2125bb2c1b18b01e7d56bc7978c5507fe327f"
+    },
+    {
+      "task": "m6-point_array-v1",
+      "variant": "solution_error",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "solution"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-point_array-v1/solution_error.gh.json",
+      "sha256": "28ff7750549308fb485cd9a8ecd8f0a746383c514c698cc5e1a63eebefd9f5a7"
+    },
+    {
+      "task": "m6-point_array-v1",
+      "variant": "missing_wire",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "connection:0",
+        "connection:1",
+        "connection:2"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-point_array-v1/missing_wire.gh.json",
+      "sha256": "95ca417f0d9e53892185a5f867b0e9df5c07245281be2e815d5c3671a17ea5f3"
+    },
+    {
+      "task": "m6-point_array-v1",
+      "variant": "orphan",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "no_orphans"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-point_array-v1/orphan.gh.json",
+      "sha256": "bd48bdcd0b64695511fd9f49695542b83586eb9403b89f3fa9b60feff78b11d6"
+    },
+    {
+      "task": "m6-point_array-v1",
+      "variant": "wrong_count",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:result0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-point_array-v1/wrong_count.gh.json",
+      "sha256": "d955cb6bd014d2aa075e2d7d59498e760290f743e3ada6611386f955cafe7a27"
+    },
+    {
+      "task": "m6-point_array-v1",
+      "variant": "wrong_value",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:result0",
+        "bounds:result0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-point_array-v1/wrong_value.gh.json",
+      "sha256": "097151d9aad818c98a19f29526bf58c526af69961dfa0859c54303db069cb562"
+    },
+    {
+      "task": "m6-point_array-v1",
+      "variant": "truncated",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:result0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-point_array-v1/truncated.gh.json",
+      "sha256": "28c6dd82993cde85ef2acaa4ff9e50918f46b2ff556e09e0638fdf28f3f5995e"
+    },
+    {
+      "task": "m6-point_array-v1",
+      "variant": "wrong_graph",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "graph_membership"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-point_array-v1/wrong_graph.gh.json",
+      "sha256": "5b53871501a095e81fac77833fc8dbc097cbe374e29fe7bef4f3d5ad9ed9f1d4"
+    },
+    {
+      "task": "m6-point_array-v1",
+      "variant": "duplicate_nickname",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "component:positions",
+        "component:result",
+        "connection:0",
+        "connection:1",
+        "connection:2",
+        "no_orphans",
+        "output:result0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-point_array-v1/duplicate_nickname.gh.json",
+      "sha256": "5b8352d5d3cd5f49a7caa1ff202967372d3b105fa826c65bb0bf621adb5143fa"
+    },
+    {
+      "task": "m6-point_array-v1",
+      "variant": "live-wrong-value",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:result0",
+        "bounds:result0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-point_array-v1/live-wrong-value.gh.json",
+      "sha256": "c1022ba9dafbe6713e009fb0fb2d544f93fe9a96ee741a2cfdcd95d9a28ec5bc"
+    },
+    {
+      "task": "m6-circle_profiles-v1",
+      "variant": "correct",
+      "expected_pass": true,
+      "actual": "pass",
+      "matched": true,
+      "failed": [],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-circle_profiles-v1/correct.gh.json",
+      "sha256": "5e895364820b650d4a22b7e66aa0e8501ac4162cb9092ba492ac7452a3db67c3"
+    },
+    {
+      "task": "m6-circle_profiles-v1",
+      "variant": "solution_error",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "solution"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-circle_profiles-v1/solution_error.gh.json",
+      "sha256": "a76aa289bcbb2c59ee0c91459fdcfcbcf1d2d662e87208f3c134cb29043f16b1"
+    },
+    {
+      "task": "m6-circle_profiles-v1",
+      "variant": "missing_wire",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "connection:0",
+        "connection:1"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-circle_profiles-v1/missing_wire.gh.json",
+      "sha256": "e9277b39dd5137ec8a1bdcd59e0120c84829197bd6524d4961f9429a8c0659fb"
+    },
+    {
+      "task": "m6-circle_profiles-v1",
+      "variant": "orphan",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "no_orphans"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-circle_profiles-v1/orphan.gh.json",
+      "sha256": "28b9c95f0e038f50c037379cad8fa6b57f902e5314d342937c588fcf3bc1f67e"
+    },
+    {
+      "task": "m6-circle_profiles-v1",
+      "variant": "wrong_count",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:profiles0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-circle_profiles-v1/wrong_count.gh.json",
+      "sha256": "09486bf66fcb9a17ffbd5520335cb60c0ff379c50de486eb8931bfe63669dd86"
+    },
+    {
+      "task": "m6-circle_profiles-v1",
+      "variant": "wrong_value",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:profiles0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-circle_profiles-v1/wrong_value.gh.json",
+      "sha256": "7aa2471a2c6ece390abd8b70b22e8378186f850e1cd4a7b3ffb2f036cf482ee1"
+    },
+    {
+      "task": "m6-circle_profiles-v1",
+      "variant": "truncated",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:profiles0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-circle_profiles-v1/truncated.gh.json",
+      "sha256": "36f93ff271f156bcb90d4a69e0594856bd82cf97bfd7791752de4c9a53dde508"
+    },
+    {
+      "task": "m6-circle_profiles-v1",
+      "variant": "wrong_graph",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "graph_membership"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-circle_profiles-v1/wrong_graph.gh.json",
+      "sha256": "7d54b4b096b4febcaffb2017f6b806f88440c728aaa9ae7a66b561c1e7451300"
+    },
+    {
+      "task": "m6-circle_profiles-v1",
+      "variant": "duplicate_nickname",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "component:radii",
+        "component:areas",
+        "connection:0",
+        "connection:1",
+        "no_orphans",
+        "output:areas0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-circle_profiles-v1/duplicate_nickname.gh.json",
+      "sha256": "0bb0d133a02714b0b1618ea6f644b40f59583ab603235ba070518ee04fc95176"
+    },
+    {
+      "task": "m6-circle_profiles-v1",
+      "variant": "live-wrong-value",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:profiles0",
+        "output:areas0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-circle_profiles-v1/live-wrong-value.gh.json",
+      "sha256": "bfd20ffac848e9372b02705bd40d490ac9eb3dbc56466628fc5f0c4da77e9ed4"
+    },
+    {
+      "task": "m6-loft_sections-v1",
+      "variant": "correct",
+      "expected_pass": true,
+      "actual": "pass",
+      "matched": true,
+      "failed": [],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-loft_sections-v1/correct.gh.json",
+      "sha256": "b17968a193119b0cbff57b7b0570803f4d6d484b2b78f637147a5a7146d32c59"
+    },
+    {
+      "task": "m6-loft_sections-v1",
+      "variant": "solution_error",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "solution"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-loft_sections-v1/solution_error.gh.json",
+      "sha256": "e22713d54a56cdf3dc79be8b3855cc5026773684bbefb509fa1e7372383dab59"
+    },
+    {
+      "task": "m6-loft_sections-v1",
+      "variant": "missing_wire",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "connection:0",
+        "connection:1",
+        "connection:2",
+        "connection:3",
+        "connection:4"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-loft_sections-v1/missing_wire.gh.json",
+      "sha256": "26ae3634b6a8613b806f11c856998d728171287d1efe52f593ff1e1cbd1e3c92"
+    },
+    {
+      "task": "m6-loft_sections-v1",
+      "variant": "orphan",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "no_orphans"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-loft_sections-v1/orphan.gh.json",
+      "sha256": "80c5f31be0f302798729d81c8a8b1c02c3c9ee34bdf7e69f4e4e209643577d15"
+    },
+    {
+      "task": "m6-loft_sections-v1",
+      "variant": "wrong_count",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:sections0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-loft_sections-v1/wrong_count.gh.json",
+      "sha256": "70fb2d6eabf9214635b9707d76f2dbc601fe10f0d038061b000482b4cf06cfad"
+    },
+    {
+      "task": "m6-loft_sections-v1",
+      "variant": "wrong_value",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:sections0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-loft_sections-v1/wrong_value.gh.json",
+      "sha256": "fa69149eac9d2d771e7f3f7f1b9447cc00f066bb0abd027a96a7cc1dc5e8b044"
+    },
+    {
+      "task": "m6-loft_sections-v1",
+      "variant": "truncated",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:sections0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-loft_sections-v1/truncated.gh.json",
+      "sha256": "d1f1941b90c3c40755951bdd1cd94cb3158119c21261597ae7537f549cc802fc"
+    },
+    {
+      "task": "m6-loft_sections-v1",
+      "variant": "wrong_graph",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "graph_membership"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-loft_sections-v1/wrong_graph.gh.json",
+      "sha256": "12583b67d3238c9c22313841fe34e0aa38c6ca9a0914713f95f239943a87ff29"
+    },
+    {
+      "task": "m6-loft_sections-v1",
+      "variant": "duplicate_nickname",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "component:heights",
+        "component:area",
+        "connection:0",
+        "connection:4",
+        "no_orphans",
+        "output:area0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-loft_sections-v1/duplicate_nickname.gh.json",
+      "sha256": "99460fa8d317a2def6de6cfb77acf2526ee3e2768d293bf8019c787ce9baeaa8"
+    },
+    {
+      "task": "m6-loft_sections-v1",
+      "variant": "live-wrong-value",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:sections0",
+        "output:area0"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-154424/m6-loft_sections-v1/live-wrong-value.gh.json",
+      "sha256": "619673acb3fafa06a018a292d07dd97ef18a0ba64e234051bc65caf34b2a543e"
+    }
+  ],
+  "all_matched": true,
+  "builds_sha256": "dbbf5ee458dcc2ef3dad525f6da30e43f9a2cf374b9a33de585a1a681da54ea4"
+}

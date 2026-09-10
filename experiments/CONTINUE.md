@@ -88,8 +88,11 @@ both candidates fail the reviewed failed-call gate. Cycle1 Claude retains one
 baseline timeout and three passes; cycle2 all four pass with zero failures.
 See [M3b](workflow/M3B.md). Joining and directional projection are spent/closed;
 instance/block reuse and mesh connectivity repair remain sealed. No candidate is
-adopted. M6 is next; M5 stays deferred. Worktree housekeeping was complete at entry.
-Latest checks: 285 server, 493 experiments, 13 contracts, Ruff green.
+adopted. M6 ownership/gateway/task/evaluator integration is calibrated: 30 controls
+match; live active-document switching is denied, cleanup restores empty GH and
+preserved Rhino. Three definition families are ready for fresh discovery; vector
+frame is sealed before it. See workflow/GRASSHOPPER.md. M5 stays deferred.
+Latest checks: 285 server, 518 experiments, 13 contracts, Ruff green.
 
 
 - Released: rhinomcp 0.4.0 on PyPI and Yak from `releases/0.4.0`; `main` is at the

@@ -1,0 +1,90 @@
+{
+  "id": "m6-point_array-v1",
+  "type": "gh_definition",
+  "family": "gh-point-array",
+  "instruction": "Build a parametric translated point row: Series named positions yields 0,10,20,30. Connect it to X of Construct Point named points (Y=5,Z=0). Unit Z named lift has factor 20 and drives the motion of Move named result; points drives its Geometry. The four result points must be (0,5,20),(10,5,20),(20,5,20),(30,5,20). Use graph ID m6-point_array and the specified component nicknames. Outputs must match within 0.01 model units (areas within 0.01 square units). Leave no unrelated/orphan nodes.",
+  "graph_id": "m6-point_array",
+  "linear_tolerance": 0.01,
+  "components": [
+    {
+      "name": "Series",
+      "nickname": "positions"
+    },
+    {
+      "name": "Construct Point",
+      "nickname": "points"
+    },
+    {
+      "name": "Unit Z",
+      "nickname": "lift"
+    },
+    {
+      "name": "Move",
+      "nickname": "result"
+    }
+  ],
+  "connections": [
+    {
+      "source": "positions",
+      "target": "points",
+      "output_index": 0,
+      "input_index": 0
+    },
+    {
+      "source": "points",
+      "target": "result",
+      "output_index": 0,
+      "input_index": 0
+    },
+    {
+      "source": "lift",
+      "target": "result",
+      "output_index": 0,
+      "input_index": 1
+    }
+  ],
+  "outputs": [
+    {
+      "id": "result0",
+      "nickname": "result",
+      "output_index": 0,
+      "parameter_name": "Geometry",
+      "count": 4,
+      "values": [
+        [
+          0,
+          5,
+          20
+        ],
+        [
+          10,
+          5,
+          20
+        ],
+        [
+          20,
+          5,
+          20
+        ],
+        [
+          30,
+          5,
+          20
+        ]
+      ],
+      "tolerance": 0.01,
+      "bounds": [
+        [
+          0,
+          5,
+          20
+        ],
+        [
+          30,
+          5,
+          20
+        ]
+      ]
+    }
+  ]
+}

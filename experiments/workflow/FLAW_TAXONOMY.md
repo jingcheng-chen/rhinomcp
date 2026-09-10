@@ -149,3 +149,11 @@ Do not infer that normal guidance/inspection is waste or tune a recipe for one p
 Verification: **285 server, 407 experiment and 13 contract tests passed** (705 total);
 server lint and the changed audit/test modules pass Ruff. No production source
 changed, so no plugin build or installation was required for M1.
+
+## Grasshopper extension (M6)
+
+`gh_friction` distinguishes repeated identical component queries, failed port
+selectors, wiring errors, repeated solution/expire loops, and layout thrash.
+Search/loop/layout heuristics are candidate findings requiring intent review.
+GH catalog queries join discovery; graph, canvas and value reads use the same
+mutation barriers as Rhino reads. No geometry verdict is inferred from traces.

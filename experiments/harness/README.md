@@ -184,3 +184,12 @@ independent saved-file evaluation. `../workflow/m2-pilot.json` registers four
 families. The same pilot supports the 17-tool native subset and `--full-catalog`
 (all production definitions, with document-scoped Rhino permissions). See
 [calibration, boundaries and results](../workflow/SCENE_BENCHMARKS.md).
+
+### Grasshopper adapter (M6)
+
+`gh_task.py` validates/scores frozen graph/output snapshots; `gh_ownership.py`
+guards the actual GH document ID and empty Rhino; `gh_scope.py` constrains stock
+component construction on the supervised host. These plug into the existing
+native gateway, pilot and binary comparison. `validate_gh.py` calibrates three
+small definition families with correct and flawed controls. See
+[`workflow/GRASSHOPPER.md`](../workflow/GRASSHOPPER.md). M5 is still deferred.

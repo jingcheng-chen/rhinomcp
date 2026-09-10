@@ -18,6 +18,7 @@ TAXONOMY = (
     "recovery_loop",
     "unmet_capability",
     "completion_contradiction",
+    "gh_friction",
 )
 DISCOVERY = {
     "describe_command",
@@ -25,6 +26,12 @@ DISCOVERY = {
     "describe_capabilities",
     "get_commands",
     "get_modeling_guidance",
+    "gh_search_components",
+    "gh_batch_search_components",
+    "gh_get_component_type_info",
+    "gh_batch_get_component_type_info",
+    "gh_get_available_components",
+    "gh_list_component_categories",
 }
 READS = DISCOVERY | {
     "get_objects",
@@ -36,6 +43,12 @@ READS = DISCOVERY | {
     "get_reference_image",
     "inspect_view",
     "capture_viewport",
+    "gh_get_graph",
+    "gh_get_document_info",
+    "gh_get_canvas_state",
+    "gh_get_component_info",
+    "gh_list_components",
+    "gh_get_parameter_value",
 }
 WRAPPERS = {"assembly_command", "modeling_command"}
 FALLBACKS = {
@@ -218,9 +231,57 @@ def classify(rows):
 
     prior_error, reads, recent_mutations = {}, {}, []
     epoch = 0
+    gh_queries = Counter()
+    previous_gh_loop = None
     for row in rows:
         command, params = row["command"], row["params"]
         readonly = command in READS
+        if command in {"gh_search_components", "gh_batch_search_components"}:
+            signature = canonical(params)
+            gh_queries[signature] += 1
+            if gh_queries[signature] > 1:
+                add(
+                    "gh_friction",
+                    "component_search_churn",
+                    row,
+                    confidence="candidate",
+                    reason="Repeated identical component search; review whether earlier discovery was usable.",
+                )
+        if command.startswith("gh_") and row["failed"]:
+            text = canonical(row["payload"]).lower()
+            if (
+                command in {"gh_connect_components", "gh_disconnect_components"}
+                or "connection" in text
+                or "wire" in text
+            ):
+                add(
+                    "gh_friction",
+                    "wiring_error",
+                    row,
+                    reason="Failed GH wiring operation; symptom, not a proven tool defect.",
+                )
+            elif "parameter" in text or "input_index" in text or "output_index" in text:
+                add(
+                    "gh_friction",
+                    "parameter_selector",
+                    row,
+                    reason="GH failure names a parameter or port selector.",
+                )
+        if command in {"gh_run_solution", "gh_expire_solution", "gh_layout_components"}:
+            if previous_gh_loop and previous_gh_loop["command"] == command:
+                add(
+                    "gh_friction",
+                    "layout_thrash"
+                    if command == "gh_layout_components"
+                    else "repeated_solution_loop",
+                    row,
+                    [previous_gh_loop["id"], row["id"]],
+                    "candidate",
+                    "Repeated solution/layout operation without an intervening graph mutation; review intent.",
+                )
+            previous_gh_loop = row
+        elif command.startswith("gh_") and not readonly:
+            previous_gh_loop = None
         if row["failed"]:
             add(
                 "failed_call",

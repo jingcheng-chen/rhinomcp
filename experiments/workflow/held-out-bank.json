@@ -177,5 +177,20 @@
       "report_sha256": "156e3d444bb62768e8cdad3c323d75f35515c17f93cfce4bb3ef5ac85a6d17ae"
     },
     "sha256": "962d6af98bfe3071142c2e8ae85b0a81dbba7be3ddfe3afd79cbe2a115027df4"
+  },
+  {
+    "previous": "962d6af98bfe3071142c2e8ae85b0a81dbba7be3ddfe3afd79cbe2a115027df4",
+    "at": "2026-09-10T13:40:13.756922+00:00",
+    "body": {
+      "kind": "seal",
+      "id": "gh-vector-frame-v1",
+      "family": "gh-vector-frame",
+      "payload_sha256": "fc40c4384a3d611fe2b36d6356534203028058a636c9df1be5d69da495d533c2",
+      "cases": 2,
+      "novelty_review": "Sealed before any GH discovery. Vector cross products and orthogonal direction/length calculations are absent from prior Rhino discovery and the three declared GH families (point translation, circles, loft). New vector algebra dataflow, not another point-row parameterization.",
+      "calibration_required": true,
+      "replaces": null
+    },
+    "sha256": "20f3761f30fb0c840aa4d2d775c0dde71c78ba62ce73930a2ccc00e0e64558b9"
   }
 ]

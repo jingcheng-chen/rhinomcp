@@ -1,0 +1,30 @@
+{
+  "runtime": {
+    "document": 268435459,
+    "marker": null,
+    "object_count": 0,
+    "path": null,
+    "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+    "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+    "version": "0.4.1.0",
+    "pid": 99475,
+    "docs": [
+      {
+        "serial": 268435459,
+        "path": null,
+        "count": 0,
+        "modified": true
+      }
+    ]
+  },
+  "first_owned_id": "941e11f8-b8c2-44fe-bd5c-ead0a95e0e9e",
+  "second_owned_id": "a76b7ac4-4602-4efb-844c-d590f49da651",
+  "active_switch_denied": true,
+  "after": {
+    "count": 0,
+    "id": null,
+    "objects": 0
+  },
+  "rhino_preserved": true,
+  "scope": "Two supervisor-created empty GH documents; no user documents touched."
+}

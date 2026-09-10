@@ -122,3 +122,21 @@ def test_failed_model_cannot_snapshot_foreign_document(tmp_path, monkeypatch):
     with pytest.raises(RuntimeError, match="not owned"):
         pilot.retain_failed_model(tmp_path, owner, "owned")
     assert not (tmp_path / "failed-artifact").exists()
+
+
+def test_gh_snapshot_uses_same_trusted_deferred_judge(tmp_path, monkeypatch):
+    identity, _ = pending(tmp_path, monkeypatch)
+    persist(tmp_path / "task.json", {"id": "gh", "type": "gh_definition"})
+    persist(tmp_path / "candidate.gh.json", {"complete": True, "outputs": {"x": 1}})
+    record = read(tmp_path / "artifact.json")
+    record.update(
+        sha256=sha256(tmp_path / "candidate.gh.json"),
+        task_sha256=sha256(tmp_path / "task.json"),
+    )
+    persist(tmp_path / "artifact.json", record)
+    monkeypatch.setattr(
+        pilot, "measure", lambda *args: pytest.fail("GH must judge the frozen snapshot")
+    )
+    result = pilot.evaluate_saved(tmp_path, identity)
+    assert result["status"] == "fail"
+    assert result["measurements"] == {"complete": True, "outputs": {"x": 1}}

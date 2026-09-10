@@ -1,0 +1,85 @@
+{
+  "id": "m6-circle_profiles-v1",
+  "type": "gh_definition",
+  "family": "gh-circle-profiles",
+  "instruction": "Build three concentric world-XY circles with radii 2,4,6. Series named radii (start2,step2,count3) must drive the Radius of Circle named profiles. Connect profiles to Area named areas. Require three circles centered at the origin and area outputs 4*pi,16*pi,36*pi. Use graph ID m6-circle_profiles and the specified component nicknames. Outputs must match within 0.01 model units (areas within 0.01 square units). Leave no unrelated/orphan nodes.",
+  "graph_id": "m6-circle_profiles",
+  "linear_tolerance": 0.01,
+  "components": [
+    {
+      "name": "Series",
+      "nickname": "radii"
+    },
+    {
+      "name": "Circle",
+      "nickname": "profiles"
+    },
+    {
+      "name": "Area",
+      "nickname": "areas"
+    }
+  ],
+  "connections": [
+    {
+      "source": "radii",
+      "target": "profiles",
+      "output_index": 0,
+      "input_index": 1
+    },
+    {
+      "source": "profiles",
+      "target": "areas",
+      "output_index": 0,
+      "input_index": 0
+    }
+  ],
+  "outputs": [
+    {
+      "id": "profiles0",
+      "nickname": "profiles",
+      "output_index": 0,
+      "parameter_name": "Circle",
+      "count": 3,
+      "values": [
+        {
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "radius": 2
+        },
+        {
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "radius": 4
+        },
+        {
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "radius": 6
+        }
+      ],
+      "tolerance": 0.01
+    },
+    {
+      "id": "areas0",
+      "nickname": "areas",
+      "output_index": 0,
+      "parameter_name": "Area",
+      "count": 3,
+      "values": [
+        12.566370614359172,
+        50.26548245743669,
+        113.09733552923255
+      ],
+      "tolerance": 0.01
+    }
+  ]
+}
