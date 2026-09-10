@@ -1,0 +1,90 @@
+{
+  "ledger_sha256": "1543db76077fcce3f3ee908ed2fa009691a2a517c2d591a9173b2b33054207fc",
+  "head": "02e6c9cb4a3ee252543eb1deb28e02f04522fb44f2cd8c8db6d2230458888923",
+  "discovery_families": [
+    "curved-panels",
+    "document-inspection",
+    "editing-existing",
+    "layer-organization",
+    "photo-reconstruction",
+    "posed-solids",
+    "primitives",
+    "recovery",
+    "small-assemblies",
+    "subtractive-solids",
+    "surface-construction",
+    "trimmed-patches"
+  ],
+  "entries": {
+    "m3-cycle1": {
+      "kind": "historical_spend",
+      "id": "m3-cycle1",
+      "family": "planar-curve-editing",
+      "validation": "m3-cycle1",
+      "evidence": "experiments/workflow/m3-cycle1-results.json",
+      "evidence_sha256": "cbf9bd723dcfda3e328f4a2b34fcb0fadfe6f843bdce33d460f026e60d755151",
+      "task_sha256": "7ee2b9770c16a9ff47ae5040dff99544b4fb415b00994024521e0ac4d59e3f73",
+      "note": "Imported after M3; original pre-dispatch declarations and all attempts remain in M3 evidence. This is not a new pre-M3 cryptographic reservation.",
+      "state": "spent",
+      "closure": {
+        "kind": "close",
+        "id": "m3-cycle1",
+        "outcome": "kept",
+        "report_sha256": "cbf9bd723dcfda3e328f4a2b34fcb0fadfe6f843bdce33d460f026e60d755151"
+      }
+    },
+    "m3-cycle2": {
+      "kind": "historical_spend",
+      "id": "m3-cycle2",
+      "family": "section-extraction",
+      "validation": "m3-cycle2",
+      "evidence": "experiments/workflow/m3-cycle2-results.json",
+      "evidence_sha256": "37984264195ed71733a5ed855d3957301341e85ab81eb1a4c5e009580a4eaec7",
+      "task_sha256": "75b9e688d688ad8994737c153e407ef1276e8ff22b60f5b2e980868f04d49744",
+      "note": "Imported after M3; original pre-dispatch declarations and all attempts remain in M3 evidence. This is not a new pre-M3 cryptographic reservation.",
+      "state": "spent",
+      "closure": {
+        "kind": "close",
+        "id": "m3-cycle2",
+        "outcome": "kept",
+        "report_sha256": "37984264195ed71733a5ed855d3957301341e85ab81eb1a4c5e009580a4eaec7"
+      }
+    },
+    "curve-network-joining-v1": {
+      "kind": "seal",
+      "id": "curve-network-joining-v1",
+      "family": "curve-network-joining",
+      "payload_sha256": "c3ba09d0f9f815dc3eefa8b621700ff810dc451dd84c37ee955998e0ea32e783",
+      "cases": 2,
+      "novelty_review": "Reviewed historical flaw corpus and M2/M3 family allocation. Endpoint-connectivity joining of multiple prepared curve fragments has not been a discovery task; planar offset and section extraction are spent and explicitly excluded. Family identity is the connectivity/join workflow, not its numeric dimensions.",
+      "calibration_required": true,
+      "replaces": "m3-cycle1",
+      "state": "available",
+      "payload_status": "verified"
+    },
+    "instance-block-reuse-v1": {
+      "kind": "seal",
+      "id": "instance-block-reuse-v1",
+      "family": "instance-block-reuse",
+      "payload_sha256": "2dd1ffbdca305a089bfcca179cf82259794239be2472d489627a5c1ebb7e019d",
+      "cases": 2,
+      "novelty_review": "Reviewed the historical and M2/M3 corpus. Prepared shared-definition instances and retained definition linkage have not been discovery tasks. Earlier small assemblies use independent solids; this family specifically requires shared instance identity and propagation rather than merely similar output geometry.",
+      "calibration_required": true,
+      "replaces": "m3-cycle2",
+      "state": "available",
+      "payload_status": "verified"
+    }
+  },
+  "ready_families": 2,
+  "verification": {
+    "controller_sha256": "d61b3aa8ab9071379f21a494baa523e86ff7671451dd1a2ba0a2674ece60ab4a",
+    "tests_sha256": "bbc03850b139ceed49981f4ff4c4a8d5575a861792517d1db292dacfd01a6c8a",
+    "lifecycle_tests_passed": 14,
+    "real_family_disclosures": 0,
+    "new_cases_modeled": 0,
+    "private_files_ignored": true,
+    "server_version": "0.4.0",
+    "plugin_version": "0.4.0",
+    "update_advice": null
+  }
+}

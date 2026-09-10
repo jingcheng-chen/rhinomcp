@@ -1,7 +1,7 @@
 # Continue autonomous RhinoMCP improvement
 
 Entry point for a fresh development session (Codex CLI or Claude Code) with no
-chat context. Last updated 2026-09-10, after M3 on the 0.4.0 release. Verify repository
+chat context. Last updated 2026-09-10, after M4 with the 0.4.0 experimental baseline. Verify repository
 and application state before acting; nothing below about running processes, open
 documents or loaded plugins is an assumption you may keep.
 
@@ -58,7 +58,7 @@ This supersedes the precision-oriented next steps in [HANDOFF_HISTORY.md](HANDOF
    test session. Decide and record everything else yourself.
 7. Before every commit: from `server/`, `.venv/bin/python -m pytest` (285 at last
    count) and `.venv/bin/ruff check src/rhinomcp`; from the repository root,
-   `server/.venv/bin/python -m pytest experiments/tests` (457) and
+   `server/.venv/bin/python -m pytest experiments/tests` (471) and
    `server/.venv/bin/python -m pytest contracts/test_schemas.py` (13); for plugin
    changes, `dotnet build plugin/rhinomcp.sln --configuration Release`.
 
@@ -70,7 +70,8 @@ credentials anywhere; reinstall the plugin into a Rhino that holds user work.
 ## Current state — 2026-09-10
 
 - Released: rhinomcp 0.4.0 on PyPI and Yak from `releases/0.4.0`; `main` is at the
-  merge of PR #52 (`a4bb8bb`). 0.4.0 includes MCP SDK 2.x, `create_planar_region`,
+  merge of PR #54 (`b446d4a`) with unreleased 0.4.1 changes; no package release
+  was requested. Released 0.4.0 includes MCP SDK 2.x, `create_planar_region`,
   packaged guidance v2, the plugin repairs, and the server/plugin version-skew guard.
   `CHANGELOG.md` has the details. The `harness` branch continues experimental work after that release.
 - Every Rhino connection now reads `describe_capabilities` once before its first
@@ -112,13 +113,23 @@ credentials anywhere; reinstall the plugin into a Rhino that holds user work.
   wrong-field error did not recur in either arm; this small descriptive signal does
   not prove the wording caused every saving. See [M3 report](workflow/M3.md),
   `workflow/m3-cycle1-results.json` and `workflow/m3-cycle2-results.json`.
-- Kept changes are in open PRs [#53](https://github.com/jingcheng-chen/rhinomcp/pull/53)
-  and [#54](https://github.com/jingcheng-chen/rhinomcp/pull/54), targeting main and
-  preparing the same unreleased 0.4.1. #54 is stacked on #53; review/merge #53 first.
-  No merge or publication was authorized/performed. Neither the selected baseline
-  nor production source in this harness checkout was advanced. The attribute
-  release build repeats 14/14 direct checks. Combined release source passes tests;
-  the fresh-agent trials tested each change independently, not their joint effect.
+- The user authorized merging the kept changes after M3. PRs
+  [#53](https://github.com/jingcheng-chen/rhinomcp/pull/53) and
+  [#54](https://github.com/jingcheng-chen/rhinomcp/pull/54) are merged, in that order,
+  as `262e277` and `b446d4a`, with green CI and the tested combined source tree.
+  Version 0.4.1 is still unreleased. Publication was not requested. Keep the
+  selected experimental baseline and this harness checkout's production source
+  at released 0.4.0 until an explicit rebaseline; do not infer a runtime install
+  or package release from the PR merges.
+- M4 is complete: `workflow/held-out-bank.json` contains two spent M3 histories
+  and two sealed replacement families with two fixed cases each. Private bundles
+  are in ignored `experiments/held_out_private/`; public metadata contains hashes
+  and novelty reviews, never parameters. `workflow/held_out.py` spends before
+  disclosure, prevents family/validation reuse, preserves export failures, requires
+  a fresh replacement before closure, and can retire damaged/lost/leaked bundles.
+  Fourteen synthetic lifecycle tests pass. See [M4 report](workflow/M4.md) and
+  [allocation runbook](workflow/HELD_OUT.md). These are fixed specifications for
+  future shared task/evaluator calibration, not yet live-validated task adapters.
 - The user authorized dedicated local testing. Final M3 verification: Rhino PID
   7380, document 268435457, zero objects, no marker/path, original layers, modified
   flag true. Server/plugin both 0.4.0, no update advice, verified released SHA/MVID.
@@ -131,14 +142,15 @@ credentials anywhere; reinstall the plugin into a Rhino that holds user work.
   solids, trimmed patches and curved panels through a 14-tool subset. Held-out cases
   in those families are spent; new parameterizations of them are discovery cases.
 - Curve editing and section extraction were spent in M3. Unopened replacement
-  family names are curve-network joining and instance/block reuse; parameters are
-  not yet sealed. M4 is next: formalize the sealed bank and allocation process.
+  families are curve-network joining and instance/block reuse; parameters are
+  now sealed in the supervisor-only bank. M5 is next and still needs the dedicated
+  environment decision. Do not open private bundles for discovery or builders.
   See [held-out allocation](workflow/HELD_OUT.md), declared before M2 discovery.
 - Agents available: the Codex adapter (default) and the Claude adapter (native
   modeling validated; binary comparison orchestration remains Codex-only).
 - Pending user decision: the dedicated isolation environment (VM or machine) for
-  unattended operation. Nothing else blocks M0 to M4.
-- Tests at last verification: 285 server, 457 experiments, 13 contracts; server lint passes.
+  unattended operation. M0 through M4 are complete.
+- Tests at last verification: 285 server, 471 experiments, 13 contracts; server lint passes.
 
 ## Milestones from here, in order
 
@@ -210,11 +222,15 @@ advice for one task.
 Done when two cycles have completed end to end on 0.4.0 with recorded verdicts,
 kept or rejected.
 
-### M4 — Held-out family bank
+### M4 — Held-out family bank (complete, 2026-09-10)
 
 Keep a sealed list of families and parameterizations unused in discovery. Spend one
 per validation and replace it. Record in `workflow/HELD_OUT.md` which was used when,
 so generalization claims stay honest.
+
+Implemented with two locally verified sealed families, immutable payload hashes,
+a durable allocation/closure ledger, and fourteen lifecycle tests. Read
+[HELD_OUT.md](workflow/HELD_OUT.md) before any future validation allocation.
 
 ### M5 — Unattended operation and hard isolation (blocked on the user)
 

@@ -4,9 +4,9 @@
   "branch": "codex/clarify-object-lookup-selectors",
   "commit": "859322b",
   "version": "0.4.1",
-  "status": "open",
+  "status": "merged",
   "depends_on": "https://github.com/jingcheng-chen/rhinomcp/pull/53",
-  "merged": false,
+  "merged": true,
   "published": false,
   "baseline_selected": "0.4.0",
   "validation": {
@@ -29,5 +29,8 @@
       "schemas",
       "lint"
     ]
-  }
+  },
+  "merge_commit": "b446d4a1a7d7ed84e41edb16c450e909aaa6652c",
+  "merged_at": "2026-09-10T07:52:52Z",
+  "merge_authorization": "Explicit user request after M3: Merge the two PRs. Continue to M4."
 }

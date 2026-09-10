@@ -36,9 +36,77 @@ attempts in this one frozen validation remain part of its declared use.
 Section extraction is allocated to cycle 2. After the fresh planner proposal, the
 supervisor fixes a prepared solid and two section heights in
 `tasks/extract_sections.json`. The bounded builder receives no task parameters.
-Seven saved controls will calibrate the shared evaluator before comparison. This
+Eight saved controls calibrate the shared evaluator before comparison. This
 family becomes spent at the first dispatch of the frozen cycle 2 comparison;
 curve-network joining and instance/block reuse remain unopened replacements.
 
 The frozen M3-2 comparison dispatched its first modeler on 2026-09-10. Section
 extraction is now spent for later tuning; all twelve runs belong to this allocation.
+
+## M4 sealed bank — 2026-09-10
+
+Source of truth: [held-out-bank.json](held-out-bank.json), managed by
+`held_out.py`. The M3 entries are explicitly imported historical spends, backed by
+unchanged task/result hashes; this does not retroactively claim a cryptographic
+reservation before M3. Both have a sealed replacement and are closed as kept.
+
+| Family | State | Fixed cases | Replaces |
+| --- | --- | --- | --- |
+| Planar curve editing | Spent in M3-1 | Historical offset task | — |
+| Section extraction | Spent in M3-2 | Historical section task | — |
+| Curve-network joining | Sealed, available | 2 | M3-1 |
+| Instance/block reuse | Sealed, available | 2 | M3-2 |
+
+Private bundles are in ignored `experiments/held_out_private/`, with owner-only
+permissions. Do not open them for discovery, send them to a planner/builder, place
+them in public task directories, or infer new variants after seeing outcomes.
+Public metadata records the novelty review, case count and payload hash. Sealing
+here means supervisor custody and an immutable commitment, not encryption or an
+adversarial filesystem boundary. Fresh bounded roles cannot request these paths
+through their tools. A supervisor with filesystem access can read them; M5 remains
+necessary for hard isolation. Keep a private backup when moving workspaces. A
+fresh clone without the bundles reports `unavailable`, never validation-ready.
+
+### Allocate one family to one frozen validation
+
+1. Inspect metadata with `server/.venv/bin/python -m experiments.workflow.held_out status`.
+   Check the public exclusion list and semantic novelty review, not just the name.
+   Renaming a family or choosing new dimensions does not make it held out again.
+2. Complete the fresh planner/builder boundaries and write the validation review
+   before opening a bundle. It must declare the two discovery families, selected
+   held-out family, agent/budgets, calibration plan, fixed comparison design and
+   keep rule. Do not give the builder the private parameters.
+3. Run the following with a new validation ID and a new output path:
+
+   ```sh
+   server/.venv/bin/python -m experiments.workflow.held_out spend ENTRY_ID --validation VALIDATION_ID --review-file REVIEW.md --output SUPERVISOR_BUNDLE.json
+   ```
+
+   The ledger marks the **entire family spent before export**, conservatively
+   earlier than first modeler dispatch. All cases may be used in that one frozen
+   validation, but no tuning or extra repetitions after seeing results. Commit the
+   ledger and preserve its hash with the comparison review before modeling.
+4. Independently turn the committed specification into the shared task/evaluator
+   route and calibrate saved positive/negative controls. These sealed specifications
+   are not yet runnable task schemas or calibrated geometry evaluators. Do not
+   loosen the fixed acceptance requirements to pass a run. If preparation exposes
+   an invalid case, retain it as abandoned and replace the family. Freeze runnable
+   task/evaluator/catalog/source pins before modeler dispatch through the existing
+   comparison controller; this bank never launches agents or changes Rhino.
+5. Preserve every outcome, including timeout, failure and abandonment. Seal a new,
+   semantically unused family with `seal PRIVATE_SPEC.json --replaces ENTRY_ID`,
+   then `close ENTRY_ID --outcome OUTCOME --report REPORT` (outcome: kept, rejected,
+   incomplete or abandoned).
+   Those subcommands use the same module invocation as above. Closing requires a
+   still-available sealed replacement; no command restores a spent family.
+
+An export failure still spends the family. `export ENTRY_ID --validation SAME_ID
+--output NEW_PATH` can recover the identical bundle for the same open validation;
+it never grants a new attempt. A leaked, missing or damaged bundle is retired with
+`retire ENTRY_ID --validation INCIDENT_ID --review-file INCIDENT.md`, without
+reading/exporting its contents. Replace it and close it as abandoned. Public
+ledger edits or payload mismatches are not repaired by regenerating parameters.
+
+The CLI enforces allocation state and byte identity. It does not prove semantic
+novelty, calibrate geometry, prevent a supervisor from bypassing it, or replace the
+comparison controller's immutable schedule. See [M4 validation](M4.md).

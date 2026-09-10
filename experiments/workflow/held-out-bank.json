@@ -1,0 +1,107 @@
+[
+  {
+    "previous": null,
+    "at": "2026-09-10T07:57:56.366766+00:00",
+    "body": {
+      "kind": "initialize",
+      "version": 1,
+      "discovery_families": [
+        "curved-panels",
+        "document-inspection",
+        "editing-existing",
+        "layer-organization",
+        "photo-reconstruction",
+        "posed-solids",
+        "primitives",
+        "recovery",
+        "small-assemblies",
+        "subtractive-solids",
+        "surface-construction",
+        "trimmed-patches"
+      ]
+    },
+    "sha256": "a55e1164bb02c60f6903b1fe8dd5c2404b4a27499f6544bdfd3a6052b8f9bacc"
+  },
+  {
+    "previous": "a55e1164bb02c60f6903b1fe8dd5c2404b4a27499f6544bdfd3a6052b8f9bacc",
+    "at": "2026-09-10T07:57:56.367452+00:00",
+    "body": {
+      "kind": "historical_spend",
+      "id": "m3-cycle1",
+      "family": "planar-curve-editing",
+      "validation": "m3-cycle1",
+      "evidence": "experiments/workflow/m3-cycle1-results.json",
+      "evidence_sha256": "cbf9bd723dcfda3e328f4a2b34fcb0fadfe6f843bdce33d460f026e60d755151",
+      "task_sha256": "7ee2b9770c16a9ff47ae5040dff99544b4fb415b00994024521e0ac4d59e3f73",
+      "note": "Imported after M3; original pre-dispatch declarations and all attempts remain in M3 evidence. This is not a new pre-M3 cryptographic reservation."
+    },
+    "sha256": "e98facd1622b564a05b810662a76900c9f8ad298a3325d18ca1ee003d10ebc67"
+  },
+  {
+    "previous": "e98facd1622b564a05b810662a76900c9f8ad298a3325d18ca1ee003d10ebc67",
+    "at": "2026-09-10T07:57:56.367878+00:00",
+    "body": {
+      "kind": "historical_spend",
+      "id": "m3-cycle2",
+      "family": "section-extraction",
+      "validation": "m3-cycle2",
+      "evidence": "experiments/workflow/m3-cycle2-results.json",
+      "evidence_sha256": "37984264195ed71733a5ed855d3957301341e85ab81eb1a4c5e009580a4eaec7",
+      "task_sha256": "75b9e688d688ad8994737c153e407ef1276e8ff22b60f5b2e980868f04d49744",
+      "note": "Imported after M3; original pre-dispatch declarations and all attempts remain in M3 evidence. This is not a new pre-M3 cryptographic reservation."
+    },
+    "sha256": "42c46465f3df8f41a1f08a0329ce86c73363b3e082dc777408ed122093ec8389"
+  },
+  {
+    "previous": "42c46465f3df8f41a1f08a0329ce86c73363b3e082dc777408ed122093ec8389",
+    "at": "2026-09-10T07:57:56.368319+00:00",
+    "body": {
+      "kind": "seal",
+      "id": "curve-network-joining-v1",
+      "family": "curve-network-joining",
+      "payload_sha256": "c3ba09d0f9f815dc3eefa8b621700ff810dc451dd84c37ee955998e0ea32e783",
+      "cases": 2,
+      "novelty_review": "Reviewed historical flaw corpus and M2/M3 family allocation. Endpoint-connectivity joining of multiple prepared curve fragments has not been a discovery task; planar offset and section extraction are spent and explicitly excluded. Family identity is the connectivity/join workflow, not its numeric dimensions.",
+      "calibration_required": true,
+      "replaces": "m3-cycle1"
+    },
+    "sha256": "420570fef64d7efdf5d5667e4c83efc995292dcbd6b3e65d0a6359ad3b97477d"
+  },
+  {
+    "previous": "420570fef64d7efdf5d5667e4c83efc995292dcbd6b3e65d0a6359ad3b97477d",
+    "at": "2026-09-10T07:57:56.368708+00:00",
+    "body": {
+      "kind": "close",
+      "id": "m3-cycle1",
+      "outcome": "kept",
+      "report_sha256": "cbf9bd723dcfda3e328f4a2b34fcb0fadfe6f843bdce33d460f026e60d755151"
+    },
+    "sha256": "160daa5a08f28b6f7f8138d2474c35db4e7633d18bf64a2d2936c635dca35402"
+  },
+  {
+    "previous": "160daa5a08f28b6f7f8138d2474c35db4e7633d18bf64a2d2936c635dca35402",
+    "at": "2026-09-10T07:57:56.369379+00:00",
+    "body": {
+      "kind": "seal",
+      "id": "instance-block-reuse-v1",
+      "family": "instance-block-reuse",
+      "payload_sha256": "2dd1ffbdca305a089bfcca179cf82259794239be2472d489627a5c1ebb7e019d",
+      "cases": 2,
+      "novelty_review": "Reviewed the historical and M2/M3 corpus. Prepared shared-definition instances and retained definition linkage have not been discovery tasks. Earlier small assemblies use independent solids; this family specifically requires shared instance identity and propagation rather than merely similar output geometry.",
+      "calibration_required": true,
+      "replaces": "m3-cycle2"
+    },
+    "sha256": "926c89c912efa148da2f296472c7e485ed630897091f139c036090a57b9eb197"
+  },
+  {
+    "previous": "926c89c912efa148da2f296472c7e485ed630897091f139c036090a57b9eb197",
+    "at": "2026-09-10T07:57:56.369857+00:00",
+    "body": {
+      "kind": "close",
+      "id": "m3-cycle2",
+      "outcome": "kept",
+      "report_sha256": "37984264195ed71733a5ed855d3957301341e85ab81eb1a4c5e009580a4eaec7"
+    },
+    "sha256": "02e6c9cb4a3ee252543eb1deb28e02f04522fb44f2cd8c8db6d2230458888923"
+  }
+]

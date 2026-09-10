@@ -4,8 +4,8 @@
   "branch": "codex/fix-attribute-updates-040",
   "commit": "abf03a9",
   "version": "0.4.1",
-  "status": "open",
-  "merged": false,
+  "status": "merged",
+  "merged": true,
   "published": false,
   "baseline_selected": "0.4.0",
   "validation": {
@@ -29,5 +29,8 @@
       "schemas",
       "lint"
     ]
-  }
+  },
+  "merge_commit": "262e277570622d0bb247ba70959930f490b174a8",
+  "merged_at": "2026-09-10T07:52:18Z",
+  "merge_authorization": "Explicit user request after M3: Merge the two PRs. Continue to M4."
 }

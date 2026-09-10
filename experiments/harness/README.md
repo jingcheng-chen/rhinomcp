@@ -13,6 +13,7 @@ configuration, not a second copy of instructions kept elsewhere.
 
 | Concern | Source of truth |
 | --- | --- |
+| Held-out family custody and allocation | `../workflow/held_out.py`, `../workflow/held-out-bank.json`, `../workflow/HELD_OUT.md`; private bundles are outside agent tool scopes |
 | Description-only paired comparison | `../workflow/compare.py`, `../workflow/placement-trial.json`; reuses the native pilot |
 | Shared native-interface pilot | `../workflow/pilot.json`, `../workflow/pilot.py`, `../workflow/native_mcp.py` |
 | Modeler behavior | `roles/modeler.md` |

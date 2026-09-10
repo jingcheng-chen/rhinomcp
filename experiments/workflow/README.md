@@ -296,3 +296,14 @@ section cases use the same task runner and saved-file measurement path as boxes.
 `validate_attributes.py` runs controller-only attribute checks in an owned empty
 document. Preserve all failed attempts and setup failures, and never convert an
 agent completion claim into a task verdict.
+
+## M4 supervisor-held family bank
+
+The [sealed bank and allocation runbook](HELD_OUT.md) now govern future held-out
+claims. Use `python -m experiments.workflow.held_out status` with the server venv
+from the repository root. Metadata is public, fixed payloads remain in the ignored
+local vault. Spend before exposure; even an abandoned validation consumes its
+family. Seal a new family before closing the old allocation. The CLI neither
+launches modeling nor bypasses the existing comparison/calibration gates.
+See [M4 evidence and limits](M4.md). A checkout without private payloads must report
+unavailable cases; do not reconstruct them with new parameters under the old hash.
