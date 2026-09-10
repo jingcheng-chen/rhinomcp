@@ -277,7 +277,10 @@ class TestVersionSkew:
 
     @patch("rhinomcp.tools.describe_capabilities.get_rhino_connection")
     def test_describe_capabilities_reports_both_sides(self, mock_get_conn):
-        from rhinomcp.tools.describe_capabilities import describe_capabilities
+        from rhinomcp.tools.describe_capabilities import (
+            describe_capabilities,
+            version_skew_report,
+        )
 
         mock_conn = MagicMock()
         mock_conn.send_command.return_value = {
@@ -288,7 +291,8 @@ class TestVersionSkew:
         }
         mock_get_conn.return_value = mock_conn
 
-        with patch("rhinomcp.server.server_version", return_value="0.4.0"):
+        # Other tests reload the server module; patch the helper retained by this tool.
+        with patch.dict(version_skew_report.__globals__, server_version=lambda: "0.4.0"):
             result = describe_capabilities(ctx=None)
 
         assert result["version"] == "0.3.2"

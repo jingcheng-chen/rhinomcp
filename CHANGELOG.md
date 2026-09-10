@@ -4,6 +4,17 @@ Server and plugin share one version. Update them together: the server sends
 commands the matching plugin understands, and an older plugin silently ignores
 parameters it does not know.
 
+## 0.4.1 — unreleased (prepared 2026-09-10)
+
+### Fixed
+
+- `update_object_attributes` works with the Newtonsoft assembly loaded by Rhino 8
+  on macOS. A missing overload previously prevented all updates, including calls
+  that only changed an object's layer.
+- Attribute edits use a detached copy before committing, preserving existing and
+  newly assigned user strings. Scalar encoding, null deletion and validation stay
+  unchanged; no wire-contract or dependency change is required.
+
 ## 0.4.0 — unreleased (prepared 2026-09-09)
 
 ### Fixed: fresh installs of 0.3.2 fail to start

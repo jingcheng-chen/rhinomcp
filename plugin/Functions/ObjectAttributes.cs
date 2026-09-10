@@ -26,7 +26,7 @@ public partial class RhinoMCPFunctions
             throw new ArgumentException("update_object_attributes requires at least one attribute update.");
 
         var obj = getObjectByIdOrName(parameters);
-        var attrs = obj.Attributes;
+        var attrs = obj.Attributes.Duplicate();
         var attributesModified = false;
 
         if (parameters["visible"]?.Type == JTokenType.Boolean &&
@@ -123,7 +123,7 @@ public partial class RhinoMCPFunctions
                          property.Value.Type == JTokenType.Float ||
                          property.Value.Type == JTokenType.Boolean)
                 {
-                    attrs.SetUserString(property.Name, property.Value.ToString(Formatting.None));
+                    attrs.SetUserString(property.Name, property.Value.ToString(Formatting.None, Array.Empty<JsonConverter>()));
                 }
                 else
                 {
