@@ -1,0 +1,33 @@
+{
+  "decision": "keep",
+  "pr": "https://github.com/jingcheng-chen/rhinomcp/pull/53",
+  "branch": "codex/fix-attribute-updates-040",
+  "commit": "abf03a9",
+  "version": "0.4.1",
+  "status": "open",
+  "merged": false,
+  "published": false,
+  "baseline_selected": "0.4.0",
+  "validation": {
+    "server_tests": 285,
+    "experiment_tests": 355,
+    "contract_tests": 13,
+    "build_warnings": 0,
+    "build_errors": 0,
+    "live_attribute_checks": 14,
+    "live_attribute_passes": 14
+  },
+  "ci": {
+    "status": "all_pass",
+    "run": "https://github.com/jingcheng-chen/rhinomcp/actions/runs/34450747912",
+    "checks": [
+      "Python 3.10",
+      "Python 3.11",
+      "Python 3.12",
+      ".NET 7 build",
+      ".NET 8 build",
+      "schemas",
+      "lint"
+    ]
+  }
+}

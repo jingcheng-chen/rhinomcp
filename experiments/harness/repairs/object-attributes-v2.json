@@ -1,0 +1,14 @@
+{
+  "baseline_revision": "releases/0.4.0",
+  "read_paths": [
+    "plugin/Functions/ObjectAttributes.cs",
+    "plugin/Serializers/Serializer.cs",
+    "server/src/rhinomcp/tools/object_attributes.py",
+    "contracts/commands/update_object_attributes.json"
+  ],
+  "write_paths": [
+    "plugin/Functions/ObjectAttributes.cs"
+  ],
+  "requirements": "Repair the statically bound unavailable JToken.ToString(Formatting) call using a signature exposed by Rhino loaded Newtonsoft assemblies. Preserve compact JSON scalar representations, native string values, null deletion, array/object rejection and all existing handler operations, validation and responses. Do not change contracts, dependencies, other operations, or add guidance. Keep the patch minimal. A loaded reflection probe found only ToString() and ToString(Formatting, JsonConverter[]) overloads. Do not use parameterless ToString for booleans or floating numbers if it changes encoding. Independent preflight of the one-line candidate exposed existing user-data loss when the handler modifies obj.Attributes directly. A direct Rhino control yields {} after SetUserString+ModifyAttributes with obj.Attributes, and preserves old=value,text=abc when using obj.Attributes.Duplicate(). Also change the handler to edit a detached duplicate before committing. Keep both fixes confined to this handler; no new functionality. Preserve validation failure atomicity and geometry identity.",
+  "acceptance": "Supervisor will independently build and test layer-only calls plus string/numeric/boolean/null user-data round trips, invalid arrays/objects, name/color/material/visibility/lock operations and saved geometry/identity preservation; then compare fresh cross-family agent runs. Builder cannot build or install."
+}

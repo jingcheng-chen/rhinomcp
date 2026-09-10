@@ -1,0 +1,5033 @@
+{
+  "status": "benefit_observed",
+  "tasks": {
+    "experiments/tasks/table_assembly.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 10,
+        "median_calls": 21.0,
+        "median_seconds": 70.99107052097679
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 14.0,
+        "median_seconds": 67.11476993802353
+      },
+      "family": "small-assemblies",
+      "correctness_regression": false,
+      "observed_benefit": true
+    },
+    "experiments/tasks/recover_intermediate.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 3,
+        "median_calls": 15.0,
+        "median_seconds": 81.45960429101251
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 10.0,
+        "median_seconds": 45.53770983350114
+      },
+      "family": "recovery",
+      "correctness_regression": false,
+      "observed_benefit": true
+    },
+    "experiments/tasks/offset_outline.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 2,
+        "median_calls": 24.0,
+        "median_seconds": 84.42579552048119
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 18.0,
+        "median_seconds": 70.14095281250775
+      },
+      "family": "planar-curve-editing",
+      "correctness_regression": false,
+      "observed_benefit": true
+    }
+  },
+  "runs": [
+    {
+      "id": "task-1-pair-1-baseline",
+      "family": "small-assemblies",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-1-pair-1-baseline",
+      "source_sha256": "415ecaa3f057dcdb9d5eda91916bc21fc41b78ec6b43c7a47b5d044c5befdced",
+      "session_status": "completed",
+      "elapsed_seconds": 68.06409554195125,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "28babe09c085f640b1b5fb517e0bb3ffe035ec0267cc1c8edb015a3ebd465eea",
+      "result_sha256": "20793ba660e6bc704a40f5ab72338658282fc541f87847baf0fa2c1cdc99ebd2",
+      "status_sha256": "a9ff291d3b9f020249fc8e56ed1e43f5cc873e1e57d58126aa234427bdc21daa",
+      "environment_sha256": "cf2d4ff8f4360305217c10bf7500a946ccd8da1fa190cb3de1c95425351d385b",
+      "metrics": {
+        "mcp_attempts": 24,
+        "completed_calls": 24,
+        "unfinished_calls": 0,
+        "failed_calls": 5,
+        "failures_by_tool": {
+          "update_object_attributes": 5
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 3,
+          "create_objects": 1,
+          "get_commands": 1,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 5,
+          "get_objects": 3,
+          "run_command": 2,
+          "update_object_attributes": 5
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 3,
+          "create_objects": 1,
+          "get_commands": 1,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 5,
+          "get_objects": 3,
+          "run_command": 2,
+          "update_object_attributes": 5
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 311609,
+          "cached_input_tokens": 273408,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1786,
+          "reasoning_output_tokens": 350
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_2"
+            ],
+            "cost_call_ids": [
+              "item_2"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "task-1-pair-1-baseline:1",
+            "evidence_lines": [
+              5,
+              8
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.1907463339739479,
+            "measured_seconds_subtotal": 0.1907463339739479,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_10"
+            ],
+            "cost_call_ids": [
+              "item_10"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-1-pair-1-baseline:2",
+            "evidence_lines": [
+              21,
+              22
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.15153295802883804,
+            "measured_seconds_subtotal": 0.15153295802883804,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_11"
+            ],
+            "cost_call_ids": [
+              "item_11"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-1-pair-1-baseline:3",
+            "evidence_lines": [
+              23,
+              24
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.14197116700233892,
+            "measured_seconds_subtotal": 0.14197116700233892,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_12"
+            ],
+            "cost_call_ids": [
+              "item_12"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-1-pair-1-baseline:4",
+            "evidence_lines": [
+              25,
+              26
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.1464604579959996,
+            "measured_seconds_subtotal": 0.1464604579959996,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_13"
+            ],
+            "cost_call_ids": [
+              "item_13"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-1-pair-1-baseline:5",
+            "evidence_lines": [
+              27,
+              28
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.15839341696118936,
+            "measured_seconds_subtotal": 0.15839341696118936,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_14"
+            ],
+            "cost_call_ids": [
+              "item_14"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-1-pair-1-baseline:6",
+            "evidence_lines": [
+              29,
+              30
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.1411838330095634,
+            "measured_seconds_subtotal": 0.1411838330095634,
+            "timed_calls": 1
+          },
+          {
+            "category": "discovery",
+            "subtype": "schema_or_catalog",
+            "tool": "get_commands",
+            "confidence": "observation",
+            "call_ids": [
+              "item_15"
+            ],
+            "cost_call_ids": [
+              "item_15"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "task-1-pair-1-baseline:7",
+            "evidence_lines": [
+              31,
+              32
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.2774824579828419,
+            "measured_seconds_subtotal": 0.2774824579828419,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "run_command",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_16"
+            ],
+            "cost_call_ids": [
+              "item_16"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "task-1-pair-1-baseline:8",
+            "evidence_lines": [
+              33,
+              34
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.31373220798559487,
+            "measured_seconds_subtotal": 0.31373220798559487,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "run_command",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_17"
+            ],
+            "cost_call_ids": [
+              "item_17"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "task-1-pair-1-baseline:9",
+            "evidence_lines": [
+              35,
+              36
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.31240058300318196,
+            "measured_seconds_subtotal": 0.31240058300318196,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 2,
+          "failed_call": 5,
+          "typed_fallback": 2
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 20,
+          "total_calls": 24
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              4,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_2",
+            "tool": "get_modeling_guidance",
+            "command": "get_modeling_guidance",
+            "lines": [
+              5,
+              8
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.1907463339739479
+          },
+          {
+            "id": "item_3",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              6,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24469129100907594
+          },
+          {
+            "id": "item_4",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              10,
+              11
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2671277080080472
+          },
+          {
+            "id": "item_5",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              12,
+              13
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.21995137498015538
+          },
+          {
+            "id": "item_6",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              14,
+              15
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2550776249845512
+          },
+          {
+            "id": "item_7",
+            "tool": "create_objects",
+            "command": "create_objects",
+            "lines": [
+              16,
+              17
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2711967080249451
+          },
+          {
+            "id": "item_9",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              19,
+              20
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_10",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              21,
+              22
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.15153295802883804
+          },
+          {
+            "id": "item_11",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              23,
+              24
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.14197116700233892
+          },
+          {
+            "id": "item_12",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              25,
+              26
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.1464604579959996
+          },
+          {
+            "id": "item_13",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              27,
+              28
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.15839341696118936
+          },
+          {
+            "id": "item_14",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              29,
+              30
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.1411838330095634
+          },
+          {
+            "id": "item_15",
+            "tool": "get_commands",
+            "command": "get_commands",
+            "lines": [
+              31,
+              32
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2774824579828419
+          },
+          {
+            "id": "item_16",
+            "tool": "run_command",
+            "command": "run_command",
+            "lines": [
+              33,
+              34
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.31373220798559487
+          },
+          {
+            "id": "item_17",
+            "tool": "run_command",
+            "command": "run_command",
+            "lines": [
+              35,
+              36
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.31240058300318196
+          },
+          {
+            "id": "item_18",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              37,
+              47
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_19",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              38,
+              45
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_20",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              39,
+              46
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.23861362499883398
+          },
+          {
+            "id": "item_21",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              40,
+              48
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24382870900444686
+          },
+          {
+            "id": "item_22",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              41,
+              50
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22463441704167053
+          },
+          {
+            "id": "item_23",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              42,
+              49
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2254175830166787
+          },
+          {
+            "id": "item_24",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              43,
+              51
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.25089637498604134
+          },
+          {
+            "id": "item_25",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              44,
+              52
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22794654197059572
+          }
+        ]
+      },
+      "cohort": "unspecified",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+          "version": "0.4.0.0",
+          "pid": 28447,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": false
+            }
+          ]
+        },
+        "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "aaa3e781c272a4cf75f48222d333e2cc06b7e7857dcbf1485d2245b8887823c7",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "baseline",
+      "pair": 1,
+      "task": "experiments/tasks/table_assembly.json",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "top/solid_box": true,
+        "top/min": true,
+        "top/max": true,
+        "top/volume": true,
+        "top/attributes": true,
+        "leg_1/solid_box": true,
+        "leg_1/min": true,
+        "leg_1/max": true,
+        "leg_1/volume": true,
+        "leg_1/attributes": true,
+        "leg_2/solid_box": true,
+        "leg_2/min": true,
+        "leg_2/max": true,
+        "leg_2/volume": true,
+        "leg_2/attributes": true,
+        "leg_3/solid_box": true,
+        "leg_3/min": true,
+        "leg_3/max": true,
+        "leg_3/volume": true,
+        "leg_3/attributes": true,
+        "leg_4/solid_box": true,
+        "leg_4/min": true,
+        "leg_4/max": true,
+        "leg_4/volume": true,
+        "leg_4/attributes": true
+      },
+      "preserved": true,
+      "evidence_hashes": {
+        "task.json": "38794cc26e9d3c04201d676e6cf0c92c2d72b4d691d60ffdef64dfc158dc77e6",
+        "pins.json": "53c36879010d229398e15de62cdbea5c379be5e22e4091b82e69b26dd3159d23",
+        "tool-definitions.json": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39",
+        "candidate.3dm": "e3cbc80eabeba4ae6de447e4459a332ef64b1f383729f0a081539489d1f9d055",
+        "initial.3dm": "c653daa01a27bd4916e26041dfb0470fccd1e2f8464fce314b3d297c4cfa9ceb",
+        "initial.json": "d5967421ff181406c5b7d9ccb24d4c8ddf223455794934d0dff9a3f624f49a02",
+        "evaluation.json": "28babe09c085f640b1b5fb517e0bb3ffe035ec0267cc1c8edb015a3ebd465eea",
+        "perspective.png": "b47161756723e091380e3406778e4498027085a578f65eb574b8efc567b4052d",
+        "modeler/events.jsonl": "415ecaa3f057dcdb9d5eda91916bc21fc41b78ec6b43c7a47b5d044c5befdced"
+      }
+    },
+    {
+      "id": "task-1-pair-1-candidate",
+      "family": "small-assemblies",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-1-pair-1-candidate",
+      "source_sha256": "3c03c4e42dfd2c719e0a0b80e0c54ef0d808c6be67b191ac9b4abad67bae5f59",
+      "session_status": "completed",
+      "elapsed_seconds": 81.47858491702937,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "888e4dbcb172a067263268f06171e481f2fa296589b7fac085b9171c87f31c02",
+      "result_sha256": "fab95bd235535ed163d8561594b61edc3a193b5012db0cf75f48aae1cde8b617",
+      "status_sha256": "194320da53fe953d1ce77797e73a2bdacb78b270d955657d23fc6cf9afa38d50",
+      "environment_sha256": "8d0465dacfc310b556371cf387b2d4378b22e232b7f6c0a3beb98d038eb5d554",
+      "metrics": {
+        "mcp_attempts": 13,
+        "completed_calls": 13,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 3,
+          "create_objects": 1,
+          "get_document_summary": 2,
+          "get_objects": 1,
+          "update_object_attributes": 5
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 3,
+          "create_objects": 1,
+          "get_document_summary": 2,
+          "get_objects": 1,
+          "update_object_attributes": 5
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 351843,
+          "cached_input_tokens": 313088,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1631,
+          "reasoning_output_tokens": 274
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [],
+        "counts": {},
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 11,
+          "total_calls": 13
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              4,
+              5
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_3",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              7,
+              8
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2574096669559367
+          },
+          {
+            "id": "item_4",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              9,
+              10
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.26787487498950213
+          },
+          {
+            "id": "item_5",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              11,
+              12
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2507337089627981
+          },
+          {
+            "id": "item_6",
+            "tool": "create_objects",
+            "command": "create_objects",
+            "lines": [
+              13,
+              14
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.29809462500270456
+          },
+          {
+            "id": "item_7",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              15,
+              16
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2083038329728879
+          },
+          {
+            "id": "item_8",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              17,
+              18
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22269466699799523
+          },
+          {
+            "id": "item_9",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              19,
+              20
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22983820899389684
+          },
+          {
+            "id": "item_10",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              21,
+              22
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22247358300955966
+          },
+          {
+            "id": "item_11",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              23,
+              24
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2311440000194125
+          },
+          {
+            "id": "item_12",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              25,
+              26
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.21807324996916577
+          },
+          {
+            "id": "item_14",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              28,
+              29
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2244687090278603
+          },
+          {
+            "id": "item_15",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              30,
+              31
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          }
+        ]
+      },
+      "cohort": "unspecified",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "15aca56b-1d45-41a5-9247-c15200e67b0a",
+          "version": "0.4.0.0",
+          "pid": 36806,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": false
+            }
+          ]
+        },
+        "plugin_sha256": "0d528773e16dc75966fdcc63a8e3d0707220fdad9fbf06e644207bc4d2aac891",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "15322b68514057d57db2757908a56348a3c229e01950220b2701c6a3abb27fe4",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "candidate",
+      "pair": 1,
+      "task": "experiments/tasks/table_assembly.json",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "top/solid_box": true,
+        "top/min": true,
+        "top/max": true,
+        "top/volume": true,
+        "top/attributes": true,
+        "leg_1/solid_box": true,
+        "leg_1/min": true,
+        "leg_1/max": true,
+        "leg_1/volume": true,
+        "leg_1/attributes": true,
+        "leg_2/solid_box": true,
+        "leg_2/min": true,
+        "leg_2/max": true,
+        "leg_2/volume": true,
+        "leg_2/attributes": true,
+        "leg_3/solid_box": true,
+        "leg_3/min": true,
+        "leg_3/max": true,
+        "leg_3/volume": true,
+        "leg_3/attributes": true,
+        "leg_4/solid_box": true,
+        "leg_4/min": true,
+        "leg_4/max": true,
+        "leg_4/volume": true,
+        "leg_4/attributes": true
+      },
+      "preserved": true,
+      "evidence_hashes": {
+        "task.json": "38794cc26e9d3c04201d676e6cf0c92c2d72b4d691d60ffdef64dfc158dc77e6",
+        "pins.json": "53c36879010d229398e15de62cdbea5c379be5e22e4091b82e69b26dd3159d23",
+        "tool-definitions.json": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39",
+        "candidate.3dm": "b0fdd05d902297d42616ba5334ffa1467d50fd4627c11ef2b626d3da97cc6e00",
+        "initial.3dm": "19f5056b02c72e79a2cc953ef4bdae8fa75d323d4a8fb928c2032038c446fbf2",
+        "initial.json": "9dc04f3a2dee823b0de0477e26a616f6f176f39e9552a8471d07c13bf7b2b754",
+        "evaluation.json": "888e4dbcb172a067263268f06171e481f2fa296589b7fac085b9171c87f31c02",
+        "perspective.png": "b47161756723e091380e3406778e4498027085a578f65eb574b8efc567b4052d",
+        "modeler/events.jsonl": "3c03c4e42dfd2c719e0a0b80e0c54ef0d808c6be67b191ac9b4abad67bae5f59"
+      }
+    },
+    {
+      "id": "task-1-pair-2-candidate",
+      "family": "small-assemblies",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-1-pair-2-candidate",
+      "source_sha256": "a0da27060fd2d89d2d57e9ac09f425cbeb7fd2e773e79c7ebda4be738c224906",
+      "session_status": "completed",
+      "elapsed_seconds": 52.75095495901769,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "af0e8c9b9f852d89926c0e2190036ad1eb9757939709a16e26d96b6236e46310",
+      "result_sha256": "0234cf7822267ed0513233548b8c7dcbb3170abc414e2fa65173c6dbd9889c85",
+      "status_sha256": "4097f597f2acd92dbe765071df3d9b4d80cd34f9034e909bf4205914cc2f4d5d",
+      "environment_sha256": "873aaa4896000bfd2a847e710d096e4e0d04f147a15a3ad6030b1f5ccf0a9dd5",
+      "metrics": {
+        "mcp_attempts": 15,
+        "completed_calls": 15,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 3,
+          "create_objects": 1,
+          "get_document_summary": 2,
+          "get_objects": 3,
+          "update_object_attributes": 5
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 3,
+          "create_objects": 1,
+          "get_document_summary": 2,
+          "get_objects": 3,
+          "update_object_attributes": 5
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 229629,
+          "cached_input_tokens": 195328,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1362,
+          "reasoning_output_tokens": 213
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [],
+        "counts": {},
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 11,
+          "total_calls": 15
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              4,
+              6
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.30123475001892075
+          },
+          {
+            "id": "item_2",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              5,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_3",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              8,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24386229098308831
+          },
+          {
+            "id": "item_4",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              10,
+              11
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.23858491698047146
+          },
+          {
+            "id": "item_5",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              12,
+              13
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2523561249836348
+          },
+          {
+            "id": "item_7",
+            "tool": "create_objects",
+            "command": "create_objects",
+            "lines": [
+              15,
+              16
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.21415645896922797
+          },
+          {
+            "id": "item_8",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              17,
+              18
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_9",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              19,
+              20
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24306366697419435
+          },
+          {
+            "id": "item_10",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              21,
+              22
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.21492008300265297
+          },
+          {
+            "id": "item_11",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              23,
+              24
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.25827574997674674
+          },
+          {
+            "id": "item_12",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              25,
+              26
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2118159580277279
+          },
+          {
+            "id": "item_13",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              27,
+              28
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22255283396225423
+          },
+          {
+            "id": "item_14",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              29,
+              33
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.233408291998785
+          },
+          {
+            "id": "item_15",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              30,
+              32
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_16",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              31,
+              34
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          }
+        ]
+      },
+      "cohort": "unspecified",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "15aca56b-1d45-41a5-9247-c15200e67b0a",
+          "version": "0.4.0.0",
+          "pid": 36806,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "0d528773e16dc75966fdcc63a8e3d0707220fdad9fbf06e644207bc4d2aac891",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "675aededba946b25ed313264fa610d4ec6460ee4b9f0f1e4db9d2d9b0ebede49",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "candidate",
+      "pair": 2,
+      "task": "experiments/tasks/table_assembly.json",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "top/solid_box": true,
+        "top/min": true,
+        "top/max": true,
+        "top/volume": true,
+        "top/attributes": true,
+        "leg_1/solid_box": true,
+        "leg_1/min": true,
+        "leg_1/max": true,
+        "leg_1/volume": true,
+        "leg_1/attributes": true,
+        "leg_2/solid_box": true,
+        "leg_2/min": true,
+        "leg_2/max": true,
+        "leg_2/volume": true,
+        "leg_2/attributes": true,
+        "leg_3/solid_box": true,
+        "leg_3/min": true,
+        "leg_3/max": true,
+        "leg_3/volume": true,
+        "leg_3/attributes": true,
+        "leg_4/solid_box": true,
+        "leg_4/min": true,
+        "leg_4/max": true,
+        "leg_4/volume": true,
+        "leg_4/attributes": true
+      },
+      "preserved": true,
+      "evidence_hashes": {
+        "task.json": "38794cc26e9d3c04201d676e6cf0c92c2d72b4d691d60ffdef64dfc158dc77e6",
+        "pins.json": "53c36879010d229398e15de62cdbea5c379be5e22e4091b82e69b26dd3159d23",
+        "tool-definitions.json": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39",
+        "candidate.3dm": "bd3468eddd49c412268c5f2219042135108e938b19e87ddc6ffe6b35e4a970d2",
+        "initial.3dm": "8161c02921a858198d86d6d443871ba97b3afc558f57b52e866166c84049aa97",
+        "initial.json": "bd444ae771a16e1e3c5506629fa23860fdf76f3dcedf0a600766e3225ad6adef",
+        "evaluation.json": "af0e8c9b9f852d89926c0e2190036ad1eb9757939709a16e26d96b6236e46310",
+        "perspective.png": "b47161756723e091380e3406778e4498027085a578f65eb574b8efc567b4052d",
+        "modeler/events.jsonl": "a0da27060fd2d89d2d57e9ac09f425cbeb7fd2e773e79c7ebda4be738c224906"
+      }
+    },
+    {
+      "id": "task-1-pair-2-baseline",
+      "family": "small-assemblies",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-1-pair-2-baseline",
+      "source_sha256": "0eddaea97374221082def17c836013ffb17a6e6f0f9fdf4fb3f984e555afac6c",
+      "session_status": "completed",
+      "elapsed_seconds": 73.91804550000234,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "5a731d28820477dc8b6c3ee83677269729d0bdbdb153249989c7c6279753cf76",
+      "result_sha256": "9ca6defa34215816e2475fd1e8339a4946356b621c0d2252a747ec06831eb8a7",
+      "status_sha256": "2547e39b20b4d6ac58352296f4bc7ba75ea14ade1e10c2bb8210bcddc5699bc0",
+      "environment_sha256": "bc543df385b282d8163f2ccbadec299ed830feef2fc4377d357cafe6f4ae7b85",
+      "metrics": {
+        "mcp_attempts": 18,
+        "completed_calls": 18,
+        "unfinished_calls": 0,
+        "failed_calls": 5,
+        "failures_by_tool": {
+          "update_object_attributes": 5
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 3,
+          "create_objects": 1,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 1,
+          "get_objects": 2,
+          "run_command": 1,
+          "search_rhinoscript_functions": 2,
+          "update_object_attributes": 5
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 3,
+          "create_objects": 1,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 1,
+          "get_objects": 2,
+          "run_command": 1,
+          "search_rhinoscript_functions": 2,
+          "update_object_attributes": 5
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 349777,
+          "cached_input_tokens": 317952,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2116,
+          "reasoning_output_tokens": 528
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_1"
+            ],
+            "cost_call_ids": [
+              "item_1"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "task-1-pair-2-baseline:1",
+            "evidence_lines": [
+              4,
+              6
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.250108124979306,
+            "measured_seconds_subtotal": 0.250108124979306,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_9"
+            ],
+            "cost_call_ids": [
+              "item_9"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-1-pair-2-baseline:2",
+            "evidence_lines": [
+              19,
+              20
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.15200779197039083,
+            "measured_seconds_subtotal": 0.15200779197039083,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_10"
+            ],
+            "cost_call_ids": [
+              "item_10"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-1-pair-2-baseline:3",
+            "evidence_lines": [
+              21,
+              22
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.14117391599575058,
+            "measured_seconds_subtotal": 0.14117391599575058,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_11"
+            ],
+            "cost_call_ids": [
+              "item_11"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-1-pair-2-baseline:4",
+            "evidence_lines": [
+              23,
+              24
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.1448203750187531,
+            "measured_seconds_subtotal": 0.1448203750187531,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_12"
+            ],
+            "cost_call_ids": [
+              "item_12"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-1-pair-2-baseline:5",
+            "evidence_lines": [
+              25,
+              26
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.14195349998772144,
+            "measured_seconds_subtotal": 0.14195349998772144,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_13"
+            ],
+            "cost_call_ids": [
+              "item_13"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-1-pair-2-baseline:6",
+            "evidence_lines": [
+              27,
+              28
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.14123970799846575,
+            "measured_seconds_subtotal": 0.14123970799846575,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "run_command",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_16"
+            ],
+            "cost_call_ids": [
+              "item_16"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "task-1-pair-2-baseline:7",
+            "evidence_lines": [
+              33,
+              34
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.6414430839940906,
+            "measured_seconds_subtotal": 0.6414430839940906,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 1,
+          "failed_call": 5,
+          "typed_fallback": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 16,
+          "total_calls": 18
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_modeling_guidance",
+            "command": "get_modeling_guidance",
+            "lines": [
+              4,
+              6
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.250108124979306
+          },
+          {
+            "id": "item_2",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              5,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_3",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              8,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24779204203514382
+          },
+          {
+            "id": "item_4",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              10,
+              11
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22376937500666827
+          },
+          {
+            "id": "item_5",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              12,
+              13
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24211295903660357
+          },
+          {
+            "id": "item_6",
+            "tool": "create_objects",
+            "command": "create_objects",
+            "lines": [
+              14,
+              15
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24648420797893777
+          },
+          {
+            "id": "item_8",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              17,
+              18
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2606554999947548
+          },
+          {
+            "id": "item_9",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              19,
+              20
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.15200779197039083
+          },
+          {
+            "id": "item_10",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              21,
+              22
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.14117391599575058
+          },
+          {
+            "id": "item_11",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              23,
+              24
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.1448203750187531
+          },
+          {
+            "id": "item_12",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              25,
+              26
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.14195349998772144
+          },
+          {
+            "id": "item_13",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              27,
+              28
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.14123970799846575
+          },
+          {
+            "id": "item_14",
+            "tool": "search_rhinoscript_functions",
+            "command": "search_rhinoscript_functions",
+            "lines": [
+              29,
+              30
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2239345419802703
+          },
+          {
+            "id": "item_15",
+            "tool": "search_rhinoscript_functions",
+            "command": "search_rhinoscript_functions",
+            "lines": [
+              31,
+              32
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.15796012501232326
+          },
+          {
+            "id": "item_16",
+            "tool": "run_command",
+            "command": "run_command",
+            "lines": [
+              33,
+              34
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.6414430839940906
+          },
+          {
+            "id": "item_17",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              35,
+              38
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2482838339637965
+          },
+          {
+            "id": "item_18",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              36,
+              40
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.226140332990326
+          },
+          {
+            "id": "item_19",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              37,
+              39
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          }
+        ]
+      },
+      "cohort": "unspecified",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+          "version": "0.4.0.0",
+          "pid": 46002,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": false
+            }
+          ]
+        },
+        "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "9ab72c341d38bf4a0dd9ec00130fce9b2323d9b37c15ed606f13f41361583b83",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "baseline",
+      "pair": 2,
+      "task": "experiments/tasks/table_assembly.json",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "top/solid_box": true,
+        "top/min": true,
+        "top/max": true,
+        "top/volume": true,
+        "top/attributes": true,
+        "leg_1/solid_box": true,
+        "leg_1/min": true,
+        "leg_1/max": true,
+        "leg_1/volume": true,
+        "leg_1/attributes": true,
+        "leg_2/solid_box": true,
+        "leg_2/min": true,
+        "leg_2/max": true,
+        "leg_2/volume": true,
+        "leg_2/attributes": true,
+        "leg_3/solid_box": true,
+        "leg_3/min": true,
+        "leg_3/max": true,
+        "leg_3/volume": true,
+        "leg_3/attributes": true,
+        "leg_4/solid_box": true,
+        "leg_4/min": true,
+        "leg_4/max": true,
+        "leg_4/volume": true,
+        "leg_4/attributes": true
+      },
+      "preserved": true,
+      "evidence_hashes": {
+        "task.json": "38794cc26e9d3c04201d676e6cf0c92c2d72b4d691d60ffdef64dfc158dc77e6",
+        "pins.json": "53c36879010d229398e15de62cdbea5c379be5e22e4091b82e69b26dd3159d23",
+        "tool-definitions.json": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39",
+        "candidate.3dm": "c7681ff53e2d3accc8c1c2e51fb02cf526d1419e92f7389a2fe10979be52147e",
+        "initial.3dm": "d8f2e43d9cdeb283c5fa456a2afa90ac15c39a2de3e1a8cdac4a1e20d7ac9f7d",
+        "initial.json": "120a75d4488d5dff9d291dbe4b23db27e5172a233209533cf0597e975437f34f",
+        "evaluation.json": "5a731d28820477dc8b6c3ee83677269729d0bdbdb153249989c7c6279753cf76",
+        "perspective.png": "b47161756723e091380e3406778e4498027085a578f65eb574b8efc567b4052d",
+        "modeler/events.jsonl": "0eddaea97374221082def17c836013ffb17a6e6f0f9fdf4fb3f984e555afac6c"
+      }
+    },
+    {
+      "id": "task-2-pair-1-baseline",
+      "family": "recovery",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-2-pair-1-baseline",
+      "source_sha256": "397ebdb1a0713e8a9f9f17e96066f519aadf53167e4d3025d9b8982cee03558d",
+      "session_status": "completed",
+      "elapsed_seconds": 89.89450991601916,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "8359e8812d69c02472af971d791cdf1df3dd1a1923df9505671cc3e8cc1809b9",
+      "result_sha256": "28f7f9ff1db6a9ff3daba9a1f935d2364b2c21db0804a7623371da26f4c39972",
+      "status_sha256": "f5cdc1452b18459233996cb888cf283af2c0dde77e9223337c004d01eee5e819",
+      "environment_sha256": "207f65cbf03b9a189029ac69778c62427e1fbb19552719930b9cc6e665633a41",
+      "metrics": {
+        "mcp_attempts": 13,
+        "completed_calls": 13,
+        "unfinished_calls": 0,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "update_object_attributes": 1
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_objects": 4,
+          "get_rhinoscript_docs": 1,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "update_object_attributes": 1
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_objects": 4,
+          "get_rhinoscript_docs": 1,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "update_object_attributes": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 373566,
+          "cached_input_tokens": 311808,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1812,
+          "reasoning_output_tokens": 568
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_4"
+            ],
+            "cost_call_ids": [
+              "item_4"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-2-pair-1-baseline:1",
+            "evidence_lines": [
+              10,
+              11
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.12844775000121444,
+            "measured_seconds_subtotal": 0.12844775000121444,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "run_command",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_7"
+            ],
+            "cost_call_ids": [
+              "item_7"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "task-2-pair-1-baseline:2",
+            "evidence_lines": [
+              15,
+              16
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 15.275002166046761,
+            "measured_seconds_subtotal": 15.275002166046761,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_11"
+            ],
+            "cost_call_ids": [
+              "item_11"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "task-2-pair-1-baseline:3",
+            "evidence_lines": [
+              23,
+              24
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.23483470804058015,
+            "measured_seconds_subtotal": 0.23483470804058015,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "failed_call": 1,
+          "typed_fallback": 2
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 8,
+          "total_calls": 13
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              4,
+              6
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_2",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              5,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.25296387501293793
+          },
+          {
+            "id": "item_3",
+            "tool": "create_object",
+            "command": "create_object",
+            "lines": [
+              8,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.200088958023116
+          },
+          {
+            "id": "item_4",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              10,
+              11
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.12844775000121444
+          },
+          {
+            "id": "item_5",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              12,
+              13
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_7",
+            "tool": "run_command",
+            "command": "run_command",
+            "lines": [
+              15,
+              16
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 15.275002166046761
+          },
+          {
+            "id": "item_8",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              17,
+              18
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_9",
+            "tool": "get_rhinoscript_docs",
+            "command": "get_rhinoscript_docs",
+            "lines": [
+              19,
+              20
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.18912925000768155
+          },
+          {
+            "id": "item_10",
+            "tool": "search_rhinoscript_functions",
+            "command": "search_rhinoscript_functions",
+            "lines": [
+              21,
+              22
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.1752423329744488
+          },
+          {
+            "id": "item_11",
+            "tool": "execute_rhinoscript_python_code",
+            "command": "execute_rhinoscript_python_code",
+            "lines": [
+              23,
+              24
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.23483470804058015
+          },
+          {
+            "id": "item_12",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              25,
+              28
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_13",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              26,
+              29
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_14",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              27,
+              30
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2167364580091089
+          }
+        ]
+      },
+      "cohort": "unspecified",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+          "version": "0.4.0.0",
+          "pid": 46002,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "1d879e2f24ef59a9147c2cfc1ca4faf8f7edeb4b7e9c71a415186e211a179e15",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "baseline",
+      "pair": 1,
+      "task": "experiments/tasks/recover_intermediate.json",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "corrected/solid_box": true,
+        "corrected/min": true,
+        "corrected/max": true,
+        "corrected/volume": true,
+        "corrected/attributes": true,
+        "reference/solid_box": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/volume": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true,
+        "wrong_intermediate_removed": true
+      },
+      "preserved": true,
+      "evidence_hashes": {
+        "task.json": "8f77f178a00491a1a49e0835565d90acef119a068054a09b6426f92fd8ea1260",
+        "pins.json": "53c36879010d229398e15de62cdbea5c379be5e22e4091b82e69b26dd3159d23",
+        "tool-definitions.json": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39",
+        "candidate.3dm": "1f4c7f64efa732cbb4cdab987e603dcb7ff4977dec30f2649c8c4d7bafb30707",
+        "initial.3dm": "d398f0ce6b39106c4ec398fbeef70e4cfb770f2ff249b6a0c084b0e55824dfc8",
+        "initial.json": "9e026d9604b4b82db9be739bd7c03a6d50689635292d149dfe2c248db536c06e",
+        "evaluation.json": "8359e8812d69c02472af971d791cdf1df3dd1a1923df9505671cc3e8cc1809b9",
+        "perspective.png": "08570fdb274e3bf5e1062d4f356cbabd091edfb7ffc10183ae9189a0294912f4",
+        "modeler/events.jsonl": "397ebdb1a0713e8a9f9f17e96066f519aadf53167e4d3025d9b8982cee03558d"
+      }
+    },
+    {
+      "id": "task-2-pair-1-candidate",
+      "family": "recovery",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-2-pair-1-candidate",
+      "source_sha256": "d1b3dbb1119d057f943b59d3a8ebdeda93be20fc2ed503a6cff598a394fb53a8",
+      "session_status": "completed",
+      "elapsed_seconds": 39.222626958973706,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "f6ddc43d0298df61a40f3d85422b466a5bc11789d3f2747e217f9cd8bf4cf493",
+      "result_sha256": "15993c4eed6918efe2e0eb30f0943dc740611d5207ce30db6dda597bef7d1d2f",
+      "status_sha256": "2f5b98c5388fd5c4fe15b7b5240a04dc385651c0d1b55ad512f49d028eb5a761",
+      "environment_sha256": "45923814b0c21fd9c0d0df266fb285367a181582eaae7dae048827ad097e57d7",
+      "metrics": {
+        "mcp_attempts": 10,
+        "completed_calls": 10,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "get_object_attributes": 3,
+          "get_objects": 2,
+          "get_or_set_current_layer": 1,
+          "update_object_attributes": 1
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "get_object_attributes": 3,
+          "get_objects": 2,
+          "get_or_set_current_layer": 1,
+          "update_object_attributes": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 1,
+        "usage": {
+          "input_tokens": 224638,
+          "cached_input_tokens": 188416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1162,
+          "reasoning_output_tokens": 289
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [],
+        "counts": {},
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 6,
+          "total_calls": 10
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              4,
+              5
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_2",
+            "tool": "get_or_set_current_layer",
+            "command": "get_or_set_current_layer",
+            "lines": [
+              6,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.20044395799050108
+          },
+          {
+            "id": "item_3",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              8,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_4",
+            "tool": "delete_object",
+            "command": "delete_object",
+            "lines": [
+              10,
+              11
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2188654999481514
+          },
+          {
+            "id": "item_5",
+            "tool": "create_object",
+            "command": "create_object",
+            "lines": [
+              12,
+              13
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22392266598762944
+          },
+          {
+            "id": "item_6",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              14,
+              15
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.240472208999563
+          },
+          {
+            "id": "item_8",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              17,
+              22
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_9",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              18,
+              21
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.21898587502073497
+          },
+          {
+            "id": "item_10",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              19,
+              24
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22447383299004287
+          },
+          {
+            "id": "item_11",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              20,
+              23
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          }
+        ]
+      },
+      "cohort": "unspecified",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "15aca56b-1d45-41a5-9247-c15200e67b0a",
+          "version": "0.4.0.0",
+          "pid": 57404,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": false
+            }
+          ]
+        },
+        "plugin_sha256": "0d528773e16dc75966fdcc63a8e3d0707220fdad9fbf06e644207bc4d2aac891",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "e168a93a030191280c495fe756d090b307403122725badb489b40ae497072323",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "candidate",
+      "pair": 1,
+      "task": "experiments/tasks/recover_intermediate.json",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "corrected/solid_box": true,
+        "corrected/min": true,
+        "corrected/max": true,
+        "corrected/volume": true,
+        "corrected/attributes": true,
+        "reference/solid_box": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/volume": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true,
+        "wrong_intermediate_removed": true
+      },
+      "preserved": true,
+      "evidence_hashes": {
+        "task.json": "8f77f178a00491a1a49e0835565d90acef119a068054a09b6426f92fd8ea1260",
+        "pins.json": "53c36879010d229398e15de62cdbea5c379be5e22e4091b82e69b26dd3159d23",
+        "tool-definitions.json": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39",
+        "candidate.3dm": "23781d4486e0f46f3170d56e2f1b2dbea81cbbaa12a10499032bf72a59dc9b7e",
+        "initial.3dm": "66490be99b39cad594b20b060c90df2f44786a9b841d7d79668c26adb869ce26",
+        "initial.json": "4efeb52ec7d957d59958e6fa2b8a6b1d28d8790d830a59aec495f7eda6764d35",
+        "evaluation.json": "f6ddc43d0298df61a40f3d85422b466a5bc11789d3f2747e217f9cd8bf4cf493",
+        "perspective.png": "08570fdb274e3bf5e1062d4f356cbabd091edfb7ffc10183ae9189a0294912f4",
+        "modeler/events.jsonl": "d1b3dbb1119d057f943b59d3a8ebdeda93be20fc2ed503a6cff598a394fb53a8"
+      }
+    },
+    {
+      "id": "task-2-pair-2-candidate",
+      "family": "recovery",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-2-pair-2-candidate",
+      "source_sha256": "640076a647f3c2fae79f002304b61c5187cf777ec38ca3e86ca5ec8a509493e8",
+      "session_status": "completed",
+      "elapsed_seconds": 51.85279270802857,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "0ee33af83d8b347c4bc036b9956a136129a65cc0327ee210b921a8220a724056",
+      "result_sha256": "e5e48a9ba99475f191b2ffe916b0d817cdc0e01bd0c7a8d22c76d779cf7f18e6",
+      "status_sha256": "120807ead97c5fcf521d837bfa7e56f71c68dbef11faf2672163e0dc12b309ee",
+      "environment_sha256": "6a5582fbeda62fa58ec815e7199cd603a3532eb0c8f476594e4dfc998e8b51e2",
+      "metrics": {
+        "mcp_attempts": 10,
+        "completed_calls": 10,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "get_document_summary": 1,
+          "get_object_attributes": 3,
+          "get_objects": 2,
+          "update_object_attributes": 1
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "get_document_summary": 1,
+          "get_object_attributes": 3,
+          "get_objects": 2,
+          "update_object_attributes": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 1,
+        "usage": {
+          "input_tokens": 274307,
+          "cached_input_tokens": 237056,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1181,
+          "reasoning_output_tokens": 361
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [],
+        "counts": {},
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 6,
+          "total_calls": 10
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              4,
+              5
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.3008187499945052
+          },
+          {
+            "id": "item_2",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              6,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_3",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              8,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_5",
+            "tool": "delete_object",
+            "command": "delete_object",
+            "lines": [
+              11,
+              12
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.23333158303285018
+          },
+          {
+            "id": "item_6",
+            "tool": "create_object",
+            "command": "create_object",
+            "lines": [
+              13,
+              14
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.260979791986756
+          },
+          {
+            "id": "item_7",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              15,
+              16
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2399468329967931
+          },
+          {
+            "id": "item_8",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              17,
+              21
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.23240283300401643
+          },
+          {
+            "id": "item_9",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              18,
+              22
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_10",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              19,
+              23
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_11",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              20,
+              24
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.240376208035741
+          }
+        ]
+      },
+      "cohort": "unspecified",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "15aca56b-1d45-41a5-9247-c15200e67b0a",
+          "version": "0.4.0.0",
+          "pid": 57404,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "0d528773e16dc75966fdcc63a8e3d0707220fdad9fbf06e644207bc4d2aac891",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "3b12709ef79cfa2bf685242d75efe9806f7b4fed563330a8773a7be58af48b34",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "candidate",
+      "pair": 2,
+      "task": "experiments/tasks/recover_intermediate.json",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "corrected/solid_box": true,
+        "corrected/min": true,
+        "corrected/max": true,
+        "corrected/volume": true,
+        "corrected/attributes": true,
+        "reference/solid_box": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/volume": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true,
+        "wrong_intermediate_removed": true
+      },
+      "preserved": true,
+      "evidence_hashes": {
+        "task.json": "8f77f178a00491a1a49e0835565d90acef119a068054a09b6426f92fd8ea1260",
+        "pins.json": "53c36879010d229398e15de62cdbea5c379be5e22e4091b82e69b26dd3159d23",
+        "tool-definitions.json": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39",
+        "candidate.3dm": "981fc2faa0a887542eb082249f5e67b7f929452572d47bf35498ae9bd755744e",
+        "initial.3dm": "8d7e2546a1c2f0a8996b001d0e303768093486f2e46c4b4f557200d6e13a39de",
+        "initial.json": "e1d8b6070907ed2d904a6b46df4f07df4ecd9391edd01324d4271f690d1439bb",
+        "evaluation.json": "0ee33af83d8b347c4bc036b9956a136129a65cc0327ee210b921a8220a724056",
+        "perspective.png": "08570fdb274e3bf5e1062d4f356cbabd091edfb7ffc10183ae9189a0294912f4",
+        "modeler/events.jsonl": "640076a647f3c2fae79f002304b61c5187cf777ec38ca3e86ca5ec8a509493e8"
+      }
+    },
+    {
+      "id": "task-2-pair-2-baseline",
+      "family": "recovery",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-2-pair-2-baseline",
+      "source_sha256": "ec4135929d069b7355b50f51d9e25185d7f7d80e234e8f1e0abe45954eb0ada2",
+      "session_status": "completed",
+      "elapsed_seconds": 73.02469866600586,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "2a7797a9b65a7415f7b7cc03e6f16044a2b8622f9986191bb84932a2ef582e26",
+      "result_sha256": "0be517b91513010ad4d9f900359c192e062028a58093acacb2582121085bb976",
+      "status_sha256": "f8f51f0d90153af45616222f152d0409b63c8482c3327322de3148d76816af81",
+      "environment_sha256": "dc04257e90d3659ed8e442274b99652416b7eac96d802ed7485df223bae10dff",
+      "metrics": {
+        "mcp_attempts": 17,
+        "completed_calls": 17,
+        "unfinished_calls": 0,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "get_rhinoscript_docs": 1,
+          "update_object_attributes": 1
+        },
+        "tools": {
+          "analyze_objects": 2,
+          "create_object": 1,
+          "delete_object": 1,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 3,
+          "get_object_info": 1,
+          "get_objects": 3,
+          "get_rhinoscript_docs": 2,
+          "update_object_attributes": 1
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "create_object": 1,
+          "delete_object": 1,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 3,
+          "get_object_info": 1,
+          "get_objects": 3,
+          "get_rhinoscript_docs": 2,
+          "update_object_attributes": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 1,
+        "usage": {
+          "input_tokens": 417930,
+          "cached_input_tokens": 376832,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1948,
+          "reasoning_output_tokens": 386
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_6"
+            ],
+            "cost_call_ids": [
+              "item_6"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-2-pair-2-baseline:1",
+            "evidence_lines": [
+              13,
+              14
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.12668708397541195,
+            "measured_seconds_subtotal": 0.12668708397541195,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "schema_input",
+            "tool": "get_rhinoscript_docs",
+            "confidence": "observed",
+            "call_ids": [
+              "item_11"
+            ],
+            "cost_call_ids": [
+              "item_11"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-2-pair-2-baseline:2",
+            "evidence_lines": [
+              23,
+              24
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.06941829202696681,
+            "measured_seconds_subtotal": 0.06941829202696681,
+            "timed_calls": 1
+          },
+          {
+            "category": "retry_after_error",
+            "subtype": "same_intent_candidate",
+            "tool": "get_rhinoscript_docs",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_11",
+              "item_12"
+            ],
+            "cost_call_ids": [
+              "item_12"
+            ],
+            "reason": "Same command, target/type after a failure; parameter correction is allowed.",
+            "id": "task-2-pair-2-baseline:3",
+            "evidence_lines": [
+              23,
+              24,
+              25,
+              26
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.1855817919713445,
+            "measured_seconds_subtotal": 0.1855817919713445,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_13"
+            ],
+            "cost_call_ids": [
+              "item_13"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "task-2-pair-2-baseline:4",
+            "evidence_lines": [
+              27,
+              28
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.6006020409986377,
+            "measured_seconds_subtotal": 0.6006020409986377,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "failed_call": 2,
+          "retry_after_error": 1,
+          "typed_fallback": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 8,
+          "total_calls": 17
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              4,
+              5
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_2",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              6,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_4",
+            "tool": "delete_object",
+            "command": "delete_object",
+            "lines": [
+              9,
+              10
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.23937412502709776
+          },
+          {
+            "id": "item_5",
+            "tool": "create_object",
+            "command": "create_object",
+            "lines": [
+              11,
+              12
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24272095802007243
+          },
+          {
+            "id": "item_6",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              13,
+              14
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.12668708397541195
+          },
+          {
+            "id": "item_7",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              15,
+              21
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_8",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              16,
+              19
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_9",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              17,
+              20
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_10",
+            "tool": "get_object_info",
+            "command": "get_object_info",
+            "lines": [
+              18,
+              22
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2122087090392597
+          },
+          {
+            "id": "item_11",
+            "tool": "get_rhinoscript_docs",
+            "command": "get_rhinoscript_docs",
+            "lines": [
+              23,
+              24
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.06941829202696681
+          },
+          {
+            "id": "item_12",
+            "tool": "get_rhinoscript_docs",
+            "command": "get_rhinoscript_docs",
+            "lines": [
+              25,
+              26
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.1855817919713445
+          },
+          {
+            "id": "item_13",
+            "tool": "execute_rhinoscript_python_code",
+            "command": "execute_rhinoscript_python_code",
+            "lines": [
+              27,
+              28
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.6006020409986377
+          },
+          {
+            "id": "item_15",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              30,
+              35
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_16",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              31,
+              36
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_17",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              32,
+              37
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_18",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              33,
+              38
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.23742100002709776
+          },
+          {
+            "id": "item_19",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              34,
+              39
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          }
+        ]
+      },
+      "cohort": "unspecified",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+          "version": "0.4.0.0",
+          "pid": 64379,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": false
+            }
+          ]
+        },
+        "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "ea7f8f52e0830224dc43a997cf01df5bd92207dce50a61ec1d648a536ad98937",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "baseline",
+      "pair": 2,
+      "task": "experiments/tasks/recover_intermediate.json",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "corrected/solid_box": true,
+        "corrected/min": true,
+        "corrected/max": true,
+        "corrected/volume": true,
+        "corrected/attributes": true,
+        "reference/solid_box": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/volume": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true,
+        "wrong_intermediate_removed": true
+      },
+      "preserved": true,
+      "evidence_hashes": {
+        "task.json": "8f77f178a00491a1a49e0835565d90acef119a068054a09b6426f92fd8ea1260",
+        "pins.json": "53c36879010d229398e15de62cdbea5c379be5e22e4091b82e69b26dd3159d23",
+        "tool-definitions.json": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39",
+        "candidate.3dm": "8ddabeb192afda5c2afd5696fc4eb487630fb72d3290bc40fe3e02e0c633ed86",
+        "initial.3dm": "867ee60b4f3356cd65e03aebd8b489946c59457fd672db8fc041b68216407abf",
+        "initial.json": "6dc905a27813e6ced864426f2fd49bb495da051c33ba5314958e39d5e750d077",
+        "evaluation.json": "2a7797a9b65a7415f7b7cc03e6f16044a2b8622f9986191bb84932a2ef582e26",
+        "perspective.png": "08570fdb274e3bf5e1062d4f356cbabd091edfb7ffc10183ae9189a0294912f4",
+        "modeler/events.jsonl": "ec4135929d069b7355b50f51d9e25185d7f7d80e234e8f1e0abe45954eb0ada2"
+      }
+    },
+    {
+      "id": "task-3-pair-1-baseline",
+      "family": "planar-curve-editing",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-3-pair-1-baseline",
+      "source_sha256": "efd73059663815b68eb58c83ddd0932d39845d2e48a67a701aa72729ab1b20ef",
+      "session_status": "completed",
+      "elapsed_seconds": 106.35220566595672,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "f26642bec6d07955dd17d3b2eb7e1750ef1e30110d35ad1b0b01d91a58742bd8",
+      "result_sha256": "ee9bd6890c1e7177e788b06a668c67335fc92ed890e1c389593ef1581287805d",
+      "status_sha256": "ba748de46c4c42a4c954330ca970a26797dfd7c65d5a11c15044e3fc007d96ce",
+      "environment_sha256": "80b016da784d9d89aa8947557de6204038fc78348a6ef98ebc2391d857bdd84b",
+      "metrics": {
+        "mcp_attempts": 27,
+        "completed_calls": 27,
+        "unfinished_calls": 0,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "update_object_attributes": 1
+        },
+        "tools": {
+          "analyze_objects": 5,
+          "create_layer": 1,
+          "delete_object": 1,
+          "execute_rhinoscript_python_code": 1,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 6,
+          "get_object_info": 4,
+          "get_rhinoscript_docs": 1,
+          "offset_curve": 2,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "select_objects": 2,
+          "update_object_attributes": 1
+        },
+        "commands": {
+          "analyze_objects": 5,
+          "create_layer": 1,
+          "delete_object": 1,
+          "execute_rhinoscript_python_code": 1,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 6,
+          "get_object_info": 4,
+          "get_rhinoscript_docs": 1,
+          "offset_curve": 2,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "select_objects": 2,
+          "update_object_attributes": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 1,
+        "usage": {
+          "input_tokens": 522901,
+          "cached_input_tokens": 485120,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3058,
+          "reasoning_output_tokens": 1108
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_1"
+            ],
+            "cost_call_ids": [
+              "item_1"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "task-3-pair-1-baseline:1",
+            "evidence_lines": [
+              4,
+              7
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.271308500028681,
+            "measured_seconds_subtotal": 0.271308500028681,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_9"
+            ],
+            "cost_call_ids": [
+              "item_9"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-3-pair-1-baseline:2",
+            "evidence_lines": [
+              19,
+              20
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.17453008296433836,
+            "measured_seconds_subtotal": 0.17453008296433836,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "run_command",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_21"
+            ],
+            "cost_call_ids": [
+              "item_21"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "task-3-pair-1-baseline:3",
+            "evidence_lines": [
+              42,
+              43
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.4360686669824645,
+            "measured_seconds_subtotal": 0.4360686669824645,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_24"
+            ],
+            "cost_call_ids": [
+              "item_24"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "task-3-pair-1-baseline:4",
+            "evidence_lines": [
+              48,
+              49
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.2174240829772316,
+            "measured_seconds_subtotal": 0.2174240829772316,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 1,
+          "failed_call": 1,
+          "typed_fallback": 2
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 20,
+          "total_calls": 27
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_modeling_guidance",
+            "command": "get_modeling_guidance",
+            "lines": [
+              4,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.271308500028681
+          },
+          {
+            "id": "item_2",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              5,
+              8
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2489577090018429
+          },
+          {
+            "id": "item_3",
+            "tool": "get_object_info",
+            "command": "get_object_info",
+            "lines": [
+              6,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.21762745798332617
+          },
+          {
+            "id": "item_5",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              11,
+              12
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2801293749944307
+          },
+          {
+            "id": "item_6",
+            "tool": "offset_curve",
+            "command": "offset_curve",
+            "lines": [
+              13,
+              14
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24043645896017551
+          },
+          {
+            "id": "item_7",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              15,
+              17
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_8",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              16,
+              18
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_9",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              19,
+              20
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.17453008296433836
+          },
+          {
+            "id": "item_10",
+            "tool": "get_object_info",
+            "command": "get_object_info",
+            "lines": [
+              21,
+              27
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2580616250052117
+          },
+          {
+            "id": "item_11",
+            "tool": "get_object_info",
+            "command": "get_object_info",
+            "lines": [
+              22,
+              29
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.21798804198624566
+          },
+          {
+            "id": "item_12",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              23,
+              28
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22483133402420208
+          },
+          {
+            "id": "item_13",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              24,
+              30
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22044141596416011
+          },
+          {
+            "id": "item_14",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              25,
+              32
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_15",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              26,
+              31
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_17",
+            "tool": "delete_object",
+            "command": "delete_object",
+            "lines": [
+              34,
+              35
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24040341703221202
+          },
+          {
+            "id": "item_18",
+            "tool": "offset_curve",
+            "command": "offset_curve",
+            "lines": [
+              36,
+              37
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24155504099326208
+          },
+          {
+            "id": "item_19",
+            "tool": "select_objects",
+            "command": "select_objects",
+            "lines": [
+              38,
+              39
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2411785409785807
+          },
+          {
+            "id": "item_20",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              40,
+              41
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_21",
+            "tool": "run_command",
+            "command": "run_command",
+            "lines": [
+              42,
+              43
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.4360686669824645
+          },
+          {
+            "id": "item_22",
+            "tool": "search_rhinoscript_functions",
+            "command": "search_rhinoscript_functions",
+            "lines": [
+              44,
+              45
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.20156450005015358
+          },
+          {
+            "id": "item_23",
+            "tool": "get_rhinoscript_docs",
+            "command": "get_rhinoscript_docs",
+            "lines": [
+              46,
+              47
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.21789687499403954
+          },
+          {
+            "id": "item_24",
+            "tool": "execute_rhinoscript_python_code",
+            "command": "execute_rhinoscript_python_code",
+            "lines": [
+              48,
+              49
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2174240829772316
+          },
+          {
+            "id": "item_25",
+            "tool": "select_objects",
+            "command": "select_objects",
+            "lines": [
+              50,
+              51
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2153233329881914
+          },
+          {
+            "id": "item_26",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              52,
+              56
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_27",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              53,
+              57
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_28",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              54,
+              58
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.21865383302792907
+          },
+          {
+            "id": "item_29",
+            "tool": "get_object_info",
+            "command": "get_object_info",
+            "lines": [
+              55,
+              59
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2531941669876687
+          }
+        ]
+      },
+      "cohort": "unspecified",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+          "version": "0.4.0.0",
+          "pid": 64379,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "c163426a8f0b14cf4b87f6a22191463e4bc0cfbd83daa9511d3bd3d95905914c",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "baseline",
+      "pair": 1,
+      "task": "experiments/tasks/offset_outline.json",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "source_outline/min": true,
+        "source_outline/max": true,
+        "source_outline/rectangle_curve": true,
+        "source_outline/curve_length": true,
+        "source_outline/curve_area": true,
+        "source_outline/attributes": true,
+        "source_outline/identity": true,
+        "source_outline/unchanged": true,
+        "offset_outline/min": true,
+        "offset_outline/max": true,
+        "offset_outline/rectangle_curve": true,
+        "offset_outline/curve_length": true,
+        "offset_outline/curve_area": true,
+        "offset_outline/attributes": true
+      },
+      "preserved": true,
+      "evidence_hashes": {
+        "task.json": "7ee2b9770c16a9ff47ae5040dff99544b4fb415b00994024521e0ac4d59e3f73",
+        "pins.json": "53c36879010d229398e15de62cdbea5c379be5e22e4091b82e69b26dd3159d23",
+        "tool-definitions.json": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39",
+        "candidate.3dm": "812edd1c97b06735f44386ce2b502d821e34ed38d590acdb167ab454794e5e35",
+        "initial.3dm": "3f2f7aa092e17ec5624f858bfa8719f0c3e2edb6c701bab411357c041063b271",
+        "initial.json": "fe82435f04d8aa2f05859f3c36efca753ee55b5f9c896fa5dbf5a840d1c45eef",
+        "evaluation.json": "f26642bec6d07955dd17d3b2eb7e1750ef1e30110d35ad1b0b01d91a58742bd8",
+        "perspective.png": "357ba370f0c0e6fcac8c130a74662cb6cb3b656de6a6f3f9a443ce278f894c92",
+        "modeler/events.jsonl": "efd73059663815b68eb58c83ddd0932d39845d2e48a67a701aa72729ab1b20ef"
+      }
+    },
+    {
+      "id": "task-3-pair-1-candidate",
+      "family": "planar-curve-editing",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-3-pair-1-candidate",
+      "source_sha256": "ca9f2bac5b07860e19265c1c926441a60f7a6cf8a23a0332752e25355aa1218b",
+      "session_status": "completed",
+      "elapsed_seconds": 73.79507433302933,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "a86f4da9a5bba1d86dded39f93983fbdecdbad752bc0934a5729a679883c14b2",
+      "result_sha256": "dcb079429a58617393e3eb00d64b7d0eabf1bd10f0fcc45b17bf17bd7e7d9a97",
+      "status_sha256": "341fe048c8ef94577285baacd3046d495da14f1cd151cfb70d5ac31eb87a39a1",
+      "environment_sha256": "b37d3d016e24429af403c7bf259b9233edd455559fbc4de0585cb734b2b80cfa",
+      "metrics": {
+        "mcp_attempts": 19,
+        "completed_calls": 19,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 5,
+          "create_layer": 1,
+          "delete_object": 1,
+          "get_document_summary": 3,
+          "get_object_attributes": 4,
+          "get_object_info": 1,
+          "offset_curve": 2,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 5,
+          "create_layer": 1,
+          "delete_object": 1,
+          "get_document_summary": 3,
+          "get_object_attributes": 4,
+          "get_object_info": 1,
+          "offset_curve": 2,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 1,
+        "usage": {
+          "input_tokens": 390929,
+          "cached_input_tokens": 331264,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1901,
+          "reasoning_output_tokens": 548
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [],
+        "counts": {},
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 10,
+          "total_calls": 19
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_object_info",
+            "command": "get_object_info",
+            "lines": [
+              4,
+              5
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.3146174169960432
+          },
+          {
+            "id": "item_2",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              6,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_3",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              8,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.26482204196508974
+          },
+          {
+            "id": "item_4",
+            "tool": "offset_curve",
+            "command": "offset_curve",
+            "lines": [
+              10,
+              11
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2706498749903403
+          },
+          {
+            "id": "item_5",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              12,
+              14
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2081037500174716
+          },
+          {
+            "id": "item_6",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              13,
+              15
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_7",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              16,
+              17
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2615694999694824
+          },
+          {
+            "id": "item_9",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              19,
+              25
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2545677910093218
+          },
+          {
+            "id": "item_10",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              20,
+              23
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_11",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              21,
+              24
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_12",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              22,
+              26
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_14",
+            "tool": "offset_curve",
+            "command": "offset_curve",
+            "lines": [
+              28,
+              29
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.3057121660094708
+          },
+          {
+            "id": "item_15",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              30,
+              31
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2430517500033602
+          },
+          {
+            "id": "item_16",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              32,
+              33
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_17",
+            "tool": "delete_object",
+            "command": "delete_object",
+            "lines": [
+              34,
+              35
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24226924998220056
+          },
+          {
+            "id": "item_18",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              36,
+              40
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_19",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              37,
+              41
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_20",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              38,
+              42
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_21",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              39,
+              43
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2291153339901939
+          }
+        ]
+      },
+      "cohort": "unspecified",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "15aca56b-1d45-41a5-9247-c15200e67b0a",
+          "version": "0.4.0.0",
+          "pid": 80229,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": false
+            }
+          ]
+        },
+        "plugin_sha256": "0d528773e16dc75966fdcc63a8e3d0707220fdad9fbf06e644207bc4d2aac891",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "6b77d00026bf8f1b62443c649f3038f7452f8113bd56b9e7070af7675ee3f5bf",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "candidate",
+      "pair": 1,
+      "task": "experiments/tasks/offset_outline.json",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "source_outline/min": true,
+        "source_outline/max": true,
+        "source_outline/rectangle_curve": true,
+        "source_outline/curve_length": true,
+        "source_outline/curve_area": true,
+        "source_outline/attributes": true,
+        "source_outline/identity": true,
+        "source_outline/unchanged": true,
+        "offset_outline/min": true,
+        "offset_outline/max": true,
+        "offset_outline/rectangle_curve": true,
+        "offset_outline/curve_length": true,
+        "offset_outline/curve_area": true,
+        "offset_outline/attributes": true
+      },
+      "preserved": true,
+      "evidence_hashes": {
+        "task.json": "7ee2b9770c16a9ff47ae5040dff99544b4fb415b00994024521e0ac4d59e3f73",
+        "pins.json": "53c36879010d229398e15de62cdbea5c379be5e22e4091b82e69b26dd3159d23",
+        "tool-definitions.json": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39",
+        "candidate.3dm": "f07f7d88fea54c3863e6d38f897c2d15ebec97487b511928be50103a3363c623",
+        "initial.3dm": "452eace69eb37bf60b18e1b73a49da0aa9734ede2486cb5932ffce5d94bea6a5",
+        "initial.json": "e87c056e807d0fcc977ec9b89a6cfcd496c3405ad5df34218c029ccec6929cb4",
+        "evaluation.json": "a86f4da9a5bba1d86dded39f93983fbdecdbad752bc0934a5729a679883c14b2",
+        "perspective.png": "237cf965fbeed1b0427b0af32696424624dbc87549f8fc42d7fac1828317a212",
+        "modeler/events.jsonl": "ca9f2bac5b07860e19265c1c926441a60f7a6cf8a23a0332752e25355aa1218b"
+      }
+    },
+    {
+      "id": "task-3-pair-2-candidate",
+      "family": "planar-curve-editing",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-3-pair-2-candidate",
+      "source_sha256": "420fb3ad0840ab04939417f545976dd6c174cce9d7af61223460af09bd11dc99",
+      "session_status": "completed",
+      "elapsed_seconds": 66.48683129198616,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "0b01c2c89a394aa9269ad624dde811439250b1db0db71b93fddf5af40382470c",
+      "result_sha256": "75953d3fdf540706c37f11152cbd27495c5af9c29f038281e01c4a7e02caeb3c",
+      "status_sha256": "024cc4caff142d11a875388d47330c9daf2b2acd9b5e33925a3ac2874e4db263",
+      "environment_sha256": "48e61ec978c0a4c508c26fb46f1dbe652cde146d96c0cb777f2b2e2015dda6a4",
+      "metrics": {
+        "mcp_attempts": 17,
+        "completed_calls": 17,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 4,
+          "create_layer": 1,
+          "delete_object": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "offset_curve": 2,
+          "update_object_attributes": 1
+        },
+        "commands": {
+          "analyze_objects": 4,
+          "create_layer": 1,
+          "delete_object": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "offset_curve": 2,
+          "update_object_attributes": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 1,
+        "usage": {
+          "input_tokens": 254855,
+          "cached_input_tokens": 214016,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1551,
+          "reasoning_output_tokens": 312
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [],
+        "counts": {},
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 9,
+          "total_calls": 17
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              4,
+              6
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_2",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              5,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_3",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              8,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.23780245799571276
+          },
+          {
+            "id": "item_4",
+            "tool": "offset_curve",
+            "command": "offset_curve",
+            "lines": [
+              10,
+              11
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.21922070800792426
+          },
+          {
+            "id": "item_5",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              12,
+              17
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_6",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              13,
+              16
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_7",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              14,
+              18
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2187390000326559
+          },
+          {
+            "id": "item_8",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              15,
+              19
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2454000410507433
+          },
+          {
+            "id": "item_10",
+            "tool": "delete_object",
+            "command": "delete_object",
+            "lines": [
+              21,
+              22
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22166470799129456
+          },
+          {
+            "id": "item_11",
+            "tool": "offset_curve",
+            "command": "offset_curve",
+            "lines": [
+              23,
+              24
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22322250000433996
+          },
+          {
+            "id": "item_12",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              25,
+              26
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.1962235000100918
+          },
+          {
+            "id": "item_13",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              27,
+              33
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_14",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              28,
+              34
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_15",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              29,
+              35
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22123158298199996
+          },
+          {
+            "id": "item_16",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              30,
+              36
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_17",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              31,
+              37
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22088791598798707
+          },
+          {
+            "id": "item_18",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              32,
+              38
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          }
+        ]
+      },
+      "cohort": "unspecified",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "15aca56b-1d45-41a5-9247-c15200e67b0a",
+          "version": "0.4.0.0",
+          "pid": 80229,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "0d528773e16dc75966fdcc63a8e3d0707220fdad9fbf06e644207bc4d2aac891",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "04639d7222b851ef29b24eeaad92d80c9ce94bf87aedbccb3cc2d49b73f92f91",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "candidate",
+      "pair": 2,
+      "task": "experiments/tasks/offset_outline.json",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "source_outline/min": true,
+        "source_outline/max": true,
+        "source_outline/rectangle_curve": true,
+        "source_outline/curve_length": true,
+        "source_outline/curve_area": true,
+        "source_outline/attributes": true,
+        "source_outline/identity": true,
+        "source_outline/unchanged": true,
+        "offset_outline/min": true,
+        "offset_outline/max": true,
+        "offset_outline/rectangle_curve": true,
+        "offset_outline/curve_length": true,
+        "offset_outline/curve_area": true,
+        "offset_outline/attributes": true
+      },
+      "preserved": true,
+      "evidence_hashes": {
+        "task.json": "7ee2b9770c16a9ff47ae5040dff99544b4fb415b00994024521e0ac4d59e3f73",
+        "pins.json": "53c36879010d229398e15de62cdbea5c379be5e22e4091b82e69b26dd3159d23",
+        "tool-definitions.json": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39",
+        "candidate.3dm": "f65401c0f7c3376cbb331552bb0dd9af0081d09015884371ccb4d934e4ec5099",
+        "initial.3dm": "2ec93d69b8467b006cf05c408bb4d5fb66eef1143dcde75fa336beaf05bfcf30",
+        "initial.json": "d9af841addabde0dbcc99164421dbeca4185a59540416cc68fed602edcf83711",
+        "evaluation.json": "0b01c2c89a394aa9269ad624dde811439250b1db0db71b93fddf5af40382470c",
+        "perspective.png": "237cf965fbeed1b0427b0af32696424624dbc87549f8fc42d7fac1828317a212",
+        "modeler/events.jsonl": "420fb3ad0840ab04939417f545976dd6c174cce9d7af61223460af09bd11dc99"
+      }
+    },
+    {
+      "id": "task-3-pair-2-baseline",
+      "family": "planar-curve-editing",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-3-pair-2-baseline",
+      "source_sha256": "c67d765ca93566d3a66290e1641eef798d3dcb1b760d879bf8849c9d751d968e",
+      "session_status": "completed",
+      "elapsed_seconds": 62.49938537500566,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "ce7e1e7cd2b9e6ffb4a5d836b039da4db3f94c85231e15d6c15ccea8c9bf35f4",
+      "result_sha256": "369f50adf801c059f7d867c2d9a3973f0c237caa12a9b6eb7358dae5f643fd6c",
+      "status_sha256": "eccc833398b443694f65cbf32c9424162ec80b0af09eb75cd370b0a8d155d211",
+      "environment_sha256": "584942e21f2d8a5ce94383c98c45e315b0388e4005035ba60be98285820efe41",
+      "metrics": {
+        "mcp_attempts": 21,
+        "completed_calls": 21,
+        "unfinished_calls": 0,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "update_object_attributes": 1
+        },
+        "tools": {
+          "analyze_objects": 5,
+          "create_layer": 1,
+          "delete_object": 1,
+          "execute_rhinocommon_csharp_code": 1,
+          "get_document_summary": 3,
+          "get_object_attributes": 5,
+          "get_objects": 2,
+          "offset_curve": 2,
+          "update_object_attributes": 1
+        },
+        "commands": {
+          "analyze_objects": 5,
+          "create_layer": 1,
+          "delete_object": 1,
+          "execute_rhinocommon_csharp_code": 1,
+          "get_document_summary": 3,
+          "get_object_attributes": 5,
+          "get_objects": 2,
+          "offset_curve": 2,
+          "update_object_attributes": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 1,
+        "usage": {
+          "input_tokens": 276938,
+          "cached_input_tokens": 232192,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1843,
+          "reasoning_output_tokens": 422
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_7"
+            ],
+            "cost_call_ids": [
+              "item_7"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "task-3-pair-2-baseline:1",
+            "evidence_lines": [
+              16,
+              17
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.12529004202224314,
+            "measured_seconds_subtotal": 0.12529004202224314,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinocommon_csharp_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_16"
+            ],
+            "cost_call_ids": [
+              "item_16"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "task-3-pair-2-baseline:2",
+            "evidence_lines": [
+              33,
+              34
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.24470158299664035,
+            "measured_seconds_subtotal": 0.24470158299664035,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "failed_call": 1,
+          "typed_fallback": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 14,
+          "total_calls": 21
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              4,
+              8
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.3163630830240436
+          },
+          {
+            "id": "item_2",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              5,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_3",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              6,
+              10
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24243279203074053
+          },
+          {
+            "id": "item_4",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              7,
+              11
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.25221837498247623
+          },
+          {
+            "id": "item_5",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              12,
+              13
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2586768330074847
+          },
+          {
+            "id": "item_6",
+            "tool": "offset_curve",
+            "command": "offset_curve",
+            "lines": [
+              14,
+              15
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24970058404142037
+          },
+          {
+            "id": "item_7",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              16,
+              17
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.12529004202224314
+          },
+          {
+            "id": "item_8",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              18,
+              23
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_9",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              19,
+              24
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_10",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              20,
+              25
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.21897404198534787
+          },
+          {
+            "id": "item_11",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              21,
+              26
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2442511249682866
+          },
+          {
+            "id": "item_12",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              22,
+              27
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_14",
+            "tool": "delete_object",
+            "command": "delete_object",
+            "lines": [
+              29,
+              30
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.26123379199998453
+          },
+          {
+            "id": "item_15",
+            "tool": "offset_curve",
+            "command": "offset_curve",
+            "lines": [
+              31,
+              32
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2201740409946069
+          },
+          {
+            "id": "item_16",
+            "tool": "execute_rhinocommon_csharp_code",
+            "command": "execute_rhinocommon_csharp_code",
+            "lines": [
+              33,
+              34
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24470158299664035
+          },
+          {
+            "id": "item_17",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              35,
+              41
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_18",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              36,
+              42
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.23376520798774436
+          },
+          {
+            "id": "item_19",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              37,
+              43
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_20",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              38,
+              45
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24163012497592717
+          },
+          {
+            "id": "item_21",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              39,
+              44
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_22",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              40,
+              46
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2157258330262266
+          }
+        ]
+      },
+      "cohort": "unspecified",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+          "version": "0.4.0.0",
+          "pid": 90432,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": false
+            }
+          ]
+        },
+        "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "35586cdbd4bbe75fdbca834f2e76e4b57aade56df2b1f73d4e0c87274f35085b",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ],
+      "arm": "baseline",
+      "pair": 2,
+      "task": "experiments/tasks/offset_outline.json",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "source_outline/min": true,
+        "source_outline/max": true,
+        "source_outline/rectangle_curve": true,
+        "source_outline/curve_length": true,
+        "source_outline/curve_area": true,
+        "source_outline/attributes": true,
+        "source_outline/identity": true,
+        "source_outline/unchanged": true,
+        "offset_outline/min": true,
+        "offset_outline/max": true,
+        "offset_outline/rectangle_curve": true,
+        "offset_outline/curve_length": true,
+        "offset_outline/curve_area": true,
+        "offset_outline/attributes": true
+      },
+      "preserved": true,
+      "evidence_hashes": {
+        "task.json": "7ee2b9770c16a9ff47ae5040dff99544b4fb415b00994024521e0ac4d59e3f73",
+        "pins.json": "53c36879010d229398e15de62cdbea5c379be5e22e4091b82e69b26dd3159d23",
+        "tool-definitions.json": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39",
+        "candidate.3dm": "c1f8c683b78f870a46803e3a2b17e770e8389d41c5140100f59542da320c9559",
+        "initial.3dm": "520f28e95aca629977101a3a3d4221fe52988290ee19010550c8d34e5efa7db5",
+        "initial.json": "254a20463525c19134577da59bb812a7f9f2d59c18446f14fe28bdfbba15688f",
+        "evaluation.json": "ce7e1e7cd2b9e6ffb4a5d836b039da4db3f94c85231e15d6c15ccea8c9bf35f4",
+        "perspective.png": "237cf965fbeed1b0427b0af32696424624dbc87549f8fc42d7fac1828317a212",
+        "modeler/events.jsonl": "c67d765ca93566d3a66290e1641eef798d3dcb1b760d879bf8849c9d751d968e"
+      }
+    }
+  ],
+  "promotion_authorized": false,
+  "limitations": [
+    "Two repeats per arm/task; descriptive evidence, not statistical proof.",
+    "Requested model alias/effort pinned; backend snapshot unavailable.",
+    "Correctness precedes efficiency; tokens/time are secondary observations.",
+    "Evaluation uses a fresh trusted baseline process after candidate shutdown; this is not an adversarial OS sandbox.",
+    "Held-out allocation and exact decision rule are in the cycle review and HELD_OUT.md; one frozen use, two repeats per arm/family."
+  ],
+  "evaluation_mode": "trusted_baseline",
+  "supervisor_decision": {
+    "keep_rule_satisfied": true,
+    "decision": "keep",
+    "promotion_authorized": false,
+    "rule": "All six candidate tasks pass, no per-family correctness regression or failed-call increase, and correctness_then_calls_v1 benefit in a discovery family."
+  },
+  "source": "experiments/runs/workflow-binary-20260910-085542-7d89feb3",
+  "contract": {
+    "id": "m3-attribute-overload-v1",
+    "suite": "experiments/workflow/m3-cycle1-suite.json",
+    "agent": {
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "medium"
+    },
+    "repeats": 2,
+    "acceptance": "correctness_then_calls_v1",
+    "evaluation_mode": "trusted_baseline",
+    "full_catalog": true,
+    "binaries": {
+      "baseline": {
+        "path": "experiments/runs/m3-runtime-probe-20260910/baseline.rhp",
+        "identity": {
+          "sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2"
+        }
+      },
+      "candidate": {
+        "path": "experiments/runs/repair-20260910-085059-a4317332/candidate/plugin/bin/Release/net8.0/rhinomcp.rhp",
+        "identity": {
+          "mvid": "15aca56b-1d45-41a5-9247-c15200e67b0a",
+          "sha256": "0d528773e16dc75966fdcc63a8e3d0707220fdad9fbf06e644207bc4d2aac891"
+        }
+      }
+    }
+  },
+  "final_runtime": {
+    "document": 268435457,
+    "marker": null,
+    "object_count": 0,
+    "path": null,
+    "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+    "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+    "version": "0.4.0.0",
+    "pid": 90432,
+    "docs": [
+      {
+        "serial": 268435457,
+        "path": null,
+        "count": 0,
+        "modified": true
+      }
+    ]
+  },
+  "source_hashes": {
+    "contract.json": "1dc7832c7cc8e2147d176152de965ab62b0d4cddc036a5590bba0d843bbad7e2",
+    "pins.json": "0d03421c66ee51cfa849afcde7dfbe97e1cbed947472aa56b67352d20ed141be",
+    "schedule.json": "ea2256703e4a8dfccee2d4d7fd8c03915e7629d7742552452664033fc1600208",
+    "state.json": "a1f84ade3e671207c7a73112aef53788858ca169681191dd42f925d61fd027ba",
+    "comparison.json": "77b258ca9eb4bad05457b1c571a28096669c8db6d20314ea08ecba0f2fcb5415",
+    "final-runtime.json": "5ad77aa0a8969b7fb708bc77f6ec60f6a62a64742c3470deebbdf64325674025",
+    "tools.json": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "planner": {
+    "action": "plugin_issue",
+    "proposal": {
+      "id": "m3-1-update-object-attributes-runtime-repair",
+      "kind": "defect",
+      "target": "mcp_plugin",
+      "friction": "`update_object_attributes` returned runtime exceptions 15 times across five sessions in editing-existing, small-assemblies, and recovery. The failures blocked typed layer assignment; two reviewed traces then used RhinoScript/C# layer-assignment workarounds. This is observed workflow friction, but the audit alone does not establish the plugin root cause.",
+      "evidence": [
+        "Observed: all 15 ranked runtime exceptions were attributed to `update_object_attributes` (15 calls, 7.73 measured seconds) across both released-0.4.0 native and full catalogs.",
+        "Observed: small-assemblies contained 11 failures across two runs; recovery contained three across two runs; editing-existing contained one.",
+        "Observed: in two full-catalog runs, a script assigned a layer after the typed call failed; the audit reviewed these as workarounds for the exposed typed operation.",
+        "Unknown: historical runs are not comparison-eligible because resolved model/version, paired candidate runs, and repeats are not pinned; no improvement is claimed."
+      ],
+      "hypothesis": "Investigate and repair the `update_object_attributes` runtime failure after confirming it with preserved direct probes and loaded-assembly reflection. The supervisor hypothesis is that a static reference to `JToken.ToString(Formatting)` in the user-string branch can make the handler uncallable under an incompatible loaded Newtonsoft signature, including layer-only requests; this remains unconfirmed until reflection and probes establish it. The repair must require no wire-contract or schema change and must preserve native string values and JSON encoding for numeric, boolean, array, object, and null user data, plus names, layers, colors, visibility, locking, materials, and rollback behavior.",
+      "discovery_families": [
+        "small-assemblies",
+        "recovery",
+        "editing-existing"
+      ],
+      "validation_families": [
+        "small-assemblies",
+        "recovery",
+        "planar-curve-editing"
+      ],
+      "held_out_families": [
+        "planar-curve-editing"
+      ],
+      "metrics": [
+        "task_success",
+        "failed_tool_calls",
+        "mcp_calls",
+        "elapsed_seconds",
+        "recovery_success"
+      ],
+      "preserve": [
+        "Freeze model recipe (gpt-5.6-terra, medium), prompts, catalogs, tasks, evaluator, call budget, timeout, Rhino environment, and plugin comparison procedure between baseline and candidate.",
+        "Use two counterbalanced baseline/candidate pairs per validation family; assess saved-file task success before efficiency.",
+        "Require no correctness regression before considering lower failed calls, MCP calls, or elapsed seconds; held-out planar-curve-editing must pass both candidate attempts.",
+        "Keep planar-curve-editing geometry parameters independently prepared and unavailable to the builder.",
+        "Do not bundle scripting-input guidance or new capabilities with this repair."
+      ],
+      "status": "proposed"
+    }
+  },
+  "reflection": [
+    {
+      "assembly": "Newtonsoft.Json.Rhino, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b9a188c8922137c6",
+      "path": "/Applications/Rhino 8.app/Contents/Frameworks/RhCore.framework/Resources/Newtonsoft.Json.Rhino.dll",
+      "methods": [
+        "System.String ToString()",
+        "System.String ToString(Newtonsoft.Json.Formatting, Newtonsoft.Json.JsonConverter[])"
+      ]
+    },
+    {
+      "assembly": "Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed",
+      "path": "/Applications/Rhino 8.app/Contents/Frameworks/RhCore.framework/Resources/Newtonsoft.Json.dll",
+      "methods": [
+        "System.String ToString()",
+        "System.String ToString(Newtonsoft.Json.Formatting, Newtonsoft.Json.JsonConverter[])"
+      ]
+    }
+  ],
+  "review": "The loaded JToken exposes ToString() and ToString(Formatting, JsonConverter[]), not ToString(Formatting). M2 records 15 reproducible handler failures. Only fix overload binding; preserve scalar encodings and reject array/object user strings."
+}

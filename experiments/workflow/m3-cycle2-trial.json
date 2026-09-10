@@ -1,0 +1,41 @@
+{
+  "id": "m3-lookup-description-v1",
+  "suite": "experiments/workflow/m3-cycle2-suite.json",
+  "agent": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "medium"
+  },
+  "repeats": 2,
+  "acceptance": "correctness_then_calls_v1",
+  "evaluation_mode": "trusted_baseline",
+  "full_catalog": true,
+  "binaries": {
+    "baseline": {
+      "path": "experiments/runs/m3-runtime-probe-20260910/baseline.rhp",
+      "identity": {
+        "sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2"
+      }
+    },
+    "candidate": {
+      "path": "experiments/runs/m3-runtime-probe-20260910/baseline.rhp",
+      "identity": {
+        "sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2"
+      }
+    }
+  },
+  "description_tools": [
+    "get_object_info"
+  ],
+  "interfaces": {
+    "baseline": {
+      "server_source": "server/src",
+      "extra_tools": []
+    },
+    "candidate": {
+      "server_source": "experiments/runs/repair-20260910-092552-3c39fc7d/candidate/server/src",
+      "extra_tools": []
+    }
+  }
+}

@@ -270,3 +270,29 @@ calibrate the analytic scene, identity, layer and inspection checks. See
 [the M2 report](SCENE_BENCHMARKS.md), [suite](m2-pilot.json) and
 [reserved family allocation](HELD_OUT.md). This extends discovery coverage; it does
 not establish a candidate improvement or generalization claim.
+
+## M3 cross-family cycles on 0.4.0
+
+[M3.md](M3.md) records the attribute-update and lookup-description investigations.
+`plan.py REPORT --context CONTEXT --model MODEL --reasoning-effort EFFORT` accepts
+explicit supervisor context instead of injecting the old surface-construction
+proposal. Context, evidence and model settings are hashed for the fresh planner.
+
+`binary_compare.py` retains the shared pilot, saved-file evaluator, AB/BA schedule,
+resource ledger and restoration checks. `full_catalog: true` exposes the complete
+production catalog while keeping Grasshopper calls outside the Rhino-document
+permission scope. For a reviewed description-only source trial, declare
+`description_tools`, both `interfaces` with `server_source` and empty `extra_tools`,
+and identical `binaries` identities. Only the declared descriptions may differ;
+all other catalog fields must match. The supervisor separately reviews executable
+source equivalence, and both source trees are frozen before sessions. Example
+contracts: `m3-cycle1-trial.json` and `m3-cycle2-trial.json`. These consume local
+reviewed build/source artifacts; they do not reproduce them implicitly.
+
+The scene evaluator now also measures closed axis-aligned rectangular polylines,
+checking corners, closure, planarity, bounds, area and perimeter. Offset and
+section cases use the same task runner and saved-file measurement path as boxes.
+`validate_scene.run([...])` calibrates selected task names without launching agents;
+`validate_attributes.py` runs controller-only attribute checks in an owned empty
+document. Preserve all failed attempts and setup failures, and never convert an
+agent completion claim into a task verdict.

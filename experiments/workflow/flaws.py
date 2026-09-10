@@ -149,6 +149,7 @@ def trace(path, timings=None):
                     value.get("success") is False
                     or value.get("isError")
                     or value.get("is_error")
+                    or (set(value) == {"error"} and bool(value["error"]))
                 )
             )
         )

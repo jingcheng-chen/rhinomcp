@@ -20,9 +20,14 @@ def validate(task):
         if len({p["name"] for p in parts}) != len(parts):
             raise ValueError("Scene object names must be unique")
         for p in parts:
+            curve = p.get("shape") == "rectangle_curve"
             if not all(
                 math.isfinite(a) and math.isfinite(b) and b > a
-                for a, b in zip(p["min"], p["max"])
+                for a, b in zip(
+                    p["min"][: 2 if curve else 3], p["max"][: 2 if curve else 3]
+                )
+            ) or (
+                curve and (not math.isfinite(p["min"][2]) or p["min"][2] != p["max"][2])
             ):
                 raise ValueError("Scene bounds must be finite and positive")
             if not math.isfinite(math.prod(b - a for a, b in zip(p["min"], p["max"]))):
@@ -135,6 +140,32 @@ def evaluate(task, measured):
         checks[name + "/volume"] = near(
             o.get("volume"), volume, volume * task["relative_volume_tolerance"]
         )
+        if target.get("shape") == "rectangle_curve":
+            del checks[name + "/solid_box"], checks[name + "/volume"]
+            points = o.get("polyline") or []
+            expected = [c for c in corners[::2]]
+            checks[name + "/rectangle_curve"] = (
+                o.get("valid") is True
+                and o.get("curve_closed") is True
+                and o.get("curve_planar") is True
+                and len(points) == 5
+                and all(near(a, b, tol) for a, b in zip(points[0], points[-1]))
+                and all(
+                    any(all(near(a, b, tol) for a, b in zip(c, p)) for p in points[:-1])
+                    for c in expected
+                )
+            )
+            width, height = [target["max"][i] - target["min"][i] for i in (0, 1)]
+            checks[name + "/curve_length"] = near(
+                o.get("curve_length"),
+                2 * (width + height),
+                2 * (width + height) * task["relative_volume_tolerance"],
+            )
+            checks[name + "/curve_area"] = near(
+                o.get("curve_area"),
+                width * height,
+                width * height * task["relative_volume_tolerance"],
+            )
         checks[name + "/attributes"] = (
             paths.get(o.get("layer")) == target["layer"]
             and o.get("visible") is True
@@ -187,7 +218,7 @@ def evaluate(task, measured):
         "status": "pass" if all(checks.values()) else "fail",
         "checks": checks,
         "measurements": measured,
-        "limitation": "Analytic eight-corner box assemblies only. Identity/CRC checks compare saved states; mutating-tool attempts are audited separately for inspection. Supervised local execution, not adversarial isolation.",
+        "limitation": "Analytic eight-corner boxes and closed axis-aligned rectangular curves. Identity/CRC checks compare saved states; mutating-tool attempts are audited separately for inspection. Supervised local execution, not adversarial isolation.",
     }
 
 
@@ -228,10 +259,23 @@ def creation_code(parts, destination="doc", preserved_ids=None):
                 + json.dumps(preserved_ids[p["preserve_from"]])
                 + ");"
             )
-        code.append(
-            f"var box=new Box(Plane.WorldXY,new Interval({a[0]},{b[0]}),new Interval({a[1]},{b[1]}),new Interval({a[2]},{b[2]}));"
-        )
-        code.append(f"{destination}.Objects.AddBrep(box.ToBrep(),attr);}}")
+        if p.get("shape") == "rectangle_curve":
+            points = [
+                (a[0], a[1], a[2]),
+                (b[0], a[1], a[2]),
+                (b[0], b[1], a[2]),
+                (a[0], b[1], a[2]),
+                (a[0], a[1], a[2]),
+            ]
+            literal = ",".join(f"new Point3d({x},{y},{z})" for x, y, z in points)
+            code.append(
+                f"{destination}.Objects.AddCurve(new PolylineCurve(new []{{{literal}}}),attr);}}"
+            )
+        else:
+            code.append(
+                f"var box=new Box(Plane.WorldXY,new Interval({a[0]},{b[0]}),new Interval({a[1]},{b[1]}),new Interval({a[2]},{b[2]}));"
+            )
+            code.append(f"{destination}.Objects.AddBrep(box.ToBrep(),attr);}}")
     return "\n".join(code)
 
 

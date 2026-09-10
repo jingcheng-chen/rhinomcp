@@ -1,0 +1,76 @@
+{
+  "runs": [
+    {
+      "id": "workflow-binary-20260910-085542-7d89feb3-task-1-pair-1-baseline",
+      "family": "small-assemblies",
+      "run": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-1-pair-1-baseline",
+      "cohort": "m3-cycle1-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-085542-7d89feb3-task-1-pair-1-candidate",
+      "family": "small-assemblies",
+      "run": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-1-pair-1-candidate",
+      "cohort": "m3-cycle1-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-085542-7d89feb3-task-1-pair-2-candidate",
+      "family": "small-assemblies",
+      "run": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-1-pair-2-candidate",
+      "cohort": "m3-cycle1-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-085542-7d89feb3-task-1-pair-2-baseline",
+      "family": "small-assemblies",
+      "run": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-1-pair-2-baseline",
+      "cohort": "m3-cycle1-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-085542-7d89feb3-task-2-pair-1-baseline",
+      "family": "recovery",
+      "run": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-2-pair-1-baseline",
+      "cohort": "m3-cycle1-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-085542-7d89feb3-task-2-pair-1-candidate",
+      "family": "recovery",
+      "run": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-2-pair-1-candidate",
+      "cohort": "m3-cycle1-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-085542-7d89feb3-task-2-pair-2-candidate",
+      "family": "recovery",
+      "run": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-2-pair-2-candidate",
+      "cohort": "m3-cycle1-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-085542-7d89feb3-task-2-pair-2-baseline",
+      "family": "recovery",
+      "run": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-2-pair-2-baseline",
+      "cohort": "m3-cycle1-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-085542-7d89feb3-task-3-pair-1-baseline",
+      "family": "planar-curve-editing",
+      "run": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-3-pair-1-baseline",
+      "cohort": "m3-cycle1-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-085542-7d89feb3-task-3-pair-1-candidate",
+      "family": "planar-curve-editing",
+      "run": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-3-pair-1-candidate",
+      "cohort": "m3-cycle1-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-085542-7d89feb3-task-3-pair-2-candidate",
+      "family": "planar-curve-editing",
+      "run": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-3-pair-2-candidate",
+      "cohort": "m3-cycle1-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-085542-7d89feb3-task-3-pair-2-baseline",
+      "family": "planar-curve-editing",
+      "run": "experiments/runs/workflow-binary-20260910-085542-7d89feb3/task-3-pair-2-baseline",
+      "cohort": "m3-cycle1-baseline"
+    }
+  ]
+}

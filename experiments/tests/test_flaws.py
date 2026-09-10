@@ -396,3 +396,35 @@ def test_missing_runtime_method_is_not_a_missing_object():
         == "runtime_exception"
     )
     assert cause({"error": "Object with given id not found"}) == "missing_object"
+
+
+def test_error_only_result_counts_failure_but_object_data_does_not(tmp_path):
+    import json
+    from experiments.workflow.flaws import trace
+
+    path = tmp_path / "events.jsonl"
+    path.write_text(
+        "\n".join(
+            json.dumps(
+                {
+                    "type": "item.completed",
+                    "item": {
+                        "id": str(i),
+                        "type": "mcp_tool_call",
+                        "tool": "get_object_info",
+                        "status": "completed",
+                        "arguments": {},
+                        "result": {"structured_content": {"result": result}},
+                    },
+                }
+            )
+            for i, result in enumerate(
+                [
+                    {"error": "Object lookup requires id or name"},
+                    {"id": "1", "error": "custom data"},
+                ]
+            )
+        )
+    )
+    rows, _, _ = trace(path)
+    assert [r["failed"] for r in rows] == [True, False]

@@ -11,7 +11,7 @@ from experiments.strip_probe import fingerprint
 from experiments.trial import locked
 
 
-def run():
+def run(task_names=None):
     directory = (
         ROOT / "experiments/runs" / time.strftime("scene-calibration-%Y%m%d-%H%M%S")
     )
@@ -21,7 +21,7 @@ def run():
         owner = runtime()
         require_owned(owner, owner)
         before = fingerprint()
-        for name in (
+        for name in task_names or (
             "edit_existing",
             "table_assembly",
             "inspect_document",
@@ -47,6 +47,11 @@ def run():
                 "wrong_units",
                 "missing_object",
             ]
+            if any(
+                t.get("shape") == "rectangle_curve" and not t.get("unchanged")
+                for t in task["targets"]
+            ):
+                variants.append("wrong_curve_height")
             if task["initial"]:
                 variants.append("replaced_id")
             if task["family"] == "recovery":
@@ -57,6 +62,15 @@ def run():
                 path = directory / f"{name}-{variant}.3dm"
                 targets = copy.deepcopy(task["targets"])
                 preserve = ids
+                if variant == "wrong_curve_height":
+                    curve = next(
+                        t
+                        for t in targets
+                        if t.get("shape") == "rectangle_curve"
+                        and not t.get("unchanged")
+                    )
+                    curve["min"][2] += 3
+                    curve["max"][2] += 3
                 if variant == "wrong_bounds":
                     targets[0]["max"][0] += 3
                 if variant == "extra_object":

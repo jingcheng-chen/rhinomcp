@@ -410,5 +410,137 @@
     "status": "Workflow passed",
     "caption": "11 calls, 2 failures. Saved-file verdict: pass.",
     "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3-cycle1-baseline-small-assemblies",
+    "title": "M3-1 \u00b7 baseline \u00b7 small-assemblies",
+    "image": "assets/m3-cycle1-baseline-small-assemblies.png",
+    "source": "runs/workflow-binary-20260910-085542-7d89feb3/task-1-pair-1-baseline/perspective.png",
+    "sha256": "b47161756723e091380e3406778e4498027085a578f65eb574b8efc567b4052d",
+    "report": "workflow/M3.md",
+    "status": "Workflow passed",
+    "caption": "First prespecified pair; 24 calls, 5 failures.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3-cycle1-candidate-small-assemblies",
+    "title": "M3-1 \u00b7 candidate \u00b7 small-assemblies",
+    "image": "assets/m3-cycle1-candidate-small-assemblies.png",
+    "source": "runs/workflow-binary-20260910-085542-7d89feb3/task-1-pair-1-candidate/perspective.png",
+    "sha256": "b47161756723e091380e3406778e4498027085a578f65eb574b8efc567b4052d",
+    "report": "workflow/M3.md",
+    "status": "Workflow passed",
+    "caption": "First prespecified pair; 13 calls, 0 failures.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3-cycle1-baseline-recovery",
+    "title": "M3-1 \u00b7 baseline \u00b7 recovery",
+    "image": "assets/m3-cycle1-baseline-recovery.png",
+    "source": "runs/workflow-binary-20260910-085542-7d89feb3/task-2-pair-1-baseline/perspective.png",
+    "sha256": "08570fdb274e3bf5e1062d4f356cbabd091edfb7ffc10183ae9189a0294912f4",
+    "report": "workflow/M3.md",
+    "status": "Workflow passed",
+    "caption": "First prespecified pair; 13 calls, 1 failures.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3-cycle1-candidate-recovery",
+    "title": "M3-1 \u00b7 candidate \u00b7 recovery",
+    "image": "assets/m3-cycle1-candidate-recovery.png",
+    "source": "runs/workflow-binary-20260910-085542-7d89feb3/task-2-pair-1-candidate/perspective.png",
+    "sha256": "08570fdb274e3bf5e1062d4f356cbabd091edfb7ffc10183ae9189a0294912f4",
+    "report": "workflow/M3.md",
+    "status": "Workflow passed",
+    "caption": "First prespecified pair; 10 calls, 0 failures.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3-cycle1-baseline-planar-curve-editing",
+    "title": "M3-1 \u00b7 baseline \u00b7 planar-curve-editing",
+    "image": "assets/m3-cycle1-baseline-planar-curve-editing.png",
+    "source": "runs/workflow-binary-20260910-085542-7d89feb3/task-3-pair-1-baseline/perspective.png",
+    "sha256": "357ba370f0c0e6fcac8c130a74662cb6cb3b656de6a6f3f9a443ce278f894c92",
+    "report": "workflow/M3.md",
+    "status": "Workflow passed",
+    "caption": "First prespecified pair; 27 calls, 1 failures.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3-cycle1-candidate-planar-curve-editing",
+    "title": "M3-1 \u00b7 candidate \u00b7 planar-curve-editing",
+    "image": "assets/m3-cycle1-candidate-planar-curve-editing.png",
+    "source": "runs/workflow-binary-20260910-085542-7d89feb3/task-3-pair-1-candidate/perspective.png",
+    "sha256": "237cf965fbeed1b0427b0af32696424624dbc87549f8fc42d7fac1828317a212",
+    "report": "workflow/M3.md",
+    "status": "Workflow passed",
+    "caption": "First prespecified pair; 19 calls, 0 failures.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3-cycle2-baseline-document-inspection",
+    "title": "M3-2 \u00b7 baseline \u00b7 document-inspection",
+    "image": "assets/m3-cycle2-baseline-document-inspection.png",
+    "source": "runs/workflow-binary-20260910-093344-5aa4136d/task-1-pair-1-baseline/perspective.png",
+    "sha256": "a5dc0417136f7a7d91ff045efd8234a37091381bd6ed04ba18c5dc637993932e",
+    "report": "workflow/M3.md",
+    "status": "Workflow passed",
+    "caption": "First prespecified pair; 4 calls, 0 failures.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3-cycle2-candidate-document-inspection",
+    "title": "M3-2 \u00b7 candidate \u00b7 document-inspection",
+    "image": "assets/m3-cycle2-candidate-document-inspection.png",
+    "source": "runs/workflow-binary-20260910-093344-5aa4136d/task-1-pair-1-candidate/perspective.png",
+    "sha256": "a5dc0417136f7a7d91ff045efd8234a37091381bd6ed04ba18c5dc637993932e",
+    "report": "workflow/M3.md",
+    "status": "Workflow passed",
+    "caption": "First prespecified pair; 3 calls, 0 failures.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3-cycle2-baseline-editing-existing",
+    "title": "M3-2 \u00b7 baseline \u00b7 editing-existing",
+    "image": "assets/m3-cycle2-baseline-editing-existing.png",
+    "source": "runs/workflow-binary-20260910-093344-5aa4136d/task-2-pair-1-baseline/perspective.png",
+    "sha256": "7760832a32fbaa228a9cfea94e160cb87436b957fc693aac873aa30f336fdb9d",
+    "report": "workflow/M3.md",
+    "status": "Workflow passed",
+    "caption": "First prespecified pair; 12 calls, 0 failures.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3-cycle2-candidate-editing-existing",
+    "title": "M3-2 \u00b7 candidate \u00b7 editing-existing",
+    "image": "assets/m3-cycle2-candidate-editing-existing.png",
+    "source": "runs/workflow-binary-20260910-093344-5aa4136d/task-2-pair-1-candidate/perspective.png",
+    "sha256": "7760832a32fbaa228a9cfea94e160cb87436b957fc693aac873aa30f336fdb9d",
+    "report": "workflow/M3.md",
+    "status": "Workflow passed",
+    "caption": "First prespecified pair; 10 calls, 0 failures.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3-cycle2-baseline-section-extraction",
+    "title": "M3-2 \u00b7 baseline \u00b7 section-extraction",
+    "image": "assets/m3-cycle2-baseline-section-extraction.png",
+    "source": "runs/workflow-binary-20260910-093344-5aa4136d/task-3-pair-1-baseline/perspective.png",
+    "sha256": "275cdce099d14bd80020d2a3c60c27d929ab5de772d425f0babf9b05c78dc6b3",
+    "report": "workflow/M3.md",
+    "status": "Workflow passed",
+    "caption": "First prespecified pair; 25 calls, 3 failures.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3-cycle2-candidate-section-extraction",
+    "title": "M3-2 \u00b7 candidate \u00b7 section-extraction",
+    "image": "assets/m3-cycle2-candidate-section-extraction.png",
+    "source": "runs/workflow-binary-20260910-093344-5aa4136d/task-3-pair-1-candidate/perspective.png",
+    "sha256": "275cdce099d14bd80020d2a3c60c27d929ab5de772d425f0babf9b05c78dc6b3",
+    "report": "workflow/M3.md",
+    "status": "Workflow passed",
+    "caption": "First prespecified pair; 13 calls, 0 failures.",
+    "kind": "actual_rhino_capture"
   }
 ]

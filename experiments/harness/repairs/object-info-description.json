@@ -1,0 +1,13 @@
+{
+  "baseline_revision": "releases/0.4.0",
+  "read_paths": [
+    "server/src/rhinomcp/tools/get_object_info.py",
+    "plugin/Functions/GetObjectInfo.cs",
+    "contracts/commands/get_object_info.json"
+  ],
+  "write_paths": [
+    "server/src/rhinomcp/tools/get_object_info.py"
+  ],
+  "requirements": "Change only the get_object_info function docstring to align advertised selectors with the existing id/name signature. Explain at least one selector is required and id takes priority. When neither selector is known, discover objects with get_objects first. Preserve every executable statement, decorator, signature, return description and all other files. No error-envelope, schema, behavior, annotation or task-specific guidance changes.",
+  "acceptance": "Supervisor independently verifies unchanged executable AST, exact full-catalog equality except the declared description, selector behavior through existing tests, then fixed cross-family fresh-agent comparison. Do not build or install."
+}

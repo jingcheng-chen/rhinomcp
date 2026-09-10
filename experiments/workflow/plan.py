@@ -30,7 +30,7 @@ def response_schema():
     return compatible(schema)
 
 
-def run(report):
+def run(report, context=None, agent_config=None):
     directory = (
         ROOT
         / "experiments/runs"
@@ -38,12 +38,9 @@ def run(report):
     )
     directory.mkdir()
     print(directory, flush=True)
-    folder = ROOT / "experiments/workflow"
     evidence = {
         "audit": json.loads(report.read_text()),
-        "investigation_seed": json.loads(
-            (folder / "surface-feedback.proposal.json").read_text()
-        ),
+        "supervisor_context": json.loads(context.read_text()) if context else None,
     }
     save(directory / "evidence.json", evidence)
     sources = [
@@ -55,6 +52,14 @@ def run(report):
         "experiments/runner.py",
     ]
     pins = {name: sha256(ROOT / name) for name in sources}
+    save(
+        directory / "evidence-pins.json",
+        {
+            "audit": sha256(report),
+            "context": sha256(context) if context else None,
+            "agent": agent_config,
+        },
+    )
     save(directory / "inputs.json", pins)
     for name in sources:
         p = directory / "source" / name
@@ -63,10 +68,11 @@ def run(report):
     result = run_session(
         directory / "planner",
         role_instructions("workflow_planner")
-        + "\nProduce one investigation proposal from this evidence. Do not claim measured improvement. The investigation seed is a supervisor-authored proposal, not an accepted decision.\n"
+        + "\nProduce one investigation proposal from this evidence. Do not claim measured improvement. Supervisor context constrains this investigation; hypotheses in it are not measured conclusions.\n"
         + json.dumps(evidence),
         response_schema(),
         180,
+        **({"agent_config": agent_config} if agent_config else {}),
     )
     try:
         validate(result, observed_families=evidence["audit"]["families"])
@@ -97,4 +103,18 @@ def run(report):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("report", type=Path)
-    run(parser.parse_args().report)
+    parser.add_argument("--context", type=Path)
+    parser.add_argument("--model")
+    parser.add_argument(
+        "--reasoning-effort", choices=["low", "medium", "high", "xhigh"]
+    )
+    args = parser.parse_args()
+    if bool(args.model) != bool(args.reasoning_effort):
+        parser.error("Provide both --model and --reasoning-effort")
+    run(
+        args.report,
+        args.context,
+        {"model": args.model, "reasoning_effort": args.reasoning_effort}
+        if args.model
+        else None,
+    )

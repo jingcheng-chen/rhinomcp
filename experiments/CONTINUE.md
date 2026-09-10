@@ -1,7 +1,7 @@
 # Continue autonomous RhinoMCP improvement
 
 Entry point for a fresh development session (Codex CLI or Claude Code) with no
-chat context. Last updated 2026-09-10, after M2 on the 0.4.0 release. Verify repository
+chat context. Last updated 2026-09-10, after M3 on the 0.4.0 release. Verify repository
 and application state before acting; nothing below about running processes, open
 documents or loaded plugins is an assumption you may keep.
 
@@ -58,7 +58,7 @@ This supersedes the precision-oriented next steps in [HANDOFF_HISTORY.md](HANDOF
    test session. Decide and record everything else yourself.
 7. Before every commit: from `server/`, `.venv/bin/python -m pytest` (285 at last
    count) and `.venv/bin/ruff check src/rhinomcp`; from the repository root,
-   `server/.venv/bin/python -m pytest experiments/tests` (441) and
+   `server/.venv/bin/python -m pytest experiments/tests` (457) and
    `server/.venv/bin/python -m pytest contracts/test_schemas.py` (13); for plugin
    changes, `dotnet build plugin/rhinomcp.sln --configuration Release`.
 
@@ -72,7 +72,7 @@ credentials anywhere; reinstall the plugin into a Rhino that holds user work.
 - Released: rhinomcp 0.4.0 on PyPI and Yak from `releases/0.4.0`; `main` is at the
   merge of PR #52 (`a4bb8bb`). 0.4.0 includes MCP SDK 2.x, `create_planar_region`,
   packaged guidance v2, the plugin repairs, and the server/plugin version-skew guard.
-  `CHANGELOG.md` has the details. The `harness` branch is merged; keep developing on it.
+  `CHANGELOG.md` has the details. The `harness` branch continues experimental work after that release.
 - Every Rhino connection now reads `describe_capabilities` once before its first
   command. Traces show that call; it is not an agent decision.
 - M0 is complete. `workflow/current-baseline.json` selects released 0.4.0; the
@@ -100,25 +100,45 @@ credentials anywhere; reinstall the plugin into a Rhino that holds user work.
   Fifteen failures expose a missing Newtonsoft method in `update_object_attributes`
   across three families. Full-catalog agents recover through scripts in two cases.
   See [M2 report](workflow/SCENE_BENCHMARKS.md), `workflow/m2-runs.json`,
-  `workflow/m2-results.json` and `workflow/m2-audit.json`. M3 is next; start with this
-  current-runtime defect, not the pre-release M1 leaders. No production code changed.
-- The user authorized dedicated local testing. All eight M2 runs restored their
-  original document fingerprint. Final verification: Rhino PID 66923, document
-  268435458, zero objects, no marker/path, original layers, modified flag true.
-  No controller/modeler remains running. Reverify state before live work; this is
-  supervised local testing, not M5 unattended isolation.
+  `workflow/m2-results.json` and `workflow/m2-audit.json`. M3 corrected an auditor
+  omission: three bare error dictionaries were missed, so re-audited discovery has
+  104 calls and 19 failures. Original M2 reports remain historical snapshots;
+  `workflow/m3-discovery-audit.json` has the corrected counts.
+- M3 is complete: two fresh planner/builder cycles, each with two AB/BA pairs on
+  two discovery families and one held-out family. All 24 saved models pass
+  independent baseline evaluation. Both interventions meet their predeclared keep
+  rules. Attribute repair: median calls 21→14, 15→10, 24→18, with failed calls 15→0.
+  Lookup wording: 4.5→3.5, 12→11.5, 20→14, failed calls 4→1. The original lookup
+  wrong-field error did not recur in either arm; this small descriptive signal does
+  not prove the wording caused every saving. See [M3 report](workflow/M3.md),
+  `workflow/m3-cycle1-results.json` and `workflow/m3-cycle2-results.json`.
+- Kept changes are in open PRs [#53](https://github.com/jingcheng-chen/rhinomcp/pull/53)
+  and [#54](https://github.com/jingcheng-chen/rhinomcp/pull/54), targeting main and
+  preparing the same unreleased 0.4.1. #54 is stacked on #53; review/merge #53 first.
+  No merge or publication was authorized/performed. Neither the selected baseline
+  nor production source in this harness checkout was advanced. The attribute
+  release build repeats 14/14 direct checks. Combined release source passes tests;
+  the fresh-agent trials tested each change independently, not their joint effect.
+- The user authorized dedicated local testing. Final M3 verification: Rhino PID
+  7380, document 268435457, zero objects, no marker/path, original layers, modified
+  flag true. Server/plugin both 0.4.0, no update advice, verified released SHA/MVID.
+  No controller/modeler remains running. Reverify before live work and open a fresh
+  empty document before comparison preparation; the used document's modified flag
+  correctly fails that startup gate. This is supervised local testing, not M5 isolation.
 - Discovery so far: five families audited historically (primitives, posed solids,
   subtractive solids, surface construction, layer organization, plus photo
   reconstruction); the native pilot covers primitives, subtractive solids, posed
   solids, trimmed patches and curved panels through a 14-tool subset. Held-out cases
   in those families are spent; new parameterizations of them are discovery cases.
-- Reserved curve-editing and section-extraction families remain unrun; see
-  [held-out allocation](workflow/HELD_OUT.md), declared before M2 discovery.
+- Curve editing and section extraction were spent in M3. Unopened replacement
+  family names are curve-network joining and instance/block reuse; parameters are
+  not yet sealed. M4 is next: formalize the sealed bank and allocation process.
+  See [held-out allocation](workflow/HELD_OUT.md), declared before M2 discovery.
 - Agents available: the Codex adapter (default) and the Claude adapter (native
   modeling validated; binary comparison orchestration remains Codex-only).
 - Pending user decision: the dedicated isolation environment (VM or machine) for
   unattended operation. Nothing else blocks M0 to M4.
-- Tests at last verification: 285 server, 441 experiments, 13 contracts; server lint passes.
+- Tests at last verification: 285 server, 457 experiments, 13 contracts; server lint passes.
 
 ## Milestones from here, in order
 
@@ -175,7 +195,7 @@ fork orchestration. Declare which families are held out before running discovery
 Done when at least four new families are registered, calibrated with correct and
 flawed fixtures, and have a fresh baseline run on 0.4.0.
 
-### M3 — One improvement cycle per flaw
+### M3 — One improvement cycle per flaw (complete, 2026-09-10)
 
 For the top-ranked flaw: a fresh planner proposal (`workflow/plan.py`); a bounded
 change by a fresh builder (tool behavior, response content, description, guidance,

@@ -223,3 +223,22 @@ def test_initial_evidence_is_hash_bound(tmp_path, tamper):
             evaluation_context(tmp_path, {}, definitions)["inspection_no_write_calls"]
             is False
         )
+
+
+def test_rectangle_curve_saved_calibration_verdicts():
+    import json
+
+    p = ROOT / "experiments/workflow/m3-curve-calibration.json"
+    result = json.loads(p.read_text())
+    assert (
+        result["fixtures"] == 7 and result["unexpected"] == [] and result["preserved"]
+    )
+    for row in result["results"]:
+        assert row["repeat_identical"] and row["actual"] == row["expected"]
+
+
+def test_rectangle_curve_rejects_nonplanar_task_bounds():
+    t = load_task(ROOT / "experiments/tasks/offset_outline.json")
+    t["targets"][1]["max"][2] = 1
+    with pytest.raises(ValueError):
+        validate(t)

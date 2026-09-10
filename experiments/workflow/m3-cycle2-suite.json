@@ -1,0 +1,19 @@
+{
+  "id": "m3-lookup-description-cross-family-v1",
+  "call_budget": 50,
+  "timeout_seconds": 240,
+  "tasks": [
+    {
+      "family": "document-inspection",
+      "path": "experiments/tasks/inspect_document.json"
+    },
+    {
+      "family": "editing-existing",
+      "path": "experiments/tasks/edit_existing.json"
+    },
+    {
+      "family": "section-extraction",
+      "path": "experiments/tasks/extract_sections.json"
+    }
+  ]
+}
