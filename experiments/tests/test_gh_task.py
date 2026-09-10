@@ -1,4 +1,3 @@
-import copy
 import json
 from pathlib import Path
 import pytest
@@ -146,7 +145,8 @@ def test_gh_gateway_first_call_identity_scope_and_budget(tmp_path, monkeypatch):
 
 
 def test_gh_definitions_match_production(tmp_path):
-    import asyncio, rhinomcp
+    import asyncio
+    import rhinomcp
     from experiments.workflow.native_mcp import Gateway
 
     async def run():
@@ -186,3 +186,16 @@ def test_ownership_refuses_swapped_active_doc_and_nonempty_rhino(monkeypatch):
 def test_type_inspection_cannot_instantiate_unreviewed_components():
     with pytest.raises(ValueError, match="reviewed"):
         validate_call("gh_get_component_type_info", {"name": "C# Script"}, 0)
+
+
+def test_stock_component_refusal_is_a_host_boundary_not_plugin_failure():
+    from experiments.workflow.flaws import cause
+
+    assert (
+        cause(
+            {
+                "error": "Component outside reviewed stock math/geometry catalog; script, file and external plugin components refused on host"
+            }
+        )
+        == "host_component_refusal"
+    )

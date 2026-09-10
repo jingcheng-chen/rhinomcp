@@ -218,5 +218,16 @@
       "replaces": "gh-vector-frame-v1"
     },
     "sha256": "42799fae54e2b99d037e08e9c7ead1753a303243a738808c54bf923a6799686e"
+  },
+  {
+    "previous": "42799fae54e2b99d037e08e9c7ead1753a303243a738808c54bf923a6799686e",
+    "at": "2026-09-10T14:32:30.242638+00:00",
+    "body": {
+      "kind": "close",
+      "id": "gh-vector-frame-v1",
+      "outcome": "rejected",
+      "report_sha256": "5f3a272d6935761d751ec55d96e3268a874553b0d07b2e9e72ddae3f65389710"
+    },
+    "sha256": "e5e97a475fe14879961ac3ad5cadc2bf6c6bf0439d5287528a964c53d3d14614"
   }
 ]

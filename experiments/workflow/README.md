@@ -331,3 +331,12 @@ family. Seal a new family before closing the old allocation. The CLI neither
 launches modeling nor bypasses the existing comparison/calibration gates.
 See [M4 evidence and limits](M4.md). A checkout without private payloads must report
 unavailable cases; do not reconstruct them with new parameters under the old hash.
+
+## Completed Grasshopper cycle (M6)
+
+The shared runner/gateway/pilot/comparison supports `gh_definition` snapshots.
+Three calibrated discovery families pass, and one description cycle is complete
+and rejected after Codex plus Claude checks. See [GRASSHOPPER.md](GRASSHOPPER.md)
+for scope, calibration, fixed results and remaining selector/default findings.
+The host component whitelist is narrower than the library; explicit refusals
+are `host_component_refusal`, not plugin defects. M5 remains deferred.

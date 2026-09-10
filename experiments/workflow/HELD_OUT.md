@@ -143,3 +143,12 @@ immutable outcome reports are `m3b-cycle1-results.json` and
 `m3b-cycle2-results.json`. Projection replaced joining, and mesh connectivity
 repair replaced projection before closure. Instance/block reuse and mesh repair
 remain unopened and require future shared-adapter calibration. M5 is deferred.
+
+## M6 closure, 2026-09-10
+
+Vector frame was sealed before GH discovery, allocated only after independent
+candidate review, calibrated on 20 controls, compared in both fixed cases and
+closed as rejected against immutable `gh-cycle1-results.json`. Pattern filtering
+is its sealed replacement. Available families now: instance/block reuse, mesh
+connectivity repair and GH pattern filtering. They remain specifications requiring
+future calibration; no generalization or current-host readiness is claimed.

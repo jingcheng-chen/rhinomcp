@@ -189,6 +189,7 @@ def cause(row):
     patterns = [
         ("missing_object", r"\bobject\b.*not found|could not find.*\bobject\b"),
         ("missing_layer", r"layer.*not found"),
+        ("host_component_refusal", r"outside reviewed stock math/geometry catalog"),
         (
             "host_execution_refusal",
             r"execution tools are refused during supervised host trials",

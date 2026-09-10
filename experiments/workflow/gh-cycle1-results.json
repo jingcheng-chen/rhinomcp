@@ -1,0 +1,608 @@
+{
+  "cycle": "M6-1",
+  "decision": "reject",
+  "reason": "All saved outputs pass, but Codex failed calls increase in both held-out cases and Claude point-array failed calls increase. Reject under the predeclared no-regression gates.",
+  "gates": {
+    "all_codex_candidate_pass": true,
+    "codex_no_task_regression": false,
+    "discovery_benefit": true,
+    "claude_no_task_regression": false
+  },
+  "comparison": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e",
+  "comparison_sha256": "a3f9265e6ffc56c3929a5e7c8a4a0c965b90480d439d8c6579f99274c3ba72f2",
+  "tasks": {
+    "experiments/tasks/gh_point_array.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 16.0,
+        "median_seconds": 66.48160620848648
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 14.0,
+        "median_seconds": 53.61088602102245
+      },
+      "family": "gh-point-array",
+      "correctness_regression": false,
+      "observed_benefit": true
+    },
+    "experiments/tasks/gh_circle_profiles.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 11.5,
+        "median_seconds": 50.67554252102855
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 12.5,
+        "median_seconds": 56.11762574999011
+      },
+      "family": "gh-circle-profiles",
+      "correctness_regression": false,
+      "observed_benefit": false
+    },
+    "experiments/tasks/gh_orthogonal_frame.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 12,
+        "median_calls": 28.5,
+        "median_seconds": 139.43406008300371
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 14,
+        "median_calls": 23.5,
+        "median_seconds": 143.94500952100498
+      },
+      "family": "gh-vector-frame",
+      "correctness_regression": false,
+      "observed_benefit": false
+    },
+    "experiments/tasks/gh_tilted_frame.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 8,
+        "median_calls": 25.0,
+        "median_seconds": 121.30992329199216
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 14,
+        "median_calls": 25.5,
+        "median_seconds": 143.6420869169815
+      },
+      "family": "gh-vector-frame",
+      "correctness_regression": false,
+      "observed_benefit": false
+    }
+  },
+  "runs": [
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-1-pair-1-baseline",
+      "family": "gh-point-array",
+      "cohort": "released-0.4.1-m6-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-1-pair-1-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 34.47070512495702,
+      "source_sha256": "a7e09e7b75fe8f53b3b3263a4e856c2bfc3bbec443765c029cd4f7b996d11f0c",
+      "evaluation_sha256": "05278cb36e0977b758d41daaa20c430e8bfcd0b25f4fe4095b14fecda6c00eea",
+      "metrics": {
+        "mcp_attempts": 6,
+        "failed_calls": 0,
+        "failures_by_tool": {}
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "e1e10586b9c9112b19c03e72877aefe2403e3a0e3693fe580a22856bef0d787a"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-1-pair-1-candidate",
+      "family": "gh-point-array",
+      "cohort": "released-0.4.1-m6-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-1-pair-1-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 62.37706720799906,
+      "source_sha256": "f2e51e0e6ec40b84c9ede59498546a9de5efc9cbe2f42a74d318d9578e7b7eab",
+      "evaluation_sha256": "4ac57dfac3f778d9803aaabfbd67a1ba041891ba08dc2fac8296a2ee126ec849",
+      "metrics": {
+        "mcp_attempts": 16,
+        "failed_calls": 0,
+        "failures_by_tool": {}
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "983c9407b3d7a6342e1bab110184df3f851383253c3ca26eae83c19af64e8af0"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-1-pair-2-candidate",
+      "family": "gh-point-array",
+      "cohort": "released-0.4.1-m6-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-1-pair-2-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 44.84470483404584,
+      "source_sha256": "ec97dfbe20c13b3ea75ef3bfaf468289dfcaaf2b428fb14793e724294153f70b",
+      "evaluation_sha256": "bb34abad7c58e8563c79c2326a08a5e73cb379ad7fc6dfc68f24bcd88a550e47",
+      "metrics": {
+        "mcp_attempts": 12,
+        "failed_calls": 0,
+        "failures_by_tool": {}
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "75833fd85b7199be04b35723a33283dd0322aa4dd8c06f765859f43cac219fd2"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-1-pair-2-baseline",
+      "family": "gh-point-array",
+      "cohort": "released-0.4.1-m6-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-1-pair-2-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 98.49250729201594,
+      "source_sha256": "861330b335b89c4dc2c25847a0c3aab4c8cabf2885a0923d75d414f5fb0e02e3",
+      "evaluation_sha256": "1b73e17c1c1d90a46ce3c6bf2b759bc28c1d596e043c8ef533dae5c0602b07b5",
+      "metrics": {
+        "mcp_attempts": 26,
+        "failed_calls": 0,
+        "failures_by_tool": {}
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "9d42d34da4ac8696fd9848b7585d1042a8b224ff992ff52307d285eea2afda3c"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-2-pair-1-baseline",
+      "family": "gh-circle-profiles",
+      "cohort": "released-0.4.1-m6-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-2-pair-1-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 43.87295962503413,
+      "source_sha256": "7e8d8bfa46884c39403dd57053792a9ebc44b5d6be776825b5701e5e59b11b00",
+      "evaluation_sha256": "59cdcd81aa82bcc6806581f81177fd241f20ca254e28cdb8b1fb2245d28e33df",
+      "metrics": {
+        "mcp_attempts": 9,
+        "failed_calls": 0,
+        "failures_by_tool": {}
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "845fb23421f56b84e855ad2fa68905759c4d70cec7ba2eabf680d2f623a90a07"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-2-pair-1-candidate",
+      "family": "gh-circle-profiles",
+      "cohort": "released-0.4.1-m6-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-2-pair-1-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 47.130205624969676,
+      "source_sha256": "1f0256c429012e44c067bebe28812c8ef57a607cd854c784dbfe8e380a913fc7",
+      "evaluation_sha256": "9f6c1cd2f169474997d293c82694d3831528e0c972b0cfc24dd41d35419073c1",
+      "metrics": {
+        "mcp_attempts": 10,
+        "failed_calls": 0,
+        "failures_by_tool": {}
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "efbdbe95985850e393e5f579017061e57481f15c048aa5e6e82b40b4e071c548"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-2-pair-2-candidate",
+      "family": "gh-circle-profiles",
+      "cohort": "released-0.4.1-m6-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-2-pair-2-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 65.10504587501055,
+      "source_sha256": "b2f98ac8ee49428de80713ede3657f1f44a2283b4d1468e3fc99af082bd9b8c1",
+      "evaluation_sha256": "0f726146056426784eef2e92ca8f6ebb26dc92530c50c04447b531637f95d7f0",
+      "metrics": {
+        "mcp_attempts": 15,
+        "failed_calls": 0,
+        "failures_by_tool": {}
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "46006b12dd1b073a32ac5183e57c629ee4345c15eaf4a818fe5d8a58e0e3b646"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-2-pair-2-baseline",
+      "family": "gh-circle-profiles",
+      "cohort": "released-0.4.1-m6-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-2-pair-2-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 57.478125417022966,
+      "source_sha256": "c0045908728bd4ad1aa7042bdcc22b97d81b3215d79a825bad7bfc0a126f0849",
+      "evaluation_sha256": "066b1825508ed7b23fa58fa8975471a2f71a8f6fc34d5daaa6cc9dec633a3c42",
+      "metrics": {
+        "mcp_attempts": 14,
+        "failed_calls": 0,
+        "failures_by_tool": {}
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "be05caf018df513d1d5a998967a1dd418b41a25b5473efbccc56636910113a9f"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-3-pair-1-baseline",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-3-pair-1-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 149.42373400001088,
+      "source_sha256": "77a76f2b1e7a1561144d101e30d6eaf0daaf51a3bb09f4167b8f7784780d212b",
+      "evaluation_sha256": "e75daa3a616753b4492332d4042e930d9545b9e88b3064b6e47a09d2704f5cbe",
+      "metrics": {
+        "mcp_attempts": 31,
+        "failed_calls": 6,
+        "failures_by_tool": {
+          "gh_batch_get_component_type_info": 2,
+          "gh_build_graph": 1,
+          "gh_get_component_type_info": 2,
+          "gh_set_parameter_value": 1
+        }
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "956696ced8dea55f2c5f86e493824fa573139cd05661e048dbb66347476cc215"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-3-pair-1-candidate",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-3-pair-1-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 138.80371304199798,
+      "source_sha256": "2a221199a8362dcf8e1dcf1794a0ad78093901bf01e7ec30b62e20910a0ca03a",
+      "evaluation_sha256": "854e8b1d143f328e7b8d4d7db3a5f06bba45796d6addc8e2e3169299082f0e92",
+      "metrics": {
+        "mcp_attempts": 23,
+        "failed_calls": 9,
+        "failures_by_tool": {
+          "gh_add_component": 2,
+          "gh_batch_get_component_type_info": 1,
+          "gh_build_graph": 2,
+          "gh_mutate_graph": 2,
+          "gh_set_parameter_value": 2
+        }
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "e424c733185a55b6691c6e7225c606fee5804ebac4cca6d5af8935931a16af15"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-3-pair-2-candidate",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-3-pair-2-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 149.08630600001197,
+      "source_sha256": "f26f947d40c5e5de3265f6fa90c72fb6e588c72b6fa01a08c46d894602e02bcf",
+      "evaluation_sha256": "f54eaa2c7ef5b313f4bdf64d01ff2a593aa5373eaca18e41ed86b6f287b5aaaf",
+      "metrics": {
+        "mcp_attempts": 24,
+        "failed_calls": 5,
+        "failures_by_tool": {
+          "gh_add_component": 1,
+          "gh_batch_get_component_type_info": 2,
+          "gh_build_graph": 1,
+          "gh_get_component_type_info": 1
+        }
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "26e30026688cff3da4ee8d42436c4b5b997cc63f0d66e903fbc5c3de1d5a23d3"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-3-pair-2-baseline",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-3-pair-2-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 129.44438616599655,
+      "source_sha256": "dd96ad4e4afbad72b73154f8786ad39975f61142c0cdad34a9ae9473647a29bc",
+      "evaluation_sha256": "60cdf40f8107927d09c8c4536e1c7f4baaab0259e0fecc91853bddb776894884",
+      "metrics": {
+        "mcp_attempts": 26,
+        "failed_calls": 6,
+        "failures_by_tool": {
+          "gh_batch_get_component_type_info": 2,
+          "gh_get_component_type_info": 1,
+          "gh_mutate_graph": 1,
+          "gh_set_parameter_value": 2
+        }
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "6f499569dd39b3e8ccb7bb52b10368ed59590c9352c09ce0263353843b0cb600"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-4-pair-1-baseline",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-4-pair-1-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 150.9145337920054,
+      "source_sha256": "c319c017d00d8b9d00f7d822dac7f2388686e7d859d6ea853e9e79adca960335",
+      "evaluation_sha256": "ac597e6781012f9b09afb9e8d5cf25bc8c91ffbc863ba38276e1890ca583642c",
+      "metrics": {
+        "mcp_attempts": 26,
+        "failed_calls": 5,
+        "failures_by_tool": {
+          "gh_batch_get_component_type_info": 1,
+          "gh_build_graph": 2,
+          "gh_get_component_type_info": 2
+        }
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "b94d653ccf13025cd23509b08dc0577651def48cece2b7b749d6bd4289ffc754"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-4-pair-1-candidate",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-4-pair-1-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 115.13832441699924,
+      "source_sha256": "cce28f94fad76946c7f64f45df8fa2beffbabfc5079fd94a7ce8743b80525f9c",
+      "evaluation_sha256": "7369b217c641a90967b3a33344c7be282301fa70175e36f0f82f6eb84ac65430",
+      "metrics": {
+        "mcp_attempts": 23,
+        "failed_calls": 5,
+        "failures_by_tool": {
+          "gh_add_component": 1,
+          "gh_batch_get_component_type_info": 2,
+          "gh_build_graph": 2
+        }
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "4de69fbf0fe5fbcb0614ed0ab74d6705fae23ce7e1c46bcec2bb8a9ed844326f"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-4-pair-2-candidate",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-candidate",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-4-pair-2-candidate",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 172.14584941696376,
+      "source_sha256": "37aa5a4c00efcfe6c0942e5a055bfbdbcccb9e8628439db9b2e4cec530a701e3",
+      "evaluation_sha256": "e82f98fca0b544af7966ea734d92cea1b12710bb8f8690dfce8841e883d7e7db",
+      "metrics": {
+        "mcp_attempts": 28,
+        "failed_calls": 9,
+        "failures_by_tool": {
+          "gh_add_component": 2,
+          "gh_batch_get_component_type_info": 2,
+          "gh_build_graph": 4,
+          "gh_get_component_type_info": 1
+        }
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "bacc4f6ae5ef88bd60630d19dcba02a7c3db910d7e3c23f6b17c3c2e996bee55"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-4-pair-2-baseline",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-baseline",
+      "source": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-4-pair-2-baseline",
+      "session_status": "completed",
+      "task_verdict": "pass",
+      "elapsed_seconds": 91.70531279197894,
+      "source_sha256": "46e8651e655cf9e4a6153f0f06dff04462ae16744b6f8c43c101b0ce2ead6678",
+      "evaluation_sha256": "c738d7fdc0e97ac025c023a2b717f36f8ad43fcc3d629c56c1b65504491eb7c7",
+      "metrics": {
+        "mcp_attempts": 24,
+        "failed_calls": 3,
+        "failures_by_tool": {
+          "gh_build_graph": 1,
+          "gh_get_component_type_info": 1,
+          "gh_set_parameter_value": 1
+        }
+      },
+      "preserved": true,
+      "gh_cleanup": {
+        "count": 0,
+        "id": null,
+        "objects": 0
+      },
+      "artifact_sha256": "84918ad2ad84988468358c13cf5a295a1f6a98826bae1a04c47f40b5f1c58291"
+    }
+  ],
+  "cross_agent": {
+    "registry": "experiments/runs/m6-claude-20260910-162811-f6f740b5/registry.json",
+    "runs": [
+      {
+        "id": "m6-claude-20260910-162811-f6f740b5-task-1-baseline",
+        "family": "gh-point-array",
+        "cohort": "claude-baseline",
+        "source": "experiments/runs/m6-claude-20260910-162811-f6f740b5/task-1-baseline",
+        "session_status": "completed",
+        "task_verdict": "pass",
+        "elapsed_seconds": 24.776595000003,
+        "source_sha256": "ab8acaac9b03e237df17f6d5ff182cc9bdd9ef25823bfa48141f263838687454",
+        "evaluation_sha256": "a5d704b7ad4a94839ffc6120c1f4ad4b6abfb65296e0d854e4c235339405c89b",
+        "metrics": {
+          "mcp_attempts": 5,
+          "failed_calls": 0,
+          "failures_by_tool": {}
+        },
+        "preserved": true,
+        "gh_cleanup": {
+          "count": 0,
+          "id": null,
+          "objects": 0
+        },
+        "artifact_sha256": "09fb951dfad82c91a73155c15801a1857c4a9d9c96e1261e383027e2ec7f5a92"
+      },
+      {
+        "id": "m6-claude-20260910-162811-f6f740b5-task-1-candidate",
+        "family": "gh-point-array",
+        "cohort": "claude-candidate",
+        "source": "experiments/runs/m6-claude-20260910-162811-f6f740b5/task-1-candidate",
+        "session_status": "completed",
+        "task_verdict": "pass",
+        "elapsed_seconds": 45.47376916697249,
+        "source_sha256": "f248135a076a547f435f2bac29b0d0022765237d5d7a453b36c0f2b05d51de2d",
+        "evaluation_sha256": "71cfab9b1e5b4eaa5c0cf2c9f15071f5f3e8b76e89a68d58227662f0be0e7a45",
+        "metrics": {
+          "mcp_attempts": 8,
+          "failed_calls": 3,
+          "failures_by_tool": {
+            "gh_build_graph": 3
+          }
+        },
+        "preserved": true,
+        "gh_cleanup": {
+          "count": 0,
+          "id": null,
+          "objects": 0
+        },
+        "artifact_sha256": "d88dcf966a2ea4d0ff4aff58cbeda409f4affcbf6730539dfd7ea765abeb2e8d"
+      },
+      {
+        "id": "m6-claude-20260910-162811-f6f740b5-task-2-baseline",
+        "family": "gh-circle-profiles",
+        "cohort": "claude-baseline",
+        "source": "experiments/runs/m6-claude-20260910-162811-f6f740b5/task-2-baseline",
+        "session_status": "completed",
+        "task_verdict": "pass",
+        "elapsed_seconds": 31.61181975004729,
+        "source_sha256": "ea824673bb73ecfd4ea92ed6f4c8cf436dc7a8eca283fe0f7e300dab8eb3fc78",
+        "evaluation_sha256": "3166c5adcbf954fbdbe23489942d4d2bbf4d48ca8a18b60c5a2996ba34d17994",
+        "metrics": {
+          "mcp_attempts": 7,
+          "failed_calls": 1,
+          "failures_by_tool": {
+            "gh_build_graph": 1
+          }
+        },
+        "preserved": true,
+        "gh_cleanup": {
+          "count": 0,
+          "id": null,
+          "objects": 0
+        },
+        "artifact_sha256": "689a74ccf48eb103f2e8ffd47e5384a9e9e7a1c4d10adb6e35a0009ec71037a3"
+      },
+      {
+        "id": "m6-claude-20260910-162811-f6f740b5-task-2-candidate",
+        "family": "gh-circle-profiles",
+        "cohort": "claude-candidate",
+        "source": "experiments/runs/m6-claude-20260910-162811-f6f740b5/task-2-candidate",
+        "session_status": "completed",
+        "task_verdict": "pass",
+        "elapsed_seconds": 41.228032500017434,
+        "source_sha256": "44ab2150dd079e7913b6b8c500e369eb51cc6be61ebd43d49e3d04fcf3ec9b69",
+        "evaluation_sha256": "2ce52fe78b022abfa70bfcf72af763a743ddf5af4eb5b8821e85d6eff1fc7f4b",
+        "metrics": {
+          "mcp_attempts": 11,
+          "failed_calls": 0,
+          "failures_by_tool": {}
+        },
+        "preserved": true,
+        "gh_cleanup": {
+          "count": 0,
+          "id": null,
+          "objects": 0
+        },
+        "artifact_sha256": "2490d8db95ae787a94c6dd01c83e24e9fbc25a2d47b8e2b9e852d08f8241366b"
+      }
+    ]
+  },
+  "production_adopted": false,
+  "limitations": [
+    "Two repeats per arm/task; descriptive acceptance evidence, not statistical or causal proof.",
+    "Requested model aliases and effort pinned; backend model snapshots unavailable.",
+    "Saved artifacts are trusted graph/output snapshots, not replayable GH documents or baked3dm.",
+    "GH name/index0 selector defect remains a separate observed issue.",
+    "M5 remains deferred; this is supervised host execution with reviewed component restrictions."
+  ]
+}

@@ -718,5 +718,49 @@
     "status": "Graph and outputs passed",
     "caption": "15 calls, zero failures; fresh release0.4.1 GH-only discovery.",
     "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m6-cycle1-point-array-baseline",
+    "title": "M6 trial \u00b7 point-array \u00b7 baseline",
+    "image": "assets/m6-cycle1-point-array-baseline.png",
+    "source": "runs/workflow-binary-20260910-155941-b3b13d0e/task-1-pair-1-baseline/perspective.png",
+    "sha256": "ade7299ed740b2f85dd049add69b5ddbe0a2e3d4f234a22b3f5fcc81f7a2f162",
+    "report": "workflow/GRASSHOPPER.md",
+    "status": "Graph and outputs passed",
+    "caption": "First fixed pair; description intervention rejected on failed-call gate.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m6-cycle1-point-array-candidate",
+    "title": "M6 trial \u00b7 point-array \u00b7 candidate",
+    "image": "assets/m6-cycle1-point-array-candidate.png",
+    "source": "runs/workflow-binary-20260910-155941-b3b13d0e/task-1-pair-1-candidate/perspective.png",
+    "sha256": "ade7299ed740b2f85dd049add69b5ddbe0a2e3d4f234a22b3f5fcc81f7a2f162",
+    "report": "workflow/GRASSHOPPER.md",
+    "status": "Graph and outputs passed",
+    "caption": "First fixed pair; description intervention rejected on failed-call gate.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m6-cycle1-vector-frame-baseline",
+    "title": "M6 trial \u00b7 vector-frame \u00b7 baseline",
+    "image": "assets/m6-cycle1-vector-frame-baseline.png",
+    "source": "runs/workflow-binary-20260910-155941-b3b13d0e/task-3-pair-1-baseline/perspective.png",
+    "sha256": "3d3697cf62bb65aa61f52e99d051ab4415ce7d8284da14b73563fcacfb4291da",
+    "report": "workflow/GRASSHOPPER.md",
+    "status": "Graph and outputs passed",
+    "caption": "First fixed pair; description intervention rejected on failed-call gate.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m6-cycle1-vector-frame-candidate",
+    "title": "M6 trial \u00b7 vector-frame \u00b7 candidate",
+    "image": "assets/m6-cycle1-vector-frame-candidate.png",
+    "source": "runs/workflow-binary-20260910-155941-b3b13d0e/task-3-pair-1-candidate/perspective.png",
+    "sha256": "3d3697cf62bb65aa61f52e99d051ab4415ce7d8284da14b73563fcacfb4291da",
+    "report": "workflow/GRASSHOPPER.md",
+    "status": "Graph and outputs passed",
+    "caption": "First fixed pair; description intervention rejected on failed-call gate.",
+    "kind": "actual_rhino_capture"
   }
 ]

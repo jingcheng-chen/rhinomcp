@@ -88,14 +88,22 @@ both candidates fail the reviewed failed-call gate. Cycle1 Claude retains one
 baseline timeout and three passes; cycle2 all four pass with zero failures.
 See [M3b](workflow/M3B.md). Joining and directional projection are spent/closed;
 instance/block reuse and mesh connectivity repair remain sealed. No candidate is
-adopted. M6 ownership/gateway/task/evaluator integration is calibrated: 30 controls
-match; live active-document switching is denied, cleanup restores empty GH and
-preserved Rhino. Three fresh GH discovery families pass (8/12/15 calls, zero failures). A fresh
-planner/builder graph-value description candidate passes AST/catalog review and
-285 tests. Vector-frame allocation is spent, its 20 controls match, and comparison
-is ready in gh-cycle1-trial.json. A separate output_name/index0 selection defect
-is recorded for future repair. See workflow/GRASSHOPPER.md. M5 stays deferred.
-Latest checks: 285 server, 518 experiments, 13 contracts, Ruff green.
+adopted. **M6 is complete**: shared GH ownership/gateway/task/evaluator adapter;
+30 discovery controls and 20 held-out controls match. Three fresh discovery families
+pass (35 calls, zero failures). All 16 comparison and four Claude snapshots pass,
+but the graph-description candidate is rejected by failed-call gates in both
+Codex held-out cases and Claude point arrays. See [M6](workflow/GRASSHOPPER.md).
+The vector-frame family is spent/closed; pattern filtering is its sealed replacement.
+Instance/block reuse and mesh repair remain unopened. Runtime is still released
+0.4.1; final Rhino is empty/unclaimed, GH has no documents, all controllers/modelers
+stopped. No VM work. Latest checks: 285 server, 519 experiments, 13 contracts, Ruff green.
+
+Requested order M0b → M3b → M6 is finished. M5 stays deferred until explicit go.
+Concrete next investigation: GH input/output name selectors are masked by wrapper
+index0 defaults; batch value target/port shapes also cause failures. Review host
+stock-component coverage before a new GH campaign; 40 of 48 comparison failures
+were guard refusals, not plugin failures. Do not resume the closed trials or tune
+against their former held-out cases as though they were unseen.
 
 
 - Released: rhinomcp 0.4.0 on PyPI and Yak from `releases/0.4.0`; `main` is at the
@@ -369,7 +377,7 @@ shipping; nothing publishes automatically.
 Done when `workflow/ISOLATION_EVIDENCE.md` records all five items with hashes and a
 campaign of at least three comparisons has run overnight without a person.
 
-### M6 — Grasshopper harness (after M3b; ahead of M5 while M5 is deferred)
+### M6 — Grasshopper harness (complete, 2026-09-10; M5 deferred)
 
 Same cycle, different surface, on the host, supervised like M3.
 

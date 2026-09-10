@@ -157,3 +157,8 @@ selectors, wiring errors, repeated solution/expire loops, and layout thrash.
 Search/loop/layout heuristics are candidate findings requiring intent review.
 GH catalog queries join discovery; graph, canvas and value reads use the same
 mutation barriers as Rhino reads. No geometry verdict is inferred from traces.
+
+After the M6 trial, explicit reviewed-component whitelist refusals are labeled
+`host_component_refusal` rather than unknown. A focused regression protects this
+boundary. Forty of 48 Codex comparison failures are such refusals; historical raw
+traces and verdicts remain unchanged.
