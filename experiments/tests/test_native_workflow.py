@@ -128,13 +128,55 @@ def test_full_catalog_still_enforces_rhino_ownership_and_excludes_unowned_gh(tmp
             tmp_path / "log",
             production,
             guard,
-            tool_names=("run_command", "gh_clear_canvas"),
+            tool_names=("create_object", "gh_clear_canvas"),
             full_catalog=True,
         )
-        await gateway.call("run_command", {"command": "_Box"})
+        await gateway.call("create_object", {"type": "BOX"})
         assert guard.call_count == 2
         with pytest.raises(ValueError, match="Grasshopper"):
             await gateway.call("gh_clear_canvas", {})
         production.call_tool.assert_awaited_once()
+
+    asyncio.run(check())
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "run_command",
+        "execute_rhinocommon_csharp_code",
+        "execute_rhinoscript_python_code",
+    ],
+)
+def test_host_execution_attempts_are_refused_recorded_and_consume_budget(
+    tmp_path, name
+):
+    async def check():
+        production = Mock(call_tool=AsyncMock())
+        guard = Mock()
+        log = tmp_path / "calls"
+        gateway = Gateway(
+            1,
+            "run",
+            1,
+            log,
+            production,
+            guard,
+            tool_names=(name, "create_object"),
+            full_catalog=True,
+        )
+        arguments = {"code": "agent-authored"}
+        with pytest.raises(ValueError, match="Execution tools are refused"):
+            await gateway.call(name, arguments)
+        with pytest.raises(RuntimeError, match="budget"):
+            await gateway.call("create_object", {})
+        production.call_tool.assert_not_awaited()
+        guard.assert_not_called()
+        events = [json.loads(line) for line in log.read_text().splitlines()]
+        assert events[0]["tool"] == name
+        assert events[0]["arguments"] == arguments
+        assert events[0]["status"] == "error"
+        assert "M5" in events[0]["error"]
+        assert events[1]["attempt"] == 2
 
     asyncio.run(check())

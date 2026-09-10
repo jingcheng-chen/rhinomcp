@@ -12,8 +12,17 @@ from mcp.types import CallToolResult, ListToolsResult, TextContent
 import rhinomcp
 from experiments.bridge import assert_document
 
-# Default suite-wide subset. Full-catalog mode separately permits task-scoped
-# Rhino scripts/macros under the supervised workflow modeler's instructions.
+# Keep execution definitions visible for discovery, but refuse agent-authored
+# code on the host until the isolated M5 environment is verified.
+EXECUTION_TOOLS = frozenset(
+    {
+        "run_command",
+        "execute_rhinocommon_csharp_code",
+        "execute_rhinoscript_python_code",
+    }
+)
+
+# Default suite-wide subset.
 TOOLS = (
     "create_object",
     "modify_object",
@@ -96,6 +105,10 @@ class Gateway:
                 if self.full_catalog and name.startswith("gh_"):
                     raise ValueError(
                         "Grasshopper is outside this Rhino document task; its catalog is visible but its documents are not owned"
+                    )
+                if name in EXECUTION_TOOLS:
+                    raise ValueError(
+                        "Execution tools are refused during supervised host trials until M5 isolation is verified; attempt recorded"
                     )
                 self.guard(self.document, self.marker)
                 result = await self.production.call_tool(name, arguments)

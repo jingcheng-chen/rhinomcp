@@ -542,5 +542,60 @@
     "status": "Workflow passed",
     "caption": "First prespecified pair; 13 calls, 0 failures.",
     "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "release-041-primitives",
+    "title": "0.4.1 \u00b7 primitives",
+    "image": "assets/release-041-primitives.png",
+    "source": "runs/workflow-baseline-20260910-140717-69aab83c/task-1/perspective.png",
+    "sha256": "22345f1b4bbdf870a3b2a2a8d99d4e86ca80f2e4dbffa538bedbf8daa6010c5c",
+    "report": "workflow/REBASELINE_041.md",
+    "status": "Geometry passed",
+    "caption": "3 tool calls; 0 failed calls. First fixed release-pilot attempt.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "release-041-subtractive-solids",
+    "title": "0.4.1 \u00b7 subtractive-solids",
+    "image": "assets/release-041-subtractive-solids.png",
+    "source": "runs/workflow-baseline-20260910-140717-69aab83c/task-2/perspective.png",
+    "sha256": "d8fa84a4d221772ed7bfde8790a9d78531a2c09840768519c9b5fa0722e00342",
+    "report": "workflow/REBASELINE_041.md",
+    "status": "Geometry passed",
+    "caption": "7 tool calls; 0 failed calls. First fixed release-pilot attempt.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "release-041-posed-solids",
+    "title": "0.4.1 \u00b7 posed-solids",
+    "image": "assets/release-041-posed-solids.png",
+    "source": "runs/workflow-baseline-20260910-140717-69aab83c/task-3/perspective.png",
+    "sha256": "aba0bef0fc2711cfdf6e5231d94e306e6618cf11a81f9be212152ea30ca5c72d",
+    "report": "workflow/REBASELINE_041.md",
+    "status": "Geometry passed",
+    "caption": "8 tool calls; 0 failed calls. First fixed release-pilot attempt.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "release-041-trimmed-patches",
+    "title": "0.4.1 \u00b7 trimmed-patches",
+    "image": "assets/release-041-trimmed-patches.png",
+    "source": "runs/workflow-baseline-20260910-140717-69aab83c/task-4/perspective.png",
+    "sha256": "4c96e4fe016a59c91abe2fb69d81690188ee54421fbfcc62b49c795d82c8b40c",
+    "report": "workflow/REBASELINE_041.md",
+    "status": "Geometry passed",
+    "caption": "15 tool calls; 0 failed calls. First fixed release-pilot attempt.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "release-041-curved-panels",
+    "title": "0.4.1 \u00b7 curved-panels",
+    "image": "assets/release-041-curved-panels.png",
+    "source": "runs/workflow-baseline-20260910-140717-69aab83c/task-5/perspective.png",
+    "sha256": "0dbd43af172c6405ddccb25b2905d9515fcdaf0eda518313e69b68e40bd257de",
+    "report": "workflow/REBASELINE_041.md",
+    "status": "Geometry failed",
+    "caption": "7 tool calls; 0 failed calls. First fixed release-pilot attempt.",
+    "kind": "actual_rhino_capture"
   }
 ]

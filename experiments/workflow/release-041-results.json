@@ -1,0 +1,1831 @@
+{
+  "status": "M0b complete",
+  "release": "0.4.1",
+  "selection": {
+    "id": "released-0.4.1-v1",
+    "source_revision": "ddc6cfdaaca3a1dc7b8930b409d0c2fce28ec33a",
+    "release_tag": "releases/0.4.1",
+    "version": "0.4.1",
+    "server_version": "0.4.1",
+    "identity": {
+      "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+      "sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da"
+    },
+    "selection": "experiments/runs/selection-release-20260910-140702-e1b9dacd",
+    "selection_state_required": "selected",
+    "runtime_verification_required": true,
+    "native_tools": [
+      "create_object",
+      "modify_object",
+      "delete_object",
+      "analyze_objects",
+      "get_object_info",
+      "get_objects",
+      "extrude_curve",
+      "loft",
+      "sweep1",
+      "boolean_difference",
+      "boolean_union",
+      "boolean_intersection",
+      "create_planar_region",
+      "get_modeling_guidance"
+    ],
+    "suite": "experiments/workflow/release-pilot.json",
+    "claim": "Nine fresh discovery observations: five native release families and four full-catalog workflow scenes; no paired improvement or held-out generalization claim.",
+    "history": "experiments/workflow/baseline-history.json",
+    "observations": "experiments/workflow/release-041-results.json"
+  },
+  "runs": [
+    {
+      "id": "workflow-baseline-20260910-140717-69aab83c-box-v2",
+      "family": "primitives",
+      "cohort": "released-0.4.1-native",
+      "source": "experiments/runs/workflow-baseline-20260910-140717-69aab83c/task-1",
+      "task_verdict": "pass",
+      "elapsed_seconds": 15.660224624967668,
+      "metrics": {
+        "mcp_attempts": 3,
+        "completed_calls": 3,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_objects": 1
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_objects": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 65122,
+          "cached_input_tokens": 44288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 334,
+          "reasoning_output_tokens": 34
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "source_sha256": "8d35ba606e3f521c618dca1a198a87bcc5aacebe151fa4f1607ae07df8216211",
+      "evaluation_sha256": "f011965d4aafbdad40143f6090eef7c735c84b1e23275ffb40965f4d04bd090e",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": false
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 30,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "native"
+      },
+      "artifact_sha256": "60e0da8d839f64923ba6a32291fe0263dd402152f28c37288a3defc50e90ed29",
+      "pins_sha256": "c1eab283186785c851e1197f522bd09807a671e41dc0eb429a508cbc2c326d2c",
+      "checks": {
+        "units": true,
+        "object_count": true,
+        "valid": true,
+        "solid": true,
+        "minimum": true,
+        "dimensions": true,
+        "volume": true
+      },
+      "preservation": {
+        "before": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "after": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "preserved": true
+      }
+    },
+    {
+      "id": "workflow-baseline-20260910-140717-69aab83c-through-hole-v2",
+      "family": "subtractive-solids",
+      "cohort": "released-0.4.1-native",
+      "source": "experiments/runs/workflow-baseline-20260910-140717-69aab83c/task-2",
+      "task_verdict": "pass",
+      "elapsed_seconds": 33.49479725002311,
+      "metrics": {
+        "mcp_attempts": 7,
+        "completed_calls": 7,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "boolean_difference": 1,
+          "create_object": 2,
+          "get_object_info": 1,
+          "get_objects": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "boolean_difference": 1,
+          "create_object": 2,
+          "get_object_info": 1,
+          "get_objects": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 164578,
+          "cached_input_tokens": 145152,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 894,
+          "reasoning_output_tokens": 202
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "source_sha256": "649e64aadafbb5dac563813c24a68b35e51959e47707efc3e59a58bb24d20f34",
+      "evaluation_sha256": "5921fc38633c5d4511a752c641c376e8c352b4920052f53c5052df4c83319fd7",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 30,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "native"
+      },
+      "artifact_sha256": "e4799efb8d2a455fdc051d6c45a8cb4efa70bb853a5feec46cd77cda6734b586",
+      "pins_sha256": "c1eab283186785c851e1197f522bd09807a671e41dc0eb429a508cbc2c326d2c",
+      "checks": {
+        "units": true,
+        "object_count": true,
+        "valid": true,
+        "solid": true,
+        "minimum": true,
+        "dimensions": true,
+        "supported_faces": true,
+        "outer_boundary_planes": true,
+        "hole_axis": true,
+        "hole_radius": true,
+        "hole_full_height": true,
+        "hole_axis_clear": true,
+        "area": true,
+        "volume": true
+      },
+      "preservation": {
+        "before": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "after": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "preserved": true
+      }
+    },
+    {
+      "id": "workflow-baseline-20260910-140717-69aab83c-posed-prism-v2",
+      "family": "posed-solids",
+      "cohort": "released-0.4.1-native",
+      "source": "experiments/runs/workflow-baseline-20260910-140717-69aab83c/task-3",
+      "task_verdict": "pass",
+      "elapsed_seconds": 41.46005483303452,
+      "metrics": {
+        "mcp_attempts": 8,
+        "completed_calls": 8,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "extrude_curve": 1,
+          "get_modeling_guidance": 1,
+          "get_object_info": 1,
+          "get_objects": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "extrude_curve": 1,
+          "get_modeling_guidance": 1,
+          "get_object_info": 1,
+          "get_objects": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 1,
+        "usage": {
+          "input_tokens": 144054,
+          "cached_input_tokens": 119040,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1082,
+          "reasoning_output_tokens": 346
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "source_sha256": "19d20f278d913dfd20082c53f0fad6891805689abd4b445df4dc43783d5b3303",
+      "evaluation_sha256": "d1bb3147be04d551a6f4bd373598d8f8cfcc3b28d0e7e2ee08e2c4dab0493dc3",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 30,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "native"
+      },
+      "artifact_sha256": "358618ff35d1f00770ed6ea57742210abf38ca8f8612899c5263f14d8a384d60",
+      "pins_sha256": "c1eab283186785c851e1197f522bd09807a671e41dc0eb429a508cbc2c326d2c",
+      "checks": {
+        "units": true,
+        "object_count": true,
+        "valid": true,
+        "solid": true,
+        "pose_corners": true,
+        "vertices_inside": true,
+        "planar_faces": true,
+        "straight_edges": true,
+        "area": true,
+        "volume": true
+      },
+      "preservation": {
+        "before": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "after": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "preserved": true
+      }
+    },
+    {
+      "id": "workflow-baseline-20260910-140717-69aab83c-trimmed-offset-v2",
+      "family": "trimmed-patches",
+      "cohort": "released-0.4.1-native",
+      "source": "experiments/runs/workflow-baseline-20260910-140717-69aab83c/task-4",
+      "task_verdict": "pass",
+      "elapsed_seconds": 59.91148970799986,
+      "metrics": {
+        "mcp_attempts": 15,
+        "completed_calls": 13,
+        "unfinished_calls": 2,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 2,
+          "create_object": 2,
+          "create_planar_region": 1,
+          "delete_object": 2,
+          "get_modeling_guidance": 4,
+          "get_object_info": 1,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "create_object": 2,
+          "create_planar_region": 1,
+          "delete_object": 2,
+          "get_modeling_guidance": 4,
+          "get_object_info": 1,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 2,
+        "usage": {
+          "input_tokens": 228085,
+          "cached_input_tokens": 198912,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1880,
+          "reasoning_output_tokens": 695
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "source_sha256": "d3effd48e958d25f464f32803116253cfde4b3aea1c169018565c20e0760ece5",
+      "evaluation_sha256": "930b04561b692926d709370136904731a185b13e1015a9dc9574860dcb4ea531",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 30,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "native"
+      },
+      "artifact_sha256": "70299338b80743df8cf1bbcba7871b88568edfaac6a7bec8ad362ab171181c11",
+      "pins_sha256": "c1eab283186785c851e1197f522bd09807a671e41dc0eb429a508cbc2c326d2c",
+      "checks": {
+        "one_object": true,
+        "millimeters": true,
+        "valid": true,
+        "one_open_planar_face": true,
+        "outer_and_hole": true,
+        "local_bounds": true,
+        "rectangular_outer_boundary": true,
+        "circular_inner_boundary": true,
+        "trimmed_area": true,
+        "trimmed_membership": true
+      },
+      "preservation": {
+        "before": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "after": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "preserved": true
+      }
+    },
+    {
+      "id": "workflow-baseline-20260910-140717-69aab83c-panel-raised-v2",
+      "family": "curved-panels",
+      "cohort": "released-0.4.1-native",
+      "source": "experiments/runs/workflow-baseline-20260910-140717-69aab83c/task-5",
+      "task_verdict": "fail",
+      "elapsed_seconds": 40.378715833008755,
+      "metrics": {
+        "mcp_attempts": 7,
+        "completed_calls": 7,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_modeling_guidance": 2,
+          "get_object_info": 1,
+          "get_objects": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_modeling_guidance": 2,
+          "get_object_info": 1,
+          "get_objects": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 108688,
+          "cached_input_tokens": 84736,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1251,
+          "reasoning_output_tokens": 509
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "source_sha256": "42a642cfd2e68e44bf100c2c7ba915b02122a2dd961397ba29f79358bc7da462",
+      "evaluation_sha256": "e7ad0790e4dc2a15fa4f540e307788831a5a2cb1e80d719a62b9727dfb1c8b22",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 30,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "native"
+      },
+      "artifact_sha256": "6c5669e48d9bc9931aec64e71f841d2cb871f480f497b7f22fc93fec1dd40616",
+      "pins_sha256": "c1eab283186785c851e1197f522bd09807a671e41dc0eb429a508cbc2c326d2c",
+      "checks": {
+        "one_object": true,
+        "millimeters": true,
+        "valid": true,
+        "single_open_face": true,
+        "one_outer_no_inner_loops": true,
+        "local_bounds": false,
+        "reference_to_surface": false,
+        "surface_to_reference": false,
+        "rectangular_boundary": false
+      },
+      "preservation": {
+        "before": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "after": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "preserved": true
+      }
+    },
+    {
+      "id": "workflow-baseline-20260910-141054-84ee9640-edit_existing-v1",
+      "family": "editing-existing",
+      "cohort": "released-0.4.1-full",
+      "source": "experiments/runs/workflow-baseline-20260910-141054-84ee9640/task-1",
+      "task_verdict": "pass",
+      "elapsed_seconds": 59.3149106670171,
+      "metrics": {
+        "mcp_attempts": 14,
+        "completed_calls": 14,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 4,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "commands": {
+          "analyze_objects": 4,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 262723,
+          "cached_input_tokens": 226816,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1588,
+          "reasoning_output_tokens": 401
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "source_sha256": "50e8f983c399b048735907e464b1606a4e0bf32088ad955e7755e45af91daa43",
+      "evaluation_sha256": "98def2b53f366143e38f85276ba97678534a9c2492b9a5803ef22c2c11bdde63",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "artifact_sha256": "4b30b19a3768d53c352239eb1afc44947967a430def176e774b45923362493b5",
+      "pins_sha256": "c1eab283186785c851e1197f522bd09807a671e41dc0eb429a508cbc2c326d2c",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "housing/solid_box": true,
+        "housing/min": true,
+        "housing/max": true,
+        "housing/volume": true,
+        "housing/attributes": true,
+        "housing/identity": true,
+        "reference/solid_box": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/volume": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true
+      },
+      "preservation": {
+        "before": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "after": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "preserved": true
+      }
+    },
+    {
+      "id": "workflow-baseline-20260910-141054-84ee9640-table_assembly-v1",
+      "family": "small-assemblies",
+      "cohort": "released-0.4.1-full",
+      "source": "experiments/runs/workflow-baseline-20260910-141054-84ee9640/task-2",
+      "task_verdict": "pass",
+      "elapsed_seconds": 44.89931750000687,
+      "metrics": {
+        "mcp_attempts": 12,
+        "completed_calls": 12,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 3,
+          "create_objects": 1,
+          "get_document_summary": 2,
+          "update_object_attributes": 5
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 3,
+          "create_objects": 1,
+          "get_document_summary": 2,
+          "update_object_attributes": 5
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 223807,
+          "cached_input_tokens": 191232,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1180,
+          "reasoning_output_tokens": 216
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "source_sha256": "bb78c37bf5629f4a96a197ea8724ad887ba8768d4aebc1ff35704059633f85f1",
+      "evaluation_sha256": "9b1a7ee73603f7a91db8391b59b9469f8ad97a517e5032213a5c481c768cc697",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "artifact_sha256": "6330183cb44c6edd3ff471f31efda7557f3c1e79fb6e9a08554bc67797779e21",
+      "pins_sha256": "c1eab283186785c851e1197f522bd09807a671e41dc0eb429a508cbc2c326d2c",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "top/solid_box": true,
+        "top/min": true,
+        "top/max": true,
+        "top/volume": true,
+        "top/attributes": true,
+        "leg_1/solid_box": true,
+        "leg_1/min": true,
+        "leg_1/max": true,
+        "leg_1/volume": true,
+        "leg_1/attributes": true,
+        "leg_2/solid_box": true,
+        "leg_2/min": true,
+        "leg_2/max": true,
+        "leg_2/volume": true,
+        "leg_2/attributes": true,
+        "leg_3/solid_box": true,
+        "leg_3/min": true,
+        "leg_3/max": true,
+        "leg_3/volume": true,
+        "leg_3/attributes": true,
+        "leg_4/solid_box": true,
+        "leg_4/min": true,
+        "leg_4/max": true,
+        "leg_4/volume": true,
+        "leg_4/attributes": true
+      },
+      "preservation": {
+        "before": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "after": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "preserved": true
+      }
+    },
+    {
+      "id": "workflow-baseline-20260910-141054-84ee9640-inspect_document-v1",
+      "family": "document-inspection",
+      "cohort": "released-0.4.1-full",
+      "source": "experiments/runs/workflow-baseline-20260910-141054-84ee9640/task-3",
+      "task_verdict": "pass",
+      "elapsed_seconds": 30.307418124983087,
+      "metrics": {
+        "mcp_attempts": 4,
+        "completed_calls": 4,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 2,
+          "get_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "get_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 188485,
+          "cached_input_tokens": 152064,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 814,
+          "reasoning_output_tokens": 190
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "source_sha256": "2d3bbce504e81a023550a8a3ab8f3bd1b4f945d8573f73a85daf7a3ece446828",
+      "evaluation_sha256": "2fc516f6d6de46b0fb07f701de22035bf4f63fb3e94a08132f3698d3f336c2c9",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "artifact_sha256": "252bad606aff5ab47bbd133c863a6c8ed98c5ce66470e3bba32be531cecd2cab",
+      "pins_sha256": "c1eab283186785c851e1197f522bd09807a671e41dc0eb429a508cbc2c326d2c",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "sample_a/solid_box": true,
+        "sample_a/min": true,
+        "sample_a/max": true,
+        "sample_a/volume": true,
+        "sample_a/attributes": true,
+        "sample_a/identity": true,
+        "sample_a/unchanged": true,
+        "sample_b/solid_box": true,
+        "sample_b/min": true,
+        "sample_b/max": true,
+        "sample_b/volume": true,
+        "sample_b/attributes": true,
+        "sample_b/identity": true,
+        "sample_b/unchanged": true,
+        "inspection_names": true,
+        "inspection_no_write_calls": true,
+        "sample_a/reported_volume": true,
+        "sample_a/reported_min": true,
+        "sample_a/reported_max": true,
+        "sample_b/reported_volume": true,
+        "sample_b/reported_min": true,
+        "sample_b/reported_max": true
+      },
+      "preservation": {
+        "before": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "after": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "preserved": true
+      }
+    },
+    {
+      "id": "workflow-baseline-20260910-141054-84ee9640-recover_intermediate-v1",
+      "family": "recovery",
+      "cohort": "released-0.4.1-full",
+      "source": "experiments/runs/workflow-baseline-20260910-141054-84ee9640/task-4",
+      "task_verdict": "pass",
+      "elapsed_seconds": 32.53971908299718,
+      "metrics": {
+        "mcp_attempts": 8,
+        "completed_calls": 8,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "get_object_info": 2,
+          "get_objects": 2,
+          "update_object_attributes": 1
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "get_object_info": 2,
+          "get_objects": 2,
+          "update_object_attributes": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 1,
+        "usage": {
+          "input_tokens": 195238,
+          "cached_input_tokens": 164864,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 900,
+          "reasoning_output_tokens": 201
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "source_sha256": "6d177a07e6099141df5e4f1aec467ff4f84991c5498256a9c87a3a1558989974",
+      "evaluation_sha256": "50b7d1bd1cab5d802ecd0c581dec0ea3e47c91a00334f2b1cbac73d4045fe82f",
+      "environment": {
+        "rhino": {
+          "document": 268435457,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435457,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "artifact_sha256": "55227e8c1f548f445af897b9546dfa6068d4c7abe0282b9a59a7fb9a41e5d395",
+      "pins_sha256": "c1eab283186785c851e1197f522bd09807a671e41dc0eb429a508cbc2c326d2c",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "corrected/solid_box": true,
+        "corrected/min": true,
+        "corrected/max": true,
+        "corrected/volume": true,
+        "corrected/attributes": true,
+        "reference/solid_box": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/volume": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true,
+        "wrong_intermediate_removed": true
+      },
+      "preservation": {
+        "before": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "after": {
+          "objects": [],
+          "layers": [
+            {
+              "Id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+              "Name": "Default",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "7173a954-412b-4606-b14c-c2bdb579af98",
+              "Name": "Layer 01",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "a6adc9c5-7df7-4740-a8d5-7ef7545490fe",
+              "Name": "Layer 02",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "36831b5f-2273-423a-8ca9-6bc345543400",
+              "Name": "Layer 03",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "c96883e2-362f-4335-a61c-8ea92714f43d",
+              "Name": "Layer 04",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            },
+            {
+              "Id": "b3792994-e174-4615-a6e5-94f94b83c2de",
+              "Name": "Layer 05",
+              "ParentLayerId": "00000000-0000-0000-0000-000000000000",
+              "IsVisible": true,
+              "IsLocked": false
+            }
+          ],
+          "units": "Millimeters",
+          "tolerance": 0.001
+        },
+        "preserved": true
+      }
+    }
+  ],
+  "total_calls": 78,
+  "failed_calls": 0,
+  "passes": 8,
+  "attempts": 9,
+  "limitations": [
+    "One attempt per family; no retries, paired comparison or causal improvement claim.",
+    "Model alias gpt-5.6-terra medium; resolved backend snapshot unavailable.",
+    "Execution definitions visible but all three execution tools refused on host.",
+    "Curved panel failed dimensions and boundary; retained as a completion contradiction, not a tolerance-only fidelity miss."
+  ]
+}

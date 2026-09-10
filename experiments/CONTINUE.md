@@ -73,6 +73,19 @@ clone or boot the user's personal `Windows 11.pvm`.
 
 ## Current state — 2026-09-10
 
+Latest verified state (supersedes historical bullets below): **M0b complete**.
+Package Manager 0.4.1 selected through `select_release`; server/plugin both 0.4.1,
+no update advice. Loaded MVID `2c401408-5a49-4a4b-831d-fa9f5cb913c5`, SHA256
+`6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da`.
+Nine fresh runs: eight saved-file passes, 78 calls, zero failed calls. The panel
+fails bounds/boundary despite completion, retained without retry. Four full-catalog
+scenes pass; execution tools are now refused and recorded by the host gateway.
+`flaw-report.json` ranks only 0.4.1 runs; `flaw-runs.json` remains historical, and
+`release-041-runs.json` is the current registry. See [M0b](workflow/REBASELINE_041.md).
+M3b is next, then M6; M5 remains deferred. No candidate work or held-out disclosure
+has begun. Worktree housekeeping was already complete at entry (only `harness`).
+
+
 - Released: rhinomcp 0.4.0 on PyPI and Yak from `releases/0.4.0`; `main` is at the
   merge of PR #54 (`b446d4a`) with unreleased 0.4.1 changes; no package release
   was requested. Released 0.4.0 includes MCP SDK 2.x, `create_planar_region`,
@@ -256,7 +269,7 @@ Implemented with two locally verified sealed families, immutable payload hashes,
 a durable allocation/closure ledger, and fourteen lifecycle tests. Read
 [HELD_OUT.md](workflow/HELD_OUT.md) before any future validation allocation.
 
-### M0b — Re-baseline on the released 0.4.1 (next, supervised)
+### M0b — Re-baseline on the released 0.4.1 (complete, 2026-09-10)
 
 Update the plugin in the dedicated Rhino through the Package Manager, restart it,
 run `select_release` against `releases/0.4.1`, and run the release pilot once per

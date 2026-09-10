@@ -66,6 +66,17 @@ See [implemented distribution and live checks](DISTRIBUTABLE_GUIDANCE.md).
    changes with demonstrated benefit and no unacceptable regressions. Keep inconclusive
    changes unpromoted; record task-specific benefit without generalizing it.
 
+## Current ranking — M0b, 2026-09-10
+
+The selected baseline is now released 0.4.1. Nine fresh observations produce eight
+passes, 78 calls and zero failed calls. The curved panel fails dimensions and
+boundary despite a completion claim. Historical M1/M2 failures do not rank current
+interventions. See [M0b report](REBASELINE_041.md). Rebuild the current ranking with:
+
+```sh
+server/.venv/bin/python -m experiments.workflow.audit experiments/workflow/release-041-runs.json --output experiments/workflow/flaw-report.json
+```
+
 ## M1 trace classification — complete, 2026-09-09
 
 The audit now produces evidence-linked flaw counts and rankings by tool, family
@@ -77,7 +88,7 @@ synthetic tests cover the taxonomy's additional cases. These are discovery
 observations, not held-out classifier accuracy or candidate-effectiveness claims.
 
 ```sh
-server/.venv/bin/python -m experiments.workflow.audit experiments/workflow/flaw-runs.json --labels experiments/workflow/flaw-labels.json --output experiments/workflow/flaw-report.json
+server/.venv/bin/python -m experiments.workflow.audit experiments/workflow/flaw-runs.json --labels experiments/workflow/flaw-labels.json --output experiments/runs/historical-flaw-report.json
 ```
 
 See [the taxonomy, ranking limits and top findings](FLAW_TAXONOMY.md). The largest

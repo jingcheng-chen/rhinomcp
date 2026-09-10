@@ -415,9 +415,11 @@ def run(path, agent_config=None, full_catalog=False):
                 {
                     "id": directory.name + "-" + load_task(ROOT / entry["path"])["id"],
                     "family": entry["family"],
-                    "cohort": "released-0.4.0-full"
-                    if full_catalog
-                    else "released-0.4.0-native",
+                    "cohort": "released-"
+                    + json.loads((child / "environment.json").read_text())["rhino"][
+                        "version"
+                    ].removesuffix(".0")
+                    + ("-full" if full_catalog else "-native"),
                     "run": str(child.relative_to(ROOT)),
                 }
             )
