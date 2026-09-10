@@ -1,0 +1,26 @@
+{
+  "run": "experiments/runs/workflow-baseline-20260910-154702-9c262712/task-2",
+  "events_sha256": "5baffbcf18a4dc10b3ae125e2a5985dd84e56cb07e53b7cff5b15b0e26f29770",
+  "call_id": "item_11",
+  "arguments": {
+    "nickname": "areas",
+    "output_name": "Centroid",
+    "max_items": 10
+  },
+  "returned_parameter": "Area",
+  "returned_values": [
+    {
+      "path": "{0;0}",
+      "items": [
+        12.566370614359172,
+        50.26548245743669,
+        113.09733552923255
+      ]
+    }
+  ],
+  "source_evidence": [
+    "server/src/rhinomcp/tools/grasshopper_parameters.py: gh_get_parameter_value always emits output_index=0 unless caller overrides",
+    "plugin/Functions/GrasshopperHelpers.cs: FindParam gives supplied index precedence over name"
+  ],
+  "classification": "Observed misleading selection, not a geometry task failure; fix requires a separate reviewed intervention."
+}

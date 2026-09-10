@@ -1,0 +1,11 @@
+{
+  "baseline_revision": "releases/0.4.1",
+  "read_paths": [
+    "server/src/rhinomcp/tools/grasshopper_graph.py"
+  ],
+  "write_paths": [
+    "server/src/rhinomcp/tools/grasshopper_graph.py"
+  ],
+  "requirements": "Change only gh_get_graph function docstring. Clarify existing include_values=True broad inspection: per-component inputs/outputs[].value contains values/data_count/branch_count/truncated; standalone parameters use value_data. Returns current solution data, does not recompute: solve when fresh values are needed and check truncation. Focused gh_get_parameter_value remains useful for a single output. Keep concise and generic, explain where values are, no task recipes, measured benefit or geometry-bounds promises. Preserve all executable AST, signature/defaults/decorators, schemas, other docstrings, plugin and every other source. Do not fix output-name/index selector behavior as a second intervention.",
+  "acceptance": "Independent AST/full catalog review; existing285 tests; frozen GH cross-family and held-out comparisons plus fixed Claude pilot. No adoption before measured keep rule."
+}

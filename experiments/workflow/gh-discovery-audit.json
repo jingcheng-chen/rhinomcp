@@ -1,0 +1,692 @@
+{
+  "taxonomy_version": 1,
+  "rankings": {
+    "overall": [
+      {
+        "category": "discovery",
+        "subtype": "schema_or_catalog",
+        "confidence": "observation",
+        "frequency": 6,
+        "runs": 3,
+        "mean_cost_calls": 1.0,
+        "score_calls": 6,
+        "score_seconds": 4.084345001028851,
+        "mean_cost_seconds": 0.6807241668381417,
+        "measured_seconds_subtotal": 4.084345001028851,
+        "timed_calls": 6,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-point_array-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-point_array-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1:2"
+          }
+        ]
+      }
+    ],
+    "observed_or_reviewed_flaws": [],
+    "observed_flaws_by_cohort": {
+      "released-0.4.1-native": []
+    },
+    "by_seconds_complete_only": [],
+    "by_tool": [
+      {
+        "category": "discovery",
+        "subtype": "schema_or_catalog",
+        "confidence": "observation",
+        "frequency": 3,
+        "runs": 3,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": 1.8080789590021595,
+        "mean_cost_seconds": 0.6026929863340532,
+        "measured_seconds_subtotal": 1.8080789590021595,
+        "timed_calls": 3,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-point_array-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-point_array-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1:2"
+          }
+        ],
+        "tool": "gh_batch_get_component_type_info"
+      },
+      {
+        "category": "discovery",
+        "subtype": "schema_or_catalog",
+        "confidence": "observation",
+        "frequency": 3,
+        "runs": 2,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": 2.276266042026691,
+        "mean_cost_seconds": 0.7587553473422304,
+        "measured_seconds_subtotal": 2.276266042026691,
+        "timed_calls": 3,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1:1"
+          }
+        ],
+        "tool": "gh_batch_search_components"
+      }
+    ],
+    "by_family": [
+      {
+        "category": "discovery",
+        "subtype": "schema_or_catalog",
+        "confidence": "observation",
+        "frequency": 3,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": 2.135550584003795,
+        "mean_cost_seconds": 0.7118501946679316,
+        "measured_seconds_subtotal": 2.135550584003795,
+        "timed_calls": 3,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:3"
+          }
+        ],
+        "family": "gh-circle-profiles"
+      },
+      {
+        "category": "discovery",
+        "subtype": "schema_or_catalog",
+        "confidence": "observation",
+        "frequency": 2,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": 1.4086906670127064,
+        "mean_cost_seconds": 0.7043453335063532,
+        "measured_seconds_subtotal": 1.4086906670127064,
+        "timed_calls": 2,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1:2"
+          }
+        ],
+        "family": "gh-loft-sections"
+      },
+      {
+        "category": "discovery",
+        "subtype": "schema_or_catalog",
+        "confidence": "observation",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.5401037500123493,
+        "mean_cost_seconds": 0.5401037500123493,
+        "measured_seconds_subtotal": 0.5401037500123493,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260910-154702-9c262712-m6-point_array-v1",
+            "finding": "workflow-baseline-20260910-154702-9c262712-m6-point_array-v1:1"
+          }
+        ],
+        "family": "gh-point-array"
+      }
+    ],
+    "by_cohort": {
+      "released-0.4.1-native": [
+        {
+          "category": "discovery",
+          "subtype": "schema_or_catalog",
+          "confidence": "observation",
+          "frequency": 6,
+          "runs": 3,
+          "mean_cost_calls": 1.0,
+          "score_calls": 6,
+          "score_seconds": 4.084345001028851,
+          "mean_cost_seconds": 0.6807241668381417,
+          "measured_seconds_subtotal": 4.084345001028851,
+          "timed_calls": 6,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260910-154702-9c262712-m6-point_array-v1",
+              "finding": "workflow-baseline-20260910-154702-9c262712-m6-point_array-v1:1"
+            },
+            {
+              "run": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1",
+              "finding": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:1"
+            },
+            {
+              "run": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1",
+              "finding": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:2"
+            },
+            {
+              "run": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1",
+              "finding": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:3"
+            },
+            {
+              "run": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1",
+              "finding": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1:1"
+            },
+            {
+              "run": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1",
+              "finding": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1:2"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "ranking_policy": "Frequency times mean charged calls; seconds reported only with complete timing coverage. Categories overlap and must not be summed. Observation/candidate rows are not confirmed product flaws.",
+  "purpose": "Find cross-task workflow friction, not score modeling quality or claim improvement.",
+  "families": [
+    "gh-circle-profiles",
+    "gh-loft-sections",
+    "gh-point-array"
+  ],
+  "runs": [
+    {
+      "id": "workflow-baseline-20260910-154702-9c262712-m6-point_array-v1",
+      "family": "gh-point-array",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260910-154702-9c262712/task-1",
+      "source_sha256": "ef7177a59236b018b870b0888ffcfa611e5333c9242886e56288fdebbe3c9bdc",
+      "session_status": "completed",
+      "elapsed_seconds": 51.433376832981594,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "dcb50233b76490762b5be95ba48ad0f58bd4bff93618999eeb4e767df989b4be",
+      "result_sha256": "92e4ec390469544105cfd8e4a4cc49fadb174ccdbe6ca6c635b1d93c776a3a5f",
+      "status_sha256": "d020a4ff96eedb4cd14a6dfab386aa7b63209fe92b9633c221078c8d61fd2091",
+      "environment_sha256": "262df584887fd27fc10ed88fe5fbfe27040edf0606beee2d9368d5a6621173fb",
+      "metrics": {
+        "mcp_attempts": 8,
+        "completed_calls": 8,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "gh_batch_get_component_type_info": 1,
+          "gh_build_graph": 1,
+          "gh_create_document": 1,
+          "gh_get_graph": 1,
+          "gh_get_parameter_value": 3,
+          "gh_run_solution": 1
+        },
+        "commands": {
+          "gh_batch_get_component_type_info": 1,
+          "gh_build_graph": 1,
+          "gh_create_document": 1,
+          "gh_get_graph": 1,
+          "gh_get_parameter_value": 3,
+          "gh_run_solution": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 130384,
+          "cached_input_tokens": 90624,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1672,
+          "reasoning_output_tokens": 499
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "schema_or_catalog",
+            "tool": "gh_batch_get_component_type_info",
+            "confidence": "observation",
+            "call_ids": [
+              "item_2"
+            ],
+            "cost_call_ids": [
+              "item_2"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-baseline-20260910-154702-9c262712-m6-point_array-v1:1",
+            "evidence_lines": [
+              6,
+              7
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.5401037500123493,
+            "measured_seconds_subtotal": 0.5401037500123493,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 8,
+          "total_calls": 8
+        }
+      },
+      "cohort": "released-0.4.1-native",
+      "environment": {
+        "rhino": {
+          "document": 268435459,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435459,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 40,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "native"
+      },
+      "timing_sha256": "c580d8017b2123393298b8341001d7d036201bbb54e7616b37e153dc93963a4c",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1",
+      "family": "gh-circle-profiles",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260910-154702-9c262712/task-2",
+      "source_sha256": "5baffbcf18a4dc10b3ae125e2a5985dd84e56cb07e53b7cff5b15b0e26f29770",
+      "session_status": "completed",
+      "elapsed_seconds": 76.50350954197347,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "42762c5eeeed694994c9bd7d8a4a2607d79f73c47c879ca5982aa1080bf9b7bf",
+      "result_sha256": "5e754c6403ed33313b3aafbed5362b6c397f2180c3d8d8795875caaf10cfba74",
+      "status_sha256": "057ea5a82fe3d412d4973ba5938ba64ce23c3ecbecceca3fa6683b0b5953a3ef",
+      "environment_sha256": "262df584887fd27fc10ed88fe5fbfe27040edf0606beee2d9368d5a6621173fb",
+      "metrics": {
+        "mcp_attempts": 12,
+        "completed_calls": 12,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "gh_batch_get_component_type_info": 1,
+          "gh_batch_search_components": 2,
+          "gh_build_graph": 1,
+          "gh_capture_preview": 1,
+          "gh_create_document": 1,
+          "gh_get_graph": 1,
+          "gh_get_parameter_value": 4,
+          "gh_run_solution": 1
+        },
+        "commands": {
+          "gh_batch_get_component_type_info": 1,
+          "gh_batch_search_components": 2,
+          "gh_build_graph": 1,
+          "gh_capture_preview": 1,
+          "gh_create_document": 1,
+          "gh_get_graph": 1,
+          "gh_get_parameter_value": 4,
+          "gh_run_solution": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 219294,
+          "cached_input_tokens": 183040,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2112,
+          "reasoning_output_tokens": 629
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "schema_or_catalog",
+            "tool": "gh_batch_search_components",
+            "confidence": "observation",
+            "call_ids": [
+              "item_2"
+            ],
+            "cost_call_ids": [
+              "item_2"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:1",
+            "evidence_lines": [
+              6,
+              7
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.8169417500030249,
+            "measured_seconds_subtotal": 0.8169417500030249,
+            "timed_calls": 1
+          },
+          {
+            "category": "discovery",
+            "subtype": "schema_or_catalog",
+            "tool": "gh_batch_get_component_type_info",
+            "confidence": "observation",
+            "call_ids": [
+              "item_3"
+            ],
+            "cost_call_ids": [
+              "item_3"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:2",
+            "evidence_lines": [
+              8,
+              9
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.5205592919955961,
+            "measured_seconds_subtotal": 0.5205592919955961,
+            "timed_calls": 1
+          },
+          {
+            "category": "discovery",
+            "subtype": "schema_or_catalog",
+            "tool": "gh_batch_search_components",
+            "confidence": "observation",
+            "call_ids": [
+              "item_4"
+            ],
+            "cost_call_ids": [
+              "item_4"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1:3",
+            "evidence_lines": [
+              10,
+              11
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.7980495420051739,
+            "measured_seconds_subtotal": 0.7980495420051739,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 3
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 12,
+          "total_calls": 12
+        }
+      },
+      "cohort": "released-0.4.1-native",
+      "environment": {
+        "rhino": {
+          "document": 268435459,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435459,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 40,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "native"
+      },
+      "timing_sha256": "a00d4932e66b5e0d304180afe2e4c48e8c78825089ab67b6c4dd544e22a1fa0d",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1",
+      "family": "gh-loft-sections",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260910-154702-9c262712/task-3",
+      "source_sha256": "b0714a38369c51214c83369d2d798236402dd98beb4bdca15496f2b3c52806e1",
+      "session_status": "completed",
+      "elapsed_seconds": 58.767610166047234,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "19dcfd468120dce22f5cdbb79d3d1dce7ff9679a22b6ba6015f4adfe984bd19c",
+      "result_sha256": "5b6b68c667612a26d574bdf073438f921344ba012aab8066374370b251caa9df",
+      "status_sha256": "c13060e34de42ee4191eae98636b99624f3d8e7cb85ddf8298416da4415c4740",
+      "environment_sha256": "262df584887fd27fc10ed88fe5fbfe27040edf0606beee2d9368d5a6621173fb",
+      "metrics": {
+        "mcp_attempts": 15,
+        "completed_calls": 15,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "gh_batch_get_component_type_info": 1,
+          "gh_batch_search_components": 1,
+          "gh_build_graph": 1,
+          "gh_create_document": 1,
+          "gh_get_graph": 1,
+          "gh_get_parameter_value": 5,
+          "gh_run_solution": 1,
+          "gh_set_parameter_value": 4
+        },
+        "commands": {
+          "gh_batch_get_component_type_info": 1,
+          "gh_batch_search_components": 1,
+          "gh_build_graph": 1,
+          "gh_create_document": 1,
+          "gh_get_graph": 1,
+          "gh_get_parameter_value": 5,
+          "gh_run_solution": 1,
+          "gh_set_parameter_value": 4
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 248512,
+          "cached_input_tokens": 195584,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1770,
+          "reasoning_output_tokens": 555
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "schema_or_catalog",
+            "tool": "gh_batch_search_components",
+            "confidence": "observation",
+            "call_ids": [
+              "item_2"
+            ],
+            "cost_call_ids": [
+              "item_2"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1:1",
+            "evidence_lines": [
+              6,
+              7
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.6612747500184923,
+            "measured_seconds_subtotal": 0.6612747500184923,
+            "timed_calls": 1
+          },
+          {
+            "category": "discovery",
+            "subtype": "schema_or_catalog",
+            "tool": "gh_batch_get_component_type_info",
+            "confidence": "observation",
+            "call_ids": [
+              "item_3"
+            ],
+            "cost_call_ids": [
+              "item_3"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1:2",
+            "evidence_lines": [
+              8,
+              9
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.7474159169942141,
+            "measured_seconds_subtotal": 0.7474159169942141,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 2
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 15,
+          "total_calls": 15
+        }
+      },
+      "cohort": "released-0.4.1-native",
+      "environment": {
+        "rhino": {
+          "document": 268435459,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435459,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 40,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "native"
+      },
+      "timing_sha256": "a0af074c6092b77882da965e50bde9287186e4f08075d0da140c102c59071f6b",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    }
+  ],
+  "promotion_authorized": false,
+  "limitation": "Historical heterogeneous observations only. Missing data stays unknown; task success and efficiency are separate."
+}

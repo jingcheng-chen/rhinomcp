@@ -1,0 +1,21 @@
+diff --git a/server/src/rhinomcp/tools/grasshopper_graph.py b/server/src/rhinomcp/tools/grasshopper_graph.py
+index 6cf6549..4204348 100644
+--- a/server/src/rhinomcp/tools/grasshopper_graph.py
++++ b/server/src/rhinomcp/tools/grasshopper_graph.py
+@@ -16,7 +16,15 @@ def gh_get_graph(
+     include_values: bool = False,
+     max_items: int = 20,
+ ) -> Dict[str, Any]:
+-    """Inspect all Grasshopper objects tagged with a graph id."""
++    """Inspect all Grasshopper objects tagged with a graph id.
++
++    For broad value inspection, set include_values=True: each component's
++    inputs/outputs[].value contains values, data_count, branch_count, and
++    truncated; standalone parameters use value_data.
++    Returns current solution data without recomputing. Solve first when fresh
++    values are needed, and check truncated for incomplete data.
++    Use gh_get_parameter_value for focused inspection of a single output.
++    """
+     return send_grasshopper_command(
+         "gh_get_graph",
+         {

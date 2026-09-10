@@ -1,0 +1,151 @@
+{
+  "cycle": "M6-1",
+  "runtime": "Released 0.4.1, identical baseline plugin, supervised host; M5 deferred. Three GH discovery tasks pass, 35 calls and no tool failures. No plugin candidates.",
+  "scope": "Propose one minimal gh_get_graph description-only clarification of existing graph-wide value inspection, motivated by equivalent graph plus scalar value reads in all three families. The snapshot includes per-component inputs/outputs[].value (not value_data), each with values/data_count/branch_count/truncated; standalone params use value_data. include_values=True returns current values, does not solve. Advise checking truncation and solving when needed; focused gh_get_parameter_value remains appropriate for one output. Do not change behavior, schemas, other descriptions, prescribed tasks, evaluator or reduce verification requirements. No recipe, timings/causal claims, or promise of geometry bounds.",
+  "evidence": [
+    {
+      "run": "experiments/runs/workflow-baseline-20260910-154702-9c262712/task-1",
+      "events_sha256": "ef7177a59236b018b870b0888ffcfa611e5333c9242886e56288fdebbe3c9bdc",
+      "graph_value_overlap": [
+        {
+          "graph_call": "item_8",
+          "parameter_call": "item_6",
+          "nickname": "points",
+          "parameter": "Point",
+          "exact_data_match": true
+        },
+        {
+          "graph_call": "item_8",
+          "parameter_call": "item_7",
+          "nickname": "result",
+          "parameter": "Geometry",
+          "exact_data_match": true
+        },
+        {
+          "graph_call": "item_8",
+          "parameter_call": "item_9",
+          "nickname": "positions",
+          "parameter": "Series",
+          "exact_data_match": true
+        }
+      ],
+      "separate_set_calls": 0,
+      "note": "Observed equivalent returned data, not a claim that every separate verification call can safely be removed."
+    },
+    {
+      "run": "experiments/runs/workflow-baseline-20260910-154702-9c262712/task-2",
+      "events_sha256": "5baffbcf18a4dc10b3ae125e2a5985dd84e56cb07e53b7cff5b15b0e26f29770",
+      "graph_value_overlap": [
+        {
+          "graph_call": "item_12",
+          "parameter_call": "item_8",
+          "nickname": "radii",
+          "parameter": "Series",
+          "exact_data_match": true
+        },
+        {
+          "graph_call": "item_12",
+          "parameter_call": "item_9",
+          "nickname": "profiles",
+          "parameter": "Circle",
+          "exact_data_match": true
+        },
+        {
+          "graph_call": "item_12",
+          "parameter_call": "item_10",
+          "nickname": "areas",
+          "parameter": "Area",
+          "exact_data_match": true
+        },
+        {
+          "graph_call": "item_12",
+          "parameter_call": "item_11",
+          "nickname": "areas",
+          "parameter": "Area",
+          "exact_data_match": true
+        }
+      ],
+      "separate_set_calls": 0,
+      "note": "Observed equivalent returned data, not a claim that every separate verification call can safely be removed."
+    },
+    {
+      "run": "experiments/runs/workflow-baseline-20260910-154702-9c262712/task-3",
+      "events_sha256": "b0714a38369c51214c83369d2d798236402dd98beb4bdca15496f2b3c52806e1",
+      "graph_value_overlap": [
+        {
+          "graph_call": "item_15",
+          "parameter_call": "item_10",
+          "nickname": "heights",
+          "parameter": "Series",
+          "exact_data_match": true
+        },
+        {
+          "graph_call": "item_15",
+          "parameter_call": "item_11",
+          "nickname": "origins",
+          "parameter": "Point",
+          "exact_data_match": true
+        },
+        {
+          "graph_call": "item_15",
+          "parameter_call": "item_12",
+          "nickname": "sections",
+          "parameter": "Circle",
+          "exact_data_match": true
+        },
+        {
+          "graph_call": "item_15",
+          "parameter_call": "item_13",
+          "nickname": "shell",
+          "parameter": "Loft",
+          "exact_data_match": true
+        },
+        {
+          "graph_call": "item_15",
+          "parameter_call": "item_14",
+          "nickname": "area",
+          "parameter": "Area",
+          "exact_data_match": true
+        }
+      ],
+      "separate_set_calls": 4,
+      "note": "Observed equivalent returned data, not a claim that every separate verification call can safely be removed."
+    }
+  ],
+  "selector_observation": {
+    "run": "experiments/runs/workflow-baseline-20260910-154702-9c262712/task-2",
+    "events_sha256": "5baffbcf18a4dc10b3ae125e2a5985dd84e56cb07e53b7cff5b15b0e26f29770",
+    "call_id": "item_11",
+    "arguments": {
+      "nickname": "areas",
+      "output_name": "Centroid",
+      "max_items": 10
+    },
+    "returned_parameter": "Area",
+    "returned_values": [
+      {
+        "path": "{0;0}",
+        "items": [
+          12.566370614359172,
+          50.26548245743669,
+          113.09733552923255
+        ]
+      }
+    ],
+    "source_evidence": [
+      "server/src/rhinomcp/tools/grasshopper_parameters.py: gh_get_parameter_value always emits output_index=0 unless caller overrides",
+      "plugin/Functions/GrasshopperHelpers.cs: FindParam gives supplied index precedence over name"
+    ],
+    "classification": "Observed misleading selection, not a geometry task failure; fix requires a separate reviewed intervention."
+  },
+  "interpretation": "Graph value inspection can expose all actual output names/data without serial port selection. The Centroid request silently returned Area because the Python wrapper supplied default index0; document this separate defect, do not fix it as a second intervention. Overlapping reads are real returned-data overlap, not proof they are all unnecessary.",
+  "discovery_families": [
+    "gh-point-array",
+    "gh-circle-profiles",
+    "gh-loft-sections"
+  ],
+  "held_out_families": [
+    "gh-vector-frame"
+  ],
+  "validation": "Two ABBA pairs each on point-array and circle-profiles plus both sealed vector-frame cases. 40 calls/240 seconds, gpt-5.6-terra medium, same27GHcatalog, frozen sources/tasks/evaluator. All candidate outputs must pass, no per-task success or failed-call regression, median-call benefit in at least one discovery family. Fixed Claude sonnet medium baseline/candidate on both discovery tasks even if rejected; no retry. Do not disclose held-out parameter values."
+}

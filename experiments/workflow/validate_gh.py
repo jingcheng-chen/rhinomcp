@@ -113,7 +113,9 @@ def run(builds_path=ROOT / "experiments/workflow/gh-calibration-builds.json"):
                     {
                         "nickname": value["target"],
                         "input_index": value["input_index"],
-                        "value": value["value"] + 7,
+                        "value": [-n for n in value["value"]]
+                        if isinstance(value["value"], list)
+                        else value["value"] + 7,
                     },
                 )
                 bad = gh_task.snapshot(task, owner["document"], marker, document_id)

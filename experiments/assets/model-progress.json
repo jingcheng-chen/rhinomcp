@@ -685,5 +685,38 @@
     "status": "Geometry passed",
     "caption": "First fixed pair; intervention rejected under the failed-call gate.",
     "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m6-discovery-point-array",
+    "title": "M6 \u00b7 point-array",
+    "image": "assets/m6-discovery-point-array.png",
+    "source": "runs/workflow-baseline-20260910-154702-9c262712/task-1/perspective.png",
+    "sha256": "ade7299ed740b2f85dd049add69b5ddbe0a2e3d4f234a22b3f5fcc81f7a2f162",
+    "report": "workflow/GRASSHOPPER.md",
+    "status": "Graph and outputs passed",
+    "caption": "8 calls, zero failures; fresh release0.4.1 GH-only discovery.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m6-discovery-circle-profiles",
+    "title": "M6 \u00b7 circle-profiles",
+    "image": "assets/m6-discovery-circle-profiles.png",
+    "source": "runs/workflow-baseline-20260910-154702-9c262712/task-2/perspective.png",
+    "sha256": "d5eaf9aa42077cee719a85ac0a1fab163d524a0ac5fb8264e0463f62d85e4462",
+    "report": "workflow/GRASSHOPPER.md",
+    "status": "Graph and outputs passed",
+    "caption": "12 calls, zero failures; fresh release0.4.1 GH-only discovery.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m6-discovery-loft-sections",
+    "title": "M6 \u00b7 loft-sections",
+    "image": "assets/m6-discovery-loft-sections.png",
+    "source": "runs/workflow-baseline-20260910-154702-9c262712/task-3/perspective.png",
+    "sha256": "176aa476621d2f139f5eb84e610c53338b09b910b0257f367ed0fa3c147f1439",
+    "report": "workflow/GRASSHOPPER.md",
+    "status": "Graph and outputs passed",
+    "caption": "15 calls, zero failures; fresh release0.4.1 GH-only discovery.",
+    "kind": "actual_rhino_capture"
   }
 ]

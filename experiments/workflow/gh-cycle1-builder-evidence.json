@@ -1,0 +1,49 @@
+{
+  "planner": {
+    "action": "plugin_issue",
+    "proposal": {
+      "id": "m6-1-gh-get-graph-value-inspection-guidance",
+      "kind": "tool_ergonomics",
+      "target": "mcp_interface",
+      "friction": "Across all three passing Grasshopper families, agents performed graph-wide inspection plus separate scalar parameter reads whose returned values exactly overlapped the final graph snapshot. The audit does not establish that those reads were unnecessary, but the current interface description may not make graph-wide value inspection, its freshness limits, truncation signal, and the role of focused reads sufficiently clear.",
+      "evidence": [
+        "Observed overlap in gh-point-array: final gh_get_graph values exactly matched three gh_get_parameter_value results (points/Point, result/Geometry, positions/Series).",
+        "Observed overlap in gh-circle-profiles: final gh_get_graph values exactly matched four gh_get_parameter_value results (radii/Series, profiles/Circle, and two areas/Area reads).",
+        "Observed overlap in gh-loft-sections: final gh_get_graph values exactly matched five gh_get_parameter_value results (heights/Series, origins/Point, sections/Circle, shell/Loft, area/Area).",
+        "The supplied audit records 35 completed calls, zero failed calls, and passing deterministic verdicts; it contains no observed plugin flaw.",
+        "The ranked audit separately records six schema/catalog-discovery calls across the three runs; it does not establish a defect in either catalog tool.",
+        "The task-2 Centroid selection returned Area because the wrapper supplied output_index=0; supervisor evidence classifies this as a separate misleading-selection observation and it is excluded from this single intervention."
+      ],
+      "hypothesis": "A description-only clarification for gh_get_graph should state that include_values=true returns current per-component inputs/outputs[].value (values, data_count, branch_count, truncated), does not solve the definition, and should be checked for truncation; after solving when freshness is needed, it can support broad inspection of actual output names and values, while gh_get_parameter_value remains appropriate for a single focused output. This may reduce avoidable broad-plus-scalar inspection sequences without relaxing verification or correctness.",
+      "discovery_families": [
+        "gh-point-array",
+        "gh-circle-profiles",
+        "gh-loft-sections"
+      ],
+      "validation_families": [
+        "gh-point-array",
+        "gh-circle-profiles",
+        "gh-vector-frame"
+      ],
+      "held_out_families": [
+        "gh-vector-frame"
+      ],
+      "metrics": [
+        "task_success",
+        "failed_tool_calls",
+        "mcp_calls",
+        "elapsed_seconds"
+      ],
+      "preserve": [
+        "Change only the gh_get_graph tool description; preserve command behavior, schemas, other descriptions, prescribed tasks, evaluator, acceptance criteria, and geometry requirements.",
+        "Keep model recipe, prompts, evaluator, call budget (40), timeout (240 seconds), native 27-component Grasshopper catalog, host environment, and source pins fixed between baseline and candidate; obtain a resolved model-version pin before making causal claims.",
+        "Run two ABBA pairs each for gh-point-array and gh-circle-profiles, plus both sealed gh-vector-frame cases; do not disclose held-out parameter values.",
+        "Require every candidate output to pass, with no per-task regression in task success or failed calls; assess call and elapsed-time metrics only after correctness is preserved. A median-call benefit in at least one discovery family is a prospective promotion criterion, not a claimed result.",
+        "Also run the fixed Claude Sonnet medium baseline/candidate comparison on both discovery tasks without retry, even if that comparison is rejected; do not treat a model-specific recipe as cross-task MCP evidence.",
+        "Do not implement the separate output-name/index selection defect under this proposal."
+      ],
+      "status": "proposed"
+    }
+  },
+  "dispatch_note": "Historical builder dispatch key only; scoped tool ergonomics, no plugin defect/build/install authorization."
+}

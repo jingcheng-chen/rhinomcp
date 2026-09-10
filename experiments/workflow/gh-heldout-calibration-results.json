@@ -1,0 +1,263 @@
+{
+  "directory": "experiments/runs/gh-calibration-20260910-155743",
+  "rows": [
+    {
+      "task": "m6-orthogonal-frame-v1",
+      "variant": "correct",
+      "expected_pass": true,
+      "actual": "pass",
+      "matched": true,
+      "failed": [],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-orthogonal-frame-v1/correct.gh.json",
+      "sha256": "46107af1742c76bd8a69867bb422e150cee5a1c3aa92f205f444a15bfada772b"
+    },
+    {
+      "task": "m6-orthogonal-frame-v1",
+      "variant": "solution_error",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "solution"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-orthogonal-frame-v1/solution_error.gh.json",
+      "sha256": "e4282e3c9009e60f9887bbc31f1d9928e81831e988937ac959577de339dd2bc5"
+    },
+    {
+      "task": "m6-orthogonal-frame-v1",
+      "variant": "missing_wire",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "connection:0",
+        "connection:1",
+        "connection:2"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-orthogonal-frame-v1/missing_wire.gh.json",
+      "sha256": "1983ca262691a371e660b3a03fc1297b0013b225f51d8486f756fbfd6297f324"
+    },
+    {
+      "task": "m6-orthogonal-frame-v1",
+      "variant": "orphan",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "no_orphans"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-orthogonal-frame-v1/orphan.gh.json",
+      "sha256": "bc698e4fcf36cd9240cb5ad2a052e3a6434330bb7dd05505b5369bd5470f45a6"
+    },
+    {
+      "task": "m6-orthogonal-frame-v1",
+      "variant": "wrong_count",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:normal"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-orthogonal-frame-v1/wrong_count.gh.json",
+      "sha256": "4b732da4a324d232f9f1cfeab106025c5b2b322142cfd55feebd8d1cafa5e479"
+    },
+    {
+      "task": "m6-orthogonal-frame-v1",
+      "variant": "wrong_value",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:normal"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-orthogonal-frame-v1/wrong_value.gh.json",
+      "sha256": "d0fd4e734118a4cc9175268ad87e1c67fb313189f0a7936260fb2c689cdb33bd"
+    },
+    {
+      "task": "m6-orthogonal-frame-v1",
+      "variant": "truncated",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:normal"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-orthogonal-frame-v1/truncated.gh.json",
+      "sha256": "716cf72a5ce30e361478bc511ec139821870265552bae07753a7778bce8d913b"
+    },
+    {
+      "task": "m6-orthogonal-frame-v1",
+      "variant": "wrong_graph",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "graph_membership"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-orthogonal-frame-v1/wrong_graph.gh.json",
+      "sha256": "05231834009448343211052c9216431a322067321f4abfa86a204f5030373f32"
+    },
+    {
+      "task": "m6-orthogonal-frame-v1",
+      "variant": "duplicate_nickname",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "component:normal",
+        "component:axis",
+        "connection:0",
+        "connection:1",
+        "connection:2",
+        "no_orphans",
+        "output:normal",
+        "output:axis"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-orthogonal-frame-v1/duplicate_nickname.gh.json",
+      "sha256": "83072b8476002d1ad6bb24f0b3b15b048723dba3a78e2c210b31f3118f2bb904"
+    },
+    {
+      "task": "m6-orthogonal-frame-v1",
+      "variant": "live-wrong-value",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:normal",
+        "output:axis"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-orthogonal-frame-v1/live-wrong-value.gh.json",
+      "sha256": "a99d25335e599b34d173799c118f6e0a847f3a0d8e373302af1686683bf7309c"
+    },
+    {
+      "task": "m6-tilted-frame-v1",
+      "variant": "correct",
+      "expected_pass": true,
+      "actual": "pass",
+      "matched": true,
+      "failed": [],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-tilted-frame-v1/correct.gh.json",
+      "sha256": "5b513a64448fceab9fc7302e1a0ffba4ff52e426322ff519ba22e27500ec8f07"
+    },
+    {
+      "task": "m6-tilted-frame-v1",
+      "variant": "solution_error",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "solution"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-tilted-frame-v1/solution_error.gh.json",
+      "sha256": "0639d0c91c20cf2a2b435b900f06b05ae4b6aac130e4b0b6f0d19b8447c8f5d0"
+    },
+    {
+      "task": "m6-tilted-frame-v1",
+      "variant": "missing_wire",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "connection:0",
+        "connection:1",
+        "connection:2"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-tilted-frame-v1/missing_wire.gh.json",
+      "sha256": "1321b06db3b2b75393c11f44ec888d68bfceced92bb27b6ac5077bd796d895da"
+    },
+    {
+      "task": "m6-tilted-frame-v1",
+      "variant": "orphan",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "no_orphans"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-tilted-frame-v1/orphan.gh.json",
+      "sha256": "7ac95fba36d80bae076c8d0b7ad8e96f7d067d98feb56070e898308ba96ac04a"
+    },
+    {
+      "task": "m6-tilted-frame-v1",
+      "variant": "wrong_count",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:normal"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-tilted-frame-v1/wrong_count.gh.json",
+      "sha256": "1373a8f066026c5b51d52b43300f4f26b3a29b1d9c5fe39695aa5799203eae3a"
+    },
+    {
+      "task": "m6-tilted-frame-v1",
+      "variant": "wrong_value",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:normal"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-tilted-frame-v1/wrong_value.gh.json",
+      "sha256": "c0675429a138e0ea1193c828ad6b52b9d089c898356f238c47624183d432b7ad"
+    },
+    {
+      "task": "m6-tilted-frame-v1",
+      "variant": "truncated",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:normal"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-tilted-frame-v1/truncated.gh.json",
+      "sha256": "8a76f5b0724a7687690784e649801318c725e2e54c022e89f685d703603155af"
+    },
+    {
+      "task": "m6-tilted-frame-v1",
+      "variant": "wrong_graph",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "graph_membership"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-tilted-frame-v1/wrong_graph.gh.json",
+      "sha256": "20855e94ec168e30950ce45d4ed8b2177d3c453450a1c7c794e9483d8c8357b4"
+    },
+    {
+      "task": "m6-tilted-frame-v1",
+      "variant": "duplicate_nickname",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "component:normal",
+        "component:axis",
+        "connection:0",
+        "connection:1",
+        "connection:2",
+        "no_orphans",
+        "output:normal",
+        "output:axis"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-tilted-frame-v1/duplicate_nickname.gh.json",
+      "sha256": "583a9fdb7bafbf9362184daafc239022575a2e20ef2c9765faf5456e01beeeff"
+    },
+    {
+      "task": "m6-tilted-frame-v1",
+      "variant": "live-wrong-value",
+      "expected_pass": false,
+      "actual": "fail",
+      "matched": true,
+      "failed": [
+        "output:normal",
+        "output:axis"
+      ],
+      "artifact": "experiments/runs/gh-calibration-20260910-155743/m6-tilted-frame-v1/live-wrong-value.gh.json",
+      "sha256": "55a6d6fd55863161265c61bbe4e3239ed8982ff4cdfc06ce57e12c91110d458e"
+    }
+  ],
+  "all_matched": true,
+  "builds_sha256": "be9fbe69b755b561bacfd3d2b62dd50d88658f98a70e4f79f0c4956bd6fee9e8"
+}

@@ -1,7 +1,7 @@
 # M6 — supervised Grasshopper workflow harness
 
-Ownership and evaluator calibration are implemented; fresh discovery and one
-improvement cycle remain. Released RhinoMCP 0.4.1 is unchanged. M5 stays deferred.
+Ownership, calibration and three fresh discovery runs are complete; one
+improvement cycle remains. Released RhinoMCP 0.4.1 is unchanged. M5 stays deferred.
 
 The existing `pilot.run_task`, native gateway, runner task loader, audit and
 `binary_compare` serve `gh_definition` tasks. No new modeler orchestration loop.
@@ -56,3 +56,30 @@ Rhino document to meet its unchanged startup gate.
 
 Foundation verification: 285 server, 518 experiment and 13 contract tests pass;
 server Ruff passes. Live ownership switch is denied and all cleanup checks pass.
+
+## Fresh discovery
+
+Released0.4.1, gpt-5.6-terra/medium, 40 calls/240 seconds, 27 GH tools.
+All three saved graph/output snapshots pass: point array8 calls, profiles12,
+loft15, zero failed calls. Every attempt starts gh_create_document; all GH cleanup
+and Rhino preservation checks pass. Actual previews and hashes are in the gallery.
+[Audit](gh-discovery-audit.json), [registry](gh-discovery-runs.json),
+[review](gh-discovery-review.json).
+
+Three/four/five focused value reads return the same values also present in each
+whole-graph snapshot. This is observed overlap, not a proven counterfactual saving.
+The loft additionally sets four values after graph creation. A fresh planner is
+investigating a single gh_get_graph description clarification, preserving the
+existing read behavior and verification requirements.
+
+A separate misleading selector is retained: output_name=Centroid without an
+explicit index returns Area, because the wrapper sends default output_index0 and
+the plugin prioritizes indices. It does not invalidate the independently indexed
+evaluator or geometry result. [Exact observation](gh-selector-observation.json).
+No second fix is bundled into this cycle; it is a concrete future defect candidate.
+
+Cycle1 candidate is independently reviewed (unchanged AST/full catalog except
+gh_get_graph description) with285 server tests passing. Both allocated vector
+cases match20 correct/flawed controls, including reversed live vectors. The
+comparison is frozen by [review](GH_CYCLE1_REVIEW.md) and
+[contract](gh-cycle1-trial.json). A pattern-filter replacement is sealed.

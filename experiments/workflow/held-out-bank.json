@@ -192,5 +192,31 @@
       "replaces": null
     },
     "sha256": "20f3761f30fb0c840aa4d2d775c0dde71c78ba62ce73930a2ccc00e0e64558b9"
+  },
+  {
+    "previous": "20f3761f30fb0c840aa4d2d775c0dde71c78ba62ce73930a2ccc00e0e64558b9",
+    "at": "2026-09-10T13:56:39.307406+00:00",
+    "body": {
+      "kind": "spend",
+      "id": "gh-vector-frame-v1",
+      "validation": "m6-cycle1",
+      "review_sha256": "45e671a817c8d27b5d0618c06537e3ccbc7089bd5171530e349c426bb0ecd675"
+    },
+    "sha256": "875f089f7c1151f9681edab43db0b1ce8d5d2c6a39a979aa0b573b4b564c6123"
+  },
+  {
+    "previous": "875f089f7c1151f9681edab43db0b1ce8d5d2c6a39a979aa0b573b4b564c6123",
+    "at": "2026-09-10T13:58:02.285295+00:00",
+    "body": {
+      "kind": "seal",
+      "id": "gh-pattern-filter-v1",
+      "family": "gh-pattern-filter",
+      "payload_sha256": "e0f50a11f433f7a039d211bc5694e0ab2924b18989c2a41bdeb66577875c7918",
+      "cases": 2,
+      "novelty_review": "Reviewed GH discovery and the spent vector-frame allocation: no list-mask filtering has been used. This family tests Boolean pattern/data-list correspondence and retained ordering, not coordinate transformation, radius generation, loft geometry or vector algebra. Future shared-adapter and stock-component review required.",
+      "calibration_required": true,
+      "replaces": "gh-vector-frame-v1"
+    },
+    "sha256": "42799fae54e2b99d037e08e9c7ead1753a303243a738808c54bf923a6799686e"
   }
 ]

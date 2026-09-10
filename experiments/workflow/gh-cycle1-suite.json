@@ -1,0 +1,23 @@
+{
+  "id": "m6-cycle1-fixed-v1",
+  "call_budget": 40,
+  "timeout_seconds": 240,
+  "tasks": [
+    {
+      "path": "experiments/tasks/gh_point_array.json",
+      "family": "gh-point-array"
+    },
+    {
+      "path": "experiments/tasks/gh_circle_profiles.json",
+      "family": "gh-circle-profiles"
+    },
+    {
+      "path": "experiments/tasks/gh_orthogonal_frame.json",
+      "family": "gh-vector-frame"
+    },
+    {
+      "path": "experiments/tasks/gh_tilted_frame.json",
+      "family": "gh-vector-frame"
+    }
+  ]
+}

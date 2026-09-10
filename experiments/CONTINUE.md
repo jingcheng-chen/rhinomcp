@@ -90,8 +90,11 @@ See [M3b](workflow/M3B.md). Joining and directional projection are spent/closed;
 instance/block reuse and mesh connectivity repair remain sealed. No candidate is
 adopted. M6 ownership/gateway/task/evaluator integration is calibrated: 30 controls
 match; live active-document switching is denied, cleanup restores empty GH and
-preserved Rhino. Three definition families are ready for fresh discovery; vector
-frame is sealed before it. See workflow/GRASSHOPPER.md. M5 stays deferred.
+preserved Rhino. Three fresh GH discovery families pass (8/12/15 calls, zero failures). A fresh
+planner/builder graph-value description candidate passes AST/catalog review and
+285 tests. Vector-frame allocation is spent, its 20 controls match, and comparison
+is ready in gh-cycle1-trial.json. A separate output_name/index0 selection defect
+is recorded for future repair. See workflow/GRASSHOPPER.md. M5 stays deferred.
 Latest checks: 285 server, 518 experiments, 13 contracts, Ruff green.
 
 
