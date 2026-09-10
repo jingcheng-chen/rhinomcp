@@ -1,0 +1,149 @@
+{
+  "id": "projection-oblique-v1",
+  "type": "workflow_scene",
+  "family": "directional-curve-projection",
+  "instruction": "Project the prepared open spatial polyline source onto the prepared planar face target along the specified direction. Name the one projected curve projected on Results. Keep source and target unchanged, including identity and attributes. No extra objects; outputs visible/unlocked. Projection direction is [0.2, 0.1, -1]. The source and target are on Inputs. Endpoints must agree within 0.01 mm and curve length within 0.1%. Preserve all input IDs, geometry and attributes. No extra layers.",
+  "units": "Millimeters",
+  "linear_tolerance": 0.01,
+  "relative_volume_tolerance": 0.01,
+  "relative_length_tolerance": 0.001,
+  "initial": [
+    {
+      "name": "source",
+      "layer": "Inputs",
+      "shape": "polyline",
+      "points": [
+        [
+          5,
+          10,
+          70
+        ],
+        [
+          35,
+          10,
+          90
+        ],
+        [
+          35,
+          35,
+          75
+        ]
+      ],
+      "min": [
+        5,
+        10,
+        70
+      ],
+      "max": [
+        35,
+        35,
+        90
+      ]
+    },
+    {
+      "name": "target",
+      "layer": "Inputs",
+      "shape": "rectangle_surface",
+      "min": [
+        -20,
+        -20,
+        10
+      ],
+      "max": [
+        120,
+        100,
+        10
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "name": "projected",
+      "layer": "Results",
+      "shape": "polyline",
+      "points": [
+        [
+          17.0,
+          16.0,
+          10.0
+        ],
+        [
+          51.0,
+          18.0,
+          10.0
+        ],
+        [
+          48.0,
+          41.5,
+          10.0
+        ]
+      ],
+      "min": [
+        17.0,
+        16.0,
+        10.0
+      ],
+      "max": [
+        51.0,
+        41.5,
+        10.0
+      ]
+    },
+    {
+      "name": "source",
+      "layer": "Inputs",
+      "shape": "polyline",
+      "points": [
+        [
+          5,
+          10,
+          70
+        ],
+        [
+          35,
+          10,
+          90
+        ],
+        [
+          35,
+          35,
+          75
+        ]
+      ],
+      "min": [
+        5,
+        10,
+        70
+      ],
+      "max": [
+        35,
+        35,
+        90
+      ],
+      "preserve_from": "source",
+      "unchanged": true
+    },
+    {
+      "name": "target",
+      "layer": "Inputs",
+      "shape": "rectangle_surface",
+      "min": [
+        -20,
+        -20,
+        10
+      ],
+      "max": [
+        120,
+        100,
+        10
+      ],
+      "preserve_from": "target",
+      "unchanged": true
+    }
+  ],
+  "layers": [
+    "Inputs",
+    "Results"
+  ],
+  "inspection_names": []
+}

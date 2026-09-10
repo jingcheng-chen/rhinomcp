@@ -40,7 +40,7 @@ def validate(task):
                 continue
             if "points" in p:
                 raise ValueError("Explicit points require a point or polyline shape")
-            curve = p.get("shape") == "rectangle_curve"
+            curve = p.get("shape") in {"rectangle_curve", "rectangle_surface"}
             if not all(
                 math.isfinite(a) and math.isfinite(b) and b > a
                 for a, b in zip(
@@ -187,6 +187,27 @@ def evaluate(task, measured):
         checks[name + "/volume"] = near(
             o.get("volume"), volume, volume * task["relative_volume_tolerance"]
         )
+        if target.get("shape") == "rectangle_surface":
+            del checks[name + "/solid_box"], checks[name + "/volume"]
+            checks[name + "/planar_rectangle"] = (
+                o.get("valid") is True
+                and o.get("face_count") == 1
+                and o.get("planar_faces") is True
+                and len(vertices) == 4
+                and all(
+                    any(
+                        len(v) == 3 and all(near(a, b, tol) for a, b in zip(v, c))
+                        for v in vertices
+                    )
+                    for c in corners[::2]
+                )
+            )
+            area = (target["max"][0] - target["min"][0]) * (
+                target["max"][1] - target["min"][1]
+            )
+            checks[name + "/surface_area"] = near(
+                o.get("surface_area"), area, area * task["relative_volume_tolerance"]
+            )
         if target.get("shape") == "rectangle_curve":
             del checks[name + "/solid_box"], checks[name + "/volume"]
             points = o.get("polyline") or []
@@ -288,7 +309,7 @@ def evaluate(task, measured):
         "status": "pass" if all(checks.values()) else "fail",
         "checks": checks,
         "measurements": measured,
-        "limitation": "Analytic boxes, rectangular curves, explicit polyline edge sets and points. Identity/CRC checks compare saved states; mutating-tool attempts are audited separately for inspection. Supervised local execution, not adversarial isolation.",
+        "limitation": "Analytic boxes, horizontal rectangular faces, rectangular curves, explicit polyline edge sets and points. Identity/CRC checks compare saved states; mutating-tool attempts are audited separately for inspection. Supervised local execution, not adversarial isolation.",
     }
 
 
@@ -337,6 +358,10 @@ def creation_code(parts, destination="doc", preserved_ids=None):
                 code.append(
                     f"{destination}.Objects.AddCurve(new PolylineCurve(new []{{{literal}}}),attr);}}"
                 )
+        elif p.get("shape") == "rectangle_surface":
+            code.append(
+                f"var surface=new PlaneSurface(new Plane(new Point3d(0,0,{a[2]}),Vector3d.ZAxis),new Interval({a[0]},{b[0]}),new Interval({a[1]},{b[1]}));{destination}.Objects.AddBrep(surface.ToBrep(),attr);}}"
+            )
         elif p.get("shape") == "rectangle_curve":
             points = [
                 (a[0], a[1], a[2]),

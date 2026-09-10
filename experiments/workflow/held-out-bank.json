@@ -140,5 +140,31 @@
       "report_sha256": "4d61536fbae7f8c8933b09a44dfbbe855bd9feb0bf2ebee07cdea86751ca666d"
     },
     "sha256": "ee5375ab9b1df6f3c4ae7d07e5d10208b4a6f77375466b8991af0255b2595d13"
+  },
+  {
+    "previous": "ee5375ab9b1df6f3c4ae7d07e5d10208b4a6f77375466b8991af0255b2595d13",
+    "at": "2026-09-10T12:56:46.202776+00:00",
+    "body": {
+      "kind": "spend",
+      "id": "directional-curve-projection-v1",
+      "validation": "m3b-cycle2",
+      "review_sha256": "ac55b781afb6b0ce065032103160fdcfb434275c8367c51c8e594558502ad474"
+    },
+    "sha256": "a4498be41df7a9d10d44540dff8e349fd438c3fac157908699edbd92e60d7ab3"
+  },
+  {
+    "previous": "a4498be41df7a9d10d44540dff8e349fd438c3fac157908699edbd92e60d7ab3",
+    "at": "2026-09-10T13:00:44.180005+00:00",
+    "body": {
+      "kind": "seal",
+      "id": "mesh-connectivity-repair-v1",
+      "family": "mesh-connectivity-repair",
+      "payload_sha256": "89e886f33f7d1990981bfcfa3754aa901b8bf2a90454ced1a518070088f412c2",
+      "cases": 2,
+      "novelty_review": "The public historical corpus and M0-M3b bank cover Brep/curve creation, transforms, booleans, offsets, sections, joining and projection. Repairing mesh face connectivity while preserving geometric vertex positions has not been a discovery workflow; it is distinct from inspecting or creating another solid. Reserved for future capability validation, not asserted runnable on the current host catalog.",
+      "calibration_required": true,
+      "replaces": "directional-curve-projection-v1"
+    },
+    "sha256": "e8b48642e95389ae9a99b31592c82601d20c3c7b7fa17e37085861ac1906c6ed"
   }
 ]

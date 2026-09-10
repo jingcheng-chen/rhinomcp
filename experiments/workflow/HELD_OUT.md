@@ -126,3 +126,12 @@ M3b-1 validation is closed as rejected against the immutable
 and failed-call rule fails; the four scheduled Claude attempts are recorded too.
 `directional-curve-projection-v1` supplies two sealed replacement cases and remains
 available. Instance/block reuse is still unopened.
+
+## M3b-2 allocation — 2026-09-10
+
+After fresh planner/builder and independent description-only review,
+`directional-curve-projection-v1` was spent for M3b-2. Both specifications have
+faithful shared-scene task adapters. Thirty-two saved controls match expected
+verdicts, including reversed equivalents and direction, height, source/target,
+edge and layer failures. See `M3B_CYCLE2_REVIEW.md` and
+`m3b-projection-calibration.json`. No comparison modeler has run at allocation.

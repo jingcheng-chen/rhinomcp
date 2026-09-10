@@ -13,7 +13,7 @@ using(var file=Rhino.FileIO.File3dm.Read(ARTIFACT_PATH)) {
   var curveArea=curve!=null && curve.IsClosed && curve.IsPlanar() ? AreaMassProperties.Compute(curve) : null;
   objects.Add(new {id=o.Attributes.ObjectId.ToString(),name=o.Attributes.Name,layer=o.Attributes.LayerIndex,
    is_point=o.Geometry is Rhino.Geometry.Point,visible=o.Attributes.Visible,mode=o.Attributes.Mode.ToString(),valid=o.Geometry.IsValid,
-   solid=brep!=null && brep.IsSolid,volume=volume?.Volume,
+   solid=brep!=null && brep.IsSolid,volume=volume?.Volume,face_count=brep?.Faces.Count, surface_area=brep!=null ? AreaMassProperties.Compute(brep)?.Area : null,
    planar_faces=brep!=null && brep.Faces.All(f=>f.IsPlanar(0.001)),
    vertices=brep?.Vertices.Select(v=>new[]{v.Location.X,v.Location.Y,v.Location.Z}).ToArray(),
    min=new[]{b.Min.X,b.Min.Y,b.Min.Z},max=new[]{b.Max.X,b.Max.Y,b.Max.Z},

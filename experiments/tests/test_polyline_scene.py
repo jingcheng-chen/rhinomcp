@@ -45,3 +45,17 @@ def test_explicit_geometry_contract_rejects_ambiguous_inputs(fault):
         p["shape"] = "point"
     with pytest.raises(ValueError):
         validate(task)
+
+
+@pytest.mark.parametrize("fault", ["nonplanar", "collapsed", "nonfinite"])
+def test_planar_target_contract_rejects_bad_surface_bounds(fault):
+    task = load_task(ROOT / "experiments/tasks/projection_vertical.json")
+    target = task["initial"][1]
+    if fault == "nonplanar":
+        target["max"][2] += 1
+    elif fault == "collapsed":
+        target["max"][0] = target["min"][0]
+    else:
+        target["min"][2] = float("inf")
+    with pytest.raises(ValueError):
+        validate(task)

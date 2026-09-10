@@ -88,7 +88,8 @@ Claude check records one baseline timeout, three passes, and a panel failed-call
 increase (2 to 4). See `workflow/M3B.md`. The joining family is closed/replaced;
 directional-curve-projection remains sealed for M3b-2. Cycle2 has a fresh planner,
 bounded layer-precondition description candidate, unchanged AST/catalog review,
-and 285 passing candidate server tests. Its comparison has not started. Worktree housekeeping was already complete at entry (only `harness`).
+and 285 passing candidate server tests. Its directional-projection allocation is spent and 32 saved controls pass;
+comparison is ready to start from `workflow/m3b-cycle2-trial.json`. Worktree housekeeping was already complete at entry (only `harness`).
 
 
 - Released: rhinomcp 0.4.0 on PyPI and Yak from `releases/0.4.0`; `main` is at the

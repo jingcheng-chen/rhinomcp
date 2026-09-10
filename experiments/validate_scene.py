@@ -58,7 +58,8 @@ def run(task_names=None):
                 variants.append("wrong_intermediate_retained")
             if task["family"] == "document-inspection":
                 variants += ["wrong_report", "write_attempt"]
-            polylines = task["family"] == "curve-network-joining"
+            projection = task["family"] == "directional-curve-projection"
+            polylines = task["family"] == "curve-network-joining" or projection
             if polylines:
                 variants += [
                     "missing_edge",
@@ -70,6 +71,8 @@ def run(task_names=None):
                 ]
                 if len([t for t in task["targets"] if not t.get("unchanged")]) > 1:
                     variants.append("bridged_components")
+            if projection:
+                variants += ["wrong_direction", "wrong_plane", "target_mutation"]
             for variant in variants:
                 path = directory / f"{name}-{variant}.3dm"
                 targets = copy.deepcopy(task["targets"])
@@ -88,6 +91,17 @@ def run(task_names=None):
                         targets[0]["points"][0][0] += 3
                     else:
                         targets[0]["max"][0] += 3
+                if variant == "wrong_direction":
+                    height = targets[0]["points"][0][2]
+                    source = next(t for t in task["initial"] if t["name"] == "source")
+                    targets[0]["points"] = [
+                        [p[0] + p[2] - height, p[1], height] for p in source["points"]
+                    ]
+                if variant == "wrong_plane":
+                    for p in targets[0]["points"]:
+                        p[2] += 2
+                if variant == "target_mutation":
+                    next(t for t in targets if t["name"] == "target")["max"][0] += 3
                 if variant == "missing_edge":
                     targets[0]["points"].pop(1)
                 if variant == "duplicate_fragment":
