@@ -34,3 +34,10 @@ runs times its cost in calls and seconds. Prefer proposals that remove a class o
 friction (a clearer response, a better default or anchor, a missing operation, a
 misleading description) over recipes for one shape. A fallback to run_command or
 script execution where a typed tool exists is friction in the typed tool.
+
+When the evidence records a behavior defect (a silently ignored parameter, a wrong
+precedence, an error that gives the agent nothing to correct with), propose the
+behavior change, not a description. Refusals issued by the experiment gateway are
+not tool friction and must not motivate a proposal. Three wording-only proposals
+in a row were rejected on 2026-09-10; do not propose wording unless the traces show
+an agent misreading the existing text.

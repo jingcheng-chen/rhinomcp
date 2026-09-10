@@ -39,6 +39,17 @@ Analytic trimmed patches retain strict plane/boundary checks and a 1% area budge
 See [M0 preparation](REBASELINE_040.md) for declarations, verification and the
 completed released-runtime observations. Historical suite files remain replay inputs.
 
+## Keep rule v2 — 2026-09-10
+
+Gateway-caused failures (execution-tool and component refusals, scope and budget)
+are excluded from the failed-call gate and kept as friction observations. At two
+AB/BA pairs per task, rejecting on failed calls needs at least two non-gateway
+failures of difference on one task or a lost success; smaller differences are
+inconclusive and may be re-run with two more frozen pairs, never tuned. A kept
+change still needs every candidate output to pass, the Claude check and a PR to
+`main`. "No change needed" is a valid outcome. Full text and the widened
+Grasshopper allowlist rule are in [CONTINUE.md](../CONTINUE.md#m3c--behavior-cycles-on-the-041-findings-next).
+
 ## Distribution requirement — user-approved 2026-09-09
 
 Reusable modeling knowledge ships with RhinoMCP. Keep essential semantics in tool

@@ -1,8 +1,8 @@
 # Continue autonomous RhinoMCP improvement
 
 Entry point for a fresh development session (Codex CLI or Claude Code) with no
-chat context. Last updated 2026-09-10, after the 0.4.1 release; the VM is decided but
-deferred. Verify repository
+chat context. Last updated 2026-09-10 evening, after M0b, M3b and M6 and the review of
+their verdicts; the VM is decided but deferred. Verify repository
 and application state before acting; nothing below about running processes, open
 documents or loaded plugins is an assumption you may keep.
 
@@ -71,147 +71,46 @@ promote a candidate automatically; leave a controller or agent running; paste
 credentials anywhere; reinstall the plugin into a Rhino that holds user work; touch,
 clone or boot the user's personal `Windows 11.pvm`.
 
-## Current state — 2026-09-10
+## Current state — 2026-09-10, evening
 
-Latest verified state (supersedes historical bullets below): **M0b complete**.
-Package Manager 0.4.1 selected through `select_release`; server/plugin both 0.4.1,
-no update advice. Loaded MVID `2c401408-5a49-4a4b-831d-fa9f5cb913c5`, SHA256
-`6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da`.
-Nine fresh runs: eight saved-file passes, 78 calls, zero failed calls. The panel
-fails bounds/boundary despite completion, retained without retry. Four full-catalog
-scenes pass; execution tools are now refused and recorded by the host gateway.
-`flaw-report.json` ranks only 0.4.1 runs; `flaw-runs.json` remains historical, and
-`release-041-runs.json` is the current registry. See [M0b](workflow/REBASELINE_041.md).
-M3b is complete: two server-only description cycles, both rejected after frozen
-Codex comparisons and fixed Claude checks. All 32 Codex saved models pass, but
-both candidates fail the reviewed failed-call gate. Cycle1 Claude retains one
-baseline timeout and three passes; cycle2 all four pass with zero failures.
-See [M3b](workflow/M3B.md). Joining and directional projection are spent/closed;
-instance/block reuse and mesh connectivity repair remain sealed. No candidate is
-adopted. **M6 is complete**: shared GH ownership/gateway/task/evaluator adapter;
-30 discovery controls and 20 held-out controls match. Three fresh discovery families
-pass (35 calls, zero failures). All 16 comparison and four Claude snapshots pass,
-but the graph-description candidate is rejected by failed-call gates in both
-Codex held-out cases and Claude point arrays. See [M6](workflow/GRASSHOPPER.md).
-The vector-frame family is spent/closed; pattern filtering is its sealed replacement.
-Instance/block reuse and mesh repair remain unopened. Runtime is still released
-0.4.1; final Rhino is empty/unclaimed, GH has no documents, all controllers/modelers
-stopped. No VM work. Latest checks: 285 server, 519 experiments, 13 contracts, Ruff green.
-
-Requested order M0b → M3b → M6 is finished. M5 stays deferred until explicit go.
-Concrete next investigation: GH input/output name selectors are masked by wrapper
-index0 defaults; batch value target/port shapes also cause failures. Review host
-stock-component coverage before a new GH campaign; 40 of 48 comparison failures
-were guard refusals, not plugin failures. Do not resume the closed trials or tune
-against their former held-out cases as though they were unseen.
-
-
-- Released: rhinomcp 0.4.0 on PyPI and Yak from `releases/0.4.0`; `main` is at the
-  merge of PR #54 (`b446d4a`) with unreleased 0.4.1 changes; no package release
-  was requested. Released 0.4.0 includes MCP SDK 2.x, `create_planar_region`,
-  packaged guidance v2, the plugin repairs, and the server/plugin version-skew guard.
-  `CHANGELOG.md` has the details. The `harness` branch continues experimental work after that release.
-- Every Rhino connection now reads `describe_capabilities` once before its first
-  command. Traces show that call; it is not an agent decision.
-- 2026-09-10 review: `main` was merged into `harness` (`4547c7d`), so this checkout's
-  production source is the unreleased 0.4.1 (attribute fix, lookup wording). The
-  selected runtime baseline stays the released 0.4.0 plugin; `select_release` will
-  refuse until 0.4.1 is tagged, then repeat M0 on it. PR #55 pins Newtonsoft.Json
-  to Rhino's bundled 13.0.3: the attribute failure was a 0.4.0 regression caused by
-  compiling against 13.0.4, whose new `JToken.ToString(Formatting)` overload Rhino's
-  loaded copy lacks. Never compile the plugin against a newer Newtonsoft than Rhino
-  bundles. In full-catalog runs, refusing and recording the three execution tools
-  (instead of executing them) is the recommended mitigation until M5.
-- M0 is complete. `workflow/current-baseline.json` selects released 0.4.0; the
-  pre-release baseline and overlays are retained in `workflow/baseline-history.json`.
-  Loaded identity verified: MVID `ee66d5ce-fb32-4807-9d17-5af8fe1458d2`, SHA256
-  `a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e`.
-  Server and plugin both report 0.4.0 with no update advice.
-- Five fresh v2 baseline families all passed saved-file evaluation: primitives,
-  subtractive solids, posed solids, trimmed patches and curved panels. 40 agent
-  calls, zero failed calls; no reruns or improvement/generalization claims.
-  See [M0 report](workflow/REBASELINE_040.md), `workflow/release-040-results.json`
-  and `workflow/release-040-runs.json`.
-- M1 is complete: `workflow/audit.py` produces a fixed-taxonomy, evidence-linked
-  ranking by tool, family and cohort. `workflow/flaw-runs.json` registers all seven
-  historical and sixteen 2026-09-09 agent runs (including the timeout); all 23
-  reviewed calibration labels match. Corpus: 378 calls, 18 failures. See
-  [taxonomy and top findings](workflow/FLAW_TAXONOMY.md) and `workflow/flaw-report.json`.
-  The leading same-day problems are surface-schema workarounds, ignored placement
-  parameters and surface-input failures, all observed on pre-release 0.3.2.
-  Released 0.4.0 shows two duplicate guidance reads, not three demonstrated product
-  defects. Fidelity misses stay separate. This remains the historical M1 corpus; M2 adds current-runtime evidence below.
-- M2 is complete: four scene families, 30 calibrated fixtures, eight fresh 0.4.0
-  observations using 17 native tools and the full 70-definition catalog. Six pass;
-  native assembly and recovery fail only layer assignment. 104 calls, 16 failures.
-  Fifteen failures expose a missing Newtonsoft method in `update_object_attributes`
-  across three families. Full-catalog agents recover through scripts in two cases.
-  See [M2 report](workflow/SCENE_BENCHMARKS.md), `workflow/m2-runs.json`,
-  `workflow/m2-results.json` and `workflow/m2-audit.json`. M3 corrected an auditor
-  omission: three bare error dictionaries were missed, so re-audited discovery has
-  104 calls and 19 failures. Original M2 reports remain historical snapshots;
-  `workflow/m3-discovery-audit.json` has the corrected counts.
-- M3 is complete: two fresh planner/builder cycles, each with two AB/BA pairs on
-  two discovery families and one held-out family. All 24 saved models pass
-  independent baseline evaluation. Both interventions meet their predeclared keep
-  rules. Attribute repair: median calls 21→14, 15→10, 24→18, with failed calls 15→0.
-  Lookup wording: 4.5→3.5, 12→11.5, 20→14, failed calls 4→1. The original lookup
-  wrong-field error did not recur in either arm; this small descriptive signal does
-  not prove the wording caused every saving. See [M3 report](workflow/M3.md),
-  `workflow/m3-cycle1-results.json` and `workflow/m3-cycle2-results.json`.
-- The user authorized merging the kept changes after M3. PRs
-  [#53](https://github.com/jingcheng-chen/rhinomcp/pull/53) and
-  [#54](https://github.com/jingcheng-chen/rhinomcp/pull/54) are merged, in that order,
-  as `262e277` and `b446d4a`, with green CI and the tested combined source tree.
-  Version 0.4.1 is still unreleased. Publication was not requested. Keep the
-  selected experimental baseline and this harness checkout's production source
-  at released 0.4.0 until an explicit rebaseline; do not infer a runtime install
-  or package release from the PR merges.
-- M4 is complete: `workflow/held-out-bank.json` contains two spent M3 histories
-  and two sealed replacement families with two fixed cases each. Private bundles
-  are in ignored `experiments/held_out_private/`; public metadata contains hashes
-  and novelty reviews, never parameters. `workflow/held_out.py` spends before
-  disclosure, prevents family/validation reuse, preserves export failures, requires
-  a fresh replacement before closure, and can retire damaged/lost/leaked bundles.
-  Fourteen synthetic lifecycle tests pass. See [M4 report](workflow/M4.md) and
-  [allocation runbook](workflow/HELD_OUT.md). These are fixed specifications for
-  future shared task/evaluator calibration, not yet live-validated task adapters.
-- The user authorized dedicated local testing. Final M3 verification: Rhino PID
-  7380, document 268435457, zero objects, no marker/path, original layers, modified
-  flag true. Server/plugin both 0.4.0, no update advice, verified released SHA/MVID.
-  No controller/modeler remains running. Reverify before live work and open a fresh
-  empty document before comparison preparation; the used document's modified flag
-  correctly fails that startup gate. This is supervised local testing, not M5 isolation.
-- Discovery so far: five families audited historically (primitives, posed solids,
-  subtractive solids, surface construction, layer organization, plus photo
-  reconstruction); the native pilot covers primitives, subtractive solids, posed
-  solids, trimmed patches and curved panels through a 14-tool subset. Held-out cases
-  in those families are spent; new parameterizations of them are discovery cases.
-- Curve editing and section extraction were spent in M3. Unopened replacement
-  families are curve-network joining and instance/block reuse; parameters are
-  now sealed in the supervisor-only bank. M5 is next and still needs the dedicated
-  environment decision. Do not open private bundles for discovery or builders.
-  See [held-out allocation](workflow/HELD_OUT.md), declared before M2 discovery.
-- Agents available: the Codex adapter (default) and the Claude adapter (native
-  modeling validated; binary comparison orchestration remains Codex-only).
-- 0.4.1 is released (`releases/0.4.1`, 2026-09-10) with the attribute fix, the lookup
-  wording and the Newtonsoft pin. `harness` is merged with that `main` (`b9d4bdb`).
-  The runtime baseline recorded in `current-baseline.json` is still the released
-  0.4.0 plugin; M0b below moves it.
-- Decided 2026-09-10 by the user: unattended operation will run in a fresh Parallels
-  VM on this Mac, but the user deferred it the same day because the setup is not
-  ready. M5 is parked; everything else proceeds supervised on the host, as M3 did.
-  See [ISOLATED_ENVIRONMENT.md](workflow/ISOLATED_ENVIRONMENT.md).
-- Housekeeping: two stale worktrees from the merged PR branches remain under
-  `/private/tmp` (`git worktree list`); remove them. Tracked evidence JSON grew by
-  3.4 MB in one day; keep hashes and summaries in the tree and compress or drop
-  per-call dumps from now on.
-- Tests at last verification: 285 server, 471 experiments, 13 contracts; server lint passes.
+- Released: 0.4.1 (`releases/0.4.1`). Runtime baseline: Package Manager 0.4.1,
+  MVID `2c401408-5a49-4a4b-831d-fa9f5cb913c5`, SHA256 in
+  `workflow/current-baseline.json`; server and plugin both 0.4.1, no update advice.
+  `harness` includes `main` up to that release. Production source is unchanged since;
+  no candidate is adopted.
+- Complete: M0 to M4, M0b, M3b and M6. M5 is deferred by the user; do not start it.
+  Reports: `workflow/REBASELINE_041.md`, `workflow/M3B.md`, `workflow/GRASSHOPPER.md`,
+  and the M1 to M4 reports listed under Pointers.
+- Latest observations on 0.4.1: nine release and scene runs, eight pass; the v2 panel
+  (0.5 mm shape tolerance) still fails bounds and boundary while the agent claims
+  completion. Three Grasshopper discovery runs pass with zero failed calls.
+- Three improvement cycles ran on 0.4.1 (two Rhino wording changes, one Grasshopper
+  wording change); all were rejected. In each, most failed calls were the gateway's
+  own refusals (execution tools; Grasshopper components outside a 35-item allowlist),
+  and the remaining differences were within noise at two pairs per task. Those
+  verdicts measured the guard, not the candidates. Keep rule v2 (M3c) corrects that.
+  Do not reopen the closed trials or reuse their held-out cases as unseen.
+- Recorded behavior defects not yet acted on, the M3c targets: `gh_get_parameter_value`
+  and `gh_set_parameter_value` ignore `output_name` and `input_name` because the
+  Python wrapper also sends a default index that takes precedence in C#
+  (`workflow/gh-selector-observation.json`); `gh_build_graph` value targets confuse
+  both agents; assigning to a non-existent layer fails with an error that names no
+  existing layer; the SURFACE path still yields off-bounds panels.
+- Held-out bank: joining, directional projection and vector frame are spent and
+  closed; sealed and unopened: instance/block reuse, mesh connectivity repair,
+  pattern filtering. See `workflow/HELD_OUT.md`.
+- Gateway: execution tools are refused and recorded in full-catalog runs; Grasshopper
+  runs own a fresh GH document per attempt and must start with `gh_create_document`.
+- Agents: the Codex adapter (default, comparisons) and the Claude adapter (fixed
+  cross-agent checks).
+- Hygiene debts: absolute `/Users/chen` paths in new audit JSON, 3.9 MB of evidence
+  added per day, one-line commit messages. Rules in M3c.
+- Tests at last verification: 285 server, 519 experiments, 13 contracts; ruff passes.
 
 ## Milestones from here, in order
 
-Order as of 2026-09-10: **M0b, then M3b, then M6**. M5 is deferred by the user and
-stays parked until an explicit go. Each milestone ends with tests green, a portable
+Order as of 2026-09-10, evening: **M3c**, then the next Grasshopper cycle under keep
+rule v2. M5 is deferred by the user and stays parked until an explicit go. Each milestone ends with tests green, a portable
 report under `workflow/`, the state section above updated, and a commit.
 
 ### M0 — Re-baseline on the released 0.4.0 (complete, 2026-09-09)
@@ -321,6 +220,59 @@ Same loop as M3, on the 0.4.1 ranking, with these rules:
 
 Done when two more cycles have completed end to end on the 0.4.1 ranking, kept or
 rejected, at least one of them server-only, each with the cross-agent check recorded.
+
+### M3c — Behavior cycles on the 0.4.1 findings (next)
+
+Three wording cycles in a row produced nothing measurable while the runs recorded
+real behavior defects. Fix the gates first, then work the defects.
+
+**Keep rule v2, for every comparison from now on.**
+
+- Failed calls caused by the gateway (`host_execution_refusal`,
+  `host_component_refusal`, scope and budget refusals) are excluded from the
+  failed-call gate. They stay in the audit as friction observations.
+- With two AB/BA pairs per task, a rejection on failed calls needs a difference of at
+  least two non-gateway failures on one task, or a lost success. Anything smaller is
+  `inconclusive`: neither kept nor rejected. An inconclusive candidate may be re-run
+  with two more frozen pairs, without any tuning, before a verdict.
+- A kept change still needs every candidate output to pass, no lost success, the
+  Claude check, and a PR to `main`.
+- `no change needed` is a legitimate outcome of a cycle. Record it and move on;
+  never manufacture a candidate in order to have something to compare.
+
+**Grasshopper allowlist.** Replace the 35-component allowlist with an exclusion
+rule: every stock component installed with Rhino 8's Grasshopper is allowed except
+script components (C#, Python, VB), file and network I/O, and anything from a
+non-stock plugin. Build the list from `gh_get_available_components` on the
+dedicated Rhino, review it once, pin its hash, and keep recording refusals
+separately from tool failures.
+
+**Targets, in order. The first three and the last are server-only fast lane.**
+
+1. Parameter selector precedence: when `output_name` or `input_name` is given, the
+   wrapper must not send the default index. Add regression tests; ship via PR; then
+   re-run the Grasshopper discovery suite to see what the fix changes.
+2. `gh_build_graph` value targets: determine from the traces whether the confusion
+   is the schema shape or the description, and fix the shape if it is the shape.
+3. Missing layer on `update_object_attributes` and `create_layer`: when the plugin
+   reports a missing layer, the server enriches the error with the existing layer
+   full paths (one extra read-only round trip) so the agent can correct in one step.
+   Measure on the assembly and joining families.
+4. The SURFACE path (plugin, supervised): take the panel traces and the M1
+   surface-input findings to a fresh planner. A candidate may need a plugin change
+   and therefore a person for the install ticket.
+5. Field traces (a product feature): an opt-in `RHINO_MCP_TRACE=<path>` that logs
+   tool name, argument shape, duration and error text to a local file, with no
+   geometry and no upload, so the user's own modeling sessions can feed the M1
+   classifier. Synthetic tasks only find what they were written to find.
+
+Done when targets 1 to 3 each have a verdict under keep rule v2 and the widened
+Grasshopper catalog has replaced the allowlist with a pinned review.
+
+**Hygiene, from now on.** Edit the state section above in place instead of
+prepending a "latest" block. Store paths in evidence relative to the repository.
+Keep each cycle's tracked evidence under about 500 KB; per-call dumps stay in the
+ignored run directories. Commit bodies say what was verified.
 
 ### M5 — Unattended operation in a Parallels VM (decided 2026-09-10, deferred)
 
