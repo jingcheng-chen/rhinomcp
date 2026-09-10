@@ -597,5 +597,49 @@
     "status": "Geometry failed",
     "caption": "7 tool calls; 0 failed calls. First fixed release-pilot attempt.",
     "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3b1-panel-baseline",
+    "title": "M3b-1 \u00b7 panel \u00b7 baseline",
+    "image": "assets/m3b1-panel-baseline.png",
+    "source": "runs/workflow-binary-20260910-142439-01635fa7/task-1-pair-1-baseline/perspective.png",
+    "sha256": "4c49fa95ae5b9c6d1b576913fca2a54c9209c514c51558a4f8ae0c10f173d6c8",
+    "report": "workflow/M3B.md",
+    "status": "Geometry passed; intervention rejected",
+    "caption": "First prespecified pair; saved-file pass does not establish improvement.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3b1-panel-candidate",
+    "title": "M3b-1 \u00b7 panel \u00b7 candidate",
+    "image": "assets/m3b1-panel-candidate.png",
+    "source": "runs/workflow-binary-20260910-142439-01635fa7/task-1-pair-1-candidate/perspective.png",
+    "sha256": "f045a0b5912465c7871df9e5985acc5d0479978bd6cfbc0883154af289dee951",
+    "report": "workflow/M3B.md",
+    "status": "Geometry passed; intervention rejected",
+    "caption": "First prespecified pair; saved-file pass does not establish improvement.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3b1-closed-network-baseline",
+    "title": "M3b-1 \u00b7 closed-network \u00b7 baseline",
+    "image": "assets/m3b1-closed-network-baseline.png",
+    "source": "runs/workflow-binary-20260910-142439-01635fa7/task-3-pair-1-baseline/perspective.png",
+    "sha256": "11b8ed8b05976b3ba4c4fb00db5124723f07d3c05a0aac57e2751ecb9dd2c4c3",
+    "report": "workflow/M3B.md",
+    "status": "Geometry passed; intervention rejected",
+    "caption": "First prespecified pair; saved-file pass does not establish improvement.",
+    "kind": "actual_rhino_capture"
+  },
+  {
+    "id": "m3b1-closed-network-candidate",
+    "title": "M3b-1 \u00b7 closed-network \u00b7 candidate",
+    "image": "assets/m3b1-closed-network-candidate.png",
+    "source": "runs/workflow-binary-20260910-142439-01635fa7/task-3-pair-1-candidate/perspective.png",
+    "sha256": "11b8ed8b05976b3ba4c4fb00db5124723f07d3c05a0aac57e2751ecb9dd2c4c3",
+    "report": "workflow/M3B.md",
+    "status": "Geometry passed; intervention rejected",
+    "caption": "First prespecified pair; saved-file pass does not establish improvement.",
+    "kind": "actual_rhino_capture"
   }
 ]

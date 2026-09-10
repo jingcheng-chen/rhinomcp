@@ -1,0 +1,100 @@
+{
+  "runs": [
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline",
+      "family": "curved-panels",
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-1-pair-1-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+      "family": "curved-panels",
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-1-pair-1-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+      "family": "curved-panels",
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-1-pair-2-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+      "family": "curved-panels",
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-1-pair-2-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-baseline",
+      "family": "editing-existing",
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-2-pair-1-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate",
+      "family": "editing-existing",
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-2-pair-1-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-candidate",
+      "family": "editing-existing",
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-2-pair-2-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-baseline",
+      "family": "editing-existing",
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-2-pair-2-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline",
+      "family": "curve-network-joining",
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-3-pair-1-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+      "family": "curve-network-joining",
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-3-pair-1-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+      "family": "curve-network-joining",
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-3-pair-2-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+      "family": "curve-network-joining",
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-3-pair-2-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline",
+      "family": "curve-network-joining",
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-4-pair-1-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+      "family": "curve-network-joining",
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-4-pair-1-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+      "family": "curve-network-joining",
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-4-pair-2-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+      "family": "curve-network-joining",
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-4-pair-2-baseline"
+    }
+  ]
+}

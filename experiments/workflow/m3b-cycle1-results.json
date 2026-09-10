@@ -1,0 +1,1535 @@
+{
+  "cycle": "M3b-1",
+  "decision": "reject",
+  "reason": "No discovery benefit; failed calls increase in all four tasks. All 16 independently judged saved files pass.",
+  "comparison": "experiments/runs/workflow-binary-20260910-142439-01635fa7",
+  "comparison_sha256": "66e85b534659a67b432016acdea26b18b1cee1353385f4fe6926da6ee7290ace",
+  "tasks": {
+    "experiments/tasks/panel_raised_v2.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 8.0,
+        "median_seconds": 55.993543249496724
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 1,
+        "median_calls": 11.0,
+        "median_seconds": 75.00154052098515
+      },
+      "family": "curved-panels",
+      "correctness_regression": false,
+      "observed_benefit": false
+    },
+    "experiments/tasks/edit_existing.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 0,
+        "median_calls": 10.5,
+        "median_seconds": 42.47269675001735
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 1,
+        "median_calls": 12.0,
+        "median_seconds": 56.007903104502475
+      },
+      "family": "editing-existing",
+      "correctness_regression": false,
+      "observed_benefit": false
+    },
+    "experiments/tasks/join_closed_network.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 3,
+        "median_calls": 21.0,
+        "median_seconds": 81.47221462550806
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 5,
+        "median_calls": 19.0,
+        "median_seconds": 97.66796387502109
+      },
+      "family": "curve-network-joining",
+      "correctness_regression": false,
+      "observed_benefit": false
+    },
+    "experiments/tasks/join_two_components.json": {
+      "baseline": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 3,
+        "median_calls": 23.5,
+        "median_seconds": 87.70052268751897
+      },
+      "candidate": {
+        "runs": 2,
+        "passes": 2,
+        "failed_calls": 4,
+        "median_calls": 21.5,
+        "median_seconds": 96.11994506299379
+      },
+      "family": "curve-network-joining",
+      "correctness_regression": false,
+      "observed_benefit": false
+    }
+  },
+  "runs": [
+    {
+      "id": "task-1-pair-1-baseline",
+      "family": "curved-panels",
+      "arm": "baseline",
+      "pair": 1,
+      "task": "experiments/tasks/panel_raised_v2.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-1-pair-1-baseline",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 7,
+        "completed_calls": 7,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "capture_viewport": 1,
+          "create_object": 1,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "capture_viewport": 1,
+          "create_object": 1,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 153066,
+          "cached_input_tokens": 121344,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1134,
+          "reasoning_output_tokens": 378
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 44.989778082992416,
+      "source_sha256": "77bd78ffd6384eff38135707541ebcf90d7dd53626220559538e1d88b2fa2fb7",
+      "evaluation_sha256": "51e594d6ebbab3b65df59b6d8657a8b527dab7f8921a8a320d26886ad114afea",
+      "environment_sha256": "4c51681a945d8661cebf6f46500e88437463706c040fe55370db27f72f610c69",
+      "artifact_sha256": "e2b0282cad932956d6bb2638a43dc22eee98613856d1d1cb8939c1bb05299508",
+      "checks": {
+        "one_object": true,
+        "millimeters": true,
+        "valid": true,
+        "single_open_face": true,
+        "one_outer_no_inner_loops": true,
+        "local_bounds": true,
+        "reference_to_surface": true,
+        "surface_to_reference": true,
+        "rectangular_boundary": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-1-pair-1-candidate",
+      "family": "curved-panels",
+      "arm": "candidate",
+      "pair": 1,
+      "task": "experiments/tasks/panel_raised_v2.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-1-pair-1-candidate",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 11,
+        "completed_calls": 11,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "capture_viewport": 1,
+          "create_object": 1,
+          "get_document_summary": 1,
+          "get_modeling_guidance": 4,
+          "get_object_info": 1,
+          "get_objects": 1,
+          "select_objects": 1
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "capture_viewport": 1,
+          "create_object": 1,
+          "get_document_summary": 1,
+          "get_modeling_guidance": 4,
+          "get_object_info": 1,
+          "get_objects": 1,
+          "select_objects": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 276827,
+          "cached_input_tokens": 235008,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1700,
+          "reasoning_output_tokens": 603
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 54.20647062495118,
+      "source_sha256": "e9070284b0dfdca600627232f6e806f2f44a5978107cdb20c63f77f69faf1a8e",
+      "evaluation_sha256": "d27e50dde049ff0a317c7223a6cc9ba52b9bfec16fcc7ddd41849a45e00d8f48",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "artifact_sha256": "b05895763f348a778957d469041d630032b8f242910b84a70977f83bb780460b",
+      "checks": {
+        "one_object": true,
+        "millimeters": true,
+        "valid": true,
+        "single_open_face": true,
+        "one_outer_no_inner_loops": true,
+        "local_bounds": true,
+        "reference_to_surface": true,
+        "surface_to_reference": true,
+        "rectangular_boundary": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-1-pair-2-candidate",
+      "family": "curved-panels",
+      "arm": "candidate",
+      "pair": 2,
+      "task": "experiments/tasks/panel_raised_v2.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-1-pair-2-candidate",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 11,
+        "completed_calls": 11,
+        "unfinished_calls": 0,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "execute_rhinoscript_python_code": 1
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "capture_viewport": 1,
+          "create_object": 1,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 2,
+          "get_objects": 1,
+          "search_rhinoscript_functions": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "capture_viewport": 1,
+          "create_object": 1,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 2,
+          "get_objects": 1,
+          "search_rhinoscript_functions": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 471215,
+          "cached_input_tokens": 419328,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3238,
+          "reasoning_output_tokens": 1961
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 95.79661041701911,
+      "source_sha256": "036d37839e44db764c885ce5e477c94393d4d40d8b26a225d4306718e8d54cb5",
+      "evaluation_sha256": "0037bec713d77401f89aa12113f2472c459b776df1cf1bc54a4804440bc66f15",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "artifact_sha256": "9716b1033e13e1e63947bb5025a0c5bb47d3e5e03b0537abae86a8c85f6c8f02",
+      "checks": {
+        "one_object": true,
+        "millimeters": true,
+        "valid": true,
+        "single_open_face": true,
+        "one_outer_no_inner_loops": true,
+        "local_bounds": true,
+        "reference_to_surface": true,
+        "surface_to_reference": true,
+        "rectangular_boundary": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-1-pair-2-baseline",
+      "family": "curved-panels",
+      "arm": "baseline",
+      "pair": 2,
+      "task": "experiments/tasks/panel_raised_v2.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-1-pair-2-baseline",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 9,
+        "completed_calls": 9,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "describe_capabilities": 2,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 2,
+          "get_object_info": 1
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 2,
+          "get_object_info": 1
+        },
+        "schema_queries": 2,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 418459,
+          "cached_input_tokens": 343808,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1760,
+          "reasoning_output_tokens": 656
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 66.99730841600103,
+      "source_sha256": "6687a8e164ef0520230704a285cf92b42d7b14a43cccdff06069f60762071f0c",
+      "evaluation_sha256": "6ce5e4f64f32a37e1c0b42f4ebaaf3ce4158819846a6163a2b6c9de5d8a484b0",
+      "environment_sha256": "cab98bd52b53fc1319fa451b18a15516b3b7f33254b18c5860f7acd54e31e370",
+      "artifact_sha256": "cec4b38b8337872dc7f1b46142349245f1b46c713a5cd126fcec4f713c2ac855",
+      "checks": {
+        "one_object": true,
+        "millimeters": true,
+        "valid": true,
+        "single_open_face": true,
+        "one_outer_no_inner_loops": true,
+        "local_bounds": true,
+        "reference_to_surface": true,
+        "surface_to_reference": true,
+        "rectangular_boundary": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-2-pair-1-baseline",
+      "family": "editing-existing",
+      "arm": "baseline",
+      "pair": 1,
+      "task": "experiments/tasks/edit_existing.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-2-pair-1-baseline",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 9,
+        "completed_calls": 9,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 2,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 1,
+          "get_objects": 2,
+          "modify_objects": 1,
+          "update_object_attributes": 1
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 1,
+          "get_objects": 2,
+          "modify_objects": 1,
+          "update_object_attributes": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 177399,
+          "cached_input_tokens": 152576,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1008,
+          "reasoning_output_tokens": 250
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 37.31921687501017,
+      "source_sha256": "3e166338a72dd7e7bbafed0841cef97920685943957d0ea309ede5b25035ff36",
+      "evaluation_sha256": "aaf44cb23aada130b7356538de72d22d88ffe0e2b8cb6c0c716dafcc7e59ab99",
+      "environment_sha256": "cab98bd52b53fc1319fa451b18a15516b3b7f33254b18c5860f7acd54e31e370",
+      "artifact_sha256": "adef32c79ca38a0bce1e3e1bcf7d8c9672b77d31658d4aec5f2a77b3b61e30ee",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "housing/solid_box": true,
+        "housing/min": true,
+        "housing/max": true,
+        "housing/volume": true,
+        "housing/attributes": true,
+        "housing/identity": true,
+        "reference/solid_box": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/volume": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-2-pair-1-candidate",
+      "family": "editing-existing",
+      "arm": "candidate",
+      "pair": 1,
+      "task": "experiments/tasks/edit_existing.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-2-pair-1-candidate",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 11,
+        "completed_calls": 11,
+        "unfinished_calls": 0,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "get_object_info": 1
+        },
+        "tools": {
+          "analyze_objects": 2,
+          "get_modeling_guidance": 1,
+          "get_object_info": 4,
+          "get_objects": 2,
+          "modify_object": 1,
+          "update_object_attributes": 1
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "get_modeling_guidance": 1,
+          "get_object_info": 4,
+          "get_objects": 2,
+          "modify_object": 1,
+          "update_object_attributes": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 383026,
+          "cached_input_tokens": 340992,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1399,
+          "reasoning_output_tokens": 259
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 53.076198791968636,
+      "source_sha256": "3caa9417ffb0af7ea1dbbe182d88613caff871a20f04df1723f01b47e21b93f5",
+      "evaluation_sha256": "b447122034aabc0e118f3bf18f146651a08d3a937a2dc82897590126658fd6e8",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "artifact_sha256": "4ffde3c9a3e5e946588020936be9f18a48871d551f41f435dfb0b0066bfb6f03",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "housing/solid_box": true,
+        "housing/min": true,
+        "housing/max": true,
+        "housing/volume": true,
+        "housing/attributes": true,
+        "housing/identity": true,
+        "reference/solid_box": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/volume": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-2-pair-2-candidate",
+      "family": "editing-existing",
+      "arm": "candidate",
+      "pair": 2,
+      "task": "experiments/tasks/edit_existing.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-2-pair-2-candidate",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 13,
+        "completed_calls": 13,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 4,
+          "get_document_summary": 1,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "commands": {
+          "analyze_objects": 4,
+          "get_document_summary": 1,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 306678,
+          "cached_input_tokens": 263936,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1530,
+          "reasoning_output_tokens": 299
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 58.939607417036314,
+      "source_sha256": "e67e6c51ed005e78c85d4f9076e61d660778b0192998dc8eceb38d439746293a",
+      "evaluation_sha256": "f31848601f390d1b74c2d1cb4b3f2adb279f091934fe573946276d3bf2522aba",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "artifact_sha256": "fe9f87089038c6ae912e611f2fb77afd64712367cd3c91887dc65d138e0ea9c1",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "housing/solid_box": true,
+        "housing/min": true,
+        "housing/max": true,
+        "housing/volume": true,
+        "housing/attributes": true,
+        "housing/identity": true,
+        "reference/solid_box": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/volume": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-2-pair-2-baseline",
+      "family": "editing-existing",
+      "arm": "baseline",
+      "pair": 2,
+      "task": "experiments/tasks/edit_existing.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-2-pair-2-baseline",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 12,
+        "completed_calls": 12,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 2,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 259961,
+          "cached_input_tokens": 203264,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1494,
+          "reasoning_output_tokens": 355
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 47.62617662502453,
+      "source_sha256": "5615fd1b640db94faeb6858257971364551e2ba47ee131732794dbb7dbec6641",
+      "evaluation_sha256": "cad7df8e08cce90cb4559a9dc9a56546ec339804dc1d8f519f019e25f13e6db0",
+      "environment_sha256": "cab98bd52b53fc1319fa451b18a15516b3b7f33254b18c5860f7acd54e31e370",
+      "artifact_sha256": "b2fafff8cfc8ebaf82d46f0307604904fccb1277a8c9e4f50b3491cf08356027",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "housing/solid_box": true,
+        "housing/min": true,
+        "housing/max": true,
+        "housing/volume": true,
+        "housing/attributes": true,
+        "housing/identity": true,
+        "reference/solid_box": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/volume": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-3-pair-1-baseline",
+      "family": "curve-network-joining",
+      "arm": "baseline",
+      "pair": 1,
+      "task": "experiments/tasks/join_closed_network.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-3-pair-1-baseline",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 16,
+        "completed_calls": 16,
+        "unfinished_calls": 0,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "update_object_attributes": 1
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "get_document_summary": 1,
+          "get_object_attributes": 2,
+          "get_objects": 2,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "get_document_summary": 1,
+          "get_object_attributes": 2,
+          "get_objects": 2,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 6,
+        "usage": {
+          "input_tokens": 375903,
+          "cached_input_tokens": 339968,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1754,
+          "reasoning_output_tokens": 574
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 62.7492952090106,
+      "source_sha256": "a169c6e98e253946f99adc193671ed2b42dda25f14d018f59b8dae07da859164",
+      "evaluation_sha256": "46386468c3e2a9b37380d46169b930d35465ec0ea16ea023dddb8decd7d12d96",
+      "environment_sha256": "cab98bd52b53fc1319fa451b18a15516b3b7f33254b18c5860f7acd54e31e370",
+      "artifact_sha256": "43a7667f86cdc981fc2c49a04061c91ef52e8b20586ca6c2fb437068a4db7a2b",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "joined_outline/min": true,
+        "joined_outline/max": true,
+        "joined_outline/edges": true,
+        "joined_outline/closure": true,
+        "joined_outline/curve_length": true,
+        "joined_outline/attributes": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/edges": true,
+        "reference/closure": true,
+        "reference/curve_length": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-3-pair-1-candidate",
+      "family": "curve-network-joining",
+      "arm": "candidate",
+      "pair": 1,
+      "task": "experiments/tasks/join_closed_network.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-3-pair-1-candidate",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 22,
+        "completed_calls": 22,
+        "unfinished_calls": 0,
+        "failed_calls": 3,
+        "failures_by_tool": {
+          "execute_rhinoscript_python_code": 1,
+          "run_command": 1,
+          "update_object_attributes": 1
+        },
+        "tools": {
+          "analyze_objects": 2,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_objects": 3,
+          "get_rhinoscript_docs": 1,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "select_objects": 1,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_objects": 3,
+          "get_rhinoscript_docs": 1,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "select_objects": 1,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 6,
+        "usage": {
+          "input_tokens": 714686,
+          "cached_input_tokens": 659968,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3193,
+          "reasoning_output_tokens": 1459
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 114.60538791702129,
+      "source_sha256": "868ab2fc3bb5cb2741c236b7e8610b98a389d29ecf7980d67a63a16d598ae237",
+      "evaluation_sha256": "12feff5b4a9d755f3f80af2265a6f55e5c8306cc483e442e412363430d6431ea",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "artifact_sha256": "bcbe3b2f8ac3526260e91b036fd823b6445abe71b848d42f0aef0dd240b2e840",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "joined_outline/min": true,
+        "joined_outline/max": true,
+        "joined_outline/edges": true,
+        "joined_outline/closure": true,
+        "joined_outline/curve_length": true,
+        "joined_outline/attributes": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/edges": true,
+        "reference/closure": true,
+        "reference/curve_length": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-3-pair-2-candidate",
+      "family": "curve-network-joining",
+      "arm": "candidate",
+      "pair": 2,
+      "task": "experiments/tasks/join_closed_network.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-3-pair-2-candidate",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 16,
+        "completed_calls": 16,
+        "unfinished_calls": 0,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "execute_rhinocommon_csharp_code": 1,
+          "update_object_attributes": 1
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "execute_rhinocommon_csharp_code": 1,
+          "get_document_summary": 1,
+          "get_object_attributes": 1,
+          "get_objects": 2,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "execute_rhinocommon_csharp_code": 1,
+          "get_document_summary": 1,
+          "get_object_attributes": 1,
+          "get_objects": 2,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 6,
+        "usage": {
+          "input_tokens": 470173,
+          "cached_input_tokens": 426496,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2648,
+          "reasoning_output_tokens": 896
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 80.73053983302088,
+      "source_sha256": "0e9618f2e2ca5d895f8eaa3368bd0f3539fdac8e6a3b74bd5c641091b3fa53b1",
+      "evaluation_sha256": "024b1ee6f0c82185e663ed0af31371cc7dcc563de1cfc18e115bba394c5c359b",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "artifact_sha256": "4b3582a3f06dc67e9ac221a2856abaf2aff779693691e004d5c099140997a35d",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "joined_outline/min": true,
+        "joined_outline/max": true,
+        "joined_outline/edges": true,
+        "joined_outline/closure": true,
+        "joined_outline/curve_length": true,
+        "joined_outline/attributes": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/edges": true,
+        "reference/closure": true,
+        "reference/curve_length": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-3-pair-2-baseline",
+      "family": "curve-network-joining",
+      "arm": "baseline",
+      "pair": 2,
+      "task": "experiments/tasks/join_closed_network.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-3-pair-2-baseline",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 26,
+        "completed_calls": 26,
+        "unfinished_calls": 0,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "execute_rhinoscript_python_code": 1,
+          "run_command": 1
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 3,
+          "get_object_info": 2,
+          "get_objects": 3,
+          "get_or_set_current_layer": 1,
+          "get_rhinoscript_docs": 1,
+          "get_selected_objects_info": 1,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "select_objects": 1
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 3,
+          "get_object_info": 2,
+          "get_objects": 3,
+          "get_or_set_current_layer": 1,
+          "get_rhinoscript_docs": 1,
+          "get_selected_objects_info": 1,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "select_objects": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 6,
+        "usage": {
+          "input_tokens": 507424,
+          "cached_input_tokens": 465664,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2789,
+          "reasoning_output_tokens": 960
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 100.19513404200552,
+      "source_sha256": "c4fbeb6bef08a047b22dcbbdb492bd7cc75a737562689734bb856a2cd8da028d",
+      "evaluation_sha256": "bb775127210a3ed6447f8bbccfc0a6213473a736948b83e51effbf11eb3c335a",
+      "environment_sha256": "cab98bd52b53fc1319fa451b18a15516b3b7f33254b18c5860f7acd54e31e370",
+      "artifact_sha256": "319e3125c5183b699e05bee83a9693aa9eef7ce9540accf4d837f5cb5a5ad1f8",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "joined_outline/min": true,
+        "joined_outline/max": true,
+        "joined_outline/edges": true,
+        "joined_outline/closure": true,
+        "joined_outline/curve_length": true,
+        "joined_outline/attributes": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/edges": true,
+        "reference/closure": true,
+        "reference/curve_length": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-4-pair-1-baseline",
+      "family": "curve-network-joining",
+      "arm": "baseline",
+      "pair": 1,
+      "task": "experiments/tasks/join_two_components.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-4-pair-1-baseline",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 22,
+        "completed_calls": 22,
+        "unfinished_calls": 0,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "execute_rhinocommon_csharp_code": 1
+        },
+        "tools": {
+          "analyze_objects": 2,
+          "create_layer": 1,
+          "create_object": 2,
+          "delete_object": 7,
+          "execute_rhinocommon_csharp_code": 1,
+          "get_document_summary": 1,
+          "get_object_attributes": 3,
+          "get_object_info": 1,
+          "get_objects": 2,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "create_layer": 1,
+          "create_object": 2,
+          "delete_object": 7,
+          "execute_rhinocommon_csharp_code": 1,
+          "get_document_summary": 1,
+          "get_object_attributes": 3,
+          "get_object_info": 1,
+          "get_objects": 2,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 7,
+        "usage": {
+          "input_tokens": 522853,
+          "cached_input_tokens": 476416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2693,
+          "reasoning_output_tokens": 664
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 87.6648763330304,
+      "source_sha256": "bc1b0aba26d0d567aa97fb44f20073806cb9b9f302f065b80c9a12a7982b3a9d",
+      "evaluation_sha256": "6c25a34984d83064e4dd9dc436967cbd4a1d6e570a66ae1b0211c48f3e296bce",
+      "environment_sha256": "cab98bd52b53fc1319fa451b18a15516b3b7f33254b18c5860f7acd54e31e370",
+      "artifact_sha256": "d766ae6ad591a80eaab79de536e77a4492fd3980dcb9dabc6eb66c381a6b69ef",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "open_chain/min": true,
+        "open_chain/max": true,
+        "open_chain/edges": true,
+        "open_chain/closure": true,
+        "open_chain/curve_length": true,
+        "open_chain/attributes": true,
+        "closed_loop/min": true,
+        "closed_loop/max": true,
+        "closed_loop/edges": true,
+        "closed_loop/closure": true,
+        "closed_loop/curve_length": true,
+        "closed_loop/attributes": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/point": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-4-pair-1-candidate",
+      "family": "curve-network-joining",
+      "arm": "candidate",
+      "pair": 1,
+      "task": "experiments/tasks/join_two_components.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-4-pair-1-candidate",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 22,
+        "completed_calls": 22,
+        "unfinished_calls": 0,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "execute_rhinoscript_python_code": 1,
+          "run_command": 1
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_objects": 1,
+          "delete_object": 7,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_objects": 5,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_objects": 1,
+          "delete_object": 7,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_objects": 5,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 7,
+        "usage": {
+          "input_tokens": 598492,
+          "cached_input_tokens": 540416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2530,
+          "reasoning_output_tokens": 656
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 80.86846941697877,
+      "source_sha256": "f3ecf252bc47a111d3baa5bf37b93b0d27faf7111657351857ccfa81e1b78128",
+      "evaluation_sha256": "161a7cce22900137afae9d5632e659a15e559e3211f860ca529fda1ac2624586",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "artifact_sha256": "a61d105f539f54c3651a76c3d3b5cb6ac9d8909275bb1d67114681e3d7c2486c",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "open_chain/min": true,
+        "open_chain/max": true,
+        "open_chain/edges": true,
+        "open_chain/closure": true,
+        "open_chain/curve_length": true,
+        "open_chain/attributes": true,
+        "closed_loop/min": true,
+        "closed_loop/max": true,
+        "closed_loop/edges": true,
+        "closed_loop/closure": true,
+        "closed_loop/curve_length": true,
+        "closed_loop/attributes": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/point": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-4-pair-2-candidate",
+      "family": "curve-network-joining",
+      "arm": "candidate",
+      "pair": 2,
+      "task": "experiments/tasks/join_two_components.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-4-pair-2-candidate",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 21,
+        "completed_calls": 21,
+        "unfinished_calls": 0,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "execute_rhinocommon_csharp_code": 1,
+          "run_command": 1
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_objects": 1,
+          "delete_object": 7,
+          "execute_rhinocommon_csharp_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 1,
+          "get_objects": 2,
+          "get_selected_objects_info": 1,
+          "run_command": 1,
+          "select_objects": 1,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_objects": 1,
+          "delete_object": 7,
+          "execute_rhinocommon_csharp_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 1,
+          "get_objects": 2,
+          "get_selected_objects_info": 1,
+          "run_command": 1,
+          "select_objects": 1,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 7,
+        "usage": {
+          "input_tokens": 717700,
+          "cached_input_tokens": 665344,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3244,
+          "reasoning_output_tokens": 1251
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 111.37142070900882,
+      "source_sha256": "0256060c974d343ba087ca9d48059b1e3175e7626b4750b6914c951c3e1a5c79",
+      "evaluation_sha256": "03d70913891f6ea147db3c61a0762c1b3a956122322d02371622041b99b7c1af",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "artifact_sha256": "992a393a13d3a8d37ae462ff41d65df1ecf74acd742375ad56e54119871ae1dd",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "open_chain/min": true,
+        "open_chain/max": true,
+        "open_chain/edges": true,
+        "open_chain/closure": true,
+        "open_chain/curve_length": true,
+        "open_chain/attributes": true,
+        "closed_loop/min": true,
+        "closed_loop/max": true,
+        "closed_loop/edges": true,
+        "closed_loop/closure": true,
+        "closed_loop/curve_length": true,
+        "closed_loop/attributes": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/point": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true
+      },
+      "preserved": true
+    },
+    {
+      "id": "task-4-pair-2-baseline",
+      "family": "curve-network-joining",
+      "arm": "baseline",
+      "pair": 2,
+      "task": "experiments/tasks/join_two_components.json",
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-4-pair-2-baseline",
+      "task_verdict": "pass",
+      "metrics": {
+        "mcp_attempts": 25,
+        "completed_calls": 25,
+        "unfinished_calls": 0,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "execute_rhinoscript_python_code": 1,
+          "run_command": 1
+        },
+        "tools": {
+          "analyze_objects": 2,
+          "create_layer": 1,
+          "create_objects": 1,
+          "delete_object": 7,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 1,
+          "get_object_info": 2,
+          "get_objects": 2,
+          "get_rhinoscript_docs": 1,
+          "get_selected_objects_info": 1,
+          "run_command": 1,
+          "select_objects": 1,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "create_layer": 1,
+          "create_objects": 1,
+          "delete_object": 7,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 1,
+          "get_object_info": 2,
+          "get_objects": 2,
+          "get_rhinoscript_docs": 1,
+          "get_selected_objects_info": 1,
+          "run_command": 1,
+          "select_objects": 1,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 7,
+        "usage": {
+          "input_tokens": 663033,
+          "cached_input_tokens": 608512,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2640,
+          "reasoning_output_tokens": 851
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "elapsed_seconds": 87.73616904200753,
+      "source_sha256": "315e03aaca80de6c922494140ad99d92165608ca73f595ee736ec9e5d177c405",
+      "evaluation_sha256": "1a757edd31874e8b2eff225254024fe58217f096929b7b4e0e206ff4073d18a5",
+      "environment_sha256": "cab98bd52b53fc1319fa451b18a15516b3b7f33254b18c5860f7acd54e31e370",
+      "artifact_sha256": "fa1f577710074603181408f4a14eb2d7e3308004a35dbd75602a1529c3516091",
+      "checks": {
+        "millimeters": true,
+        "exact_objects": true,
+        "exact_layers": true,
+        "original_layers_unchanged": true,
+        "open_chain/min": true,
+        "open_chain/max": true,
+        "open_chain/edges": true,
+        "open_chain/closure": true,
+        "open_chain/curve_length": true,
+        "open_chain/attributes": true,
+        "closed_loop/min": true,
+        "closed_loop/max": true,
+        "closed_loop/edges": true,
+        "closed_loop/closure": true,
+        "closed_loop/curve_length": true,
+        "closed_loop/attributes": true,
+        "reference/min": true,
+        "reference/max": true,
+        "reference/point": true,
+        "reference/attributes": true,
+        "reference/identity": true,
+        "reference/unchanged": true
+      },
+      "preserved": true
+    }
+  ],
+  "cross_agent": {
+    "status": "failed_no_regression_rule",
+    "reason": "Panel candidate has 4 failed calls versus 2 in timed-out baseline; editing stays pass with zero failures. Timeout is retained and unscored, not a geometry pass.",
+    "runs": [
+      {
+        "id": "m3b-claude-20260910-144547-9bdbc412-task-1-baseline",
+        "family": "curved-panels",
+        "cohort": "claude-baseline",
+        "source": "experiments/runs/m3b-claude-20260910-144547-9bdbc412/task-1-baseline",
+        "session_status": "timed_out",
+        "task_verdict": "unscored",
+        "elapsed_seconds": 240.56594858301105,
+        "metrics": {
+          "mcp_attempts": 4,
+          "completed_calls": 4,
+          "unfinished_calls": 0,
+          "failed_calls": 2,
+          "failures_by_tool": {
+            "execute_rhinocommon_csharp_code": 1,
+            "execute_rhinoscript_python_code": 1
+          },
+          "tools": {
+            "execute_rhinocommon_csharp_code": 1,
+            "execute_rhinoscript_python_code": 1,
+            "get_document_summary": 1,
+            "get_modeling_guidance": 1
+          },
+          "commands": {
+            "execute_rhinocommon_csharp_code": 1,
+            "execute_rhinoscript_python_code": 1,
+            "get_document_summary": 1,
+            "get_modeling_guidance": 1
+          },
+          "schema_queries": 0,
+          "delete_calls": 0,
+          "usage": null,
+          "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+        },
+        "source_sha256": "e6521322e6247fb3a25cbf713bc237be465068802928f14a0f3d299e24c0f8bc",
+        "evaluation_sha256": null,
+        "preserved": true
+      },
+      {
+        "id": "m3b-claude-20260910-144547-9bdbc412-task-1-candidate",
+        "family": "curved-panels",
+        "cohort": "claude-candidate",
+        "source": "experiments/runs/m3b-claude-20260910-144547-9bdbc412/task-1-candidate",
+        "session_status": "completed",
+        "task_verdict": "pass",
+        "elapsed_seconds": 133.338843000005,
+        "metrics": {
+          "mcp_attempts": 11,
+          "completed_calls": 11,
+          "unfinished_calls": 0,
+          "failed_calls": 4,
+          "failures_by_tool": {
+            "create_object": 2,
+            "execute_rhinocommon_csharp_code": 1,
+            "execute_rhinoscript_python_code": 1
+          },
+          "tools": {
+            "analyze_objects": 2,
+            "create_object": 3,
+            "execute_rhinocommon_csharp_code": 1,
+            "execute_rhinoscript_python_code": 1,
+            "get_document_summary": 1,
+            "get_modeling_guidance": 1,
+            "modify_object": 1,
+            "search_rhinoscript_functions": 1
+          },
+          "commands": {
+            "analyze_objects": 2,
+            "create_object": 3,
+            "execute_rhinocommon_csharp_code": 1,
+            "execute_rhinoscript_python_code": 1,
+            "get_document_summary": 1,
+            "get_modeling_guidance": 1,
+            "modify_object": 1,
+            "search_rhinoscript_functions": 1
+          },
+          "schema_queries": 0,
+          "delete_calls": 0,
+          "usage": {
+            "input_tokens": 22,
+            "cache_creation_input_tokens": 55774,
+            "cache_read_input_tokens": 444358,
+            "output_tokens": 13488,
+            "output_tokens_details": {
+              "thinking_tokens": 10379
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 55774,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 574,
+                "cache_read_input_tokens": 53229,
+                "cache_creation_input_tokens": 2545,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 2545
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard"
+          },
+          "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+        },
+        "source_sha256": "b82e2cd2745631700b013d1213fb19f644b3a0a214aedd8fff1946a26e0e9820",
+        "evaluation_sha256": "3f5d143712b829124e1a20f2c3777c8b97c33bafa14dd023d4ab2cb188beaccf",
+        "preserved": true
+      },
+      {
+        "id": "m3b-claude-20260910-144547-9bdbc412-task-2-baseline",
+        "family": "editing-existing",
+        "cohort": "claude-baseline",
+        "source": "experiments/runs/m3b-claude-20260910-144547-9bdbc412/task-2-baseline",
+        "session_status": "completed",
+        "task_verdict": "pass",
+        "elapsed_seconds": 19.763284209009726,
+        "metrics": {
+          "mcp_attempts": 6,
+          "completed_calls": 6,
+          "unfinished_calls": 0,
+          "failed_calls": 0,
+          "failures_by_tool": {},
+          "tools": {
+            "analyze_objects": 2,
+            "get_document_summary": 1,
+            "get_object_attributes": 1,
+            "get_objects": 1,
+            "modify_object": 1
+          },
+          "commands": {
+            "analyze_objects": 2,
+            "get_document_summary": 1,
+            "get_object_attributes": 1,
+            "get_objects": 1,
+            "modify_object": 1
+          },
+          "schema_queries": 0,
+          "delete_calls": 0,
+          "usage": {
+            "input_tokens": 8,
+            "cache_creation_input_tokens": 42329,
+            "cache_read_input_tokens": 120080,
+            "output_tokens": 1181,
+            "output_tokens_details": {
+              "thinking_tokens": 279
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 42329,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 378,
+                "cache_read_input_tokens": 41158,
+                "cache_creation_input_tokens": 1171,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 1171
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard"
+          },
+          "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+        },
+        "source_sha256": "44e6396184f846adfbcbfc13fe36d6ff4273446a7b2b83ed689290ec9ffb97ac",
+        "evaluation_sha256": "2d64932556234ae03fc2aea159d0b4e0edfbbcde91a184add5402e6b7a98f72e",
+        "preserved": true
+      },
+      {
+        "id": "m3b-claude-20260910-144547-9bdbc412-task-2-candidate",
+        "family": "editing-existing",
+        "cohort": "claude-candidate",
+        "source": "experiments/runs/m3b-claude-20260910-144547-9bdbc412/task-2-candidate",
+        "session_status": "completed",
+        "task_verdict": "pass",
+        "elapsed_seconds": 16.024864791019354,
+        "metrics": {
+          "mcp_attempts": 6,
+          "completed_calls": 6,
+          "unfinished_calls": 0,
+          "failed_calls": 0,
+          "failures_by_tool": {},
+          "tools": {
+            "analyze_objects": 2,
+            "get_document_summary": 2,
+            "get_object_attributes": 1,
+            "modify_object": 1
+          },
+          "commands": {
+            "analyze_objects": 2,
+            "get_document_summary": 2,
+            "get_object_attributes": 1,
+            "modify_object": 1
+          },
+          "schema_queries": 0,
+          "delete_calls": 0,
+          "usage": {
+            "input_tokens": 8,
+            "cache_creation_input_tokens": 43996,
+            "cache_read_input_tokens": 120581,
+            "output_tokens": 1244,
+            "output_tokens_details": {
+              "thinking_tokens": 335
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 43996,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 389,
+                "cache_read_input_tokens": 41361,
+                "cache_creation_input_tokens": 2635,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 2635
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard"
+          },
+          "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+        },
+        "source_sha256": "03a5e74deff111ea2d923fc17d1beb410f0ba3d1eb683d57bf59c2eb90c95077",
+        "evaluation_sha256": "0c786d3d38704131247bb676a555f87dfb91e150de48e851b88bafcad6aa0ba5",
+        "preserved": true
+      }
+    ],
+    "registry": "experiments/runs/m3b-claude-20260910-144547-9bdbc412/registry.json"
+  },
+  "candidate_shipped": false,
+  "limitations": [
+    "Two repeats per arm/task; descriptive evidence, not statistical proof.",
+    "Requested model alias/effort pinned; backend snapshot unavailable.",
+    "Held-out coverage is defined by the separately reviewed family allocation.",
+    "Correctness precedes efficiency; tokens/time are secondary observations.",
+    "Evaluation uses the trusted baseline after all candidate sessions stop; this is not an adversarial OS sandbox."
+  ]
+}

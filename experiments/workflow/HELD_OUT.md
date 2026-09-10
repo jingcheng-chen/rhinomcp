@@ -120,3 +120,9 @@ including reversed-order equivalents and connectivity/reference failures. The
 predeclared review is `M3B_CYCLE1_REVIEW.md`; source/catalog checks are in
 `m3b-cycle1-source-validation.json`, calibration in `m3b-curve-calibration.json`.
 The family is spent for this validation only; no replacement or closure yet.
+
+M3b-1 validation is closed as rejected against the immutable
+`m3b-cycle1-results.json` hash. All 16 Codex saved outputs pass, but the efficiency
+and failed-call rule fails; the four scheduled Claude attempts are recorded too.
+`directional-curve-projection-v1` supplies two sealed replacement cases and remains
+available. Instance/block reuse is still unopened.

@@ -174,21 +174,25 @@ def trace(path, timings=None):
 def cause(row):
     text = canonical(row.get("error") or row.get("result") or "").lower()
     patterns = [
+        ("missing_object", r"\bobject\b.*not found|could not find.*\bobject\b"),
+        ("missing_layer", r"layer.*not found"),
+        (
+            "host_execution_refusal",
+            r"execution tools are refused during supervised host trials",
+        ),
         (
             "gateway_scope",
             r"outside .*scope|not (?:allowed|exposed)|(?:call|tool) budget|document changed",
         ),
         (
             "schema_input",
-            r"validation error|unexpected token|error reading|must exceed|missing|required|invalid (?:argument|parameter)|unknown (?:argument|parameter)",
+            r"validation error|unexpected token|error reading|must exceed|missing|require[ds]|invalid (?:argument|parameter)|unknown (?:argument|parameter)",
         ),
         (
             "runtime_exception",
             r"object reference|exception|nullreference|method not found",
         ),
         ("transport", r"connection refused|timed? out|timeout|disconnected|socket"),
-        ("missing_object", r"object.*not found|could not find.*object"),
-        ("missing_layer", r"layer.*not found"),
     ]
     return next(
         (name for name, pattern in patterns if re.search(pattern, text)), "unknown"

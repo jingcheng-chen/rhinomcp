@@ -1,0 +1,15 @@
+{
+  "cycle": "M3b-2",
+  "runtime": "Released 0.4.1; supervised host, M5 deferred. The cycle1 analyze_objects wording failed its Codex keep rule and is not adopted. Its fixed Claude check is still completing. Cycle2 must use unchanged released production source as baseline.",
+  "scope": "Investigate the top actionable non-policy failure from cycle1: three update_object_attributes attempts assigned Joined before that layer existed (one baseline, two candidate). The Python description says optional destination name/full path but does not state that it must already exist. Consider a minimal description-only clarification of that existing precondition and create_layer dependency. Do not auto-create layers, change behavior/schema, add task recipes, or carry over cycle1 verification wording.",
+  "evidence": "17 failed calls in 16 saved-file-passing 0.4.1 sessions: 13 intentional host execution refusals (5 run_command,5 Python,3 C#), 3 missing-layer errors, 1 get_object_info(all=true) missing selector. The current auditor mislabels the three layer errors as missing_object because raw error text includes update_object_attributes; this is an instrumentation issue to correct separately. All three underlying errors explicitly say Layer Joined not found. Execution refusals are the gateway boundary, not plugin runtime failures; native joining capability would require a deferred plugin candidate.",
+  "discovery_families": [
+    "curve-network-joining",
+    "small-assemblies"
+  ],
+  "validation": "Two AB/BA pairs for one spent joining case and the table assembly task, plus two sealed directional-curve-projection cases. gpt-5.6-terra medium, 50 calls/240 seconds, full catalog with host execution refused. Candidate must pass all saved-file tasks, no per-task success or failed-call regression, benefit in at least one discovery family. Fixed Claude sonnet medium baseline/candidate checks on both discovery tasks, no regression before shipping. No retries.",
+  "held_out_families": [
+    "directional-curve-projection"
+  ],
+  "preserve": "Only update_object_attributes docstring; all executable AST, schema, other descriptions and plugin bytes identical. Parameters of sealed cases never supplied to builder/planner. No adoption without measured benefit. No merging or publication."
+}

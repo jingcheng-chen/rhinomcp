@@ -114,5 +114,31 @@
       "review_sha256": "f0ec10487e044704fc9c8f70c20a025a01fd5b750acfbfcde0a44fcac7aad236"
     },
     "sha256": "1d1e0f0d10f1c68abc80a8ac0de3c16ad8f8dd78cd9e0b533f18070e1c81a199"
+  },
+  {
+    "previous": "1d1e0f0d10f1c68abc80a8ac0de3c16ad8f8dd78cd9e0b533f18070e1c81a199",
+    "at": "2026-09-10T12:25:49.194819+00:00",
+    "body": {
+      "kind": "seal",
+      "id": "directional-curve-projection-v1",
+      "family": "directional-curve-projection",
+      "payload_sha256": "c025d5dd0f4bd16503cd6c7a1fa57d105f473c64cfb26a98a291ba9c69f8275f",
+      "cases": 2,
+      "novelty_review": "Reviewed historical audit, M2/M3 discovery and allocation metadata: directional projection of prepared spatial curves onto a separate surface is absent. Offset editing, section extraction and fragment joining are excluded and already spent. This family tests projection correspondence and preserved source/target geometry, not joining connectivity or another parameterization of an offset task.",
+      "calibration_required": true,
+      "replaces": "curve-network-joining-v1"
+    },
+    "sha256": "cee86126e376493d6addc89a80a2743d1719e80974f942cbb7f412d25708266e"
+  },
+  {
+    "previous": "cee86126e376493d6addc89a80a2743d1719e80974f942cbb7f412d25708266e",
+    "at": "2026-09-10T12:54:58.131916+00:00",
+    "body": {
+      "kind": "close",
+      "id": "curve-network-joining-v1",
+      "outcome": "rejected",
+      "report_sha256": "4d61536fbae7f8c8933b09a44dfbbe855bd9feb0bf2ebee07cdea86751ca666d"
+    },
+    "sha256": "ee5375ab9b1df6f3c4ae7d07e5d10208b4a6f77375466b8991af0255b2595d13"
   }
 ]

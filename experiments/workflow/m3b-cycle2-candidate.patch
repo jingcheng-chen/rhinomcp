@@ -1,0 +1,14 @@
+diff --git a/server/src/rhinomcp/tools/object_attributes.py b/server/src/rhinomcp/tools/object_attributes.py
+index ac611a2..b9ced51 100644
+--- a/server/src/rhinomcp/tools/object_attributes.py
++++ b/server/src/rhinomcp/tools/object_attributes.py
+@@ -58,7 +58,8 @@ def update_object_attributes(
+     - id: The id of the object to update
+     - name: The name of the object to update
+     - new_name: Optional new object name
+-    - layer: Optional destination layer name or full path
++    - layer: Optional destination layer name or full path; must already exist.
++    This tool does not create layers. Use create_layer before assignment if needed.
+     - color: Optional RGB color [r, g, b]. Sets color source to object.
+     - material_index: Optional Rhino material table index. Sets material source to object.
+     - visible: Optional visibility flag. False hides the object.

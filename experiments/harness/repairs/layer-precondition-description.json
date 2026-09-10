@@ -1,0 +1,11 @@
+{
+  "baseline_revision": "releases/0.4.1",
+  "read_paths": [
+    "server/src/rhinomcp/tools/object_attributes.py"
+  ],
+  "write_paths": [
+    "server/src/rhinomcp/tools/object_attributes.py"
+  ],
+  "requirements": "Change only the update_object_attributes function docstring, preferably the layer parameter bullet. State that a supplied destination layer name/full path must already exist; this tool does not create it. Direct clients to create_layer before assignment when needed. Keep wording concise and generic. Preserve every other function docstring, all executable AST, decorators, signatures, schema, return docs and all other source. Do not add verification wording from cycle1, automatic layer creation, recipes or claims of measured benefit.",
+  "acceptance": "Supervisor reviews unchanged executable AST and identical catalog except update_object_attributes description, runs existing tests and fixed cross-family/Claude validation. No plugin build or installation."
+}
