@@ -4,6 +4,18 @@ Server and plugin share one version. Update them together: the server sends
 commands the matching plugin understands, and an older plugin silently ignores
 parameters it does not know.
 
+## 0.4.1.1 — unreleased (prepared 2026-09-13)
+
+### Fixed
+
+- Normalize numeric negative zero in plugin results before response validation
+  and MCP output. Strict clients can now consume geometry containing `-0.0`
+  without rejecting an already-completed operation (#57). Nonzero measurements
+  and strings are preserved. The fix works with existing plugins; raw TCP
+  responses are unchanged.
+- Version compatibility checks retain nonzero fourth components, distinguishing
+  patch revision `0.4.1.1` from `0.4.1`.
+
 ## 0.4.1 — unreleased (prepared 2026-09-10)
 
 ### Fixed

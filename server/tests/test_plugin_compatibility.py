@@ -306,6 +306,8 @@ class TestVersionSkew:
     [
         ("0.4.0", (0, 4, 0)),
         ("0.4.0.0", (0, 4, 0)),
+        ("0.4.1.1", (0, 4, 1, 1)),
+        ("0.4.1.1.0", (0, 4, 1, 1)),
         ("0.4.0+abc123", (0, 4, 0)),
         ("0.0.0-mock", (0, 0, 0)),
         ("v1.2", (1, 2, 0)),
@@ -318,3 +320,15 @@ def test_parse_version(text, expected):
     from rhinomcp.server import parse_version
 
     assert parse_version(text) == expected
+
+
+def test_version_skew_retains_patch_revision():
+    from rhinomcp.server import version_skew_report
+
+    with patch.dict(version_skew_report.__globals__, server_version=lambda: "0.4.1.1"):
+        older = version_skew_report("0.4.1")
+        matching = version_skew_report("0.4.1.1")
+    assert older["plugin_matches_server"] is False
+    assert "older" in older["update_advice"]
+    assert matching["plugin_matches_server"] is True
+    assert matching["update_advice"] is None

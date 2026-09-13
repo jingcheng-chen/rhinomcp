@@ -165,14 +165,16 @@ def server_version() -> str | None:
 
 
 def parse_version(text) -> tuple | None:
-    """The leading dotted integers of a version string as a 3-tuple, or None.
+    """The leading dotted integers, retaining nonzero revisions, or None.
 
     "0.4.0", "0.4.0.0" and "0.4.0+abc" all read as (0, 4, 0); "unknown" as None.
     """
     match = _VERSION_PREFIX.match(str(text)) if text else None
     if not match:
         return None
-    parts = [int(part) for part in match.group(1).split(".")][:3]
+    parts = [int(part) for part in match.group(1).split(".")]
+    while len(parts) > 3 and parts[-1] == 0:
+        parts.pop()
     return tuple(parts + [0] * (3 - len(parts)))
 
 
@@ -231,6 +233,21 @@ def rhino_startup_error_message(
         f"{prefix} at {host}:{port}. "
         "Please start Rhino, run the Rhino command `mcpstart`, then retry the MCP request."
     )
+
+
+def _normalize_negative_zero(value: Any) -> Any:
+    """Remove signed zero from decoded results for strict MCP JSON clients.
+
+    JavaScript JSON serialization loses the sign of -0.0. Normalize only zero,
+    preserving nonzero measurements and strings containing serialized user data.
+    """
+    if isinstance(value, float):
+        return 0.0 if value == 0.0 else value
+    if isinstance(value, dict):
+        return {key: _normalize_negative_zero(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_normalize_negative_zero(item) for item in value]
+    return value
 
 
 @dataclass
@@ -580,7 +597,7 @@ class RhinoConnection:
                     )
                 raise Exception(message)
 
-            result = response.get("result", {})
+            result = _normalize_negative_zero(response.get("result", {}))
 
             # Post-flight: validate the unwrapped result against the response
             # contract, mirroring the pre-flight semantics. The C# side doesn't
