@@ -1,0 +1,19 @@
+{
+  "id": "m3-attribute-update-cross-family-v1",
+  "call_budget": 50,
+  "timeout_seconds": 240,
+  "tasks": [
+    {
+      "family": "small-assemblies",
+      "path": "experiments/tasks/table_assembly.json"
+    },
+    {
+      "family": "recovery",
+      "path": "experiments/tasks/recover_intermediate.json"
+    },
+    {
+      "family": "planar-curve-editing",
+      "path": "experiments/tasks/offset_outline.json"
+    }
+  ]
+}

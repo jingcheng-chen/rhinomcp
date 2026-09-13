@@ -1,0 +1,78 @@
+{
+  "id": "extract_sections-v1",
+  "type": "workflow_scene",
+  "family": "section-extraction",
+  "instruction": "The document contains stock, a closed solid on Parts. Extract its two closed planar section curves at world Z=5 and Z=15 mm. Keep stock unchanged, including its ID, geometry and attributes. Name the curves cut_low and cut_high and put both on the new Sections layer. Each curve has world XY bounds (0,0) to (60,35) mm at its section height. Keep exactly the original solid and these two curves, with no other new objects or layers; all must be visible and unlocked. Match bounds within 0.001 mm and area/perimeter within 1%.",
+  "units": "Millimeters",
+  "linear_tolerance": 0.001,
+  "relative_volume_tolerance": 0.01,
+  "initial": [
+    {
+      "name": "stock",
+      "layer": "Parts",
+      "min": [
+        0,
+        0,
+        0
+      ],
+      "max": [
+        60,
+        35,
+        20
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "name": "stock",
+      "layer": "Parts",
+      "min": [
+        0,
+        0,
+        0
+      ],
+      "max": [
+        60,
+        35,
+        20
+      ],
+      "preserve_from": "stock",
+      "unchanged": true
+    },
+    {
+      "name": "cut_low",
+      "layer": "Sections",
+      "shape": "rectangle_curve",
+      "min": [
+        0,
+        0,
+        5
+      ],
+      "max": [
+        60,
+        35,
+        5
+      ]
+    },
+    {
+      "name": "cut_high",
+      "layer": "Sections",
+      "shape": "rectangle_curve",
+      "min": [
+        0,
+        0,
+        15
+      ],
+      "max": [
+        60,
+        35,
+        15
+      ]
+    }
+  ],
+  "layers": [
+    "Parts",
+    "Sections"
+  ],
+  "inspection_names": []
+}

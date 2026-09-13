@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "const": "workflow_scene"
+    },
+    "family": {
+      "enum": [
+        "editing-existing",
+        "small-assemblies",
+        "document-inspection",
+        "recovery",
+        "planar-curve-editing",
+        "section-extraction",
+        "curve-network-joining",
+        "directional-curve-projection"
+      ]
+    },
+    "instruction": {
+      "type": "string",
+      "minLength": 1
+    },
+    "units": {
+      "const": "Millimeters"
+    },
+    "linear_tolerance": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "relative_volume_tolerance": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 0.1
+    },
+    "initial": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "layer": {
+            "type": "string",
+            "minLength": 1
+          },
+          "min": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number"
+            }
+          },
+          "max": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number"
+            }
+          },
+          "preserve_from": {
+            "type": "string"
+          },
+          "unchanged": {
+            "type": "boolean"
+          },
+          "shape": {
+            "enum": [
+              "box",
+              "rectangle_curve",
+              "polyline",
+              "point",
+              "rectangle_surface"
+            ]
+          },
+          "points": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "required": [
+          "name",
+          "layer",
+          "min",
+          "max"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "targets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "layer": {
+            "type": "string",
+            "minLength": 1
+          },
+          "min": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number"
+            }
+          },
+          "max": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number"
+            }
+          },
+          "preserve_from": {
+            "type": "string"
+          },
+          "unchanged": {
+            "type": "boolean"
+          },
+          "shape": {
+            "enum": [
+              "box",
+              "rectangle_curve",
+              "polyline",
+              "point",
+              "rectangle_surface"
+            ]
+          },
+          "points": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "required": [
+          "name",
+          "layer",
+          "min",
+          "max"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "layers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "inspection_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "relative_length_tolerance": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 0.1
+    }
+  },
+  "required": [
+    "id",
+    "type",
+    "family",
+    "instruction",
+    "units",
+    "linear_tolerance",
+    "relative_volume_tolerance",
+    "initial",
+    "targets",
+    "layers",
+    "inspection_names"
+  ],
+  "additionalProperties": false
+}

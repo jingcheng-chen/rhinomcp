@@ -1,0 +1,124 @@
+{
+  "runs": [
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-1-pair-1-baseline",
+      "family": "gh-point-array",
+      "cohort": "released-0.4.1-m6-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-1-pair-1-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-1-pair-1-candidate",
+      "family": "gh-point-array",
+      "cohort": "released-0.4.1-m6-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-1-pair-1-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-1-pair-2-candidate",
+      "family": "gh-point-array",
+      "cohort": "released-0.4.1-m6-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-1-pair-2-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-1-pair-2-baseline",
+      "family": "gh-point-array",
+      "cohort": "released-0.4.1-m6-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-1-pair-2-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-2-pair-1-baseline",
+      "family": "gh-circle-profiles",
+      "cohort": "released-0.4.1-m6-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-2-pair-1-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-2-pair-1-candidate",
+      "family": "gh-circle-profiles",
+      "cohort": "released-0.4.1-m6-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-2-pair-1-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-2-pair-2-candidate",
+      "family": "gh-circle-profiles",
+      "cohort": "released-0.4.1-m6-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-2-pair-2-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-2-pair-2-baseline",
+      "family": "gh-circle-profiles",
+      "cohort": "released-0.4.1-m6-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-2-pair-2-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-3-pair-1-baseline",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-3-pair-1-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-3-pair-1-candidate",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-3-pair-1-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-3-pair-2-candidate",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-3-pair-2-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-3-pair-2-baseline",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-3-pair-2-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-4-pair-1-baseline",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-4-pair-1-baseline"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-4-pair-1-candidate",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-4-pair-1-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-4-pair-2-candidate",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-candidate",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-4-pair-2-candidate"
+    },
+    {
+      "id": "workflow-binary-20260910-155941-b3b13d0e-task-4-pair-2-baseline",
+      "family": "gh-vector-frame",
+      "cohort": "released-0.4.1-m6-baseline",
+      "run": "experiments/runs/workflow-binary-20260910-155941-b3b13d0e/task-4-pair-2-baseline"
+    },
+    {
+      "id": "m6-claude-20260910-162811-f6f740b5-task-1-baseline",
+      "family": "gh-point-array",
+      "cohort": "claude-baseline",
+      "run": "experiments/runs/m6-claude-20260910-162811-f6f740b5/task-1-baseline"
+    },
+    {
+      "id": "m6-claude-20260910-162811-f6f740b5-task-1-candidate",
+      "family": "gh-point-array",
+      "cohort": "claude-candidate",
+      "run": "experiments/runs/m6-claude-20260910-162811-f6f740b5/task-1-candidate"
+    },
+    {
+      "id": "m6-claude-20260910-162811-f6f740b5-task-2-baseline",
+      "family": "gh-circle-profiles",
+      "cohort": "claude-baseline",
+      "run": "experiments/runs/m6-claude-20260910-162811-f6f740b5/task-2-baseline"
+    },
+    {
+      "id": "m6-claude-20260910-162811-f6f740b5-task-2-candidate",
+      "family": "gh-circle-profiles",
+      "cohort": "claude-candidate",
+      "run": "experiments/runs/m6-claude-20260910-162811-f6f740b5/task-2-candidate"
+    }
+  ]
+}

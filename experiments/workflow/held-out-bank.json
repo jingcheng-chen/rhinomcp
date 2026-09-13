@@ -1,0 +1,233 @@
+[
+  {
+    "previous": null,
+    "at": "2026-09-10T07:57:56.366766+00:00",
+    "body": {
+      "kind": "initialize",
+      "version": 1,
+      "discovery_families": [
+        "curved-panels",
+        "document-inspection",
+        "editing-existing",
+        "layer-organization",
+        "photo-reconstruction",
+        "posed-solids",
+        "primitives",
+        "recovery",
+        "small-assemblies",
+        "subtractive-solids",
+        "surface-construction",
+        "trimmed-patches"
+      ]
+    },
+    "sha256": "a55e1164bb02c60f6903b1fe8dd5c2404b4a27499f6544bdfd3a6052b8f9bacc"
+  },
+  {
+    "previous": "a55e1164bb02c60f6903b1fe8dd5c2404b4a27499f6544bdfd3a6052b8f9bacc",
+    "at": "2026-09-10T07:57:56.367452+00:00",
+    "body": {
+      "kind": "historical_spend",
+      "id": "m3-cycle1",
+      "family": "planar-curve-editing",
+      "validation": "m3-cycle1",
+      "evidence": "experiments/workflow/m3-cycle1-results.json",
+      "evidence_sha256": "cbf9bd723dcfda3e328f4a2b34fcb0fadfe6f843bdce33d460f026e60d755151",
+      "task_sha256": "7ee2b9770c16a9ff47ae5040dff99544b4fb415b00994024521e0ac4d59e3f73",
+      "note": "Imported after M3; original pre-dispatch declarations and all attempts remain in M3 evidence. This is not a new pre-M3 cryptographic reservation."
+    },
+    "sha256": "e98facd1622b564a05b810662a76900c9f8ad298a3325d18ca1ee003d10ebc67"
+  },
+  {
+    "previous": "e98facd1622b564a05b810662a76900c9f8ad298a3325d18ca1ee003d10ebc67",
+    "at": "2026-09-10T07:57:56.367878+00:00",
+    "body": {
+      "kind": "historical_spend",
+      "id": "m3-cycle2",
+      "family": "section-extraction",
+      "validation": "m3-cycle2",
+      "evidence": "experiments/workflow/m3-cycle2-results.json",
+      "evidence_sha256": "37984264195ed71733a5ed855d3957301341e85ab81eb1a4c5e009580a4eaec7",
+      "task_sha256": "75b9e688d688ad8994737c153e407ef1276e8ff22b60f5b2e980868f04d49744",
+      "note": "Imported after M3; original pre-dispatch declarations and all attempts remain in M3 evidence. This is not a new pre-M3 cryptographic reservation."
+    },
+    "sha256": "42c46465f3df8f41a1f08a0329ce86c73363b3e082dc777408ed122093ec8389"
+  },
+  {
+    "previous": "42c46465f3df8f41a1f08a0329ce86c73363b3e082dc777408ed122093ec8389",
+    "at": "2026-09-10T07:57:56.368319+00:00",
+    "body": {
+      "kind": "seal",
+      "id": "curve-network-joining-v1",
+      "family": "curve-network-joining",
+      "payload_sha256": "c3ba09d0f9f815dc3eefa8b621700ff810dc451dd84c37ee955998e0ea32e783",
+      "cases": 2,
+      "novelty_review": "Reviewed historical flaw corpus and M2/M3 family allocation. Endpoint-connectivity joining of multiple prepared curve fragments has not been a discovery task; planar offset and section extraction are spent and explicitly excluded. Family identity is the connectivity/join workflow, not its numeric dimensions.",
+      "calibration_required": true,
+      "replaces": "m3-cycle1"
+    },
+    "sha256": "420570fef64d7efdf5d5667e4c83efc995292dcbd6b3e65d0a6359ad3b97477d"
+  },
+  {
+    "previous": "420570fef64d7efdf5d5667e4c83efc995292dcbd6b3e65d0a6359ad3b97477d",
+    "at": "2026-09-10T07:57:56.368708+00:00",
+    "body": {
+      "kind": "close",
+      "id": "m3-cycle1",
+      "outcome": "kept",
+      "report_sha256": "cbf9bd723dcfda3e328f4a2b34fcb0fadfe6f843bdce33d460f026e60d755151"
+    },
+    "sha256": "160daa5a08f28b6f7f8138d2474c35db4e7633d18bf64a2d2936c635dca35402"
+  },
+  {
+    "previous": "160daa5a08f28b6f7f8138d2474c35db4e7633d18bf64a2d2936c635dca35402",
+    "at": "2026-09-10T07:57:56.369379+00:00",
+    "body": {
+      "kind": "seal",
+      "id": "instance-block-reuse-v1",
+      "family": "instance-block-reuse",
+      "payload_sha256": "2dd1ffbdca305a089bfcca179cf82259794239be2472d489627a5c1ebb7e019d",
+      "cases": 2,
+      "novelty_review": "Reviewed the historical and M2/M3 corpus. Prepared shared-definition instances and retained definition linkage have not been discovery tasks. Earlier small assemblies use independent solids; this family specifically requires shared instance identity and propagation rather than merely similar output geometry.",
+      "calibration_required": true,
+      "replaces": "m3-cycle2"
+    },
+    "sha256": "926c89c912efa148da2f296472c7e485ed630897091f139c036090a57b9eb197"
+  },
+  {
+    "previous": "926c89c912efa148da2f296472c7e485ed630897091f139c036090a57b9eb197",
+    "at": "2026-09-10T07:57:56.369857+00:00",
+    "body": {
+      "kind": "close",
+      "id": "m3-cycle2",
+      "outcome": "kept",
+      "report_sha256": "37984264195ed71733a5ed855d3957301341e85ab81eb1a4c5e009580a4eaec7"
+    },
+    "sha256": "02e6c9cb4a3ee252543eb1deb28e02f04522fb44f2cd8c8db6d2230458888923"
+  },
+  {
+    "previous": "02e6c9cb4a3ee252543eb1deb28e02f04522fb44f2cd8c8db6d2230458888923",
+    "at": "2026-09-10T12:20:20.099150+00:00",
+    "body": {
+      "kind": "spend",
+      "id": "curve-network-joining-v1",
+      "validation": "m3b-cycle1",
+      "review_sha256": "f0ec10487e044704fc9c8f70c20a025a01fd5b750acfbfcde0a44fcac7aad236"
+    },
+    "sha256": "1d1e0f0d10f1c68abc80a8ac0de3c16ad8f8dd78cd9e0b533f18070e1c81a199"
+  },
+  {
+    "previous": "1d1e0f0d10f1c68abc80a8ac0de3c16ad8f8dd78cd9e0b533f18070e1c81a199",
+    "at": "2026-09-10T12:25:49.194819+00:00",
+    "body": {
+      "kind": "seal",
+      "id": "directional-curve-projection-v1",
+      "family": "directional-curve-projection",
+      "payload_sha256": "c025d5dd0f4bd16503cd6c7a1fa57d105f473c64cfb26a98a291ba9c69f8275f",
+      "cases": 2,
+      "novelty_review": "Reviewed historical audit, M2/M3 discovery and allocation metadata: directional projection of prepared spatial curves onto a separate surface is absent. Offset editing, section extraction and fragment joining are excluded and already spent. This family tests projection correspondence and preserved source/target geometry, not joining connectivity or another parameterization of an offset task.",
+      "calibration_required": true,
+      "replaces": "curve-network-joining-v1"
+    },
+    "sha256": "cee86126e376493d6addc89a80a2743d1719e80974f942cbb7f412d25708266e"
+  },
+  {
+    "previous": "cee86126e376493d6addc89a80a2743d1719e80974f942cbb7f412d25708266e",
+    "at": "2026-09-10T12:54:58.131916+00:00",
+    "body": {
+      "kind": "close",
+      "id": "curve-network-joining-v1",
+      "outcome": "rejected",
+      "report_sha256": "4d61536fbae7f8c8933b09a44dfbbe855bd9feb0bf2ebee07cdea86751ca666d"
+    },
+    "sha256": "ee5375ab9b1df6f3c4ae7d07e5d10208b4a6f77375466b8991af0255b2595d13"
+  },
+  {
+    "previous": "ee5375ab9b1df6f3c4ae7d07e5d10208b4a6f77375466b8991af0255b2595d13",
+    "at": "2026-09-10T12:56:46.202776+00:00",
+    "body": {
+      "kind": "spend",
+      "id": "directional-curve-projection-v1",
+      "validation": "m3b-cycle2",
+      "review_sha256": "ac55b781afb6b0ce065032103160fdcfb434275c8367c51c8e594558502ad474"
+    },
+    "sha256": "a4498be41df7a9d10d44540dff8e349fd438c3fac157908699edbd92e60d7ab3"
+  },
+  {
+    "previous": "a4498be41df7a9d10d44540dff8e349fd438c3fac157908699edbd92e60d7ab3",
+    "at": "2026-09-10T13:00:44.180005+00:00",
+    "body": {
+      "kind": "seal",
+      "id": "mesh-connectivity-repair-v1",
+      "family": "mesh-connectivity-repair",
+      "payload_sha256": "89e886f33f7d1990981bfcfa3754aa901b8bf2a90454ced1a518070088f412c2",
+      "cases": 2,
+      "novelty_review": "The public historical corpus and M0-M3b bank cover Brep/curve creation, transforms, booleans, offsets, sections, joining and projection. Repairing mesh face connectivity while preserving geometric vertex positions has not been a discovery workflow; it is distinct from inspecting or creating another solid. Reserved for future capability validation, not asserted runnable on the current host catalog.",
+      "calibration_required": true,
+      "replaces": "directional-curve-projection-v1"
+    },
+    "sha256": "e8b48642e95389ae9a99b31592c82601d20c3c7b7fa17e37085861ac1906c6ed"
+  },
+  {
+    "previous": "e8b48642e95389ae9a99b31592c82601d20c3c7b7fa17e37085861ac1906c6ed",
+    "at": "2026-09-10T13:32:43.884538+00:00",
+    "body": {
+      "kind": "close",
+      "id": "directional-curve-projection-v1",
+      "outcome": "rejected",
+      "report_sha256": "156e3d444bb62768e8cdad3c323d75f35515c17f93cfce4bb3ef5ac85a6d17ae"
+    },
+    "sha256": "962d6af98bfe3071142c2e8ae85b0a81dbba7be3ddfe3afd79cbe2a115027df4"
+  },
+  {
+    "previous": "962d6af98bfe3071142c2e8ae85b0a81dbba7be3ddfe3afd79cbe2a115027df4",
+    "at": "2026-09-10T13:40:13.756922+00:00",
+    "body": {
+      "kind": "seal",
+      "id": "gh-vector-frame-v1",
+      "family": "gh-vector-frame",
+      "payload_sha256": "fc40c4384a3d611fe2b36d6356534203028058a636c9df1be5d69da495d533c2",
+      "cases": 2,
+      "novelty_review": "Sealed before any GH discovery. Vector cross products and orthogonal direction/length calculations are absent from prior Rhino discovery and the three declared GH families (point translation, circles, loft). New vector algebra dataflow, not another point-row parameterization.",
+      "calibration_required": true,
+      "replaces": null
+    },
+    "sha256": "20f3761f30fb0c840aa4d2d775c0dde71c78ba62ce73930a2ccc00e0e64558b9"
+  },
+  {
+    "previous": "20f3761f30fb0c840aa4d2d775c0dde71c78ba62ce73930a2ccc00e0e64558b9",
+    "at": "2026-09-10T13:56:39.307406+00:00",
+    "body": {
+      "kind": "spend",
+      "id": "gh-vector-frame-v1",
+      "validation": "m6-cycle1",
+      "review_sha256": "45e671a817c8d27b5d0618c06537e3ccbc7089bd5171530e349c426bb0ecd675"
+    },
+    "sha256": "875f089f7c1151f9681edab43db0b1ce8d5d2c6a39a979aa0b573b4b564c6123"
+  },
+  {
+    "previous": "875f089f7c1151f9681edab43db0b1ce8d5d2c6a39a979aa0b573b4b564c6123",
+    "at": "2026-09-10T13:58:02.285295+00:00",
+    "body": {
+      "kind": "seal",
+      "id": "gh-pattern-filter-v1",
+      "family": "gh-pattern-filter",
+      "payload_sha256": "e0f50a11f433f7a039d211bc5694e0ab2924b18989c2a41bdeb66577875c7918",
+      "cases": 2,
+      "novelty_review": "Reviewed GH discovery and the spent vector-frame allocation: no list-mask filtering has been used. This family tests Boolean pattern/data-list correspondence and retained ordering, not coordinate transformation, radius generation, loft geometry or vector algebra. Future shared-adapter and stock-component review required.",
+      "calibration_required": true,
+      "replaces": "gh-vector-frame-v1"
+    },
+    "sha256": "42799fae54e2b99d037e08e9c7ead1753a303243a738808c54bf923a6799686e"
+  },
+  {
+    "previous": "42799fae54e2b99d037e08e9c7ead1753a303243a738808c54bf923a6799686e",
+    "at": "2026-09-10T14:32:30.242638+00:00",
+    "body": {
+      "kind": "close",
+      "id": "gh-vector-frame-v1",
+      "outcome": "rejected",
+      "report_sha256": "5f3a272d6935761d751ec55d96e3268a874553b0d07b2e9e72ddae3f65389710"
+    },
+    "sha256": "e5e97a475fe14879961ac3ad5cadc2bf6c6bf0439d5287528a964c53d3d14614"
+  }
+]

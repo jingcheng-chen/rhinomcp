@@ -1,0 +1,18 @@
+diff --git a/server/src/rhinomcp/tools/analyze_objects.py b/server/src/rhinomcp/tools/analyze_objects.py
+index 600efe3..1941699 100644
+--- a/server/src/rhinomcp/tools/analyze_objects.py
++++ b/server/src/rhinomcp/tools/analyze_objects.py
+@@ -28,6 +28,13 @@ def analyze_objects(
+       closed/solid flags, and Brep/Mesh counts where available.
+       For Breps, naked_edge_count counts all naked topological edges, including
+       inner hole boundaries and excluding joined edges and seams.
++
++    Reported valid/closed/solid flags and successful calls do not certify task
++    correctness. Before claiming completion, compare observed bounds, dimensions,
++    counts, and applicable metrics against explicit task requirements. Bounds are
++    world-axis-aligned and do not directly equal local dimensions on rotated
++    geometry; compare in a consistent coordinate frame. This tool does not verify
++    a target pose or arbitrary surface shape.
+     """
+     selectors = [
+         id is not None,

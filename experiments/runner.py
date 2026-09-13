@@ -50,6 +50,12 @@ def evaluator_versions():
             "trimmed_task.py",
             "trimmed_measure.cs",
             "strip_probe.py",
+            "gh_task.py",
+            "tasks/gh_definition.schema.json",
+            "workflow/gh-reviewed-components.json",
+            "scene_task.py",
+            "scene_measure.cs",
+            "tasks/workflow_scene.schema.json",
         )
     }
 
@@ -87,6 +93,14 @@ PLANNER_SCHEMA = schema(
 
 def load_task(path):
     task = json.loads(path.read_text())
+    if task.get("type") == "gh_definition":
+        from experiments.gh_task import validate
+
+        return validate(task)
+    if task.get("type") == "workflow_scene":
+        from experiments.scene_task import validate
+
+        return validate(task)
     jsonschema.validate(
         task, json.loads((ROOT / "experiments/tasks/schema.json").read_text())
     )
@@ -100,6 +114,7 @@ def load_task(path):
             task.get("hole_radius", 0),
             task.get("panel_height", 0),
             task.get("rotation_x_degrees", 0),
+            task.get("shape_tolerance", 0),
         ]
     )
     if not all(math.isfinite(value) for value in numbers):
@@ -247,6 +262,10 @@ if (!doc.WriteFile({json.dumps(str(path))}, new Rhino.FileIO.FileWriteOptions())
 
 
 def measure(path, task=None):
+    if task and task["type"] == "workflow_scene":
+        from experiments.scene_task import measure as measure_scene
+
+        return measure_scene(path, task)
     if task and task["type"] == "trimmed_planar_patch":
         from experiments.trimmed_task import measure as measure_trimmed
 

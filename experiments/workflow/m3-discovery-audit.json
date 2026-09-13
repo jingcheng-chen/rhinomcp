@@ -1,0 +1,4478 @@
+{
+  "taxonomy_version": 1,
+  "rankings": {
+    "overall": [
+      {
+        "category": "failed_call",
+        "subtype": "runtime_exception",
+        "confidence": "observed",
+        "frequency": 15,
+        "runs": 5,
+        "mean_cost_calls": 1.0,
+        "score_calls": 15,
+        "score_seconds": 7.733738333859947,
+        "mean_cost_seconds": 0.5155825555906631,
+        "measured_seconds_subtotal": 7.733738333859947,
+        "timed_calls": 15,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:4"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:5"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:6"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:7"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:4"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:5"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:1"
+          }
+        ]
+      },
+      {
+        "category": "discovery",
+        "subtype": "guidance",
+        "confidence": "observation",
+        "frequency": 3,
+        "runs": 3,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": 1.136334665992763,
+        "mean_cost_seconds": 0.37877822199758765,
+        "measured_seconds_subtotal": 1.136334665992763,
+        "timed_calls": 3,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-edit_existing-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-edit_existing-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1:1"
+          }
+        ]
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "requires_catalog_review",
+        "confidence": "candidate",
+        "frequency": 3,
+        "runs": 2,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": 5.311330042022746,
+        "mean_cost_seconds": 1.7704433473409154,
+        "measured_seconds_subtotal": 5.311330042022746,
+        "timed_calls": 3,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:6"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:4"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "unknown",
+        "confidence": "observed",
+        "frequency": 2,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": 3.327200207975693,
+        "mean_cost_seconds": 1.6636001039878465,
+        "measured_seconds_subtotal": 3.327200207975693,
+        "timed_calls": 2,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:2"
+          }
+        ]
+      },
+      {
+        "category": "retry_after_error",
+        "subtype": "same_intent_candidate",
+        "confidence": "candidate",
+        "frequency": 2,
+        "runs": 2,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": 1.8574295829748735,
+        "mean_cost_seconds": 0.9287147914874367,
+        "measured_seconds_subtotal": 1.8574295829748735,
+        "timed_calls": 2,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:4"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:3"
+          }
+        ]
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "layer_assignment_script",
+        "confidence": "reviewed",
+        "frequency": 2,
+        "runs": 2,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": 3.9433310000458732,
+        "mean_cost_seconds": 1.9716655000229366,
+        "measured_seconds_subtotal": 3.9433310000458732,
+        "timed_calls": 2,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:7"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:5"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "missing_object",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.45967295800801367,
+        "mean_cost_seconds": 0.45967295800801367,
+        "measured_seconds_subtotal": 0.45967295800801367,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:2"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "schema_input",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 1.3679990419768728,
+        "mean_cost_seconds": 1.3679990419768728,
+        "measured_seconds_subtotal": 1.3679990419768728,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:3"
+          }
+        ]
+      }
+    ],
+    "observed_or_reviewed_flaws": [
+      {
+        "category": "failed_call",
+        "subtype": "runtime_exception",
+        "confidence": "observed",
+        "frequency": 15,
+        "runs": 5,
+        "mean_cost_calls": 1.0,
+        "score_calls": 15,
+        "score_seconds": 7.733738333859947,
+        "mean_cost_seconds": 0.5155825555906631,
+        "measured_seconds_subtotal": 7.733738333859947,
+        "timed_calls": 15,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:4"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:5"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:6"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:7"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:4"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:5"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:1"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "unknown",
+        "confidence": "observed",
+        "frequency": 2,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": 3.327200207975693,
+        "mean_cost_seconds": 1.6636001039878465,
+        "measured_seconds_subtotal": 3.327200207975693,
+        "timed_calls": 2,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:2"
+          }
+        ]
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "layer_assignment_script",
+        "confidence": "reviewed",
+        "frequency": 2,
+        "runs": 2,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": 3.9433310000458732,
+        "mean_cost_seconds": 1.9716655000229366,
+        "measured_seconds_subtotal": 3.9433310000458732,
+        "timed_calls": 2,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:7"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:5"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "missing_object",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.45967295800801367,
+        "mean_cost_seconds": 0.45967295800801367,
+        "measured_seconds_subtotal": 0.45967295800801367,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:2"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "schema_input",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 1.3679990419768728,
+        "mean_cost_seconds": 1.3679990419768728,
+        "measured_seconds_subtotal": 1.3679990419768728,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:3"
+          }
+        ]
+      }
+    ],
+    "observed_flaws_by_cohort": {
+      "released-0.4.0-full": [
+        {
+          "category": "failed_call",
+          "subtype": "runtime_exception",
+          "confidence": "observed",
+          "frequency": 7,
+          "runs": 3,
+          "mean_cost_calls": 1.0,
+          "score_calls": 7,
+          "score_seconds": 5.265228458971251,
+          "mean_cost_seconds": 0.7521754941387501,
+          "measured_seconds_subtotal": 5.265228458971251,
+          "timed_calls": 7,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1:2"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:1"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:2"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:3"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:4"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:5"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:1"
+            }
+          ]
+        },
+        {
+          "category": "failed_call",
+          "subtype": "unknown",
+          "confidence": "observed",
+          "frequency": 2,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 2,
+          "score_seconds": 3.327200207975693,
+          "mean_cost_seconds": 1.6636001039878465,
+          "measured_seconds_subtotal": 3.327200207975693,
+          "timed_calls": 2,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:1"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:2"
+            }
+          ]
+        },
+        {
+          "category": "typed_fallback",
+          "subtype": "layer_assignment_script",
+          "confidence": "reviewed",
+          "frequency": 2,
+          "runs": 2,
+          "mean_cost_calls": 1.0,
+          "score_calls": 2,
+          "score_seconds": 3.9433310000458732,
+          "mean_cost_seconds": 1.9716655000229366,
+          "measured_seconds_subtotal": 3.9433310000458732,
+          "timed_calls": 2,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:7"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:5"
+            }
+          ]
+        },
+        {
+          "category": "failed_call",
+          "subtype": "schema_input",
+          "confidence": "observed",
+          "frequency": 1,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 1,
+          "score_seconds": 1.3679990419768728,
+          "mean_cost_seconds": 1.3679990419768728,
+          "measured_seconds_subtotal": 1.3679990419768728,
+          "timed_calls": 1,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:3"
+            }
+          ]
+        }
+      ],
+      "released-0.4.0-native": [
+        {
+          "category": "failed_call",
+          "subtype": "runtime_exception",
+          "confidence": "observed",
+          "frequency": 8,
+          "runs": 2,
+          "mean_cost_calls": 1.0,
+          "score_calls": 8,
+          "score_seconds": 2.4685098748886958,
+          "mean_cost_seconds": 0.30856373436108697,
+          "measured_seconds_subtotal": 2.4685098748886958,
+          "timed_calls": 8,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:2"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:3"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:4"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:5"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:6"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:7"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:1"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:3"
+            }
+          ]
+        },
+        {
+          "category": "failed_call",
+          "subtype": "missing_object",
+          "confidence": "observed",
+          "frequency": 1,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 1,
+          "score_seconds": 0.45967295800801367,
+          "mean_cost_seconds": 0.45967295800801367,
+          "measured_seconds_subtotal": 0.45967295800801367,
+          "timed_calls": 1,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:2"
+            }
+          ]
+        }
+      ]
+    },
+    "by_seconds_complete_only": [
+      {
+        "category": "failed_call",
+        "subtype": "runtime_exception",
+        "confidence": "observed",
+        "frequency": 15,
+        "runs": 5,
+        "mean_cost_calls": 1.0,
+        "score_calls": 15,
+        "score_seconds": 7.733738333859947,
+        "mean_cost_seconds": 0.5155825555906631,
+        "measured_seconds_subtotal": 7.733738333859947,
+        "timed_calls": 15,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:4"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:5"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:6"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:7"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:4"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:5"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:1"
+          }
+        ]
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "layer_assignment_script",
+        "confidence": "reviewed",
+        "frequency": 2,
+        "runs": 2,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": 3.9433310000458732,
+        "mean_cost_seconds": 1.9716655000229366,
+        "measured_seconds_subtotal": 3.9433310000458732,
+        "timed_calls": 2,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:7"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:5"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "unknown",
+        "confidence": "observed",
+        "frequency": 2,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": 3.327200207975693,
+        "mean_cost_seconds": 1.6636001039878465,
+        "measured_seconds_subtotal": 3.327200207975693,
+        "timed_calls": 2,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:2"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "schema_input",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 1.3679990419768728,
+        "mean_cost_seconds": 1.3679990419768728,
+        "measured_seconds_subtotal": 1.3679990419768728,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:3"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "missing_object",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.45967295800801367,
+        "mean_cost_seconds": 0.45967295800801367,
+        "measured_seconds_subtotal": 0.45967295800801367,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:2"
+          }
+        ]
+      }
+    ],
+    "by_tool": [
+      {
+        "category": "failed_call",
+        "subtype": "runtime_exception",
+        "confidence": "observed",
+        "frequency": 15,
+        "runs": 5,
+        "mean_cost_calls": 1.0,
+        "score_calls": 15,
+        "score_seconds": 7.733738333859947,
+        "mean_cost_seconds": 0.5155825555906631,
+        "measured_seconds_subtotal": 7.733738333859947,
+        "timed_calls": 15,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:4"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:5"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:6"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:7"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:4"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:5"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:1"
+          }
+        ],
+        "tool": "update_object_attributes"
+      },
+      {
+        "category": "discovery",
+        "subtype": "guidance",
+        "confidence": "observation",
+        "frequency": 3,
+        "runs": 3,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": 1.136334665992763,
+        "mean_cost_seconds": 0.37877822199758765,
+        "measured_seconds_subtotal": 1.136334665992763,
+        "timed_calls": 3,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-edit_existing-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-edit_existing-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1:1"
+          }
+        ],
+        "tool": "get_modeling_guidance"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "unknown",
+        "confidence": "observed",
+        "frequency": 2,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": 3.327200207975693,
+        "mean_cost_seconds": 1.6636001039878465,
+        "measured_seconds_subtotal": 3.327200207975693,
+        "timed_calls": 2,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:2"
+          }
+        ],
+        "tool": "get_object_info"
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "requires_catalog_review",
+        "confidence": "candidate",
+        "frequency": 2,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": 2.5616792920045555,
+        "mean_cost_seconds": 1.2808396460022777,
+        "measured_seconds_subtotal": 2.5616792920045555,
+        "timed_calls": 2,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:4"
+          }
+        ],
+        "tool": "execute_rhinocommon_csharp_code"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "missing_object",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.45967295800801367,
+        "mean_cost_seconds": 0.45967295800801367,
+        "measured_seconds_subtotal": 0.45967295800801367,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:2"
+          }
+        ],
+        "tool": "get_object_info"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "schema_input",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 1.3679990419768728,
+        "mean_cost_seconds": 1.3679990419768728,
+        "measured_seconds_subtotal": 1.3679990419768728,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:3"
+          }
+        ],
+        "tool": "execute_rhinocommon_csharp_code"
+      },
+      {
+        "category": "retry_after_error",
+        "subtype": "same_intent_candidate",
+        "confidence": "candidate",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 1.5433585830032825,
+        "mean_cost_seconds": 1.5433585830032825,
+        "measured_seconds_subtotal": 1.5433585830032825,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:3"
+          }
+        ],
+        "tool": "get_object_info"
+      },
+      {
+        "category": "retry_after_error",
+        "subtype": "same_intent_candidate",
+        "confidence": "candidate",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.31407099997159094,
+        "mean_cost_seconds": 0.31407099997159094,
+        "measured_seconds_subtotal": 0.31407099997159094,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:4"
+          }
+        ],
+        "tool": "update_object_attributes"
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "layer_assignment_script",
+        "confidence": "reviewed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 1.1936802500276826,
+        "mean_cost_seconds": 1.1936802500276826,
+        "measured_seconds_subtotal": 1.1936802500276826,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:5"
+          }
+        ],
+        "tool": "execute_rhinocommon_csharp_code"
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "layer_assignment_script",
+        "confidence": "reviewed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 2.7496507500181906,
+        "mean_cost_seconds": 2.7496507500181906,
+        "measured_seconds_subtotal": 2.7496507500181906,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:7"
+          }
+        ],
+        "tool": "execute_rhinoscript_python_code"
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "requires_catalog_review",
+        "confidence": "candidate",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 2.7496507500181906,
+        "mean_cost_seconds": 2.7496507500181906,
+        "measured_seconds_subtotal": 2.7496507500181906,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:6"
+          }
+        ],
+        "tool": "execute_rhinoscript_python_code"
+      }
+    ],
+    "by_family": [
+      {
+        "category": "failed_call",
+        "subtype": "runtime_exception",
+        "confidence": "observed",
+        "frequency": 11,
+        "runs": 2,
+        "mean_cost_calls": 1.0,
+        "score_calls": 11,
+        "score_seconds": 6.347044375957921,
+        "mean_cost_seconds": 0.5770040341779928,
+        "measured_seconds_subtotal": 6.347044375957921,
+        "timed_calls": 11,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:4"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:5"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:6"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:7"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:4"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:5"
+          }
+        ],
+        "family": "small-assemblies"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "runtime_exception",
+        "confidence": "observed",
+        "frequency": 3,
+        "runs": 2,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": 0.9856279999366961,
+        "mean_cost_seconds": 0.32854266664556536,
+        "measured_seconds_subtotal": 0.9856279999366961,
+        "timed_calls": 3,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:3"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:1"
+          }
+        ],
+        "family": "recovery"
+      },
+      {
+        "category": "discovery",
+        "subtype": "guidance",
+        "confidence": "observation",
+        "frequency": 2,
+        "runs": 2,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": 0.8957279159803875,
+        "mean_cost_seconds": 0.44786395799019374,
+        "measured_seconds_subtotal": 0.8957279159803875,
+        "timed_calls": 2,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-edit_existing-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-edit_existing-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1:1"
+          }
+        ],
+        "family": "editing-existing"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "unknown",
+        "confidence": "observed",
+        "frequency": 2,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": 3.327200207975693,
+        "mean_cost_seconds": 1.6636001039878465,
+        "measured_seconds_subtotal": 3.327200207975693,
+        "timed_calls": 2,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:1"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:2"
+          }
+        ],
+        "family": "document-inspection"
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "requires_catalog_review",
+        "confidence": "candidate",
+        "frequency": 2,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": 2.5616792920045555,
+        "mean_cost_seconds": 1.2808396460022777,
+        "measured_seconds_subtotal": 2.5616792920045555,
+        "timed_calls": 2,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:2"
+          },
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:4"
+          }
+        ],
+        "family": "recovery"
+      },
+      {
+        "category": "discovery",
+        "subtype": "guidance",
+        "confidence": "observation",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.24060675001237541,
+        "mean_cost_seconds": 0.24060675001237541,
+        "measured_seconds_subtotal": 0.24060675001237541,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:1"
+          }
+        ],
+        "family": "small-assemblies"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "missing_object",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.45967295800801367,
+        "mean_cost_seconds": 0.45967295800801367,
+        "measured_seconds_subtotal": 0.45967295800801367,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:2"
+          }
+        ],
+        "family": "recovery"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "runtime_exception",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.4010659579653293,
+        "mean_cost_seconds": 0.4010659579653293,
+        "measured_seconds_subtotal": 0.4010659579653293,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1:2"
+          }
+        ],
+        "family": "editing-existing"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "schema_input",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 1.3679990419768728,
+        "mean_cost_seconds": 1.3679990419768728,
+        "measured_seconds_subtotal": 1.3679990419768728,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:3"
+          }
+        ],
+        "family": "recovery"
+      },
+      {
+        "category": "retry_after_error",
+        "subtype": "same_intent_candidate",
+        "confidence": "candidate",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 1.5433585830032825,
+        "mean_cost_seconds": 1.5433585830032825,
+        "measured_seconds_subtotal": 1.5433585830032825,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:3"
+          }
+        ],
+        "family": "document-inspection"
+      },
+      {
+        "category": "retry_after_error",
+        "subtype": "same_intent_candidate",
+        "confidence": "candidate",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.31407099997159094,
+        "mean_cost_seconds": 0.31407099997159094,
+        "measured_seconds_subtotal": 0.31407099997159094,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:4"
+          }
+        ],
+        "family": "recovery"
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "layer_assignment_script",
+        "confidence": "reviewed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 1.1936802500276826,
+        "mean_cost_seconds": 1.1936802500276826,
+        "measured_seconds_subtotal": 1.1936802500276826,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:5"
+          }
+        ],
+        "family": "recovery"
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "layer_assignment_script",
+        "confidence": "reviewed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 2.7496507500181906,
+        "mean_cost_seconds": 2.7496507500181906,
+        "measured_seconds_subtotal": 2.7496507500181906,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:7"
+          }
+        ],
+        "family": "small-assemblies"
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "requires_catalog_review",
+        "confidence": "candidate",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 2.7496507500181906,
+        "mean_cost_seconds": 2.7496507500181906,
+        "measured_seconds_subtotal": 2.7496507500181906,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+            "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:6"
+          }
+        ],
+        "family": "small-assemblies"
+      }
+    ],
+    "by_cohort": {
+      "released-0.4.0-full": [
+        {
+          "category": "failed_call",
+          "subtype": "runtime_exception",
+          "confidence": "observed",
+          "frequency": 7,
+          "runs": 3,
+          "mean_cost_calls": 1.0,
+          "score_calls": 7,
+          "score_seconds": 5.265228458971251,
+          "mean_cost_seconds": 0.7521754941387501,
+          "measured_seconds_subtotal": 5.265228458971251,
+          "timed_calls": 7,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1:2"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:1"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:2"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:3"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:4"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:5"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:1"
+            }
+          ]
+        },
+        {
+          "category": "typed_fallback",
+          "subtype": "requires_catalog_review",
+          "confidence": "candidate",
+          "frequency": 3,
+          "runs": 2,
+          "mean_cost_calls": 1.0,
+          "score_calls": 3,
+          "score_seconds": 5.311330042022746,
+          "mean_cost_seconds": 1.7704433473409154,
+          "measured_seconds_subtotal": 5.311330042022746,
+          "timed_calls": 3,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:6"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:2"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:4"
+            }
+          ]
+        },
+        {
+          "category": "failed_call",
+          "subtype": "unknown",
+          "confidence": "observed",
+          "frequency": 2,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 2,
+          "score_seconds": 3.327200207975693,
+          "mean_cost_seconds": 1.6636001039878465,
+          "measured_seconds_subtotal": 3.327200207975693,
+          "timed_calls": 2,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:1"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:2"
+            }
+          ]
+        },
+        {
+          "category": "typed_fallback",
+          "subtype": "layer_assignment_script",
+          "confidence": "reviewed",
+          "frequency": 2,
+          "runs": 2,
+          "mean_cost_calls": 1.0,
+          "score_calls": 2,
+          "score_seconds": 3.9433310000458732,
+          "mean_cost_seconds": 1.9716655000229366,
+          "measured_seconds_subtotal": 3.9433310000458732,
+          "timed_calls": 2,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:7"
+            },
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:5"
+            }
+          ]
+        },
+        {
+          "category": "discovery",
+          "subtype": "guidance",
+          "confidence": "observation",
+          "frequency": 1,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 1,
+          "score_seconds": 0.613278332981281,
+          "mean_cost_seconds": 0.613278332981281,
+          "measured_seconds_subtotal": 0.613278332981281,
+          "timed_calls": 1,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1:1"
+            }
+          ]
+        },
+        {
+          "category": "failed_call",
+          "subtype": "schema_input",
+          "confidence": "observed",
+          "frequency": 1,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 1,
+          "score_seconds": 1.3679990419768728,
+          "mean_cost_seconds": 1.3679990419768728,
+          "measured_seconds_subtotal": 1.3679990419768728,
+          "timed_calls": 1,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:3"
+            }
+          ]
+        },
+        {
+          "category": "retry_after_error",
+          "subtype": "same_intent_candidate",
+          "confidence": "candidate",
+          "frequency": 1,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 1,
+          "score_seconds": 1.5433585830032825,
+          "mean_cost_seconds": 1.5433585830032825,
+          "measured_seconds_subtotal": 1.5433585830032825,
+          "timed_calls": 1,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+              "finding": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:3"
+            }
+          ]
+        }
+      ],
+      "released-0.4.0-native": [
+        {
+          "category": "failed_call",
+          "subtype": "runtime_exception",
+          "confidence": "observed",
+          "frequency": 8,
+          "runs": 2,
+          "mean_cost_calls": 1.0,
+          "score_calls": 8,
+          "score_seconds": 2.4685098748886958,
+          "mean_cost_seconds": 0.30856373436108697,
+          "measured_seconds_subtotal": 2.4685098748886958,
+          "timed_calls": 8,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:2"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:3"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:4"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:5"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:6"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:7"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:1"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:3"
+            }
+          ]
+        },
+        {
+          "category": "discovery",
+          "subtype": "guidance",
+          "confidence": "observation",
+          "frequency": 2,
+          "runs": 2,
+          "mean_cost_calls": 1.0,
+          "score_calls": 2,
+          "score_seconds": 0.5230563330114819,
+          "mean_cost_seconds": 0.26152816650574096,
+          "measured_seconds_subtotal": 0.5230563330114819,
+          "timed_calls": 2,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-edit_existing-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-edit_existing-v1:1"
+            },
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:1"
+            }
+          ]
+        },
+        {
+          "category": "failed_call",
+          "subtype": "missing_object",
+          "confidence": "observed",
+          "frequency": 1,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 1,
+          "score_seconds": 0.45967295800801367,
+          "mean_cost_seconds": 0.45967295800801367,
+          "measured_seconds_subtotal": 0.45967295800801367,
+          "timed_calls": 1,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:2"
+            }
+          ]
+        },
+        {
+          "category": "retry_after_error",
+          "subtype": "same_intent_candidate",
+          "confidence": "candidate",
+          "frequency": 1,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 1,
+          "score_seconds": 0.31407099997159094,
+          "mean_cost_seconds": 0.31407099997159094,
+          "measured_seconds_subtotal": 0.31407099997159094,
+          "timed_calls": 1,
+          "evidence": [
+            {
+              "run": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+              "finding": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:4"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "ranking_policy": "Frequency times mean charged calls; seconds reported only with complete timing coverage. Categories overlap and must not be summed. Observation/candidate rows are not confirmed product flaws.",
+  "purpose": "Find cross-task workflow friction, not score modeling quality or claim improvement.",
+  "families": [
+    "document-inspection",
+    "editing-existing",
+    "recovery",
+    "small-assemblies"
+  ],
+  "runs": [
+    {
+      "id": "workflow-baseline-20260909-235243-2ca8879e-edit_existing-v1",
+      "family": "editing-existing",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-235243-2ca8879e/task-1",
+      "source_sha256": "6657abfbd7eff527a43a875f1dc99ae5999d354f7d7f85adccc2fc66f985a13c",
+      "session_status": "completed",
+      "elapsed_seconds": 44.549435709021054,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "e525f15ca83da85b1d33ddf98354710dffa3790d1fe909f4c6c13db65f308512",
+      "result_sha256": "00822d0ff57cf2c48518d431c3200abf553c5b5e03cb664a2751c8511039c2d3",
+      "status_sha256": "a3df9181d4bf8dd043c0608c1f159d964284c0cb58b7114618c77de84ea2230e",
+      "environment_sha256": "a6c8548298c97c811b12bb7372ed993e22cfd788534760de90a759eb5487a5e1",
+      "metrics": {
+        "mcp_attempts": 12,
+        "completed_calls": 12,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 3,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "modify_object": 2
+        },
+        "commands": {
+          "analyze_objects": 3,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "modify_object": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 152987,
+          "cached_input_tokens": 126208,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1362,
+          "reasoning_output_tokens": 382
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_1"
+            ],
+            "cost_call_ids": [
+              "item_1"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-baseline-20260909-235243-2ca8879e-edit_existing-v1:1",
+            "evidence_lines": [
+              4,
+              5
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.2824495829991065,
+            "measured_seconds_subtotal": 0.2824495829991065,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 6,
+          "total_calls": 12
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_modeling_guidance",
+            "command": "get_modeling_guidance",
+            "lines": [
+              4,
+              5
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2824495829991065
+          },
+          {
+            "id": "item_2",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              6,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_3",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              8,
+              12
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.197735833004117
+          },
+          {
+            "id": "item_4",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              9,
+              13
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_5",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              10,
+              15
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2599532920285128
+          },
+          {
+            "id": "item_6",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              11,
+              14
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_8",
+            "tool": "modify_object",
+            "command": "modify_object",
+            "lines": [
+              17,
+              18
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22729395900387317
+          },
+          {
+            "id": "item_9",
+            "tool": "modify_object",
+            "command": "modify_object",
+            "lines": [
+              19,
+              20
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.22985170898027718
+          },
+          {
+            "id": "item_10",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              21,
+              25
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_11",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              22,
+              26
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.3717862920020707
+          },
+          {
+            "id": "item_12",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              23,
+              28
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_13",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              24,
+              27
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          }
+        ]
+      },
+      "cohort": "released-0.4.0-native",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+          "version": "0.4.0.0",
+          "pid": 66923,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": false
+            }
+          ]
+        },
+        "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "native"
+      },
+      "timing_sha256": "8bff155318bc1fc6276c3884fe029dacd67c2f1a9dd08a2e72f70dc4fef9e709",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+      "family": "small-assemblies",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-235243-2ca8879e/task-2",
+      "source_sha256": "2ecbef5b14b77958f3ccd76c97ddac48675bfefa00c88c04fba86710c4062c0f",
+      "session_status": "completed",
+      "elapsed_seconds": 60.14559187495615,
+      "task_verdict": "fail",
+      "agent_claim_complete": false,
+      "evaluation_sha256": "da46b24e50a8254a86ee74b8111a2fa6812bf629f9b2da7ec734c76851deaf6a",
+      "result_sha256": "79851a105b424622c617fa6470ce2bf3896ca34e9e786f1043234289704261ff",
+      "status_sha256": "924075043c80fc7715e9d23b81fd487548694708f9217f890374cd6be64a34ea",
+      "environment_sha256": "91c93d70986ba331e2ef66061dfe35fda8ebe2c12553d9d283efa91869fa3e67",
+      "metrics": {
+        "mcp_attempts": 23,
+        "completed_calls": 23,
+        "unfinished_calls": 0,
+        "failed_calls": 6,
+        "failures_by_tool": {
+          "update_object_attributes": 6
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 3,
+          "create_object": 5,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 5,
+          "get_objects": 2,
+          "update_object_attributes": 6
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 3,
+          "create_object": 5,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 5,
+          "get_objects": 2,
+          "update_object_attributes": 6
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 262102,
+          "cached_input_tokens": 228352,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1893,
+          "reasoning_output_tokens": 530
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_2"
+            ],
+            "cost_call_ids": [
+              "item_2"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:1",
+            "evidence_lines": [
+              5,
+              7
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.24060675001237541,
+            "measured_seconds_subtotal": 0.24060675001237541,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_12"
+            ],
+            "cost_call_ids": [
+              "item_12"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:2",
+            "evidence_lines": [
+              25,
+              26
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.21022070798790082,
+            "measured_seconds_subtotal": 0.21022070798790082,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_13"
+            ],
+            "cost_call_ids": [
+              "item_13"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:3",
+            "evidence_lines": [
+              27,
+              28
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.4604986670310609,
+            "measured_seconds_subtotal": 0.4604986670310609,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_14"
+            ],
+            "cost_call_ids": [
+              "item_14"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:4",
+            "evidence_lines": [
+              29,
+              30
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.3679375419742428,
+            "measured_seconds_subtotal": 0.3679375419742428,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_15"
+            ],
+            "cost_call_ids": [
+              "item_15"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:5",
+            "evidence_lines": [
+              31,
+              32
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.34962479094974697,
+            "measured_seconds_subtotal": 0.34962479094974697,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_16"
+            ],
+            "cost_call_ids": [
+              "item_16"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:6",
+            "evidence_lines": [
+              33,
+              34
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.3487944999942556,
+            "measured_seconds_subtotal": 0.3487944999942556,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_22"
+            ],
+            "cost_call_ids": [
+              "item_22"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1:7",
+            "evidence_lines": [
+              45,
+              46
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.19410550000611693,
+            "measured_seconds_subtotal": 0.19410550000611693,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 1,
+          "failed_call": 6
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 23,
+          "total_calls": 23
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              4,
+              6
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.3090158330160193
+          },
+          {
+            "id": "item_2",
+            "tool": "get_modeling_guidance",
+            "command": "get_modeling_guidance",
+            "lines": [
+              5,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24060675001237541
+          },
+          {
+            "id": "item_3",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              8,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.373734750028234
+          },
+          {
+            "id": "item_4",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              10,
+              11
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.29985033301636577
+          },
+          {
+            "id": "item_5",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              12,
+              13
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.5025791669613682
+          },
+          {
+            "id": "item_7",
+            "tool": "create_object",
+            "command": "create_object",
+            "lines": [
+              15,
+              16
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24534108297666535
+          },
+          {
+            "id": "item_8",
+            "tool": "create_object",
+            "command": "create_object",
+            "lines": [
+              17,
+              18
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2891256660223007
+          },
+          {
+            "id": "item_9",
+            "tool": "create_object",
+            "command": "create_object",
+            "lines": [
+              19,
+              20
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.3099950000178069
+          },
+          {
+            "id": "item_10",
+            "tool": "create_object",
+            "command": "create_object",
+            "lines": [
+              21,
+              22
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.28882887499639764
+          },
+          {
+            "id": "item_11",
+            "tool": "create_object",
+            "command": "create_object",
+            "lines": [
+              23,
+              24
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.29038787499303
+          },
+          {
+            "id": "item_12",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              25,
+              26
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.21022070798790082
+          },
+          {
+            "id": "item_13",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              27,
+              28
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.4604986670310609
+          },
+          {
+            "id": "item_14",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              29,
+              30
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.3679375419742428
+          },
+          {
+            "id": "item_15",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              31,
+              32
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.34962479094974697
+          },
+          {
+            "id": "item_16",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              33,
+              34
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.3487944999942556
+          },
+          {
+            "id": "item_17",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              35,
+              40
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.3046741660218686
+          },
+          {
+            "id": "item_18",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              36,
+              41
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.4113223330350593
+          },
+          {
+            "id": "item_19",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              37,
+              42
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.24809904204448685
+          },
+          {
+            "id": "item_20",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              38,
+              43
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.263786000024993
+          },
+          {
+            "id": "item_21",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              39,
+              44
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2796000419766642
+          },
+          {
+            "id": "item_22",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              45,
+              46
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.19410550000611693
+          },
+          {
+            "id": "item_23",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              47,
+              49
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.37334724998800084
+          },
+          {
+            "id": "item_24",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              48,
+              50
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.2751215410535224
+          }
+        ]
+      },
+      "cohort": "released-0.4.0-native",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+          "version": "0.4.0.0",
+          "pid": 66923,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "native"
+      },
+      "timing_sha256": "f8bf004545a9f1fc960de70e7d7c39a7ed62db0d465c4c8d0cb69cee32a1cb2d",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-baseline-20260909-235243-2ca8879e-inspect_document-v1",
+      "family": "document-inspection",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-235243-2ca8879e/task-3",
+      "source_sha256": "bcca51f6cda8c145a0530828d2309b3f1b1b0568f6a33568049d93a332d4bd73",
+      "session_status": "completed",
+      "elapsed_seconds": 23.082069375028368,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "879402c3733b51f96fdc528cec7d6ecbb7e7b1e8e88cea22b347edf509d941f9",
+      "result_sha256": "1e8e35a41fb1cfbf55c898d784fc54870ef0c39423ad096ed2a61bc2364f593d",
+      "status_sha256": "a6e674fac97f7283f497f473611cd21dad6e2a8443fdb580815b417692cfffe3",
+      "environment_sha256": "91c93d70986ba331e2ef66061dfe35fda8ebe2c12553d9d283efa91869fa3e67",
+      "metrics": {
+        "mcp_attempts": 5,
+        "completed_calls": 5,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 2,
+          "get_object_attributes": 2,
+          "get_objects": 1
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "get_object_attributes": 2,
+          "get_objects": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 88798,
+          "cached_input_tokens": 65536,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 659,
+          "reasoning_output_tokens": 118
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [],
+        "counts": {},
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 5,
+          "total_calls": 5
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              4,
+              5
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.3942410000017844
+          },
+          {
+            "id": "item_2",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              6,
+              10
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.25302845798432827
+          },
+          {
+            "id": "item_3",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              7,
+              12
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.26116537500638515
+          },
+          {
+            "id": "item_4",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              8,
+              11
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.27826962497783825
+          },
+          {
+            "id": "item_5",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              9,
+              13
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.28959404199849814
+          }
+        ]
+      },
+      "cohort": "released-0.4.0-native",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+          "version": "0.4.0.0",
+          "pid": 66923,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "native"
+      },
+      "timing_sha256": "75d64136af1355a84437793eeab5b63a6c745c8bb70d1b9058f3f59ac4efe5c1",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+      "family": "recovery",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-235243-2ca8879e/task-4",
+      "source_sha256": "5b86ff1095b781c92353ed06cc9e0a6f839955233ba56f6ed3d9ce9d212b9630",
+      "session_status": "completed",
+      "elapsed_seconds": 47.27664799999911,
+      "task_verdict": "fail",
+      "agent_claim_complete": false,
+      "evaluation_sha256": "dd94279003316496bf9407ff43455655abc68c0b35bda25b354026770d8e0461",
+      "result_sha256": "e36cd78c8c8050ea798dbd298ff78728aca5e4a838c017a41ba464f642610d90",
+      "status_sha256": "d564de8b52d0129c893d702de4b9f3132e51d3489123e21db6d46f18a41ee2ed",
+      "environment_sha256": "91c93d70986ba331e2ef66061dfe35fda8ebe2c12553d9d283efa91869fa3e67",
+      "metrics": {
+        "mcp_attempts": 9,
+        "completed_calls": 9,
+        "unfinished_calls": 0,
+        "failed_calls": 3,
+        "failures_by_tool": {
+          "get_object_info": 1,
+          "update_object_attributes": 2
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "get_object_attributes": 2,
+          "get_object_info": 1,
+          "get_objects": 1,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "get_object_attributes": 2,
+          "get_object_info": 1,
+          "get_objects": 1,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 1,
+        "usage": {
+          "input_tokens": 193151,
+          "cached_input_tokens": 151296,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1656,
+          "reasoning_output_tokens": 823
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_5"
+            ],
+            "cost_call_ids": [
+              "item_5"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:1",
+            "evidence_lines": [
+              12,
+              13
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.22325716697378084,
+            "measured_seconds_subtotal": 0.22325716697378084,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "missing_object",
+            "tool": "get_object_info",
+            "confidence": "observed",
+            "call_ids": [
+              "item_8"
+            ],
+            "cost_call_ids": [
+              "item_8"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:2",
+            "evidence_lines": [
+              16,
+              19
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.45967295800801367,
+            "measured_seconds_subtotal": 0.45967295800801367,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_10"
+            ],
+            "cost_call_ids": [
+              "item_10"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:3",
+            "evidence_lines": [
+              21,
+              22
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.31407099997159094,
+            "measured_seconds_subtotal": 0.31407099997159094,
+            "timed_calls": 1
+          },
+          {
+            "category": "retry_after_error",
+            "subtype": "same_intent_candidate",
+            "tool": "update_object_attributes",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_5",
+              "item_10"
+            ],
+            "cost_call_ids": [
+              "item_10"
+            ],
+            "reason": "Same command, target/type after a failure; parameter correction is allowed.",
+            "id": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1:4",
+            "evidence_lines": [
+              12,
+              13,
+              21,
+              22
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.31407099997159094,
+            "measured_seconds_subtotal": 0.31407099997159094,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "failed_call": 3,
+          "retry_after_error": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 9,
+          "total_calls": 9
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              4,
+              6
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.6422416249988601
+          },
+          {
+            "id": "item_2",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              5,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.5403295420110226
+          },
+          {
+            "id": "item_3",
+            "tool": "delete_object",
+            "command": "delete_object",
+            "lines": [
+              8,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.3397011670167558
+          },
+          {
+            "id": "item_4",
+            "tool": "create_object",
+            "command": "create_object",
+            "lines": [
+              10,
+              11
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.32491170801222324
+          },
+          {
+            "id": "item_5",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              12,
+              13
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.22325716697378084
+          },
+          {
+            "id": "item_7",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              15,
+              18
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.5885840420378372
+          },
+          {
+            "id": "item_8",
+            "tool": "get_object_info",
+            "command": "get_object_info",
+            "lines": [
+              16,
+              19
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.45967295800801367
+          },
+          {
+            "id": "item_9",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              17,
+              20
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.8300597079796717
+          },
+          {
+            "id": "item_10",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              21,
+              22
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.31407099997159094
+          }
+        ]
+      },
+      "cohort": "released-0.4.0-native",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+          "version": "0.4.0.0",
+          "pid": 66923,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "native"
+      },
+      "timing_sha256": "04383aa0a2914715df220aa41437451e7bfcbfafc81bf4b8624bae6ee8eb1884",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1",
+      "family": "editing-existing",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-235618-5aa1776e/task-1",
+      "source_sha256": "95ec05884b7fdb9eedc15a827c2366ce5ab1971656939bc5974f43e458ad96b9",
+      "session_status": "completed",
+      "elapsed_seconds": 59.663945999986026,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "9a25a625c15f5028f7a5e88dce7b553fe0c3b4f703a736d254b467b69e701b41",
+      "result_sha256": "a92a5adb55723d795d47027d502d6739197427af8f947f1dac01ed3956b38a30",
+      "status_sha256": "6159c2ed8bd0a6729a2d66d54081d36f4a0412b8a3d2b6760f70a57c0aeb1ba5",
+      "environment_sha256": "ba0827ba8233bcfa1c8968d11a7c226d50936db0b57d409a7fc30ab6f32f2418",
+      "metrics": {
+        "mcp_attempts": 14,
+        "completed_calls": 14,
+        "unfinished_calls": 0,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "update_object_attributes": 1
+        },
+        "tools": {
+          "analyze_objects": 4,
+          "get_document_summary": 1,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "modify_object": 1,
+          "update_object_attributes": 1
+        },
+        "commands": {
+          "analyze_objects": 4,
+          "get_document_summary": 1,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "modify_object": 1,
+          "update_object_attributes": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 288608,
+          "cached_input_tokens": 226816,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1638,
+          "reasoning_output_tokens": 407
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_2"
+            ],
+            "cost_call_ids": [
+              "item_2"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1:1",
+            "evidence_lines": [
+              5,
+              7
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.613278332981281,
+            "measured_seconds_subtotal": 0.613278332981281,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_10"
+            ],
+            "cost_call_ids": [
+              "item_10"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1:2",
+            "evidence_lines": [
+              21,
+              22
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.4010659579653293,
+            "measured_seconds_subtotal": 0.4010659579653293,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 1,
+          "failed_call": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 6,
+          "total_calls": 14
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              4,
+              6
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.1703962499741465
+          },
+          {
+            "id": "item_2",
+            "tool": "get_modeling_guidance",
+            "command": "get_modeling_guidance",
+            "lines": [
+              5,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.613278332981281
+          },
+          {
+            "id": "item_3",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              8,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.8986436670529656
+          },
+          {
+            "id": "item_4",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              10,
+              14
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_5",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              11,
+              15
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_6",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              12,
+              16
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_7",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              13,
+              17
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_9",
+            "tool": "modify_object",
+            "command": "modify_object",
+            "lines": [
+              19,
+              20
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.7850635410286486
+          },
+          {
+            "id": "item_10",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              21,
+              22
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.4010659579653293
+          },
+          {
+            "id": "item_11",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              23,
+              28
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.1990667500067502
+          },
+          {
+            "id": "item_12",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              24,
+              29
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_13",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              25,
+              30
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_14",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              26,
+              31
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_15",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              27,
+              32
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          }
+        ]
+      },
+      "cohort": "released-0.4.0-full",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+          "version": "0.4.0.0",
+          "pid": 66923,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "db583501320131595ecd4bd6d33241d8236b24f9dcf3f91cb229b8bb368c045f",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+      "family": "small-assemblies",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-235618-5aa1776e/task-2",
+      "source_sha256": "f0c9372265f93483cde9d41d917e002e0d8e817e8a2925202e89bec6d8b5d607",
+      "session_status": "completed",
+      "elapsed_seconds": 88.19901366700651,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "9a140ea83cd8ef84bf66d227f10199264aea2f7213432a7c152397594762e3c6",
+      "result_sha256": "77c01e48e68cfad8bb0425d7e7c6f70a6f83a274b02b0f807036d58314f88ffa",
+      "status_sha256": "ef7ca02519f005a4001115137984c950532c351f8c1aa7ec2897161d4228fd20",
+      "environment_sha256": "ba0827ba8233bcfa1c8968d11a7c226d50936db0b57d409a7fc30ab6f32f2418",
+      "metrics": {
+        "mcp_attempts": 24,
+        "completed_calls": 24,
+        "unfinished_calls": 0,
+        "failed_calls": 5,
+        "failures_by_tool": {
+          "update_object_attributes": 5
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 3,
+          "create_objects": 1,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 5,
+          "get_objects": 4,
+          "get_rhinoscript_docs": 2,
+          "update_object_attributes": 5
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 3,
+          "create_objects": 1,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 5,
+          "get_objects": 4,
+          "get_rhinoscript_docs": 2,
+          "update_object_attributes": 5
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 425947,
+          "cached_input_tokens": 391168,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1979,
+          "reasoning_output_tokens": 317
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_8"
+            ],
+            "cost_call_ids": [
+              "item_8"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:1",
+            "evidence_lines": [
+              18,
+              19
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.4313959589926526,
+            "measured_seconds_subtotal": 0.4313959589926526,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_9"
+            ],
+            "cost_call_ids": [
+              "item_9"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:2",
+            "evidence_lines": [
+              20,
+              21
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.9303203750168905,
+            "measured_seconds_subtotal": 0.9303203750168905,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_10"
+            ],
+            "cost_call_ids": [
+              "item_10"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:3",
+            "evidence_lines": [
+              22,
+              23
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 1.0437292919959873,
+            "measured_seconds_subtotal": 1.0437292919959873,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_11"
+            ],
+            "cost_call_ids": [
+              "item_11"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:4",
+            "evidence_lines": [
+              24,
+              25
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.9666768750175834,
+            "measured_seconds_subtotal": 0.9666768750175834,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_12"
+            ],
+            "cost_call_ids": [
+              "item_12"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:5",
+            "evidence_lines": [
+              26,
+              27
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 1.0437401669914834,
+            "measured_seconds_subtotal": 1.0437401669914834,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_17"
+            ],
+            "cost_call_ids": [
+              "item_17"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:6",
+            "evidence_lines": [
+              35,
+              36
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 2.7496507500181906,
+            "measured_seconds_subtotal": 2.7496507500181906,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "layer_assignment_script",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "reviewed",
+            "call_ids": [
+              "item_17"
+            ],
+            "cost_call_ids": [
+              "item_17"
+            ],
+            "reason": "Script assigns the object layer after the exposed update_object_attributes tool returned a missing-method error. This is a workaround for a failed typed operation.",
+            "typed_alternative": "update_object_attributes",
+            "catalog": {
+              "path": "tool-definitions.json",
+              "sha256": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39"
+            },
+            "evidence": [
+              {
+                "path": "calls.jsonl",
+                "sha256": "9907357a04544f5497428664cdb36fe13bd0756a78bc93bbade0374ea7c24137",
+                "quote": "rs.ObjectLayer"
+              }
+            ],
+            "id": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1:7",
+            "evidence_lines": [
+              35,
+              36
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 2.7496507500181906,
+            "measured_seconds_subtotal": 2.7496507500181906,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "failed_call": 5,
+          "typed_fallback": 2
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 19,
+          "total_calls": 24
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              4,
+              6
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_2",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              5,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.2118105420377105
+          },
+          {
+            "id": "item_3",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              8,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.9551292500109412
+          },
+          {
+            "id": "item_4",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              10,
+              11
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.9608708329615183
+          },
+          {
+            "id": "item_5",
+            "tool": "create_layer",
+            "command": "create_layer",
+            "lines": [
+              12,
+              13
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.2099879579618573
+          },
+          {
+            "id": "item_6",
+            "tool": "create_objects",
+            "command": "create_objects",
+            "lines": [
+              14,
+              15
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.7498185830190778
+          },
+          {
+            "id": "item_7",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              16,
+              17
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_8",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              18,
+              19
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.4313959589926526
+          },
+          {
+            "id": "item_9",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              20,
+              21
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.9303203750168905
+          },
+          {
+            "id": "item_10",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              22,
+              23
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 1.0437292919959873
+          },
+          {
+            "id": "item_11",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              24,
+              25
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.9666768750175834
+          },
+          {
+            "id": "item_12",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              26,
+              27
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 1.0437401669914834
+          },
+          {
+            "id": "item_14",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              29,
+              30
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_15",
+            "tool": "get_rhinoscript_docs",
+            "command": "get_rhinoscript_docs",
+            "lines": [
+              31,
+              32
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.5892540839849971
+          },
+          {
+            "id": "item_16",
+            "tool": "get_rhinoscript_docs",
+            "command": "get_rhinoscript_docs",
+            "lines": [
+              33,
+              34
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.5891122909961268
+          },
+          {
+            "id": "item_17",
+            "tool": "execute_rhinoscript_python_code",
+            "command": "execute_rhinoscript_python_code",
+            "lines": [
+              35,
+              36
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 2.7496507500181906
+          },
+          {
+            "id": "item_18",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              37,
+              45
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_19",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              38,
+              46
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_20",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              39,
+              47
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.0002068339963444
+          },
+          {
+            "id": "item_21",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              40,
+              48
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.0019359999569133
+          },
+          {
+            "id": "item_22",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              41,
+              50
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.9725145000265911
+          },
+          {
+            "id": "item_23",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              42,
+              49
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.9632716249907389
+          },
+          {
+            "id": "item_24",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              43,
+              51
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.004130916961003
+          },
+          {
+            "id": "item_25",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              44,
+              52
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.9715548750245944
+          }
+        ]
+      },
+      "cohort": "released-0.4.0-full",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+          "version": "0.4.0.0",
+          "pid": 66923,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "9907357a04544f5497428664cdb36fe13bd0756a78bc93bbade0374ea7c24137",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+      "family": "document-inspection",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-235618-5aa1776e/task-3",
+      "source_sha256": "9e6c97634b210dc33fc45691de84706c731e57a58c12d1edc360929ba4901e82",
+      "session_status": "completed",
+      "elapsed_seconds": 26.208841458021197,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "b4691a390abe071823c5de07afd5f268a06847a012932622913e3de138dea347",
+      "result_sha256": "4f71abc14e9c658c62b717e59e1e3e59dd0a3f09606e98bb5b3919b962e4e584",
+      "status_sha256": "ecbd4515cb0a4bae67a3eb41d4963dd87e8be957fd2c068d0cb889a731768fca",
+      "environment_sha256": "ba0827ba8233bcfa1c8968d11a7c226d50936db0b57d409a7fc30ab6f32f2418",
+      "metrics": {
+        "mcp_attempts": 6,
+        "completed_calls": 6,
+        "unfinished_calls": 0,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "get_object_info": 2
+        },
+        "tools": {
+          "analyze_objects": 2,
+          "get_object_attributes": 2,
+          "get_object_info": 2
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "get_object_attributes": 2,
+          "get_object_info": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 79755,
+          "cached_input_tokens": 52480,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 535,
+          "reasoning_output_tokens": 108
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "unknown",
+            "tool": "get_object_info",
+            "confidence": "observed",
+            "call_ids": [
+              "item_1"
+            ],
+            "cost_call_ids": [
+              "item_1"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:1",
+            "evidence_lines": [
+              4,
+              10
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 1.7838416249724105,
+            "measured_seconds_subtotal": 1.7838416249724105,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "unknown",
+            "tool": "get_object_info",
+            "confidence": "observed",
+            "call_ids": [
+              "item_4"
+            ],
+            "cost_call_ids": [
+              "item_4"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:2",
+            "evidence_lines": [
+              7,
+              13
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 1.5433585830032825,
+            "measured_seconds_subtotal": 1.5433585830032825,
+            "timed_calls": 1
+          },
+          {
+            "category": "retry_after_error",
+            "subtype": "same_intent_candidate",
+            "tool": "get_object_info",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_1",
+              "item_4"
+            ],
+            "cost_call_ids": [
+              "item_4"
+            ],
+            "reason": "Same command, target/type after a failure; parameter correction is allowed.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1:3",
+            "evidence_lines": [
+              4,
+              7,
+              10,
+              13
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 1.5433585830032825,
+            "measured_seconds_subtotal": 1.5433585830032825,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "failed_call": 2,
+          "retry_after_error": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 6,
+          "total_calls": 6
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_object_info",
+            "command": "get_object_info",
+            "lines": [
+              4,
+              10
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 1.7838416249724105
+          },
+          {
+            "id": "item_2",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              5,
+              11
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.097458208038006
+          },
+          {
+            "id": "item_3",
+            "tool": "get_object_attributes",
+            "command": "get_object_attributes",
+            "lines": [
+              6,
+              12
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.9945083330385387
+          },
+          {
+            "id": "item_4",
+            "tool": "get_object_info",
+            "command": "get_object_info",
+            "lines": [
+              7,
+              13
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 1.5433585830032825
+          },
+          {
+            "id": "item_5",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              8,
+              14
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.2740319999866188
+          },
+          {
+            "id": "item_6",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              9,
+              15
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.012414583005011
+          }
+        ]
+      },
+      "cohort": "released-0.4.0-full",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+          "version": "0.4.0.0",
+          "pid": 66923,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "2464f75471592eef888a35ee90a5818a07f248b8efbbc36a7bbc1e38d5851b56",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+      "family": "recovery",
+      "available": true,
+      "source": "experiments/runs/workflow-baseline-20260909-235618-5aa1776e/task-4",
+      "source_sha256": "1c3d711c986cbc4e0a1dc997ee427180663a9625c681f37eb71c79ca20c3eb92",
+      "session_status": "completed",
+      "elapsed_seconds": 75.19719987502322,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "b6dda13f35dd95f07867a338d1a511b534f185eca2ae03aae2df84c56575cef7",
+      "result_sha256": "1a8713db8e3ca71e2ae5c58e2f38f5881cf57958c2ad55b393afe9031252f62e",
+      "status_sha256": "7baf6b0e20ffcd979a4fc71648bddf0af285ca5f4578ef86b3c875b1fa457a93",
+      "environment_sha256": "ba0827ba8233bcfa1c8968d11a7c226d50936db0b57d409a7fc30ab6f32f2418",
+      "metrics": {
+        "mcp_attempts": 11,
+        "completed_calls": 11,
+        "unfinished_calls": 0,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "execute_rhinocommon_csharp_code": 1,
+          "update_object_attributes": 1
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "execute_rhinocommon_csharp_code": 2,
+          "get_document_summary": 1,
+          "get_objects": 3,
+          "search_rhinoscript_functions": 1,
+          "update_object_attributes": 1
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "delete_object": 1,
+          "execute_rhinocommon_csharp_code": 2,
+          "get_document_summary": 1,
+          "get_objects": 3,
+          "search_rhinoscript_functions": 1,
+          "update_object_attributes": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 1,
+        "usage": {
+          "input_tokens": 342272,
+          "cached_input_tokens": 309760,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2432,
+          "reasoning_output_tokens": 1015
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "runtime_exception",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_5"
+            ],
+            "cost_call_ids": [
+              "item_5"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:1",
+            "evidence_lines": [
+              12,
+              13
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.44829983299132437,
+            "measured_seconds_subtotal": 0.44829983299132437,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinocommon_csharp_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_9"
+            ],
+            "cost_call_ids": [
+              "item_9"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:2",
+            "evidence_lines": [
+              19,
+              20
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 1.1936802500276826,
+            "measured_seconds_subtotal": 1.1936802500276826,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "schema_input",
+            "tool": "execute_rhinocommon_csharp_code",
+            "confidence": "observed",
+            "call_ids": [
+              "item_11"
+            ],
+            "cost_call_ids": [
+              "item_11"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:3",
+            "evidence_lines": [
+              23,
+              24
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 1.3679990419768728,
+            "measured_seconds_subtotal": 1.3679990419768728,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinocommon_csharp_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_11"
+            ],
+            "cost_call_ids": [
+              "item_11"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:4",
+            "evidence_lines": [
+              23,
+              24
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 1.3679990419768728,
+            "measured_seconds_subtotal": 1.3679990419768728,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "layer_assignment_script",
+            "tool": "execute_rhinocommon_csharp_code",
+            "confidence": "reviewed",
+            "call_ids": [
+              "item_9"
+            ],
+            "cost_call_ids": [
+              "item_9"
+            ],
+            "reason": "Script assigns the object layer after the exposed update_object_attributes tool returned a missing-method error. This is a workaround for a failed typed operation.",
+            "typed_alternative": "update_object_attributes",
+            "catalog": {
+              "path": "tool-definitions.json",
+              "sha256": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39"
+            },
+            "evidence": [
+              {
+                "path": "calls.jsonl",
+                "sha256": "29d8fec06f79e7f33514c1ca4731192f42316983ff4212f75382fc0a78871c82",
+                "quote": "ModifyAttributes"
+              }
+            ],
+            "id": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1:5",
+            "evidence_lines": [
+              19,
+              20
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 1.1936802500276826,
+            "measured_seconds_subtotal": 1.1936802500276826,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "failed_call": 2,
+          "typed_fallback": 3
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 9,
+          "total_calls": 11
+        },
+        "call_index": [
+          {
+            "id": "item_1",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              4,
+              6
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.58602637500735
+          },
+          {
+            "id": "item_2",
+            "tool": "get_document_summary",
+            "command": "get_document_summary",
+            "lines": [
+              5,
+              7
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.343939042009879
+          },
+          {
+            "id": "item_3",
+            "tool": "delete_object",
+            "command": "delete_object",
+            "lines": [
+              8,
+              9
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.2475780000095256
+          },
+          {
+            "id": "item_4",
+            "tool": "create_object",
+            "command": "create_object",
+            "lines": [
+              10,
+              11
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 0.8896117499680258
+          },
+          {
+            "id": "item_5",
+            "tool": "update_object_attributes",
+            "command": "update_object_attributes",
+            "lines": [
+              12,
+              13
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 0.44829983299132437
+          },
+          {
+            "id": "item_7",
+            "tool": "search_rhinoscript_functions",
+            "command": "search_rhinoscript_functions",
+            "lines": [
+              15,
+              16
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.0771792909945361
+          },
+          {
+            "id": "item_8",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              17,
+              18
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_9",
+            "tool": "execute_rhinocommon_csharp_code",
+            "command": "execute_rhinocommon_csharp_code",
+            "lines": [
+              19,
+              20
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.1936802500276826
+          },
+          {
+            "id": "item_10",
+            "tool": "get_objects",
+            "command": "get_objects",
+            "lines": [
+              21,
+              22
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": null
+          },
+          {
+            "id": "item_11",
+            "tool": "execute_rhinocommon_csharp_code",
+            "command": "execute_rhinocommon_csharp_code",
+            "lines": [
+              23,
+              24
+            ],
+            "failed": true,
+            "completed": true,
+            "seconds": 1.3679990419768728
+          },
+          {
+            "id": "item_12",
+            "tool": "analyze_objects",
+            "command": "analyze_objects",
+            "lines": [
+              25,
+              26
+            ],
+            "failed": false,
+            "completed": true,
+            "seconds": 1.0862037500482984
+          }
+        ]
+      },
+      "cohort": "released-0.4.0-full",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+          "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+          "version": "0.4.0.0",
+          "pid": 66923,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": null,
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "29d8fec06f79e7f33514c1ca4731192f42316983ff4212f75382fc0a78871c82",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    }
+  ],
+  "promotion_authorized": false,
+  "limitation": "Historical heterogeneous observations only. Missing data stays unknown; task success and efficiency are separate.",
+  "input_hashes": {
+    "experiments/workflow/m2-runs.json": "02a95473b3f305c8952e364c22feeb1e97e0c10ae1c0d5d7b64b2af92c2d6f36"
+  },
+  "classifier_hashes": {
+    "audit.py": "fdc35a09371473d33053e26a07bc7e5794efa52b26135c6b52f9b09a7a119519",
+    "flaws.py": "47b474fa0c7a003683fce0fd73ba742b775e8ab6ed04f74dc7c6d88e7821406f"
+  }
+}

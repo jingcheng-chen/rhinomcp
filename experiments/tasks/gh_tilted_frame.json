@@ -1,0 +1,92 @@
+{
+  "id": "m6-tilted-frame-v1",
+  "type": "gh_definition",
+  "family": "gh-vector-frame",
+  "instruction": "Build a vector frame: Cross Product named normal computes A cross B, with A=[1, 2, 0] and B=[0, 0, 3], without unitizing. Feed its vector to Vector Length named magnitude, and to Direction of Line SDL named axis. Feed magnitude to the line Length; start the line at [0, 0, 0]. Expected normal [6, -3, 0], magnitude 6.708203932499369, line endpoint [6, -3, 0]. Use graph ID m6-tilted-frame, the specified nicknames and required connections; leave no unrelated/orphan nodes. Values/endpoints must match within0.01 model units.",
+  "graph_id": "m6-tilted-frame",
+  "linear_tolerance": 0.01,
+  "components": [
+    {
+      "name": "Cross Product",
+      "nickname": "normal"
+    },
+    {
+      "name": "Vector Length",
+      "nickname": "magnitude"
+    },
+    {
+      "name": "Line SDL",
+      "nickname": "axis"
+    }
+  ],
+  "connections": [
+    {
+      "source": "normal",
+      "target": "magnitude",
+      "output_index": 0,
+      "input_index": 0
+    },
+    {
+      "source": "normal",
+      "target": "axis",
+      "output_index": 0,
+      "input_index": 1
+    },
+    {
+      "source": "magnitude",
+      "target": "axis",
+      "output_index": 0,
+      "input_index": 2
+    }
+  ],
+  "outputs": [
+    {
+      "id": "normal",
+      "nickname": "normal",
+      "output_index": 0,
+      "parameter_name": "Vector",
+      "count": 1,
+      "values": [
+        [
+          6,
+          -3,
+          0
+        ]
+      ],
+      "tolerance": 0.01
+    },
+    {
+      "id": "magnitude",
+      "nickname": "magnitude",
+      "output_index": 0,
+      "parameter_name": "Length",
+      "count": 1,
+      "values": [
+        6.708203932499369
+      ],
+      "tolerance": 0.01
+    },
+    {
+      "id": "axis",
+      "nickname": "axis",
+      "output_index": 0,
+      "parameter_name": "Line",
+      "count": 1,
+      "values": [
+        {
+          "from": [
+            0,
+            0,
+            0
+          ],
+          "to": [
+            6,
+            -3,
+            0
+          ]
+        }
+      ],
+      "tolerance": 0.01
+    }
+  ]
+}

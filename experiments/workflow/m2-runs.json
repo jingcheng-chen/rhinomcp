@@ -1,0 +1,112 @@
+{
+  "runs": [
+    {
+      "id": "workflow-baseline-20260909-235243-2ca8879e-edit_existing-v1",
+      "family": "editing-existing",
+      "cohort": "released-0.4.0-native",
+      "run": "experiments/runs/workflow-baseline-20260909-235243-2ca8879e/task-1"
+    },
+    {
+      "id": "workflow-baseline-20260909-235243-2ca8879e-table_assembly-v1",
+      "family": "small-assemblies",
+      "cohort": "released-0.4.0-native",
+      "run": "experiments/runs/workflow-baseline-20260909-235243-2ca8879e/task-2"
+    },
+    {
+      "id": "workflow-baseline-20260909-235243-2ca8879e-inspect_document-v1",
+      "family": "document-inspection",
+      "cohort": "released-0.4.0-native",
+      "run": "experiments/runs/workflow-baseline-20260909-235243-2ca8879e/task-3"
+    },
+    {
+      "id": "workflow-baseline-20260909-235243-2ca8879e-recover_intermediate-v1",
+      "family": "recovery",
+      "cohort": "released-0.4.0-native",
+      "run": "experiments/runs/workflow-baseline-20260909-235243-2ca8879e/task-4"
+    },
+    {
+      "id": "workflow-baseline-20260909-235618-5aa1776e-edit_existing-v1",
+      "family": "editing-existing",
+      "cohort": "released-0.4.0-full",
+      "run": "experiments/runs/workflow-baseline-20260909-235618-5aa1776e/task-1"
+    },
+    {
+      "id": "workflow-baseline-20260909-235618-5aa1776e-table_assembly-v1",
+      "family": "small-assemblies",
+      "cohort": "released-0.4.0-full",
+      "run": "experiments/runs/workflow-baseline-20260909-235618-5aa1776e/task-2",
+      "review": {
+        "events_sha256": "f0c9372265f93483cde9d41d917e002e0d8e817e8a2925202e89bec6d8b5d607",
+        "findings": [
+          {
+            "category": "typed_fallback",
+            "subtype": "layer_assignment_script",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "reviewed",
+            "call_ids": [
+              "item_17"
+            ],
+            "cost_call_ids": [
+              "item_17"
+            ],
+            "reason": "Script assigns the object layer after the exposed update_object_attributes tool returned a missing-method error. This is a workaround for a failed typed operation.",
+            "typed_alternative": "update_object_attributes",
+            "catalog": {
+              "path": "tool-definitions.json",
+              "sha256": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39"
+            },
+            "evidence": [
+              {
+                "path": "calls.jsonl",
+                "sha256": "9907357a04544f5497428664cdb36fe13bd0756a78bc93bbade0374ea7c24137",
+                "quote": "rs.ObjectLayer"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1",
+      "family": "document-inspection",
+      "cohort": "released-0.4.0-full",
+      "run": "experiments/runs/workflow-baseline-20260909-235618-5aa1776e/task-3"
+    },
+    {
+      "id": "workflow-baseline-20260909-235618-5aa1776e-recover_intermediate-v1",
+      "family": "recovery",
+      "cohort": "released-0.4.0-full",
+      "run": "experiments/runs/workflow-baseline-20260909-235618-5aa1776e/task-4",
+      "review": {
+        "events_sha256": "1c3d711c986cbc4e0a1dc997ee427180663a9625c681f37eb71c79ca20c3eb92",
+        "findings": [
+          {
+            "category": "typed_fallback",
+            "subtype": "layer_assignment_script",
+            "tool": "execute_rhinocommon_csharp_code",
+            "confidence": "reviewed",
+            "call_ids": [
+              "item_9"
+            ],
+            "cost_call_ids": [
+              "item_9"
+            ],
+            "reason": "Script assigns the object layer after the exposed update_object_attributes tool returned a missing-method error. This is a workaround for a failed typed operation.",
+            "typed_alternative": "update_object_attributes",
+            "catalog": {
+              "path": "tool-definitions.json",
+              "sha256": "622bab22c1509a8f80ac48f10d7e0accd37e156981dbda6387e18a71bdd91d39"
+            },
+            "evidence": [
+              {
+                "path": "calls.jsonl",
+                "sha256": "29d8fec06f79e7f33514c1ca4731192f42316983ff4212f75382fc0a78871c82",
+                "quote": "ModifyAttributes"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

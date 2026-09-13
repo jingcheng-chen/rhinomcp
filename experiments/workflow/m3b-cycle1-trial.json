@@ -1,0 +1,41 @@
+{
+  "id": "m3b-verification-description-v1",
+  "suite": "experiments/workflow/m3b-cycle1-suite.json",
+  "agent": {
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "medium"
+  },
+  "repeats": 2,
+  "acceptance": "correctness_then_calls_v1",
+  "evaluation_mode": "trusted_baseline",
+  "full_catalog": true,
+  "binaries": {
+    "baseline": {
+      "path": "experiments/runs/m3b-runtime/baseline.rhp",
+      "identity": {
+        "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+        "sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da"
+      }
+    },
+    "candidate": {
+      "path": "experiments/runs/m3b-runtime/baseline.rhp",
+      "identity": {
+        "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+        "sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da"
+      }
+    }
+  },
+  "description_tools": [
+    "analyze_objects"
+  ],
+  "interfaces": {
+    "baseline": {
+      "server_source": "server/src",
+      "extra_tools": []
+    },
+    "candidate": {
+      "server_source": "experiments/runs/repair-20260910-141837-8597e500/candidate/server/src",
+      "extra_tools": []
+    }
+  }
+}

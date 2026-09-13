@@ -1,0 +1,2489 @@
+{
+  "baseline": {
+    "runtime": {
+      "document": 268435458,
+      "marker": null,
+      "object_count": 0,
+      "path": null,
+      "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+      "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+      "version": "0.4.0.0",
+      "pid": 66923,
+      "docs": [
+        {
+          "serial": 268435458,
+          "path": null,
+          "count": 0,
+          "modified": true
+        }
+      ]
+    },
+    "results": [
+      {
+        "case": "layer",
+        "params": {
+          "layer": "Layer 01"
+        },
+        "expected": {
+          "layer": "Layer 01"
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": false,
+          "layer": false
+        },
+        "pass": false,
+        "artifact_sha256": "830389bd99a92f52055822e5677d1c695947ad3b1912ad053ce9ae9a4fe8bc8c"
+      },
+      {
+        "case": "rename_color",
+        "params": {
+          "new_name": "renamed",
+          "color": [
+            13,
+            27,
+            91
+          ]
+        },
+        "expected": {
+          "name": "renamed",
+          "color": [
+            13,
+            27,
+            91
+          ]
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": false,
+          "name": false,
+          "color": false
+        },
+        "pass": false,
+        "artifact_sha256": "8ecd536c13e7eae0695782528d923cc0d9cc30445f621d2821b99d2d63f3f79d"
+      },
+      {
+        "case": "strings",
+        "params": {
+          "user_strings": {
+            "text": "quoted \"value\"",
+            "integer": 42,
+            "decimal": 1.25,
+            "true": true,
+            "false": false,
+            "remove": null
+          }
+        },
+        "expected": {
+          "strings": {
+            "text": "quoted \"value\"",
+            "integer": "42",
+            "decimal": "1.25",
+            "true": "true",
+            "false": "false",
+            "old": "value"
+          }
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": false,
+          "strings": false
+        },
+        "pass": false,
+        "artifact_sha256": "2c111c1ad5559e4bfcb6584f71ca68e8216aad0ae19e02cba196828fc6450f03"
+      },
+      {
+        "case": "remove",
+        "params": {
+          "delete_user_strings": [
+            "old"
+          ]
+        },
+        "expected": {
+          "strings": {}
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": false,
+          "strings": false
+        },
+        "pass": false,
+        "artifact_sha256": "a793175b0e9b4aa5fe281165c166d1cec5f7489909c2c672eeba2fe531ca35e9"
+      },
+      {
+        "case": "clear",
+        "params": {
+          "clear_user_strings": true
+        },
+        "expected": {
+          "strings": {}
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": false,
+          "strings": false
+        },
+        "pass": false,
+        "artifact_sha256": "15cea27495b5896978b62c08ce070d3b92fc33f267c7a9351f33ba02530032cf"
+      },
+      {
+        "case": "hide",
+        "params": {
+          "visible": false
+        },
+        "expected": {
+          "mode": "Hidden"
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": false,
+          "mode": false
+        },
+        "pass": false,
+        "artifact_sha256": "c9acbbfec641d6c03b812b3c925c0c8443603926a209ee62c76bf6052e61ac97"
+      },
+      {
+        "case": "lock",
+        "params": {
+          "locked": true
+        },
+        "expected": {
+          "mode": "Locked"
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": false,
+          "mode": false
+        },
+        "pass": false,
+        "artifact_sha256": "93a92b8a996eceaf303eb4c39b09a8cb6ba79d3b47451ce7c24be7d934686463"
+      },
+      {
+        "case": "material_from_layer",
+        "params": {
+          "material_index": -1
+        },
+        "expected": {
+          "material": -1
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": false,
+          "material": true
+        },
+        "pass": false,
+        "artifact_sha256": "b0e8b0e8d584f556a114e71e4f62596d061aa5afea1fda525208ab2bd838b3ae"
+      },
+      {
+        "case": "reject_array",
+        "params": {
+          "user_strings": {
+            "a": [
+              1
+            ]
+          }
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "9311928f72ccbfffd2d8fcc0c18747603b7876c332d70ab66bfa7ec91e06ecf0"
+      },
+      {
+        "case": "reject_object",
+        "params": {
+          "user_strings": {
+            "a": {
+              "x": 1
+            }
+          }
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "2179b59c1d6a07e91dc7e70e9757ff303c63064e8ee3873272987fd76ba388e7"
+      },
+      {
+        "case": "reject_hidden_locked",
+        "params": {
+          "visible": false,
+          "locked": true
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "99f1e6873b2f2f7432a271f71bdde686f40764f0bd040c3014f21f1f812d6555"
+      },
+      {
+        "case": "reject_missing_layer",
+        "params": {
+          "layer": "DefinitelyAbsent"
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "d9c3fc589cc400c8705cec0d712e04f77a1cee407868ee1ce49efc9c81d4d681"
+      },
+      {
+        "case": "reject_material",
+        "params": {
+          "material_index": 99999
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "c730cb342f8b556e23174e220330c6f5168de86012b01011dd313b2bd2793b4b"
+      },
+      {
+        "case": "reject_no_updates",
+        "params": {},
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Method not found: 'System.String Newtonsoft.Json.Linq.JToken.ToString(Newtonsoft.Json.Formatting)'.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "8e7be962313a97ca3aa3535538b9792d347fe77bfeedb7a4c127037ab1e17467"
+      }
+    ],
+    "passes": 6,
+    "total": 14,
+    "preserved": true
+  },
+  "candidate": {
+    "runtime": {
+      "document": 268435457,
+      "marker": null,
+      "object_count": 0,
+      "path": null,
+      "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+      "mvid": "e7ea0a23-714d-4a4f-89e9-d473d5ed12d4",
+      "version": "0.4.0.0",
+      "pid": 12977,
+      "docs": [
+        {
+          "serial": 268435457,
+          "path": null,
+          "count": 0,
+          "modified": false
+        }
+      ]
+    },
+    "results": [
+      {
+        "case": "layer",
+        "params": {
+          "layer": "Layer 01"
+        },
+        "expected": {
+          "layer": "Layer 01"
+        },
+        "response": {
+          "id": "7c0ed1c9-5490-4f6b-9d69-a0a235271d9b",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 1,
+            "id": "7173a954-412b-4606-b14c-c2bdb579af98",
+            "name": "Layer 01",
+            "full_path": "Layer 01"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Layer 01",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "layer": true
+        },
+        "pass": true,
+        "artifact_sha256": "9d684b6b27bee6f4ca53840290dac8fa31da478309ec02660ea18cbef90459b6"
+      },
+      {
+        "case": "rename_color",
+        "params": {
+          "new_name": "renamed",
+          "color": [
+            13,
+            27,
+            91
+          ]
+        },
+        "expected": {
+          "name": "renamed",
+          "color": [
+            13,
+            27,
+            91
+          ]
+        },
+        "response": {
+          "id": "a831cb54-d9a5-4454-80b3-c00a49864f16",
+          "name": "renamed",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 13,
+            "g": 27,
+            "b": 91
+          },
+          "color_source": "ColorFromObject",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "renamed",
+          "layer": "Default",
+          "color": "DRtb",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "name": true,
+          "color": false
+        },
+        "pass": false,
+        "artifact_sha256": "e14123438f0e2496e31656ec946511e786b55ba640fc36f575e496b10a824fc1"
+      },
+      {
+        "case": "strings",
+        "params": {
+          "user_strings": {
+            "text": "quoted \"value\"",
+            "integer": 42,
+            "decimal": 1.25,
+            "true": true,
+            "false": false,
+            "remove": null
+          }
+        },
+        "expected": {
+          "strings": {
+            "text": "quoted \"value\"",
+            "integer": "42",
+            "decimal": "1.25",
+            "true": "true",
+            "false": "false",
+            "old": "value"
+          }
+        },
+        "response": {
+          "id": "65360215-33d7-4a63-b7d1-3d56b9ebf053",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {}
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {}
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "strings": false
+        },
+        "pass": false,
+        "artifact_sha256": "01b41d0d7c83a7f462a22c93c566a10054a237bc1f827160e92ea4783d67090a"
+      },
+      {
+        "case": "remove",
+        "params": {
+          "delete_user_strings": [
+            "old"
+          ]
+        },
+        "expected": {
+          "strings": {}
+        },
+        "response": {
+          "id": "11202666-e493-41a6-98f5-e33d1bc9727e",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {}
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {}
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "strings": true
+        },
+        "pass": true,
+        "artifact_sha256": "b234ef7d2c7ab323f6a9e5b436f84c2708267cb503669fd72144a2e92bce1a3b"
+      },
+      {
+        "case": "clear",
+        "params": {
+          "clear_user_strings": true
+        },
+        "expected": {
+          "strings": {}
+        },
+        "response": {
+          "id": "7c416bff-f1a0-45c8-9485-30213a7b7529",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {}
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {}
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "strings": true
+        },
+        "pass": true,
+        "artifact_sha256": "86b4f2c6cefa021dfc8dd7da1050e6b6631fdb0aa62a93f7fdae5a83253c392f"
+      },
+      {
+        "case": "hide",
+        "params": {
+          "visible": false
+        },
+        "expected": {
+          "mode": "Hidden"
+        },
+        "response": {
+          "id": "7488958d-7242-45f9-9b9a-a5222a6e6247",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": false,
+          "locked": false,
+          "hidden": true,
+          "normal": false,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Hidden",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "mode": true
+        },
+        "pass": true,
+        "artifact_sha256": "d2c6c45e07c45efcf93000098fc5e824896e26d7399475d5a1dc00c63098bf53"
+      },
+      {
+        "case": "lock",
+        "params": {
+          "locked": true
+        },
+        "expected": {
+          "mode": "Locked"
+        },
+        "response": {
+          "id": "a90087a8-b4db-4a62-8ec0-db3433b34325",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": true,
+          "hidden": false,
+          "normal": false,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Locked",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "mode": true
+        },
+        "pass": true,
+        "artifact_sha256": "4c0b1b1188d88cefb35626ab9d36a119c989fd7fbdc705b1a84c0d16ca4c5e60"
+      },
+      {
+        "case": "material_from_layer",
+        "params": {
+          "material_index": -1
+        },
+        "expected": {
+          "material": -1
+        },
+        "response": {
+          "id": "bce12217-14a2-4b6c-a89c-569db4756f88",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "material": true
+        },
+        "pass": true,
+        "artifact_sha256": "c73513e152d7b1510e68e516aba4e6195b509e7f16668e68b15c4fae3a4aad0b"
+      },
+      {
+        "case": "reject_array",
+        "params": {
+          "user_strings": {
+            "a": [
+              1
+            ]
+          }
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: User string values must be strings, numbers, booleans, or null.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "a7a1561ddc5fbb2794caff2a316e377fdbd96c13c41722f421d7045eb75437f6"
+      },
+      {
+        "case": "reject_object",
+        "params": {
+          "user_strings": {
+            "a": {
+              "x": 1
+            }
+          }
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: User string values must be strings, numbers, booleans, or null.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "629268295578b22c148fc45801455fa267b921b1ec199b1a0bd7f15f63f806f1"
+      },
+      {
+        "case": "reject_hidden_locked",
+        "params": {
+          "visible": false,
+          "locked": true
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Object cannot be hidden and locked at the same time.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "11a8b15431c82dffb2941c6b99d992df90a501f39b322aa01984aebb1434a3c1"
+      },
+      {
+        "case": "reject_missing_layer",
+        "params": {
+          "layer": "DefinitelyAbsent"
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Layer 'DefinitelyAbsent' not found.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "b9a50936a0d80b47776a4bc32ef7aa3f0cdfcb557a028d93fab4b065c69aea74"
+      },
+      {
+        "case": "reject_material",
+        "params": {
+          "material_index": 99999
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Material index 99999 is outside the document material table.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "4f3905e34fd0665f9c0367b2cac7b28ef995090ef3899b9b7697487ed4462bfc"
+      },
+      {
+        "case": "reject_no_updates",
+        "params": {},
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: update_object_attributes requires at least one attribute update.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": "AAAA",
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "770317f3f53247eb4d493b4db707abc24ecec3b767405b387adfeec46b4dd55e"
+      }
+    ],
+    "passes": 12,
+    "total": 14,
+    "preserved": true
+  },
+  "candidate_v2": {
+    "runtime": {
+      "document": 268435457,
+      "marker": null,
+      "object_count": 0,
+      "path": null,
+      "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+      "mvid": "15aca56b-1d45-41a5-9247-c15200e67b0a",
+      "version": "0.4.0.0",
+      "pid": 23349,
+      "docs": [
+        {
+          "serial": 268435457,
+          "path": null,
+          "count": 0,
+          "modified": false
+        }
+      ]
+    },
+    "results": [
+      {
+        "case": "layer",
+        "params": {
+          "layer": "Layer 01"
+        },
+        "expected": {
+          "layer": "Layer 01"
+        },
+        "response": {
+          "id": "79044c38-fa94-4c5b-be1c-67435fcb9eb5",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 1,
+            "id": "7173a954-412b-4606-b14c-c2bdb579af98",
+            "name": "Layer 01",
+            "full_path": "Layer 01"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Layer 01",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "layer": true
+        },
+        "pass": true,
+        "artifact_sha256": "54222693d063c8c89f4d180eba0bb8d11b254d6b560bc1f03f2a243236d3bd05"
+      },
+      {
+        "case": "rename_color",
+        "params": {
+          "new_name": "renamed",
+          "color": [
+            13,
+            27,
+            91
+          ]
+        },
+        "expected": {
+          "name": "renamed",
+          "color": [
+            13,
+            27,
+            91
+          ]
+        },
+        "response": {
+          "id": "d81625b3-fcc2-4ee3-add8-62cd41df9bbe",
+          "name": "renamed",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 13,
+            "g": 27,
+            "b": 91
+          },
+          "color_source": "ColorFromObject",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "renamed",
+          "layer": "Default",
+          "color": [
+            13,
+            27,
+            91
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "name": true,
+          "color": true
+        },
+        "pass": true,
+        "artifact_sha256": "84de7bcb34454aff866f9394ecd1ff60e53d21b831fe3ab0c94487cbcabdd60e"
+      },
+      {
+        "case": "strings",
+        "params": {
+          "user_strings": {
+            "text": "quoted \"value\"",
+            "integer": 42,
+            "decimal": 1.25,
+            "true": true,
+            "false": false,
+            "remove": null
+          }
+        },
+        "expected": {
+          "strings": {
+            "text": "quoted \"value\"",
+            "integer": "42",
+            "decimal": "1.25",
+            "true": "true",
+            "false": "false",
+            "old": "value"
+          }
+        },
+        "response": {
+          "id": "31e38741-4398-42dc-a9ec-9cdf805cda94",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {
+            "old": "value",
+            "text": "quoted \"value\"",
+            "integer": "42",
+            "decimal": "1.25",
+            "true": "true",
+            "false": "false"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value",
+            "text": "quoted \"value\"",
+            "integer": "42",
+            "decimal": "1.25",
+            "true": "true",
+            "false": "false"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "strings": true
+        },
+        "pass": true,
+        "artifact_sha256": "7de1b8fd7a9f4036b9e2cc81659dde27317cb6c69ec4d93770996b78faaa9e8a"
+      },
+      {
+        "case": "remove",
+        "params": {
+          "delete_user_strings": [
+            "old"
+          ]
+        },
+        "expected": {
+          "strings": {}
+        },
+        "response": {
+          "id": "2824dddc-e139-46ee-a77b-42373a5c4400",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {}
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {}
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "strings": true
+        },
+        "pass": true,
+        "artifact_sha256": "b813d105ecb07009ecd16bfb65c39a63965f9b388451cadf7f570513757ff370"
+      },
+      {
+        "case": "clear",
+        "params": {
+          "clear_user_strings": true
+        },
+        "expected": {
+          "strings": {}
+        },
+        "response": {
+          "id": "c9d82529-bcfc-48f0-9c1a-438a4086af97",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {}
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {}
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "strings": true
+        },
+        "pass": true,
+        "artifact_sha256": "80d1513cedb4a8175c75e2a4950da03c415a0816f678e5fa827f85bf8ff75f39"
+      },
+      {
+        "case": "hide",
+        "params": {
+          "visible": false
+        },
+        "expected": {
+          "mode": "Hidden"
+        },
+        "response": {
+          "id": "82d9feb7-2cc6-4784-8dbb-ba7b0b01d623",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": false,
+          "locked": false,
+          "hidden": true,
+          "normal": false,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Hidden",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "mode": true
+        },
+        "pass": true,
+        "artifact_sha256": "2d0f7f6ddc81c559a486763e06e533faad284a3799d00007adc16705eea24c8f"
+      },
+      {
+        "case": "lock",
+        "params": {
+          "locked": true
+        },
+        "expected": {
+          "mode": "Locked"
+        },
+        "response": {
+          "id": "96a5a3c8-fb79-42a4-8c86-3c105797d0e1",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": true,
+          "hidden": false,
+          "normal": false,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Locked",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "mode": true
+        },
+        "pass": true,
+        "artifact_sha256": "72f525559433a00d8a23899842bf0dfa5c35d6e9c22993caa0450c449bda496b"
+      },
+      {
+        "case": "material_from_layer",
+        "params": {
+          "material_index": -1
+        },
+        "expected": {
+          "material": -1
+        },
+        "response": {
+          "id": "9ba1d408-d7d6-469a-ba85-6922814a4af5",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "material": true
+        },
+        "pass": true,
+        "artifact_sha256": "ad1fa544f58b60f1ac0ab595415f81432879ce174750fb05b9313ecfd5e8dd0c"
+      },
+      {
+        "case": "reject_array",
+        "params": {
+          "user_strings": {
+            "a": [
+              1
+            ]
+          }
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: User string values must be strings, numbers, booleans, or null.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "fa86f9290156fc8dac99256c494503296050ab2e60e9d58ffa7e2ab2686ce737"
+      },
+      {
+        "case": "reject_object",
+        "params": {
+          "user_strings": {
+            "a": {
+              "x": 1
+            }
+          }
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: User string values must be strings, numbers, booleans, or null.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "eaf2fd560e62729906c8325b40cd51f4e36cb38ead4ae32c8b5b5a090e5f3169"
+      },
+      {
+        "case": "reject_hidden_locked",
+        "params": {
+          "visible": false,
+          "locked": true
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Object cannot be hidden and locked at the same time.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "e8dfeaad57f73f5592e51897ac5d053ac5a40e238fc9e32224b4fc97892519d7"
+      },
+      {
+        "case": "reject_missing_layer",
+        "params": {
+          "layer": "DefinitelyAbsent"
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Layer 'DefinitelyAbsent' not found.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "7c349333beb304b813468c089ef351b27d40f46d074c69bc676fbe21ff5eb168"
+      },
+      {
+        "case": "reject_material",
+        "params": {
+          "material_index": 99999
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Material index 99999 is outside the document material table.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "50aea26c2132667335b8110b0a89b89c3a24b892e85af27788716b941fff2390"
+      },
+      {
+        "case": "reject_no_updates",
+        "params": {},
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: update_object_attributes requires at least one attribute update.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "1eded4f2664b6526ef1abbfb8df42d11600631d56e5b2f9687faf7fb4102595b"
+      }
+    ],
+    "passes": 14,
+    "total": 14,
+    "preserved": true
+  },
+  "candidate_v1_note": "Rejected preflight: data loss. Color mismatch was probe byte-array JSON representation; fixed observer to serialize integer channels.",
+  "release_041": {
+    "runtime": {
+      "document": 268435457,
+      "marker": null,
+      "object_count": 0,
+      "path": null,
+      "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+      "mvid": "4cf421f0-ac86-44c2-a275-eefba631c337",
+      "version": "0.4.1.0",
+      "pid": 2961,
+      "docs": [
+        {
+          "serial": 268435457,
+          "path": null,
+          "count": 0,
+          "modified": false
+        }
+      ]
+    },
+    "results": [
+      {
+        "case": "layer",
+        "params": {
+          "layer": "Layer 01"
+        },
+        "expected": {
+          "layer": "Layer 01"
+        },
+        "response": {
+          "id": "a213551d-2de3-413e-9e43-01b2800cded6",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 1,
+            "id": "7173a954-412b-4606-b14c-c2bdb579af98",
+            "name": "Layer 01",
+            "full_path": "Layer 01"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Layer 01",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "layer": true
+        },
+        "pass": true,
+        "artifact_sha256": "10654682bf5fa86c07068416bdbd1124b55fd31da5e17b58c8d589a98b619f5e"
+      },
+      {
+        "case": "rename_color",
+        "params": {
+          "new_name": "renamed",
+          "color": [
+            13,
+            27,
+            91
+          ]
+        },
+        "expected": {
+          "name": "renamed",
+          "color": [
+            13,
+            27,
+            91
+          ]
+        },
+        "response": {
+          "id": "57d40a2d-d30c-4548-bc1d-276f30b3551f",
+          "name": "renamed",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 13,
+            "g": 27,
+            "b": 91
+          },
+          "color_source": "ColorFromObject",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "renamed",
+          "layer": "Default",
+          "color": [
+            13,
+            27,
+            91
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "name": true,
+          "color": true
+        },
+        "pass": true,
+        "artifact_sha256": "f37fde971c49688dea9346de9dd2676410fa0ac44f2df8393be63e2584dad089"
+      },
+      {
+        "case": "strings",
+        "params": {
+          "user_strings": {
+            "text": "quoted \"value\"",
+            "integer": 42,
+            "decimal": 1.25,
+            "true": true,
+            "false": false,
+            "remove": null
+          }
+        },
+        "expected": {
+          "strings": {
+            "text": "quoted \"value\"",
+            "integer": "42",
+            "decimal": "1.25",
+            "true": "true",
+            "false": "false",
+            "old": "value"
+          }
+        },
+        "response": {
+          "id": "c9d645c6-89f1-46d2-add6-6a4db651852c",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {
+            "old": "value",
+            "text": "quoted \"value\"",
+            "integer": "42",
+            "decimal": "1.25",
+            "true": "true",
+            "false": "false"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value",
+            "text": "quoted \"value\"",
+            "integer": "42",
+            "decimal": "1.25",
+            "true": "true",
+            "false": "false"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "strings": true
+        },
+        "pass": true,
+        "artifact_sha256": "fbacd8cb8424f9c29a50f92dd2f4307cba838e16cb7a7d222b1a9a0453191ae0"
+      },
+      {
+        "case": "remove",
+        "params": {
+          "delete_user_strings": [
+            "old"
+          ]
+        },
+        "expected": {
+          "strings": {}
+        },
+        "response": {
+          "id": "fefb14bb-7d26-4c61-8498-123133dafed7",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {}
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {}
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "strings": true
+        },
+        "pass": true,
+        "artifact_sha256": "7b6e6eb629e9b069e04dd2e767f3052a58043924cc7138811d0fa1e0d3ac29be"
+      },
+      {
+        "case": "clear",
+        "params": {
+          "clear_user_strings": true
+        },
+        "expected": {
+          "strings": {}
+        },
+        "response": {
+          "id": "c70f0491-d6f6-464a-8f1e-232f2459ee54",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {}
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {}
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "strings": true
+        },
+        "pass": true,
+        "artifact_sha256": "09c7bcc9c4dae1d470cfaa76629ac708387d215cb799bc2131b56ed7c489516b"
+      },
+      {
+        "case": "hide",
+        "params": {
+          "visible": false
+        },
+        "expected": {
+          "mode": "Hidden"
+        },
+        "response": {
+          "id": "950f964e-daee-4720-9ca3-b74239469c8d",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": false,
+          "locked": false,
+          "hidden": true,
+          "normal": false,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Hidden",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "mode": true
+        },
+        "pass": true,
+        "artifact_sha256": "d538edda8d153202b8759b2cb7a7bdaced2e12e75f7dc09c02938447ecf7e646"
+      },
+      {
+        "case": "lock",
+        "params": {
+          "locked": true
+        },
+        "expected": {
+          "mode": "Locked"
+        },
+        "response": {
+          "id": "c6bca3f9-9f84-4f5e-9b85-a4f16d86e62d",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": true,
+          "hidden": false,
+          "normal": false,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Locked",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "mode": true
+        },
+        "pass": true,
+        "artifact_sha256": "ea6328a8fd3972ecbe8bbc8072a5dc6d071460c3a9aeb3d02ab3b84b77fafc1f"
+      },
+      {
+        "case": "material_from_layer",
+        "params": {
+          "material_index": -1
+        },
+        "expected": {
+          "material": -1
+        },
+        "response": {
+          "id": "8597224a-6743-42f8-9dee-9576a49a44a0",
+          "name": "probe",
+          "type": "BREP",
+          "layer": {
+            "index": 0,
+            "id": "67bfd040-c5c5-4493-9b0e-8061b7d8c488",
+            "name": "Default",
+            "full_path": "Default"
+          },
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+          },
+          "color_source": "ColorFromLayer",
+          "material_index": -1,
+          "material_source": "MaterialFromLayer",
+          "visible": true,
+          "locked": false,
+          "hidden": false,
+          "normal": true,
+          "user_strings": {
+            "old": "value"
+          }
+        },
+        "error": null,
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true,
+          "material": true
+        },
+        "pass": true,
+        "artifact_sha256": "3a5ded942da169c027d583c4c67b1ef3066dd59f90a1efe2b62a9058a03d44f1"
+      },
+      {
+        "case": "reject_array",
+        "params": {
+          "user_strings": {
+            "a": [
+              1
+            ]
+          }
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: User string values must be strings, numbers, booleans, or null.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "1216be51c35fbd8a18a45119d8ef963300faa6f3e992d2208486da76f33f0cd1"
+      },
+      {
+        "case": "reject_object",
+        "params": {
+          "user_strings": {
+            "a": {
+              "x": 1
+            }
+          }
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: User string values must be strings, numbers, booleans, or null.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "f32ec7870ea233546ee3f93e71e03018821b092af2511a8ef5f0c8c8e92d2898"
+      },
+      {
+        "case": "reject_hidden_locked",
+        "params": {
+          "visible": false,
+          "locked": true
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Object cannot be hidden and locked at the same time.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "d9d1349e80a39c9cae16769510c0dba5d3b0ec0fba32fad0fb6016b075d30ad6"
+      },
+      {
+        "case": "reject_missing_layer",
+        "params": {
+          "layer": "DefinitelyAbsent"
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Layer 'DefinitelyAbsent' not found.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "7c944716e0377b3347592080243d0f6467346a8d8e5ffdc1310fdcf1b7194ada"
+      },
+      {
+        "case": "reject_material",
+        "params": {
+          "material_index": 99999
+        },
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: Material index 99999 is outside the document material table.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "9537cc0061820ce5ea0d299386aed93008a463e50d49710bbfa3ef0f8aafd4fb"
+      },
+      {
+        "case": "reject_no_updates",
+        "params": {},
+        "expected": {
+          "error": true
+        },
+        "response": null,
+        "error": "Communication error with Rhino: update_object_attributes requires at least one attribute update.",
+        "attributes": {
+          "name": "probe",
+          "layer": "Default",
+          "color": [
+            0,
+            0,
+            0
+          ],
+          "mode": "Normal",
+          "material": -1,
+          "strings": {
+            "old": "value"
+          }
+        },
+        "checks": {
+          "geometry_identity": true,
+          "response": true
+        },
+        "pass": true,
+        "artifact_sha256": "b8909c2cac68333f1e70e5a766628f96390f879d2b3fda5c63f92999485336b8"
+      }
+    ],
+    "passes": 14,
+    "total": 14,
+    "preserved": true,
+    "source": "experiments/runs/attribute-probe-20260910-093130",
+    "binary_sha256": "e11ac653eaa0a503e28ed20a09ead26cdc8974448fbcdae2dab716379a0f3be3"
+  }
+}

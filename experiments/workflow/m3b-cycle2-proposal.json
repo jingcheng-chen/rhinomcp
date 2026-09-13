@@ -1,0 +1,38 @@
+{
+  "id": "m3b2-update-object-attributes-existing-layer-precondition",
+  "kind": "tool_ergonomics",
+  "target": "mcp_interface",
+  "friction": "In three saved-file-passing curve-network-joining sessions, agents attempted update_object_attributes with destination layer Joined before creating that layer, each costing a failed call and, where retried, an additional call. The current tool description says the destination layer is optional but does not state that a supplied layer name/full path must already exist or point agents to create_layer.",
+  "evidence": [
+    "Three underlying update_object_attributes failures explicitly reported that layer Joined was not found: one baseline and two candidate sessions in curve-network-joining.",
+    "The audit records three missing-object-classified update_object_attributes failures and three same-intent retries; supervisor review identifies the classifier label as instrumentation noise, not a missing-object/plugin conclusion.",
+    "All affected task verdicts passed, so this is workflow inefficiency/recovery friction rather than evidence of correctness failure.",
+    "The 13 host execution refusals are gateway restrictions, not evidence for this proposal."
+  ],
+  "hypothesis": "A description-only clarification that destination_layer must already exist, with create_layer as the prerequisite, will reduce premature layer-assignment failures and recovery calls without changing update_object_attributes behavior or task correctness. This remains unmeasured until a pinned AB/BA evaluation.",
+  "discovery_families": [
+    "curve-network-joining"
+  ],
+  "validation_families": [
+    "curve-network-joining",
+    "small-assemblies",
+    "directional-curve-projection"
+  ],
+  "held_out_families": [
+    "directional-curve-projection"
+  ],
+  "metrics": [
+    "task_success",
+    "failed_tool_calls",
+    "mcp_calls",
+    "elapsed_seconds",
+    "recovery_success"
+  ],
+  "preserve": [
+    "Change only the update_object_attributes MCP tool description/docstring; no executable AST, schema, command behavior, other tool descriptions, plugin bytes, model recipe, task prompt, evaluator, budget, or environment changes.",
+    "Use fixed gpt-5.6-terra medium, 50 calls, 240 seconds, full catalog, and refused host execution for baseline/candidate AB/BA comparisons.",
+    "Require all saved-file tasks to pass, no per-task task-success or failed-call regression, and no adoption without measured benefit in at least one discovery family.",
+    "Treat small-assemblies and directional-curve-projection as planned validation only; directional-curve-projection is held out from the supplied audit."
+  ],
+  "status": "proposed"
+}

@@ -1,0 +1,128 @@
+{
+  "id": "m6-loft_sections-v1",
+  "type": "gh_definition",
+  "family": "gh-loft-sections",
+  "instruction": "Build an uncapped circular loft from three horizontal circles of radius5 at heights0,10,20. Series named heights drives Z of Construct Point named origins (X=Y=0); origins drives XY Plane named planes; planes drives Plane of Circle named sections, radius5. Connect sections to Loft named shell; connect shell to Area named area. Expect one open Brep, one face and total area200*pi. Keep all three sections centered on the Z axis. Use graph ID m6-loft_sections and the specified component nicknames. Outputs must match within 0.01 model units (areas within 0.01 square units). Leave no unrelated/orphan nodes.",
+  "graph_id": "m6-loft_sections",
+  "linear_tolerance": 0.01,
+  "components": [
+    {
+      "name": "Series",
+      "nickname": "heights"
+    },
+    {
+      "name": "Construct Point",
+      "nickname": "origins"
+    },
+    {
+      "name": "XY Plane",
+      "nickname": "planes"
+    },
+    {
+      "name": "Circle",
+      "nickname": "sections"
+    },
+    {
+      "name": "Loft",
+      "nickname": "shell"
+    },
+    {
+      "name": "Area",
+      "nickname": "area"
+    }
+  ],
+  "connections": [
+    {
+      "source": "heights",
+      "target": "origins",
+      "output_index": 0,
+      "input_index": 2
+    },
+    {
+      "source": "origins",
+      "target": "planes",
+      "output_index": 0,
+      "input_index": 0
+    },
+    {
+      "source": "planes",
+      "target": "sections",
+      "output_index": 0,
+      "input_index": 0
+    },
+    {
+      "source": "sections",
+      "target": "shell",
+      "output_index": 0,
+      "input_index": 0
+    },
+    {
+      "source": "shell",
+      "target": "area",
+      "output_index": 0,
+      "input_index": 0
+    }
+  ],
+  "outputs": [
+    {
+      "id": "sections0",
+      "nickname": "sections",
+      "output_index": 0,
+      "parameter_name": "Circle",
+      "count": 3,
+      "values": [
+        {
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "radius": 5
+        },
+        {
+          "center": [
+            0,
+            0,
+            10
+          ],
+          "radius": 5
+        },
+        {
+          "center": [
+            0,
+            0,
+            20
+          ],
+          "radius": 5
+        }
+      ],
+      "tolerance": 0.01
+    },
+    {
+      "id": "shell0",
+      "nickname": "shell",
+      "output_index": 0,
+      "parameter_name": "Loft",
+      "count": 1,
+      "values": [
+        {
+          "type": "Brep",
+          "is_solid": false,
+          "faces": 1
+        }
+      ],
+      "tolerance": 0.01
+    },
+    {
+      "id": "area0",
+      "nickname": "area",
+      "output_index": 0,
+      "parameter_name": "Area",
+      "count": 1,
+      "values": [
+        628.3185307179587
+      ],
+      "tolerance": 0.01
+    }
+  ]
+}

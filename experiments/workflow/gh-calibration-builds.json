@@ -1,0 +1,263 @@
+[
+  {
+    "task": "experiments/tasks/gh_point_array.json",
+    "build": {
+      "components": [
+        {
+          "alias": "positions",
+          "nickname": "positions",
+          "component_name": "Series",
+          "component_guid": "e64c5fb1-845c-4ab1-8911-5f338516ba67"
+        },
+        {
+          "alias": "points",
+          "nickname": "points",
+          "component_name": "Construct Point",
+          "component_guid": "3581f42a-9592-4549-bd6b-1c0fc39d067b"
+        },
+        {
+          "alias": "lift",
+          "nickname": "lift",
+          "component_name": "Unit Z",
+          "component_guid": "9103c240-a6a9-4223-9b42-dbd19bf38e2b"
+        },
+        {
+          "alias": "result",
+          "nickname": "result",
+          "component_name": "Move",
+          "component_guid": "b40f28a2-ba30-4ac2-afe5-a6ece7f985fc"
+        }
+      ],
+      "connections": [
+        {
+          "source": "positions",
+          "target": "points",
+          "source_output_index": 0,
+          "target_input_index": 0
+        },
+        {
+          "source": "points",
+          "target": "result",
+          "source_output_index": 0,
+          "target_input_index": 0
+        },
+        {
+          "source": "lift",
+          "target": "result",
+          "source_output_index": 0,
+          "target_input_index": 1
+        }
+      ],
+      "values": [
+        {
+          "target": "positions",
+          "input_index": 0,
+          "value": 0
+        },
+        {
+          "target": "positions",
+          "input_index": 1,
+          "value": 10
+        },
+        {
+          "target": "positions",
+          "input_index": 2,
+          "value": 4
+        },
+        {
+          "target": "points",
+          "input_index": 1,
+          "value": 5
+        },
+        {
+          "target": "points",
+          "input_index": 2,
+          "value": 0
+        },
+        {
+          "target": "lift",
+          "input_index": 0,
+          "value": 20
+        }
+      ],
+      "graph_id": "m6-point_array",
+      "layout": {
+        "enabled": true
+      },
+      "recompute": true
+    }
+  },
+  {
+    "task": "experiments/tasks/gh_circle_profiles.json",
+    "build": {
+      "components": [
+        {
+          "alias": "radii",
+          "nickname": "radii",
+          "component_name": "Series",
+          "component_guid": "e64c5fb1-845c-4ab1-8911-5f338516ba67"
+        },
+        {
+          "alias": "profiles",
+          "nickname": "profiles",
+          "component_name": "Circle",
+          "component_guid": "807b86e3-be8d-4970-92b5-f8cdcb45b06b"
+        },
+        {
+          "alias": "areas",
+          "nickname": "areas",
+          "component_name": "Area",
+          "component_guid": "2e205f24-9279-47b2-b414-d06dcd0b21a7"
+        }
+      ],
+      "connections": [
+        {
+          "source": "radii",
+          "target": "profiles",
+          "source_output_index": 0,
+          "target_input_index": 1
+        },
+        {
+          "source": "profiles",
+          "target": "areas",
+          "source_output_index": 0,
+          "target_input_index": 0
+        }
+      ],
+      "values": [
+        {
+          "target": "radii",
+          "input_index": 0,
+          "value": 2
+        },
+        {
+          "target": "radii",
+          "input_index": 1,
+          "value": 2
+        },
+        {
+          "target": "radii",
+          "input_index": 2,
+          "value": 3
+        }
+      ],
+      "graph_id": "m6-circle_profiles",
+      "layout": {
+        "enabled": true
+      },
+      "recompute": true
+    }
+  },
+  {
+    "task": "experiments/tasks/gh_loft_sections.json",
+    "build": {
+      "components": [
+        {
+          "alias": "heights",
+          "nickname": "heights",
+          "component_name": "Series",
+          "component_guid": "e64c5fb1-845c-4ab1-8911-5f338516ba67"
+        },
+        {
+          "alias": "origins",
+          "nickname": "origins",
+          "component_name": "Construct Point",
+          "component_guid": "3581f42a-9592-4549-bd6b-1c0fc39d067b"
+        },
+        {
+          "alias": "planes",
+          "nickname": "planes",
+          "component_name": "XY Plane",
+          "component_guid": "17b7152b-d30d-4d50-b9ef-c9fe25576fc2"
+        },
+        {
+          "alias": "sections",
+          "nickname": "sections",
+          "component_name": "Circle",
+          "component_guid": "807b86e3-be8d-4970-92b5-f8cdcb45b06b"
+        },
+        {
+          "alias": "shell",
+          "nickname": "shell",
+          "component_name": "Loft",
+          "component_guid": "a7a41d0a-2188-4f7a-82cc-1a2c4e4ec850"
+        },
+        {
+          "alias": "area",
+          "nickname": "area",
+          "component_name": "Area",
+          "component_guid": "2e205f24-9279-47b2-b414-d06dcd0b21a7"
+        }
+      ],
+      "connections": [
+        {
+          "source": "heights",
+          "target": "origins",
+          "source_output_index": 0,
+          "target_input_index": 2
+        },
+        {
+          "source": "origins",
+          "target": "planes",
+          "source_output_index": 0,
+          "target_input_index": 0
+        },
+        {
+          "source": "planes",
+          "target": "sections",
+          "source_output_index": 0,
+          "target_input_index": 0
+        },
+        {
+          "source": "sections",
+          "target": "shell",
+          "source_output_index": 0,
+          "target_input_index": 0
+        },
+        {
+          "source": "shell",
+          "target": "area",
+          "source_output_index": 0,
+          "target_input_index": 0
+        }
+      ],
+      "values": [
+        {
+          "target": "heights",
+          "input_index": 0,
+          "value": 0
+        },
+        {
+          "target": "heights",
+          "input_index": 1,
+          "value": 10
+        },
+        {
+          "target": "heights",
+          "input_index": 2,
+          "value": 3
+        },
+        {
+          "target": "origins",
+          "input_index": 0,
+          "value": 0
+        },
+        {
+          "target": "origins",
+          "input_index": 1,
+          "value": 0
+        },
+        {
+          "target": "sections",
+          "input_index": 1,
+          "value": 5
+        }
+      ],
+      "graph_id": "m6-loft_sections",
+      "layout": {
+        "enabled": true
+      },
+      "recompute": true
+    }
+  }
+]

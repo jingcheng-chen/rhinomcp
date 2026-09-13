@@ -1,0 +1,41 @@
+{
+  "id": "m3b-1-generic-verification-guidance",
+  "kind": "tool_ergonomics",
+  "target": "shared_tool_guidance",
+  "friction": "Agents can treat successful creation and topology analysis as completion without explicitly comparing returned bounds, dimensions, and pose to the request. One curved-panel run claimed completion but its independently evaluated saved file failed; the available evidence does not establish a plugin geometry defect. Repeated guidance reads (8 charged calls across 4 runs) make concise, generic verification guidance worth testing, but are not themselves defects.",
+  "evidence": [
+    "Observation: the curved-panels run claimed completion but its saved-file verdict was fail; creation and analysis reportedly returned the geometry that was actually produced.",
+    "Observation: get_modeling_guidance incurred 8 charged discovery calls across posed-solids, trimmed-patches, curved-panels, and editing-existing; 4 occurred in trimmed-patches.",
+    "Observation: 78 baseline calls had zero failed calls and eight of nine tasks passed; this does not support a general plugin-operation failure.",
+    "Limitation: all historical sessions are comparison-ineligible because resolved model/version and paired, repeated baseline/candidate conditions are not pinned."
+  ],
+  "hypothesis": "A bounded, description-only update to existing generic modeling/verification guidance that tells agents to compare observed returned measurements (bounds, requested dimensions, and pose) with task requirements before declaring completion will improve saved-file task success or reduce unnecessary verification/discovery calls without increasing failed calls. It will not be treated as evidence that a Rhino plugin operation caused the curved-panel failure.",
+  "discovery_families": [
+    "curved-panels",
+    "editing-existing"
+  ],
+  "validation_families": [
+    "curved-panels",
+    "editing-existing",
+    "curve-network-joining"
+  ],
+  "held_out_families": [
+    "curve-network-joining"
+  ],
+  "metrics": [
+    "task_success",
+    "failed_tool_calls",
+    "mcp_calls",
+    "elapsed_seconds"
+  ],
+  "preserve": [
+    "Keep agent model recipe, task prompts, evaluator, call budget, timeout, host environment, and acceptance criteria fixed within each baseline/candidate comparison.",
+    "Use two AB/BA pairs with pinned gpt-5.6-terra medium, 50-call budget, and 240-second timeout; no retries.",
+    "Run a fixed Claude Sonnet medium baseline/candidate pilot and require no task-success or failed-tool-call regression before retaining any description change.",
+    "Require every candidate saved-file task to pass, no per-family correctness or failed-call regression, and benefit in at least one discovery family; otherwise reject.",
+    "Do not claim measured improvement from this audit.",
+    "Description-only server-side scope: no plugin, protocol/schema, executable AST, scripts, macros, evaluator, promotion, merge, or publication changes.",
+    "Treat curve-network-joining as planned held-out validation only; it was absent from the supplied audit."
+  ],
+  "status": "proposed"
+}

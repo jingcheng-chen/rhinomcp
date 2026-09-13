@@ -1,0 +1,334 @@
+{
+  "id": "join-two-components-v1",
+  "type": "workflow_scene",
+  "family": "curve-network-joining",
+  "instruction": "Combine the prepared fragments into their two connected components. Name the open spatial chain open_chain and the closed planar loop closed_loop on Joined. Remove contributing fragments; keep the reference point unchanged. Do not bridge the disconnected components. The reference is named reference on Reference; inputs are named fragment_1 onward on Fragments. Endpoints must agree within 0.01 mm and lengths within 0.1%. Preserve the exact undirected segments; no extra or duplicate edges. All output objects must be visible and unlocked. Use the available RhinoMCP tools.",
+  "units": "Millimeters",
+  "linear_tolerance": 0.01,
+  "relative_volume_tolerance": 0.01,
+  "relative_length_tolerance": 0.001,
+  "initial": [
+    {
+      "name": "fragment_6",
+      "layer": "Fragments",
+      "shape": "polyline",
+      "points": [
+        [
+          85,
+          28,
+          7
+        ],
+        [
+          40,
+          28,
+          7
+        ]
+      ],
+      "min": [
+        40,
+        28,
+        7
+      ],
+      "max": [
+        85,
+        28,
+        7
+      ]
+    },
+    {
+      "name": "fragment_2",
+      "layer": "Fragments",
+      "shape": "polyline",
+      "points": [
+        [
+          -18,
+          14,
+          19
+        ],
+        [
+          -18,
+          -10,
+          5
+        ]
+      ],
+      "min": [
+        -18,
+        -10,
+        5
+      ],
+      "max": [
+        -18,
+        14,
+        19
+      ]
+    },
+    {
+      "name": "fragment_4",
+      "layer": "Fragments",
+      "shape": "polyline",
+      "points": [
+        [
+          40,
+          0,
+          7
+        ],
+        [
+          85,
+          0,
+          7
+        ]
+      ],
+      "min": [
+        40,
+        0,
+        7
+      ],
+      "max": [
+        85,
+        0,
+        7
+      ]
+    },
+    {
+      "name": "fragment_1",
+      "layer": "Fragments",
+      "shape": "polyline",
+      "points": [
+        [
+          -45,
+          -10,
+          5
+        ],
+        [
+          -18,
+          -10,
+          5
+        ]
+      ],
+      "min": [
+        -45,
+        -10,
+        5
+      ],
+      "max": [
+        -18,
+        -10,
+        5
+      ]
+    },
+    {
+      "name": "fragment_7",
+      "layer": "Fragments",
+      "shape": "polyline",
+      "points": [
+        [
+          40,
+          0,
+          7
+        ],
+        [
+          40,
+          28,
+          7
+        ]
+      ],
+      "min": [
+        40,
+        0,
+        7
+      ],
+      "max": [
+        40,
+        28,
+        7
+      ]
+    },
+    {
+      "name": "fragment_3",
+      "layer": "Fragments",
+      "shape": "polyline",
+      "points": [
+        [
+          -18,
+          14,
+          19
+        ],
+        [
+          6,
+          14,
+          19
+        ]
+      ],
+      "min": [
+        -18,
+        14,
+        19
+      ],
+      "max": [
+        6,
+        14,
+        19
+      ]
+    },
+    {
+      "name": "fragment_5",
+      "layer": "Fragments",
+      "shape": "polyline",
+      "points": [
+        [
+          85,
+          28,
+          7
+        ],
+        [
+          85,
+          0,
+          7
+        ]
+      ],
+      "min": [
+        85,
+        0,
+        7
+      ],
+      "max": [
+        85,
+        28,
+        7
+      ]
+    },
+    {
+      "name": "reference",
+      "layer": "Reference",
+      "shape": "point",
+      "points": [
+        [
+          120,
+          35,
+          12
+        ]
+      ],
+      "min": [
+        120,
+        35,
+        12
+      ],
+      "max": [
+        120,
+        35,
+        12
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "name": "open_chain",
+      "layer": "Joined",
+      "shape": "polyline",
+      "points": [
+        [
+          -45,
+          -10,
+          5
+        ],
+        [
+          -18,
+          -10,
+          5
+        ],
+        [
+          -18,
+          14,
+          19
+        ],
+        [
+          6,
+          14,
+          19
+        ]
+      ],
+      "min": [
+        -45,
+        -10,
+        5
+      ],
+      "max": [
+        6,
+        14,
+        19
+      ]
+    },
+    {
+      "name": "closed_loop",
+      "layer": "Joined",
+      "shape": "polyline",
+      "points": [
+        [
+          40,
+          0,
+          7
+        ],
+        [
+          85,
+          0,
+          7
+        ],
+        [
+          85,
+          28,
+          7
+        ],
+        [
+          40,
+          28,
+          7
+        ],
+        [
+          40,
+          0,
+          7
+        ]
+      ],
+      "min": [
+        40,
+        0,
+        7
+      ],
+      "max": [
+        85,
+        28,
+        7
+      ]
+    },
+    {
+      "name": "reference",
+      "layer": "Reference",
+      "shape": "point",
+      "points": [
+        [
+          120,
+          35,
+          12
+        ]
+      ],
+      "min": [
+        120,
+        35,
+        12
+      ],
+      "max": [
+        120,
+        35,
+        12
+      ],
+      "preserve_from": "reference",
+      "unchanged": true
+    }
+  ],
+  "layers": [
+    "Fragments",
+    "Joined",
+    "Reference"
+  ],
+  "inspection_names": []
+}

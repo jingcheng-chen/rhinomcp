@@ -1,0 +1,4968 @@
+{
+  "taxonomy_version": 1,
+  "rankings": {
+    "overall": [
+      {
+        "category": "discovery",
+        "subtype": "guidance",
+        "confidence": "observation",
+        "frequency": 14,
+        "runs": 8,
+        "mean_cost_calls": 1.0,
+        "score_calls": 14,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 2.0685501670232043,
+        "timed_calls": 10,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:5"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-baseline:1"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "host_execution_refusal",
+        "confidence": "observed",
+        "frequency": 13,
+        "runs": 8,
+        "mean_cost_calls": 1.0,
+        "score_calls": 13,
+        "score_seconds": 7.537507917732e-05,
+        "mean_cost_seconds": 5.79808301364e-06,
+        "measured_seconds_subtotal": 7.537507917732e-05,
+        "timed_calls": 13,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:3"
+          }
+        ]
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "requires_catalog_review",
+        "confidence": "candidate",
+        "frequency": 13,
+        "runs": 8,
+        "mean_cost_calls": 1.0,
+        "score_calls": 13,
+        "score_seconds": 7.537507917732e-05,
+        "mean_cost_seconds": 5.79808301364e-06,
+        "measured_seconds_subtotal": 7.537507917732e-05,
+        "timed_calls": 13,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:4"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "missing_layer",
+        "confidence": "observed",
+        "frequency": 3,
+        "runs": 3,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:5"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:3"
+          }
+        ]
+      },
+      {
+        "category": "redundant_read",
+        "subtype": "identical_response",
+        "confidence": "observed",
+        "frequency": 3,
+        "runs": 2,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:6"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:5"
+          }
+        ]
+      },
+      {
+        "category": "retry_after_error",
+        "subtype": "same_intent_candidate",
+        "confidence": "candidate",
+        "frequency": 3,
+        "runs": 3,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:6"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:4"
+          }
+        ]
+      },
+      {
+        "category": "discovery",
+        "subtype": "schema_or_catalog",
+        "confidence": "observation",
+        "frequency": 2,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:4"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "schema_input",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.3502490830142051,
+        "mean_cost_seconds": 0.3502490830142051,
+        "measured_seconds_subtotal": 0.3502490830142051,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate:1"
+          }
+        ]
+      }
+    ],
+    "observed_or_reviewed_flaws": [
+      {
+        "category": "failed_call",
+        "subtype": "host_execution_refusal",
+        "confidence": "observed",
+        "frequency": 13,
+        "runs": 8,
+        "mean_cost_calls": 1.0,
+        "score_calls": 13,
+        "score_seconds": 7.537507917732e-05,
+        "mean_cost_seconds": 5.79808301364e-06,
+        "measured_seconds_subtotal": 7.537507917732e-05,
+        "timed_calls": 13,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:3"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "missing_layer",
+        "confidence": "observed",
+        "frequency": 3,
+        "runs": 3,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:5"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:3"
+          }
+        ]
+      },
+      {
+        "category": "redundant_read",
+        "subtype": "identical_response",
+        "confidence": "observed",
+        "frequency": 3,
+        "runs": 2,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:6"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:5"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "schema_input",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.3502490830142051,
+        "mean_cost_seconds": 0.3502490830142051,
+        "measured_seconds_subtotal": 0.3502490830142051,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate:1"
+          }
+        ]
+      }
+    ],
+    "observed_flaws_by_cohort": {
+      "released-0.4.1-m3b1-baseline": [
+        {
+          "category": "failed_call",
+          "subtype": "host_execution_refusal",
+          "confidence": "observed",
+          "frequency": 5,
+          "runs": 3,
+          "mean_cost_calls": 1.0,
+          "score_calls": 5,
+          "score_seconds": 3.208400448784232e-05,
+          "mean_cost_seconds": 6.4168008975684644e-06,
+          "measured_seconds_subtotal": 3.208400448784232e-05,
+          "timed_calls": 5,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:3"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:3"
+            }
+          ]
+        },
+        {
+          "category": "failed_call",
+          "subtype": "missing_layer",
+          "confidence": "observed",
+          "frequency": 1,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 1,
+          "score_seconds": null,
+          "mean_cost_seconds": null,
+          "measured_seconds_subtotal": 0,
+          "timed_calls": 0,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline:1"
+            }
+          ]
+        },
+        {
+          "category": "redundant_read",
+          "subtype": "identical_response",
+          "confidence": "observed",
+          "frequency": 1,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 1,
+          "score_seconds": null,
+          "mean_cost_seconds": null,
+          "measured_seconds_subtotal": 0,
+          "timed_calls": 0,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:5"
+            }
+          ]
+        }
+      ],
+      "released-0.4.1-m3b1-candidate": [
+        {
+          "category": "failed_call",
+          "subtype": "host_execution_refusal",
+          "confidence": "observed",
+          "frequency": 8,
+          "runs": 5,
+          "mean_cost_calls": 1.0,
+          "score_calls": 8,
+          "score_seconds": 4.329107468947768e-05,
+          "mean_cost_seconds": 5.41138433618471e-06,
+          "measured_seconds_subtotal": 4.329107468947768e-05,
+          "timed_calls": 8,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:3"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:3"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:3"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:3"
+            }
+          ]
+        },
+        {
+          "category": "failed_call",
+          "subtype": "missing_layer",
+          "confidence": "observed",
+          "frequency": 2,
+          "runs": 2,
+          "mean_cost_calls": 1.0,
+          "score_calls": 2,
+          "score_seconds": null,
+          "mean_cost_seconds": null,
+          "measured_seconds_subtotal": 0,
+          "timed_calls": 0,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:5"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:3"
+            }
+          ]
+        },
+        {
+          "category": "redundant_read",
+          "subtype": "identical_response",
+          "confidence": "observed",
+          "frequency": 2,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 2,
+          "score_seconds": null,
+          "mean_cost_seconds": null,
+          "measured_seconds_subtotal": 0,
+          "timed_calls": 0,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:4"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:6"
+            }
+          ]
+        },
+        {
+          "category": "failed_call",
+          "subtype": "schema_input",
+          "confidence": "observed",
+          "frequency": 1,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 1,
+          "score_seconds": 0.3502490830142051,
+          "mean_cost_seconds": 0.3502490830142051,
+          "measured_seconds_subtotal": 0.3502490830142051,
+          "timed_calls": 1,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate:1"
+            }
+          ]
+        }
+      ]
+    },
+    "by_seconds_complete_only": [
+      {
+        "category": "failed_call",
+        "subtype": "schema_input",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.3502490830142051,
+        "mean_cost_seconds": 0.3502490830142051,
+        "measured_seconds_subtotal": 0.3502490830142051,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate:1"
+          }
+        ]
+      },
+      {
+        "category": "failed_call",
+        "subtype": "host_execution_refusal",
+        "confidence": "observed",
+        "frequency": 13,
+        "runs": 8,
+        "mean_cost_calls": 1.0,
+        "score_calls": 13,
+        "score_seconds": 7.537507917732e-05,
+        "mean_cost_seconds": 5.79808301364e-06,
+        "measured_seconds_subtotal": 7.537507917732e-05,
+        "timed_calls": 13,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:3"
+          }
+        ]
+      }
+    ],
+    "by_tool": [
+      {
+        "category": "discovery",
+        "subtype": "guidance",
+        "confidence": "observation",
+        "frequency": 14,
+        "runs": 8,
+        "mean_cost_calls": 1.0,
+        "score_calls": 14,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 2.0685501670232043,
+        "timed_calls": 10,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:5"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-baseline:1"
+          }
+        ],
+        "tool": "get_modeling_guidance"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "host_execution_refusal",
+        "confidence": "observed",
+        "frequency": 5,
+        "runs": 5,
+        "mean_cost_calls": 1.0,
+        "score_calls": 5,
+        "score_seconds": 2.7041009161621332e-05,
+        "mean_cost_seconds": 5.408201832324266e-06,
+        "measured_seconds_subtotal": 2.7041009161621332e-05,
+        "timed_calls": 5,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:1"
+          }
+        ],
+        "tool": "execute_rhinoscript_python_code"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "host_execution_refusal",
+        "confidence": "observed",
+        "frequency": 5,
+        "runs": 5,
+        "mean_cost_calls": 1.0,
+        "score_calls": 5,
+        "score_seconds": 3.2667070627212524e-05,
+        "mean_cost_seconds": 6.533414125442505e-06,
+        "measured_seconds_subtotal": 3.2667070627212524e-05,
+        "timed_calls": 5,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:3"
+          }
+        ],
+        "tool": "run_command"
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "requires_catalog_review",
+        "confidence": "candidate",
+        "frequency": 5,
+        "runs": 5,
+        "mean_cost_calls": 1.0,
+        "score_calls": 5,
+        "score_seconds": 2.7041009161621332e-05,
+        "mean_cost_seconds": 5.408201832324266e-06,
+        "measured_seconds_subtotal": 2.7041009161621332e-05,
+        "timed_calls": 5,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:2"
+          }
+        ],
+        "tool": "execute_rhinoscript_python_code"
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "requires_catalog_review",
+        "confidence": "candidate",
+        "frequency": 5,
+        "runs": 5,
+        "mean_cost_calls": 1.0,
+        "score_calls": 5,
+        "score_seconds": 3.2667070627212524e-05,
+        "mean_cost_seconds": 6.533414125442505e-06,
+        "measured_seconds_subtotal": 3.2667070627212524e-05,
+        "timed_calls": 5,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:4"
+          }
+        ],
+        "tool": "run_command"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "host_execution_refusal",
+        "confidence": "observed",
+        "frequency": 3,
+        "runs": 3,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": 1.5666999388486147e-05,
+        "mean_cost_seconds": 5.222333129495382e-06,
+        "measured_seconds_subtotal": 1.5666999388486147e-05,
+        "timed_calls": 3,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:1"
+          }
+        ],
+        "tool": "execute_rhinocommon_csharp_code"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "missing_layer",
+        "confidence": "observed",
+        "frequency": 3,
+        "runs": 3,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:5"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:3"
+          }
+        ],
+        "tool": "update_object_attributes"
+      },
+      {
+        "category": "retry_after_error",
+        "subtype": "same_intent_candidate",
+        "confidence": "candidate",
+        "frequency": 3,
+        "runs": 3,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:6"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:4"
+          }
+        ],
+        "tool": "update_object_attributes"
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "requires_catalog_review",
+        "confidence": "candidate",
+        "frequency": 3,
+        "runs": 3,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": 1.5666999388486147e-05,
+        "mean_cost_seconds": 5.222333129495382e-06,
+        "measured_seconds_subtotal": 1.5666999388486147e-05,
+        "timed_calls": 3,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:2"
+          }
+        ],
+        "tool": "execute_rhinocommon_csharp_code"
+      },
+      {
+        "category": "discovery",
+        "subtype": "schema_or_catalog",
+        "confidence": "observation",
+        "frequency": 2,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:4"
+          }
+        ],
+        "tool": "describe_capabilities"
+      },
+      {
+        "category": "redundant_read",
+        "subtype": "identical_response",
+        "confidence": "observed",
+        "frequency": 2,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:6"
+          }
+        ],
+        "tool": "get_modeling_guidance"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "schema_input",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.3502490830142051,
+        "mean_cost_seconds": 0.3502490830142051,
+        "measured_seconds_subtotal": 0.3502490830142051,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate:1"
+          }
+        ],
+        "tool": "get_object_info"
+      },
+      {
+        "category": "redundant_read",
+        "subtype": "identical_response",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:5"
+          }
+        ],
+        "tool": "describe_capabilities"
+      }
+    ],
+    "by_family": [
+      {
+        "category": "failed_call",
+        "subtype": "host_execution_refusal",
+        "confidence": "observed",
+        "frequency": 12,
+        "runs": 7,
+        "mean_cost_calls": 1.0,
+        "score_calls": 12,
+        "score_seconds": 7.129204459488392e-05,
+        "mean_cost_seconds": 5.941003716240327e-06,
+        "measured_seconds_subtotal": 7.129204459488392e-05,
+        "timed_calls": 12,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:3"
+          }
+        ],
+        "family": "curve-network-joining"
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "requires_catalog_review",
+        "confidence": "candidate",
+        "frequency": 12,
+        "runs": 7,
+        "mean_cost_calls": 1.0,
+        "score_calls": 12,
+        "score_seconds": 7.129204459488392e-05,
+        "mean_cost_seconds": 5.941003716240327e-06,
+        "measured_seconds_subtotal": 7.129204459488392e-05,
+        "timed_calls": 12,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:4"
+          }
+        ],
+        "family": "curve-network-joining"
+      },
+      {
+        "category": "discovery",
+        "subtype": "guidance",
+        "confidence": "observation",
+        "frequency": 10,
+        "runs": 4,
+        "mean_cost_calls": 1.0,
+        "score_calls": 10,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 1.3113003330072388,
+        "timed_calls": 6,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:5"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:2"
+          }
+        ],
+        "family": "curved-panels"
+      },
+      {
+        "category": "discovery",
+        "subtype": "guidance",
+        "confidence": "observation",
+        "frequency": 4,
+        "runs": 4,
+        "mean_cost_calls": 1.0,
+        "score_calls": 4,
+        "score_seconds": 0.7572498340159655,
+        "mean_cost_seconds": 0.18931245850399137,
+        "measured_seconds_subtotal": 0.7572498340159655,
+        "timed_calls": 4,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-candidate:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-baseline:1"
+          }
+        ],
+        "family": "editing-existing"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "missing_layer",
+        "confidence": "observed",
+        "frequency": 3,
+        "runs": 3,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline:1"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:5"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:3"
+          }
+        ],
+        "family": "curve-network-joining"
+      },
+      {
+        "category": "redundant_read",
+        "subtype": "identical_response",
+        "confidence": "observed",
+        "frequency": 3,
+        "runs": 2,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:4"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:6"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:5"
+          }
+        ],
+        "family": "curved-panels"
+      },
+      {
+        "category": "retry_after_error",
+        "subtype": "same_intent_candidate",
+        "confidence": "candidate",
+        "frequency": 3,
+        "runs": 3,
+        "mean_cost_calls": 1.0,
+        "score_calls": 3,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline:2"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:6"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:4"
+          }
+        ],
+        "family": "curve-network-joining"
+      },
+      {
+        "category": "discovery",
+        "subtype": "schema_or_catalog",
+        "confidence": "observation",
+        "frequency": 2,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 2,
+        "score_seconds": null,
+        "mean_cost_seconds": null,
+        "measured_seconds_subtotal": 0,
+        "timed_calls": 0,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:3"
+          },
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:4"
+          }
+        ],
+        "family": "curved-panels"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "host_execution_refusal",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 4.083034582436085e-06,
+        "mean_cost_seconds": 4.083034582436085e-06,
+        "measured_seconds_subtotal": 4.083034582436085e-06,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:3"
+          }
+        ],
+        "family": "curved-panels"
+      },
+      {
+        "category": "failed_call",
+        "subtype": "schema_input",
+        "confidence": "observed",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 0.3502490830142051,
+        "mean_cost_seconds": 0.3502490830142051,
+        "measured_seconds_subtotal": 0.3502490830142051,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate:1"
+          }
+        ],
+        "family": "editing-existing"
+      },
+      {
+        "category": "typed_fallback",
+        "subtype": "requires_catalog_review",
+        "confidence": "candidate",
+        "frequency": 1,
+        "runs": 1,
+        "mean_cost_calls": 1.0,
+        "score_calls": 1,
+        "score_seconds": 4.083034582436085e-06,
+        "mean_cost_seconds": 4.083034582436085e-06,
+        "measured_seconds_subtotal": 4.083034582436085e-06,
+        "timed_calls": 1,
+        "evidence": [
+          {
+            "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+            "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:4"
+          }
+        ],
+        "family": "curved-panels"
+      }
+    ],
+    "by_cohort": {
+      "released-0.4.1-m3b1-baseline": [
+        {
+          "category": "discovery",
+          "subtype": "guidance",
+          "confidence": "observation",
+          "frequency": 6,
+          "runs": 4,
+          "mean_cost_calls": 1.0,
+          "score_calls": 6,
+          "score_seconds": 1.2995757920434698,
+          "mean_cost_seconds": 0.21659596534057832,
+          "measured_seconds_subtotal": 1.2995757920434698,
+          "timed_calls": 6,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline:2"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:2"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-baseline:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-baseline:1"
+            }
+          ]
+        },
+        {
+          "category": "failed_call",
+          "subtype": "host_execution_refusal",
+          "confidence": "observed",
+          "frequency": 5,
+          "runs": 3,
+          "mean_cost_calls": 1.0,
+          "score_calls": 5,
+          "score_seconds": 3.208400448784232e-05,
+          "mean_cost_seconds": 6.4168008975684644e-06,
+          "measured_seconds_subtotal": 3.208400448784232e-05,
+          "timed_calls": 5,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:3"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:3"
+            }
+          ]
+        },
+        {
+          "category": "typed_fallback",
+          "subtype": "requires_catalog_review",
+          "confidence": "candidate",
+          "frequency": 5,
+          "runs": 3,
+          "mean_cost_calls": 1.0,
+          "score_calls": 5,
+          "score_seconds": 3.208400448784232e-05,
+          "mean_cost_seconds": 6.4168008975684644e-06,
+          "measured_seconds_subtotal": 3.208400448784232e-05,
+          "timed_calls": 5,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:2"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:4"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline:2"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:2"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:4"
+            }
+          ]
+        },
+        {
+          "category": "discovery",
+          "subtype": "schema_or_catalog",
+          "confidence": "observation",
+          "frequency": 2,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 2,
+          "score_seconds": null,
+          "mean_cost_seconds": null,
+          "measured_seconds_subtotal": 0,
+          "timed_calls": 0,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:3"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:4"
+            }
+          ]
+        },
+        {
+          "category": "failed_call",
+          "subtype": "missing_layer",
+          "confidence": "observed",
+          "frequency": 1,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 1,
+          "score_seconds": null,
+          "mean_cost_seconds": null,
+          "measured_seconds_subtotal": 0,
+          "timed_calls": 0,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline:1"
+            }
+          ]
+        },
+        {
+          "category": "redundant_read",
+          "subtype": "identical_response",
+          "confidence": "observed",
+          "frequency": 1,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 1,
+          "score_seconds": null,
+          "mean_cost_seconds": null,
+          "measured_seconds_subtotal": 0,
+          "timed_calls": 0,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:5"
+            }
+          ]
+        },
+        {
+          "category": "retry_after_error",
+          "subtype": "same_intent_candidate",
+          "confidence": "candidate",
+          "frequency": 1,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 1,
+          "score_seconds": null,
+          "mean_cost_seconds": null,
+          "measured_seconds_subtotal": 0,
+          "timed_calls": 0,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline:2"
+            }
+          ]
+        }
+      ],
+      "released-0.4.1-m3b1-candidate": [
+        {
+          "category": "discovery",
+          "subtype": "guidance",
+          "confidence": "observation",
+          "frequency": 8,
+          "runs": 4,
+          "mean_cost_calls": 1.0,
+          "score_calls": 8,
+          "score_seconds": null,
+          "mean_cost_seconds": null,
+          "measured_seconds_subtotal": 0.7689743749797344,
+          "timed_calls": 4,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:2"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:3"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:5"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:2"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate:2"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-candidate:1"
+            }
+          ]
+        },
+        {
+          "category": "failed_call",
+          "subtype": "host_execution_refusal",
+          "confidence": "observed",
+          "frequency": 8,
+          "runs": 5,
+          "mean_cost_calls": 1.0,
+          "score_calls": 8,
+          "score_seconds": 4.329107468947768e-05,
+          "mean_cost_seconds": 5.41138433618471e-06,
+          "measured_seconds_subtotal": 4.329107468947768e-05,
+          "timed_calls": 8,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:3"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:3"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:3"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:1"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:3"
+            }
+          ]
+        },
+        {
+          "category": "typed_fallback",
+          "subtype": "requires_catalog_review",
+          "confidence": "candidate",
+          "frequency": 8,
+          "runs": 5,
+          "mean_cost_calls": 1.0,
+          "score_calls": 8,
+          "score_seconds": 4.329107468947768e-05,
+          "mean_cost_seconds": 5.41138433618471e-06,
+          "measured_seconds_subtotal": 4.329107468947768e-05,
+          "timed_calls": 8,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:4"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:2"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:4"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:2"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:2"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:4"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:2"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:4"
+            }
+          ]
+        },
+        {
+          "category": "failed_call",
+          "subtype": "missing_layer",
+          "confidence": "observed",
+          "frequency": 2,
+          "runs": 2,
+          "mean_cost_calls": 1.0,
+          "score_calls": 2,
+          "score_seconds": null,
+          "mean_cost_seconds": null,
+          "measured_seconds_subtotal": 0,
+          "timed_calls": 0,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:5"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:3"
+            }
+          ]
+        },
+        {
+          "category": "redundant_read",
+          "subtype": "identical_response",
+          "confidence": "observed",
+          "frequency": 2,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 2,
+          "score_seconds": null,
+          "mean_cost_seconds": null,
+          "measured_seconds_subtotal": 0,
+          "timed_calls": 0,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:4"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:6"
+            }
+          ]
+        },
+        {
+          "category": "retry_after_error",
+          "subtype": "same_intent_candidate",
+          "confidence": "candidate",
+          "frequency": 2,
+          "runs": 2,
+          "mean_cost_calls": 1.0,
+          "score_calls": 2,
+          "score_seconds": null,
+          "mean_cost_seconds": null,
+          "measured_seconds_subtotal": 0,
+          "timed_calls": 0,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:6"
+            },
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:4"
+            }
+          ]
+        },
+        {
+          "category": "failed_call",
+          "subtype": "schema_input",
+          "confidence": "observed",
+          "frequency": 1,
+          "runs": 1,
+          "mean_cost_calls": 1.0,
+          "score_calls": 1,
+          "score_seconds": 0.3502490830142051,
+          "mean_cost_seconds": 0.3502490830142051,
+          "measured_seconds_subtotal": 0.3502490830142051,
+          "timed_calls": 1,
+          "evidence": [
+            {
+              "run": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate",
+              "finding": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate:1"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "ranking_policy": "Frequency times mean charged calls; seconds reported only with complete timing coverage. Categories overlap and must not be summed. Observation/candidate rows are not confirmed product flaws.",
+  "purpose": "Find cross-task workflow friction, not score modeling quality or claim improvement.",
+  "families": [
+    "curve-network-joining",
+    "curved-panels",
+    "editing-existing"
+  ],
+  "runs": [
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline",
+      "family": "curved-panels",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-1-pair-1-baseline",
+      "source_sha256": "77bd78ffd6384eff38135707541ebcf90d7dd53626220559538e1d88b2fa2fb7",
+      "session_status": "completed",
+      "elapsed_seconds": 44.989778082992416,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "51e594d6ebbab3b65df59b6d8657a8b527dab7f8921a8a320d26886ad114afea",
+      "result_sha256": "662c36b49594713df52428ce3f4a78ad2de5f9e9ba218da2a8b20094815cc169",
+      "status_sha256": "bb5f09f730522812950880b969b52e1456ce5a3d8161e2c1f66e0312b819bd83",
+      "environment_sha256": "4c51681a945d8661cebf6f46500e88437463706c040fe55370db27f72f610c69",
+      "metrics": {
+        "mcp_attempts": 7,
+        "completed_calls": 7,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "capture_viewport": 1,
+          "create_object": 1,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "capture_viewport": 1,
+          "create_object": 1,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 153066,
+          "cached_input_tokens": 121344,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1134,
+          "reasoning_output_tokens": 378
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_1"
+            ],
+            "cost_call_ids": [
+              "item_1"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline:1",
+            "evidence_lines": [
+              4,
+              7
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.2672000420279801,
+            "measured_seconds_subtotal": 0.2672000420279801,
+            "timed_calls": 1
+          },
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_3"
+            ],
+            "cost_call_ids": [
+              "item_3"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-baseline:2",
+            "evidence_lines": [
+              6,
+              9
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.1714014169992879,
+            "measured_seconds_subtotal": 0.1714014169992879,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 2
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 5,
+          "total_calls": 7
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": false
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "62978d09ace0281a507b567e41cf5728f4a3920cd685b1894bf93dafab1f94cd",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate",
+      "family": "curved-panels",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-1-pair-1-candidate",
+      "source_sha256": "e9070284b0dfdca600627232f6e806f2f44a5978107cdb20c63f77f69faf1a8e",
+      "session_status": "completed",
+      "elapsed_seconds": 54.20647062495118,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "d27e50dde049ff0a317c7223a6cc9ba52b9bfec16fcc7ddd41849a45e00d8f48",
+      "result_sha256": "0f3965c664ec7566db7570fca8f9d295a0d5327b1d84c04bc612910d657ff499",
+      "status_sha256": "df7571dbea133b6636cca009d8d7a4999ce0efb5de74078749da66fdcbf382e7",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "metrics": {
+        "mcp_attempts": 11,
+        "completed_calls": 11,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "capture_viewport": 1,
+          "create_object": 1,
+          "get_document_summary": 1,
+          "get_modeling_guidance": 4,
+          "get_object_info": 1,
+          "get_objects": 1,
+          "select_objects": 1
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "capture_viewport": 1,
+          "create_object": 1,
+          "get_document_summary": 1,
+          "get_modeling_guidance": 4,
+          "get_object_info": 1,
+          "get_objects": 1,
+          "select_objects": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 276827,
+          "cached_input_tokens": 235008,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1700,
+          "reasoning_output_tokens": 603
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_1"
+            ],
+            "cost_call_ids": [
+              "item_1"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:1",
+            "evidence_lines": [
+              4,
+              5
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          },
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_2"
+            ],
+            "cost_call_ids": [
+              "item_2"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:2",
+            "evidence_lines": [
+              6,
+              7
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          },
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_3"
+            ],
+            "cost_call_ids": [
+              "item_3"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:3",
+            "evidence_lines": [
+              8,
+              9
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          },
+          {
+            "category": "redundant_read",
+            "subtype": "identical_response",
+            "tool": "get_modeling_guidance",
+            "confidence": "observed",
+            "call_ids": [
+              "item_1",
+              "item_3"
+            ],
+            "cost_call_ids": [
+              "item_3"
+            ],
+            "reason": "Same query and response; no intervening possible document mutation (discovery is static).",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:4",
+            "evidence_lines": [
+              4,
+              5,
+              8,
+              9
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          },
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_4"
+            ],
+            "cost_call_ids": [
+              "item_4"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:5",
+            "evidence_lines": [
+              10,
+              11
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          },
+          {
+            "category": "redundant_read",
+            "subtype": "identical_response",
+            "tool": "get_modeling_guidance",
+            "confidence": "observed",
+            "call_ids": [
+              "item_2",
+              "item_4"
+            ],
+            "cost_call_ids": [
+              "item_4"
+            ],
+            "reason": "Same query and response; no intervening possible document mutation (discovery is static).",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-1-candidate:6",
+            "evidence_lines": [
+              6,
+              7,
+              10,
+              11
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          }
+        ],
+        "counts": {
+          "discovery": 4,
+          "redundant_read": 2
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 7,
+          "total_calls": 11
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260910-141837-8597e500/candidate/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "755da31d78ac0a4380a4dfd8e731920b28b7bbf38fd414b06aebe45e357dd49d",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate",
+      "family": "curved-panels",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-1-pair-2-candidate",
+      "source_sha256": "036d37839e44db764c885ce5e477c94393d4d40d8b26a225d4306718e8d54cb5",
+      "session_status": "completed",
+      "elapsed_seconds": 95.79661041701911,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "0037bec713d77401f89aa12113f2472c459b776df1cf1bc54a4804440bc66f15",
+      "result_sha256": "d751142a1bb9287ebaafd0d58a4932fe395ec033ee9899535556320c5a5c138d",
+      "status_sha256": "bf889fd40059495e0d9335f9a6ea0ca2948d6139abe9679661a7e53b88dc0f73",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "metrics": {
+        "mcp_attempts": 11,
+        "completed_calls": 11,
+        "unfinished_calls": 0,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "execute_rhinoscript_python_code": 1
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "capture_viewport": 1,
+          "create_object": 1,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 2,
+          "get_objects": 1,
+          "search_rhinoscript_functions": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "capture_viewport": 1,
+          "create_object": 1,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 2,
+          "get_objects": 1,
+          "search_rhinoscript_functions": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 471215,
+          "cached_input_tokens": 419328,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3238,
+          "reasoning_output_tokens": 1961
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_1"
+            ],
+            "cost_call_ids": [
+              "item_1"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:1",
+            "evidence_lines": [
+              4,
+              5
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.2631897079991177,
+            "measured_seconds_subtotal": 0.2631897079991177,
+            "timed_calls": 1
+          },
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_2"
+            ],
+            "cost_call_ids": [
+              "item_2"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:2",
+            "evidence_lines": [
+              6,
+              7
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.1641332499566488,
+            "measured_seconds_subtotal": 0.1641332499566488,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "host_execution_refusal",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "observed",
+            "call_ids": [
+              "item_11"
+            ],
+            "cost_call_ids": [
+              "item_11"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:3",
+            "evidence_lines": [
+              23,
+              24
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 4.083034582436085e-06,
+            "measured_seconds_subtotal": 4.083034582436085e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_11"
+            ],
+            "cost_call_ids": [
+              "item_11"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-candidate:4",
+            "evidence_lines": [
+              23,
+              24
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 4.083034582436085e-06,
+            "measured_seconds_subtotal": 4.083034582436085e-06,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 2,
+          "failed_call": 1,
+          "typed_fallback": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 9,
+          "total_calls": 11
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260910-141837-8597e500/candidate/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "8db63a6cc1dd7da3dcd39b3fc1e2937d1eb465322264d9363adcf21d8e985f42",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline",
+      "family": "curved-panels",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-1-pair-2-baseline",
+      "source_sha256": "6687a8e164ef0520230704a285cf92b42d7b14a43cccdff06069f60762071f0c",
+      "session_status": "completed",
+      "elapsed_seconds": 66.99730841600103,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "6ce5e4f64f32a37e1c0b42f4ebaaf3ce4158819846a6163a2b6c9de5d8a484b0",
+      "result_sha256": "14144f19f4f1d6913023d583513ca9b419be0ffcb02570502bf79b44359bbfab",
+      "status_sha256": "0cf5c422ec5513549396ccc1bd6b10d6f3afd0e28dc1280353ab6358003ac5b2",
+      "environment_sha256": "cab98bd52b53fc1319fa451b18a15516b3b7f33254b18c5860f7acd54e31e370",
+      "metrics": {
+        "mcp_attempts": 9,
+        "completed_calls": 9,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "describe_capabilities": 2,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 2,
+          "get_object_info": 1
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_object": 1,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 2,
+          "get_object_info": 1
+        },
+        "schema_queries": 2,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 418459,
+          "cached_input_tokens": 343808,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1760,
+          "reasoning_output_tokens": 656
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_1"
+            ],
+            "cost_call_ids": [
+              "item_1"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:1",
+            "evidence_lines": [
+              4,
+              5
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.23961562500335276,
+            "measured_seconds_subtotal": 0.23961562500335276,
+            "timed_calls": 1
+          },
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_2"
+            ],
+            "cost_call_ids": [
+              "item_2"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:2",
+            "evidence_lines": [
+              6,
+              7
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.20576029102085158,
+            "measured_seconds_subtotal": 0.20576029102085158,
+            "timed_calls": 1
+          },
+          {
+            "category": "discovery",
+            "subtype": "schema_or_catalog",
+            "tool": "describe_capabilities",
+            "confidence": "observation",
+            "call_ids": [
+              "item_3"
+            ],
+            "cost_call_ids": [
+              "item_3"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:3",
+            "evidence_lines": [
+              8,
+              9
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          },
+          {
+            "category": "discovery",
+            "subtype": "schema_or_catalog",
+            "tool": "describe_capabilities",
+            "confidence": "observation",
+            "call_ids": [
+              "item_8"
+            ],
+            "cost_call_ids": [
+              "item_8"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:4",
+            "evidence_lines": [
+              17,
+              18
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          },
+          {
+            "category": "redundant_read",
+            "subtype": "identical_response",
+            "tool": "describe_capabilities",
+            "confidence": "observed",
+            "call_ids": [
+              "item_3",
+              "item_8"
+            ],
+            "cost_call_ids": [
+              "item_8"
+            ],
+            "reason": "Same query and response; no intervening possible document mutation (discovery is static).",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-1-pair-2-baseline:5",
+            "evidence_lines": [
+              8,
+              9,
+              17,
+              18
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          }
+        ],
+        "counts": {
+          "discovery": 4,
+          "redundant_read": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 5,
+          "total_calls": 9
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "f67266da16399b46870381d57ece0cb5bd9eaf44f5ba2e38a4f23683bec67cc7",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-baseline",
+      "family": "editing-existing",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-2-pair-1-baseline",
+      "source_sha256": "3e166338a72dd7e7bbafed0841cef97920685943957d0ea309ede5b25035ff36",
+      "session_status": "completed",
+      "elapsed_seconds": 37.31921687501017,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "aaf44cb23aada130b7356538de72d22d88ffe0e2b8cb6c0c716dafcc7e59ab99",
+      "result_sha256": "e0c207af916ae991d7beeee12be13d24ae4c6e8f6edf16e1bf18c1b8e6bc6100",
+      "status_sha256": "eb86a9d735fba7ea6973c9992e06f8f8efc69051ef8cba845bcebdfb8fbadd07",
+      "environment_sha256": "cab98bd52b53fc1319fa451b18a15516b3b7f33254b18c5860f7acd54e31e370",
+      "metrics": {
+        "mcp_attempts": 9,
+        "completed_calls": 9,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 2,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 1,
+          "get_objects": 2,
+          "modify_objects": 1,
+          "update_object_attributes": 1
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 1,
+          "get_objects": 2,
+          "modify_objects": 1,
+          "update_object_attributes": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 177399,
+          "cached_input_tokens": 152576,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1008,
+          "reasoning_output_tokens": 250
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_3"
+            ],
+            "cost_call_ids": [
+              "item_3"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-baseline:1",
+            "evidence_lines": [
+              6,
+              8
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.16667245799908414,
+            "measured_seconds_subtotal": 0.16667245799908414,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 5,
+          "total_calls": 9
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "9f28aad2e907d6504e663dea0e5b7c046b4f5138bacb02d502c9f748e7f511ba",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate",
+      "family": "editing-existing",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-2-pair-1-candidate",
+      "source_sha256": "3caa9417ffb0af7ea1dbbe182d88613caff871a20f04df1723f01b47e21b93f5",
+      "session_status": "completed",
+      "elapsed_seconds": 53.076198791968636,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "b447122034aabc0e118f3bf18f146651a08d3a937a2dc82897590126658fd6e8",
+      "result_sha256": "bb2bfc07c65722ec58d8720b9b91707970633d01816ac7a7a4448ac6bf4cdef9",
+      "status_sha256": "2ed3234618690fd8bd8f11a9cf8b06b2f391ae2ea188bb05e7b97b2f71bad55f",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "metrics": {
+        "mcp_attempts": 11,
+        "completed_calls": 11,
+        "unfinished_calls": 0,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "get_object_info": 1
+        },
+        "tools": {
+          "analyze_objects": 2,
+          "get_modeling_guidance": 1,
+          "get_object_info": 4,
+          "get_objects": 2,
+          "modify_object": 1,
+          "update_object_attributes": 1
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "get_modeling_guidance": 1,
+          "get_object_info": 4,
+          "get_objects": 2,
+          "modify_object": 1,
+          "update_object_attributes": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 383026,
+          "cached_input_tokens": 340992,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1399,
+          "reasoning_output_tokens": 259
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "schema_input",
+            "tool": "get_object_info",
+            "confidence": "observed",
+            "call_ids": [
+              "item_1"
+            ],
+            "cost_call_ids": [
+              "item_1"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate:1",
+            "evidence_lines": [
+              4,
+              6
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.3502490830142051,
+            "measured_seconds_subtotal": 0.3502490830142051,
+            "timed_calls": 1
+          },
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_2"
+            ],
+            "cost_call_ids": [
+              "item_2"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-2-pair-1-candidate:2",
+            "evidence_lines": [
+              5,
+              7
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.17258904204936698,
+            "measured_seconds_subtotal": 0.17258904204936698,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 1,
+          "failed_call": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 5,
+          "total_calls": 11
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260910-141837-8597e500/candidate/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "c543491fff8f3cc45019382439f8375ce42c50b524d17f6d20ebad55e6b52aee",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-candidate",
+      "family": "editing-existing",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-2-pair-2-candidate",
+      "source_sha256": "e67e6c51ed005e78c85d4f9076e61d660778b0192998dc8eceb38d439746293a",
+      "session_status": "completed",
+      "elapsed_seconds": 58.939607417036314,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "f31848601f390d1b74c2d1cb4b3f2adb279f091934fe573946276d3bf2522aba",
+      "result_sha256": "27f8e1978231c06de133ba259b4b10c591024d2c196e7814504d246ef785a43c",
+      "status_sha256": "4b0eedc70c77b140f071a491444ae0ba8381332648e35e0b5a058cd98b32f38b",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "metrics": {
+        "mcp_attempts": 13,
+        "completed_calls": 13,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 4,
+          "get_document_summary": 1,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "commands": {
+          "analyze_objects": 4,
+          "get_document_summary": 1,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 306678,
+          "cached_input_tokens": 263936,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1530,
+          "reasoning_output_tokens": 299
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_2"
+            ],
+            "cost_call_ids": [
+              "item_2"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-candidate:1",
+            "evidence_lines": [
+              5,
+              7
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.16906237497460097,
+            "measured_seconds_subtotal": 0.16906237497460097,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 3,
+          "total_calls": 13
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260910-141837-8597e500/candidate/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "afe51cc2e6da9244bea91fc2632a93f4315ab1ca4fcff6d407e2da29f36020bf",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-baseline",
+      "family": "editing-existing",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-2-pair-2-baseline",
+      "source_sha256": "5615fd1b640db94faeb6858257971364551e2ba47ee131732794dbb7dbec6641",
+      "session_status": "completed",
+      "elapsed_seconds": 47.62617662502453,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "cad7df8e08cce90cb4559a9dc9a56546ec339804dc1d8f519f019e25f13e6db0",
+      "result_sha256": "fb8d977e65f43c18129663b9a8a1eb127ce0ace0598adb7526b002dcc91156b6",
+      "status_sha256": "97357ca4247393984ce996be8d6872fb2072a39429ee98eda97d966cfa476d32",
+      "environment_sha256": "cab98bd52b53fc1319fa451b18a15516b3b7f33254b18c5860f7acd54e31e370",
+      "metrics": {
+        "mcp_attempts": 12,
+        "completed_calls": 12,
+        "unfinished_calls": 0,
+        "failed_calls": 0,
+        "failures_by_tool": {},
+        "tools": {
+          "analyze_objects": 2,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "get_document_summary": 2,
+          "get_modeling_guidance": 1,
+          "get_object_attributes": 4,
+          "get_objects": 2,
+          "modify_object": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 0,
+        "usage": {
+          "input_tokens": 259961,
+          "cached_input_tokens": 203264,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1494,
+          "reasoning_output_tokens": 355
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "discovery",
+            "subtype": "guidance",
+            "tool": "get_modeling_guidance",
+            "confidence": "observation",
+            "call_ids": [
+              "item_1"
+            ],
+            "cost_call_ids": [
+              "item_1"
+            ],
+            "reason": "Discovery cost, not automatically a product defect.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-2-pair-2-baseline:1",
+            "evidence_lines": [
+              4,
+              6
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 0.24892595899291337,
+            "measured_seconds_subtotal": 0.24892595899291337,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "discovery": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 2,
+          "total_calls": 12
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "56ac0687363c7c27f985acc01f685330cc7b6a8079433482b98b48f76f28ba7f",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline",
+      "family": "curve-network-joining",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-3-pair-1-baseline",
+      "source_sha256": "a169c6e98e253946f99adc193671ed2b42dda25f14d018f59b8dae07da859164",
+      "session_status": "completed",
+      "elapsed_seconds": 62.7492952090106,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "46386468c3e2a9b37380d46169b930d35465ec0ea16ea023dddb8decd7d12d96",
+      "result_sha256": "297159ad393db457e320e46ee32ba6091639d012673dbf3b18c1ac8a722ac2d6",
+      "status_sha256": "ff505054280add8c59351ff59d9fa4cc12705e36771d898154c9057a4c483ecb",
+      "environment_sha256": "cab98bd52b53fc1319fa451b18a15516b3b7f33254b18c5860f7acd54e31e370",
+      "metrics": {
+        "mcp_attempts": 16,
+        "completed_calls": 16,
+        "unfinished_calls": 0,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "update_object_attributes": 1
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "get_document_summary": 1,
+          "get_object_attributes": 2,
+          "get_objects": 2,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "get_document_summary": 1,
+          "get_object_attributes": 2,
+          "get_objects": 2,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 6,
+        "usage": {
+          "input_tokens": 375903,
+          "cached_input_tokens": 339968,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1754,
+          "reasoning_output_tokens": 574
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "missing_layer",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_5"
+            ],
+            "cost_call_ids": [
+              "item_5"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline:1",
+            "evidence_lines": [
+              11,
+              12
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          },
+          {
+            "category": "retry_after_error",
+            "subtype": "same_intent_candidate",
+            "tool": "update_object_attributes",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_5",
+              "item_7"
+            ],
+            "cost_call_ids": [
+              "item_7"
+            ],
+            "reason": "Same command, target/type after a failure; parameter correction is allowed.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-baseline:2",
+            "evidence_lines": [
+              11,
+              12,
+              15,
+              16
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          }
+        ],
+        "counts": {
+          "failed_call": 1,
+          "retry_after_error": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 14,
+          "total_calls": 16
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "a7ee522840cc39e0fe25017d08c3b5fdbcbbdf4c0bdb275ae96a1db28121865a",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate",
+      "family": "curve-network-joining",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-3-pair-1-candidate",
+      "source_sha256": "868ab2fc3bb5cb2741c236b7e8610b98a389d29ecf7980d67a63a16d598ae237",
+      "session_status": "completed",
+      "elapsed_seconds": 114.60538791702129,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "12feff5b4a9d755f3f80af2265a6f55e5c8306cc483e442e412363430d6431ea",
+      "result_sha256": "046b86e64c3187109ad19883f6c1647e9abdc8585e4ce5b71dc37a474eadfac9",
+      "status_sha256": "a79019d657e09a445c80b939c52a5a349fa3f570977983f0f5a9007a4c9c5b52",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "metrics": {
+        "mcp_attempts": 22,
+        "completed_calls": 22,
+        "unfinished_calls": 0,
+        "failed_calls": 3,
+        "failures_by_tool": {
+          "execute_rhinoscript_python_code": 1,
+          "run_command": 1,
+          "update_object_attributes": 1
+        },
+        "tools": {
+          "analyze_objects": 2,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_objects": 3,
+          "get_rhinoscript_docs": 1,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "select_objects": 1,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_objects": 3,
+          "get_rhinoscript_docs": 1,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "select_objects": 1,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 6,
+        "usage": {
+          "input_tokens": 714686,
+          "cached_input_tokens": 659968,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3193,
+          "reasoning_output_tokens": 1459
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "host_execution_refusal",
+            "tool": "run_command",
+            "confidence": "observed",
+            "call_ids": [
+              "item_7"
+            ],
+            "cost_call_ids": [
+              "item_7"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:1",
+            "evidence_lines": [
+              15,
+              16
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 6.125017534941435e-06,
+            "measured_seconds_subtotal": 6.125017534941435e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "run_command",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_7"
+            ],
+            "cost_call_ids": [
+              "item_7"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:2",
+            "evidence_lines": [
+              15,
+              16
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 6.125017534941435e-06,
+            "measured_seconds_subtotal": 6.125017534941435e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "host_execution_refusal",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "observed",
+            "call_ids": [
+              "item_11"
+            ],
+            "cost_call_ids": [
+              "item_11"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:3",
+            "evidence_lines": [
+              22,
+              23
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 5.665991920977831e-06,
+            "measured_seconds_subtotal": 5.665991920977831e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_11"
+            ],
+            "cost_call_ids": [
+              "item_11"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:4",
+            "evidence_lines": [
+              22,
+              23
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 5.665991920977831e-06,
+            "measured_seconds_subtotal": 5.665991920977831e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "missing_layer",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_13"
+            ],
+            "cost_call_ids": [
+              "item_13"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:5",
+            "evidence_lines": [
+              26,
+              27
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          },
+          {
+            "category": "retry_after_error",
+            "subtype": "same_intent_candidate",
+            "tool": "update_object_attributes",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_13",
+              "item_15"
+            ],
+            "cost_call_ids": [
+              "item_15"
+            ],
+            "reason": "Same command, target/type after a failure; parameter correction is allowed.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-1-candidate:6",
+            "evidence_lines": [
+              26,
+              27,
+              30,
+              31
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          }
+        ],
+        "counts": {
+          "failed_call": 3,
+          "retry_after_error": 1,
+          "typed_fallback": 2
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 18,
+          "total_calls": 22
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260910-141837-8597e500/candidate/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "25f0b461454f2d4499794ac622d619184d785b60f56ad3a11d0cd721121cd27a",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate",
+      "family": "curve-network-joining",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-3-pair-2-candidate",
+      "source_sha256": "0e9618f2e2ca5d895f8eaa3368bd0f3539fdac8e6a3b74bd5c641091b3fa53b1",
+      "session_status": "completed",
+      "elapsed_seconds": 80.73053983302088,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "024b1ee6f0c82185e663ed0af31371cc7dcc563de1cfc18e115bba394c5c359b",
+      "result_sha256": "df0d207cfd6ebc8a060606ef485ad23f26c85f168120eaa83dc3d3acb2a33312",
+      "status_sha256": "c4952e1fac29d4bc36c81b21b2edadf0024419eb11d38ca3524a9f9964ffd7d8",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "metrics": {
+        "mcp_attempts": 16,
+        "completed_calls": 16,
+        "unfinished_calls": 0,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "execute_rhinocommon_csharp_code": 1,
+          "update_object_attributes": 1
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "execute_rhinocommon_csharp_code": 1,
+          "get_document_summary": 1,
+          "get_object_attributes": 1,
+          "get_objects": 2,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "execute_rhinocommon_csharp_code": 1,
+          "get_document_summary": 1,
+          "get_object_attributes": 1,
+          "get_objects": 2,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 6,
+        "usage": {
+          "input_tokens": 470173,
+          "cached_input_tokens": 426496,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2648,
+          "reasoning_output_tokens": 896
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "host_execution_refusal",
+            "tool": "execute_rhinocommon_csharp_code",
+            "confidence": "observed",
+            "call_ids": [
+              "item_4"
+            ],
+            "cost_call_ids": [
+              "item_4"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:1",
+            "evidence_lines": [
+              9,
+              10
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 4.125002305954695e-06,
+            "measured_seconds_subtotal": 4.125002305954695e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinocommon_csharp_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_4"
+            ],
+            "cost_call_ids": [
+              "item_4"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:2",
+            "evidence_lines": [
+              9,
+              10
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 4.125002305954695e-06,
+            "measured_seconds_subtotal": 4.125002305954695e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "missing_layer",
+            "tool": "update_object_attributes",
+            "confidence": "observed",
+            "call_ids": [
+              "item_6"
+            ],
+            "cost_call_ids": [
+              "item_6"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:3",
+            "evidence_lines": [
+              13,
+              14
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          },
+          {
+            "category": "retry_after_error",
+            "subtype": "same_intent_candidate",
+            "tool": "update_object_attributes",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_6",
+              "item_8"
+            ],
+            "cost_call_ids": [
+              "item_8"
+            ],
+            "reason": "Same command, target/type after a failure; parameter correction is allowed.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-candidate:4",
+            "evidence_lines": [
+              13,
+              14,
+              17,
+              18
+            ],
+            "cost_calls": 1,
+            "cost_seconds": null,
+            "measured_seconds_subtotal": 0,
+            "timed_calls": 0
+          }
+        ],
+        "counts": {
+          "failed_call": 2,
+          "retry_after_error": 1,
+          "typed_fallback": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 12,
+          "total_calls": 16
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260910-141837-8597e500/candidate/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "a625aab48e489cbf00cfe0a9030c52304ea17bb5dd656b824dba136fa75271a1",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline",
+      "family": "curve-network-joining",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-3-pair-2-baseline",
+      "source_sha256": "c4fbeb6bef08a047b22dcbbdb492bd7cc75a737562689734bb856a2cd8da028d",
+      "session_status": "completed",
+      "elapsed_seconds": 100.19513404200552,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "bb775127210a3ed6447f8bbccfc0a6213473a736948b83e51effbf11eb3c335a",
+      "result_sha256": "36d01662eb55be48aaa2bb7c96467f96857d0cd496232ef1e575b8afd2bda1e3",
+      "status_sha256": "99df6df8fa86c53ccc90a0862e15c7de3d2d2d3d607488fd57fac8282e61a2e6",
+      "environment_sha256": "cab98bd52b53fc1319fa451b18a15516b3b7f33254b18c5860f7acd54e31e370",
+      "metrics": {
+        "mcp_attempts": 26,
+        "completed_calls": 26,
+        "unfinished_calls": 0,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "execute_rhinoscript_python_code": 1,
+          "run_command": 1
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 3,
+          "get_object_info": 2,
+          "get_objects": 3,
+          "get_or_set_current_layer": 1,
+          "get_rhinoscript_docs": 1,
+          "get_selected_objects_info": 1,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "select_objects": 1
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_object": 1,
+          "delete_object": 6,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 3,
+          "get_object_info": 2,
+          "get_objects": 3,
+          "get_or_set_current_layer": 1,
+          "get_rhinoscript_docs": 1,
+          "get_selected_objects_info": 1,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "select_objects": 1
+        },
+        "schema_queries": 0,
+        "delete_calls": 6,
+        "usage": {
+          "input_tokens": 507424,
+          "cached_input_tokens": 465664,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2789,
+          "reasoning_output_tokens": 960
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "host_execution_refusal",
+            "tool": "run_command",
+            "confidence": "observed",
+            "call_ids": [
+              "item_9"
+            ],
+            "cost_call_ids": [
+              "item_9"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:1",
+            "evidence_lines": [
+              19,
+              20
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 9.417010005563498e-06,
+            "measured_seconds_subtotal": 9.417010005563498e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "run_command",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_9"
+            ],
+            "cost_call_ids": [
+              "item_9"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:2",
+            "evidence_lines": [
+              19,
+              20
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 9.417010005563498e-06,
+            "measured_seconds_subtotal": 9.417010005563498e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "host_execution_refusal",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "observed",
+            "call_ids": [
+              "item_12"
+            ],
+            "cost_call_ids": [
+              "item_12"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:3",
+            "evidence_lines": [
+              25,
+              26
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 5.124951712787151e-06,
+            "measured_seconds_subtotal": 5.124951712787151e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_12"
+            ],
+            "cost_call_ids": [
+              "item_12"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-3-pair-2-baseline:4",
+            "evidence_lines": [
+              25,
+              26
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 5.124951712787151e-06,
+            "measured_seconds_subtotal": 5.124951712787151e-06,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "failed_call": 2,
+          "typed_fallback": 2
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 22,
+          "total_calls": 26
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "6d20919dd00c7f313a0a3c4159d56d17c788d09318766fda235a1fff6488f40d",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline",
+      "family": "curve-network-joining",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-4-pair-1-baseline",
+      "source_sha256": "bc1b0aba26d0d567aa97fb44f20073806cb9b9f302f065b80c9a12a7982b3a9d",
+      "session_status": "completed",
+      "elapsed_seconds": 87.6648763330304,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "6c25a34984d83064e4dd9dc436967cbd4a1d6e570a66ae1b0211c48f3e296bce",
+      "result_sha256": "e13f52ac7ec95da16a11a1d2ddc84f22d856a2f3cc2f79994213cb3131813652",
+      "status_sha256": "9568eae89c7698a922079b9b1b237aee05aef039235394bb52f81fa4562f0040",
+      "environment_sha256": "cab98bd52b53fc1319fa451b18a15516b3b7f33254b18c5860f7acd54e31e370",
+      "metrics": {
+        "mcp_attempts": 22,
+        "completed_calls": 22,
+        "unfinished_calls": 0,
+        "failed_calls": 1,
+        "failures_by_tool": {
+          "execute_rhinocommon_csharp_code": 1
+        },
+        "tools": {
+          "analyze_objects": 2,
+          "create_layer": 1,
+          "create_object": 2,
+          "delete_object": 7,
+          "execute_rhinocommon_csharp_code": 1,
+          "get_document_summary": 1,
+          "get_object_attributes": 3,
+          "get_object_info": 1,
+          "get_objects": 2,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "create_layer": 1,
+          "create_object": 2,
+          "delete_object": 7,
+          "execute_rhinocommon_csharp_code": 1,
+          "get_document_summary": 1,
+          "get_object_attributes": 3,
+          "get_object_info": 1,
+          "get_objects": 2,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 7,
+        "usage": {
+          "input_tokens": 522853,
+          "cached_input_tokens": 476416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2693,
+          "reasoning_output_tokens": 664
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "host_execution_refusal",
+            "tool": "execute_rhinocommon_csharp_code",
+            "confidence": "observed",
+            "call_ids": [
+              "item_3"
+            ],
+            "cost_call_ids": [
+              "item_3"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline:1",
+            "evidence_lines": [
+              7,
+              8
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 6.62502134218812e-06,
+            "measured_seconds_subtotal": 6.62502134218812e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinocommon_csharp_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_3"
+            ],
+            "cost_call_ids": [
+              "item_3"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-baseline:2",
+            "evidence_lines": [
+              7,
+              8
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 6.62502134218812e-06,
+            "measured_seconds_subtotal": 6.62502134218812e-06,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "failed_call": 1,
+          "typed_fallback": 1
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 20,
+          "total_calls": 22
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "c8ac4b10631dcebf8d562558b1953bd04417f314aef7508a8b1bc2882df86fb3",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate",
+      "family": "curve-network-joining",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-4-pair-1-candidate",
+      "source_sha256": "f3ecf252bc47a111d3baa5bf37b93b0d27faf7111657351857ccfa81e1b78128",
+      "session_status": "completed",
+      "elapsed_seconds": 80.86846941697877,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "161a7cce22900137afae9d5632e659a15e559e3211f860ca529fda1ac2624586",
+      "result_sha256": "1ec82a6bde26713147719d2e10bad32d6266f278c9ec1a1af704ddb035fe6bfd",
+      "status_sha256": "f69099b27e9c61523fd7205169a1558c2d5d269b8b427babd26bf09ecabb0c2e",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "metrics": {
+        "mcp_attempts": 22,
+        "completed_calls": 22,
+        "unfinished_calls": 0,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "execute_rhinoscript_python_code": 1,
+          "run_command": 1
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_objects": 1,
+          "delete_object": 7,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_objects": 5,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_objects": 1,
+          "delete_object": 7,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_objects": 5,
+          "run_command": 1,
+          "search_rhinoscript_functions": 1,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 7,
+        "usage": {
+          "input_tokens": 598492,
+          "cached_input_tokens": 540416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2530,
+          "reasoning_output_tokens": 656
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "host_execution_refusal",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "observed",
+            "call_ids": [
+              "item_7"
+            ],
+            "cost_call_ids": [
+              "item_7"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:1",
+            "evidence_lines": [
+              15,
+              16
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 6.792019121348858e-06,
+            "measured_seconds_subtotal": 6.792019121348858e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_7"
+            ],
+            "cost_call_ids": [
+              "item_7"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:2",
+            "evidence_lines": [
+              15,
+              16
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 6.792019121348858e-06,
+            "measured_seconds_subtotal": 6.792019121348858e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "host_execution_refusal",
+            "tool": "run_command",
+            "confidence": "observed",
+            "call_ids": [
+              "item_9"
+            ],
+            "cost_call_ids": [
+              "item_9"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:3",
+            "evidence_lines": [
+              18,
+              19
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 5.667039658874273e-06,
+            "measured_seconds_subtotal": 5.667039658874273e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "run_command",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_9"
+            ],
+            "cost_call_ids": [
+              "item_9"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-1-candidate:4",
+            "evidence_lines": [
+              18,
+              19
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 5.667039658874273e-06,
+            "measured_seconds_subtotal": 5.667039658874273e-06,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "failed_call": 2,
+          "typed_fallback": 2
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 20,
+          "total_calls": 22
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260910-141837-8597e500/candidate/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "476f4e0675055ce037478146af4d8d375650349e22fa15945548dedc7bc40030",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate",
+      "family": "curve-network-joining",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-4-pair-2-candidate",
+      "source_sha256": "0256060c974d343ba087ca9d48059b1e3175e7626b4750b6914c951c3e1a5c79",
+      "session_status": "completed",
+      "elapsed_seconds": 111.37142070900882,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "03d70913891f6ea147db3c61a0762c1b3a956122322d02371622041b99b7c1af",
+      "result_sha256": "df6778b5f719013829e3f046c55221e85182a15c8d86be771852db8da5b0ec79",
+      "status_sha256": "3078190e78f692b89c9d3895c9d0f5efc67ca1d37bb57dcc5bb088bb34f90217",
+      "environment_sha256": "b8785d2238c5e977f1695ff229da78fc6bd847e04108d4248212106d9f5d6bbc",
+      "metrics": {
+        "mcp_attempts": 21,
+        "completed_calls": 21,
+        "unfinished_calls": 0,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "execute_rhinocommon_csharp_code": 1,
+          "run_command": 1
+        },
+        "tools": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_objects": 1,
+          "delete_object": 7,
+          "execute_rhinocommon_csharp_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 1,
+          "get_objects": 2,
+          "get_selected_objects_info": 1,
+          "run_command": 1,
+          "select_objects": 1,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 1,
+          "create_layer": 1,
+          "create_objects": 1,
+          "delete_object": 7,
+          "execute_rhinocommon_csharp_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 1,
+          "get_objects": 2,
+          "get_selected_objects_info": 1,
+          "run_command": 1,
+          "select_objects": 1,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 7,
+        "usage": {
+          "input_tokens": 717700,
+          "cached_input_tokens": 665344,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3244,
+          "reasoning_output_tokens": 1251
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "host_execution_refusal",
+            "tool": "execute_rhinocommon_csharp_code",
+            "confidence": "observed",
+            "call_ids": [
+              "item_4"
+            ],
+            "cost_call_ids": [
+              "item_4"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:1",
+            "evidence_lines": [
+              9,
+              10
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 4.916975740343332e-06,
+            "measured_seconds_subtotal": 4.916975740343332e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinocommon_csharp_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_4"
+            ],
+            "cost_call_ids": [
+              "item_4"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:2",
+            "evidence_lines": [
+              9,
+              10
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 4.916975740343332e-06,
+            "measured_seconds_subtotal": 4.916975740343332e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "host_execution_refusal",
+            "tool": "run_command",
+            "confidence": "observed",
+            "call_ids": [
+              "item_8"
+            ],
+            "cost_call_ids": [
+              "item_8"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:3",
+            "evidence_lines": [
+              17,
+              18
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 5.915993824601173e-06,
+            "measured_seconds_subtotal": 5.915993824601173e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "run_command",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_8"
+            ],
+            "cost_call_ids": [
+              "item_8"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-candidate:4",
+            "evidence_lines": [
+              17,
+              18
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 5.915993824601173e-06,
+            "measured_seconds_subtotal": 5.915993824601173e-06,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "failed_call": 2,
+          "typed_fallback": 2
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 19,
+          "total_calls": 21
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-candidate",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/experiments/runs/repair-20260910-141837-8597e500/candidate/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "144dec15463faa27d577b5c3329b800e9c06e5f53a41b371337977c292a61fc2",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    },
+    {
+      "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline",
+      "family": "curve-network-joining",
+      "available": true,
+      "source": "experiments/runs/workflow-binary-20260910-142439-01635fa7/task-4-pair-2-baseline",
+      "source_sha256": "315e03aaca80de6c922494140ad99d92165608ca73f595ee736ec9e5d177c405",
+      "session_status": "completed",
+      "elapsed_seconds": 87.73616904200753,
+      "task_verdict": "pass",
+      "agent_claim_complete": true,
+      "evaluation_sha256": "1a757edd31874e8b2eff225254024fe58217f096929b7b4e0e206ff4073d18a5",
+      "result_sha256": "039be1ee860635e19bff536b53bd6bd31aff277b0e02af034cf9a0f2d3760591",
+      "status_sha256": "d136a1a300d3c6aa78da4bddb5fec277299cd70813a6ecdb8d38471d0537858e",
+      "environment_sha256": "cab98bd52b53fc1319fa451b18a15516b3b7f33254b18c5860f7acd54e31e370",
+      "metrics": {
+        "mcp_attempts": 25,
+        "completed_calls": 25,
+        "unfinished_calls": 0,
+        "failed_calls": 2,
+        "failures_by_tool": {
+          "execute_rhinoscript_python_code": 1,
+          "run_command": 1
+        },
+        "tools": {
+          "analyze_objects": 2,
+          "create_layer": 1,
+          "create_objects": 1,
+          "delete_object": 7,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 1,
+          "get_object_info": 2,
+          "get_objects": 2,
+          "get_rhinoscript_docs": 1,
+          "get_selected_objects_info": 1,
+          "run_command": 1,
+          "select_objects": 1,
+          "update_object_attributes": 2
+        },
+        "commands": {
+          "analyze_objects": 2,
+          "create_layer": 1,
+          "create_objects": 1,
+          "delete_object": 7,
+          "execute_rhinoscript_python_code": 1,
+          "get_document_summary": 2,
+          "get_object_attributes": 1,
+          "get_object_info": 2,
+          "get_objects": 2,
+          "get_rhinoscript_docs": 1,
+          "get_selected_objects_info": 1,
+          "run_command": 1,
+          "select_objects": 1,
+          "update_object_attributes": 2
+        },
+        "schema_queries": 0,
+        "delete_calls": 7,
+        "usage": {
+          "input_tokens": 663033,
+          "cached_input_tokens": 608512,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2640,
+          "reasoning_output_tokens": 851
+        },
+        "caution": "Delete calls may be normal construction cleanup. Call failures may be gateway, input or runtime failures; neither proves a plugin defect."
+      },
+      "flaws": {
+        "taxonomy_version": 1,
+        "findings": [
+          {
+            "category": "failed_call",
+            "subtype": "host_execution_refusal",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "observed",
+            "call_ids": [
+              "item_6"
+            ],
+            "cost_call_ids": [
+              "item_6"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:1",
+            "evidence_lines": [
+              13,
+              14
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 5.375011824071407e-06,
+            "measured_seconds_subtotal": 5.375011824071407e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "execute_rhinoscript_python_code",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_6"
+            ],
+            "cost_call_ids": [
+              "item_6"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:2",
+            "evidence_lines": [
+              13,
+              14
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 5.375011824071407e-06,
+            "measured_seconds_subtotal": 5.375011824071407e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "failed_call",
+            "subtype": "host_execution_refusal",
+            "tool": "run_command",
+            "confidence": "observed",
+            "call_ids": [
+              "item_9"
+            ],
+            "cost_call_ids": [
+              "item_9"
+            ],
+            "reason": "Explicit failed status, MCP error, or unsuccessful result envelope.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:3",
+            "evidence_lines": [
+              19,
+              20
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 5.542009603232145e-06,
+            "measured_seconds_subtotal": 5.542009603232145e-06,
+            "timed_calls": 1
+          },
+          {
+            "category": "typed_fallback",
+            "subtype": "requires_catalog_review",
+            "tool": "run_command",
+            "confidence": "candidate",
+            "call_ids": [
+              "item_9"
+            ],
+            "cost_call_ids": [
+              "item_9"
+            ],
+            "reason": "Script/macro use observed. Typed alternative and its availability require reviewed evidence.",
+            "id": "workflow-binary-20260910-142439-01635fa7-task-4-pair-2-baseline:4",
+            "evidence_lines": [
+              19,
+              20
+            ],
+            "cost_calls": 1,
+            "cost_seconds": 5.542009603232145e-06,
+            "measured_seconds_subtotal": 5.542009603232145e-06,
+            "timed_calls": 1
+          }
+        ],
+        "counts": {
+          "failed_call": 2,
+          "typed_fallback": 2
+        },
+        "required_operations": null,
+        "fidelity_note": null,
+        "timing": {
+          "source": "unique exact matches in calls.jsonl; gateway execution including guard overhead",
+          "timed_calls": 23,
+          "total_calls": 25
+        }
+      },
+      "cohort": "released-0.4.1-m3b1-baseline",
+      "environment": {
+        "rhino": {
+          "document": 268435458,
+          "marker": null,
+          "object_count": 0,
+          "path": null,
+          "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+          "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+          "version": "0.4.1.0",
+          "pid": 99475,
+          "docs": [
+            {
+              "serial": 268435458,
+              "path": null,
+              "count": 0,
+              "modified": true
+            }
+          ]
+        },
+        "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+        "provider": "codex",
+        "provider_version": "codex-cli 0.153.4",
+        "codex_version": "codex-cli 0.153.4",
+        "model": {
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "medium"
+        },
+        "comparison_eligible": false,
+        "comparison_blockers": [
+          "No pinned resolved model version or paired candidate/repeats"
+        ],
+        "call_budget": 50,
+        "timeout_seconds": 240,
+        "server_source": "/Users/chen/projects/hobby/rhinomcp/server/src",
+        "catalog_mode": "full"
+      },
+      "timing_sha256": "be3bc6872ab15d8087b9b5eec04ff81192ac17ffe5ebe26b6c879ed8ebd51171",
+      "comparison_eligible": false,
+      "comparison_blockers": [
+        "Historical sessions do not pin a common agent model/version and identical task, evaluator and environment across plugin versions."
+      ]
+    }
+  ],
+  "promotion_authorized": false,
+  "limitation": "Historical heterogeneous observations only. Missing data stays unknown; task success and efficiency are separate."
+}

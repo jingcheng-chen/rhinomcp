@@ -1,0 +1,282 @@
+[
+  {
+    "name": "Series",
+    "nickname": "Series",
+    "category": "Sets",
+    "subcategory": "Sequence",
+    "guid": "e64c5fb1-845c-4ab1-8911-5f338516ba67",
+    "description": "Create a series of numbers."
+  },
+  {
+    "name": "Construct Point",
+    "nickname": "Pt",
+    "category": "Vector",
+    "subcategory": "Point",
+    "guid": "3581f42a-9592-4549-bd6b-1c0fc39d067b",
+    "description": "Construct a point from {xyz} coordinates."
+  },
+  {
+    "name": "Construct Point",
+    "nickname": "Pt",
+    "category": "Vector",
+    "subcategory": "Point",
+    "guid": "8a5aae11-8775-4ee5-b4fc-db3a1bd89c2f",
+    "description": "Construct a point from individual coordinates."
+  },
+  {
+    "name": "Move",
+    "nickname": "Move",
+    "category": "Transform",
+    "subcategory": "Euclidean",
+    "guid": "b40f28a2-ba30-4ac2-afe5-a6ece7f985fc",
+    "description": "Translate (move) an object along a vector."
+  },
+  {
+    "name": "Move",
+    "nickname": "Move",
+    "category": "Transform",
+    "subcategory": "Euclidean",
+    "guid": "e9eb1dcf-92f6-4d4d-84ae-96222d60f56b",
+    "description": "Translate (move) an object along a vector."
+  },
+  {
+    "name": "Unit Z",
+    "nickname": "Z",
+    "category": "Vector",
+    "subcategory": "Vector",
+    "guid": "9103c240-a6a9-4223-9b42-dbd19bf38e2b",
+    "description": "Unit vector parallel to the world {z} axis."
+  },
+  {
+    "name": "Circle",
+    "nickname": "Circle",
+    "category": "Params",
+    "subcategory": "Geometry",
+    "guid": "d1028c72-ff86-4057-9eb0-36c687a4d98c",
+    "description": "Contains a collection of circles"
+  },
+  {
+    "name": "Circle",
+    "nickname": "Cir",
+    "category": "Curve",
+    "subcategory": "Primitive",
+    "guid": "807b86e3-be8d-4970-92b5-f8cdcb45b06b",
+    "description": "Create a circle defined by base plane and radius."
+  },
+  {
+    "name": "Area",
+    "nickname": "Area",
+    "category": "Surface",
+    "subcategory": "Analysis",
+    "guid": "2e205f24-9279-47b2-b414-d06dcd0b21a7",
+    "description": "Solve area properties for breps, meshes and planar closed curves."
+  },
+  {
+    "name": "Area",
+    "nickname": "Area",
+    "category": "Surface",
+    "subcategory": "Analysis",
+    "guid": "86b28a7e-94d9-4791-8306-e13e10d5f8d5",
+    "description": "Solve area properties for breps, meshes and planar closed curves."
+  },
+  {
+    "name": "XY Plane",
+    "nickname": "XY",
+    "category": "Vector",
+    "subcategory": "Plane",
+    "guid": "17b7152b-d30d-4d50-b9ef-c9fe25576fc2",
+    "description": "World XY plane."
+  },
+  {
+    "name": "Loft",
+    "nickname": "Loft",
+    "category": "Surface",
+    "subcategory": "Freeform",
+    "guid": "a7a41d0a-2188-4f7a-82cc-1a2c4e4ec850",
+    "description": "Create a lofted surface through a set of section curves."
+  },
+  {
+    "name": "Cross Product",
+    "nickname": "XProd",
+    "category": "Vector",
+    "subcategory": "Vector",
+    "guid": "2a5cfb31-028a-4b34-b4e1-9b20ae15312e",
+    "description": "Compute vector cross product."
+  },
+  {
+    "name": "Vector Length",
+    "nickname": "VLen",
+    "category": "Vector",
+    "subcategory": "Vector",
+    "guid": "675e31bf-1775-48d7-bb8d-76b77786dd53",
+    "description": "Compute the length (amplitude) of a vector."
+  },
+  {
+    "name": "Line SDL",
+    "nickname": "Line",
+    "category": "Curve",
+    "subcategory": "Primitive",
+    "guid": "4c619bc9-39fd-4717-82a6-1e07ea237bbe",
+    "description": "Create a line segment defined by start point, tangent and length.}"
+  },
+  {
+    "name": "Addition",
+    "nickname": "Add",
+    "category": "Complex",
+    "subcategory": "Operators",
+    "guid": "58669268-a825-4688-8072-7d3508fcf91c",
+    "description": "Add two complex numbers."
+  },
+  {
+    "name": "Addition",
+    "nickname": "Add",
+    "category": "Display",
+    "subcategory": "Colour",
+    "guid": "60327ca4-c548-40e6-a11f-3c6759582f13",
+    "description": "Perform colour addition."
+  },
+  {
+    "name": "Addition",
+    "nickname": "A+B",
+    "category": "Maths",
+    "subcategory": "Operators",
+    "guid": "a0d62394-a118-422d-abb3-6af115c75b25",
+    "description": "Mathematical addition"
+  },
+  {
+    "name": "Addition",
+    "nickname": "Add",
+    "category": "Scalar",
+    "subcategory": "Operators",
+    "guid": "cae37d1c-8146-4e0b-9cf1-14cb3e337b94",
+    "description": "Add two numbers."
+  },
+  {
+    "name": "Addition",
+    "nickname": "A+B",
+    "category": "Maths",
+    "subcategory": "Operators",
+    "guid": "d18db32b-7099-4eea-85c4-8ba675ee8ec3",
+    "description": "Mathematical addition"
+  },
+  {
+    "name": "Addition",
+    "nickname": "VAdd",
+    "category": "Vector",
+    "subcategory": "Vector",
+    "guid": "fb012ef9-4734-4049-84a0-b92b85bb09da",
+    "description": "Perform vector-vector addition."
+  },
+  {
+    "name": "Multiplication",
+    "nickname": "Mul",
+    "category": "Vector",
+    "subcategory": "Colour",
+    "guid": "035bf8a7-b9e0-4e37-b031-4567bc60d047",
+    "description": "Perform colour multiplication."
+  },
+  {
+    "name": "Multiplication",
+    "nickname": "Multiply",
+    "category": "Complex",
+    "subcategory": "Operators",
+    "guid": "2f643ab6-b9a4-4923-b3da-f9d52b0cba14",
+    "description": "Multiply two complex numbers."
+  },
+  {
+    "name": "Multiplication",
+    "nickname": "Mult",
+    "category": "Scalar",
+    "subcategory": "Operators",
+    "guid": "3e6383e9-af39-427b-801a-19ca916160fa",
+    "description": "Multiply two numbers."
+  },
+  {
+    "name": "Multiplication",
+    "nickname": "A\u00d7B",
+    "category": "Maths",
+    "subcategory": "Operators",
+    "guid": "b8963bb1-aa57-476e-a20e-ed6cf635a49c",
+    "description": "Mathematical multiplication"
+  },
+  {
+    "name": "Multiplication",
+    "nickname": "A\u00d7B",
+    "category": "Maths",
+    "subcategory": "Operators",
+    "guid": "ce46b74e-00c9-43c4-805a-193b69ea4a11",
+    "description": "Mathematical multiplication"
+  },
+  {
+    "name": "Number Slider",
+    "nickname": "",
+    "category": "Params",
+    "subcategory": "Input",
+    "guid": "57da07bd-ecab-415d-9d86-af36d7073abc",
+    "description": "Numeric slider for single values"
+  },
+  {
+    "name": "Number",
+    "nickname": "Num",
+    "category": "Params",
+    "subcategory": "Primitive",
+    "guid": "3e8ca6be-fda8-4aaf-b5c0-3c54c8bb7312",
+    "description": "Contains a collection of floating point numbers"
+  },
+  {
+    "name": "Point",
+    "nickname": "Pt",
+    "category": "Params",
+    "subcategory": "Geometry",
+    "guid": "fbac3e32-f100-4292-8692-77240a42fd1a",
+    "description": "Contains a collection of three-dimensional points"
+  },
+  {
+    "name": "Vector",
+    "nickname": "Vec",
+    "category": "Params",
+    "subcategory": "Geometry",
+    "guid": "16ef3e75-e315-4899-b531-d3166b42dac9",
+    "description": "Contains a collection of three-dimensional vectors"
+  },
+  {
+    "name": "Line",
+    "nickname": "Line",
+    "category": "Params",
+    "subcategory": "Geometry",
+    "guid": "8529dbdf-9b6f-42e9-8e1f-c7a2bde56a70",
+    "description": "Contains a collection of line segments"
+  },
+  {
+    "name": "Line",
+    "nickname": "Ln",
+    "category": "Curve",
+    "subcategory": "Primitive",
+    "guid": "4c4e56eb-2f04-43f9-95a3-cc46a14f495a",
+    "description": "Create a line between two points."
+  },
+  {
+    "name": "Plane",
+    "nickname": "Pln",
+    "category": "Params",
+    "subcategory": "Geometry",
+    "guid": "4f8984c4-7c7a-4d69-b0a2-183cbb330d20",
+    "description": "Contains a collection of three-dimensional axis-systems"
+  },
+  {
+    "name": "Merge",
+    "nickname": "Merge",
+    "category": "Sets",
+    "subcategory": "Tree",
+    "guid": "3cadddef-1e2b-4c09-9390-0e8f78f7609f",
+    "description": "Merge a bunch of data streams"
+  },
+  {
+    "name": "Merge",
+    "nickname": "Merge",
+    "category": "Sets",
+    "subcategory": "Tree",
+    "guid": "86866576-6cc0-485a-9cd2-6f7d493f57f7",
+    "description": "Merge two streams into one."
+  }
+]

@@ -99,7 +99,7 @@ def summarize(rows, plan):
         "limitations": [
             "Two repeats per arm/task; descriptive evidence, not statistical proof.",
             "Requested model alias/effort pinned; backend snapshot unavailable.",
-            "Panel discovery tasks are not held-out families.",
+            "Held-out coverage is defined by the separately reviewed family allocation.",
             "Evaluation runs in the reviewed candidate process; no adversarial isolation.",
             "Correctness precedes efficiency; tokens/time are secondary observations.",
         ],
@@ -163,15 +163,22 @@ def check_pins(directory):
             raise RuntimeError(f"Frozen {arm} binary changed")
 
 
-def native_catalog(server_source, extra_tools):
+def native_catalog(server_source, extra_tools, full_catalog=False):
     """Read reviewed candidate-native schemas without changing production imports."""
     source = (ROOT / server_source).resolve(strict=True)
     source.relative_to(ROOT)
     source_pins(source)  # Validate the declared package path before importing it.
     names = [*TOOLS, *extra_tools]
-    code = "import asyncio,json,sys,pathlib,rhinomcp; assert pathlib.Path(rhinomcp.__file__).resolve().parent == pathlib.Path(sys.argv[2])/'rhinomcp'; from experiments.workflow.native_mcp import Gateway; print(json.dumps([t.model_dump(mode='json',by_alias=True,exclude_none=True) for t in asyncio.run(Gateway(0,'',1,'unused',tool_names=json.loads(sys.argv[1])).definitions())]))"
+    code = "import asyncio,json,sys,pathlib,rhinomcp; assert pathlib.Path(rhinomcp.__file__).resolve().parent == pathlib.Path(sys.argv[2])/'rhinomcp'; from experiments.workflow.native_mcp import Gateway; print(json.dumps([t.model_dump(mode='json',by_alias=True,exclude_none=True) for t in asyncio.run(Gateway(0,'',1,'unused',tool_names=json.loads(sys.argv[1]),full_catalog=json.loads(sys.argv[3])).definitions())]))"
     output = subprocess.check_output(
-        [sys.executable, "-c", code, json.dumps(names), str(source)],
+        [
+            sys.executable,
+            "-c",
+            code,
+            json.dumps(names),
+            str(source),
+            json.dumps(full_catalog),
+        ],
         cwd=ROOT,
         env={
             **os.environ,
@@ -193,10 +200,42 @@ def catalog_extension(baseline, candidate, additions):
         raise ValueError("Candidate catalog must add only its declared tools")
 
 
+def catalog_descriptions(baseline, candidate, changed_tools):
+    """Accept precisely the declared description changes, with no schema drift."""
+    if (
+        not isinstance(changed_tools, list)
+        or not changed_tools
+        or any(not isinstance(name, str) for name in changed_tools)
+        or len(changed_tools) != len(set(changed_tools))
+        or len(baseline) != len(candidate)
+    ):
+        raise ValueError("Invalid description intervention")
+    changed = set()
+    for before, after in zip(baseline, candidate, strict=True):
+        expected = dict(after)
+        if before["name"] in changed_tools:
+            if not after.get("description", "").strip():
+                raise ValueError("Empty candidate description")
+            if before.get("description") != after["description"]:
+                changed.add(before["name"])
+            expected["description"] = before.get("description")
+        if before != expected:
+            raise ValueError("Only declared tool descriptions may change")
+    if changed != set(changed_tools):
+        raise ValueError("Every declared description must change")
+
+
 def prepare(path, review):
     contract = read(path)
     if (
-        set(contract) - {"evaluation_mode", "interfaces", "resource_limits"}
+        set(contract)
+        - {
+            "evaluation_mode",
+            "interfaces",
+            "resource_limits",
+            "full_catalog",
+            "description_tools",
+        }
         != {"id", "suite", "agent", "binaries", "repeats", "acceptance"}
         or contract["repeats"] != 2
         or not review.strip()
@@ -234,6 +273,23 @@ def prepare(path, review):
         positive=True,
     )
     interfaces = contract.get("interfaces")
+    if type(contract.get("full_catalog", False)) is not bool:
+        raise ValueError("full_catalog must be boolean")
+    descriptions = contract.get("description_tools")
+    if descriptions is not None and (
+        not interfaces
+        or not contract.get("full_catalog")
+        or any(spec.get("extra_tools") for spec in interfaces.values())
+        or contract["binaries"]["baseline"]["identity"]
+        != contract["binaries"]["candidate"]["identity"]
+    ):
+        raise ValueError(
+            "Description trials require full source interfaces and identical binaries"
+        )
+    if contract.get("full_catalog") and interfaces is not None and descriptions is None:
+        raise ValueError(
+            "Full catalog comparisons currently require an unchanged server interface"
+        )
     if interfaces is not None:
         if (
             set(interfaces) != {"baseline", "candidate"}
@@ -259,6 +315,7 @@ def prepare(path, review):
     if (
         contract["binaries"]["baseline"]["identity"]
         == contract["binaries"]["candidate"]["identity"]
+        and descriptions is None
     ):
         raise ValueError("Identical binaries are not an intervention")
     runs = ROOT / "experiments/runs"
@@ -282,20 +339,37 @@ def prepare(path, review):
         persist(directory / "initial-runtime.json", initial)
         definitions = [
             t.model_dump(mode="json", by_alias=True, exclude_none=True)
-            for t in asyncio.run(Gateway(0, "", 1, directory / "unused").definitions())
+            for t in asyncio.run(
+                Gateway(
+                    0,
+                    "",
+                    1,
+                    directory / "unused",
+                    full_catalog=contract.get("full_catalog", False),
+                ).definitions()
+            )
         ]
         persist(directory / "tools.json", definitions)
         pins = source_pins()
         if interfaces is not None:
             catalogs = {
-                arm: native_catalog(spec["server_source"], spec["extra_tools"])
+                arm: native_catalog(
+                    spec["server_source"],
+                    spec["extra_tools"],
+                    contract.get("full_catalog", False),
+                )
                 for arm, spec in interfaces.items()
             }
-            catalog_extension(
-                catalogs["baseline"],
-                catalogs["candidate"],
-                interfaces["candidate"]["extra_tools"],
-            )
+            if descriptions is not None:
+                catalog_descriptions(
+                    catalogs["baseline"], catalogs["candidate"], descriptions
+                )
+            else:
+                catalog_extension(
+                    catalogs["baseline"],
+                    catalogs["candidate"],
+                    interfaces["candidate"]["extra_tools"],
+                )
             persist(directory / "tools.json", catalogs)
             for spec in interfaces.values():
                 pins.update(source_pins(ROOT / spec["server_source"]))
@@ -450,7 +524,15 @@ def resume_index(directory, plan):
             raise RuntimeError("Completed modeling evidence changed")
         record = read(child / "artifact.json")
         if (
-            sha256(child / "candidate.3dm") != record["sha256"]
+            sha256(
+                child
+                / (
+                    "candidate.gh.json"
+                    if read(child / "task.json").get("type") == "gh_definition"
+                    else "candidate.3dm"
+                )
+            )
+            != record["sha256"]
             or sha256(child / "task.json") != record["task_sha256"]
             or (
                 deferred
@@ -534,12 +616,17 @@ def run(directory, resume=False, max_sessions=None):
                     / contract["interfaces"][step["arm"]]["server_source"]
                     if "interfaces" in contract
                     else None,
-                    tool_names=[
+                    tool_names=[t["name"] for t in definitions[step["arm"]]]
+                    if "interfaces" in contract and contract.get("full_catalog")
+                    else [
                         *TOOLS,
                         *contract["interfaces"][step["arm"]]["extra_tools"],
                     ]
                     if "interfaces" in contract
+                    else [t["name"] for t in definitions]
+                    if contract.get("full_catalog")
                     else None,
+                    full_catalog=contract.get("full_catalog", False),
                 )
                 check_pins(directory)
                 if rhino_trial.probe(directory) != identity(step["arm"], directory):
@@ -635,7 +722,7 @@ def run(directory, resume=False, max_sessions=None):
                     if not text.startswith("Evaluation runs")
                 ]
                 result["limitations"].append(
-                    "Evaluation uses a fresh trusted baseline process after candidate shutdown; this is not an adversarial OS sandbox."
+                    "Evaluation uses the trusted baseline after all candidate sessions stop; this is not an adversarial OS sandbox."
                 )
                 persist(directory / "comparison.json", result)
             except BaseException as error:

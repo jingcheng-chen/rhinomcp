@@ -1,11 +1,13 @@
 # RhinoMCP autonomous improvement plan
 
-Current direction (2026-09-07): optimize RhinoMCP from evidence of agent workflow
-friction across tasks. Models are benchmark outputs; the chair is one case.
-See [the governing workflow](../experiments/workflow/README.md) for the active cycle,
-implemented audit/proposal layer, and remaining common-runner/builder/comparison work.
-See [the handoff](../experiments/CONTINUE.md) for current evidence. The phases below
-are historical design context, not an up-to-date implementation checklist.
+Current direction (2026-09-09): enhance the overall Rhino modeling workflow by
+detecting flaws in agent runs and improving the MCP tools. Modeling output is
+evidence, not the product; precision beyond a task's realistic tolerance and any
+single object (the chair) are out of scope. The baseline is the released 0.4.0.
+See [the operating brief](../experiments/CONTINUE.md) for the milestone queue and
+[the governing workflow](../experiments/workflow/README.md) for the cycle, tolerance
+policy and implemented machinery. Phases 1 to 5 below are historical design context;
+the roadmap from 0.4.0 and the Grasshopper phase follow them.
 
 ## Objective
 
@@ -128,3 +130,35 @@ Introduce real photographs only after the controlled suite works. Record what is
 ## First implementation milestone
 
 Deliver Phase 1: task/report formats, five small fixtures, trusted geometry checks, evaluator validation, and one recorded live Rhino run. This establishes whether the feedback is reliable enough to drive autonomous repairs before investing in agent orchestration or automatic deployment.
+
+## Roadmap from 0.4.0 (2026-09-09)
+
+Phases 1 to 3 are complete, phase 4 is supervised rather than unattended, and phase
+5's photo track is set aside. The queue continues in [CONTINUE.md](../experiments/CONTINUE.md):
+
+| Milestone | Outcome |
+| --- | --- |
+| M0 Re-baseline | `current-baseline.json` points at the released 0.4.0; active tasks carry realistic tolerances |
+| M1 Flaw detection | One command turns run traces into a ranked flaw report under a fixed taxonomy |
+| M2 Realistic families | Editing, pipeline, assembly, inspection and recovery tasks with calibrated evaluators |
+| M3 Improvement cycles | Proposal, bounded change, comparison and keep/reject per top-ranked flaw; kept changes ship via PR |
+| M4 Held-out bank | Sealed families spent one per validation and replaced |
+| M5 Unattended operation | Fresh Parallels VM (decided 2026-09-10, deferred until a setup exists): feasibility spike, guest lifecycle, trusted-judge separation, denial tests, then unattended acceptance |
+| M6 Grasshopper harness | Same cycle over the `gh_*` tools |
+
+## Phase 6: Grasshopper harness
+
+Apply the same loop to Grasshopper once the Rhino queue has produced a kept
+improvement. Tasks are text descriptions of small definitions with checkable outputs
+(a parametric grid driven by an attractor, a loft from sliders, sections through a
+solid). The modeler gets the `gh_*` command family only and starts every attempt from
+`gh_create_document`. The evaluator reads the graph (`gh_get_graph`,
+`gh_get_document_info`), runs it (`gh_run_solution`) and checks output parameters
+(`gh_get_parameter_value`) against declared expectations; previews from
+`gh_capture_preview` are supplementary. Deterministic predicates: the solution runs
+without errors, required components and connections exist, there are no orphan
+components, and outputs are within tolerance. A bake-to-document command is a likely
+first capability proposal so the saved-file evaluators can judge resulting geometry.
+The flaw taxonomy gains component search churn, wrong parameter names or indices,
+wiring errors, expire/run loops and layout thrash. Orchestration, audit and comparison
+code are reused; only a Grasshopper task type and evaluator adapter are new.

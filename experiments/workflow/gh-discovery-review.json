@@ -1,0 +1,110 @@
+[
+  {
+    "run": "experiments/runs/workflow-baseline-20260910-154702-9c262712/task-1",
+    "events_sha256": "ef7177a59236b018b870b0888ffcfa611e5333c9242886e56288fdebbe3c9bdc",
+    "graph_value_overlap": [
+      {
+        "graph_call": "item_8",
+        "parameter_call": "item_6",
+        "nickname": "points",
+        "parameter": "Point",
+        "exact_data_match": true
+      },
+      {
+        "graph_call": "item_8",
+        "parameter_call": "item_7",
+        "nickname": "result",
+        "parameter": "Geometry",
+        "exact_data_match": true
+      },
+      {
+        "graph_call": "item_8",
+        "parameter_call": "item_9",
+        "nickname": "positions",
+        "parameter": "Series",
+        "exact_data_match": true
+      }
+    ],
+    "separate_set_calls": 0,
+    "note": "Observed equivalent returned data, not a claim that every separate verification call can safely be removed."
+  },
+  {
+    "run": "experiments/runs/workflow-baseline-20260910-154702-9c262712/task-2",
+    "events_sha256": "5baffbcf18a4dc10b3ae125e2a5985dd84e56cb07e53b7cff5b15b0e26f29770",
+    "graph_value_overlap": [
+      {
+        "graph_call": "item_12",
+        "parameter_call": "item_8",
+        "nickname": "radii",
+        "parameter": "Series",
+        "exact_data_match": true
+      },
+      {
+        "graph_call": "item_12",
+        "parameter_call": "item_9",
+        "nickname": "profiles",
+        "parameter": "Circle",
+        "exact_data_match": true
+      },
+      {
+        "graph_call": "item_12",
+        "parameter_call": "item_10",
+        "nickname": "areas",
+        "parameter": "Area",
+        "exact_data_match": true
+      },
+      {
+        "graph_call": "item_12",
+        "parameter_call": "item_11",
+        "nickname": "areas",
+        "parameter": "Area",
+        "exact_data_match": true
+      }
+    ],
+    "separate_set_calls": 0,
+    "note": "Observed equivalent returned data, not a claim that every separate verification call can safely be removed."
+  },
+  {
+    "run": "experiments/runs/workflow-baseline-20260910-154702-9c262712/task-3",
+    "events_sha256": "b0714a38369c51214c83369d2d798236402dd98beb4bdca15496f2b3c52806e1",
+    "graph_value_overlap": [
+      {
+        "graph_call": "item_15",
+        "parameter_call": "item_10",
+        "nickname": "heights",
+        "parameter": "Series",
+        "exact_data_match": true
+      },
+      {
+        "graph_call": "item_15",
+        "parameter_call": "item_11",
+        "nickname": "origins",
+        "parameter": "Point",
+        "exact_data_match": true
+      },
+      {
+        "graph_call": "item_15",
+        "parameter_call": "item_12",
+        "nickname": "sections",
+        "parameter": "Circle",
+        "exact_data_match": true
+      },
+      {
+        "graph_call": "item_15",
+        "parameter_call": "item_13",
+        "nickname": "shell",
+        "parameter": "Loft",
+        "exact_data_match": true
+      },
+      {
+        "graph_call": "item_15",
+        "parameter_call": "item_14",
+        "nickname": "area",
+        "parameter": "Area",
+        "exact_data_match": true
+      }
+    ],
+    "separate_set_calls": 4,
+    "note": "Observed equivalent returned data, not a claim that every separate verification call can safely be removed."
+  }
+]

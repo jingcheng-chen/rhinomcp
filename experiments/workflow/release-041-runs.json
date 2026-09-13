@@ -1,0 +1,58 @@
+{
+  "runs": [
+    {
+      "id": "workflow-baseline-20260910-140717-69aab83c-box-v2",
+      "family": "primitives",
+      "cohort": "released-0.4.1-native",
+      "run": "experiments/runs/workflow-baseline-20260910-140717-69aab83c/task-1"
+    },
+    {
+      "id": "workflow-baseline-20260910-140717-69aab83c-through-hole-v2",
+      "family": "subtractive-solids",
+      "cohort": "released-0.4.1-native",
+      "run": "experiments/runs/workflow-baseline-20260910-140717-69aab83c/task-2"
+    },
+    {
+      "id": "workflow-baseline-20260910-140717-69aab83c-posed-prism-v2",
+      "family": "posed-solids",
+      "cohort": "released-0.4.1-native",
+      "run": "experiments/runs/workflow-baseline-20260910-140717-69aab83c/task-3"
+    },
+    {
+      "id": "workflow-baseline-20260910-140717-69aab83c-trimmed-offset-v2",
+      "family": "trimmed-patches",
+      "cohort": "released-0.4.1-native",
+      "run": "experiments/runs/workflow-baseline-20260910-140717-69aab83c/task-4"
+    },
+    {
+      "id": "workflow-baseline-20260910-140717-69aab83c-panel-raised-v2",
+      "family": "curved-panels",
+      "cohort": "released-0.4.1-native",
+      "run": "experiments/runs/workflow-baseline-20260910-140717-69aab83c/task-5"
+    },
+    {
+      "id": "workflow-baseline-20260910-141054-84ee9640-edit_existing-v1",
+      "family": "editing-existing",
+      "cohort": "released-0.4.1-full",
+      "run": "experiments/runs/workflow-baseline-20260910-141054-84ee9640/task-1"
+    },
+    {
+      "id": "workflow-baseline-20260910-141054-84ee9640-table_assembly-v1",
+      "family": "small-assemblies",
+      "cohort": "released-0.4.1-full",
+      "run": "experiments/runs/workflow-baseline-20260910-141054-84ee9640/task-2"
+    },
+    {
+      "id": "workflow-baseline-20260910-141054-84ee9640-inspect_document-v1",
+      "family": "document-inspection",
+      "cohort": "released-0.4.1-full",
+      "run": "experiments/runs/workflow-baseline-20260910-141054-84ee9640/task-3"
+    },
+    {
+      "id": "workflow-baseline-20260910-141054-84ee9640-recover_intermediate-v1",
+      "family": "recovery",
+      "cohort": "released-0.4.1-full",
+      "run": "experiments/runs/workflow-baseline-20260910-141054-84ee9640/task-4"
+    }
+  ]
+}

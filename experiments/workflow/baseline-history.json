@@ -1,0 +1,85 @@
+{
+  "baselines": [
+    {
+      "id": "planar-region-selected-v1",
+      "source_revision": "22ffe046f42b96a58aff8dd56f6eb06080f2bc7e",
+      "identity": {
+        "sha256": "85fb12f3247cc996fe9885a9bbaaf26036fdc8679e3c576b406745eabf29ba4c",
+        "mvid": "f2c73913-0e83-4d95-9eb5-273420f8ca70"
+      },
+      "selection": "experiments/runs/selection-20260908-214357-b9bfc9f6",
+      "selection_state_required": "selected",
+      "runtime_verification_required": true,
+      "preservation_suite": "experiments/harness/trial-preservation-v4.json",
+      "preservation_cases": 79,
+      "native_tools": [
+        "create_object",
+        "modify_object",
+        "delete_object",
+        "analyze_objects",
+        "get_object_info",
+        "get_objects",
+        "extrude_curve",
+        "loft",
+        "sweep1",
+        "boolean_difference",
+        "boolean_union",
+        "boolean_intersection",
+        "create_planar_region",
+        "get_modeling_guidance"
+      ],
+      "comparison": "experiments/runs/workflow-binary-20260908-210711-5aea4e1e",
+      "claim": "Scoped trimmed-patch benefit with reserved-case validation and through-hole preservation; no broad generalization or adversarial isolation claim.",
+      "unreleased_python_overlay": {
+        "kind": "bundled_modeling_guidance",
+        "guide_version": "2",
+        "full_tools": 70,
+        "native_tools": 14,
+        "report": "experiments/workflow/guidance-v2-distribution.json",
+        "publication": "not_published"
+      },
+      "active_local_runtime_overlay": {
+        "source_revision": "47cb752",
+        "mvid": "addb4d4c-9ce9-4021-b777-53b34874e663",
+        "sha256": "309144c7118f9f7e56a4b76f3c0e50fbbef7e7a39176a77e481cca4acb5b8d70",
+        "report": "experiments/workflow/naked-edge-candidate.json",
+        "status": "supervisor_validated_edge_reporting_fix; historical planar selection journal unchanged"
+      }
+    },
+    {
+      "id": "released-0.4.0-v1",
+      "source_revision": "a4bb8bbf00fc97bdf5d9b6dfab0c02b8c026dd3b",
+      "release_tag": "releases/0.4.0",
+      "version": "0.4.0",
+      "server_version": "0.4.0",
+      "identity": {
+        "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+        "sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e"
+      },
+      "selection": "experiments/runs/selection-release-20260909-224356-1a5b7a48",
+      "selection_state_required": "selected",
+      "runtime_verification_required": true,
+      "native_tools": [
+        "create_object",
+        "modify_object",
+        "delete_object",
+        "analyze_objects",
+        "get_object_info",
+        "get_objects",
+        "extrude_curve",
+        "loft",
+        "sweep1",
+        "boolean_difference",
+        "boolean_union",
+        "boolean_intersection",
+        "create_planar_region",
+        "get_modeling_guidance"
+      ],
+      "suite": "experiments/workflow/release-pilot.json",
+      "claim": "One fresh discovery observation per family; no paired improvement or held-out generalization claim.",
+      "history": "experiments/workflow/baseline-history.json",
+      "observations": "experiments/workflow/release-040-results.json"
+    }
+  ],
+  "superseded_by": "released-0.4.0-v1"
+}

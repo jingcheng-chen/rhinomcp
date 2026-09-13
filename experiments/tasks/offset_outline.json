@@ -1,0 +1,65 @@
+{
+  "id": "offset_outline-v1",
+  "type": "workflow_scene",
+  "family": "planar-curve-editing",
+  "instruction": "The document contains the closed rectangular curve named source_outline on Input. Make an outward planar offset of 6 mm in world XY, leaving source_outline completely unchanged (including ID and attributes). Name the resulting closed curve offset_outline and put it on the new Cut layer. Its world bounds should be (-6,-6,0) to (86,56,0) mm. Keep exactly the original and the offset curves; no other new layers or objects. Both curves must be visible and unlocked. Match bounds within 0.001 mm and perimeter/area within 1%.",
+  "units": "Millimeters",
+  "linear_tolerance": 0.001,
+  "relative_volume_tolerance": 0.01,
+  "initial": [
+    {
+      "name": "source_outline",
+      "layer": "Input",
+      "shape": "rectangle_curve",
+      "min": [
+        0,
+        0,
+        0
+      ],
+      "max": [
+        80,
+        50,
+        0
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "name": "source_outline",
+      "layer": "Input",
+      "shape": "rectangle_curve",
+      "min": [
+        0,
+        0,
+        0
+      ],
+      "max": [
+        80,
+        50,
+        0
+      ],
+      "preserve_from": "source_outline",
+      "unchanged": true
+    },
+    {
+      "name": "offset_outline",
+      "layer": "Cut",
+      "shape": "rectangle_curve",
+      "min": [
+        -6,
+        -6,
+        0
+      ],
+      "max": [
+        86,
+        56,
+        0
+      ]
+    }
+  ],
+  "layers": [
+    "Input",
+    "Cut"
+  ],
+  "inspection_names": []
+}

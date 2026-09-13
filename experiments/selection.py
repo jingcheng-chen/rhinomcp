@@ -9,6 +9,7 @@ import os
 from pathlib import Path, PurePosixPath
 import shutil
 import stat
+import subprocess
 import time
 import uuid
 
@@ -353,6 +354,106 @@ def confirm_runtime(directory):
         state["stage"] = "selected"
     persist(directory / "state.json", state)
     return state
+
+
+def select_release(tag, expected_identity, version):
+    """Verify already-installed release sources through the selection journal.
+
+    This records a released baseline, not candidate promotion. It neither installs
+    a binary nor writes production sources; the supervisor handles installation.
+    """
+    if tag != "releases/" + version:
+        raise ValueError("Release tag must match the declared version")
+    revision = subprocess.check_output(
+        ["git", "rev-parse", "--verify", f"refs/tags/{tag}^{{commit}}"],
+        cwd=ROOT,
+        text=True,
+    ).strip()
+    with (
+        locked(ROOT / "experiments/runs/source-selection.lock"),
+        locked(ROOT / "experiments/runs/rhino.lock"),
+    ):
+        changed = subprocess.check_output(
+            ["git", "diff", revision, "--", "server", "plugin", "contracts"],
+            cwd=ROOT,
+        )
+        untracked = subprocess.check_output(
+            [
+                "git",
+                "ls-files",
+                "--others",
+                "--exclude-standard",
+                "--",
+                "server",
+                "plugin",
+                "contracts",
+            ],
+            cwd=ROOT,
+        )
+        if changed or untracked:
+            raise ValueError("Production checkout differs from the release tag")
+        from experiments.rhino_trial import runtime
+        from rhinomcp.tools.describe_capabilities import describe_capabilities
+
+        capabilities = describe_capabilities(None)
+        observed = runtime()
+        if (
+            capabilities.get("version") != version
+            or capabilities.get("server_version") != version
+            or observed["version"] != version + ".0"
+            or len(observed["docs"]) != 1
+            or observed["docs"][0]["modified"]
+        ):
+            raise ValueError("Release requires matching versions and a fresh document")
+        directory = (
+            ROOT
+            / "experiments/runs"
+            / (time.strftime("selection-release-%Y%m%d-%H%M%S-") + uuid.uuid4().hex[:8])
+        )
+        directory.mkdir()
+        entries = {}
+        names = (
+            subprocess.check_output(
+                ["git", "ls-files", "-z", "--", "server", "plugin", "contracts"],
+                cwd=ROOT,
+            )
+            .decode()
+            .strip("\0")
+            .split("\0")
+        )
+        for name in names:
+            source = target(ROOT, name)
+            entry = file_state(source)
+            entries[name] = {"before": entry, "after": entry}
+            for arm in ("before", "after"):
+                dest = directory / arm / name
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, dest)
+        persist(
+            directory / "manifest.json",
+            {
+                "root": str(ROOT),
+                "kind": "released_baseline",
+                "tag": tag,
+                "source_revision": revision,
+                "entries": entries,
+                "baseline": expected_identity,
+                "candidate": expected_identity,
+                "capabilities": capabilities,
+                "review": "Supervisor-authorized released baseline installation; no candidate promotion.",
+            },
+        )
+        persist(
+            directory / "state.json",
+            {
+                "stage": "applied",
+                "events": [],
+                "runtime_verified": False,
+                "manifest_sha256": sha256(directory / "manifest.json"),
+            },
+        )
+        confirm_runtime(directory)
+        return directory
 
 
 def switch_runtime(directory):

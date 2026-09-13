@@ -1,0 +1,32 @@
+{
+  "runtime": {
+    "document": 268435460,
+    "marker": null,
+    "object_count": 0,
+    "path": null,
+    "assembly": "/Users/chen/Library/Application Support/McNeel/Rhinoceros/packages/8.0/rhinomcp/0.4.1/net8.0/rhinomcp.rhp",
+    "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+    "version": "0.4.1.0",
+    "pid": 99475,
+    "docs": [
+      {
+        "serial": 268435460,
+        "path": null,
+        "count": 0,
+        "modified": true
+      }
+    ]
+  },
+  "gh": {
+    "count": 0,
+    "id": null,
+    "objects": 0
+  },
+  "capabilities": {
+    "version": "0.4.1",
+    "server_version": "0.4.1",
+    "update_advice": null
+  },
+  "plugin_sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da",
+  "note": "Final dedicated-host verification after every modeler/controller stopped. No candidate adopted; M5 deferred."
+}

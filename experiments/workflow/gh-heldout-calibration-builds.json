@@ -1,0 +1,170 @@
+[
+  {
+    "task": "experiments/tasks/gh_orthogonal_frame.json",
+    "build": {
+      "components": [
+        {
+          "alias": "normal",
+          "nickname": "normal",
+          "component_name": "Cross Product",
+          "component_guid": "2a5cfb31-028a-4b34-b4e1-9b20ae15312e"
+        },
+        {
+          "alias": "magnitude",
+          "nickname": "magnitude",
+          "component_name": "Vector Length",
+          "component_guid": "675e31bf-1775-48d7-bb8d-76b77786dd53"
+        },
+        {
+          "alias": "axis",
+          "nickname": "axis",
+          "component_name": "Line SDL",
+          "component_guid": "4c619bc9-39fd-4717-82a6-1e07ea237bbe"
+        }
+      ],
+      "connections": [
+        {
+          "source": "normal",
+          "target": "magnitude",
+          "source_output_index": 0,
+          "target_input_index": 0
+        },
+        {
+          "source": "normal",
+          "target": "axis",
+          "source_output_index": 0,
+          "target_input_index": 1
+        },
+        {
+          "source": "magnitude",
+          "target": "axis",
+          "source_output_index": 0,
+          "target_input_index": 2
+        }
+      ],
+      "values": [
+        {
+          "target": "normal",
+          "input_index": 0,
+          "value": [
+            2,
+            0,
+            0
+          ]
+        },
+        {
+          "target": "normal",
+          "input_index": 1,
+          "value": [
+            0,
+            3,
+            0
+          ]
+        },
+        {
+          "target": "normal",
+          "input_index": 2,
+          "value": false
+        },
+        {
+          "target": "axis",
+          "input_index": 0,
+          "value": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "graph_id": "m6-orthogonal-frame",
+      "recompute": true,
+      "layout": {
+        "enabled": true
+      }
+    }
+  },
+  {
+    "task": "experiments/tasks/gh_tilted_frame.json",
+    "build": {
+      "components": [
+        {
+          "alias": "normal",
+          "nickname": "normal",
+          "component_name": "Cross Product",
+          "component_guid": "2a5cfb31-028a-4b34-b4e1-9b20ae15312e"
+        },
+        {
+          "alias": "magnitude",
+          "nickname": "magnitude",
+          "component_name": "Vector Length",
+          "component_guid": "675e31bf-1775-48d7-bb8d-76b77786dd53"
+        },
+        {
+          "alias": "axis",
+          "nickname": "axis",
+          "component_name": "Line SDL",
+          "component_guid": "4c619bc9-39fd-4717-82a6-1e07ea237bbe"
+        }
+      ],
+      "connections": [
+        {
+          "source": "normal",
+          "target": "magnitude",
+          "source_output_index": 0,
+          "target_input_index": 0
+        },
+        {
+          "source": "normal",
+          "target": "axis",
+          "source_output_index": 0,
+          "target_input_index": 1
+        },
+        {
+          "source": "magnitude",
+          "target": "axis",
+          "source_output_index": 0,
+          "target_input_index": 2
+        }
+      ],
+      "values": [
+        {
+          "target": "normal",
+          "input_index": 0,
+          "value": [
+            1,
+            2,
+            0
+          ]
+        },
+        {
+          "target": "normal",
+          "input_index": 1,
+          "value": [
+            0,
+            0,
+            3
+          ]
+        },
+        {
+          "target": "normal",
+          "input_index": 2,
+          "value": false
+        },
+        {
+          "target": "axis",
+          "input_index": 0,
+          "value": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "graph_id": "m6-tilted-frame",
+      "recompute": true,
+      "layout": {
+        "enabled": true
+      }
+    }
+  }
+]

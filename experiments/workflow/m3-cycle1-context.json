@@ -1,0 +1,10 @@
+{
+  "cycle": "M3-1",
+  "runtime": "Released 0.4.0, dedicated Rhino 8 on macOS",
+  "scope": "Investigate the highest-ranked current-runtime defect: update_object_attributes fails with a missing JToken.ToString(Formatting) method. Do not bundle scripting-input guidance or new capabilities with this repair.",
+  "evidence": "M2: 15 such failures across five sessions in editing, small assemblies and recovery. Native assembly/recovery saved files fail layer assignment; full-catalog agents use RhinoScript/C# workarounds.",
+  "hypothesis_to_check": "The handler statically references JToken.ToString(Formatting) in its user-string branch. An incompatible loaded Newtonsoft method signature may prevent JIT compilation even when only changing a layer. Confirm from loaded reflection and preserved direct probes; do not infer the exact cause solely from error text.",
+  "validation": "Use small-assemblies and recovery plus a held-out planar curve-editing family reserved in HELD_OUT.md. The held-out geometry parameters must be prepared independently by the supervisor and not supplied to the builder. Freeze two counterbalanced pairs per family, gpt-5.6-terra medium, equal catalogs/tasks/evaluator/budgets; compare saved-file task success before call efficiency. No candidate correctness regression and demonstrated benefit required; held-out must pass both candidate attempts.",
+  "preserve": "No wire-contract or schema change. Preserve native string values and JSON encoding for numeric, boolean, array, object and null user data; preserve names/layers/colors/visibility/locking/materials and rollback behavior. No object-specific recipes.",
+  "held_out_families": ["planar-curve-editing"]
+}

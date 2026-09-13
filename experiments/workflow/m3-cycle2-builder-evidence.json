@@ -1,0 +1,43 @@
+{
+  "planner": {
+    "action": "plugin_issue",
+    "proposal": {
+      "id": "m3-2-get-object-info-selector-guidance",
+      "kind": "tool_ergonomics",
+      "target": "mcp_interface",
+      "friction": "The get_object_info description advertises object_name although its accepted selectors are id or name. In full-catalog document-inspection runs, this misleading guidance produced two failed calls and a retry before successful alternate inspection; it adds avoidable recovery cost without demonstrating a runtime defect.",
+      "evidence": [
+        "Supervisor re-audit: two M2 full-catalog document-inspection calls supplied object_name to get_object_info and returned bare error dictionaries; both are wrong-field calls.",
+        "The audit records two observed unknown failed get_object_info calls in workflow-baseline-20260909-235618-5aa1776e-inspect_document-v1, costing 2 calls and 3.327 seconds total, plus one candidate same-intent retry.",
+        "The third re-audited bare error was an expected missing-object lookup during recovery and is explicitly excluded from attribution.",
+        "The audit is historically heterogeneous and comparison-ineligible, so it supplies discovery evidence only and no measured causal improvement claim."
+      ],
+      "hypothesis": "A description-only revision that names id and name as accepted selectors, says at least one is required, explains id precedence, and directs agents with no selector to discover objects first will reduce wrong-field get_object_info attempts without changing behavior.",
+      "discovery_families": [
+        "document-inspection"
+      ],
+      "validation_families": [
+        "document-inspection",
+        "editing-existing",
+        "section-extraction"
+      ],
+      "held_out_families": [
+        "section-extraction"
+      ],
+      "metrics": [
+        "task_success",
+        "failed_tool_calls",
+        "mcp_calls",
+        "elapsed_seconds"
+      ],
+      "preserve": [
+        "Builder scope must modify only the get_object_info docstring/description; do not rename parameters or alter return values, behavior, error envelopes, wire contract, schema, annotations, executable AST, or any other tool definition.",
+        "Freeze source, catalog, task, evaluator, resolved model/version, reasoning effort, call budget, timeout, and environment across baseline/candidate comparisons.",
+        "Use two counterbalanced baseline/candidate pairs per validation family with full production catalog, gpt-5.6-terra medium, 50-call budget, and 240-second timeout.",
+        "Require every candidate saved-file task to pass, no per-family correctness regression or failed-call increase, and a benefit under correctness_then_calls_v1 in at least one discovery family; otherwise reject. Do not rerun until a pass."
+      ],
+      "status": "proposed"
+    }
+  },
+  "review": "The repair controller historical plugin_issue action is used only as the explicit supervisor dispatch gate; this is a Python interface description repair, not a C# defect. Only docstring changes are authorized. Preserve all executable AST and wire schema. Two wrong-field calls motivate the investigation; improvement is unproven."
+}

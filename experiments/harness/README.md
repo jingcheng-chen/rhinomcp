@@ -13,6 +13,7 @@ configuration, not a second copy of instructions kept elsewhere.
 
 | Concern | Source of truth |
 | --- | --- |
+| Held-out family custody and allocation | `../workflow/held_out.py`, `../workflow/held-out-bank.json`, `../workflow/HELD_OUT.md`; private bundles are outside agent tool scopes |
 | Description-only paired comparison | `../workflow/compare.py`, `../workflow/placement-trial.json`; reuses the native pilot |
 | Shared native-interface pilot | `../workflow/pilot.json`, `../workflow/pilot.py`, `../workflow/native_mcp.py` |
 | Modeler behavior | `roles/modeler.md` |
@@ -173,3 +174,22 @@ judge; `../validate_posed_cushion.py` checks independent positive/negative fixtu
 See `../POSED_CUSHION_LOOP.md` for limits, recovery evidence and live run results.
 
 Surface feedback repair scope: `repairs/surface-feedback.json`. Existing serializer files are eligible for explicitly listed repairs, alongside handler/wrapper/schema files. Eligibility never grants access to undeclared paths. See `../workflow/SURFACE_FEEDBACK.md` for the candidate-only status and live acceptance gate.
+
+## Prepared workflow scenes (M2)
+
+`roles/workflow_modeler.md` is the role for the shared pilot's `workflow_scene`
+tasks. `../tasks/workflow_scene.schema.json` is their input contract;
+`../scene_task.py` and `../scene_measure.cs` implement starting documents and
+independent saved-file evaluation. `../workflow/m2-pilot.json` registers four
+families. The same pilot supports the 17-tool native subset and `--full-catalog`
+(all production definitions, with document-scoped Rhino permissions). See
+[calibration, boundaries and results](../workflow/SCENE_BENCHMARKS.md).
+
+### Grasshopper adapter (M6)
+
+`gh_task.py` validates/scores frozen graph/output snapshots; `gh_ownership.py`
+guards the actual GH document ID and empty Rhino; `gh_scope.py` constrains stock
+component construction on the supervised host. These plug into the existing
+native gateway, pilot and binary comparison. `validate_gh.py` calibrates three
+small definition families with correct and flawed controls. See
+[`workflow/GRASSHOPPER.md`](../workflow/GRASSHOPPER.md). M5 is still deferred.

@@ -1,0 +1,36 @@
+{
+  "decision": "keep",
+  "pr": "https://github.com/jingcheng-chen/rhinomcp/pull/54",
+  "branch": "codex/clarify-object-lookup-selectors",
+  "commit": "859322b",
+  "version": "0.4.1",
+  "status": "merged",
+  "depends_on": "https://github.com/jingcheng-chen/rhinomcp/pull/53",
+  "merged": true,
+  "published": false,
+  "baseline_selected": "0.4.0",
+  "validation": {
+    "server_tests": 285,
+    "experiment_tests": 355,
+    "contract_tests": 13,
+    "server_lint": "pass",
+    "plugin_build": "unchanged inherited validated 0.4.1 build from PR #53"
+  },
+  "limitation": "Agent comparisons tested the two interventions independently. Combined release source passes unit checks; no joint agent-performance claim.",
+  "ci": {
+    "status": "all_pass",
+    "run": "https://github.com/jingcheng-chen/rhinomcp/actions/runs/34451738312",
+    "checks": [
+      "Python 3.10",
+      "Python 3.11",
+      "Python 3.12",
+      ".NET 7 build",
+      ".NET 8 build",
+      "schemas",
+      "lint"
+    ]
+  },
+  "merge_commit": "b446d4a1a7d7ed84e41edb16c450e909aaa6652c",
+  "merged_at": "2026-09-10T07:52:52Z",
+  "merge_authorization": "Explicit user request after M3: Merge the two PRs. Continue to M4."
+}

@@ -1,0 +1,28 @@
+{
+  "runtime": {
+    "document": 268435457,
+    "marker": null,
+    "object_count": 0,
+    "path": null,
+    "assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+    "mvid": "ee66d5ce-fb32-4807-9d17-5af8fe1458d2",
+    "version": "0.4.0.0",
+    "pid": 7380,
+    "docs": [
+      {
+        "serial": 268435457,
+        "path": null,
+        "count": 0,
+        "modified": true
+      }
+    ]
+  },
+  "capabilities": {
+    "version": "0.4.0",
+    "server_version": "0.4.0",
+    "plugin_matches_server": true,
+    "update_advice": null
+  },
+  "plugin_sha256": "a1a9f9526df9a5d74e49c75dd505f0002c3d86116656c4192ce91b0644ab1d5e",
+  "supervised": true
+}

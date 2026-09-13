@@ -5,6 +5,51 @@ ordinary agents. Modeling outputs are benchmark evidence. The chair is one task,
 not the architecture or the primary progress metric. This direction supersedes
 chair-first next steps in historical reports (user clarification, 2026-09-07).
 
+## Direction — user clarification, 2026-09-09
+
+Enhance the overall Rhino modeling workflow by detecting flaws in agent runs and
+improving the MCP tools; do not chase precision. The 0.05 mm panel tolerance and the
+biquadratic surface recipe are historical; a valid, correctly posed result that
+misses a tight shape tolerance is a fidelity note, not a workflow flaw. The
+milestone queue (re-baseline on the released 0.4.0, flaw detection from traces,
+realistic workflow families, one improvement cycle per flaw, held-out bank,
+isolation, then a Grasshopper harness) is in [CONTINUE.md](../CONTINUE.md).
+
+## Tolerance policy — 2026-09-09
+
+Tolerances describe what a realistic modeling task needs and are fixed before a run:
+
+- analytic solids and posed geometry: the document absolute tolerance (0.001 mm at
+  task scale) for positions and dimensions; 1% for volume and area unless the task
+  says otherwise;
+- freeform surfaces and trimmed patches: linear deviation up to 0.5% of the object's
+  largest dimension (0.5 mm on a 100 mm panel); topology, pose and boundary checks
+  stay exact;
+- a run that passes topology, pose and bounds but misses a shape tolerance is
+  recorded as fidelity, not counted as friction, unless a tool response misled the
+  agent.
+
+Never change a tolerance to pass or fail a specific run. Re-declare the task as a
+new version and keep the old file for historical pins.
+
+The default pilot now uses `release-pilot.json` and versioned tasks for five
+families. Panel tasks may declare `shape_tolerance` for sampled surface deviation;
+`linear_tolerance` still controls document tolerance, bounds and boundaries.
+Analytic trimmed patches retain strict plane/boundary checks and a 1% area budget.
+See [M0 preparation](REBASELINE_040.md) for declarations, verification and the
+completed released-runtime observations. Historical suite files remain replay inputs.
+
+## Keep rule v2 — 2026-09-10
+
+Gateway-caused failures (execution-tool and component refusals, scope and budget)
+are excluded from the failed-call gate and kept as friction observations. At two
+AB/BA pairs per task, rejecting on failed calls needs at least two non-gateway
+failures of difference on one task or a lost success; smaller differences are
+inconclusive and may be re-run with two more frozen pairs, never tuned. A kept
+change still needs every candidate output to pass, the Claude check and a PR to
+`main`. "No change needed" is a valid outcome. Full text and the widened
+Grasshopper allowlist rule are in [CONTINUE.md](../CONTINUE.md#m3c--behavior-cycles-on-the-041-findings-next).
+
 ## Distribution requirement — user-approved 2026-09-09
 
 Reusable modeling knowledge ships with RhinoMCP. Keep essential semantics in tool
@@ -32,6 +77,36 @@ See [implemented distribution and live checks](DISTRIBUTABLE_GUIDANCE.md).
    changes with demonstrated benefit and no unacceptable regressions. Keep inconclusive
    changes unpromoted; record task-specific benefit without generalizing it.
 
+## Current ranking — M0b, 2026-09-10
+
+The selected baseline is now released 0.4.1. Nine fresh observations produce eight
+passes, 78 calls and zero failed calls. The curved panel fails dimensions and
+boundary despite a completion claim. Historical M1/M2 failures do not rank current
+interventions. See [M0b report](REBASELINE_041.md). Rebuild the current ranking with:
+
+```sh
+server/.venv/bin/python -m experiments.workflow.audit experiments/workflow/release-041-runs.json --output experiments/workflow/flaw-report.json
+```
+
+## M1 trace classification — complete, 2026-09-09
+
+The audit now produces evidence-linked flaw counts and rankings by tool, family
+and cohort. It normalizes native and wrapped calls, separates discovery from
+redundancy, preserves unknown timing, and uses hash-bound reviewed annotations for
+semantic claims. The seven historical and sixteen same-day runs are registered,
+including the timed-out surface attempt. All 23 calibration labels match; portable
+synthetic tests cover the taxonomy's additional cases. These are discovery
+observations, not held-out classifier accuracy or candidate-effectiveness claims.
+
+```sh
+server/.venv/bin/python -m experiments.workflow.audit experiments/workflow/flaw-runs.json --labels experiments/workflow/flaw-labels.json --output experiments/runs/historical-flaw-report.json
+```
+
+See [the taxonomy, ranking limits and top findings](FLAW_TAXONOMY.md). The largest
+same-day problems were observed on pre-release 0.3.2. The five released runs still
+pass, with two repeated guidance reads in the panel. Next is M2's broader families.
+The older audit artifacts below remain historical snapshots.
+
 ## Implemented in this milestone
 
 - `historical.json`: explicit run registry spanning five task families. Files missing
@@ -55,7 +130,39 @@ server/.venv/bin/python -m experiments.workflow.audit experiments/workflow/histo
 PYTHONPATH=/absolute/path/to/rhinomcp server/.venv/bin/python -m experiments.workflow.plan experiments/workflow/historical-audit.json
 ```
 
-## Current implementation — 2026-09-08
+## Baseline — released 0.4.1 (2026-09-10); recorded baseline still 0.4.0
+
+rhinomcp 0.4.1 (tag `releases/0.4.1`) is the baseline for every new comparison
+once M0b records its identity. Until then `current-baseline.json` names the
+released 0.4.0 recorded by M0 ([report](REBASELINE_040.md),
+[trace registry](release-040-runs.json)). 0.4.1 fixes `update_object_attributes`,
+which failed on every call in 0.4.0 and dominated the M2 flaw ranking, so rankings
+built from 0.4.0 runs are stale. Connections read `describe_capabilities` once
+before the first command; treat that entry in traces as infrastructure, not agent
+behavior.
+
+## Isolation — Parallels VM (decided 2026-09-10)
+
+Unattended operation will run candidates in a fresh Parallels guest restored from
+a clean snapshot; the host keeps the controller, evaluators and the trusted judge.
+The user deferred this on 2026-09-10 until a proper setup exists; M5 is parked and
+work continues supervised on the host (M0b, M3b, then M6).
+The boundary, network policy and transport rules are in
+[ISOLATED_ENVIRONMENT.md](ISOLATED_ENVIRONMENT.md); the implementation steps M5a to
+M5d are in [CONTINUE.md](../CONTINUE.md). Until M5d is done, full-catalog runs on the
+host must refuse and record the three execution tools instead of running them.
+
+## Later: Grasshopper harness
+
+The cycle above applies unchanged to Grasshopper once the Rhino queue has produced
+at least one kept improvement. Tasks describe small definitions with checkable
+outputs; agents get the `gh_*` tools only and start from `gh_create_document`; the
+evaluator reads the graph, runs the solution and checks output parameters, with
+previews as supplementary evidence. The design sketch and its open questions (a
+bake command for saved-file judging, Grasshopper-specific friction classes) are in
+[CONTINUE.md](../CONTINUE.md#m6--grasshopper-harness-later).
+
+## Current implementation — 2026-09-08 (historical)
 
 The shared runner now registers analytic solids, biquadratic panels and trimmed
 planar patches. It records explicit model alias/effort, task, catalog, evaluator,
@@ -188,3 +295,59 @@ workflow and existing bounded repair path.
 ## Generic panel registration (2026-09-08)
 
 See [PANEL_BENCHMARKS.md](PANEL_BENCHMARKS.md). The shared pilot now accepts posed biquadratic panels with a saved-file evaluator and explicit CLI agent settings. Twenty-two calibration fixtures pass expected verdicts. Two fresh baseline discoveries produce one pass and one modeling failure; no candidate workflow comparison or adoption is claimed. Binary switching/recovery orchestration and trimmed-patch registration remain pending.
+
+## M2 workflow scenes
+
+Four prepared-scene families now reuse the native pilot and evaluator registry.
+The 17-tool subset and full 70-definition production catalog are both observed on
+released 0.4.0, with document-scoped Rhino permissions. Thirty saved-file fixtures
+calibrate the analytic scene, identity, layer and inspection checks. See
+[the M2 report](SCENE_BENCHMARKS.md), [suite](m2-pilot.json) and
+[reserved family allocation](HELD_OUT.md). This extends discovery coverage; it does
+not establish a candidate improvement or generalization claim.
+
+## M3 cross-family cycles on 0.4.0
+
+[M3.md](M3.md) records the attribute-update and lookup-description investigations.
+`plan.py REPORT --context CONTEXT --model MODEL --reasoning-effort EFFORT` accepts
+explicit supervisor context instead of injecting the old surface-construction
+proposal. Context, evidence and model settings are hashed for the fresh planner.
+
+`binary_compare.py` retains the shared pilot, saved-file evaluator, AB/BA schedule,
+resource ledger and restoration checks. `full_catalog: true` exposes the complete
+production catalog while keeping Grasshopper calls outside the Rhino-document
+permission scope. For a reviewed description-only source trial, declare
+`description_tools`, both `interfaces` with `server_source` and empty `extra_tools`,
+and identical `binaries` identities. Only the declared descriptions may differ;
+all other catalog fields must match. The supervisor separately reviews executable
+source equivalence, and both source trees are frozen before sessions. Example
+contracts: `m3-cycle1-trial.json` and `m3-cycle2-trial.json`. These consume local
+reviewed build/source artifacts; they do not reproduce them implicitly.
+
+The scene evaluator now also measures closed axis-aligned rectangular polylines,
+checking corners, closure, planarity, bounds, area and perimeter. Offset and
+section cases use the same task runner and saved-file measurement path as boxes.
+`validate_scene.run([...])` calibrates selected task names without launching agents;
+`validate_attributes.py` runs controller-only attribute checks in an owned empty
+document. Preserve all failed attempts and setup failures, and never convert an
+agent completion claim into a task verdict.
+
+## M4 supervisor-held family bank
+
+The [sealed bank and allocation runbook](HELD_OUT.md) now govern future held-out
+claims. Use `python -m experiments.workflow.held_out status` with the server venv
+from the repository root. Metadata is public, fixed payloads remain in the ignored
+local vault. Spend before exposure; even an abandoned validation consumes its
+family. Seal a new family before closing the old allocation. The CLI neither
+launches modeling nor bypasses the existing comparison/calibration gates.
+See [M4 evidence and limits](M4.md). A checkout without private payloads must report
+unavailable cases; do not reconstruct them with new parameters under the old hash.
+
+## Completed Grasshopper cycle (M6)
+
+The shared runner/gateway/pilot/comparison supports `gh_definition` snapshots.
+Three calibrated discovery families pass, and one description cycle is complete
+and rejected after Codex plus Claude checks. See [GRASSHOPPER.md](GRASSHOPPER.md)
+for scope, calibration, fixed results and remaining selector/default findings.
+The host component whitelist is narrower than the library; explicit refusals
+are `host_component_refusal`, not plugin defects. M5 remains deferred.

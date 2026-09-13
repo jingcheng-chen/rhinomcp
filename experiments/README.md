@@ -212,3 +212,13 @@ Each review uses a fresh session and retains its input patch and feedback. Inspe
 checkpoints/failure records after interruption; do not blindly replay writes or
 revise a checkout after builds have added files. See `BUILDER_LOOP.md` for the
 completed supervised build/live-test/restoration pilot and its isolation limits.
+
+## Prepared workflow families (M2)
+
+For editing existing geometry, layered assemblies, read-only inspection and
+recovery from a wrong intermediate, use the shared pilot's
+`workflow/m2-pilot.json`. It prepares the starting document and evaluates saved
+object identities, geometry, layers and inspection answers. `--full-catalog`
+exposes production tool choice, including scoped Rhino scripts. See
+[the workflow scene report](workflow/SCENE_BENCHMARKS.md) for calibration, commands
+and limitations. These task inputs use `tasks/workflow_scene.schema.json`.

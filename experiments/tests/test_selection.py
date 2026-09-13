@@ -322,3 +322,93 @@ def test_export_permissions_and_byte_patch_preserve_working_tree_modes(
     assert old.read_bytes() == b"old"
     assert s.file_state(old)["mode"] == 0o600
     assert not (root / new_name).exists()
+
+
+@pytest.fixture
+def released_checkout(tmp_path, monkeypatch):
+    import importlib
+    import subprocess
+    from experiments import rhino_trial
+
+    root = tmp_path / "release"
+    (root / "experiments/runs").mkdir(parents=True)
+    (root / "plugin").mkdir()
+    source = root / "plugin/source.cs"
+    source.write_text("release source")
+
+    def git(*args):
+        return subprocess.check_output(["git", *args], cwd=root)
+
+    git("init", "-q")
+    git("add", "plugin/source.cs")
+    git(
+        "-c",
+        "user.name=Test",
+        "-c",
+        "user.email=test@example.invalid",
+        "commit",
+        "-qm",
+        "release",
+    )
+    git("tag", "releases/0.4.0")
+    binary = tmp_path / "release.rhp"
+    binary.write_bytes(b"release binary")
+    identity = {"mvid": "release-mvid", "sha256": sha256(binary)}
+    observed = {
+        "version": "0.4.0.0",
+        "docs": [{"modified": False}],
+        "path": None,
+        "object_count": 0,
+        "marker": None,
+        "mvid": identity["mvid"],
+        "assembly": str(binary),
+    }
+    monkeypatch.setattr(s, "ROOT", root)
+    monkeypatch.setattr(rhino_trial, "runtime", lambda: observed)
+    module = importlib.import_module("rhinomcp.tools.describe_capabilities")
+    monkeypatch.setattr(
+        module,
+        "describe_capabilities",
+        lambda ctx: {"version": "0.4.0", "server_version": "0.4.0"},
+    )
+    return root, source, identity, observed
+
+
+def test_release_selection_records_verified_sources_without_rewriting(
+    released_checkout,
+):
+    root, source, identity, _ = released_checkout
+    directory = s.select_release("releases/0.4.0", identity, "0.4.0")
+    manifest, state = s.load(directory)
+    assert manifest["kind"] == "released_baseline"
+    assert manifest["candidate"] == identity
+    assert state["stage"] == "selected" and state["runtime_verified"]
+    assert source.read_text() == "release source"
+    # The ordinary journal integrity gate also protects release snapshots.
+    (directory / "after/plugin/source.cs").write_text("tampered")
+    with pytest.raises(ValueError, match="snapshot changed"):
+        s.load(directory)
+
+
+@pytest.mark.parametrize(
+    "problem",
+    ["source", "untracked", "modified", "version", "binary", "objects", "marker"],
+)
+def test_release_selection_rejects_unverified_state(released_checkout, problem):
+    root, source, identity, observed = released_checkout
+    if problem == "source":
+        source.write_text("local edit")
+    elif problem == "untracked":
+        (root / "plugin/extra.cs").write_text("unreleased")
+    elif problem == "modified":
+        observed["docs"][0]["modified"] = True
+    elif problem == "version":
+        observed["version"] = "0.3.2.0"
+    elif problem == "binary":
+        identity = {**identity, "sha256": "different"}
+    elif problem == "objects":
+        observed["object_count"] = 1
+    else:
+        observed["marker"] = "another-run"
+    with pytest.raises(ValueError):
+        s.select_release("releases/0.4.0", identity, "0.4.0")

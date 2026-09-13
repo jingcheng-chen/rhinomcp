@@ -1,0 +1,12 @@
+{
+  "cycle": "M3-2",
+  "runtime": "Released 0.4.0, separate from the attribute candidate; supervised dedicated Rhino 8.",
+  "scope": "Investigate the next current-interface flaw after attribute updates: get_object_info advertises object_name, but its signature and wire parameters accept id or name. Two M2 full-catalog document-inspection calls used object_name and returned a bare error. This is a narrow description-only investigation, not an error-envelope or wire-contract change.",
+  "evidence": "Re-audited M2 has 104 calls and 19 failures. Three previously missed bare error dictionaries are now counted; only two are wrong-field calls. The third is an expected missing-object lookup during recovery and must not be attributed to misleading wording.",
+  "hypothesis": "Align the get_object_info description with id/name, explain that at least one selector is needed and that id takes priority. If no selector is known, discover objects first. Do not rename parameters, change return values, behavior, other tool descriptions, or add task-specific recipes.",
+  "validation": "Two counterbalanced baseline/candidate pairs per family: document-inspection and editing-existing, plus reserved section-extraction. Full production catalog, gpt-5.6-terra medium, 50 calls and 240 seconds. Freeze source/catalog/task/evaluator pins before runs. All candidate saved-file tasks must pass, no per-family correctness regression or failed-call increase, and benefit under correctness_then_calls_v1 in at least one discovery family. Otherwise reject. No reruns until pass.",
+  "held_out_families": [
+    "section-extraction"
+  ],
+  "preserve": "Only the get_object_info docstring may change. All executable AST, wire schema, annotations and the other 69 definitions must be identical. Held-out geometry is independently prepared after proposal and never supplied to builder. No automatic promotion, merge or publication."
+}

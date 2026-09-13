@@ -1,0 +1,22 @@
+{
+  "builder": "experiments/runs/repair-20260910-092552-3c39fc7d",
+  "builder_checkpoint_sha256": "8f5ed4d1948f71c39a82ad7183f43391d8958fa403c8dd5f8485985e4ed249be",
+  "changed_paths": [
+    "server/src/rhinomcp/tools/get_object_info.py"
+  ],
+  "executable_ast_identical": true,
+  "catalog_size": 70,
+  "only_changed_definition": "get_object_info.description",
+  "baseline_source_sha256": "0b0436792e09a50bb853767c2bca42c12c900e391a731c300571d593185a507d",
+  "candidate_source_sha256": "bebe61b4382951646e2f7a29fd82ed9fed44b42ec1acb1efba9125af2b5dcaed",
+  "patch_sha256": "d45e305e1901ca9490d8fea19cdd41f83e471f40eb9a2fcc553cb32df4faba81",
+  "descriptions": {
+    "baseline": "\nGet detailed information about a specific object in the Rhino document.\nThe information contains the object's id, name, type, all custom user attributes and geometry info.\nYou can either provide the id or the object_name of the object to get information about.\nIf both are provided, the id will be used.\n\nReturns:\n- A dictionary containing the object's information\n- The dictionary will have the following keys:\n    - \"id\": The id of the object\n    - \"name\": The name of the object\n    - \"type\": The type of the object\n    - \"layer\": The layer of the object\n    - \"material\": The material of the object\n    - \"color\": The color of the object\n    - \"bounding_box\": The bounding box of the object\n    - \"geometry\": The geometry info of the object\n    - \"attributes\": A dictionary containing all custom user attributes of the object\n\nParameters:\n- id: The id of the object to get information about\n- name: The name of the object to get information about\n",
+    "candidate": "\nGet detailed information about a specific object in the Rhino document.\nThe information contains the object's id, name, type, all custom user attributes and geometry info.\nProvide at least one selector: id or name of the object to get information about.\nIf both are provided, id takes priority.\nIf neither selector is known, use get_objects first to discover objects and their ids or names.\n\nReturns:\n- A dictionary containing the object's information\n- The dictionary will have the following keys:\n    - \"id\": The id of the object\n    - \"name\": The name of the object\n    - \"type\": The type of the object\n    - \"layer\": The layer of the object\n    - \"material\": The material of the object\n    - \"color\": The color of the object\n    - \"bounding_box\": The bounding box of the object\n    - \"geometry\": The geometry info of the object\n    - \"attributes\": A dictionary containing all custom user attributes of the object\n\nParameters:\n- id: The id of the object to get information about\n- name: The name of the object to get information about\n"
+  },
+  "preparation_failure": {
+    "directory": "experiments/runs/repair-20260910-092512-e9913c63",
+    "stage": "before builder dispatch",
+    "reason": "Git auto-maintenance lock appeared/disappeared during exported checkout inventory. Retained; prepared a new checkout with per-process maintenance.auto=false and gc.auto=0. No candidate or task attempt was replayed."
+  }
+}

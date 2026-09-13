@@ -1,0 +1,11 @@
+{
+  "unchanged_executable_ast": true,
+  "catalog_only_changed": [
+    "gh_get_graph.description"
+  ],
+  "candidate": "experiments/runs/repair-20260910-155450-e27727d5",
+  "candidate_source_sha256": "b709be225caf0b4aa73b34732c3c76329269d063caccda2a746a741eb02f2af5",
+  "candidate_patch_sha256": "94bbcb111e1ef00bc59a9e517ee4a0363e1309e8b44be932d82e3d4daf315a79",
+  "baseline_catalog_sha256": "3dd59f3a1ea034a19dadc8bc3d89a8736196142eddfb172ed399fd9e154b467a",
+  "candidate_catalog_sha256": "f942dacb8fc40ee7cdea8ec74057678d2fafad953548051d9f98b82d8ea3b15a"
+}

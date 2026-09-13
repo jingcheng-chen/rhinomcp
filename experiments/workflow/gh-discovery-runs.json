@@ -1,0 +1,22 @@
+{
+  "runs": [
+    {
+      "id": "workflow-baseline-20260910-154702-9c262712-m6-point_array-v1",
+      "family": "gh-point-array",
+      "cohort": "released-0.4.1-native",
+      "run": "experiments/runs/workflow-baseline-20260910-154702-9c262712/task-1"
+    },
+    {
+      "id": "workflow-baseline-20260910-154702-9c262712-m6-circle_profiles-v1",
+      "family": "gh-circle-profiles",
+      "cohort": "released-0.4.1-native",
+      "run": "experiments/runs/workflow-baseline-20260910-154702-9c262712/task-2"
+    },
+    {
+      "id": "workflow-baseline-20260910-154702-9c262712-m6-loft_sections-v1",
+      "family": "gh-loft-sections",
+      "cohort": "released-0.4.1-native",
+      "run": "experiments/runs/workflow-baseline-20260910-154702-9c262712/task-3"
+    }
+  ]
+}
