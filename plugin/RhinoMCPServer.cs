@@ -276,8 +276,15 @@ namespace RhinoMCPPlugin
                         }
                         else
                         {
-                            // No data available, sleep a bit to prevent CPU overuse
-                            Thread.Sleep(50);
+                            // Wait up to 1 s for data or a peer close. A socket that
+                            // turns readable with nothing to read has been closed by
+                            // the client; without this check the handler thread
+                            // outlives every connection and wakes forever.
+                            if (client.Client.Poll(1_000_000, SelectMode.SelectRead) && client.Available == 0)
+                            {
+                                RhinoApp.WriteLine("Client disconnected");
+                                break;
+                            }
                         }
                     }
                     catch (Exception e)
