@@ -180,6 +180,11 @@ MCP 服务器，而不是 `uvx rhinomcp` 这种本地 stdio 命令。如果你�
 打开 Rhino 后，在命令行输入 **`mcpstart`**。这会启动 MCP 服务器要连接的 TCP 桥接
 （用 `mcpstop` 结束）。每个 Rhino 会话运行一次即可。
 
+### Rhino 在另一台电脑上
+
+如果 AI 客户端和 Rhino 在不同的电脑上（例如 Mac 和 Windows PC），见
+[docs/REMOTE.md](docs/REMOTE.md)。该方案通过 SSH 连接，Rhino 的端口仍只监听本机。
+
 ### 保持更新
 
 RhinoMCP 由三个各自独立更新的部分组成：

@@ -184,6 +184,12 @@ To clean up a stale `rhinomcp` process each time your client launches:
 With Rhino open, type **`mcpstart`** in the command line. This starts the TCP bridge the server
 connects to (`mcpstop` ends it). Run it once per Rhino session.
 
+### Rhino on another computer
+
+If your AI client and Rhino run on different computers, for example a Mac and a Windows PC,
+see [docs/REMOTE.md](docs/REMOTE.md). It connects them over SSH, so Rhino's port stays on
+loopback.
+
 ### Staying up to date
 
 RhinoMCP has three parts that update separately:
