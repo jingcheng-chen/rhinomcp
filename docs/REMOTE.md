@@ -154,6 +154,39 @@ In testing, the first connection took about 3 seconds (SSH login plus Python
 startup) and later tool calls took 0.1–0.3 seconds. When the client exits, or
 its `ssh` process is killed, `rhinomcp` on the PC exits within seconds.
 
+A network drop is different. If the connection disappears without being
+closed (Wi-Fi turned off, cable pulled), the client's `ssh` gives up after
+about a minute because of `ServerAliveInterval`, but by default the PC's `sshd`
+never notices. `rhinomcp` and its Python processes keep running there. They do
+not block new sessions, but they pile up if the network drops often. To make
+`sshd` end such sessions, open `C:\ProgramData\ssh\sshd_config` in an elevated
+editor and change these two commented lines:
+
+```
+#ClientAliveInterval 0
+#ClientAliveCountMax 3
+```
+
+to:
+
+```
+ClientAliveInterval 15
+ClientAliveCountMax 3
+```
+
+Change them where they are instead of adding them at the end: the default file
+ends with a `Match Group administrators` block, and settings placed after it
+apply only to administrators. Then check the file and restart the server in an
+elevated PowerShell:
+
+```powershell
+& "$env:SystemRoot\System32\OpenSSH\sshd.exe" -t   # no output means the file is valid
+Restart-Service sshd
+```
+
+In testing, with this setting the PC ended the session and its processes about
+a minute after its Wi-Fi was turned off.
+
 ## Option 2: forward Rhino's port over SSH
 
 `rhinomcp` runs on the client as usual. An SSH tunnel makes the PC's
