@@ -242,11 +242,29 @@ wrong remote port still gives a running tunnel whose connections all fail.
 
 ## Security
 
-Anyone who can use this SSH key can already run any command as that Windows
-user, and RhinoMCP's execution tools can do the same through Rhino. The SSH key
-and the account are the security boundary, not RhinoMCP. Consider:
+RhinoMCP has no authentication of its own. Anyone who can use this SSH key can
+run code on the PC in two ways:
 
-- A dedicated standard (non-administrator) Windows account for SSH and Rhino.
-- Keeping the key on the client machine only, and not syncing it to cloud
-  storage.
-- The `RHINO_MCP_ENABLE_*` switches, if you want fewer execution tools.
+- as the Windows account the key logs in to, with a shell; and
+- through RhinoMCP's execution tools (`run_command`, Python, C#), which run
+  inside Rhino with the rights of whoever is running Rhino.
+
+So the SSH key, the login account and Rhino's own rights together are the
+security boundary. Consider:
+
+- **Log in with a dedicated standard (non-administrator) account.** Rhino can
+  keep running in your own desktop account: the server reaches it over
+  `127.0.0.1`, which every account on the PC shares. With Option 1, install `uv`
+  and `rhinomcp` under the dedicated account and point the client at that
+  account's `rhinomcp.exe`. An administrator account gets a fully elevated SSH
+  session, and a key in `administrators_authorized_keys` works for every
+  administrator on the PC.
+- **Check that Rhino itself does not run elevated.** A dedicated account limits
+  the shell, not the execution tools. With UAC on (the Windows default), Rhino
+  started normally runs without administrator rights. If UAC is off (`EnableLUA`
+  is `0` under
+  `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System`) or Rhino is
+  run as administrator, code sent through Rhino has full administrator rights,
+  whichever account SSH uses.
+- Keep the key on the client machine only, and do not sync it to cloud storage.
+- Use the `RHINO_MCP_ENABLE_*` switches if you want fewer execution tools.
