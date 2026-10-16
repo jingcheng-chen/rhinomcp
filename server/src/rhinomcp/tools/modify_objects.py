@@ -10,7 +10,7 @@ def modify_objects(
     all: Optional[bool] = None
 ) -> str:
     """
-    Create multiple objects at once in the Rhino document.
+    Modify multiple existing objects at once in the Rhino document.
     
     Parameters:
     - objects: A List of objects, each containing the parameters for a single object modification 
