@@ -184,6 +184,32 @@ To clean up a stale `rhinomcp` process each time your client launches:
 With Rhino open, type **`mcpstart`** in the command line. This starts the TCP bridge the server
 connects to (`mcpstop` ends it). Run it once per Rhino session.
 
+`mcpstatus` prints the port, the document and the connected clients.
+
+<details>
+<summary>Several Rhino instances at once</summary>
+
+Each Rhino runs its own bridge on its own port. Without a port, `mcpstart` takes the first free one
+from 1999 to 2008, so the first Rhino keeps 1999 and the next one gets 2000. To pin a port, use
+`-mcpstart Port=2000` (in a startup macro: `_-mcpstart _Port=2000 _Enter`), or start Rhino with the
+`RHINO_MCP_PORT` environment variable set. The port appears in the command line, in `mcpstatus`
+and, on Windows, at the start of the window title (`[MCP:2000] Rhinoceros 8`).
+
+Give the MCP client one server entry per instance, differing only in `RHINO_MCP_PORT`:
+
+```json
+{
+  "mcpServers": {
+    "rhino":   { "command": "uvx", "args": ["rhinomcp"], "env": { "RHINO_MCP_PORT": "1999" } },
+    "rhino-2": { "command": "uvx", "args": ["rhinomcp"], "env": { "RHINO_MCP_PORT": "2000" } }
+  }
+}
+```
+
+If the port is taken, `mcpstart` says so and starts nothing rather than reaching the wrong Rhino.
+
+</details>
+
 ### Staying up to date
 
 RhinoMCP has three parts that update separately:
@@ -301,7 +327,7 @@ authentication.
 | Variable                       | Default     | Effect                                                                        |
 | ------------------------------ | ----------- | ----------------------------------------------------------------------------- |
 | `RHINO_MCP_HOST`               | `127.0.0.1` | Connect target. Refuses non-loopback hosts unless `RHINO_MCP_ALLOW_REMOTE=1`. |
-| `RHINO_MCP_PORT`               | `1999`      | TCP port.                                                                     |
+| `RHINO_MCP_PORT`               | `1999`      | TCP port. Also read by `mcpstart` in Rhino.                                   |
 | `RHINO_MCP_ENABLE_RUN_COMMAND` | `1`         | Set `0` to disable the `run_command` tool.                                    |
 | `RHINO_MCP_ENABLE_RHINOSCRIPT` | `1`         | Set `0` to disable RhinoScript-Python execution.                              |
 | `RHINO_MCP_ENABLE_CSHARP`      | `1`         | Set `0` to disable RhinoCommon C# execution.                                  |

@@ -4,6 +4,22 @@ Server and plugin share one version. Update them together: the server sends
 commands the matching plugin understands, and an older plugin silently ignores
 parameters it does not know.
 
+## Unreleased
+
+### Added
+
+- Several Rhino instances can run a bridge at the same time. `mcpstart` takes
+  the first free port from 1999 to 2008; `-mcpstart Port=<n>` or the
+  `RHINO_MCP_PORT` environment variable pin one. A taken port is reported and
+  nothing starts, instead of an exception. The port is printed and, on
+  Windows, prefixed to the Rhino window title.
+- `mcpstatus` command: port, how it was chosen, document, connected clients
+  and their latest command.
+
+### Changed
+
+- `mcpstop` closes open client connections immediately.
+
 ## 0.4.1.1 — unreleased (prepared 2026-09-13)
 
 ### Fixed
