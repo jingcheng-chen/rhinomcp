@@ -45,8 +45,8 @@ namespace RhinoMCPPlugin
             }
         }
 
-        /// <summary>Who is on the other end, as shown by mcpstatus; the
-        /// remote endpoint unless set.</summary>
+        /// <summary>Who is on the other end ("Claude Code · project (PID n)"),
+        /// or the endpoint until/unless ClientIdentity can tell.</summary>
         public string Description
         {
             get => description ?? RemoteEndPoint?.ToString() ?? $"#{Id}";

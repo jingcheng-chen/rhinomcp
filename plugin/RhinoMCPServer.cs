@@ -230,6 +230,13 @@ namespace RhinoMCPPlugin
             RhinoApp.WriteLine("Client handler started");
 
             TcpClient client = connection.Tcp;
+            // Off the accept loop: looking up the owning process takes a few ms.
+            string identity = ClientIdentity.Describe(connection.RemoteEndPoint, port);
+            if (identity != null)
+            {
+                connection.Description = identity;
+                RhinoApp.WriteLine($"MCP client: {identity}");
+            }
 
             byte[] buffer = new byte[8192];
             var pending = new List<byte>();
