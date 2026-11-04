@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Tray icon + window listing every Rhino that runs a RhinoMCP server.
+       .NET Framework 4.8 so it runs on any Windows 10/11 without extra runtimes;
+       ships next to rhinomcp.rhp, which starts it on mcpstart. -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <!-- Lets the plug-in build on macOS/Linux (CI, Yak packaging) include it. -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>RhinoMCPTray</AssemblyName>
+    <RootNamespace>RhinoMCPTray</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Version>0.4.1.1</Version>
+    <Title>RhinoMCP tray</Title>
+    <Description>Lists the Rhino instances running a RhinoMCP server</Description>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Web.Extensions" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

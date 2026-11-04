@@ -35,6 +35,23 @@
     </Reference>
   </ItemGroup>
 
+  <!-- Build the Windows tray app that lists every Rhino running a server
+       (started by mcpstart / mcpwindow) and ship it next to the .rhp. It also
+       builds on macOS and Linux, so a Yak package made there includes it. -->
+  <Target Name="BuildStatusTray" AfterTargets="Build" Condition="'$(TargetFramework)' != ''">
+    <!-- Restore in its own evaluation first: dotnet build only restores this project. -->
+    <MSBuild Projects="../tray/RhinoMCPTray.csproj" Targets="Restore"
+             Properties="Configuration=$(Configuration);MSBuildRestoreSessionId=$([System.Guid]::NewGuid())"
+             RemoveProperties="TargetFramework;RuntimeIdentifier" />
+    <MSBuild Projects="../tray/RhinoMCPTray.csproj" Properties="Configuration=$(Configuration)" RemoveProperties="TargetFramework;RuntimeIdentifier" Targets="Build">
+      <Output TaskParameter="TargetOutputs" ItemName="StatusTrayExe" />
+    </MSBuild>
+    <ItemGroup>
+      <StatusTrayFiles Include="@(StatusTrayExe);@(StatusTrayExe->'%(FullPath).config')" />
+    </ItemGroup>
+    <Copy SourceFiles="@(StatusTrayFiles)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+
   <!--
     Post-build install into the Mac user-level Rhino Plug-ins directory.
     Disabled by default so a plain `dotnet build` succeeds without touching

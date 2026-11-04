@@ -65,6 +65,8 @@ namespace RhinoMCPPlugin
                         server = candidate;
                         PortSource = source;
                         WindowTitleTag.Show($"MCP:{port}");
+                        InstanceStatusFile.Start();
+                        StatusTray.Launch(showWindow: false);
                         RhinoApp.WriteLine($"RhinoMCP server started on {DefaultHost}:{port} ({source}).");
                         if (port != DefaultPort)
                         {
@@ -105,6 +107,7 @@ namespace RhinoMCPPlugin
             server = null;
             PortSource = null;
             WindowTitleTag.Clear();
+            InstanceStatusFile.Stop();
             RhinoApp.WriteLine($"RhinoMCP server on port {port} stopped.");
         }
 

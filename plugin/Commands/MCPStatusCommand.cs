@@ -48,6 +48,7 @@ namespace RhinoMCPPlugin.Commands
                 RhinoApp.WriteLine($"    {c.Description}: connected {c.ConnectedAt:HH:mm}, {c.CommandCount} commands{last}");
             }
             RhinoApp.WriteLine($"  MCP client setting: {RhinoMCPServerController.PortEnvironmentVariable}={server.Port}");
+            RhinoApp.WriteLine("  Run mcpwindow to see every Rhino running RhinoMCP.");
             return Result.Success;
         }
     }

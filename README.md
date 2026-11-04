@@ -184,7 +184,8 @@ To clean up a stale `rhinomcp` process each time your client launches:
 With Rhino open, type **`mcpstart`** in the command line. This starts the TCP bridge the server
 connects to (`mcpstop` ends it). Run it once per Rhino session.
 
-`mcpstatus` prints the port, the document and the connected clients.
+`mcpstatus` prints the port, the document and the connected clients. On Windows, `mcpwindow` opens
+the tray window that lists every running Rhino (see "Several Rhino instances at once").
 
 <details>
 <summary>Several Rhino instances at once</summary>
@@ -207,6 +208,13 @@ Give the MCP client one server entry per instance, differing only in `RHINO_MCP_
 ```
 
 If the port is taken, `mcpstart` says so and starts nothing rather than reaching the wrong Rhino.
+
+On Windows, `mcpstart` also puts a RhinoMCP icon in the notification area. One icon serves every
+Rhino: click it (or run `mcpwindow`) for a list of the running instances with their port, the MCP
+entry that reaches each one (read from `~/.claude.json`), the open Rhino and Grasshopper documents,
+and the connected clients with their latest command. Clicking an instance brings that Rhino to the
+front. Each Rhino writes its state to `%LOCALAPPDATA%\RhinoMCP\instances`; the icon goes away once
+no Rhino runs a server.
 
 </details>
 

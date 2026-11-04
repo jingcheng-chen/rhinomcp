@@ -40,6 +40,8 @@ jobs:
           # Copy DLL, RHP, and any other necessary files to the dist folder
           cp ${{ github.workspace }}/plugin/bin/Release/net8.0/*.dll dist/net8.0/
           cp ${{ github.workspace }}/plugin/bin/Release/net8.0/*.rhp dist/net8.0/
+          cp ${{ github.workspace }}/plugin/bin/Release/net8.0/RhinoMCPTray.exe dist/net8.0/
+          cp ${{ github.workspace }}/plugin/bin/Release/net8.0/RhinoMCPTray.exe.config dist/net8.0/
           cp ${{ github.workspace }}/plugin/manifest.yml dist/
 
       - name: Upload build artifacts

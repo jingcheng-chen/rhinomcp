@@ -15,6 +15,12 @@ parameters it does not know.
   Windows, prefixed to the Rhino window title.
 - `mcpstatus` command: port, how it was chosen, document, connected clients
   and their latest command.
+- Windows tray icon (`RhinoMCPTray.exe`, shipped next to the plug-in and
+  started by `mcpstart`): one window listing every Rhino running a server,
+  with port, matching MCP entry, Rhino/Grasshopper documents and connected
+  clients, named after the client process (e.g. the Claude Code session and
+  its working folder). `mcpwindow` opens it; clicking an instance brings that
+  Rhino to the front.
 
 ### Changed
 
