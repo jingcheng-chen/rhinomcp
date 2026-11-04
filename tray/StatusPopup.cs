@@ -35,6 +35,8 @@ namespace RhinoMCPTray
         private List<RhinoInstance> instances = new List<RhinoInstance>();
         private readonly List<(Rectangle Bounds, RhinoInstance Instance)> cards = new List<(Rectangle, RhinoInstance)>();
         private int hovered = -1;
+        private bool hasOverflow;
+        private readonly VScrollBar scrollBar = new VScrollBar { Visible = false };
         private float scale = 1f;
         private Theme theme = Theme.Current();
         private Font titleFont, cardTitleFont, bodyFont, smallFont, smallBoldFont;
@@ -51,6 +53,14 @@ namespace RhinoMCPTray
             TopMost = true;
             KeyPreview = true;
             AutoScaleMode = AutoScaleMode.None;
+            Controls.Add(scrollBar);
+            scrollBar.ValueChanged += (sender, e) =>
+            {
+                LayoutCards();
+                hovered = -1;
+                Cursor = Cursors.Default;
+                Invalidate();
+            };
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer |
                      ControlStyles.UserPaint | ControlStyles.ResizeRedraw, true);
         }
@@ -91,9 +101,10 @@ namespace RhinoMCPTray
             int gap = S(Edge);
 
             Rectangle area = screen.WorkingArea, full = screen.Bounds;
+            height = Math.Min(height, area.Height - 2 * gap);
             int x = area.Left > full.Left ? area.Left + gap : area.Right - width - gap;   // taskbar on the left?
             int y = area.Top > full.Top ? area.Top + gap : area.Bottom - height - gap;    // taskbar at the top?
-            Bounds = new Rectangle(x, y, width, Math.Min(height, area.Height - 2 * gap));
+            Bounds = new Rectangle(x, y, width, height);
             LayoutCards();
 
             hovered = -1;
@@ -174,14 +185,31 @@ namespace RhinoMCPTray
             return S(HeaderHeight) + body + S(FooterHeight) + S(4);
         }
 
+        private Rectangle CardViewport => new Rectangle(0, S(HeaderHeight),
+            ClientSize.Width - (hasOverflow ? scrollBar.Width : 0),
+            Math.Max(0, ClientSize.Height - S(HeaderHeight + FooterHeight)));
+
         private void LayoutCards()
         {
+            int viewportHeight = Math.Max(1, ClientSize.Height - S(HeaderHeight + FooterHeight));
+            int contentHeight = MeasureHeight() - S(HeaderHeight + FooterHeight);
+            int maxScroll = Math.Max(0, contentHeight - viewportHeight);
+            // Clamp before changing the range when instances disappear.
+            if (scrollBar.Value > maxScroll) scrollBar.Value = maxScroll;
+            hasOverflow = maxScroll > 0;
+            scrollBar.Visible = hasOverflow;
+            scrollBar.Bounds = new Rectangle(ClientSize.Width - scrollBar.Width, S(HeaderHeight),
+                scrollBar.Width, viewportHeight);
+            scrollBar.LargeChange = viewportHeight;
+            scrollBar.SmallChange = S(SessionHeight);
+            scrollBar.Maximum = Math.Max(0, contentHeight - 1);
+
             cards.Clear();
-            int y = S(HeaderHeight);
+            int y = S(HeaderHeight) - scrollBar.Value;
             foreach (var instance in instances)
             {
                 int h = CardHeight(instance);
-                cards.Add((new Rectangle(S(Edge), y, ClientSize.Width - 2 * S(Edge), h), instance));
+                cards.Add((new Rectangle(S(Edge), y, CardViewport.Width - 2 * S(Edge), h), instance));
                 y += h + S(CardGap);
             }
         }
@@ -208,6 +236,8 @@ namespace RhinoMCPTray
             DrawText(g, summary, smallFont, theme.Secondary,
                      new Rectangle(0, 0, ClientSize.Width - S(Edge + 4), S(HeaderHeight)), TextFormatFlags.Right);
 
+            var cardClip = g.Save();
+            g.SetClip(CardViewport);
             if (instances.Count == 0)
             {
                 DrawEmpty(g);
@@ -216,6 +246,8 @@ namespace RhinoMCPTray
             {
                 for (int i = 0; i < cards.Count; i++) DrawCard(g, cards[i].Bounds, cards[i].Instance, i == hovered);
             }
+
+            g.Restore(cardClip);
 
             // Footer hint.
             var footer = new Rectangle(S(Edge + 2), ClientSize.Height - S(FooterHeight), ClientSize.Width - 2 * S(Edge), S(FooterHeight));
@@ -369,10 +401,22 @@ namespace RhinoMCPTray
 
         // ---- interaction --------------------------------------------------
 
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            base.OnMouseWheel(e);
+            if (!scrollBar.Visible) return;
+            int lines = SystemInformation.MouseWheelScrollLines;
+            int step = lines < 0 ? scrollBar.LargeChange : lines * scrollBar.SmallChange;
+            int maximum = scrollBar.Maximum - scrollBar.LargeChange + 1;
+            scrollBar.Value = Math.Max(0, Math.Min(maximum,
+                scrollBar.Value - e.Delta * step / SystemInformation.MouseWheelScrollDelta));
+        }
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            int index = cards.FindIndex(c => c.Bounds.Contains(e.Location));
+            int index = CardViewport.Contains(e.Location)
+                ? cards.FindIndex(c => c.Bounds.Contains(e.Location)) : -1;
             if (index == hovered) return;
             hovered = index;
             Cursor = index >= 0 ? Cursors.Hand : Cursors.Default;
@@ -390,7 +434,8 @@ namespace RhinoMCPTray
         protected override void OnMouseClick(MouseEventArgs e)
         {
             base.OnMouseClick(e);
-            int index = cards.FindIndex(c => c.Bounds.Contains(e.Location));
+            int index = CardViewport.Contains(e.Location)
+                ? cards.FindIndex(c => c.Bounds.Contains(e.Location)) : -1;
             if (index < 0 || e.Button != MouseButtons.Left) return;
             ActivateRhino(cards[index].Instance.Pid);
             HidePopup();
