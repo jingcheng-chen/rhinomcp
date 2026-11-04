@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -40,6 +41,17 @@ namespace RhinoMCPPlugin
             Legacy
         }
 
+        public enum StartResult
+        {
+            Started,
+            AlreadyRunning,
+            // The port is bound by another process (typically another Rhino
+            // running mcpstart) or reserved by the OS. Callers scanning a port
+            // range move on to the next port; anything else is a real failure.
+            PortUnavailable,
+            Failed
+        }
+
         private string host;
         private int port;
         private bool running;
@@ -47,6 +59,10 @@ namespace RhinoMCPPlugin
         private Thread serverThread;
         private readonly object lockObject = new object();
         private RhinoMCPFunctions handler;
+        // Open connections by connection number, so mcpstatus can list them
+        // and Stop() can close them instead of waiting for each handler's poll.
+        private readonly ConcurrentDictionary<int, ClientConnection> clients = new ConcurrentDictionary<int, ClientConnection>();
+        private int connectionCounter;
 
         public RhinoMCPServer(string host = "127.0.0.1", int port = 1999)
         {
@@ -58,15 +74,23 @@ namespace RhinoMCPPlugin
             this.handler = new RhinoMCPFunctions();
         }
 
+        public string Host => host;
+        public int Port => port;
+        public DateTime StartedAt { get; private set; }
 
-        public void Start()
+        public IReadOnlyList<ClientConnection> ConnectedClients()
         {
+            return clients.Values.OrderBy(c => c.Id).ToList();
+        }
+
+        public StartResult Start(out string error)
+        {
+            error = null;
             lock (lockObject)
             {
                 if (running)
                 {
-                    RhinoApp.WriteLine("Server is already running");
-                    return;
+                    return StartResult.AlreadyRunning;
                 }
 
                 running = true;
@@ -84,12 +108,23 @@ namespace RhinoMCPPlugin
                 serverThread.IsBackground = true;
                 serverThread.Start();
 
-                RhinoApp.WriteLine($"RhinoMCP server started on {host}:{port}");
+                StartedAt = DateTime.Now;
+                return StartResult.Started;
+            }
+            catch (SocketException e) when (e.SocketErrorCode == SocketError.AddressAlreadyInUse ||
+                                             e.SocketErrorCode == SocketError.AccessDenied)
+            {
+                // AccessDenied is what Windows reports for ports inside an
+                // excluded range (Hyper-V/WSL reservations) or held exclusively.
+                error = e.Message;
+                Stop();
+                return StartResult.PortUnavailable;
             }
             catch (Exception e)
             {
-                RhinoApp.WriteLine($"Failed to start server: {e.Message}");
+                error = e.Message;
                 Stop();
+                return StartResult.Failed;
             }
         }
 
@@ -98,6 +133,20 @@ namespace RhinoMCPPlugin
             lock (lockObject)
             {
                 running = false;
+            }
+
+            // Drop open connections so their handler threads exit now and the
+            // MCP clients see the disconnect instead of a hang.
+            foreach (var pair in clients)
+            {
+                try
+                {
+                    pair.Value.Tcp.Close();
+                }
+                catch
+                {
+                    // Ignore errors on closing
+                }
             }
 
             // Close listener
@@ -127,8 +176,6 @@ namespace RhinoMCPPlugin
                 }
                 serverThread = null;
             }
-
-            RhinoApp.WriteLine("RhinoMCP server stopped");
         }
 
         private void ServerLoop()
@@ -145,7 +192,9 @@ namespace RhinoMCPPlugin
                     TcpClient client = listener.AcceptTcpClient();
                     RhinoApp.WriteLine($"Connected to client: {client.Client.RemoteEndPoint}");
 
-                    Thread clientThread = new Thread(() => HandleClient(client));
+                    var connection = new ClientConnection(Interlocked.Increment(ref connectionCounter), client);
+                    clients[connection.Id] = connection;
+                    Thread clientThread = new Thread(() => HandleClient(connection));
                     clientThread.IsBackground = true;
                     clientThread.Start();
                 }
@@ -176,9 +225,11 @@ namespace RhinoMCPPlugin
             }
         }
 
-        private void HandleClient(TcpClient client)
+        private void HandleClient(ClientConnection connection)
         {
             RhinoApp.WriteLine("Client handler started");
+
+            TcpClient client = connection.Tcp;
 
             byte[] buffer = new byte[8192];
             var pending = new List<byte>();
@@ -253,7 +304,7 @@ namespace RhinoMCPPlugin
                                         }));
                                         continue;
                                     }
-                                    DispatchCommand(framedCommand, stream, framed: true);
+                                    DispatchCommand(framedCommand, stream, framed: true, connection);
                                 }
                             }
                             else
@@ -266,7 +317,7 @@ namespace RhinoMCPPlugin
                                 {
                                     JObject command = JObject.Parse(incompleteData);
                                     pending.Clear();
-                                    DispatchCommand(command, stream, framed: false);
+                                    DispatchCommand(command, stream, framed: false, connection);
                                 }
                                 catch (JsonException)
                                 {
@@ -289,7 +340,11 @@ namespace RhinoMCPPlugin
                     }
                     catch (Exception e)
                     {
-                        RhinoApp.WriteLine($"Error receiving data: {e.Message}");
+                        // After Stop() the socket was closed under us on purpose.
+                        if (IsRunning())
+                        {
+                            RhinoApp.WriteLine($"Error receiving data: {e.Message}");
+                        }
                         break;
                     }
                 }
@@ -300,6 +355,7 @@ namespace RhinoMCPPlugin
             }
             finally
             {
+                clients.TryRemove(connection.Id, out _);
                 try
                 {
                     client.Close();
@@ -356,13 +412,14 @@ namespace RhinoMCPPlugin
             return true;
         }
 
-        private void DispatchCommand(JObject command, NetworkStream stream, bool framed)
+        private void DispatchCommand(JObject command, NetworkStream stream, bool framed, ClientConnection connection)
         {
             // Execute command on Rhino's main thread. Posts are processed in
             // order, so pipelined framed commands get their responses in the
             // order the commands were sent.
             RhinoApp.InvokeOnUiThread(new Action(() =>
             {
+                connection.RecordCommand(command["type"]?.ToString());
                 try
                 {
                     JObject response = ExecuteCommand(command);
@@ -541,4 +598,4 @@ namespace RhinoMCPPlugin
             }
         }
     }
-}
+}
