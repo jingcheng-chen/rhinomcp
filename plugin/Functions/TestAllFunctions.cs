@@ -739,27 +739,54 @@ public partial class RhinoMCPFunctions
             if (activeViewport == null)
                 throw new Exception("No active viewport to test against");
 
-            // zoom_to_fit moves the camera; a correct ReadOnly handler restores it.
-            string nameBefore = activeViewport.Name;
-            var before = new Rhino.DocObjects.ViewportInfo(activeViewport);
-            before.GetFrustum(out double bl, out double br, out double bb, out double bt, out _, out _);
-
-            CaptureViewport(new JObject
+            // zoom_to_fit, a temporary display mode, camera, lens and framing all
+            // move the view; a correct ReadOnly handler restores every one of them.
+            var captures = new[]
             {
-                ["viewport"] = "active",
-                ["zoom_to_fit"] = true,
-                ["width"] = 200,
-                ["height"] = 200
-            });
+                new JObject { ["zoom_to_fit"] = true },
+                new JObject
+                {
+                    ["display_mode"] = "Wireframe",
+                    ["camera_location"] = new JArray { 37.0, -53.0, 21.0 },
+                    ["camera_target"] = new JArray { 1.0, 2.0, 3.0 },
+                    ["lens_length"] = 85.0
+                },
+                new JObject
+                {
+                    ["display_mode"] = "Ghosted",
+                    ["frame_bbox"] = new JObject { ["min"] = new JArray { 0.0, 0.0, 0.0 }, ["max"] = new JArray { 3.0, 4.0, 5.0 } },
+                    ["format"] = "jpeg"
+                },
+            };
+            double cameraDrift = 0, frustumDrift = 0;
+            foreach (var capture in captures)
+            {
+                string nameBefore = activeViewport.Name;
+                var modeBefore = activeViewport.DisplayMode?.Id;
+                var before = new Rhino.DocObjects.ViewportInfo(activeViewport);
+                before.GetFrustum(out double bl, out double br, out double bb, out double bt, out _, out _);
 
-            var after = new Rhino.DocObjects.ViewportInfo(activeViewport);
-            after.GetFrustum(out double al, out double ar, out double ab, out double at, out _, out _);
+                capture["viewport"] = "active";
+                capture["width"] = 200;
+                capture["height"] = 200;
+                var result = CaptureViewport(capture);
+                if (result["display_mode"] == null || result["camera_up"] == null || result["total_object_count"] == null)
+                    throw new Exception("capture_viewport metadata is missing fields");
 
-            double cameraDrift = before.CameraLocation.DistanceTo(after.CameraLocation);
-            double frustumDrift = Math.Abs(bl - al) + Math.Abs(br - ar) + Math.Abs(bb - ab) + Math.Abs(bt - at);
-            bool nameKept = activeViewport.Name == nameBefore;
-            if (cameraDrift > 1e-6 || frustumDrift > 1e-6 || !nameKept)
-                throw new Exception($"capture_viewport changed the active view (cameraDrift={cameraDrift:G4}, frustumDrift={frustumDrift:G4}, nameKept={nameKept})");
+                var after = new Rhino.DocObjects.ViewportInfo(activeViewport);
+                after.GetFrustum(out double al, out double ar, out double ab, out double at, out _, out _);
+
+                cameraDrift = Math.Max(cameraDrift, before.CameraLocation.DistanceTo(after.CameraLocation)
+                    + before.TargetPoint.DistanceTo(after.TargetPoint)
+                    + (before.CameraUp - after.CameraUp).Length
+                    + Math.Abs(before.Camera35mmLensLength - after.Camera35mmLensLength));
+                frustumDrift = Math.Max(frustumDrift, Math.Abs(bl - al) + Math.Abs(br - ar) + Math.Abs(bb - ab) + Math.Abs(bt - at));
+                bool kept = activeViewport.Name == nameBefore
+                    && activeViewport.DisplayMode?.Id == modeBefore
+                    && before.IsPerspectiveProjection == after.IsPerspectiveProjection;
+                if (cameraDrift > 1e-6 || frustumDrift > 1e-6 || !kept)
+                    throw new Exception($"capture_viewport {capture.ToString(Newtonsoft.Json.Formatting.None, Array.Empty<Newtonsoft.Json.JsonConverter>())} changed the active view (cameraDrift={cameraDrift:G4}, frustumDrift={frustumDrift:G4}, nameModeProjectionKept={kept})");
+            }
 
             results["capture_viewport_readonly"] = new JObject
             {
