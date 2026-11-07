@@ -1858,3 +1858,37 @@ class TestCaptureViewportMetadata:
             f"not_found: Object not found: {missing}\n"
             f"{capture_server.OBJECT_NOT_FOUND_GUIDANCE}"
         )
+
+    @pytest.mark.asyncio
+    async def test_plugin_older_than_050_refuses_the_new_params(self, monkeypatch):
+        from rhinomcp.server import PLUGIN_UPDATE_ADVICE
+
+        old = MockRhinoServer(port=19981, plugin_version="0.4.1")
+        old.start()
+        try:
+            self._connect(monkeypatch, port=19981)
+            new_params = {
+                "display_mode": "Wireframe",
+                "camera_location": [1, 1, 1],
+                "camera_target": [0, 0, 0],
+                "lens_length": 35,
+                "frame_object_ids": ["00000000-0000-0000-0000-00000000dead"],
+                "frame_bbox": {"min": [0, 0, 0], "max": [1, 1, 1]},
+                "format": "jpeg",
+            }
+            for name, value in new_params.items():
+                text = await self._refusal(**{name: value})
+                assert text == (
+                    f"unsupported: 'capture_viewport' parameter '{name}' needs plugin "
+                    "0.5.0; the connected rhinomcp plugin (0.4.1) would silently "
+                    "ignore it. The command was not sent.\n"
+                    f"{PLUGIN_UPDATE_ADVICE} Or call without {name}."
+                )
+            assert "capture_viewport" not in old.received_commands
+
+            # The defaults are what an old plugin already does, so they still go through.
+            result = await self._capture(format="png")
+            assert result.content[0].mime_type == "image/png"
+            assert "format" in old.received_params["capture_viewport"]
+        finally:
+            old.stop()
