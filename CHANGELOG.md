@@ -4,10 +4,75 @@ Server and plugin share one version. Update them together: the server sends
 commands the matching plugin understands, and an older plugin silently ignores
 parameters it does not know.
 
-## Unreleased
+## 0.5.0 — unreleased (prepared 2026-11-07)
 
-### Added
+A perception release: agents can ground themselves before the first edit, see
+what a viewport capture shows, point the camera, filter selections and listings
+more precisely, and get errors that say what to try next. Everything is
+additive; against a plugin older than 0.5.0 the server refuses the new commands
+and parameters with update advice instead of letting them be ignored.
 
+### Server (`rhinomcp` on PyPI)
+
+- Coded errors with guidance. A failure now reads `code: message`, with one
+  sentence of guidance on the next line. Codes come from a closed set:
+  `invalid_argument`, `not_found`, `unsupported`, `rhino_error`, `timeout`,
+  `internal`. Socket timeouts raise `timeout`; plugin-too-old refusals from the
+  version tables raise `unsupported` with the update advice as guidance. Errors
+  without a code stay valid and read as the bare message.
+- Tool wrappers that used to return error text as a successful result
+  (`create_layer`, `create_objects`, `delete_layer`, `get_commands`,
+  `get_document_summary`, `get_objects`, `get_or_set_current_layer`,
+  `get_selected_objects_info`, `modify_objects`, `run_command`,
+  `select_objects`, `undo`, `redo`) now raise a real tool error.
+- Complete tool annotations: every tool, the Grasshopper family included, has a
+  title, a read-only hint and a destructive hint. A registry test fails when a
+  new tool ships without them.
+- New `get_context` tool: one bounded, read-only snapshot of the document
+  (name, path, units, absolute and angle tolerance), the current layer and layer
+  count, object count with the top eight types, selection count with the first
+  twenty ids, the active viewport's name, projection, display mode and camera,
+  the scene bounding box, and the number of open Grasshopper definitions.
+  `get_document_summary` is unchanged. Requires plugin 0.5.0.
+- `capture_viewport` returns the image followed by a text block of metadata:
+  viewport name, display mode, projection, image size, camera location, target
+  and up, lens length, scene bounding box, visible and total object counts.
+  **The result is now an image plus text instead of a bare image.** New
+  parameters: `display_mode`, `camera_location`, `camera_target`,
+  `lens_length`, `frame_object_ids`, `frame_bbox` and `format` (`png`, the
+  default, or `jpeg`). Size defaults are unchanged. Requires plugin 0.5.0.
+- New `set_camera` tool (location, target, up, lens length, perspective or
+  parallel projection) and `zoom_to` tool (all objects, the selection, object
+  ids or a layer). Camera changes leave no undo record. Require plugin 0.5.0.
+- `select_objects` filters gain `ids`, `layer`, `type`, `hidden` and `locked`,
+  combined with the existing name, color and custom-attribute filters under the
+  same and/or rule. The result says how many matched objects Rhino could not
+  select because they are hidden or locked. Requires plugin 0.5.0.
+- `get_objects` gains `ids`, `selected_only`, `include_hidden` and
+  `include_locked`. `include_locked` defaults to true and `include_hidden` to
+  false, so a call without them lists what it listed before. Requires plugin
+  0.5.0.
+- Server instructions and the `overview` and `verification` guides tell agents
+  to call `get_context` before the first edit, read capture metadata before
+  trusting a picture, and act on error guidance instead of retrying.
+  `guidance_version` is now 3.
+- Version tables: `get_context`, `set_camera` and `zoom_to` in
+  `COMMANDS_SINCE`; the seven `capture_viewport`, five `select_objects` filter
+  and four `get_objects` parameters in `PARAMS_SINCE`.
+
+### Plugin (`rhinomcp` on Yak)
+
+- Error replies carry `code` and `guidance`. Unknown objects and layers return
+  `not_found`; malformed GUIDs and out-of-range material index, pipe radius and
+  curve degree return `invalid_argument`.
+- `get_context`, `set_camera` and `zoom_to` commands. All three are read-only
+  on the document and create no undo record.
+- `capture_viewport` applies display mode, camera, lens and framing only for
+  the capture and restores the viewport afterwards. An explicit camera combined
+  with a framing target, or an unknown display mode, is refused with
+  `invalid_argument`; unknown frame ids with `not_found`. JPEG output.
+- `select_objects` and `get_objects` honour the new filters; an unknown id or
+  layer in a filter is refused with `not_found`.
 - Several Rhino instances can run a bridge at the same time. `mcpstart` takes
   the first free port from 1999 to 2008; `-mcpstart Port=<n>` or the
   `RHINO_MCP_PORT` environment variable pin one. A taken port is reported and
@@ -21,10 +86,33 @@ parameters it does not know.
   clients, named after the client process (e.g. the Claude Code session and
   its working folder). `mcpwindow` opens it; clicking an instance brings that
   Rhino to the front.
-
-### Changed
-
 - `mcpstop` closes open client connections immediately.
+
+### Behaviour changes
+
+- A plugin error no longer closes the socket; the next command reuses the
+  connection.
+- `get_or_set_current_layer` returns `not_found` for an unknown layer instead of
+  silently falling back to the current layer.
+- `delete_layer` returns `not_found` for an unknown layer instead of a
+  `success: false` result.
+- An unknown `layer_filter` in `get_objects` returns `not_found` instead of an
+  empty listing.
+
+### Claude Code plugin
+
+- The repository is a Claude Code plugin marketplace. The `rhinomcp` plugin
+  adds `rhino-modeler`, `rhino-inspector` and `grasshopper-builder` agents, a
+  `/scene` command that calls `get_context` and a `/snapshot [display mode]`
+  command that captures the viewport. Install with
+  `claude plugin marketplace add jingcheng-chen/rhinomcp` and
+  `claude plugin install rhinomcp@rhinomcp`; the MCP server is configured
+  separately as `rhino`.
+
+### Deferred
+
+- Document open/save/close, multi-instance targeting from the server,
+  `set_layer_material`, per-turn undo grouping, Rhino 9 / Grasshopper 2.
 
 ## 0.4.1.1 — unreleased (prepared 2026-09-13)
 
