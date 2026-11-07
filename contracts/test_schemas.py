@@ -1083,7 +1083,7 @@ def test_protocol_envelope():
         "get_document_summary", "get_context", "get_objects", "select_objects",
         "create_layer", "delete_layer", "get_or_set_current_layer",
         "execute_rhinoscript_python_code", "execute_rhinocommon_csharp_code",
-        "capture_viewport", "undo", "redo",
+        "capture_viewport", "set_camera", "zoom_to", "undo", "redo",
         "boolean_union", "boolean_difference", "boolean_intersection",
         "loft", "extrude_curve", "create_planar_region", "sweep1", "offset_curve", "pipe",
         "project_curve", "intersect_curves", "split_curve",
@@ -1350,6 +1350,78 @@ def test_capture_viewport_schema():
     return all_passed
 
 
+def test_camera_schemas():
+    """set_camera and zoom_to: params with examples, and the viewport-state result."""
+    print("\n=== Testing camera commands ===")
+    all_passed = True
+    guid = "12345678-1234-1234-1234-123456789012"
+
+    command_cases = [
+        ("commands/set_camera.json", {"location": [10, -10, 10]}, True, "location only"),
+        ("commands/set_camera.json", {
+            "viewport": "Perspective", "location": [10, -10, 10], "target": [0, 0, 0],
+            "up": [0, 0, 1], "lens_length": 50, "projection": "perspective",
+        }, True, "every field"),
+        ("commands/set_camera.json", {"projection": "parallel"}, True, "projection only"),
+        ("commands/set_camera.json", {"viewport": "Top", "lens_length": 35}, True, "named viewport lens"),
+        ("commands/set_camera.json", {}, False, "no parameters"),
+        ("commands/set_camera.json", {"viewport": "Top"}, False, "viewport alone changes nothing"),
+        ("commands/set_camera.json", {"projection": "fisheye"}, False, "unknown projection"),
+        ("commands/set_camera.json", {"lens_length": 0}, False, "zero lens length"),
+        ("commands/set_camera.json", {"location": [1, 2]}, False, "two-component location"),
+        ("commands/set_camera.json", {"location": [1, 2, 3], "fov": 40}, False, "unknown field"),
+        ("commands/zoom_to.json", {"target": "all"}, True, "all"),
+        ("commands/zoom_to.json", {"target": "selection", "viewport": "Top"}, True, "selection in Top"),
+        ("commands/zoom_to.json", {"target": "object_ids", "object_ids": [guid]}, True, "object ids"),
+        ("commands/zoom_to.json", {"target": "layer", "layer": "Legs"}, True, "layer"),
+        ("commands/zoom_to.json", {}, False, "missing target"),
+        ("commands/zoom_to.json", {"target": "everything"}, False, "unknown target"),
+        ("commands/zoom_to.json", {"target": "object_ids"}, False, "object_ids without ids"),
+        ("commands/zoom_to.json", {"target": "object_ids", "object_ids": []}, False, "empty ids"),
+        ("commands/zoom_to.json", {"target": "object_ids", "object_ids": ["nope"]}, False, "malformed id"),
+        ("commands/zoom_to.json", {"target": "layer"}, False, "layer without name"),
+        ("commands/zoom_to.json", {"target": "all", "margin": 2}, False, "unknown field"),
+    ]
+    for path, example, should_pass, label in command_cases:
+        ok = not list(Draft202012Validator(load_schema_with_refs(path)).iter_errors(example))
+        if ok == should_pass:
+            print(f"  {'PASS' if should_pass else 'CORRECTLY REJECTED'}: {path} {label}")
+        else:
+            print(f"  FAIL: {path} {label} ({'rejected' if should_pass else 'accepted'})")
+            all_passed = False
+
+    state = {
+        "viewport_name": "Perspective",
+        "projection": "perspective",
+        "camera_location": [10.0, -10.0, 10.0],
+        "camera_target": [0.0, 0.0, 0.0],
+        "camera_up": [0.0, 0.0, 1.0],
+        "lens_length": 50.0,
+    }
+    zoomed = {**state, "bounding_box": {"min": [0, 0, 0], "max": [1, 2, 3]}, "object_count": 4}
+    result_cases = [
+        ("responses/set_camera_result.json", state, True, "viewport state"),
+        ("responses/set_camera_result.json", {**state, "projection": "parallel"}, True, "parallel"),
+        ("responses/set_camera_result.json",
+         {k: v for k, v in state.items() if k != "camera_up"}, False, "missing camera_up"),
+        ("responses/set_camera_result.json", {**state, "projection": "fisheye"}, False, "unknown projection"),
+        ("responses/zoom_to_result.json", zoomed, True, "state plus framed box"),
+        ("responses/zoom_to_result.json", state, False, "missing bounding box and count"),
+        ("responses/zoom_to_result.json", {**zoomed, "object_count": -1}, False, "negative count"),
+        ("responses/zoom_to_result.json",
+         {**zoomed, "bounding_box": {"min": [0, 0, 0]}}, False, "box missing max"),
+    ]
+    for path, example, should_pass, label in result_cases:
+        ok = not list(Draft202012Validator(load_schema_with_refs(path)).iter_errors(example))
+        if ok == should_pass:
+            print(f"  {'PASS' if should_pass else 'CORRECTLY REJECTED'}: {path} {label}")
+        else:
+            print(f"  FAIL: {path} {label} ({'rejected' if should_pass else 'accepted'})")
+            all_passed = False
+
+    return all_passed
+
+
 def main():
     """Run all tests."""
     print("RhinoMCP Schema Validation Tests")
@@ -1371,6 +1443,7 @@ def main():
     results.append(("error response", test_error_response()))
     results.append(("get_context", test_get_context_schema()))
     results.append(("capture_viewport", test_capture_viewport_schema()))
+    results.append(("camera commands", test_camera_schemas()))
     test_sweep_planar_cap_schema()
     results.append(("sweep planar caps", True))
 

@@ -154,6 +154,8 @@ PARAMS_SINCE: Dict[str, Dict[str, tuple]] = {
 COMMANDS_SINCE: Dict[str, str] = {
     "create_planar_region": "0.4.0",
     "get_context": "0.5.0",
+    "set_camera": "0.5.0",
+    "zoom_to": "0.5.0",
 }
 PLUGIN_UPDATE_ADVICE = (
     "Update rhinomcp in Rhino's Package Manager (Tools > Package Manager > "
