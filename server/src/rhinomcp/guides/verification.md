@@ -1,5 +1,9 @@
 # Verify geometry against the task
 
+Call get_context before the first edit of a task and again after large changes, so
+every check compares against the document as it is: units, tolerances, current
+layer, object counts, selection and camera.
+
 Use analyze_objects with one explicit target selector. Check validity, intended
 surface/solid status, dimensions, world bounds and available topology measurements.
 A closed solid alone does not establish correct geometry. Volume alone cannot prove
@@ -16,7 +20,7 @@ Compare the actual count with the requested final count while preserving unrelat
 user objects. Check layers and intended names separately from shape.
 
 Use screenshots to inspect appearance and clearly label the view. Read the
-capture_viewport metadata before trusting the picture. The text block after the
+capture_viewport metadata before trusting a picture. The text block after the
 image reports viewport_name, display_mode, projection, camera_location,
 camera_target, camera_up, lens_length, scene_bounding_box, visible_object_count
 and total_object_count. Compare visible_object_count and the bounding box against
