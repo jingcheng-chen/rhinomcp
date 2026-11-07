@@ -1,6 +1,7 @@
 """Grasshopper component connection tools."""
 
 from typing import Any, Dict, Optional
+from mcp.types import ToolAnnotations
 
 from mcp.server.mcpserver import Context
 
@@ -8,7 +9,15 @@ from rhinomcp.server import mcp
 from rhinomcp.tools._grasshopper_common import send_grasshopper_command
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Connect Grasshopper components",
+    annotations=ToolAnnotations(
+        title="Connect Grasshopper components",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_connect_components(
     ctx: Context,
     source_instance_id: Optional[str] = None,
@@ -41,7 +50,15 @@ def gh_connect_components(
     return send_grasshopper_command("gh_connect_components", params)
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Disconnect Grasshopper components",
+    annotations=ToolAnnotations(
+        title="Disconnect Grasshopper components",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_disconnect_components(
     ctx: Context,
     source_instance_id: Optional[str] = None,

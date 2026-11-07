@@ -173,6 +173,66 @@ def test_select_objects_commands():
     return all_passed
 
 
+def test_selection_and_listing_filter_schemas():
+    """select_objects filters gain ids, layer, type, hidden and locked;
+    get_objects gains ids, selected_only, include_hidden and include_locked."""
+    print("\n=== Testing selection and listing filters ===")
+    guid = "12345678-1234-1234-1234-123456789012"
+
+    valid = [
+        ("commands/select_objects.json", {"filters": {"ids": [guid]}}),
+        ("commands/select_objects.json", {"filters": {"layer": "Furniture::Chairs"}}),
+        ("commands/select_objects.json", {"filters": {"type": "BREP"}}),
+        ("commands/select_objects.json", {"filters": {"type": ["CURVE", "LINE"]}}),
+        ("commands/select_objects.json", {"filters": {"hidden": True}}),
+        ("commands/select_objects.json", {"filters": {"locked": False}}),
+        ("commands/select_objects.json", {
+            "filters": {"layer": "Walls", "type": "EXTRUSION", "locked": False,
+                        "name": ["Wall1"], "category": ["structure"]},
+            "filters_type": "and"}),
+        ("commands/select_objects.json", {
+            "filters": {"ids": [guid], "hidden": True}, "filters_type": "or"}),
+        ("commands/get_objects.json", {"ids": [guid]}),
+        ("commands/get_objects.json", {"selected_only": True}),
+        ("commands/get_objects.json", {"include_hidden": True, "include_locked": False}),
+        ("commands/get_objects.json", {
+            "selected_only": True, "layer_filter": "Walls", "type_filter": "CURVE",
+            "include_hidden": False, "include_locked": True, "ids": [guid]}),
+        ("responses/get_objects_result.json", {
+            "objects": [], "total_matching": 0, "offset": 0, "limit": 50, "has_more": False,
+            "filters": {"layer": "Walls", "id_count": 2, "selected_only": True,
+                        "include_hidden": True, "include_locked": False}}),
+    ]
+    invalid = [
+        ("commands/select_objects.json", {"filters": {"ids": "not-a-list"}}, "select ids not an array"),
+        ("commands/select_objects.json", {"filters": {"ids": ["nope"]}}, "select ids not GUIDs"),
+        ("commands/select_objects.json", {"filters": {"layer": ["Walls"]}}, "select layer as list"),
+        ("commands/select_objects.json", {"filters": {"type": "TEAPOT"}}, "select unknown type"),
+        ("commands/select_objects.json", {"filters": {"type": []}}, "select empty type list"),
+        ("commands/select_objects.json", {"filters": {"hidden": "yes"}}, "select hidden not boolean"),
+        ("commands/select_objects.json", {"filters": {"locked": 1}}, "select locked not boolean"),
+        ("commands/get_objects.json", {"ids": guid}, "get ids not an array"),
+        ("commands/get_objects.json", {"ids": ["nope"]}, "get ids not GUIDs"),
+        ("commands/get_objects.json", {"selected_only": "true"}, "selected_only not boolean"),
+        ("commands/get_objects.json", {"include_hidden": 1}, "include_hidden not boolean"),
+        ("commands/get_objects.json", {"include_locked": None}, "include_locked not boolean"),
+        ("commands/get_objects.json", {"hidden": True}, "get_objects unknown field"),
+    ]
+
+    all_passed = True
+    for path, example in valid:
+        if not validate(path, example):
+            all_passed = False
+    for path, example, description in invalid:
+        schema = load_schema_with_refs(path)
+        if list(Draft202012Validator(schema).iter_errors(example)):
+            print(f"  CORRECTLY REJECTED: {description}")
+        else:
+            print(f"  INCORRECTLY ACCEPTED: {description}")
+            all_passed = False
+    return all_passed
+
+
 def test_layer_commands():
     """Test layer command schemas."""
     print("\n=== Testing layer commands ===")
@@ -425,6 +485,8 @@ def test_responses():
     # Select result
     print("  select_result:")
     select_result = {"count": 5}
+    if not validate("responses/select_result.json", {"count": 2, "matched": 3}):
+        all_passed = False
     if not validate("responses/select_result.json", select_result):
         all_passed = False
 
@@ -1080,10 +1142,10 @@ def test_protocol_envelope():
         "delete_object", "get_object_info", "get_selected_objects_info",
         "get_object_attributes", "update_object_attributes",
         "analyze_objects", "measure_objects", "section_profile",
-        "get_document_summary", "get_objects", "select_objects",
+        "get_document_summary", "get_context", "get_objects", "select_objects",
         "create_layer", "delete_layer", "get_or_set_current_layer",
         "execute_rhinoscript_python_code", "execute_rhinocommon_csharp_code",
-        "capture_viewport", "undo", "redo",
+        "capture_viewport", "set_camera", "zoom_to", "undo", "redo",
         "boolean_union", "boolean_difference", "boolean_intersection",
         "loft", "extrude_curve", "create_planar_region", "sweep1", "offset_curve", "pipe",
         "project_curve", "intersect_curves", "split_curve",
@@ -1124,6 +1186,52 @@ def test_protocol_envelope():
     return all_passed
 
 
+def test_error_response():
+    """errorResponse: optional closed-enum code and guidance; bare errors stay valid."""
+    print("\n=== Testing error response envelope ===")
+    with open(CONTRACTS_DIR / "protocol.json") as f:
+        protocol = json.load(f)
+    validator = Draft202012Validator(
+        {"$ref": "#/$defs/errorResponse", "$defs": protocol["$defs"]}
+    )
+    valid = [
+        ({"status": "error", "message": "Object not found"}, "bare status+message"),
+        (
+            {
+                "status": "error",
+                "message": "Object not found: 1234",
+                "code": "not_found",
+                "guidance": "List objects with get_objects to find a valid id.",
+            },
+            "code with guidance",
+        ),
+    ]
+    for code in ("invalid_argument", "not_found", "unsupported",
+                 "rhino_error", "timeout", "internal"):
+        valid.append(({"status": "error", "message": "m", "code": code}, f"code {code}"))
+    invalid = [
+        ({"status": "error", "message": "m", "code": "oops"}, "code outside the enum"),
+        ({"status": "error", "message": "m", "code": 404}, "numeric code"),
+        ({"status": "error", "message": "m", "guidance": 1}, "non-string guidance"),
+        ({"status": "error", "code": "not_found"}, "missing message"),
+    ]
+    all_passed = True
+    for example, label in valid:
+        errors = list(validator.iter_errors(example))
+        if errors:
+            print(f"  FAIL: {label} ({errors[0].message})")
+            all_passed = False
+        else:
+            print(f"  PASS: {label}")
+    for example, label in invalid:
+        if list(validator.iter_errors(example)):
+            print(f"  CORRECTLY REJECTED: {label}")
+        else:
+            print(f"  FAIL: accepted {label}")
+            all_passed = False
+    return all_passed
+
+
 def test_sweep_planar_cap_schema():
     """Caps are optional booleans and remain independent from rail closure."""
     schema = load_schema_with_refs("commands/sweep1.json")
@@ -1143,6 +1251,241 @@ def test_sweep_planar_cap_schema():
         assert list(validator.iter_errors({**payload, "cap_planar_ends": invalid}))
 
 
+def test_get_context_schema():
+    """get_context takes no params and answers a bounded snapshot."""
+    print("\n=== Testing get_context ===")
+    all_passed = True
+
+    command = Draft202012Validator(load_schema_with_refs("commands/get_context.json"))
+    if list(command.iter_errors({})):
+        print("  FAIL: get_context rejected empty params")
+        all_passed = False
+    if not list(command.iter_errors({"include_layers": True})):
+        print("  FAIL: get_context accepted an unknown param")
+        all_passed = False
+
+    context = {
+        "document_name": "chair.3dm",
+        "document_path": "/Users/me/chair.3dm",
+        "units": "Millimeters",
+        "absolute_tolerance": 0.001,
+        "angle_tolerance": 1.0,
+        "current_layer": "Legs",
+        "layer_count": 4,
+        "object_count": 12,
+        "objects_by_type": {"BREP": 8, "CURVE": 4},
+        "selection_count": 1,
+        "selected_ids": ["12345678-1234-1234-1234-123456789012"],
+        "viewport": {
+            "name": "Perspective",
+            "projection": "perspective",
+            "display_mode": "Shaded",
+            "camera_location": [100.0, -100.0, 80.0],
+            "camera_target": [0.0, 0.0, 0.0],
+        },
+        "scene_bounding_box": {"min": [0, 0, 0], "max": [10, 20, 30]},
+        "grasshopper_definition_count": 0,
+    }
+    untitled_empty = {**context, "document_name": None, "document_path": None,
+                      "object_count": 0, "objects_by_type": {}, "selection_count": 0,
+                      "selected_ids": [], "scene_bounding_box": None,
+                      "viewport": {**context["viewport"], "projection": "parallel"}}
+    for good in (context, untitled_empty):
+        if not validate("responses/get_context_result.json", good):
+            all_passed = False
+
+    result = Draft202012Validator(load_schema_with_refs("responses/get_context_result.json"))
+    many_types = {f"T{i}": 1 for i in range(9)}
+    bad_contexts = [
+        ({k: v for k, v in context.items() if k != "viewport"}, "missing viewport"),
+        ({**context, "objects_by_type": many_types}, "more than 8 types"),
+        ({**context, "selected_ids": ["12345678-1234-1234-1234-123456789012"] * 21}, "more than 20 ids"),
+        ({**context, "viewport": {**context["viewport"], "projection": "fisheye"}}, "unknown projection"),
+        ({**context, "scene_bounding_box": {"min": [0, 0, 0]}}, "bbox missing max"),
+        ({**context, "layer_hierarchy": []}, "hierarchy is not part of the context"),
+    ]
+    for bad, description in bad_contexts:
+        if list(result.iter_errors(bad)):
+            print(f"  CORRECTLY REJECTED: {description}")
+        else:
+            print(f"  INCORRECTLY ACCEPTED: {description}")
+            all_passed = False
+
+    return all_passed
+
+
+def test_capture_viewport_schema():
+    """capture_viewport: optional display mode, camera, framing and format;
+    the response carries image plus metadata and allows JPEG."""
+    print("\n=== Testing capture_viewport ===")
+    all_passed = True
+    ID = "12345678-1234-1234-1234-123456789012"
+
+    command = Draft202012Validator(load_schema_with_refs("commands/capture_viewport.json"))
+    good_commands = [
+        ({}, "defaults"),
+        ({"display_mode": "Wireframe"}, "display mode"),
+        ({"camera_location": [10, -10, 5], "camera_target": [0, 0, 0], "lens_length": 35},
+         "explicit camera"),
+        ({"camera_target": [0, 0, 0]}, "target only"),
+        ({"frame_object_ids": [ID]}, "frame on ids"),
+        ({"frame_bbox": {"min": [0, 0, 0], "max": [1, 2, 3]}}, "frame on bbox"),
+        ({"format": "jpeg", "width": 400, "height": 300}, "jpeg"),
+        ({"format": "png"}, "png"),
+    ]
+    for payload, description in good_commands:
+        if list(command.iter_errors(payload)):
+            print(f"  FAIL: capture_viewport rejected {description}")
+            all_passed = False
+        else:
+            print(f"  PASS: capture_viewport {description}")
+    schema = load_schema_with_refs("commands/capture_viewport.json")
+    props = schema["properties"]
+    if (props["width"]["default"], props["height"]["default"], props["format"]["default"]) != (
+        800, 600, "png"
+    ):
+        print("  FAIL: capture defaults changed")
+        all_passed = False
+
+    bad_commands = [
+        ({"format": "gif"}, "unknown format"),
+        ({"display_mode": ""}, "empty display mode"),
+        ({"camera_location": [0, 0]}, "2D camera location"),
+        ({"lens_length": 0}, "zero lens length"),
+        ({"frame_object_ids": []}, "empty frame ids"),
+        ({"frame_object_ids": ["not-a-guid"]}, "bad frame id"),
+        ({"frame_bbox": {"min": [0, 0, 0]}}, "bbox missing max"),
+        ({"frame_bbox": {"min": [0, 0, 0], "max": [1, 1, 1], "pad": 1}}, "bbox extra key"),
+        ({"camera": [0, 0, 0]}, "unknown param"),
+    ]
+    for payload, description in bad_commands:
+        if list(command.iter_errors(payload)):
+            print(f"  CORRECTLY REJECTED: {description}")
+        else:
+            print(f"  INCORRECTLY ACCEPTED: {description}")
+            all_passed = False
+
+    result_schema = "responses/capture_viewport_result.json"
+    capture = {
+        "image_data": "iVBORw0KGgo=",
+        "mime_type": "image/png",
+        "width": 800,
+        "height": 600,
+        "viewport_name": "Perspective",
+        "viewport_target": "active",
+        "show_grid": True,
+        "show_axes": True,
+        "show_cplane_axes": False,
+        "object_count": 3,
+        "display_mode": "Shaded",
+        "projection": "perspective",
+        "camera_location": [100.0, -100.0, 100.0],
+        "camera_target": [0.0, 0.0, 0.0],
+        "camera_up": [0.0, 0.0, 1.0],
+        "lens_length": 50.0,
+        "scene_bounding_box": {"min": [0, 0, 0], "max": [10, 20, 30]},
+        "visible_object_count": 2,
+        "total_object_count": 3,
+    }
+    jpeg_empty = {**capture, "mime_type": "image/jpeg", "projection": "parallel",
+                  "scene_bounding_box": None, "visible_object_count": 0,
+                  "total_object_count": 0, "object_count": 0}
+    for good in (capture, jpeg_empty):
+        if not validate(result_schema, good):
+            all_passed = False
+
+    result = Draft202012Validator(load_schema_with_refs(result_schema))
+    bad_results = [
+        ({**capture, "mime_type": "image/gif"}, "unknown mime type"),
+        ({**capture, "projection": "fisheye"}, "unknown projection"),
+        ({**capture, "camera_up": [0, 1]}, "2D up vector"),
+        ({**capture, "scene_bounding_box": {"min": [0, 0, 0]}}, "bbox missing max"),
+        ({**capture, "visible_object_count": -1}, "negative visible count"),
+    ]
+    for bad, description in bad_results:
+        if list(result.iter_errors(bad)):
+            print(f"  CORRECTLY REJECTED: {description}")
+        else:
+            print(f"  INCORRECTLY ACCEPTED: {description}")
+            all_passed = False
+
+    return all_passed
+
+
+def test_camera_schemas():
+    """set_camera and zoom_to: params with examples, and the viewport-state result."""
+    print("\n=== Testing camera commands ===")
+    all_passed = True
+    guid = "12345678-1234-1234-1234-123456789012"
+
+    command_cases = [
+        ("commands/set_camera.json", {"location": [10, -10, 10]}, True, "location only"),
+        ("commands/set_camera.json", {
+            "viewport": "Perspective", "location": [10, -10, 10], "target": [0, 0, 0],
+            "up": [0, 0, 1], "lens_length": 50, "projection": "perspective",
+        }, True, "every field"),
+        ("commands/set_camera.json", {"projection": "parallel"}, True, "projection only"),
+        ("commands/set_camera.json", {"viewport": "Top", "lens_length": 35}, True, "named viewport lens"),
+        ("commands/set_camera.json", {}, False, "no parameters"),
+        ("commands/set_camera.json", {"viewport": "Top"}, False, "viewport alone changes nothing"),
+        ("commands/set_camera.json", {"projection": "fisheye"}, False, "unknown projection"),
+        ("commands/set_camera.json", {"projection": "Perspective"}, False, "projection in the wrong case"),
+        ("commands/set_camera.json", {"projection": 1}, False, "projection not a string"),
+        ("commands/set_camera.json", {"lens_length": 0}, False, "zero lens length"),
+        ("commands/set_camera.json", {"location": [1, 2]}, False, "two-component location"),
+        ("commands/set_camera.json", {"location": [1, 2, 3], "fov": 40}, False, "unknown field"),
+        ("commands/zoom_to.json", {"target": "all"}, True, "all"),
+        ("commands/zoom_to.json", {"target": "selection", "viewport": "Top"}, True, "selection in Top"),
+        ("commands/zoom_to.json", {"target": "object_ids", "object_ids": [guid]}, True, "object ids"),
+        ("commands/zoom_to.json", {"target": "layer", "layer": "Legs"}, True, "layer"),
+        ("commands/zoom_to.json", {}, False, "missing target"),
+        ("commands/zoom_to.json", {"target": "everything"}, False, "unknown target"),
+        ("commands/zoom_to.json", {"target": "object_ids"}, False, "object_ids without ids"),
+        ("commands/zoom_to.json", {"target": "object_ids", "object_ids": []}, False, "empty ids"),
+        ("commands/zoom_to.json", {"target": "object_ids", "object_ids": ["nope"]}, False, "malformed id"),
+        ("commands/zoom_to.json", {"target": "layer"}, False, "layer without name"),
+        ("commands/zoom_to.json", {"target": "all", "margin": 2}, False, "unknown field"),
+    ]
+    for path, example, should_pass, label in command_cases:
+        ok = not list(Draft202012Validator(load_schema_with_refs(path)).iter_errors(example))
+        if ok == should_pass:
+            print(f"  {'PASS' if should_pass else 'CORRECTLY REJECTED'}: {path} {label}")
+        else:
+            print(f"  FAIL: {path} {label} ({'rejected' if should_pass else 'accepted'})")
+            all_passed = False
+
+    state = {
+        "viewport_name": "Perspective",
+        "projection": "perspective",
+        "camera_location": [10.0, -10.0, 10.0],
+        "camera_target": [0.0, 0.0, 0.0],
+        "camera_up": [0.0, 0.0, 1.0],
+        "lens_length": 50.0,
+    }
+    zoomed = {**state, "bounding_box": {"min": [0, 0, 0], "max": [1, 2, 3]}, "object_count": 4}
+    result_cases = [
+        ("responses/set_camera_result.json", state, True, "viewport state"),
+        ("responses/set_camera_result.json", {**state, "projection": "parallel"}, True, "parallel"),
+        ("responses/set_camera_result.json",
+         {k: v for k, v in state.items() if k != "camera_up"}, False, "missing camera_up"),
+        ("responses/set_camera_result.json", {**state, "projection": "fisheye"}, False, "unknown projection"),
+        ("responses/zoom_to_result.json", zoomed, True, "state plus framed box"),
+        ("responses/zoom_to_result.json", state, False, "missing bounding box and count"),
+        ("responses/zoom_to_result.json", {**zoomed, "object_count": -1}, False, "negative count"),
+        ("responses/zoom_to_result.json",
+         {**zoomed, "bounding_box": {"min": [0, 0, 0]}}, False, "box missing max"),
+    ]
+    for path, example, should_pass, label in result_cases:
+        ok = not list(Draft202012Validator(load_schema_with_refs(path)).iter_errors(example))
+        if ok == should_pass:
+            print(f"  {'PASS' if should_pass else 'CORRECTLY REJECTED'}: {path} {label}")
+        else:
+            print(f"  FAIL: {path} {label} ({'rejected' if should_pass else 'accepted'})")
+            all_passed = False
+
+    return all_passed
+
+
 def main():
     """Run all tests."""
     print("RhinoMCP Schema Validation Tests")
@@ -1153,6 +1496,7 @@ def main():
     results.append(("modify_object", test_modify_object_commands()))
     results.append(("delete_object", test_delete_object_commands()))
     results.append(("select_objects", test_select_objects_commands()))
+    results.append(("selection and listing filters", test_selection_and_listing_filter_schemas()))
     results.append(("layer commands", test_layer_commands()))
     results.append(("new commands", test_new_commands()))
     results.append(("other commands", test_other_commands()))
@@ -1161,6 +1505,10 @@ def main():
     results.append(("schema coverage", test_schema_coverage_against_protocol()))
     results.append(("contract sync (3 tiers)", test_contract_synchronization_across_tiers()))
     results.append(("protocol envelope", test_protocol_envelope()))
+    results.append(("error response", test_error_response()))
+    results.append(("get_context", test_get_context_schema()))
+    results.append(("capture_viewport", test_capture_viewport_schema()))
+    results.append(("camera commands", test_camera_schemas()))
     test_sweep_planar_cap_schema()
     results.append(("sweep planar caps", True))
 

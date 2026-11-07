@@ -89,10 +89,13 @@ class TestUnsupportedCommands:
 
         with pytest.raises(
             Exception,
-            match=r"\(0\.3\.2\) does not support 'create_planar_region', which was "
-            r"added in plugin 0\.4\.0.*Package Manager",
-        ):
+            match=r"^unsupported: The connected rhinomcp plugin \(0\.3\.2\) does not "
+            r"support 'create_planar_region', which was added in plugin 0\.4\.0;"
+            r".*\nUpdate rhinomcp in Rhino's Package Manager",
+        ) as info:
             conn.send_command("create_planar_region", {"boundary_ids": IDS})
+
+        assert info.value.code == "unsupported"
 
         assert sent_types(mock_sock) == ["describe_capabilities"]
 
@@ -107,7 +110,7 @@ class TestUnsupportedCommands:
         with pytest.raises(
             Exception,
             match=r"\(older than 0\.3\.2\) does not support 'create_planar_region'"
-            r".*Package Manager",
+            r".*\n.*Package Manager",
         ):
             conn.send_command("create_planar_region", {"boundary_ids": IDS})
 
@@ -129,13 +132,54 @@ class TestUnsupportedCommands:
         with pytest.raises(
             Exception,
             match=r"\(older than 0\.3\.2\) does not support 'boolean_union'; this "
-            r"server is .*Package Manager",
+            r"server is .*\n.*Package Manager",
         ) as info:
             conn.send_command("boolean_union", {"object_ids": IDS})
 
         assert not str(info.value).startswith("Communication error")
         assert sent_types(mock_sock) == ["describe_capabilities", "boolean_union"]
         assert conn.sock is not None
+
+    def test_get_context_is_refused_by_a_0_4_1_plugin_with_advice(self):
+        import time
+
+        from rhinomcp.server import RhinoConnection
+        from tests.mock_rhino_server import MockRhinoServer
+
+        server = MockRhinoServer(port=19995, plugin_version="0.4.1")
+        server.start()
+        time.sleep(0.1)
+        try:
+            conn = RhinoConnection(host="127.0.0.1", port=19995)
+            with pytest.raises(
+                Exception,
+                match=r"\(0\.4\.1\) does not support 'get_context', which was "
+                r"added in plugin 0\.5\.0.*\n.*Package Manager",
+            ):
+                conn.send_command("get_context")
+            conn.disconnect()
+        finally:
+            server.stop()
+
+        assert "get_context" not in server.received_commands
+
+    @pytest.mark.parametrize("command", ["get_context", "set_camera", "zoom_to"])
+    @patch("socket.socket")
+    def test_the_last_0_4_release_refuses_0_5_0_commands(
+        self, mock_socket_class, command
+    ):
+        conn, mock_sock = connected(
+            mock_socket_class, capabilities(ADVERTISED, "0.4.1.1")
+        )
+
+        with pytest.raises(
+            Exception,
+            match=rf"^unsupported: The connected rhinomcp plugin \(0\.4\.1\.1\) "
+            rf"does not support '{command}', which was added in plugin 0\.5\.0;",
+        ):
+            conn.send_command(command, {})
+
+        assert sent_types(mock_sock) == ["describe_capabilities"]
 
     @patch("socket.socket")
     def test_capabilities_are_read_once_per_connection(self, mock_socket_class):
@@ -170,7 +214,7 @@ class TestParametersOlderPluginsWouldDrop:
         with pytest.raises(
             Exception,
             match=r"'cap_planar_ends' needs plugin 0\.4\.0; the connected rhinomcp "
-            r"plugin \(0\.3\.2\) would silently ignore it.*Package Manager",
+            r"plugin \(0\.3\.2\) would silently ignore it.*\n.*Package Manager",
         ):
             conn.send_command("sweep1", self.SWEEP)
 
@@ -236,6 +280,49 @@ class TestParametersOlderPluginsWouldDrop:
             "sweep1",
         ]
 
+    CAPTURE = [{"name": "capture_viewport", "read_only": True}]
+
+    @pytest.mark.parametrize(
+        "name, value",
+        [
+            ("display_mode", "Wireframe"),
+            ("camera_location", [50, -80, 40]),
+            ("frame_object_ids", [IDS[0]]),
+            ("format", "jpeg"),
+        ],
+    )
+    @patch("socket.socket")
+    def test_the_last_0_4_release_refuses_0_5_0_parameters(
+        self, mock_socket_class, name, value
+    ):
+        """0.4.1.1 is the newest plugin before 0.5.0; its fourth part must not
+        let a 0.5.0 parameter through."""
+        conn, mock_sock = connected(
+            mock_socket_class, capabilities(self.CAPTURE, "0.4.1.1")
+        )
+
+        with pytest.raises(
+            Exception,
+            match=rf"^unsupported: .*'{name}' needs plugin 0\.5\.0; the connected "
+            r"rhinomcp plugin \(0\.4\.1\.1\) would silently ignore it"
+            r".*\n.*Package Manager",
+        ) as info:
+            conn.send_command("capture_viewport", {name: value})
+
+        assert info.value.code == "unsupported"
+        assert sent_types(mock_sock) == ["describe_capabilities"]
+
+    @patch("socket.socket")
+    def test_a_0_5_0_plugin_receives_0_5_0_parameters(self, mock_socket_class):
+        conn, mock_sock = connected(
+            mock_socket_class,
+            capabilities(self.CAPTURE, "0.5.0") + success({"image_data": ""}),
+        )
+
+        conn.send_command("capture_viewport", {"display_mode": "Wireframe"})
+
+        assert sent_types(mock_sock) == ["describe_capabilities", "capture_viewport"]
+
 
 class TestVersionSkew:
     def _run(self, mock_socket_class, caplog, server, plugin):
@@ -292,7 +379,9 @@ class TestVersionSkew:
         mock_get_conn.return_value = mock_conn
 
         # Other tests reload the server module; patch the helper retained by this tool.
-        with patch.dict(version_skew_report.__globals__, server_version=lambda: "0.4.0"):
+        with patch.dict(
+            version_skew_report.__globals__, server_version=lambda: "0.4.0"
+        ):
             result = describe_capabilities(ctx=None)
 
         assert result["version"] == "0.3.2"

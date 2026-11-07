@@ -4,7 +4,15 @@ from rhinomcp.server import get_rhino_connection, mcp
 from typing import Any, Dict, List, Optional
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Section profile",
+    annotations=ToolAnnotations(
+        title="Section profile",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def section_profile(
     ctx: Context,
     id: Optional[str] = None,
@@ -81,7 +89,12 @@ def section_profile(
         if profile.get("axis") not in ("X", "Y", "Z"):
             raise ValueError("section_profile profile axis must be 'X', 'Y', or 'Z'.")
         count = profile.get("count")
-        if isinstance(count, bool) or not isinstance(count, int) or count < 2 or count > 100:
+        if (
+            isinstance(count, bool)
+            or not isinstance(count, int)
+            or count < 2
+            or count > 100
+        ):
             raise ValueError(
                 "section_profile profile count must be an integer in [2, 100]."
             )

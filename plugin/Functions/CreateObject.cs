@@ -91,7 +91,9 @@ public partial class RhinoMCPFunctions
                 {
                     degree = degreeTok.ToObject<int>();
                     if (degree < 1 || degree >= controlPoints.Count)
-                        throw new InvalidOperationException($"CURVE 'degree' ({degree}) must satisfy 1 <= degree < point count ({controlPoints.Count}).");
+                        throw McpException.InvalidArgumentError(
+                            $"CURVE 'degree' ({degree}) must satisfy 1 <= degree < point count ({controlPoints.Count})",
+                            "Lower the degree or add control points; omit degree to use 3 clamped to the point count.");
                 }
                 else
                 {

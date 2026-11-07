@@ -9,7 +9,15 @@ from rhinomcp.server import mcp
 from rhinomcp.tools._grasshopper_common import JsonValue, send_grasshopper_command
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="List Grasshopper components",
+    annotations=ToolAnnotations(
+        title="List Grasshopper components",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_list_components(
     ctx: Context,
     category: Optional[str] = None,
@@ -25,7 +33,15 @@ def gh_list_components(
     return send_grasshopper_command("gh_list_components", params)
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Get Grasshopper component info",
+    annotations=ToolAnnotations(
+        title="Get Grasshopper component info",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_get_component_info(
     ctx: Context,
     instance_id: Optional[str] = None,
@@ -40,7 +56,15 @@ def gh_get_component_info(
     return send_grasshopper_command("gh_get_component_info", params)
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Add Grasshopper component",
+    annotations=ToolAnnotations(
+        title="Add Grasshopper component",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_add_component(
     ctx: Context,
     component_name: Optional[str] = None,
@@ -83,7 +107,15 @@ def gh_add_component(
     return send_grasshopper_command("gh_add_component", params)
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Lay out Grasshopper components",
+    annotations=ToolAnnotations(
+        title="Lay out Grasshopper components",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_layout_components(
     ctx: Context,
     component_ids: Optional[List[str]] = None,
@@ -107,7 +139,15 @@ def gh_layout_components(
     return send_grasshopper_command("gh_layout_components", params)
 
 
-@mcp.tool(annotations=ToolAnnotations(destructive_hint=True))
+@mcp.tool(
+    title="Delete Grasshopper component",
+    annotations=ToolAnnotations(
+        title="Delete Grasshopper component",
+        read_only_hint=False,
+        destructive_hint=True,
+        open_world_hint=False,
+    ),
+)
 def gh_delete_component(
     ctx: Context,
     instance_id: Optional[str] = None,
@@ -122,7 +162,15 @@ def gh_delete_component(
     return send_grasshopper_command("gh_delete_component", params)
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Update Grasshopper component",
+    annotations=ToolAnnotations(
+        title="Update Grasshopper component",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_update_component(
     ctx: Context,
     instance_id: Optional[str] = None,
@@ -149,7 +197,15 @@ def gh_update_component(
     return send_grasshopper_command("gh_update_component", params)
 
 
-@mcp.tool(annotations=ToolAnnotations(destructive_hint=True))
+@mcp.tool(
+    title="Clear Grasshopper canvas",
+    annotations=ToolAnnotations(
+        title="Clear Grasshopper canvas",
+        read_only_hint=False,
+        destructive_hint=True,
+        open_world_hint=False,
+    ),
+)
 def gh_clear_canvas(
     ctx: Context,
     include_groups: bool = True,

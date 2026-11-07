@@ -29,6 +29,17 @@ public partial class RhinoMCPFunctions
         string typeFilter = parameters["type_filter"]?.ToString()?.ToUpper();
         JToken bboxFilter = parameters["bbox_filter"];
         bool includeGeometry = parameters["include_geometry"]?.ToObject<bool>() ?? true;
+        bool selectedOnly = parameters["selected_only"]?.ToObject<bool>() ?? false;
+        bool includeHidden = parameters["include_hidden"]?.ToObject<bool>() ?? false;
+        bool includeLocked = parameters["include_locked"]?.ToObject<bool>() ?? true;
+
+        // ids restrict the listing; ids not in the document are simply absent.
+        HashSet<Guid> ids = null;
+        if (parameters["ids"] is JArray idArray)
+            ids = new HashSet<Guid>(idArray.Select(t => McpException.ParseGuid(t.ToString())));
+
+        if (!string.IsNullOrEmpty(layerFilter) && FindLayerByNameOrFullPath(doc, layerFilter) == null)
+            throw McpException.LayerNotFound(layerFilter);
 
         // Parse bbox filter if provided
         BoundingBox? filterBbox = null;
@@ -53,8 +64,21 @@ public partial class RhinoMCPFunctions
         // Build filtered object list
         var allObjects = new List<RhinoObject>();
 
-        foreach (var obj in doc.Objects)
+        // The default enumerator lists normal and locked objects, not hidden
+        // ones; include_hidden widens it, and the rest narrow it below.
+        IEnumerable<RhinoObject> candidates = includeHidden
+            ? doc.Objects.GetObjectList(new ObjectEnumeratorSettings { HiddenObjects = true })
+            : doc.Objects;
+
+        foreach (var obj in candidates)
         {
+            if (!includeLocked && IsObjectOrLayerLocked(doc, obj))
+                continue;
+            if (selectedOnly && obj.IsSelected(false) == 0)
+                continue;
+            if (ids != null && !ids.Contains(obj.Id))
+                continue;
+
             // Layer filter
             if (!string.IsNullOrEmpty(layerFilter))
             {
@@ -140,6 +164,10 @@ public partial class RhinoMCPFunctions
         if (!string.IsNullOrEmpty(layerFilter)) appliedFilters["layer"] = layerFilter;
         if (!string.IsNullOrEmpty(typeFilter)) appliedFilters["type"] = typeFilter;
         if (filterBbox.HasValue) appliedFilters["bbox"] = Serializer.SerializeBBox(filterBbox.Value);
+        if (ids != null) appliedFilters["id_count"] = ids.Count;
+        if (selectedOnly) appliedFilters["selected_only"] = true;
+        if (includeHidden) appliedFilters["include_hidden"] = true;
+        if (!includeLocked) appliedFilters["include_locked"] = false;
         if (appliedFilters.Count > 0) result["filters"] = appliedFilters;
 
         RhinoApp.WriteLine($"GetObjects: returned {pagedObjects.Count} of {totalMatching} matching objects");

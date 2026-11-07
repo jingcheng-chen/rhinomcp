@@ -1,9 +1,18 @@
 from mcp.server.mcpserver import Context
+from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp
 from typing import Any, List, Dict, Optional
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Create object",
+    annotations=ToolAnnotations(
+        title="Create object",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def create_object(
     ctx: Context,
     type: str = "BOX",

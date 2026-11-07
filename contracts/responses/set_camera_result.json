@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "set_camera_result.json",
+  "title": "SetCamera Response",
+  "description": "The viewport's camera after the change",
+  "type": "object",
+  "properties": {
+    "viewport_name": { "type": "string" },
+    "projection": { "enum": ["perspective", "parallel"] },
+    "display_mode": { "type": "string" },
+    "camera_location": { "$ref": "../common/definitions.json#/$defs/point3d" },
+    "camera_target": { "$ref": "../common/definitions.json#/$defs/point3d" },
+    "camera_up": { "$ref": "../common/definitions.json#/$defs/vector3d" },
+    "lens_length": { "type": "number", "description": "35 mm equivalent lens length in millimetres" }
+  },
+  "required": ["viewport_name", "projection", "camera_location", "camera_target", "camera_up", "lens_length"],
+  "additionalProperties": false
+}

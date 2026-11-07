@@ -7,7 +7,15 @@ from typing import Any, Dict, List, Optional, Union
 UserStringValue = Union[str, int, float, bool, None]
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Get object attributes",
+    annotations=ToolAnnotations(
+        title="Get object attributes",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def get_object_attributes(
     ctx: Context,
     id: Optional[str] = None,
@@ -36,7 +44,15 @@ def get_object_attributes(
     return rhino.send_command("get_object_attributes", params)
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Update object attributes",
+    annotations=ToolAnnotations(
+        title="Update object attributes",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def update_object_attributes(
     ctx: Context,
     id: Optional[str] = None,

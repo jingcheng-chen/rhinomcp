@@ -4,7 +4,15 @@ from rhinomcp.server import get_rhino_connection, mcp, version_skew_report
 from typing import Any, Dict
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Describe capabilities",
+    annotations=ToolAnnotations(
+        title="Describe capabilities",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def describe_capabilities(ctx: Context) -> Dict[str, Any]:
     """
     Describe what this MCP server itself can do.

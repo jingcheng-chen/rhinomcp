@@ -236,6 +236,22 @@ The server reads the plugin's version when it connects and warns in its log when
 A tool that needs a newer plugin fails with an update instruction instead of silently doing
 something else, and `describe_capabilities` reports both versions.
 
+### Claude Code plugin (optional)
+
+This repository is also a Claude Code plugin marketplace. The `rhinomcp` plugin adds three agents
+(`rhino-modeler`, `rhino-inspector` and `grasshopper-builder`) and two commands: `/scene`
+summarizes the open document and `/snapshot [display mode]` captures the viewport and reports what
+it shows.
+
+```bash
+claude plugin marketplace add jingcheng-chen/rhinomcp
+claude plugin install rhinomcp@rhinomcp
+```
+
+Inside a Claude Code session the same steps are `/plugin marketplace add jingcheng-chen/rhinomcp`
+and `/plugin install rhinomcp@rhinomcp`. The plugin does not start the MCP server: configure it
+as `rhino` as described in step 2 above, since the agents call tools named `mcp__rhino__*`.
+
 ## Usage
 
 With the bridge running and your client connected, you'll see the RhinoMCP tools. From there, just
@@ -273,12 +289,16 @@ pattern with cylinders that have different heights."_
 | `loft` / `extrude_curve` / `sweep1` / `offset_curve` / `pipe`                                                 | Advanced surface and solid modeling                    |
 | `project_curve` / `intersect_curves` / `split_curve`                                                          | Curve operations                                       |
 | `analyze_objects`                                                                                             | Measure length, area, volume, bounding boxes, and more |
-| `select_objects`                                                                                              | Select by filters (name, color, category; AND / OR)    |
-| `get_objects` / `get_object_info` / `get_selected_objects_info`                                               | Query objects                                          |
+| `select_objects`                                                                                              | Select by ids, layer, type, hidden, locked, name, color, custom attributes; AND / OR |
+| `get_objects`                                                                                                 | List by ids, layer, type, bbox or selection; hidden and locked switches; paged |
+| `get_object_info` / `get_selected_objects_info`                                                               | Query objects                                          |
 | `get_object_attributes` / `update_object_attributes`                                                          | Read and write object attributes                       |
 | `create_layer` / `delete_layer` / `get_or_set_current_layer`                                                  | Layer management                                       |
+| `get_context`                                                                                                 | Bounded snapshot: units, layer, selection, camera      |
 | `get_document_summary`                                                                                        | Overview of the current document                       |
-| `capture_viewport`                                                                                            | Screenshot the viewport for visual feedback            |
+| `capture_viewport`                                                                                            | Image + metadata; display mode, camera, framing, JPEG |
+| `set_camera`                                                                                                  | Set camera location, target, up, lens, projection      |
+| `zoom_to`                                                                                                     | Frame all, the selection, object ids or a layer        |
 | `run_command`                                                                                                 | Run any native Rhino command                           |
 | `execute_rhinoscript_python_code`                                                                             | Execute RhinoScript-Python                             |
 | `execute_rhinocommon_csharp_code`                                                                             | Execute RhinoCommon C#                                 |

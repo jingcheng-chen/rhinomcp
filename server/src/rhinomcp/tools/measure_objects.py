@@ -4,7 +4,15 @@ from rhinomcp.server import get_rhino_connection, mcp
 from typing import Any, Dict, List
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Measure objects",
+    annotations=ToolAnnotations(
+        title="Measure objects",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def measure_objects(
     ctx: Context,
     object_ids: List[str],

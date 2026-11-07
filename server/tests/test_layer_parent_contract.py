@@ -38,7 +38,8 @@ def test_parent_failure_is_reported_without_retry(monkeypatch):
         "Parent name is ambiguous; use the full path"
     )
     monkeypatch.setattr(module, "get_rhino_connection", lambda: connection)
-    assert "ambiguous" in module.create_layer(None, name="Part", parent="Left")
+    with pytest.raises(RuntimeError, match="ambiguous"):
+        module.create_layer(None, name="Part", parent="Left")
     assert connection.send_command.call_count == 1
 
 

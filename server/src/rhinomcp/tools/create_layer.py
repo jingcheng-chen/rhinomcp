@@ -1,9 +1,18 @@
 from mcp.server.mcpserver import Context
+from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 from typing import List
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Create layer",
+    annotations=ToolAnnotations(
+        title="Create layer",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def create_layer(
     ctx: Context,
     name: str = None,
@@ -47,4 +56,4 @@ def create_layer(
         return f"Created layer: {result['name']}"
     except Exception as e:
         logger.error(f"Error creating layer: {str(e)}")
-        return f"Error creating layer: {str(e)}"
+        raise

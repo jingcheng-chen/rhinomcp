@@ -9,7 +9,15 @@ from rhinomcp.server import mcp
 from rhinomcp.tools._grasshopper_common import JsonValue, send_grasshopper_command
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Set Grasshopper parameter",
+    annotations=ToolAnnotations(
+        title="Set Grasshopper parameter",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_set_parameter_value(
     ctx: Context,
     value: JsonValue,
@@ -38,7 +46,15 @@ def gh_set_parameter_value(
     return send_grasshopper_command("gh_set_parameter_value", params)
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Get Grasshopper parameter",
+    annotations=ToolAnnotations(
+        title="Get Grasshopper parameter",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_get_parameter_value(
     ctx: Context,
     instance_id: Optional[str] = None,
