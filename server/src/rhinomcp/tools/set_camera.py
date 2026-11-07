@@ -4,6 +4,7 @@ from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
 
 from rhinomcp.server import get_rhino_connection, mcp
+from rhinomcp.tools._params import given
 
 
 @mcp.tool(
@@ -41,13 +42,12 @@ def set_camera(
     display_mode, camera_location, camera_target, camera_up, lens_length.
     To frame objects without computing a camera, use zoom_to.
     """
-    fields = {
-        "viewport": viewport,
-        "location": location,
-        "target": target,
-        "up": up,
-        "lens_length": lens_length,
-        "projection": projection,
-    }
-    params = {name: value for name, value in fields.items() if value is not None}
+    params = given(
+        viewport=viewport,
+        location=location,
+        target=target,
+        up=up,
+        lens_length=lens_length,
+        projection=projection,
+    )
     return get_rhino_connection().send_command("set_camera", params)

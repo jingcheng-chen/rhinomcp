@@ -4,6 +4,7 @@ import base64
 import json
 from typing import Dict, List, Literal, Optional
 from rhinomcp.server import get_rhino_connection, mcp, logger
+from rhinomcp.tools._params import given
 
 # What the text block after the image reports, in this order. The plugin
 # computes every value; the tool only picks them out of its response.
@@ -110,15 +111,16 @@ def capture_viewport(
             "zoom_to_fit": zoom_to_fit,
             "format": format,
         }
-        optional = {
-            "display_mode": display_mode,
-            "camera_location": camera_location,
-            "camera_target": camera_target,
-            "lens_length": lens_length,
-            "frame_object_ids": frame_object_ids,
-            "frame_bbox": frame_bbox,
-        }
-        params.update({k: v for k, v in optional.items() if v is not None})
+        params.update(
+            given(
+                display_mode=display_mode,
+                camera_location=camera_location,
+                camera_target=camera_target,
+                lens_length=lens_length,
+                frame_object_ids=frame_object_ids,
+                frame_bbox=frame_bbox,
+            )
+        )
 
         result = rhino.send_command("capture_viewport", params)
 
