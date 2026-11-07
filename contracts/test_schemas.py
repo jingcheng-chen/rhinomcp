@@ -1252,6 +1252,104 @@ def test_get_context_schema():
     return all_passed
 
 
+def test_capture_viewport_schema():
+    """capture_viewport: optional display mode, camera, framing and format;
+    the response carries image plus metadata and allows JPEG."""
+    print("\n=== Testing capture_viewport ===")
+    all_passed = True
+    ID = "12345678-1234-1234-1234-123456789012"
+
+    command = Draft202012Validator(load_schema_with_refs("commands/capture_viewport.json"))
+    good_commands = [
+        ({}, "defaults"),
+        ({"display_mode": "Wireframe"}, "display mode"),
+        ({"camera_location": [10, -10, 5], "camera_target": [0, 0, 0], "lens_length": 35},
+         "explicit camera"),
+        ({"camera_target": [0, 0, 0]}, "target only"),
+        ({"frame_object_ids": [ID]}, "frame on ids"),
+        ({"frame_bbox": {"min": [0, 0, 0], "max": [1, 2, 3]}}, "frame on bbox"),
+        ({"format": "jpeg", "width": 400, "height": 300}, "jpeg"),
+        ({"format": "png"}, "png"),
+    ]
+    for payload, description in good_commands:
+        if list(command.iter_errors(payload)):
+            print(f"  FAIL: capture_viewport rejected {description}")
+            all_passed = False
+        else:
+            print(f"  PASS: capture_viewport {description}")
+    schema = load_schema_with_refs("commands/capture_viewport.json")
+    props = schema["properties"]
+    if (props["width"]["default"], props["height"]["default"], props["format"]["default"]) != (
+        800, 600, "png"
+    ):
+        print("  FAIL: capture defaults changed")
+        all_passed = False
+
+    bad_commands = [
+        ({"format": "gif"}, "unknown format"),
+        ({"display_mode": ""}, "empty display mode"),
+        ({"camera_location": [0, 0]}, "2D camera location"),
+        ({"lens_length": 0}, "zero lens length"),
+        ({"frame_object_ids": []}, "empty frame ids"),
+        ({"frame_object_ids": ["not-a-guid"]}, "bad frame id"),
+        ({"frame_bbox": {"min": [0, 0, 0]}}, "bbox missing max"),
+        ({"frame_bbox": {"min": [0, 0, 0], "max": [1, 1, 1], "pad": 1}}, "bbox extra key"),
+        ({"camera": [0, 0, 0]}, "unknown param"),
+    ]
+    for payload, description in bad_commands:
+        if list(command.iter_errors(payload)):
+            print(f"  CORRECTLY REJECTED: {description}")
+        else:
+            print(f"  INCORRECTLY ACCEPTED: {description}")
+            all_passed = False
+
+    result_schema = "responses/capture_viewport_result.json"
+    capture = {
+        "image_data": "iVBORw0KGgo=",
+        "mime_type": "image/png",
+        "width": 800,
+        "height": 600,
+        "viewport_name": "Perspective",
+        "viewport_target": "active",
+        "show_grid": True,
+        "show_axes": True,
+        "show_cplane_axes": False,
+        "object_count": 3,
+        "display_mode": "Shaded",
+        "projection": "perspective",
+        "camera_location": [100.0, -100.0, 100.0],
+        "camera_target": [0.0, 0.0, 0.0],
+        "camera_up": [0.0, 0.0, 1.0],
+        "lens_length": 50.0,
+        "scene_bounding_box": {"min": [0, 0, 0], "max": [10, 20, 30]},
+        "visible_object_count": 2,
+        "total_object_count": 3,
+    }
+    jpeg_empty = {**capture, "mime_type": "image/jpeg", "projection": "parallel",
+                  "scene_bounding_box": None, "visible_object_count": 0,
+                  "total_object_count": 0, "object_count": 0}
+    for good in (capture, jpeg_empty):
+        if not validate(result_schema, good):
+            all_passed = False
+
+    result = Draft202012Validator(load_schema_with_refs(result_schema))
+    bad_results = [
+        ({**capture, "mime_type": "image/gif"}, "unknown mime type"),
+        ({**capture, "projection": "fisheye"}, "unknown projection"),
+        ({**capture, "camera_up": [0, 1]}, "2D up vector"),
+        ({**capture, "scene_bounding_box": {"min": [0, 0, 0]}}, "bbox missing max"),
+        ({**capture, "visible_object_count": -1}, "negative visible count"),
+    ]
+    for bad, description in bad_results:
+        if list(result.iter_errors(bad)):
+            print(f"  CORRECTLY REJECTED: {description}")
+        else:
+            print(f"  INCORRECTLY ACCEPTED: {description}")
+            all_passed = False
+
+    return all_passed
+
+
 def test_camera_schemas():
     """set_camera and zoom_to: params with examples, and the viewport-state result."""
     print("\n=== Testing camera commands ===")
@@ -1344,6 +1442,7 @@ def main():
     results.append(("protocol envelope", test_protocol_envelope()))
     results.append(("error response", test_error_response()))
     results.append(("get_context", test_get_context_schema()))
+    results.append(("capture_viewport", test_capture_viewport_schema()))
     results.append(("camera commands", test_camera_schemas()))
     test_sweep_planar_cap_schema()
     results.append(("sweep planar caps", True))

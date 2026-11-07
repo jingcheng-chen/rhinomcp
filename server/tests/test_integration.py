@@ -853,7 +853,7 @@ class TestAdvancedGeometry:
         result = conn.send_command("capture_viewport", {"viewport": "perspective", "width": 100, "height": 100})
         # image_data must be valid base64 the wrapper can decode.
         base64.b64decode(result["image_data"])
-        assert result["viewport_name"] == "perspective"
+        assert result["viewport_name"] == "Perspective"
 
 
 class TestPerceptionPassthrough:
@@ -1664,6 +1664,19 @@ class TestGetContext:
 
 
 @pytest.fixture
+def capture_server():
+    """A fresh document on its own port, so capture metadata counts only what a
+    test seeds."""
+    server = MockRhinoServer(port=19980)
+    server.start()
+    time.sleep(0.1)
+
+    yield server
+
+    server.stop()
+
+
+@pytest.fixture
 def camera_server():
     """A fresh document and fresh viewports on their own port, so camera tests
     see only the objects and view changes they make."""
@@ -1674,6 +1687,224 @@ def camera_server():
     yield server
 
     server.stop()
+
+
+class TestCaptureViewportMetadata:
+    """capture_viewport answers a content list: the image, then a text block
+    with a JSON object saying what the image shows."""
+
+    METADATA_KEYS = {
+        "viewport_name", "display_mode", "projection", "width", "height",
+        "camera_location", "camera_target", "camera_up", "lens_length",
+        "scene_bounding_box", "visible_object_count", "total_object_count",
+    }
+
+    def _connect(self, monkeypatch, port=19980):
+        from rhinomcp.server import RhinoConnection
+        import rhinomcp.tools.capture_viewport as capture_mod
+
+        conn = RhinoConnection(host="127.0.0.1", port=port)
+        monkeypatch.setattr(capture_mod, "get_rhino_connection", lambda: conn)
+        return conn
+
+    async def _capture(self, **arguments):
+        import rhinomcp
+
+        return await rhinomcp.mcp.call_tool("capture_viewport", arguments)
+
+    @pytest.mark.asyncio
+    async def test_default_capture_is_png_then_metadata(self, capture_server, monkeypatch):
+        import base64
+
+        self._connect(monkeypatch)
+        capture_server._create_object({"type": "BOX", "name": "A"})
+        capture_server._create_object({"type": "SPHERE", "name": "B"})
+
+        result = await self._capture()
+
+        image, text = result.content
+        assert image.type == "image"
+        assert image.mime_type == "image/png"
+        assert base64.b64decode(image.data).startswith(b"\x89PNG\r\n\x1a\n")
+        assert text.type == "text"
+        metadata = json.loads(text.text)
+        assert set(metadata) == self.METADATA_KEYS
+        assert metadata == {
+            "viewport_name": "Perspective",
+            "display_mode": "Shaded",
+            "projection": "perspective",
+            "width": 800,
+            "height": 600,
+            "camera_location": [100.0, -100.0, 100.0],
+            "camera_target": [0.0, 0.0, 0.0],
+            "camera_up": [0.0, 0.0, 1.0],
+            "lens_length": 50.0,
+            "scene_bounding_box": {"min": [-1, -1, -1], "max": [1, 1, 1]},
+            "visible_object_count": 2,
+            "total_object_count": 2,
+        }
+
+    @pytest.mark.asyncio
+    async def test_empty_document_has_null_bounding_box(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+
+        result = await self._capture()
+
+        metadata = json.loads(result.content[1].text)
+        assert metadata["scene_bounding_box"] is None
+        assert metadata["visible_object_count"] == 0
+        assert metadata["total_object_count"] == 0
+
+    @pytest.mark.asyncio
+    async def test_jpeg_format_returns_jpeg_image(self, capture_server, monkeypatch):
+        import base64
+
+        self._connect(monkeypatch)
+
+        result = await self._capture(format="jpeg")
+
+        image = result.content[0]
+        assert image.mime_type == "image/jpeg"
+        assert base64.b64decode(image.data).startswith(b"\xff\xd8\xff")
+        assert capture_server.received_params["capture_viewport"]["format"] == "jpeg"
+
+    @pytest.mark.asyncio
+    async def test_display_mode_and_camera_reach_the_plugin(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+
+        result = await self._capture(
+            display_mode="Wireframe",
+            camera_location=[10, -20, 30],
+            camera_target=[1, 2, 3],
+            lens_length=35,
+        )
+
+        sent = capture_server.received_params["capture_viewport"]
+        assert sent["display_mode"] == "Wireframe"
+        assert sent["camera_location"] == [10, -20, 30]
+        assert sent["camera_target"] == [1, 2, 3]
+        assert sent["lens_length"] == 35
+        assert "frame_object_ids" not in sent and "frame_bbox" not in sent
+        metadata = json.loads(result.content[1].text)
+        assert metadata["display_mode"] == "Wireframe"
+        assert metadata["camera_location"] == [10, -20, 30]
+        assert metadata["camera_target"] == [1, 2, 3]
+        assert metadata["lens_length"] == 35
+
+    @pytest.mark.asyncio
+    async def test_framing_targets_reach_the_plugin(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+        box = capture_server._create_object({"type": "BOX", "name": "A"})
+
+        await self._capture(frame_object_ids=[box["id"]])
+        assert capture_server.received_params["capture_viewport"]["frame_object_ids"] == [box["id"]]
+
+        bbox = {"min": [0, 0, 0], "max": [5, 5, 5]}
+        result = await self._capture(frame_bbox=bbox)
+        assert capture_server.received_params["capture_viewport"]["frame_bbox"] == bbox
+        # Framing looks at the middle of the box.
+        assert json.loads(result.content[1].text)["camera_target"] == [2.5, 2.5, 2.5]
+
+    @pytest.mark.asyncio
+    async def test_temporary_camera_leaves_the_viewport_as_it_was(
+        self, capture_server, monkeypatch
+    ):
+        conn = self._connect(monkeypatch)
+        before = conn.send_command("get_context")["viewport"]
+
+        await self._capture(display_mode="Wireframe", camera_location=[9, 9, 9],
+                            camera_target=[1, 1, 1])
+        await self._capture(frame_bbox={"min": [0, 0, 0], "max": [2, 2, 2]})
+
+        assert conn.send_command("get_context")["viewport"] == before
+
+    async def _refusal(self, **arguments):
+        from mcp.server.mcpserver.exceptions import ToolError
+
+        with pytest.raises(ToolError) as info:
+            await self._capture(**arguments)
+        prefix = "Error executing tool capture_viewport: "
+        assert str(info.value).startswith(prefix)
+        return str(info.value)[len(prefix):]
+
+    @pytest.mark.asyncio
+    async def test_camera_plus_framing_is_refused(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+        box = capture_server._create_object({"type": "BOX", "name": "A"})
+
+        for camera in ({"camera_location": [9, 9, 9]}, {"camera_target": [0, 0, 0]}):
+            for framing in ({"frame_object_ids": [box["id"]]},
+                            {"frame_bbox": {"min": [0, 0, 0], "max": [1, 1, 1]}}):
+                text = await self._refusal(**camera, **framing)
+                assert text == (
+                    "invalid_argument: An explicit camera (camera_location, "
+                    "camera_target) cannot be combined with a framing target "
+                    "(frame_object_ids, frame_bbox)\n"
+                    "Pass camera_location and camera_target to look from a known "
+                    "point, or frame_object_ids or frame_bbox to frame geometry, "
+                    "not both."
+                )
+
+    @pytest.mark.asyncio
+    async def test_unknown_display_mode_lists_the_available_modes(
+        self, capture_server, monkeypatch
+    ):
+        self._connect(monkeypatch)
+
+        text = await self._refusal(display_mode="Cartoon")
+
+        message, guidance = text.split("\n")
+        assert message == "invalid_argument: Display mode 'Cartoon' not found"
+        assert guidance == (
+            "Use one of the available display modes: Wireframe, Shaded, Rendered, "
+            "Ghosted, X-Ray, Technical, Artistic, Pen, Arctic, Raytraced."
+        )
+
+    @pytest.mark.asyncio
+    async def test_unknown_frame_object_is_not_found(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+        missing = "00000000-0000-0000-0000-00000000dead"
+
+        text = await self._refusal(frame_object_ids=[missing])
+
+        assert text == (
+            f"not_found: Object not found: {missing}\n"
+            f"{capture_server.OBJECT_NOT_FOUND_GUIDANCE}"
+        )
+
+    @pytest.mark.asyncio
+    async def test_plugin_older_than_050_refuses_the_new_params(self, monkeypatch):
+        from rhinomcp.server import PLUGIN_UPDATE_ADVICE
+
+        old = MockRhinoServer(port=19981, plugin_version="0.4.1")
+        old.start()
+        try:
+            self._connect(monkeypatch, port=19981)
+            new_params = {
+                "display_mode": "Wireframe",
+                "camera_location": [1, 1, 1],
+                "camera_target": [0, 0, 0],
+                "lens_length": 35,
+                "frame_object_ids": ["00000000-0000-0000-0000-00000000dead"],
+                "frame_bbox": {"min": [0, 0, 0], "max": [1, 1, 1]},
+                "format": "jpeg",
+            }
+            for name, value in new_params.items():
+                text = await self._refusal(**{name: value})
+                assert text == (
+                    f"unsupported: 'capture_viewport' parameter '{name}' needs plugin "
+                    "0.5.0; the connected rhinomcp plugin (0.4.1) would silently "
+                    "ignore it. The command was not sent.\n"
+                    f"{PLUGIN_UPDATE_ADVICE} Or call without {name}."
+                )
+            assert "capture_viewport" not in old.received_commands
+
+            # The defaults are what an old plugin already does, so they still go through.
+            result = await self._capture(format="png")
+            assert result.content[0].mime_type == "image/png"
+            assert "format" in old.received_params["capture_viewport"]
+        finally:
+            old.stop()
 
 
 class TestCameraTools:

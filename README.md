@@ -279,7 +279,7 @@ pattern with cylinders that have different heights."_
 | `create_layer` / `delete_layer` / `get_or_set_current_layer`                                                  | Layer management                                       |
 | `get_context`                                                                                                 | Bounded snapshot: units, layer, selection, camera      |
 | `get_document_summary`                                                                                        | Overview of the current document                       |
-| `capture_viewport`                                                                                            | Screenshot the viewport for visual feedback            |
+| `capture_viewport`                                                                                            | Screenshot + metadata; display mode, camera, framing   |
 | `set_camera`                                                                                                  | Set camera location, target, up, lens, projection      |
 | `zoom_to`                                                                                                     | Frame all, the selection, object ids or a layer        |
 | `run_command`                                                                                                 | Run any native Rhino command                           |

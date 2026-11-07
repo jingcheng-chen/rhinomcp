@@ -64,6 +64,8 @@ class MockRhinoServer:
         self._handler_table: Optional[Dict[str, Any]] = None
         # Command types received, in order, so a test can assert what was sent.
         self.received_commands: list = []
+        # The params each command type last arrived with, for pass-through tests.
+        self.received_params: Dict[str, Dict[str, Any]] = {}
         # Seconds to wait before answering, so a test can provoke a client timeout.
         self.response_delay = 0.0
 
@@ -296,6 +298,7 @@ class MockRhinoServer:
         cmd_type = command.get("type", "")
         params = command.get("params", {})
         self.received_commands.append(cmd_type)
+        self.received_params[cmd_type] = params
 
         handler = self._handlers().get(cmd_type)
         if not handler:
@@ -533,6 +536,16 @@ class MockRhinoServer:
             "object_count": len(covered),
         }
 
+    def _scene_bounding_box(self) -> Optional[Dict]:
+        """Union of every object's box as {min, max}, None for an empty document."""
+        if not self.objects:
+            return None
+        boxes = [o["bounding_box"] for o in self.objects.values()]
+        return {
+            "min": [min(b[0][axis] for b in boxes) for axis in range(3)],
+            "max": [max(b[1][axis] for b in boxes) for axis in range(3)],
+        }
+
     def _get_context(self, params: Dict) -> Dict:
         """Bounded grounding snapshot, mirroring GetContext.cs: top 8 types by
         count, first 20 selected ids, no hierarchy or per-layer counts."""
@@ -543,14 +556,8 @@ class MockRhinoServer:
         top_types = sorted(type_counts.items(), key=lambda kv: kv[1], reverse=True)[:8]
 
         selected = [i for i in self.selected_ids if i in self.objects]
+        bbox = self._scene_bounding_box()
         active = self.viewports[self.active_viewport]
-        bbox = None
-        if self.objects:
-            boxes = [o["bounding_box"] for o in self.objects.values()]
-            bbox = {
-                "min": [min(b[0][axis] for b in boxes) for axis in range(3)],
-                "max": [max(b[1][axis] for b in boxes) for axis in range(3)],
-            }
 
         return {
             "document_name": "mock.3dm",
@@ -1350,20 +1357,108 @@ class MockRhinoServer:
             }
         return {"success": True, "output": "Mock C# ran.\n"}
 
+    # Precomputed 1x1 images (a transparent PNG and a white JPEG).
+    TINY_PNG_B64 = (
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgAAIAAAUAAeImBZsAAAAASUVORK5CYII="
+    )
+    TINY_JPEG_B64 = (
+        "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERX"
+        "RTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAAB//EABQQAQAA"
+        "AAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AQH//2Q=="
+    )
+
+    # Rhino 8's built-in display modes, in the order the plugin lists them.
+    DISPLAY_MODES = ("Wireframe", "Shaded", "Rendered", "Ghosted", "X-Ray", "Technical",
+                     "Artistic", "Pen", "Arctic", "Raytraced")
+    # Same sentences as plugin/McpException.cs.
+    CAMERA_AND_FRAMING_MESSAGE = (
+        "An explicit camera (camera_location, camera_target) cannot be combined with "
+        "a framing target (frame_object_ids, frame_bbox)"
+    )
+    CAMERA_AND_FRAMING_GUIDANCE = (
+        "Pass camera_location and camera_target to look from a known point, or "
+        "frame_object_ids or frame_bbox to frame geometry, not both."
+    )
+
+    def _check_capture_params(self, params: Dict) -> None:
+        """The refusals CaptureViewport.cs makes before touching any view."""
+        has_camera = any(params.get(k) is not None for k in ("camera_location", "camera_target"))
+        has_frame = any(params.get(k) is not None for k in ("frame_object_ids", "frame_bbox"))
+        if has_camera and has_frame:
+            raise MockRhinoError("invalid_argument", self.CAMERA_AND_FRAMING_MESSAGE,
+                                 self.CAMERA_AND_FRAMING_GUIDANCE)
+        mode = params.get("display_mode")
+        if mode is not None:
+            match = next((m for m in self.DISPLAY_MODES if m.lower() == mode.lower()), None)
+            if match is None:
+                raise MockRhinoError(
+                    "invalid_argument", f"Display mode '{mode}' not found",
+                    "Use one of the available display modes: "
+                    + ", ".join(self.DISPLAY_MODES) + ".")
+            params["display_mode"] = match
+        for object_id in params.get("frame_object_ids") or []:
+            if object_id not in self.objects:
+                raise MockRhinoError("not_found", f"Object not found: {object_id}",
+                                     self.OBJECT_NOT_FOUND_GUIDANCE)
+
     def _capture_viewport(self, params: Dict) -> Dict:
-        """Mock viewport capture. Returns a 1x1 transparent PNG so callers
-        that decode base64 image_data succeed without dragging in real image
-        data. The wrapper logs viewport_name/width/height — surface them."""
-        # 1x1 transparent PNG (precomputed)
-        png_b64 = (
-            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgAAIAAAUAAeImBZsAAAAASUVORK5CYII="
-        )
+        """Mock viewport capture. Returns a 1x1 PNG or JPEG (by format) so
+        callers that decode base64 image_data succeed without dragging in real
+        image data, plus the metadata fields CaptureViewport.cs reports."""
+        self._check_capture_params(params)
+        image_format = params.get("format", "png")
+        image_b64 = self.TINY_JPEG_B64 if image_format == "jpeg" else self.TINY_PNG_B64
+        target = params.get("viewport", "active")
+        name = self.active_viewport if target.lower() == "active" else next(
+            (n for n in self.viewports if n.lower() == target.lower()), None)
+        if name is None:
+            # A standard view the document lacks: the plugin temporarily
+            # reprojects the active view, in parallel projection.
+            name = target.capitalize()
+            viewport = {**self.viewports[self.active_viewport], "projection": "parallel"}
+        else:
+            viewport = dict(self.viewports[name])
+        viewport["name"] = name
+        # Temporary view state for this capture only: echoed into the metadata,
+        # never written back to self.viewports, as the plugin restores it.
+        if params.get("display_mode"):
+            viewport["display_mode"] = params["display_mode"]
+        for key in ("camera_location", "camera_target"):
+            if params.get(key) is not None:
+                viewport[key] = params[key]
+        frame = params.get("frame_bbox")
+        if params.get("frame_object_ids"):
+            boxes = [self.objects[i]["bounding_box"] for i in params["frame_object_ids"]]
+            frame = {"min": [min(b[0][a] for b in boxes) for a in range(3)],
+                     "max": [max(b[1][a] for b in boxes) for a in range(3)]}
+        if frame:
+            # Look at the middle of the box from the same direction as before.
+            center = [(lo + hi) / 2 for lo, hi in zip(frame["min"], frame["max"])]
+            offset = [loc - tgt for loc, tgt in
+                      zip(viewport["camera_location"], viewport["camera_target"])]
+            viewport["camera_target"] = center
+            viewport["camera_location"] = [c + o for c, o in zip(center, offset)]
+        visible = sum(1 for o in self.objects.values() if o.get("visible", True))
         return {
-            "image_data": png_b64,
-            "mime_type": "image/png",
-            "viewport_name": params.get("viewport", "active"),
+            "image_data": image_b64,
+            "mime_type": f"image/{image_format}",
+            "viewport_name": viewport["name"],
+            "viewport_target": target,
             "width": params.get("width", 800),
             "height": params.get("height", 600),
+            "show_grid": params.get("show_grid", True),
+            "show_axes": params.get("show_axes", True),
+            "show_cplane_axes": params.get("show_cplane_axes", False),
+            "object_count": len(self.objects),
+            "display_mode": viewport["display_mode"],
+            "projection": viewport["projection"],
+            "camera_location": viewport["camera_location"],
+            "camera_target": viewport["camera_target"],
+            "camera_up": list(viewport["camera_up"]),
+            "lens_length": params.get("lens_length", viewport["lens_length"]),
+            "scene_bounding_box": self._scene_bounding_box(),
+            "visible_object_count": visible,
+            "total_object_count": len(self.objects),
         }
 
     def _make_result_object(self, name: str, type_name: str = "BREP") -> str:
