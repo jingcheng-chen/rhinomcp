@@ -1229,10 +1229,45 @@ class MockRhinoServer:
         "AAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AQH//2Q=="
     )
 
+    # Rhino 8's built-in display modes, in the order the plugin lists them.
+    DISPLAY_MODES = ("Wireframe", "Shaded", "Rendered", "Ghosted", "X-Ray", "Technical",
+                     "Artistic", "Pen", "Arctic", "Raytraced")
+    # Same sentences as plugin/McpException.cs.
+    CAMERA_AND_FRAMING_MESSAGE = (
+        "An explicit camera (camera_location, camera_target) cannot be combined with "
+        "a framing target (frame_object_ids, frame_bbox)"
+    )
+    CAMERA_AND_FRAMING_GUIDANCE = (
+        "Pass camera_location and camera_target to look from a known point, or "
+        "frame_object_ids or frame_bbox to frame geometry, not both."
+    )
+
+    def _check_capture_params(self, params: Dict) -> None:
+        """The refusals CaptureViewport.cs makes before touching any view."""
+        has_camera = any(params.get(k) is not None for k in ("camera_location", "camera_target"))
+        has_frame = any(params.get(k) is not None for k in ("frame_object_ids", "frame_bbox"))
+        if has_camera and has_frame:
+            raise MockRhinoError("invalid_argument", self.CAMERA_AND_FRAMING_MESSAGE,
+                                 self.CAMERA_AND_FRAMING_GUIDANCE)
+        mode = params.get("display_mode")
+        if mode is not None:
+            match = next((m for m in self.DISPLAY_MODES if m.lower() == mode.lower()), None)
+            if match is None:
+                raise MockRhinoError(
+                    "invalid_argument", f"Display mode '{mode}' not found",
+                    "Use one of the available display modes: "
+                    + ", ".join(self.DISPLAY_MODES) + ".")
+            params["display_mode"] = match
+        for object_id in params.get("frame_object_ids") or []:
+            if object_id not in self.objects:
+                raise MockRhinoError("not_found", f"Object not found: {object_id}",
+                                     self.OBJECT_NOT_FOUND_GUIDANCE)
+
     def _capture_viewport(self, params: Dict) -> Dict:
         """Mock viewport capture. Returns a 1x1 PNG or JPEG (by format) so
         callers that decode base64 image_data succeed without dragging in real
         image data, plus the metadata fields CaptureViewport.cs reports."""
+        self._check_capture_params(params)
         image_format = params.get("format", "png")
         image_b64 = self.TINY_JPEG_B64 if image_format == "jpeg" else self.TINY_PNG_B64
         viewport = dict(self.ACTIVE_VIEWPORT)

@@ -1804,3 +1804,57 @@ class TestCaptureViewportMetadata:
         await self._capture(frame_bbox={"min": [0, 0, 0], "max": [2, 2, 2]})
 
         assert conn.send_command("get_context")["viewport"] == before
+
+    async def _refusal(self, **arguments):
+        from mcp.server.mcpserver.exceptions import ToolError
+
+        with pytest.raises(ToolError) as info:
+            await self._capture(**arguments)
+        prefix = "Error executing tool capture_viewport: "
+        assert str(info.value).startswith(prefix)
+        return str(info.value)[len(prefix):]
+
+    @pytest.mark.asyncio
+    async def test_camera_plus_framing_is_refused(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+        box = capture_server._create_object({"type": "BOX", "name": "A"})
+
+        for camera in ({"camera_location": [9, 9, 9]}, {"camera_target": [0, 0, 0]}):
+            for framing in ({"frame_object_ids": [box["id"]]},
+                            {"frame_bbox": {"min": [0, 0, 0], "max": [1, 1, 1]}}):
+                text = await self._refusal(**camera, **framing)
+                assert text == (
+                    "invalid_argument: An explicit camera (camera_location, "
+                    "camera_target) cannot be combined with a framing target "
+                    "(frame_object_ids, frame_bbox)\n"
+                    "Pass camera_location and camera_target to look from a known "
+                    "point, or frame_object_ids or frame_bbox to frame geometry, "
+                    "not both."
+                )
+
+    @pytest.mark.asyncio
+    async def test_unknown_display_mode_lists_the_available_modes(
+        self, capture_server, monkeypatch
+    ):
+        self._connect(monkeypatch)
+
+        text = await self._refusal(display_mode="Cartoon")
+
+        message, guidance = text.split("\n")
+        assert message == "invalid_argument: Display mode 'Cartoon' not found"
+        assert guidance == (
+            "Use one of the available display modes: Wireframe, Shaded, Rendered, "
+            "Ghosted, X-Ray, Technical, Artistic, Pen, Arctic, Raytraced."
+        )
+
+    @pytest.mark.asyncio
+    async def test_unknown_frame_object_is_not_found(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+        missing = "00000000-0000-0000-0000-00000000dead"
+
+        text = await self._refusal(frame_object_ids=[missing])
+
+        assert text == (
+            f"not_found: Object not found: {missing}\n"
+            f"{capture_server.OBJECT_NOT_FOUND_GUIDANCE}"
+        )
