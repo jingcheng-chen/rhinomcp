@@ -173,7 +173,7 @@ class TestParametersOlderPluginsWouldDrop:
         with pytest.raises(
             Exception,
             match=r"'cap_planar_ends' needs plugin 0\.4\.0; the connected rhinomcp "
-            r"plugin \(0\.3\.2\) would silently ignore it.*Package Manager",
+            r"plugin \(0\.3\.2\) would silently ignore it.*\n.*Package Manager",
         ):
             conn.send_command("sweep1", self.SWEEP)
 

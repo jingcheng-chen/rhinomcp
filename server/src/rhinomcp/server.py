@@ -474,11 +474,11 @@ class RhinoConnection:
                 parse_version(capabilities.get("version")) if capabilities else None
             )
             if plugin is None or plugin < parse_version(introduced):
-                raise Exception(
+                raise UnsupportedCommandError(
                     f"'{command_type}' parameter '{name}' needs plugin {introduced}; "
                     f"the connected rhinomcp plugin ({version_text}) would silently "
-                    f"ignore it. The command was not sent. {PLUGIN_UPDATE_ADVICE} "
-                    f"Or call without {name}."
+                    "ignore it. The command was not sent.",
+                    f"{PLUGIN_UPDATE_ADVICE} Or call without {name}.",
                 )
 
         if params.get("dry_run"):
@@ -699,8 +699,11 @@ class RhinoConnection:
             # Don't try to reconnect here - let the get_rhino_connection handle reconnection
             # Just invalidate the current socket so it will be recreated next time
             self.disconnect()
-            raise Exception(
-                "Timeout waiting for Rhino response - try simplifying your request"
+            raise RhinoError(
+                f"Timeout waiting for Rhino response to '{command_type}'.",
+                "timeout",
+                "Rhino may still be busy: check the document before retrying, "
+                "or split the request into smaller steps.",
             )
         except (ConnectionError, BrokenPipeError, ConnectionResetError) as e:
             logger.error(f"Socket connection error: {str(e)}")

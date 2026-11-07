@@ -18,6 +18,7 @@ Or in tests:
 import json
 import socket
 import threading
+import time
 import uuid
 from typing import Dict, Any, Optional
 
@@ -59,6 +60,8 @@ class MockRhinoServer:
         self._handler_table: Optional[Dict[str, Any]] = None
         # Command types received, in order, so a test can assert what was sent.
         self.received_commands: list = []
+        # Seconds to wait before answering, so a test can provoke a client timeout.
+        self.response_delay = 0.0
 
         # Mock document state
         self.objects: Dict[str, Dict[str, Any]] = {}
@@ -182,6 +185,8 @@ class MockRhinoServer:
         try:
             command = json.loads(payload.decode("utf-8"))
             response = self._process_command(command)
+            if self.response_delay:
+                time.sleep(self.response_delay)
         except json.JSONDecodeError as e:
             response = {"status": "error", "message": f"Invalid JSON: {e}"}
 

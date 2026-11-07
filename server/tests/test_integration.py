@@ -1445,6 +1445,65 @@ class TestCodedErrors:
             f"{mock_server.LAYER_NOT_FOUND_GUIDANCE}"
         )
 
+    def test_command_the_plugin_lacks_is_refused_as_unsupported(
+        self, mock_server, monkeypatch
+    ):
+        # The mock does not advertise create_planar_region.
+        from rhinomcp.server import PLUGIN_UPDATE_ADVICE
+
+        conn = self._conn(monkeypatch)
+        with pytest.raises(Exception) as info:
+            conn.send_command("create_planar_region", {"boundary_ids": [self.MISSING_ID]})
+        first, guidance = str(info.value).split("\n")
+        assert first.startswith(
+            "unsupported: The connected rhinomcp plugin (0.0.0-mock) does not "
+            "support 'create_planar_region', which was added in plugin 0.4.0;"
+        )
+        assert guidance == PLUGIN_UPDATE_ADVICE
+
+    def test_parameter_the_plugin_predates_is_refused_as_unsupported(
+        self, mock_server, monkeypatch
+    ):
+        from rhinomcp.server import PLUGIN_UPDATE_ADVICE
+
+        conn = self._conn(monkeypatch)
+        with pytest.raises(Exception) as info:
+            conn.send_command(
+                "sweep1",
+                {"rail_id": self.MISSING_ID, "profile_ids": [self.MISSING_ID],
+                 "cap_planar_ends": True},
+            )
+        assert info.value.code == "unsupported"
+        assert str(info.value) == (
+            "unsupported: 'sweep1' parameter 'cap_planar_ends' needs plugin 0.4.0; "
+            "the connected rhinomcp plugin (0.0.0-mock) would silently ignore it. "
+            "The command was not sent.\n"
+            f"{PLUGIN_UPDATE_ADVICE} Or call without cap_planar_ends."
+        )
+        assert "sweep1" not in mock_server.received_commands
+
+    def test_socket_timeout_is_coded(self, monkeypatch):
+        import rhinomcp.server as srv
+
+        slow = MockRhinoServer(port=19996)
+        slow.response_delay = 0.5
+        slow.start()
+        try:
+            monkeypatch.setattr(srv, "RHINO_TIMEOUT", 0.1)
+            conn = srv.RhinoConnection(host="127.0.0.1", port=19996)
+            with pytest.raises(Exception) as info:
+                conn.send_command("get_document_summary")
+            assert info.value.code == "timeout"
+            assert str(info.value) == (
+                "timeout: Timeout waiting for Rhino response to "
+                "'get_document_summary'.\n"
+                "Rhino may still be busy: check the document before retrying, "
+                "or split the request into smaller steps."
+            )
+            assert conn.sock is None
+        finally:
+            slow.stop()
+
     @pytest.mark.asyncio
     async def test_swallowing_wrapper_now_raises_uncoded_error(
         self, mock_server, monkeypatch
