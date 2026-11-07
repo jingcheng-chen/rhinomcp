@@ -45,3 +45,50 @@ async def test_mcp_discovery_exposes_readonly_guide_and_topic_enum():
     assert rhinomcp.mcp.instructions == SERVER_INSTRUCTIONS
     templates = await rhinomcp.mcp.list_resource_templates()
     assert "rhinomcp://guidance/{topic}" in {str(t.uri_template) for t in templates}
+
+
+def _section(text, start, end):
+    """The part of text from the first `start` up to the next `end`."""
+    head = text.index(start)
+    return text[head : text.index(end, head)]
+
+
+def test_instructions_ground_first_and_verify_with_capture_metadata():
+    # Sent to every client every session: grounding and verification must be
+    # named there, not left for the agent to discover.
+    instructions = rhinomcp.mcp.instructions
+    assert "Call get_context before the first edit" in instructions
+    assert "after large changes" in instructions
+    assert "capture_viewport metadata" in instructions
+    assert len(instructions) < 900
+
+
+def test_overview_names_get_context_as_the_first_call():
+    content = modeling_guidance("overview")["content"]
+    first_step = _section(content, "1. ", "\n2. ")
+    assert "get_context" in first_step
+    assert "get_document_summary" in first_step
+    assert "set_camera" in content and "zoom_to" in content
+    # Same words as the server instructions, so every entry point agrees.
+    assert "Call get_context before the first edit" in content
+
+
+def test_verification_reads_capture_metadata_before_trusting_the_picture():
+    content = modeling_guidance("verification")["content"]
+    for field in (
+        "viewport_name",
+        "display_mode",
+        "projection",
+        "camera_location",
+        "camera_target",
+        "camera_up",
+        "lens_length",
+        "scene_bounding_box",
+        "visible_object_count",
+        "total_object_count",
+    ):
+        assert field in content, field
+    assert "capture_viewport metadata" in content
+    assert "frame_object_ids" in content
+    assert "never moves the user's view" in content
+    assert "code: message" in content
