@@ -34,6 +34,25 @@
       "type": "boolean",
       "default": true,
       "description": "Whether to include detailed geometry data (false for lightweight listing)"
+    },
+    "ids": {
+      "$ref": "../common/definitions.json#/$defs/guidArray",
+      "description": "Restrict the listing to these ids; ids not in the document are simply absent from the result."
+    },
+    "selected_only": {
+      "type": "boolean",
+      "default": false,
+      "description": "List only currently selected objects."
+    },
+    "include_hidden": {
+      "type": "boolean",
+      "default": false,
+      "description": "Include hidden objects and objects on hidden layers."
+    },
+    "include_locked": {
+      "type": "boolean",
+      "default": true,
+      "description": "Include locked objects and objects on locked layers (included by default, as before 0.5.0)."
     }
   },
   "additionalProperties": false
