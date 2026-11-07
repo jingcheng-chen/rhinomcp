@@ -9,7 +9,15 @@ from rhinomcp.server import mcp
 from rhinomcp.tools._grasshopper_common import send_grasshopper_command
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Create Grasshopper document",
+    annotations=ToolAnnotations(
+        title="Create Grasshopper document",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_create_document(
     ctx: Context,
     new_if_missing: bool = True,
@@ -27,13 +35,29 @@ def gh_create_document(
     )
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Get Grasshopper document info",
+    annotations=ToolAnnotations(
+        title="Get Grasshopper document info",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_get_document_info(ctx: Context) -> Dict[str, Any]:
     """Get information about the active Grasshopper document."""
     return send_grasshopper_command("gh_get_document_info", {})
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Get Grasshopper canvas state",
+    annotations=ToolAnnotations(
+        title="Get Grasshopper canvas state",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_get_canvas_state(
     ctx: Context,
     include_connections: bool = True,

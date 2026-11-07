@@ -4,7 +4,15 @@ import json
 from rhinomcp import get_rhino_connection, mcp, logger
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="List Rhino commands",
+    annotations=ToolAnnotations(
+        title="List Rhino commands",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def get_commands(ctx: Context, filter: str = "", loaded_only: bool = True) -> str:
     """
     List Rhino command names available in the current session.
@@ -28,4 +36,4 @@ def get_commands(ctx: Context, filter: str = "", loaded_only: bool = True) -> st
         return json.dumps(result, indent=2)
     except Exception as e:
         logger.error(f"Error listing Rhino commands: {str(e)}")
-        return f"Error listing Rhino commands: {str(e)}"
+        raise

@@ -5,7 +5,16 @@ from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp
 
 
-@mcp.tool(annotations=ToolAnnotations(destructive_hint=True, idempotent_hint=True))
+@mcp.tool(
+    title="Delete object",
+    annotations=ToolAnnotations(
+        title="Delete object",
+        read_only_hint=False,
+        destructive_hint=True,
+        idempotent_hint=True,
+        open_world_hint=False,
+    ),
+)
 def delete_object(
     ctx: Context, id: str = None, name: str = None, all: bool = None
 ) -> Dict[str, Any]:

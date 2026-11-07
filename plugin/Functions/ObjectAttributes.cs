@@ -55,7 +55,7 @@ public partial class RhinoMCPFunctions
             var layerName = parameters["layer"]!.ToString();
             var layer = FindLayerByNameOrFullPath(doc, layerName);
             if (layer == null)
-                throw new InvalidOperationException($"Layer '{layerName}' not found.");
+                throw McpException.LayerNotFound(layerName);
 
             attrs.LayerIndex = layer.Index;
             attributesModified = true;
@@ -73,7 +73,9 @@ public partial class RhinoMCPFunctions
         {
             var materialIndex = parameters["material_index"]!.ToObject<int>();
             if (materialIndex < -1 || materialIndex >= doc.Materials.Count)
-                throw new InvalidOperationException($"Material index {materialIndex} is outside the document material table.");
+                throw McpException.OutOfRange(
+                    $"Material index {materialIndex} is outside the document material table",
+                    $"Use -1 for the layer material or an index from 0 to {doc.Materials.Count - 1}.");
 
             attrs.MaterialIndex = materialIndex;
             attrs.MaterialSource = materialIndex == -1

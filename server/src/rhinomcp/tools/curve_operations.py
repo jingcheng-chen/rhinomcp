@@ -8,11 +8,20 @@ These tools provide interfaces for:
 """
 
 from mcp.server.mcpserver import Context
+from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 from typing import List, Optional, Dict, Any
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Project curve",
+    annotations=ToolAnnotations(
+        title="Project curve",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def project_curve(
     ctx: Context,
     curve_id: str,
@@ -51,14 +60,22 @@ def project_curve(
         return {
             "success": True,
             "result_ids": result.get("result_ids", []),
-            "message": result.get("message", "Curve projected successfully")
+            "message": result.get("message", "Curve projected successfully"),
         }
     except Exception as e:
         logger.error(f"Error in project_curve: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Intersect curves",
+    annotations=ToolAnnotations(
+        title="Intersect curves",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def intersect_curves(
     ctx: Context,
     curve_id_a: str,
@@ -95,14 +112,22 @@ def intersect_curves(
             "point_ids": result.get("point_ids", []),
             "curve_ids": result.get("curve_ids", []),
             "points": result.get("points", []),
-            "message": result.get("message", "Intersections found")
+            "message": result.get("message", "Intersections found"),
         }
     except Exception as e:
         logger.error(f"Error in intersect_curves: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Split curve",
+    annotations=ToolAnnotations(
+        title="Split curve",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def split_curve(
     ctx: Context,
     curve_id: str,
@@ -126,7 +151,10 @@ def split_curve(
     """
     try:
         if not parameters and not point_ids:
-            return {"success": False, "message": "Either parameters or point_ids must be provided"}
+            return {
+                "success": False,
+                "message": "Either parameters or point_ids must be provided",
+            }
 
         rhino = get_rhino_connection()
         params = {
@@ -144,8 +172,8 @@ def split_curve(
         return {
             "success": True,
             "result_ids": result.get("result_ids", []),
-            "message": result.get("message", "Curve split successfully")
+            "message": result.get("message", "Curve split successfully"),
         }
     except Exception as e:
         logger.error(f"Error in split_curve: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise

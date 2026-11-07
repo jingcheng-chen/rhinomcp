@@ -1376,6 +1376,160 @@ class TestSectionProfile:
             conn.send_command("section_profile", {"id": box["id"]})
 
 
+class TestCodedErrors:
+    """A coded plugin error reaches the client as `code: message`, then the
+    guidance on its own line; an uncoded error keeps its bare message.
+
+    The mock answers the failures the plugin codes (unknown object id, unknown
+    layer) with a code and guidance, exactly as the real plugin does.
+    """
+
+    MISSING_ID = "00000000-0000-0000-0000-00000000dead"
+
+    def _conn(self, monkeypatch, *modules):
+        from rhinomcp.server import RhinoConnection
+
+        conn = RhinoConnection(host="127.0.0.1", port=19999)
+        for module in modules:
+            monkeypatch.setattr(module, "get_rhino_connection", lambda: conn)
+        return conn
+
+    def test_wire_error_carries_code_and_guidance(self, mock_server, monkeypatch):
+        conn = self._conn(monkeypatch)
+        with pytest.raises(Exception) as info:
+            conn.send_command("get_object_info", {"id": self.MISSING_ID})
+        text = str(info.value)
+        assert text.startswith(f"not_found: Object not found: {self.MISSING_ID}\n")
+        assert text.splitlines()[1] == mock_server.OBJECT_NOT_FOUND_GUIDANCE
+        assert info.value.code == "not_found"
+        # The plugin answered; the socket is still good for the next call.
+        assert conn.sock is not None
+        assert conn.send_command("get_document_summary")["object_count"] >= 0
+
+    def test_uncoded_error_message_is_unchanged(self, mock_server, monkeypatch):
+        conn = self._conn(monkeypatch)
+        with pytest.raises(Exception) as info:
+            conn.send_command("select_objects", {"filters": {}, "filters_type": "xor"})
+        assert str(info.value) == "Invalid filters_type 'xor': expected 'and' or 'or'."
+        assert conn.sock is not None
+
+    @pytest.mark.asyncio
+    async def test_tool_error_text_for_unknown_object(self, mock_server, monkeypatch):
+        import rhinomcp
+        import rhinomcp.tools.get_object_info as mod
+        from mcp.server.mcpserver.exceptions import ToolError
+
+        self._conn(monkeypatch, mod)
+        with pytest.raises(ToolError) as info:
+            await rhinomcp.mcp.call_tool("get_object_info", {"id": self.MISSING_ID})
+        assert str(info.value) == (
+            "Error executing tool get_object_info: "
+            f"not_found: Object not found: {self.MISSING_ID}\n"
+            f"{mock_server.OBJECT_NOT_FOUND_GUIDANCE}"
+        )
+
+    @pytest.mark.asyncio
+    async def test_tool_error_text_for_unknown_layer(self, mock_server, monkeypatch):
+        import rhinomcp
+        import rhinomcp.tools.get_or_set_current_layer as mod
+        from mcp.server.mcpserver.exceptions import ToolError
+
+        self._conn(monkeypatch, mod)
+        with pytest.raises(ToolError) as info:
+            await rhinomcp.mcp.call_tool(
+                "get_or_set_current_layer", {"name": "NoSuchLayer"}
+            )
+        assert str(info.value) == (
+            "Error executing tool get_or_set_current_layer: "
+            "not_found: Layer 'NoSuchLayer' not found\n"
+            f"{mock_server.LAYER_NOT_FOUND_GUIDANCE}"
+        )
+
+    def test_command_the_plugin_lacks_is_refused_as_unsupported(
+        self, mock_server, monkeypatch
+    ):
+        # The mock does not advertise create_planar_region.
+        from rhinomcp.server import PLUGIN_UPDATE_ADVICE
+
+        conn = self._conn(monkeypatch)
+        with pytest.raises(Exception) as info:
+            conn.send_command("create_planar_region", {"boundary_ids": [self.MISSING_ID]})
+        first, guidance = str(info.value).split("\n")
+        assert first.startswith(
+            f"unsupported: The connected rhinomcp plugin ({mock_server.plugin_version}) "
+            "does not "
+            "support 'create_planar_region', which was added in plugin 0.4.0;"
+        )
+        assert guidance == PLUGIN_UPDATE_ADVICE
+
+    def test_parameter_the_plugin_predates_is_refused_as_unsupported(
+        self, mock_server, monkeypatch
+    ):
+        import rhinomcp.server as srv
+        from rhinomcp.server import PLUGIN_UPDATE_ADVICE
+
+        # A parameter newer than any plugin, so the mock predates it.
+        monkeypatch.setitem(
+            srv.PARAMS_SINCE, "sweep1", {"cap_planar_ends": ("99.0.0", False)}
+        )
+        conn = self._conn(monkeypatch)
+        with pytest.raises(Exception) as info:
+            conn.send_command(
+                "sweep1",
+                {"rail_id": self.MISSING_ID, "profile_ids": [self.MISSING_ID],
+                 "cap_planar_ends": True},
+            )
+        assert info.value.code == "unsupported"
+        assert str(info.value) == (
+            "unsupported: 'sweep1' parameter 'cap_planar_ends' needs plugin 99.0.0; "
+            f"the connected rhinomcp plugin ({mock_server.plugin_version}) would "
+            "silently ignore it. "
+            "The command was not sent.\n"
+            f"{PLUGIN_UPDATE_ADVICE} Or call without cap_planar_ends."
+        )
+        assert "sweep1" not in mock_server.received_commands
+
+    def test_socket_timeout_is_coded(self, monkeypatch):
+        import rhinomcp.server as srv
+
+        slow = MockRhinoServer(port=19993)
+        slow.response_delay = 0.5
+        slow.start()
+        try:
+            monkeypatch.setattr(srv, "RHINO_TIMEOUT", 0.1)
+            conn = srv.RhinoConnection(host="127.0.0.1", port=19993)
+            with pytest.raises(Exception) as info:
+                conn.send_command("get_document_summary")
+            assert info.value.code == "timeout"
+            assert str(info.value) == (
+                "timeout: Timeout waiting for Rhino response to "
+                "'get_document_summary'.\n"
+                "Rhino may still be busy: check the document before retrying, "
+                "or split the request into smaller steps."
+            )
+            assert conn.sock is None
+        finally:
+            slow.stop()
+
+    @pytest.mark.asyncio
+    async def test_swallowing_wrapper_now_raises_uncoded_error(
+        self, mock_server, monkeypatch
+    ):
+        import rhinomcp
+        import rhinomcp.tools.select_objects as mod
+        from mcp.server.mcpserver.exceptions import ToolError
+
+        self._conn(monkeypatch, mod)
+        with pytest.raises(ToolError) as info:
+            await rhinomcp.mcp.call_tool(
+                "select_objects", {"filters": {}, "filters_type": "xor"}
+            )
+        assert str(info.value) == (
+            "Error executing tool select_objects: "
+            "Invalid filters_type 'xor': expected 'and' or 'or'."
+        )
+
+
 @pytest.fixture
 def context_server():
     """A fresh document on its own port, so get_context sees only what a test

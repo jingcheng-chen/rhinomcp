@@ -1,11 +1,20 @@
 from mcp.server.mcpserver import Context, Image
+from mcp.types import ToolAnnotations
 import base64
 from rhinomcp.server import get_rhino_connection, mcp, logger
 
 
 # Camera fitting and standard-view projection are temporary; the plugin restores
 # the original viewport state after capture.
-@mcp.tool()
+@mcp.tool(
+    title="Capture viewport",
+    annotations=ToolAnnotations(
+        title="Capture viewport",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def capture_viewport(
     ctx: Context,
     viewport: str = "active",
@@ -84,4 +93,4 @@ def capture_viewport(
 
     except Exception as e:
         logger.error(f"Error capturing viewport: {str(e)}")
-        raise Exception(f"Error capturing viewport: {str(e)}")
+        raise

@@ -1574,9 +1574,8 @@ class TestRunCommandTool:
 
         mock_get_conn.side_effect = Exception("Connection refused")
 
-        result = run_command(ctx=None, command="_Box")
-        assert "Error running Rhino command" in result
-        assert "Connection refused" in result
+        with pytest.raises(Exception, match="Connection refused"):
+            run_command(ctx=None, command="_Box")
 
     @patch('rhinomcp.tools.run_command.get_rhino_connection')
     def test_run_command_failure_is_flagged(self, mock_get_conn):

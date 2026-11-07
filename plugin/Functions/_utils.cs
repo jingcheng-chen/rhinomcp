@@ -67,7 +67,7 @@ public partial class RhinoMCPFunctions
     {
         var guid = token?.ToString();
         if (guid == null) return Guid.Empty;
-        return new Guid(guid);
+        return McpException.ParseGuid(guid);
     }
 
     private List<Point3d> castToPoint3dList(JToken token)
@@ -96,11 +96,9 @@ public partial class RhinoMCPFunctions
 
         if (!string.IsNullOrEmpty(objectId))
         {
-            if (!Guid.TryParse(objectId, out var guid))
-                throw new InvalidOperationException($"Invalid GUID '{objectId}'.");
-            var obj = doc.Objects.Find(guid);
+            var obj = doc.Objects.Find(McpException.ParseGuid(objectId));
             if (obj == null)
-                throw new InvalidOperationException($"Object with id {objectId} not found.");
+                throw McpException.ObjectNotFound(objectId);
             return obj;
         }
 
@@ -108,7 +106,7 @@ public partial class RhinoMCPFunctions
         {
             var objs = doc.Objects.GetObjectList(new ObjectEnumeratorSettings { NameFilter = objectName }).ToList();
             if (objs.Count == 0)
-                throw new InvalidOperationException($"Object with name '{objectName}' not found.");
+                throw McpException.ObjectNotFound(objectName);
             if (objs.Count > 1)
                 throw new InvalidOperationException($"Multiple objects with name '{objectName}' found.");
             return objs[0];

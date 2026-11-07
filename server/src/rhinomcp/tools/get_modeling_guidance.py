@@ -8,7 +8,15 @@ from rhinomcp.guidance import modeling_guidance
 from rhinomcp.server import mcp
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True, open_world_hint=False))
+@mcp.tool(
+    title="Get modeling guidance",
+    annotations=ToolAnnotations(
+        title="Get modeling guidance",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def get_modeling_guidance(
     topic: Literal[
         "overview",

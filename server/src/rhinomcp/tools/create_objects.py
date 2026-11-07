@@ -1,16 +1,22 @@
 from mcp.server.mcpserver import Context
+from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 from typing import Any, List, Dict
 
 
-@mcp.tool()
-def create_objects(
-    ctx: Context,
-    objects: List[Dict[str, Any]]
-) -> str:
+@mcp.tool(
+    title="Create objects",
+    annotations=ToolAnnotations(
+        title="Create objects",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
+def create_objects(ctx: Context, objects: List[Dict[str, Any]]) -> str:
     """
     Create multiple objects at once in the Rhino document.
-    
+
     Parameters:
     - objects: A list of dictionaries, each containing the parameters for a single object
 
@@ -25,7 +31,7 @@ def create_objects(
 
     Returns:
     A message indicating the created objects.
-    
+
     Examples of params:
     [
         {
@@ -96,5 +102,4 @@ def create_objects(
             return f"Partial success: Created {success_count}/{total} objects. {failure_count} failed: {error_details}"
     except Exception as e:
         logger.error(f"Error creating objects: {str(e)}")
-        return f"Error creating objects: {str(e)}"
-
+        raise

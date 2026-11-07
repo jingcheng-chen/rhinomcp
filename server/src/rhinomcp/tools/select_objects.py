@@ -1,9 +1,18 @@
 from mcp.server.mcpserver import Context
+from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 from typing import Any, List, Dict, Optional
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Select objects",
+    annotations=ToolAnnotations(
+        title="Select objects",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def select_objects(
     ctx: Context,
     filters: Optional[Dict[str, List[Any]]] = None,
@@ -11,7 +20,7 @@ def select_objects(
 ) -> str:
     """
     Select objects in the Rhino document.
-    
+
     Parameters:
     - filters: A dictionary containing the filters. The filters parameter is necessary, unless it's empty, in which case all objects will be selected.
     - filters_type: The type of the filters, it's "and" or "or", default is "and"
@@ -37,7 +46,7 @@ def select_objects(
         "category": ["custom_attribute_value"]
     },
     filters_type = "or"
-    
+
 
     Returns:
     A number indicating the number of objects that have been selected.
@@ -45,15 +54,11 @@ def select_objects(
     try:
         # Get the global connection
         rhino = get_rhino_connection()
-        command_params = {
-            "filters": filters or {},
-            "filters_type": filters_type
-        }
+        command_params = {"filters": filters or {}, "filters_type": filters_type}
 
         result = rhino.send_command("select_objects", command_params)
-          
+
         return f"Selected {result['count']} objects"
     except Exception as e:
         logger.error(f"Error selecting objects: {str(e)}")
-        return f"Error selecting objects: {str(e)}"
-
+        raise

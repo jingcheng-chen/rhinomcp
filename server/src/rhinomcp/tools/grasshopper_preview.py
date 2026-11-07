@@ -1,6 +1,7 @@
 """Grasshopper live preview capture tools."""
 
 import base64
+from mcp.types import ToolAnnotations
 from typing import Any, Dict, List, Optional
 
 from mcp.server.mcpserver import Context, Image
@@ -9,7 +10,15 @@ from rhinomcp.server import logger, mcp
 from rhinomcp.tools._grasshopper_common import send_grasshopper_command
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Capture Grasshopper preview",
+    annotations=ToolAnnotations(
+        title="Capture Grasshopper preview",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_capture_preview(
     ctx: Context,
     viewport: str = "perspective",

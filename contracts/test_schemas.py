@@ -1124,6 +1124,52 @@ def test_protocol_envelope():
     return all_passed
 
 
+def test_error_response():
+    """errorResponse: optional closed-enum code and guidance; bare errors stay valid."""
+    print("\n=== Testing error response envelope ===")
+    with open(CONTRACTS_DIR / "protocol.json") as f:
+        protocol = json.load(f)
+    validator = Draft202012Validator(
+        {"$ref": "#/$defs/errorResponse", "$defs": protocol["$defs"]}
+    )
+    valid = [
+        ({"status": "error", "message": "Object not found"}, "bare status+message"),
+        (
+            {
+                "status": "error",
+                "message": "Object not found: 1234",
+                "code": "not_found",
+                "guidance": "List objects with get_objects to find a valid id.",
+            },
+            "code with guidance",
+        ),
+    ]
+    for code in ("invalid_argument", "not_found", "unsupported",
+                 "rhino_error", "timeout", "internal"):
+        valid.append(({"status": "error", "message": "m", "code": code}, f"code {code}"))
+    invalid = [
+        ({"status": "error", "message": "m", "code": "oops"}, "code outside the enum"),
+        ({"status": "error", "message": "m", "code": 404}, "numeric code"),
+        ({"status": "error", "message": "m", "guidance": 1}, "non-string guidance"),
+        ({"status": "error", "code": "not_found"}, "missing message"),
+    ]
+    all_passed = True
+    for example, label in valid:
+        errors = list(validator.iter_errors(example))
+        if errors:
+            print(f"  FAIL: {label} ({errors[0].message})")
+            all_passed = False
+        else:
+            print(f"  PASS: {label}")
+    for example, label in invalid:
+        if list(validator.iter_errors(example)):
+            print(f"  CORRECTLY REJECTED: {label}")
+        else:
+            print(f"  FAIL: accepted {label}")
+            all_passed = False
+    return all_passed
+
+
 def test_sweep_planar_cap_schema():
     """Caps are optional booleans and remain independent from rail closure."""
     schema = load_schema_with_refs("commands/sweep1.json")
@@ -1224,6 +1270,7 @@ def main():
     results.append(("schema coverage", test_schema_coverage_against_protocol()))
     results.append(("contract sync (3 tiers)", test_contract_synchronization_across_tiers()))
     results.append(("protocol envelope", test_protocol_envelope()))
+    results.append(("error response", test_error_response()))
     results.append(("get_context", test_get_context_schema()))
     test_sweep_planar_cap_schema()
     results.append(("sweep planar caps", True))

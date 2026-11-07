@@ -7,12 +7,13 @@ from rhinomcp.server import get_rhino_connection, mcp
 
 
 @mcp.tool(
+    title="Get context",
     annotations=ToolAnnotations(
         title="Get context",
         read_only_hint=True,
         destructive_hint=False,
         open_world_hint=False,
-    )
+    ),
 )
 def get_context(ctx: Context) -> Dict[str, Any]:
     """

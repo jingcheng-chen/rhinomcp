@@ -89,10 +89,13 @@ class TestUnsupportedCommands:
 
         with pytest.raises(
             Exception,
-            match=r"\(0\.3\.2\) does not support 'create_planar_region', which was "
-            r"added in plugin 0\.4\.0.*Package Manager",
-        ):
+            match=r"^unsupported: The connected rhinomcp plugin \(0\.3\.2\) does not "
+            r"support 'create_planar_region', which was added in plugin 0\.4\.0;"
+            r".*\nUpdate rhinomcp in Rhino's Package Manager",
+        ) as info:
             conn.send_command("create_planar_region", {"boundary_ids": IDS})
+
+        assert info.value.code == "unsupported"
 
         assert sent_types(mock_sock) == ["describe_capabilities"]
 
@@ -107,7 +110,7 @@ class TestUnsupportedCommands:
         with pytest.raises(
             Exception,
             match=r"\(older than 0\.3\.2\) does not support 'create_planar_region'"
-            r".*Package Manager",
+            r".*\n.*Package Manager",
         ):
             conn.send_command("create_planar_region", {"boundary_ids": IDS})
 
@@ -129,7 +132,7 @@ class TestUnsupportedCommands:
         with pytest.raises(
             Exception,
             match=r"\(older than 0\.3\.2\) does not support 'boolean_union'; this "
-            r"server is .*Package Manager",
+            r"server is .*\n.*Package Manager",
         ) as info:
             conn.send_command("boolean_union", {"object_ids": IDS})
 
@@ -151,7 +154,7 @@ class TestUnsupportedCommands:
             with pytest.raises(
                 Exception,
                 match=r"\(0\.4\.1\) does not support 'get_context', which was "
-                r"added in plugin 0\.5\.0.*Package Manager",
+                r"added in plugin 0\.5\.0.*\n.*Package Manager",
             ):
                 conn.send_command("get_context")
             conn.disconnect()
@@ -193,7 +196,7 @@ class TestParametersOlderPluginsWouldDrop:
         with pytest.raises(
             Exception,
             match=r"'cap_planar_ends' needs plugin 0\.4\.0; the connected rhinomcp "
-            r"plugin \(0\.3\.2\) would silently ignore it.*Package Manager",
+            r"plugin \(0\.3\.2\) would silently ignore it.*\n.*Package Manager",
         ):
             conn.send_command("sweep1", self.SWEEP)
 
