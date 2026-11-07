@@ -2,7 +2,7 @@
 
 from importlib import metadata, resources
 
-GUIDANCE_VERSION = "2"
+GUIDANCE_VERSION = "3"
 TOPICS = (
     "overview",
     "transforms",

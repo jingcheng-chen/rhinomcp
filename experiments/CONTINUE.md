@@ -71,8 +71,11 @@ promote a candidate automatically; leave a controller or agent running; paste
 credentials anywhere; reinstall the plugin into a Rhino that holds user work; touch,
 clone or boot the user's personal `Windows 11.pvm`.
 
-## Current state — 2026-09-10, evening
+## Current state — 2026-11-07
 
+- 2026-11-07: 0.5.0 (the perception release: `get_context`, capture metadata,
+  `set_camera`/`zoom_to`, filters, coded errors) is on the integration branch
+  `feat/0.5.0-perception` awaiting release; the bullets below are as of 2026-09-10, measured on 0.4.1.
 - Released: 0.4.1 (`releases/0.4.1`). Runtime baseline: Package Manager 0.4.1,
   MVID `2c401408-5a49-4a4b-831d-fa9f5cb913c5`, SHA256 in
   `workflow/current-baseline.json`; server and plugin both 0.4.1, no update advice.
@@ -369,6 +372,36 @@ First steps, in order:
 
 Done when at least three definition families are calibrated, have fresh baseline
 runs on 0.4.1, and one Grasshopper improvement cycle has completed end to end.
+
+### M7 — Measure 0.5.0 perception tools (next, written 2026-11-07)
+
+Written now, to be run after the maintainer publishes 0.5.0. The release's premise
+is that agents which ground themselves and read what a capture shows are flagged
+less often; measure that instead of assuming it.
+
+- Baseline: update the dedicated Rhino to the released 0.5.0 plugin through the
+  Package Manager, restart it, run `select_release` against the 0.5.0 release and
+  confirm server and plugin both report 0.5.0 with no update advice. The runtime
+  baseline in `workflow/current-baseline.json` moves to 0.5.0.
+- Runs: re-run the held-out family bank (M4) against the 0.5.0 plugin and server,
+  allocating and closing cases through the `workflow/HELD_OUT.md` ledger as usual.
+  Same agents, budgets and keep rule v2 as the 0.4.1 runs; no guidance or
+  description candidate is applied.
+- Split each run on two trace facts: whether it called `get_context` before its
+  first edit, and whether it read the `capture_viewport` metadata text block before
+  accepting a result (a capture followed by acceptance with no use of the metadata
+  counts as not read). Report the flagged-run rate, by the M1 flaw report, for each
+  of the four groups and for each fact alone, with run counts beside every rate.
+- Compare to the 0.4.1 baseline (M0b): the same families' flagged-run rate on 0.4.1
+  and on 0.5.0 overall, then grounded and verifying runs against the others.
+  State plainly when a group has too few runs to separate from noise.
+
+Record the result in this brief as a table under this milestone, with these columns:
+group, runs, flagged runs, flagged rate, 0.4.1 rate; and write the evidence to
+`workflow/M7.md`.
+
+Done when the table is in this brief, `workflow/M7.md` names the runs behind every
+cell, and the flaw report is rebuilt from runs on 0.5.0.
 
 ## Pointers
 
