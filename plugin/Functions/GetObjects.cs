@@ -38,8 +38,9 @@ public partial class RhinoMCPFunctions
         if (parameters["ids"] is JArray idArray)
             ids = new HashSet<Guid>(idArray.Select(t => McpException.ParseGuid(t.ToString())));
 
-        if (!string.IsNullOrEmpty(layerFilter) && FindLayerByNameOrFullPath(doc, layerFilter) == null)
-            throw McpException.LayerNotFound(layerFilter);
+        // A layer_filter naming a layer that does not exist lists nothing rather
+        // than refusing: agents routinely list a layer they are about to create
+        // (0.5.0 refused with not_found; reverted in 0.5.1 after harness M7).
 
         // Parse bbox filter if provided
         BoundingBox? filterBbox = null;

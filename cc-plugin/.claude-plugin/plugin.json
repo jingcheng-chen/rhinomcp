@@ -1,6 +1,6 @@
 {
   "name": "rhinomcp",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Agents and commands for driving Rhino 3D and Grasshopper through the RhinoMCP server: a modeler, a read-only inspector, a Grasshopper builder, and /scene and /snapshot.",
   "author": {
     "name": "Jingcheng Chen"

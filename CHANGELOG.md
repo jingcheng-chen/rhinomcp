@@ -4,6 +4,19 @@ Server and plugin share one version. Update them together: the server sends
 commands the matching plugin understands, and an older plugin silently ignores
 parameters it does not know.
 
+## 0.5.1 — unreleased (prepared 2026-11-07)
+
+A patch found by harness milestone M7 (25 runs on 0.5.0, see
+`experiments/workflow/M7.md`): four of the seven flagged runs were agents
+listing a layer they were about to create.
+
+### Plugin
+
+- `get_objects` with a `layer_filter` naming a layer that does not exist
+  returns an empty listing again, as it did before 0.5.0, instead of refusing
+  with `not_found`. `select_objects` keeps refusing an unknown `layer`, since
+  selecting on a missing layer is a mistake rather than a look-ahead.
+
 ## 0.5.0 — unreleased (prepared 2026-11-07)
 
 A perception release: agents can ground themselves before the first edit, see

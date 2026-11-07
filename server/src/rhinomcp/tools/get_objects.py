@@ -49,7 +49,7 @@ def get_objects(
     - include_locked: Also return locked objects and objects on locked layers
       (default: true; set false to list only what select_objects can select)
 
-    An unknown layer_filter is refused with not_found.
+    A layer_filter naming a layer that does not exist returns an empty listing.
 
     Returns:
     - objects: Array of object information

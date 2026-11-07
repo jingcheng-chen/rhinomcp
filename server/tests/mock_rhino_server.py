@@ -586,9 +586,6 @@ class MockRhinoServer:
         selected_only = params.get("selected_only", False)
         include_hidden = params.get("include_hidden", False)
         include_locked = params.get("include_locked", True)
-        if layer_filter:
-            self._require_layer(layer_filter)
-
         # Filter objects. Like the plugin's default enumerator, locked objects
         # are listed and hidden ones are not unless asked for.
         filtered = list(self.objects.values())
