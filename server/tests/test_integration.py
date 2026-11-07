@@ -1961,18 +1961,16 @@ class TestFilterRefusals(_FilterDocument):
         )
 
     @pytest.mark.asyncio
-    async def test_list_unknown_layer(self, filter_server, monkeypatch):
+    async def test_list_unknown_layer_lists_nothing(self, filter_server, monkeypatch):
+        # Agents list a layer they are about to create; a read-only listing of an
+        # absent layer is empty, not an error (0.5.0 refused; reverted in 0.5.1).
         import rhinomcp
-        from mcp.server.mcpserver.exceptions import ToolError
 
         self._seed(filter_server, monkeypatch)
-        with pytest.raises(ToolError) as info:
-            await rhinomcp.mcp.call_tool("get_objects", {"layer_filter": "NoSuchLayer"})
-        assert str(info.value) == (
-            "Error executing tool get_objects: "
-            "not_found: Layer 'NoSuchLayer' not found\n"
-            f"{filter_server.LAYER_NOT_FOUND_GUIDANCE}"
-        )
+        result = await rhinomcp.mcp.call_tool("get_objects", {"layer_filter": "NoSuchLayer"})
+        listing = json.loads(result.content[0].text)
+        assert listing["objects"] == []
+        assert listing["total_matching"] == 0
 
 
 @pytest.fixture
