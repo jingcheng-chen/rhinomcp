@@ -587,8 +587,26 @@ class MockRhinoServer:
         layer_filter = params.get("layer_filter")
         type_filter = params.get("type_filter")
 
-        # Filter objects
+        ids = params.get("ids")
+        selected_only = params.get("selected_only", False)
+        include_hidden = params.get("include_hidden", False)
+        include_locked = params.get("include_locked", True)
+        if layer_filter:
+            self._require_layer(layer_filter)
+
+        # Filter objects. Like the plugin's default enumerator, locked objects
+        # are listed and hidden ones are not unless asked for.
         filtered = list(self.objects.values())
+        if not include_hidden:
+            filtered = [o for o in filtered if o.get("visible", True)]
+        if not include_locked:
+            filtered = [o for o in filtered if not o.get("locked", False)]
+        if selected_only:
+            selected = set(self.selected_ids)
+            filtered = [o for o in filtered if o["id"] in selected]
+        if ids is not None:
+            wanted = {i.lower() for i in ids}
+            filtered = [o for o in filtered if o["id"].lower() in wanted]
         if layer_filter:
             filtered = [o for o in filtered if o.get("layer") == layer_filter]
         if type_filter:
@@ -604,6 +622,14 @@ class MockRhinoServer:
             "limit": limit,
             "has_more": offset + len(paged) < total
         }
+
+    def _require_layer(self, name: str):
+        """not_found with the plugin's guidance unless the layer exists. Mock
+        layers are flat, so a name is also its full path."""
+        if name.lower() not in {n.lower() for n in self.layers}:
+            raise MockRhinoError(
+                "not_found", f"Layer '{name}' not found", self.LAYER_NOT_FOUND_GUIDANCE
+            )
 
     def _create_object(self, params: Dict) -> Dict:
         """Create a mock object."""
@@ -1035,41 +1061,84 @@ class MockRhinoServer:
         if filters_type not in ("and", "or"):
             raise Exception(f"Invalid filters_type '{filters_type}': expected 'and' or 'or'.")
 
-        if not filters:
-            self.selected_ids = list(self.objects)
-            return {"count": len(self.objects)}
-
         name_values = filters.get("name")
         color = filters.get("color")
-        custom = {k: v for k, v in filters.items() if k not in ("name", "color")}
+        ids = filters.get("ids")
+        layer = filters.get("layer")
+        types = filters.get("type")
+        if isinstance(types, str):
+            types = [types]
+        hidden = filters.get("hidden")
+        locked = filters.get("locked")
+        # Refused before the selection changes, like the plugin.
+        if layer is not None:
+            self._require_layer(layer)
+        for obj_id in ids or []:
+            if obj_id.lower() not in {i.lower() for i in self.objects}:
+                raise MockRhinoError(
+                    "not_found", f"Object not found: {obj_id}",
+                    self.OBJECT_NOT_FOUND_GUIDANCE,
+                )
+        custom = {
+            k: v for k, v in filters.items()
+            if k not in ("name", "color", "ids", "layer", "type", "hidden", "locked")
+        }
 
         def color_matches(o):
             c = o.get("color", {})
             return [c.get("r"), c.get("g"), c.get("b")] == color
 
+        # One predicate per present built-in key, like the plugin.
+        checks = []
+        if name_values is not None:
+            checks.append(lambda o: o.get("name") in name_values)
+        if color is not None:
+            checks.append(color_matches)
+        if ids is not None:
+            wanted = {i.lower() for i in ids}
+            checks.append(lambda o: o["id"].lower() in wanted)
+        if layer is not None:
+            checks.append(lambda o: o.get("layer", "").lower() == layer.lower())
+        if types is not None:
+            wanted_types = {t.upper() for t in types}
+            checks.append(lambda o: o.get("type", "").upper() in wanted_types)
+        if hidden is not None:
+            checks.append(lambda o: (not o.get("visible", True)) == hidden)
+        if locked is not None:
+            checks.append(lambda o: bool(o.get("locked", False)) == locked)
+
+        # Candidates, like the plugin's ObjectEnumeratorSettings: normal objects,
+        # plus hidden or locked ones only when the filter asks for them.
+        def candidate(o):
+            if not o.get("visible", True):
+                return hidden is True
+            if o.get("locked", False):
+                return locked is True
+            return True
+
         matched = []
         for obj in self.objects.values():
-            if filters_type == "and":
+            if not candidate(obj):
+                continue
+            if not filters:
                 ok = True
-                if name_values is not None and obj.get("name") not in name_values:
-                    ok = False
-                if ok and color is not None and not color_matches(obj):
-                    ok = False
+            elif filters_type == "and":
+                ok = all(check(obj) for check in checks)
                 # Custom attribute filtering is not modeled in the mock document.
                 # Treat unknown attrs as not-matching to keep AND strict.
                 if ok and custom:
                     ok = False
             else:
-                ok = False
-                if name_values is not None and obj.get("name") in name_values:
-                    ok = True
-                if not ok and color is not None and color_matches(obj):
-                    ok = True
+                ok = any(check(obj) for check in checks)
                 # custom attrs not modeled — OR ignores them silently
             if ok:
-                matched.append(obj["id"])
-        self.selected_ids = matched
-        return {"count": len(matched)}
+                matched.append(obj)
+        # Rhino cannot select a hidden or locked object; it stays matched only.
+        self.selected_ids = [
+            o["id"] for o in matched
+            if o.get("visible", True) and not o.get("locked", False)
+        ]
+        return {"count": len(self.selected_ids), "matched": len(matched)}
 
     def _create_layer(self, params: Dict) -> Dict:
         """Create a layer."""

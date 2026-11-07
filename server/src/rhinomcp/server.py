@@ -136,9 +136,24 @@ CAPABILITIES_COMMAND = "describe_capabilities"
 # error, so the server checks the plugin actually connected before sending.
 #
 # When you add a parameter to an existing command, register it here with the
-# plugin version that introduces it and the value that means "not used".
+# plugin version that introduces it and the value that means "not used". A
+# dotted name ("filters.ids") reaches a key inside an object parameter.
 PARAMS_SINCE: Dict[str, Dict[str, tuple]] = {
     "sweep1": {"cap_planar_ends": ("0.4.0", False)},
+    "select_objects": {
+        # An older plugin reads these as custom user-string attributes.
+        "filters.ids": ("0.5.0", None),
+        "filters.layer": ("0.5.0", None),
+        "filters.type": ("0.5.0", None),
+        "filters.hidden": ("0.5.0", None),
+        "filters.locked": ("0.5.0", None),
+    },
+    "get_objects": {
+        "ids": ("0.5.0", None),
+        "selected_only": ("0.5.0", False),
+        "include_hidden": ("0.5.0", False),
+        "include_locked": ("0.5.0", True),
+    },
     "capture_viewport": {
         "display_mode": ("0.5.0", None),
         "camera_location": ("0.5.0", None),
@@ -237,6 +252,16 @@ ERROR_CODES = (
     "timeout",
     "internal",
 )
+
+
+def _param_value(params: Dict[str, Any], name: str):
+    """The value at a PARAMS_SINCE name; a dotted name walks into objects."""
+    value: Any = params
+    for part in name.split("."):
+        if not isinstance(value, dict):
+            return None
+        value = value.get(part)
+    return value
 
 
 class RhinoError(Exception):
@@ -473,7 +498,7 @@ class RhinoConnection:
                 )
 
         for name, (introduced, unused) in PARAMS_SINCE.get(command_type, {}).items():
-            value = params.get(name)
+            value = _param_value(params, name)
             if value is None or value == unused:
                 continue
             if capabilities is None:
