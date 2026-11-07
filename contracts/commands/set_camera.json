@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "set_camera.json",
+  "title": "SetCamera Command",
+  "description": "Change a viewport's camera. Changes the view only: no document undo record is created.",
+  "type": "object",
+  "properties": {
+    "viewport": { "type": "string", "minLength": 1, "description": "Viewport name, e.g. Perspective or Top. Defaults to the active viewport." },
+    "location": { "$ref": "../common/definitions.json#/$defs/point3d", "description": "Camera location [x, y, z]" },
+    "target": { "$ref": "../common/definitions.json#/$defs/point3d", "description": "Camera target [x, y, z]" },
+    "up": { "$ref": "../common/definitions.json#/$defs/vector3d", "description": "Camera up vector [x, y, z]" },
+    "lens_length": { "type": "number", "exclusiveMinimum": 0, "description": "35 mm equivalent lens length in millimetres" },
+    "projection": { "enum": ["perspective", "parallel"] }
+  },
+  "anyOf": [
+    { "required": ["location"] },
+    { "required": ["target"] },
+    { "required": ["up"] },
+    { "required": ["lens_length"] },
+    { "required": ["projection"] }
+  ],
+  "additionalProperties": false,
+  "examples": [
+    { "location": [100, -100, 80], "target": [0, 0, 0] },
+    { "viewport": "Perspective", "location": [100, -100, 80], "target": [0, 0, 0], "up": [0, 0, 1], "lens_length": 50, "projection": "perspective" },
+    { "viewport": "Top", "projection": "parallel" }
+  ]
+}

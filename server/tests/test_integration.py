@@ -1661,3 +1661,131 @@ class TestGetContext:
         assert tool.annotations.read_only_hint is True
         assert tool.annotations.destructive_hint is False
         assert tool.annotations.open_world_hint is False
+
+
+@pytest.fixture
+def camera_server():
+    """A fresh document and fresh viewports on their own port, so camera tests
+    see only the objects and view changes they make."""
+    server = MockRhinoServer(port=19985)
+    server.start()
+    time.sleep(0.1)
+
+    yield server
+
+    server.stop()
+
+
+class TestCameraTools:
+    """set_camera and zoom_to change a viewport (named or active), answer its
+    state afterwards, and leave the document and its undo stack alone."""
+
+    PORT = 19985
+    MISSING_ID = "00000000-0000-0000-0000-00000000dead"
+
+    def _tools(self, monkeypatch):
+        from rhinomcp.server import RhinoConnection
+        import rhinomcp.tools.set_camera as set_camera_mod
+        import rhinomcp.tools.get_context as context_mod
+
+        conn = RhinoConnection(host="127.0.0.1", port=self.PORT)
+        for mod in (set_camera_mod, context_mod):
+            monkeypatch.setattr(mod, "get_rhino_connection", lambda: conn)
+        return conn
+
+    async def _refusal(self, tool, args):
+        """The tool error text after the SDK's own 'Error executing tool' prefix."""
+        import rhinomcp
+        from mcp.server.mcpserver.exceptions import ToolError
+
+        with pytest.raises(ToolError) as info:
+            await rhinomcp.mcp.call_tool(tool, args)
+        prefix = f"Error executing tool {tool}: "
+        text = str(info.value)
+        assert text.startswith(prefix)
+        return text[len(prefix):]
+
+    # set_camera
+
+    def test_set_camera_updates_the_active_viewport(self, camera_server, monkeypatch):
+        from rhinomcp.tools.set_camera import set_camera
+        from rhinomcp.tools.get_context import get_context
+
+        self._tools(monkeypatch)
+        undo_before = list(camera_server.undo_stack)
+
+        state = set_camera(ctx=None, location=[10, -20, 30], target=[1, 2, 3],
+                           up=[0, 1, 0], lens_length=35)
+
+        assert state == {
+            "viewport_name": "Perspective",
+            "projection": "perspective",
+            "camera_location": [10, -20, 30],
+            "camera_target": [1, 2, 3],
+            "camera_up": [0, 1, 0],
+            "lens_length": 35,
+        }
+        viewport = get_context(ctx=None)["viewport"]
+        assert viewport["camera_location"] == [10, -20, 30]
+        assert viewport["camera_target"] == [1, 2, 3]
+        assert camera_server.undo_stack == undo_before
+
+    def test_set_camera_on_a_named_viewport_leaves_the_active_one(
+        self, camera_server, monkeypatch
+    ):
+        from rhinomcp.tools.set_camera import set_camera
+        from rhinomcp.tools.get_context import get_context
+
+        self._tools(monkeypatch)
+        active_before = get_context(ctx=None)["viewport"]
+
+        state = set_camera(ctx=None, viewport="Top", projection="perspective",
+                           lens_length=80)
+
+        assert state["viewport_name"] == "Top"
+        assert state["projection"] == "perspective"
+        assert state["lens_length"] == 80
+        # Fields not given keep their previous values.
+        assert state["camera_target"] == [0.0, 0.0, 0.0]
+        assert state["camera_up"] == [0.0, 1.0, 0.0]
+        assert get_context(ctx=None)["viewport"] == active_before
+
+    def test_set_camera_switches_to_parallel(self, camera_server, monkeypatch):
+        from rhinomcp.tools.set_camera import set_camera
+
+        self._tools(monkeypatch)
+        assert set_camera(ctx=None, projection="parallel")["projection"] == "parallel"
+
+    @pytest.mark.asyncio
+    async def test_set_camera_with_nothing_to_change_is_refused(
+        self, camera_server, monkeypatch
+    ):
+        self._tools(monkeypatch)
+        text = await self._refusal("set_camera", {"viewport": "Top"})
+        assert text == (
+            "invalid_argument: set_camera needs at least one of location, target, "
+            "up, lens_length or projection\n"
+            "Pass the camera fields to change; to frame objects use zoom_to instead."
+        )
+
+    @pytest.mark.asyncio
+    async def test_set_camera_on_an_unknown_viewport_is_refused(
+        self, camera_server, monkeypatch
+    ):
+        self._tools(monkeypatch)
+        text = await self._refusal("set_camera", {"viewport": "Nowhere", "lens_length": 50})
+        assert text == (
+            "not_found: Viewport 'Nowhere' not found\n"
+            "Omit viewport to use the active one, or pass a viewport name such as "
+            "Perspective, Top, Front or Right."
+        )
+
+    @pytest.mark.asyncio
+    async def test_set_camera_is_annotated_as_a_view_change(self):
+        import rhinomcp
+
+        tool = next(t for t in await rhinomcp.mcp.list_tools() if t.name == "set_camera")
+        assert tool.annotations.title == "Set camera"
+        assert tool.annotations.read_only_hint is False
+        assert tool.annotations.destructive_hint is False
+        assert tool.annotations.open_world_hint is False
