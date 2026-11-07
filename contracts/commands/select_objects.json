@@ -7,30 +7,71 @@
   "properties": {
     "filters": {
       "type": "object",
-      "description": "Filter criteria (name, color, or custom attributes)",
+      "description": "Filter criteria. Every present key must match (filters_type 'and') or any present key may match ('or'). name, color, ids, layer, type, hidden and locked are built in; any other key is a custom user-string attribute, so those names cannot be used as attribute keys.",
       "properties": {
         "name": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Filter by object names"
         },
         "color": {
           "$ref": "../common/definitions.json#/$defs/color",
           "description": "Filter by RGB color"
+        },
+        "ids": {
+          "$ref": "../common/definitions.json#/$defs/guidArray",
+          "description": "Match objects with these ids. An id that is not in the document is refused with not_found."
+        },
+        "layer": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Match objects on this layer, by full layer path (for example 'Furniture::Chairs'). An unknown layer is refused with not_found."
+        },
+        "type": {
+          "oneOf": [
+            {
+              "$ref": "../common/definitions.json#/$defs/objectType"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "../common/definitions.json#/$defs/objectType"
+              },
+              "minItems": 1
+            }
+          ],
+          "description": "Match objects of this normalized type, or of any type in the list (POINT, LINE, CURVE, BREP, EXTRUSION, ...)."
+        },
+        "hidden": {
+          "type": "boolean",
+          "description": "true lets hidden objects (and objects on hidden layers) into the candidates and matches them; false matches visible objects. Omitted: hidden objects are not considered."
+        },
+        "locked": {
+          "type": "boolean",
+          "description": "true lets locked objects (and objects on locked layers) into the candidates and matches them; false matches unlocked objects. Omitted: locked objects are not considered."
         }
       },
       "additionalProperties": {
         "type": "array",
-        "items": { "type": "string" },
+        "items": {
+          "type": "string"
+        },
         "description": "Custom attribute filter values"
       }
     },
     "filters_type": {
       "type": "string",
-      "enum": ["and", "or"],
+      "enum": [
+        "and",
+        "or"
+      ],
       "default": "and",
       "description": "How to combine multiple filters"
     }
   },
-  "required": ["filters"]
+  "required": [
+    "filters"
+  ]
 }

@@ -173,6 +173,62 @@ def test_select_objects_commands():
     return all_passed
 
 
+def test_selection_and_listing_filter_schemas():
+    """select_objects filters gain ids, layer, type, hidden and locked;
+    get_objects gains ids, selected_only, include_hidden and include_locked."""
+    print("\n=== Testing selection and listing filters ===")
+    guid = "12345678-1234-1234-1234-123456789012"
+
+    valid = [
+        ("commands/select_objects.json", {"filters": {"ids": [guid]}}),
+        ("commands/select_objects.json", {"filters": {"layer": "Furniture::Chairs"}}),
+        ("commands/select_objects.json", {"filters": {"type": "BREP"}}),
+        ("commands/select_objects.json", {"filters": {"type": ["CURVE", "LINE"]}}),
+        ("commands/select_objects.json", {"filters": {"hidden": True}}),
+        ("commands/select_objects.json", {"filters": {"locked": False}}),
+        ("commands/select_objects.json", {
+            "filters": {"layer": "Walls", "type": "EXTRUSION", "locked": False,
+                        "name": ["Wall1"], "category": ["structure"]},
+            "filters_type": "and"}),
+        ("commands/select_objects.json", {
+            "filters": {"ids": [guid], "hidden": True}, "filters_type": "or"}),
+        ("commands/get_objects.json", {"ids": [guid]}),
+        ("commands/get_objects.json", {"selected_only": True}),
+        ("commands/get_objects.json", {"include_hidden": True, "include_locked": False}),
+        ("commands/get_objects.json", {
+            "selected_only": True, "layer_filter": "Walls", "type_filter": "CURVE",
+            "include_hidden": False, "include_locked": True, "ids": [guid]}),
+    ]
+    invalid = [
+        ("commands/select_objects.json", {"filters": {"ids": "not-a-list"}}, "select ids not an array"),
+        ("commands/select_objects.json", {"filters": {"ids": ["nope"]}}, "select ids not GUIDs"),
+        ("commands/select_objects.json", {"filters": {"layer": ["Walls"]}}, "select layer as list"),
+        ("commands/select_objects.json", {"filters": {"type": "TEAPOT"}}, "select unknown type"),
+        ("commands/select_objects.json", {"filters": {"type": []}}, "select empty type list"),
+        ("commands/select_objects.json", {"filters": {"hidden": "yes"}}, "select hidden not boolean"),
+        ("commands/select_objects.json", {"filters": {"locked": 1}}, "select locked not boolean"),
+        ("commands/get_objects.json", {"ids": guid}, "get ids not an array"),
+        ("commands/get_objects.json", {"ids": ["nope"]}, "get ids not GUIDs"),
+        ("commands/get_objects.json", {"selected_only": "true"}, "selected_only not boolean"),
+        ("commands/get_objects.json", {"include_hidden": 1}, "include_hidden not boolean"),
+        ("commands/get_objects.json", {"include_locked": None}, "include_locked not boolean"),
+        ("commands/get_objects.json", {"hidden": True}, "get_objects unknown field"),
+    ]
+
+    all_passed = True
+    for path, example in valid:
+        if not validate(path, example):
+            all_passed = False
+    for path, example, description in invalid:
+        schema = load_schema_with_refs(path)
+        if list(Draft202012Validator(schema).iter_errors(example)):
+            print(f"  CORRECTLY REJECTED: {description}")
+        else:
+            print(f"  INCORRECTLY ACCEPTED: {description}")
+            all_passed = False
+    return all_passed
+
+
 def test_layer_commands():
     """Test layer command schemas."""
     print("\n=== Testing layer commands ===")
@@ -1262,6 +1318,7 @@ def main():
     results.append(("modify_object", test_modify_object_commands()))
     results.append(("delete_object", test_delete_object_commands()))
     results.append(("select_objects", test_select_objects_commands()))
+    results.append(("selection and listing filters", test_selection_and_listing_filter_schemas()))
     results.append(("layer commands", test_layer_commands()))
     results.append(("new commands", test_new_commands()))
     results.append(("other commands", test_other_commands()))
