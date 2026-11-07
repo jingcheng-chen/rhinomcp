@@ -1,8 +1,8 @@
 # Continue autonomous RhinoMCP improvement
 
 Entry point for a fresh development session (Codex CLI or Claude Code) with no
-chat context. Last updated 2026-09-10 evening, after M0b, M3b and M6 and the review of
-their verdicts; the VM is decided but deferred. Verify repository
+chat context. Last updated 2026-11-07 evening, after M7 measured the 0.5.0 perception
+release; the VM is decided but deferred. Verify repository
 and application state before acting; nothing below about running processes, open
 documents or loaded plugins is an assumption you may keep.
 
@@ -73,17 +73,26 @@ clone or boot the user's personal `Windows 11.pvm`.
 
 ## Current state — 2026-11-07
 
-- 2026-11-07: 0.5.0 (the perception release: `get_context`, capture metadata,
-  `set_camera`/`zoom_to`, filters, coded errors) is on the integration branch
-  `feat/0.5.0-perception` awaiting release; the bullets below are as of 2026-09-10, measured on 0.4.1.
-- Released: 0.4.1 (`releases/0.4.1`). Runtime baseline: Package Manager 0.4.1,
-  MVID `2c401408-5a49-4a4b-831d-fa9f5cb913c5`, SHA256 in
-  `workflow/current-baseline.json`; server and plugin both 0.4.1, no update advice.
-  `harness` includes `main` up to that release. Production source is unchanged since;
-  no candidate is adopted.
-- Complete: M0 to M4, M0b, M3b and M6. M5 is deferred by the user; do not start it.
-  Reports: `workflow/REBASELINE_041.md`, `workflow/M3B.md`, `workflow/GRASSHOPPER.md`,
-  and the M1 to M4 reports listed under Pointers.
+- Released: 0.5.0 (`releases/0.5.0`, commit `b4eb30b`), the perception release:
+  `get_context`, capture metadata, `set_camera`/`zoom_to`, filters, coded errors.
+  Runtime baseline moved to 0.5.0 on 2026-11-07 (M7): server and plugin both 0.5.0,
+  no update advice, MVID `dc9f9a72-ccfe-4eee-b402-cfc16d3b4550`, SHA256 in
+  `workflow/current-baseline.json`. The loaded plugin is a local build of the
+  release commit in the Rhino app bundle, not the published `.yak` (its `rhinomcp.rhp`
+  hashes differently); sources match the tag. Reinstall from the Package Manager
+  before the next plugin-identity-sensitive comparison. No candidate is adopted.
+- Complete: M0 to M4, M0b, M3b, M6 and M7. M5 is deferred by the user; do not start it.
+  Reports: `workflow/M7.md`, `workflow/REBASELINE_041.md`, `workflow/M3B.md`,
+  `workflow/GRASSHOPPER.md`, and the M1 to M4 reports listed under Pointers.
+- M7 result (2026-11-07): 25 fresh Codex runs on 0.5.0, all 25 pass; 7 flagged
+  (28%) against 6 of 25 plain 0.4.1 runs (24%). No run captured a viewport, so the
+  release's verification premise was never exercised; 18 of 20 full-catalog runs
+  called `get_context` first. Every flag is a missing-layer failed call in the
+  joining and projection families; four of the seven come from a new 0.5.0 class,
+  `get_objects` with a `layer_filter` naming a not-yet-created layer, which errors
+  instead of returning nothing. `flaw-report.json` is rebuilt from `m7-runs.json`.
+- The three sealed held-out families stay sealed (user decision, 2026-11-07): none
+  can exercise the perception tools (see `workflow/M7.md`).
 - Latest observations on 0.4.1: nine release and scene runs, eight pass; the v2 panel
   (0.5 mm shape tolerance) still fails bounds and boundary while the agent claims
   completion. Three Grasshopper discovery runs pass with zero failed calls.
@@ -112,8 +121,9 @@ clone or boot the user's personal `Windows 11.pvm`.
 
 ## Milestones from here, in order
 
-Order as of 2026-09-10, evening: **M3c**, then the next Grasshopper cycle under keep
-rule v2. M5 is deferred by the user and stays parked until an explicit go. Each milestone ends with tests green, a portable
+Order as of 2026-11-07: **M3c**, with its target 3 (missing layer) now backed by M7
+evidence, then the next Grasshopper cycle under keep rule v2. M5 is deferred by the
+user and stays parked until an explicit go. Each milestone ends with tests green, a portable
 report under `workflow/`, the state section above updated, and a commit.
 
 ### M0 — Re-baseline on the released 0.4.0 (complete, 2026-09-09)
@@ -373,9 +383,9 @@ First steps, in order:
 Done when at least three definition families are calibrated, have fresh baseline
 runs on 0.4.1, and one Grasshopper improvement cycle has completed end to end.
 
-### M7 — Measure 0.5.0 perception tools (next, written 2026-11-07)
+### M7 — Measure 0.5.0 perception tools (complete, 2026-11-07)
 
-Written now, to be run after the maintainer publishes 0.5.0. The release's premise
+Written 2026-11-07 morning, run the same evening after the maintainer published 0.5.0. The release's premise
 is that agents which ground themselves and read what a capture shows are flagged
 less often; measure that instead of assuming it.
 
@@ -402,6 +412,49 @@ group, runs, flagged runs, flagged rate, 0.4.1 rate; and write the evidence to
 
 Done when the table is in this brief, `workflow/M7.md` names the runs behind every
 cell, and the flaw report is rebuilt from runs on 0.5.0.
+
+**Result, 2026-11-07.** 25 fresh Codex gpt-5.6-terra/medium runs on 0.5.0 (5 native
+release families once, 4 full-catalog scene families three times, the spent joining
+and projection tasks twice), all retained, none rerun. Flagged = an observed or
+reviewed M1 finding minus gateway refusals (keep rule v2). The 0.4.1 column is the
+25 plain 0.4.1 Codex runs (M0b nine plus the M3b baseline arms); the M0b nine alone
+are 1/9 (11%). Evidence and run ids per cell: `workflow/M7.md`, `workflow/m7-results.json`.
+
+| Group | Runs | Flagged runs | Flagged rate | 0.4.1 rate |
+| --- | ---: | ---: | ---: | ---: |
+| all runs | 25 | 7 | 28% | 6/25 (24%) |
+| grounded and verified | 0 | 0 | no runs | no runs (tools absent) |
+| grounded only | 18 | 7 | 39% | no runs (tool absent) |
+| verified only | 0 | 0 | no runs | no runs |
+| neither | 7 | 0 | 0% | 6/25 (24%) |
+| grounded, either way | 18 | 7 | 39% | no runs (tool absent) |
+| not grounded | 7 | 0 | 0% | 6/25 (24%) |
+| verified, either way | 0 | 0 | no runs | no runs |
+| not verified | 25 | 7 | 28% | 6/25 (24%) |
+| full catalog | 20 | 7 | 35% | 5/20 (25%) |
+| native subset (perception tools not exposed) | 5 | 0 | 0% | 1/5 (20%) |
+
+The premise was not confirmed and could not be tested as posed: no run called
+`capture_viewport`, so the grounded-and-verified group is empty, and the grounded
+runs were flagged more often than the rest. That split is confounded by family:
+every flagged run is a joining or projection run, every one of those eight runs
+grounded, and no family has both grounded and ungrounded runs. All seven flags are
+missing-layer failed calls; four runs are flagged only by the new `get_objects`
+layer-filter probe (a read-only query for the task's target layer before it exists
+now fails with `not_found`), three by `update_object_attributes` to an absent layer,
+the same class 0.4.1 showed (4 of 10 runs). The 0.5.0 guidance line on that error
+did not stop one agent from failing three times before calling `create_layer`.
+Native runs: 5/5 pass with zero failures, the panel included (one observation).
+
+Follow-ups recorded, none applied here: (1) decide whether a read-only
+`layer_filter` on an absent layer should return an empty result with a note rather
+than an error, or let M3c target 3 add the existing layer paths to both messages;
+(2) M1 classifier gap: `READS` lacks `get_context`, `get_document_summary`,
+`measure_objects` and `select_objects`, so the 0.5.0 reads act as mutation barriers
+and can hide redundant reads; (3) a verification measurement needs tasks whose
+result cannot be checked numerically, since on this bank agents verify with
+`analyze_objects` and never look; (4) reinstall the published package before the
+next identity-sensitive comparison.
 
 ## Pointers
 

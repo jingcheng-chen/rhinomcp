@@ -79,6 +79,41 @@
       "claim": "One fresh discovery observation per family; no paired improvement or held-out generalization claim.",
       "history": "experiments/workflow/baseline-history.json",
       "observations": "experiments/workflow/release-040-results.json"
+    },
+    {
+      "id": "released-0.4.1-v1",
+      "source_revision": "ddc6cfdaaca3a1dc7b8930b409d0c2fce28ec33a",
+      "release_tag": "releases/0.4.1",
+      "version": "0.4.1",
+      "server_version": "0.4.1",
+      "identity": {
+        "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
+        "sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da"
+      },
+      "selection": "experiments/runs/selection-release-20260910-140702-e1b9dacd",
+      "selection_state_required": "selected",
+      "runtime_verification_required": true,
+      "native_tools": [
+        "create_object",
+        "modify_object",
+        "delete_object",
+        "analyze_objects",
+        "get_object_info",
+        "get_objects",
+        "extrude_curve",
+        "loft",
+        "sweep1",
+        "boolean_difference",
+        "boolean_union",
+        "boolean_intersection",
+        "create_planar_region",
+        "get_modeling_guidance"
+      ],
+      "suite": "experiments/workflow/release-pilot.json",
+      "claim": "Nine fresh discovery observations: five native release families and four full-catalog workflow scenes; no paired improvement or held-out generalization claim.",
+      "history": "experiments/workflow/baseline-history.json",
+      "observations": "experiments/workflow/release-041-results.json",
+      "superseded": "2026-11-07 by released-0.5.0-v1 (M7)"
     }
   ],
   "superseded_by": "released-0.4.0-v1"

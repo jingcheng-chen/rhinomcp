@@ -1,14 +1,20 @@
 {
-  "id": "released-0.4.1-v1",
-  "source_revision": "ddc6cfdaaca3a1dc7b8930b409d0c2fce28ec33a",
-  "release_tag": "releases/0.4.1",
-  "version": "0.4.1",
-  "server_version": "0.4.1",
+  "id": "released-0.5.0-v1",
+  "source_revision": "b4eb30ba36b3c525d76dd96129c28a52c5ce6d7a",
+  "release_tag": "releases/0.5.0",
+  "version": "0.5.0",
+  "server_version": "0.5.0",
   "identity": {
-    "mvid": "2c401408-5a49-4a4b-831d-fa9f5cb913c5",
-    "sha256": "6452bb1b574f2b3566576e297dc9a80dfd4a3b83bfd937a00dcc964e9b01b6da"
+    "mvid": "dc9f9a72-ccfe-4eee-b402-cfc16d3b4550",
+    "sha256": "9751e684e7fb21457176b366ded97482cdc7d8d6bd8e0e9a7c30e8e78789926b"
   },
-  "selection": "experiments/runs/selection-release-20260910-140702-e1b9dacd",
+  "loaded_assembly": "/Applications/Rhino 8.app/Contents/PlugIns/rhinomcp.rhp",
+  "published_package": {
+    "asset": "rhinomcp-0.5.0-rh8_17-any.yak",
+    "rhp_sha256": "8024e6a9aa6e572d9912aadf87683aecbefbfef8ec5c0ceae1cc92fb10ad4070",
+    "note": "The loaded plugin is a local build of the release commit installed in the app bundle, not the Package Manager package; source tree verified equal to the tag, binary hash differs."
+  },
+  "selection": "experiments/runs/selection-release-20261107-200802-edf66468",
   "selection_state_required": "selected",
   "runtime_verification_required": true,
   "native_tools": [
@@ -28,7 +34,7 @@
     "get_modeling_guidance"
   ],
   "suite": "experiments/workflow/release-pilot.json",
-  "claim": "Nine fresh discovery observations: five native release families and four full-catalog workflow scenes; no paired improvement or held-out generalization claim.",
+  "claim": "M7 observations on released 0.5.0: five native release families, repeated full-catalog scenes and the spent joining/projection tasks; no paired candidate or held-out generalization claim.",
   "history": "experiments/workflow/baseline-history.json",
-  "observations": "experiments/workflow/release-041-results.json"
+  "observations": "experiments/workflow/m7-results.json"
 }

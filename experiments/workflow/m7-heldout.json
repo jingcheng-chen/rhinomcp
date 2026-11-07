@@ -1,0 +1,23 @@
+{
+  "id": "m7-spent-heldout-families-v1",
+  "call_budget": 50,
+  "timeout_seconds": 240,
+  "tasks": [
+    {
+      "family": "curve-network-joining",
+      "path": "experiments/tasks/join_closed_network.json"
+    },
+    {
+      "family": "curve-network-joining",
+      "path": "experiments/tasks/join_two_components.json"
+    },
+    {
+      "family": "directional-curve-projection",
+      "path": "experiments/tasks/projection_vertical.json"
+    },
+    {
+      "family": "directional-curve-projection",
+      "path": "experiments/tasks/projection_oblique.json"
+    }
+  ]
+}

@@ -77,12 +77,23 @@ See [implemented distribution and live checks](DISTRIBUTABLE_GUIDANCE.md).
    changes with demonstrated benefit and no unacceptable regressions. Keep inconclusive
    changes unpromoted; record task-specific benefit without generalizing it.
 
-## Current ranking — M0b, 2026-09-10
+## Current ranking — M7, 2026-11-07
 
-The selected baseline is now released 0.4.1. Nine fresh observations produce eight
+The selected baseline is released 0.5.0. Twenty-five fresh observations all pass;
+seven are flagged by missing-layer failed calls in the joining and projection
+families, four of them the new `get_objects` layer-filter probe. No run captured a
+viewport. See [M7](M7.md). Rebuild the current ranking with:
+
+```sh
+server/.venv/bin/python -m experiments.workflow.m7 --current experiments/workflow/m7-runs.json --baseline experiments/workflow/m7-baseline-runs.json --output experiments/workflow/m7-results.json --audit-output experiments/workflow/flaw-report.json
+```
+
+## Previous ranking — M0b, 2026-09-10
+
+The selected baseline was released 0.4.1. Nine fresh observations produce eight
 passes, 78 calls and zero failed calls. The curved panel fails dimensions and
 boundary despite a completion claim. Historical M1/M2 failures do not rank current
-interventions. See [M0b report](REBASELINE_041.md). Rebuild the current ranking with:
+interventions. See [M0b report](REBASELINE_041.md). Rebuild that ranking with:
 
 ```sh
 server/.venv/bin/python -m experiments.workflow.audit experiments/workflow/release-041-runs.json --output experiments/workflow/flaw-report.json
