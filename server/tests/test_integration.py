@@ -1959,3 +1959,69 @@ class TestFilterRefusals(_FilterDocument):
             "not_found: Layer 'NoSuchLayer' not found\n"
             f"{filter_server.LAYER_NOT_FOUND_GUIDANCE}"
         )
+
+
+@pytest.fixture
+def plugin_041_server():
+    """A 0.4.1 plugin, which would read the new filter keys as custom
+    attributes and ignore the new listing parameters."""
+    server = MockRhinoServer(port=19976, plugin_version="0.4.1")
+    server.start()
+    time.sleep(0.1)
+
+    yield server
+
+    server.stop()
+
+
+class TestFilterPluginCompatibility(_FilterDocument):
+    """Against a plugin older than 0.5.0 the new filters are refused with
+    update advice before anything is sent; the defaults still go through."""
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("tool, arguments, name", [
+        ("select_objects", {"filters": {"ids": ["00000000-0000-0000-0000-000000000001"]}}, "filters.ids"),
+        ("select_objects", {"filters": {"layer": "Walls"}}, "filters.layer"),
+        ("select_objects", {"filters": {"type": "CURVE"}, "filters_type": "or"}, "filters.type"),
+        ("select_objects", {"filters": {"hidden": False}}, "filters.hidden"),
+        ("select_objects", {"filters": {"locked": False}}, "filters.locked"),
+        ("get_objects", {"ids": ["00000000-0000-0000-0000-000000000001"]}, "ids"),
+        ("get_objects", {"selected_only": True}, "selected_only"),
+        ("get_objects", {"include_hidden": True}, "include_hidden"),
+        ("get_objects", {"include_locked": False}, "include_locked"),
+    ])
+    async def test_new_parameter_refused_with_update_advice(
+        self, plugin_041_server, monkeypatch, tool, arguments, name
+    ):
+        import rhinomcp
+        from mcp.server.mcpserver.exceptions import ToolError
+        from rhinomcp.server import PLUGIN_UPDATE_ADVICE
+
+        self._seed(plugin_041_server, monkeypatch)
+        with pytest.raises(ToolError) as info:
+            await rhinomcp.mcp.call_tool(tool, arguments)
+        assert str(info.value) == (
+            f"Error executing tool {tool}: "
+            f"unsupported: '{tool}' parameter '{name}' needs plugin 0.5.0; "
+            "the connected rhinomcp plugin (0.4.1) would silently ignore it. "
+            "The command was not sent.\n"
+            f"{PLUGIN_UPDATE_ADVICE} Or call without {name}."
+        )
+        assert tool not in plugin_041_server.received_commands
+
+    @pytest.mark.asyncio
+    async def test_existing_filters_and_defaults_still_work(
+        self, plugin_041_server, monkeypatch
+    ):
+        import rhinomcp
+
+        self._seed(plugin_041_server, monkeypatch)
+        selected = await rhinomcp.mcp.call_tool(
+            "select_objects", {"filters": {"name": ["box_default"], "category": ["x"]},
+                               "filters_type": "or"}
+        )
+        assert selected.content[0].text == "Selected 1 objects"
+        listed = await rhinomcp.mcp.call_tool(
+            "get_objects", {"include_hidden": False, "include_locked": True}
+        )
+        assert json.loads(listed.content[0].text)["total_matching"] == 4
