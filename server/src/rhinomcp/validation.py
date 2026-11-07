@@ -179,6 +179,8 @@ def validate_response(command_type: str, response: Dict[str, Any], raise_on_erro
         # describes (object_info.json would reject it on every call).
         "get_document_summary": "document_summary.json",
         "get_context": "get_context_result.json",
+        "set_camera": "set_camera_result.json",
+        "zoom_to": "zoom_to_result.json",
         "get_objects": "get_objects_result.json",
         "delete_object": "delete_result.json",
         "select_objects": "select_result.json",

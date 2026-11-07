@@ -35,6 +35,8 @@
             "execute_rhinoscript_python_code",
             "execute_rhinocommon_csharp_code",
             "capture_viewport",
+            "set_camera",
+            "zoom_to",
             "undo",
             "redo",
             "boolean_union",

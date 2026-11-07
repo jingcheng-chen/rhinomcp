@@ -853,7 +853,7 @@ class TestAdvancedGeometry:
         result = conn.send_command("capture_viewport", {"viewport": "perspective", "width": 100, "height": 100})
         # image_data must be valid base64 the wrapper can decode.
         base64.b64decode(result["image_data"])
-        assert result["viewport_name"] == "perspective"
+        assert result["viewport_name"] == "Perspective"
 
 
 class TestPerceptionPassthrough:
@@ -2025,3 +2025,536 @@ class TestFilterPluginCompatibility(_FilterDocument):
             "get_objects", {"include_hidden": False, "include_locked": True}
         )
         assert json.loads(listed.content[0].text)["total_matching"] == 4
+
+
+@pytest.fixture
+def capture_server():
+    """A fresh document on its own port, so capture metadata counts only what a
+    test seeds."""
+    server = MockRhinoServer(port=19980)
+    server.start()
+    time.sleep(0.1)
+
+    yield server
+
+    server.stop()
+
+
+@pytest.fixture
+def camera_server():
+    """A fresh document and fresh viewports on their own port, so camera tests
+    see only the objects and view changes they make."""
+    server = MockRhinoServer(port=19985)
+    server.start()
+    time.sleep(0.1)
+
+    yield server
+
+    server.stop()
+
+
+class TestCaptureViewportMetadata:
+    """capture_viewport answers a content list: the image, then a text block
+    with a JSON object saying what the image shows."""
+
+    METADATA_KEYS = {
+        "viewport_name", "display_mode", "projection", "width", "height",
+        "camera_location", "camera_target", "camera_up", "lens_length",
+        "scene_bounding_box", "visible_object_count", "total_object_count",
+    }
+
+    def _connect(self, monkeypatch, port=19980):
+        from rhinomcp.server import RhinoConnection
+        import rhinomcp.tools.capture_viewport as capture_mod
+
+        conn = RhinoConnection(host="127.0.0.1", port=port)
+        monkeypatch.setattr(capture_mod, "get_rhino_connection", lambda: conn)
+        return conn
+
+    async def _capture(self, **arguments):
+        import rhinomcp
+
+        return await rhinomcp.mcp.call_tool("capture_viewport", arguments)
+
+    @pytest.mark.asyncio
+    async def test_default_capture_is_png_then_metadata(self, capture_server, monkeypatch):
+        import base64
+
+        self._connect(monkeypatch)
+        capture_server._create_object({"type": "BOX", "name": "A"})
+        capture_server._create_object({"type": "SPHERE", "name": "B"})
+
+        result = await self._capture()
+
+        image, text = result.content
+        assert image.type == "image"
+        assert image.mime_type == "image/png"
+        assert base64.b64decode(image.data).startswith(b"\x89PNG\r\n\x1a\n")
+        assert text.type == "text"
+        metadata = json.loads(text.text)
+        assert set(metadata) == self.METADATA_KEYS
+        assert metadata == {
+            "viewport_name": "Perspective",
+            "display_mode": "Shaded",
+            "projection": "perspective",
+            "width": 800,
+            "height": 600,
+            "camera_location": [100.0, -100.0, 100.0],
+            "camera_target": [0.0, 0.0, 0.0],
+            "camera_up": [0.0, 0.0, 1.0],
+            "lens_length": 50.0,
+            "scene_bounding_box": {"min": [-1, -1, -1], "max": [1, 1, 1]},
+            "visible_object_count": 2,
+            "total_object_count": 2,
+        }
+
+    @pytest.mark.asyncio
+    async def test_empty_document_has_null_bounding_box(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+
+        result = await self._capture()
+
+        metadata = json.loads(result.content[1].text)
+        assert metadata["scene_bounding_box"] is None
+        assert metadata["visible_object_count"] == 0
+        assert metadata["total_object_count"] == 0
+
+    @pytest.mark.asyncio
+    async def test_jpeg_format_returns_jpeg_image(self, capture_server, monkeypatch):
+        import base64
+
+        self._connect(monkeypatch)
+
+        result = await self._capture(format="jpeg")
+
+        image = result.content[0]
+        assert image.mime_type == "image/jpeg"
+        assert base64.b64decode(image.data).startswith(b"\xff\xd8\xff")
+        assert capture_server.received_params["capture_viewport"]["format"] == "jpeg"
+
+    @pytest.mark.asyncio
+    async def test_display_mode_and_camera_reach_the_plugin(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+
+        result = await self._capture(
+            display_mode="Wireframe",
+            camera_location=[10, -20, 30],
+            camera_target=[1, 2, 3],
+            lens_length=35,
+        )
+
+        sent = capture_server.received_params["capture_viewport"]
+        assert sent["display_mode"] == "Wireframe"
+        assert sent["camera_location"] == [10, -20, 30]
+        assert sent["camera_target"] == [1, 2, 3]
+        assert sent["lens_length"] == 35
+        assert "frame_object_ids" not in sent and "frame_bbox" not in sent
+        metadata = json.loads(result.content[1].text)
+        assert metadata["display_mode"] == "Wireframe"
+        assert metadata["camera_location"] == [10, -20, 30]
+        assert metadata["camera_target"] == [1, 2, 3]
+        assert metadata["lens_length"] == 35
+
+    @pytest.mark.asyncio
+    async def test_framing_targets_reach_the_plugin(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+        box = capture_server._create_object({"type": "BOX", "name": "A"})
+
+        await self._capture(frame_object_ids=[box["id"]])
+        assert capture_server.received_params["capture_viewport"]["frame_object_ids"] == [box["id"]]
+
+        bbox = {"min": [0, 0, 0], "max": [5, 5, 5]}
+        result = await self._capture(frame_bbox=bbox)
+        assert capture_server.received_params["capture_viewport"]["frame_bbox"] == bbox
+        # Framing looks at the middle of the box.
+        assert json.loads(result.content[1].text)["camera_target"] == [2.5, 2.5, 2.5]
+
+    @pytest.mark.asyncio
+    async def test_temporary_camera_leaves_the_viewport_as_it_was(
+        self, capture_server, monkeypatch
+    ):
+        conn = self._connect(monkeypatch)
+        before = conn.send_command("get_context")["viewport"]
+
+        await self._capture(display_mode="Wireframe", camera_location=[9, 9, 9],
+                            camera_target=[1, 1, 1])
+        await self._capture(frame_bbox={"min": [0, 0, 0], "max": [2, 2, 2]})
+
+        assert conn.send_command("get_context")["viewport"] == before
+
+    async def _refusal(self, **arguments):
+        from mcp.server.mcpserver.exceptions import ToolError
+
+        with pytest.raises(ToolError) as info:
+            await self._capture(**arguments)
+        prefix = "Error executing tool capture_viewport: "
+        assert str(info.value).startswith(prefix)
+        return str(info.value)[len(prefix):]
+
+    @pytest.mark.asyncio
+    async def test_camera_plus_framing_is_refused(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+        box = capture_server._create_object({"type": "BOX", "name": "A"})
+
+        for camera in ({"camera_location": [9, 9, 9]}, {"camera_target": [0, 0, 0]}):
+            for framing in ({"frame_object_ids": [box["id"]]},
+                            {"frame_bbox": {"min": [0, 0, 0], "max": [1, 1, 1]}}):
+                text = await self._refusal(**camera, **framing)
+                assert text == (
+                    "invalid_argument: An explicit camera (camera_location, "
+                    "camera_target) cannot be combined with a framing target "
+                    "(frame_object_ids, frame_bbox)\n"
+                    "Pass camera_location and camera_target to look from a known "
+                    "point, or frame_object_ids or frame_bbox to frame geometry, "
+                    "not both."
+                )
+
+    @pytest.mark.asyncio
+    async def test_unknown_display_mode_lists_the_available_modes(
+        self, capture_server, monkeypatch
+    ):
+        self._connect(monkeypatch)
+
+        text = await self._refusal(display_mode="Cartoon")
+
+        message, guidance = text.split("\n")
+        assert message == "invalid_argument: Display mode 'Cartoon' not found"
+        assert guidance == (
+            "Use one of the available display modes: Wireframe, Shaded, Rendered, "
+            "Ghosted, X-Ray, Technical, Artistic, Pen, Arctic, Raytraced."
+        )
+
+    @pytest.mark.asyncio
+    async def test_unknown_frame_object_is_not_found(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+        missing = "00000000-0000-0000-0000-00000000dead"
+
+        text = await self._refusal(frame_object_ids=[missing])
+
+        assert text == (
+            f"not_found: Object not found: {missing}\n"
+            f"{capture_server.OBJECT_NOT_FOUND_GUIDANCE}"
+        )
+
+    @pytest.mark.asyncio
+    async def test_plugin_older_than_050_refuses_the_new_params(self, monkeypatch):
+        from rhinomcp.server import PLUGIN_UPDATE_ADVICE
+
+        old = MockRhinoServer(port=19981, plugin_version="0.4.1")
+        old.start()
+        try:
+            self._connect(monkeypatch, port=19981)
+            new_params = {
+                "display_mode": "Wireframe",
+                "camera_location": [1, 1, 1],
+                "camera_target": [0, 0, 0],
+                "lens_length": 35,
+                "frame_object_ids": ["00000000-0000-0000-0000-00000000dead"],
+                "frame_bbox": {"min": [0, 0, 0], "max": [1, 1, 1]},
+                "format": "jpeg",
+            }
+            for name, value in new_params.items():
+                text = await self._refusal(**{name: value})
+                assert text == (
+                    f"unsupported: 'capture_viewport' parameter '{name}' needs plugin "
+                    "0.5.0; the connected rhinomcp plugin (0.4.1) would silently "
+                    "ignore it. The command was not sent.\n"
+                    f"{PLUGIN_UPDATE_ADVICE} Or call without {name}."
+                )
+            assert "capture_viewport" not in old.received_commands
+
+            # The defaults are what an old plugin already does, so they still go through.
+            result = await self._capture(format="png")
+            assert result.content[0].mime_type == "image/png"
+            assert "format" in old.received_params["capture_viewport"]
+        finally:
+            old.stop()
+
+
+class TestCameraTools:
+    """set_camera and zoom_to change a viewport (named or active), answer its
+    state afterwards, and leave the document and its undo stack alone."""
+
+    PORT = 19985
+    MISSING_ID = "00000000-0000-0000-0000-00000000dead"
+
+    def _tools(self, monkeypatch):
+        from rhinomcp.server import RhinoConnection
+        import rhinomcp.tools.set_camera as set_camera_mod
+        import rhinomcp.tools.get_context as context_mod
+
+        conn = RhinoConnection(host="127.0.0.1", port=self.PORT)
+        for mod in (set_camera_mod, context_mod):
+            monkeypatch.setattr(mod, "get_rhino_connection", lambda: conn)
+        return conn
+
+    async def _refusal(self, tool, args):
+        """The tool error text after the SDK's own 'Error executing tool' prefix."""
+        import rhinomcp
+        from mcp.server.mcpserver.exceptions import ToolError
+
+        with pytest.raises(ToolError) as info:
+            await rhinomcp.mcp.call_tool(tool, args)
+        prefix = f"Error executing tool {tool}: "
+        text = str(info.value)
+        assert text.startswith(prefix)
+        return text[len(prefix):]
+
+    # set_camera
+
+    def test_set_camera_updates_the_active_viewport(self, camera_server, monkeypatch):
+        from rhinomcp.tools.set_camera import set_camera
+        from rhinomcp.tools.get_context import get_context
+
+        self._tools(monkeypatch)
+        undo_before = list(camera_server.undo_stack)
+
+        state = set_camera(ctx=None, location=[10, -20, 30], target=[1, 2, 3],
+                           up=[0, 1, 0], lens_length=35)
+
+        assert state == {
+            "viewport_name": "Perspective",
+            "projection": "perspective",
+            "camera_location": [10, -20, 30],
+            "camera_target": [1, 2, 3],
+            "camera_up": [0, 1, 0],
+            "lens_length": 35,
+        }
+        viewport = get_context(ctx=None)["viewport"]
+        assert viewport["camera_location"] == [10, -20, 30]
+        assert viewport["camera_target"] == [1, 2, 3]
+        assert camera_server.undo_stack == undo_before
+
+    def test_set_camera_on_a_named_viewport_leaves_the_active_one(
+        self, camera_server, monkeypatch
+    ):
+        from rhinomcp.tools.set_camera import set_camera
+        from rhinomcp.tools.get_context import get_context
+
+        self._tools(monkeypatch)
+        active_before = get_context(ctx=None)["viewport"]
+
+        state = set_camera(ctx=None, viewport="Top", projection="perspective",
+                           lens_length=80)
+
+        assert state["viewport_name"] == "Top"
+        assert state["projection"] == "perspective"
+        assert state["lens_length"] == 80
+        # Fields not given keep their previous values.
+        assert state["camera_target"] == [0.0, 0.0, 0.0]
+        assert state["camera_up"] == [0.0, 1.0, 0.0]
+        assert get_context(ctx=None)["viewport"] == active_before
+
+    def test_set_camera_switches_to_parallel(self, camera_server, monkeypatch):
+        from rhinomcp.tools.set_camera import set_camera
+
+        self._tools(monkeypatch)
+        assert set_camera(ctx=None, projection="parallel")["projection"] == "parallel"
+
+    @pytest.mark.asyncio
+    async def test_set_camera_with_nothing_to_change_is_refused(
+        self, camera_server, monkeypatch
+    ):
+        self._tools(monkeypatch)
+        text = await self._refusal("set_camera", {"viewport": "Top"})
+        assert text == (
+            "invalid_argument: set_camera needs at least one of location, target, "
+            "up, lens_length or projection\n"
+            "Pass the camera fields to change; to frame objects use zoom_to instead."
+        )
+
+    @pytest.mark.asyncio
+    async def test_set_camera_on_an_unknown_viewport_is_refused(
+        self, camera_server, monkeypatch
+    ):
+        self._tools(monkeypatch)
+        text = await self._refusal("set_camera", {"viewport": "Nowhere", "lens_length": 50})
+        assert text == (
+            "not_found: Viewport 'Nowhere' not found\n"
+            "Omit viewport to use the active one, or pass a viewport name such as "
+            "Perspective, Top, Front or Right."
+        )
+
+    @pytest.mark.asyncio
+    async def test_set_camera_is_annotated_as_a_view_change(self):
+        import rhinomcp
+
+        tool = next(t for t in await rhinomcp.mcp.list_tools() if t.name == "set_camera")
+        assert tool.annotations.title == "Set camera"
+        assert tool.annotations.read_only_hint is False
+        assert tool.annotations.destructive_hint is False
+        assert tool.annotations.open_world_hint is False
+
+    # zoom_to
+
+    def _zoom_tools(self, monkeypatch):
+        import rhinomcp.tools.zoom_to as zoom_to_mod
+        import rhinomcp.tools.select_objects as select_mod
+
+        conn = self._tools(monkeypatch)
+        for mod in (zoom_to_mod, select_mod):
+            monkeypatch.setattr(mod, "get_rhino_connection", lambda: conn)
+        return conn
+
+    def _box(self, server, name, lo, hi, layer=None):
+        """An object with a known bounding box, straight into the mock document."""
+        created = server._create_object({"type": "BOX", "name": name})
+        server.objects[created["id"]]["bounding_box"] = [lo, hi]
+        if layer:
+            server.objects[created["id"]]["layer"] = layer
+        return created["id"]
+
+    def _two_boxes(self, server):
+        a = self._box(server, "a", [0, 0, 0], [2, 2, 2])
+        b = self._box(server, "b", [8, 10, 4], [10, 20, 6])
+        return a, b
+
+    def test_zoom_to_all_frames_every_object(self, camera_server, monkeypatch):
+        from rhinomcp.tools.zoom_to import zoom_to
+
+        self._zoom_tools(monkeypatch)
+        self._two_boxes(camera_server)
+        undo_before = list(camera_server.undo_stack)
+
+        state = zoom_to(ctx=None, target="all")
+
+        assert state["viewport_name"] == "Perspective"
+        assert state["bounding_box"] == {"min": [0, 0, 0], "max": [10, 20, 6]}
+        assert state["object_count"] == 2
+        assert state["camera_target"] == [5.0, 10.0, 3.0]
+        assert set(state) >= {"projection", "camera_location", "camera_up", "lens_length"}
+        assert camera_server.undo_stack == undo_before
+
+    def test_zoom_to_selection_in_a_named_viewport(self, camera_server, monkeypatch):
+        from rhinomcp.tools.select_objects import select_objects
+        from rhinomcp.tools.zoom_to import zoom_to
+
+        self._zoom_tools(monkeypatch)
+        self._two_boxes(camera_server)
+        select_objects(ctx=None, filters={"name": ["b"]})
+
+        state = zoom_to(ctx=None, target="selection", viewport="Top")
+
+        assert state["viewport_name"] == "Top"
+        assert state["projection"] == "parallel"
+        assert state["bounding_box"] == {"min": [8, 10, 4], "max": [10, 20, 6]}
+        assert state["object_count"] == 1
+        assert state["camera_target"] == [9.0, 15.0, 5.0]
+
+    def test_zoom_to_object_ids(self, camera_server, monkeypatch):
+        from rhinomcp.tools.zoom_to import zoom_to
+
+        self._zoom_tools(monkeypatch)
+        a, _ = self._two_boxes(camera_server)
+        c = self._box(camera_server, "c", [-4, 0, 0], [0, 1, 1])
+
+        state = zoom_to(ctx=None, target="object_ids", object_ids=[a, c])
+
+        assert state["bounding_box"] == {"min": [-4, 0, 0], "max": [2, 2, 2]}
+        assert state["object_count"] == 2
+
+    def test_zoom_to_layer(self, camera_server, monkeypatch):
+        from rhinomcp.tools.zoom_to import zoom_to
+
+        conn = self._zoom_tools(monkeypatch)
+        conn.send_command("create_layer", {"name": "Legs"})
+        self._box(camera_server, "seat", [0, 0, 0], [2, 2, 2])
+        self._box(camera_server, "leg1", [0, 0, -10], [1, 1, 0], layer="Legs")
+        self._box(camera_server, "leg2", [5, 5, -10], [6, 6, 0], layer="Legs")
+
+        state = zoom_to(ctx=None, target="layer", layer="Legs")
+
+        assert state["bounding_box"] == {"min": [0, 0, -10], "max": [6, 6, 0]}
+        assert state["object_count"] == 2
+
+    @pytest.mark.asyncio
+    async def test_zoom_to_unknown_object_ids_is_refused(self, camera_server, monkeypatch):
+        self._zoom_tools(monkeypatch)
+        a, _ = self._two_boxes(camera_server)
+        text = await self._refusal(
+            "zoom_to", {"target": "object_ids", "object_ids": [a, self.MISSING_ID]}
+        )
+        assert text == (
+            f"not_found: Object not found: {self.MISSING_ID}\n"
+            "Call get_objects or get_selected_objects_info to find a valid object "
+            "id or name."
+        )
+
+    @pytest.mark.asyncio
+    async def test_zoom_to_unknown_layer_is_refused(self, camera_server, monkeypatch):
+        self._zoom_tools(monkeypatch)
+        text = await self._refusal("zoom_to", {"target": "layer", "layer": "NoSuchLayer"})
+        assert text == (
+            "not_found: Layer 'NoSuchLayer' not found\n"
+            "Call get_document_summary to list existing layers, or create_layer to "
+            "make it first."
+        )
+
+    @pytest.mark.asyncio
+    async def test_zoom_to_empty_selection_is_refused(self, camera_server, monkeypatch):
+        self._zoom_tools(monkeypatch)
+        self._two_boxes(camera_server)
+        text = await self._refusal("zoom_to", {"target": "selection"})
+        assert text == (
+            "invalid_argument: Nothing is selected to zoom to\n"
+            "Select objects first with select_objects, or use target 'all', "
+            "'object_ids' or 'layer'."
+        )
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("target", ["object_ids", "layer"])
+    async def test_zoom_to_without_its_companion_field_is_refused(
+        self, camera_server, monkeypatch, target
+    ):
+        self._zoom_tools(monkeypatch)
+        text = await self._refusal("zoom_to", {"target": target})
+        assert text == (
+            f"invalid_argument: target '{target}' needs {target}\n"
+            f"Pass {target}, or use target 'all' or 'selection'."
+        )
+
+    @pytest.mark.asyncio
+    async def test_zoom_to_unknown_viewport_is_refused(self, camera_server, monkeypatch):
+        self._zoom_tools(monkeypatch)
+        self._two_boxes(camera_server)
+        text = await self._refusal("zoom_to", {"target": "all", "viewport": "Nowhere"})
+        assert text == (
+            "not_found: Viewport 'Nowhere' not found\n"
+            "Omit viewport to use the active one, or pass a viewport name such as "
+            "Perspective, Top, Front or Right."
+        )
+
+    @pytest.mark.asyncio
+    async def test_zoom_to_is_annotated_as_a_view_change(self):
+        import rhinomcp
+
+        tool = next(t for t in await rhinomcp.mcp.list_tools() if t.name == "zoom_to")
+        assert tool.annotations.title == "Zoom to"
+        assert tool.annotations.read_only_hint is False
+        assert tool.annotations.destructive_hint is False
+        assert tool.annotations.open_world_hint is False
+
+    @pytest.mark.parametrize("command,params", [
+        ("set_camera", {"lens_length": 50}),
+        ("zoom_to", {"target": "all"}),
+    ])
+    def test_a_0_4_1_plugin_refuses_camera_commands_with_advice(self, command, params):
+        from rhinomcp.server import RhinoConnection
+
+        server = MockRhinoServer(port=19986, plugin_version="0.4.1")
+        server.start()
+        time.sleep(0.1)
+        try:
+            conn = RhinoConnection(host="127.0.0.1", port=19986)
+            with pytest.raises(Exception) as info:
+                conn.send_command(command, params)
+            conn.disconnect()
+        finally:
+            server.stop()
+
+        assert info.value.code == "unsupported"
+        assert str(info.value).startswith(
+            "unsupported: The connected rhinomcp plugin (0.4.1) does not support "
+            f"'{command}', which was added in plugin 0.5.0;"
+        )
+        assert command not in server.received_commands

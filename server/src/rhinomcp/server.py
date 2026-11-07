@@ -154,12 +154,23 @@ PARAMS_SINCE: Dict[str, Dict[str, tuple]] = {
         "include_hidden": ("0.5.0", False),
         "include_locked": ("0.5.0", True),
     },
+    "capture_viewport": {
+        "display_mode": ("0.5.0", None),
+        "camera_location": ("0.5.0", None),
+        "camera_target": ("0.5.0", None),
+        "lens_length": ("0.5.0", None),
+        "frame_object_ids": ("0.5.0", None),
+        "frame_bbox": ("0.5.0", None),
+        "format": ("0.5.0", "png"),
+    },
 }
 # Commands added after describe_capabilities (0.3.2) existed, so a plugin too
 # old to report its command table is still refused with the right advice.
 COMMANDS_SINCE: Dict[str, str] = {
     "create_planar_region": "0.4.0",
     "get_context": "0.5.0",
+    "set_camera": "0.5.0",
+    "zoom_to": "0.5.0",
 }
 PLUGIN_UPDATE_ADVICE = (
     "Update rhinomcp in Rhino's Package Manager (Tools > Package Manager > "

@@ -2,16 +2,19 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "capture_viewport_result.json",
   "title": "CaptureViewport Response",
-  "description": "Captured viewport image with metadata",
+  "description": "Captured viewport image with metadata describing what it shows",
   "type": "object",
   "properties": {
     "image_data": {
       "type": "string",
-      "description": "Base64-encoded PNG image data"
+      "description": "Base64-encoded image data (PNG or JPEG, see mime_type)"
     },
     "mime_type": {
       "type": "string",
-      "const": "image/png",
+      "enum": [
+        "image/png",
+        "image/jpeg"
+      ],
       "description": "MIME type of the image"
     },
     "width": {
@@ -40,8 +43,78 @@
     },
     "object_count": {
       "type": "integer",
-      "description": "Number of objects in the document"
+      "description": "Number of objects in the document (same as total_object_count; kept for older clients)"
+    },
+    "show_cplane_axes": {
+      "type": "boolean",
+      "description": "Whether construction plane axes were shown"
+    },
+    "display_mode": {
+      "type": "string",
+      "description": "Display mode the image was rendered in"
+    },
+    "projection": {
+      "enum": [
+        "perspective",
+        "parallel"
+      ]
+    },
+    "camera_location": {
+      "$ref": "../common/definitions.json#/$defs/point3d",
+      "description": "Camera location used for the capture"
+    },
+    "camera_target": {
+      "$ref": "../common/definitions.json#/$defs/point3d",
+      "description": "Camera target used for the capture"
+    },
+    "camera_up": {
+      "$ref": "../common/definitions.json#/$defs/vector3d",
+      "description": "Camera up vector used for the capture"
+    },
+    "lens_length": {
+      "type": "number",
+      "description": "35mm-equivalent lens length in millimetres used for the capture"
+    },
+    "scene_bounding_box": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "min": {
+              "$ref": "../common/definitions.json#/$defs/point3d"
+            },
+            "max": {
+              "$ref": "../common/definitions.json#/$defs/point3d"
+            }
+          },
+          "required": [
+            "min",
+            "max"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Bounds of all objects in the document, null when it has none"
+    },
+    "visible_object_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Objects visible in the captured viewport"
+    },
+    "total_object_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Objects in the document"
     }
   },
-  "required": ["image_data", "mime_type", "width", "height", "viewport_name"]
+  "required": [
+    "image_data",
+    "mime_type",
+    "width",
+    "height",
+    "viewport_name"
+  ]
 }
