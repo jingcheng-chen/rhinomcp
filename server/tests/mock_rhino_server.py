@@ -438,11 +438,12 @@ class MockRhinoServer:
         )
 
     def _viewport_state(self, name: str) -> Dict[str, Any]:
-        """The reply both camera commands share, as CameraState in SetCamera.cs."""
+        """The viewport state the plugin's shared ViewportState helper reports."""
         view = self.viewports[name]
         return {
             "viewport_name": name,
             "projection": view["projection"],
+            "display_mode": view["display_mode"],
             "camera_location": list(view["camera_location"]),
             "camera_target": list(view["camera_target"]),
             "camera_up": list(view["camera_up"]),
@@ -557,8 +558,6 @@ class MockRhinoServer:
 
         selected = [i for i in self.selected_ids if i in self.objects]
         bbox = self._scene_bounding_box()
-        active = self.viewports[self.active_viewport]
-
         return {
             "document_name": "mock.3dm",
             "document_path": "/mock/mock.3dm",
@@ -571,11 +570,7 @@ class MockRhinoServer:
             "objects_by_type": dict(top_types),
             "selection_count": len(selected),
             "selected_ids": selected[:20],
-            "viewport": {
-                "name": self.active_viewport,
-                **{key: active[key] for key in (
-                    "projection", "display_mode", "camera_location", "camera_target")},
-            },
+            "viewport": {"name": self.active_viewport, **self._viewport_state(self.active_viewport)},
             "scene_bounding_box": bbox,
             "grasshopper_definition_count": 0,
         }

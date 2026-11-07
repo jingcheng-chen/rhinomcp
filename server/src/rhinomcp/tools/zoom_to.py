@@ -35,7 +35,7 @@ def zoom_to(
     - layer: layer name or full path, when target is "layer"
 
     Returns the viewport's state afterwards (viewport_name, projection,
-    camera_location, camera_target, camera_up, lens_length) plus the
+    display_mode, camera_location, camera_target, camera_up, lens_length) plus the
     bounding_box {min, max} it framed and the object_count inside it.
     """
     fields = {

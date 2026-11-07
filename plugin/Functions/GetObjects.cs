@@ -72,7 +72,7 @@ public partial class RhinoMCPFunctions
 
         foreach (var obj in candidates)
         {
-            if (!includeLocked && (obj.IsLocked || doc.Layers[obj.Attributes.LayerIndex].IsLocked))
+            if (!includeLocked && IsObjectOrLayerLocked(doc, obj))
                 continue;
             if (selectedOnly && obj.IsSelected(false) == 0)
                 continue;

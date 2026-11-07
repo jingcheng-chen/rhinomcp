@@ -10,7 +10,6 @@ using Rhino;
 using Rhino.DocObjects;
 using Rhino.Display;
 using Rhino.Geometry;
-using rhinomcp.Serializers;
 
 namespace RhinoMCPPlugin.Functions;
 
@@ -142,9 +141,8 @@ public partial class RhinoMCPFunctions
                 sceneBbox.Union(obj.Geometry.GetBoundingBox(true));
             int visibleCount = VisibleObjects(doc, viewport)
                 .Count(obj => viewport.IsVisible(obj.Geometry.GetBoundingBox(true)));
-            var up = viewport.CameraUp;
 
-            return new JObject
+            var result = new JObject
             {
                 ["image_data"] = base64Data,
                 ["mime_type"] = request.Jpeg ? "image/jpeg" : "image/png",
@@ -156,22 +154,17 @@ public partial class RhinoMCPFunctions
                 ["show_axes"] = showAxes,
                 ["show_cplane_axes"] = showCplaneAxes,
                 ["object_count"] = activeCount,
-                ["display_mode"] = viewport.DisplayMode?.EnglishName ?? "",
-                ["projection"] = viewport.IsParallelProjection ? "parallel" : "perspective",
-                ["camera_location"] = Serializer.SerializePoint(viewport.CameraLocation),
-                ["camera_target"] = Serializer.SerializePoint(viewport.CameraTarget),
-                ["camera_up"] = new JArray { Math.Round(up.X, 4), Math.Round(up.Y, 4), Math.Round(up.Z, 4) },
-                ["lens_length"] = Math.Round(viewport.Camera35mmLensLength, 2),
-                ["scene_bounding_box"] = sceneBbox.IsValid
-                    ? new JObject
-                    {
-                        ["min"] = Serializer.SerializePoint(sceneBbox.Min),
-                        ["max"] = Serializer.SerializePoint(sceneBbox.Max),
-                    }
-                    : null,
+                ["scene_bounding_box"] = SerializeMinMax(sceneBbox),
                 ["visible_object_count"] = visibleCount,
                 ["total_object_count"] = activeCount
             };
+            foreach (var field in ViewportState(viewport).Properties())
+            {
+                // viewport_name keeps the name captured before any reprojection.
+                if (field.Name != "viewport_name")
+                    result[field.Name] = field.Value;
+            }
+            return result;
         }
         finally
         {

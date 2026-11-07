@@ -38,7 +38,7 @@ def set_camera(
     - projection: "perspective" or "parallel"
 
     Returns the viewport's state afterwards: viewport_name, projection,
-    camera_location, camera_target, camera_up, lens_length.
+    display_mode, camera_location, camera_target, camera_up, lens_length.
     To frame objects without computing a camera, use zoom_to.
     """
     fields = {

@@ -88,11 +88,8 @@ public partial class RhinoMCPFunctions
         }
 
         view.Redraw();
-        return CameraState(viewport);
+        return ViewportState(viewport);
     }
-
-    private static bool IsGiven(JObject parameters, string name) =>
-        parameters[name] != null && parameters[name].Type != JTokenType.Null;
 
     // The named viewport (case-insensitive) or the active one. Never reprojects
     // a view to stand in for a missing name, unlike capture's GetTargetView.
@@ -111,20 +108,5 @@ public partial class RhinoMCPFunctions
             McpException.NotFound,
             $"Viewport '{name}' not found",
             "Omit viewport to use the active one, or pass a viewport name such as Perspective, Top, Front or Right.");
-    }
-
-    // The reply both camera commands share. Full precision: SerializePoint
-    // rounds to two decimals, which would bend a unit up vector.
-    private static JObject CameraState(RhinoViewport viewport)
-    {
-        return new JObject
-        {
-            ["viewport_name"] = viewport.Name,
-            ["projection"] = viewport.IsParallelProjection ? "parallel" : "perspective",
-            ["camera_location"] = new JArray(viewport.CameraLocation.X, viewport.CameraLocation.Y, viewport.CameraLocation.Z),
-            ["camera_target"] = new JArray(viewport.CameraTarget.X, viewport.CameraTarget.Y, viewport.CameraTarget.Z),
-            ["camera_up"] = new JArray(viewport.CameraUp.X, viewport.CameraUp.Y, viewport.CameraUp.Z),
-            ["lens_length"] = viewport.Camera35mmLensLength,
-        };
     }
 }

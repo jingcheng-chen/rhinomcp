@@ -1612,10 +1612,13 @@ class TestGetContext:
         assert set(context["selected_ids"]) <= selected_ids
         assert context["viewport"] == {
             "name": "Perspective",
+            "viewport_name": "Perspective",
             "projection": "perspective",
             "display_mode": "Shaded",
             "camera_location": [100.0, -100.0, 100.0],
             "camera_target": [0.0, 0.0, 0.0],
+            "camera_up": [0.0, 0.0, 1.0],
+            "lens_length": 50.0,
         }
         assert context["scene_bounding_box"] == {"min": [-1, -1, -1], "max": [1, 1, 1]}
         assert context["grasshopper_definition_count"] == 0
@@ -2336,6 +2339,7 @@ class TestCameraTools:
         assert state == {
             "viewport_name": "Perspective",
             "projection": "perspective",
+            "display_mode": "Shaded",
             "camera_location": [10, -20, 30],
             "camera_target": [1, 2, 3],
             "camera_up": [0, 1, 0],

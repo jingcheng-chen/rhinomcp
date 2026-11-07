@@ -7,6 +7,7 @@
   "properties": {
     "viewport_name": { "type": "string" },
     "projection": { "enum": ["perspective", "parallel"] },
+    "display_mode": { "type": "string" },
     "camera_location": { "$ref": "../common/definitions.json#/$defs/point3d" },
     "camera_target": { "$ref": "../common/definitions.json#/$defs/point3d" },
     "camera_up": { "$ref": "../common/definitions.json#/$defs/vector3d" },
