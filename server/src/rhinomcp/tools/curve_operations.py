@@ -8,11 +8,20 @@ These tools provide interfaces for:
 """
 
 from mcp.server.mcpserver import Context
+from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 from typing import List, Optional, Dict, Any
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Project curve",
+    annotations=ToolAnnotations(
+        title="Project curve",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def project_curve(
     ctx: Context,
     curve_id: str,
@@ -58,7 +67,15 @@ def project_curve(
         raise
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Intersect curves",
+    annotations=ToolAnnotations(
+        title="Intersect curves",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def intersect_curves(
     ctx: Context,
     curve_id_a: str,
@@ -102,7 +119,15 @@ def intersect_curves(
         raise
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Split curve",
+    annotations=ToolAnnotations(
+        title="Split curve",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def split_curve(
     ctx: Context,
     curve_id: str,

@@ -10,11 +10,20 @@ These tools provide a simple, hallucination-free interface for:
 """
 
 from mcp.server.mcpserver import Context
+from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 from typing import List, Optional, Dict, Any
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Loft curves",
+    annotations=ToolAnnotations(
+        title="Loft curves",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def loft(
     ctx: Context,
     curve_ids: List[str],
@@ -65,7 +74,15 @@ def loft(
         raise
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Extrude curve",
+    annotations=ToolAnnotations(
+        title="Extrude curve",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def extrude_curve(
     ctx: Context,
     curve_id: str,
@@ -114,7 +131,15 @@ def extrude_curve(
         raise
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Sweep along rail",
+    annotations=ToolAnnotations(
+        title="Sweep along rail",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def sweep1(
     ctx: Context,
     rail_id: str,
@@ -169,7 +194,15 @@ def sweep1(
         raise
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Offset curve",
+    annotations=ToolAnnotations(
+        title="Offset curve",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def offset_curve(
     ctx: Context,
     curve_id: str,
@@ -219,7 +252,15 @@ def offset_curve(
         raise
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Pipe curve",
+    annotations=ToolAnnotations(
+        title="Pipe curve",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def pipe(
     ctx: Context,
     curve_id: str,

@@ -5,7 +5,15 @@ from typing import Optional
 from rhinomcp import get_rhino_connection, mcp, logger
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Get objects",
+    annotations=ToolAnnotations(
+        title="Get objects",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def get_objects(
     ctx: Context,
     offset: int = 0,

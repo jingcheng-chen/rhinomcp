@@ -1,7 +1,16 @@
 from mcp.server.mcpserver import Context
+from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 
-@mcp.tool()
+@mcp.tool(
+    title="Get or set current layer",
+    annotations=ToolAnnotations(
+        title="Get or set current layer",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def get_or_set_current_layer(
     ctx: Context,
     guid: str = None,

@@ -4,7 +4,15 @@ from rhinomcp.server import get_rhino_connection, mcp
 from typing import Any, Dict, List, Optional
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Section profile",
+    annotations=ToolAnnotations(
+        title="Section profile",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def section_profile(
     ctx: Context,
     id: Optional[str] = None,

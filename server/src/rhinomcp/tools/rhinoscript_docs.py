@@ -81,7 +81,15 @@ def _get_function_details(function_name: str) -> Optional[Dict[str, Any]]:
     return None
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Search RhinoScript functions",
+    annotations=ToolAnnotations(
+        title="Search RhinoScript functions",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def search_rhinoscript_functions(ctx: Context, query: str, limit: int = 10) -> List[Dict[str, Any]]:
     """
     Search RhinoScript functions by keyword or description.
@@ -116,7 +124,15 @@ def search_rhinoscript_functions(ctx: Context, query: str, limit: int = 10) -> L
         raise
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Get RhinoScript docs",
+    annotations=ToolAnnotations(
+        title="Get RhinoScript docs",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def get_rhinoscript_docs(
     ctx: Context,
     topic: str,
@@ -184,7 +200,15 @@ def get_rhinoscript_docs(
         raise
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="List RhinoScript modules",
+    annotations=ToolAnnotations(
+        title="List RhinoScript modules",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def list_rhinoscript_modules(ctx: Context) -> Dict[str, Any]:
     """
     List all available RhinoScript modules and their function counts.
@@ -223,7 +247,15 @@ def list_rhinoscript_modules(ctx: Context) -> Dict[str, Any]:
         raise
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Get RhinoScript module functions",
+    annotations=ToolAnnotations(
+        title="Get RhinoScript module functions",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def get_module_functions(ctx: Context, module_name: str) -> Dict[str, Any]:
     """
     Get all functions in a specific RhinoScript module with their signatures.

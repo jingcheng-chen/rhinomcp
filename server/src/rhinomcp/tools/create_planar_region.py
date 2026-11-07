@@ -1,11 +1,20 @@
 from typing import Any, Dict, List, Optional
+from mcp.types import ToolAnnotations
 
 from mcp.server.mcpserver import Context
 
 from rhinomcp.server import get_rhino_connection, mcp
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Create planar region",
+    annotations=ToolAnnotations(
+        title="Create planar region",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def create_planar_region(
     ctx: Context,
     outer_curve_id: str,

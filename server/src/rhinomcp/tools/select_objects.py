@@ -1,9 +1,18 @@
 from mcp.server.mcpserver import Context
+from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 from typing import Any, List, Dict, Optional
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Select objects",
+    annotations=ToolAnnotations(
+        title="Select objects",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def select_objects(
     ctx: Context,
     filters: Optional[Dict[str, List[Any]]] = None,

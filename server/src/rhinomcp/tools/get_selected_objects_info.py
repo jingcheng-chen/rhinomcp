@@ -3,7 +3,15 @@ from mcp.types import ToolAnnotations
 import json
 from rhinomcp import get_rhino_connection, mcp, logger
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Get selected objects",
+    annotations=ToolAnnotations(
+        title="Get selected objects",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def get_selected_objects_info(ctx: Context, include_attributes: bool = False) -> str:
     """Get detailed information about the currently selected objects in Rhino
     

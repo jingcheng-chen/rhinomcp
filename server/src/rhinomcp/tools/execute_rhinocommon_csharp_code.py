@@ -10,7 +10,15 @@ def _enabled() -> bool:
     return os.getenv("RHINO_MCP_ENABLE_CSHARP", "1").lower() not in ("0", "false", "no")
 
 
-@mcp.tool(annotations=ToolAnnotations(destructive_hint=True, open_world_hint=True))
+@mcp.tool(
+    title="Run RhinoCommon C# code",
+    annotations=ToolAnnotations(
+        title="Run RhinoCommon C# code",
+        read_only_hint=False,
+        destructive_hint=True,
+        open_world_hint=False,
+    ),
+)
 def execute_rhinocommon_csharp_code(
     ctx: Context,
     code: str,

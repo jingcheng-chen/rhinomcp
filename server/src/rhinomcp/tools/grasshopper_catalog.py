@@ -9,7 +9,15 @@ from rhinomcp.server import mcp
 from rhinomcp.tools._grasshopper_common import send_grasshopper_command
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Search Grasshopper components",
+    annotations=ToolAnnotations(
+        title="Search Grasshopper components",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_search_components(
     ctx: Context,
     query: Optional[str] = None,
@@ -25,7 +33,15 @@ def gh_search_components(
     return send_grasshopper_command("gh_search_components", params)
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Batch search Grasshopper components",
+    annotations=ToolAnnotations(
+        title="Batch search Grasshopper components",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_batch_search_components(
     ctx: Context,
     queries: List[str],
@@ -43,13 +59,29 @@ def gh_batch_search_components(
     )
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="List Grasshopper categories",
+    annotations=ToolAnnotations(
+        title="List Grasshopper categories",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_list_component_categories(ctx: Context) -> Dict[str, Any]:
     """List installed Grasshopper component categories and subcategories."""
     return send_grasshopper_command("gh_list_component_categories", {})
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Get available Grasshopper components",
+    annotations=ToolAnnotations(
+        title="Get available Grasshopper components",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_get_available_components(
     ctx: Context,
     category: Optional[str] = None,
@@ -66,7 +98,15 @@ def gh_get_available_components(
     return send_grasshopper_command("gh_get_available_components", params)
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Get Grasshopper component type",
+    annotations=ToolAnnotations(
+        title="Get Grasshopper component type",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_get_component_type_info(
     ctx: Context,
     name: Optional[str] = None,
@@ -81,7 +121,15 @@ def gh_get_component_type_info(
     return send_grasshopper_command("gh_get_component_type_info", params)
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Batch get Grasshopper component types",
+    annotations=ToolAnnotations(
+        title="Batch get Grasshopper component types",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_batch_get_component_type_info(
     ctx: Context,
     components: List[Dict[str, str]],
