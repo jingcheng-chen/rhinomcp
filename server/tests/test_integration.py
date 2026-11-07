@@ -1456,7 +1456,8 @@ class TestCodedErrors:
             conn.send_command("create_planar_region", {"boundary_ids": [self.MISSING_ID]})
         first, guidance = str(info.value).split("\n")
         assert first.startswith(
-            "unsupported: The connected rhinomcp plugin (0.0.0-mock) does not "
+            f"unsupported: The connected rhinomcp plugin ({mock_server.plugin_version}) "
+            "does not "
             "support 'create_planar_region', which was added in plugin 0.4.0;"
         )
         assert guidance == PLUGIN_UPDATE_ADVICE
@@ -1464,8 +1465,13 @@ class TestCodedErrors:
     def test_parameter_the_plugin_predates_is_refused_as_unsupported(
         self, mock_server, monkeypatch
     ):
+        import rhinomcp.server as srv
         from rhinomcp.server import PLUGIN_UPDATE_ADVICE
 
+        # A parameter newer than any plugin, so the mock predates it.
+        monkeypatch.setitem(
+            srv.PARAMS_SINCE, "sweep1", {"cap_planar_ends": ("99.0.0", False)}
+        )
         conn = self._conn(monkeypatch)
         with pytest.raises(Exception) as info:
             conn.send_command(
@@ -1475,8 +1481,9 @@ class TestCodedErrors:
             )
         assert info.value.code == "unsupported"
         assert str(info.value) == (
-            "unsupported: 'sweep1' parameter 'cap_planar_ends' needs plugin 0.4.0; "
-            "the connected rhinomcp plugin (0.0.0-mock) would silently ignore it. "
+            "unsupported: 'sweep1' parameter 'cap_planar_ends' needs plugin 99.0.0; "
+            f"the connected rhinomcp plugin ({mock_server.plugin_version}) would "
+            "silently ignore it. "
             "The command was not sent.\n"
             f"{PLUGIN_UPDATE_ADVICE} Or call without cap_planar_ends."
         )
@@ -1485,12 +1492,12 @@ class TestCodedErrors:
     def test_socket_timeout_is_coded(self, monkeypatch):
         import rhinomcp.server as srv
 
-        slow = MockRhinoServer(port=19996)
+        slow = MockRhinoServer(port=19993)
         slow.response_delay = 0.5
         slow.start()
         try:
             monkeypatch.setattr(srv, "RHINO_TIMEOUT", 0.1)
-            conn = srv.RhinoConnection(host="127.0.0.1", port=19996)
+            conn = srv.RhinoConnection(host="127.0.0.1", port=19993)
             with pytest.raises(Exception) as info:
                 conn.send_command("get_document_summary")
             assert info.value.code == "timeout"
@@ -1521,3 +1528,136 @@ class TestCodedErrors:
             "Error executing tool select_objects: "
             "Invalid filters_type 'xor': expected 'and' or 'or'."
         )
+
+
+@pytest.fixture
+def context_server():
+    """A fresh document on its own port, so get_context sees only what a test
+    seeds, not what earlier tests left in the module-wide mock."""
+    server = MockRhinoServer(port=19996)
+    server.start()
+    time.sleep(0.1)
+
+    yield server
+
+    server.stop()
+
+
+class TestGetContext:
+    """get_context answers a bounded grounding snapshot: every field, the type
+    breakdown capped at eight and the selected ids capped at twenty."""
+
+    # Nine types with distinct counts, so the ninth (ARC) falls off the top 8.
+    SEED = [("BOX", 9), ("SPHERE", 8), ("CYLINDER", 7), ("CONE", 6), ("LINE", 5),
+            ("CIRCLE", 4), ("CURVE", 3), ("POINT", 2), ("ARC", 1)]
+    SELECTED_TYPES = ("BOX", "SPHERE", "CYLINDER")  # 9 + 8 + 7 = 24 selected
+
+    def _get_context(self, monkeypatch):
+        from rhinomcp.server import RhinoConnection
+        import rhinomcp.tools.get_context as context_mod
+
+        conn = RhinoConnection(host="127.0.0.1", port=19996)
+        monkeypatch.setattr(context_mod, "get_rhino_connection", lambda: conn)
+        return conn, context_mod.get_context
+
+    def _seed(self, server, conn):
+        """Two layers with Seat current, 45 objects of nine types, 24 selected.
+        Returns the ids of the selected objects. Objects go straight into the
+        mock document (the wire would demand real per-type geometry params);
+        layer and selection changes go over the wire."""
+        conn.send_command("create_layer", {"name": "Seat"})
+        conn.send_command("get_or_set_current_layer", {"name": "Seat"})
+        ids = {}
+        for obj_type, count in self.SEED:
+            for i in range(count):
+                created = server._create_object({"type": obj_type, "name": f"{obj_type}_{i}"})
+                ids[created["name"]] = created["id"]
+        names = [n for n in ids if n.split("_")[0] in self.SELECTED_TYPES]
+        selected = conn.send_command("select_objects", {"filters": {"name": names}})
+        assert selected["count"] == 24
+        return {ids[n] for n in names}
+
+    def test_seeded_document(self, context_server, monkeypatch):
+        conn, get_context = self._get_context(monkeypatch)
+        selected_ids = self._seed(context_server, conn)
+
+        context = get_context(ctx=None)
+
+        assert context["document_name"] == "mock.3dm"
+        assert context["document_path"] == "/mock/mock.3dm"
+        assert context["units"] == "Millimeters"
+        assert context["absolute_tolerance"] == 0.001
+        assert context["angle_tolerance"] == 1.0
+        assert context["current_layer"] == "Seat"
+        assert context["layer_count"] == 2
+        assert context["object_count"] == 45
+        assert list(context["objects_by_type"].items()) == [
+            ("BOX", 9), ("SPHERE", 8), ("CYLINDER", 7), ("CONE", 6),
+            ("LINE", 5), ("CIRCLE", 4), ("CURVE", 3), ("POINT", 2),
+        ]
+        assert context["selection_count"] == 24
+        assert len(context["selected_ids"]) == 20
+        assert len(set(context["selected_ids"])) == 20
+        assert set(context["selected_ids"]) <= selected_ids
+        assert context["viewport"] == {
+            "name": "Perspective",
+            "projection": "perspective",
+            "display_mode": "Shaded",
+            "camera_location": [100.0, -100.0, 100.0],
+            "camera_target": [0.0, 0.0, 0.0],
+        }
+        assert context["scene_bounding_box"] == {"min": [-1, -1, -1], "max": [1, 1, 1]}
+        assert context["grasshopper_definition_count"] == 0
+        assert "layer_hierarchy" not in context
+        assert "objects_by_layer" not in context
+
+    @pytest.mark.asyncio
+    async def test_typical_model_stays_under_sixty_lines(self, context_server, monkeypatch):
+        """Measured on the text the client receives, not on the dict."""
+        import rhinomcp
+
+        conn, _ = self._get_context(monkeypatch)
+        for obj_type, count in [("BREP", 30), ("CURVE", 12), ("EXTRUSION", 6), ("MESH", 2)]:
+            for i in range(count):
+                context_server._create_object({"type": obj_type, "name": f"{obj_type}_{i}"})
+        conn.send_command("select_objects", {"filters": {"name": ["BREP_0", "BREP_1", "MESH_0"]}})
+
+        result = await rhinomcp.mcp.call_tool("get_context", {})
+
+        text = result.content[0].text
+        assert json.loads(text)["selection_count"] == 3
+        assert len(text.splitlines()) < 60
+
+    def test_empty_document(self, context_server, monkeypatch):
+        _, get_context = self._get_context(monkeypatch)
+
+        context = get_context(ctx=None)
+
+        assert context["object_count"] == 0
+        assert context["objects_by_type"] == {}
+        assert context["selection_count"] == 0
+        assert context["selected_ids"] == []
+        assert context["scene_bounding_box"] is None
+        assert context["current_layer"] == "Default"
+        assert context["layer_count"] == 1
+
+    def test_reading_context_changes_nothing(self, context_server, monkeypatch):
+        _, get_context = self._get_context(monkeypatch)
+        context_server._create_object({"type": "BOX", "name": "Only"})
+        before = json.dumps(context_server.objects, sort_keys=True)
+        undo_before = list(context_server.undo_stack)
+
+        get_context(ctx=None)
+
+        assert json.dumps(context_server.objects, sort_keys=True) == before
+        assert context_server.undo_stack == undo_before
+
+    @pytest.mark.asyncio
+    async def test_tool_is_annotated_read_only(self):
+        import rhinomcp
+
+        tool = next(t for t in await rhinomcp.mcp.list_tools() if t.name == "get_context")
+        assert tool.annotations.title == "Get context"
+        assert tool.annotations.read_only_hint is True
+        assert tool.annotations.destructive_hint is False
+        assert tool.annotations.open_world_hint is False

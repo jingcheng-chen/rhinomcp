@@ -1080,7 +1080,7 @@ def test_protocol_envelope():
         "delete_object", "get_object_info", "get_selected_objects_info",
         "get_object_attributes", "update_object_attributes",
         "analyze_objects", "measure_objects", "section_profile",
-        "get_document_summary", "get_objects", "select_objects",
+        "get_document_summary", "get_context", "get_objects", "select_objects",
         "create_layer", "delete_layer", "get_or_set_current_layer",
         "execute_rhinoscript_python_code", "execute_rhinocommon_csharp_code",
         "capture_viewport", "undo", "redo",
@@ -1189,6 +1189,69 @@ def test_sweep_planar_cap_schema():
         assert list(validator.iter_errors({**payload, "cap_planar_ends": invalid}))
 
 
+def test_get_context_schema():
+    """get_context takes no params and answers a bounded snapshot."""
+    print("\n=== Testing get_context ===")
+    all_passed = True
+
+    command = Draft202012Validator(load_schema_with_refs("commands/get_context.json"))
+    if list(command.iter_errors({})):
+        print("  FAIL: get_context rejected empty params")
+        all_passed = False
+    if not list(command.iter_errors({"include_layers": True})):
+        print("  FAIL: get_context accepted an unknown param")
+        all_passed = False
+
+    context = {
+        "document_name": "chair.3dm",
+        "document_path": "/Users/me/chair.3dm",
+        "units": "Millimeters",
+        "absolute_tolerance": 0.001,
+        "angle_tolerance": 1.0,
+        "current_layer": "Legs",
+        "layer_count": 4,
+        "object_count": 12,
+        "objects_by_type": {"BREP": 8, "CURVE": 4},
+        "selection_count": 1,
+        "selected_ids": ["12345678-1234-1234-1234-123456789012"],
+        "viewport": {
+            "name": "Perspective",
+            "projection": "perspective",
+            "display_mode": "Shaded",
+            "camera_location": [100.0, -100.0, 80.0],
+            "camera_target": [0.0, 0.0, 0.0],
+        },
+        "scene_bounding_box": {"min": [0, 0, 0], "max": [10, 20, 30]},
+        "grasshopper_definition_count": 0,
+    }
+    untitled_empty = {**context, "document_name": None, "document_path": None,
+                      "object_count": 0, "objects_by_type": {}, "selection_count": 0,
+                      "selected_ids": [], "scene_bounding_box": None,
+                      "viewport": {**context["viewport"], "projection": "parallel"}}
+    for good in (context, untitled_empty):
+        if not validate("responses/get_context_result.json", good):
+            all_passed = False
+
+    result = Draft202012Validator(load_schema_with_refs("responses/get_context_result.json"))
+    many_types = {f"T{i}": 1 for i in range(9)}
+    bad_contexts = [
+        ({k: v for k, v in context.items() if k != "viewport"}, "missing viewport"),
+        ({**context, "objects_by_type": many_types}, "more than 8 types"),
+        ({**context, "selected_ids": ["12345678-1234-1234-1234-123456789012"] * 21}, "more than 20 ids"),
+        ({**context, "viewport": {**context["viewport"], "projection": "fisheye"}}, "unknown projection"),
+        ({**context, "scene_bounding_box": {"min": [0, 0, 0]}}, "bbox missing max"),
+        ({**context, "layer_hierarchy": []}, "hierarchy is not part of the context"),
+    ]
+    for bad, description in bad_contexts:
+        if list(result.iter_errors(bad)):
+            print(f"  CORRECTLY REJECTED: {description}")
+        else:
+            print(f"  INCORRECTLY ACCEPTED: {description}")
+            all_passed = False
+
+    return all_passed
+
+
 def main():
     """Run all tests."""
     print("RhinoMCP Schema Validation Tests")
@@ -1208,6 +1271,7 @@ def main():
     results.append(("contract sync (3 tiers)", test_contract_synchronization_across_tiers()))
     results.append(("protocol envelope", test_protocol_envelope()))
     results.append(("error response", test_error_response()))
+    results.append(("get_context", test_get_context_schema()))
     test_sweep_planar_cap_schema()
     results.append(("sweep planar caps", True))
 

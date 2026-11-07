@@ -277,6 +277,7 @@ pattern with cylinders that have different heights."_
 | `get_objects` / `get_object_info` / `get_selected_objects_info`                                               | Query objects                                          |
 | `get_object_attributes` / `update_object_attributes`                                                          | Read and write object attributes                       |
 | `create_layer` / `delete_layer` / `get_or_set_current_layer`                                                  | Layer management                                       |
+| `get_context`                                                                                                 | Bounded snapshot: units, layer, selection, camera      |
 | `get_document_summary`                                                                                        | Overview of the current document                       |
 | `capture_viewport`                                                                                            | Screenshot the viewport for visual feedback            |
 | `run_command`                                                                                                 | Run any native Rhino command                           |

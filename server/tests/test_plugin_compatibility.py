@@ -140,6 +140,29 @@ class TestUnsupportedCommands:
         assert sent_types(mock_sock) == ["describe_capabilities", "boolean_union"]
         assert conn.sock is not None
 
+    def test_get_context_is_refused_by_a_0_4_1_plugin_with_advice(self):
+        import time
+
+        from rhinomcp.server import RhinoConnection
+        from tests.mock_rhino_server import MockRhinoServer
+
+        server = MockRhinoServer(port=19995, plugin_version="0.4.1")
+        server.start()
+        time.sleep(0.1)
+        try:
+            conn = RhinoConnection(host="127.0.0.1", port=19995)
+            with pytest.raises(
+                Exception,
+                match=r"\(0\.4\.1\) does not support 'get_context', which was "
+                r"added in plugin 0\.5\.0.*\n.*Package Manager",
+            ):
+                conn.send_command("get_context")
+            conn.disconnect()
+        finally:
+            server.stop()
+
+        assert "get_context" not in server.received_commands
+
     @patch("socket.socket")
     def test_capabilities_are_read_once_per_connection(self, mock_socket_class):
         conn, mock_sock = connected(
