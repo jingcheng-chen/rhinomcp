@@ -9,6 +9,11 @@
       "type": "integer",
       "description": "Number of objects selected",
       "minimum": 0
+    },
+    "matched": {
+      "type": "integer",
+      "description": "Number of objects the filters matched (select_objects, plugin 0.5.0+). Larger than count when matched objects are hidden or locked, which Rhino cannot select.",
+      "minimum": 0
     }
   },
   "required": ["count"]

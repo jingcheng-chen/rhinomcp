@@ -481,6 +481,8 @@ def test_responses():
     # Select result
     print("  select_result:")
     select_result = {"count": 5}
+    if not validate("responses/select_result.json", {"count": 2, "matched": 3}):
+        all_passed = False
     if not validate("responses/select_result.json", select_result):
         all_passed = False
 

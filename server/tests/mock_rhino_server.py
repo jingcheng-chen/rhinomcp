@@ -890,41 +890,75 @@ class MockRhinoServer:
         if filters_type not in ("and", "or"):
             raise Exception(f"Invalid filters_type '{filters_type}': expected 'and' or 'or'.")
 
-        if not filters:
-            self.selected_ids = list(self.objects)
-            return {"count": len(self.objects)}
-
         name_values = filters.get("name")
         color = filters.get("color")
-        custom = {k: v for k, v in filters.items() if k not in ("name", "color")}
+        ids = filters.get("ids")
+        layer = filters.get("layer")
+        types = filters.get("type")
+        if isinstance(types, str):
+            types = [types]
+        hidden = filters.get("hidden")
+        locked = filters.get("locked")
+        custom = {
+            k: v for k, v in filters.items()
+            if k not in ("name", "color", "ids", "layer", "type", "hidden", "locked")
+        }
 
         def color_matches(o):
             c = o.get("color", {})
             return [c.get("r"), c.get("g"), c.get("b")] == color
 
+        # One predicate per present built-in key, like the plugin.
+        checks = []
+        if name_values is not None:
+            checks.append(lambda o: o.get("name") in name_values)
+        if color is not None:
+            checks.append(color_matches)
+        if ids is not None:
+            wanted = {i.lower() for i in ids}
+            checks.append(lambda o: o["id"].lower() in wanted)
+        if layer is not None:
+            checks.append(lambda o: o.get("layer", "").lower() == layer.lower())
+        if types is not None:
+            wanted_types = {t.upper() for t in types}
+            checks.append(lambda o: o.get("type", "").upper() in wanted_types)
+        if hidden is not None:
+            checks.append(lambda o: (not o.get("visible", True)) == hidden)
+        if locked is not None:
+            checks.append(lambda o: bool(o.get("locked", False)) == locked)
+
+        # Candidates, like the plugin's ObjectEnumeratorSettings: normal objects,
+        # plus hidden or locked ones only when the filter asks for them.
+        def candidate(o):
+            if not o.get("visible", True):
+                return hidden is True
+            if o.get("locked", False):
+                return locked is True
+            return True
+
         matched = []
         for obj in self.objects.values():
-            if filters_type == "and":
+            if not candidate(obj):
+                continue
+            if not filters:
                 ok = True
-                if name_values is not None and obj.get("name") not in name_values:
-                    ok = False
-                if ok and color is not None and not color_matches(obj):
-                    ok = False
+            elif filters_type == "and":
+                ok = all(check(obj) for check in checks)
                 # Custom attribute filtering is not modeled in the mock document.
                 # Treat unknown attrs as not-matching to keep AND strict.
                 if ok and custom:
                     ok = False
             else:
-                ok = False
-                if name_values is not None and obj.get("name") in name_values:
-                    ok = True
-                if not ok and color is not None and color_matches(obj):
-                    ok = True
+                ok = any(check(obj) for check in checks)
                 # custom attrs not modeled — OR ignores them silently
             if ok:
-                matched.append(obj["id"])
-        self.selected_ids = matched
-        return {"count": len(matched)}
+                matched.append(obj)
+        # Rhino cannot select a hidden or locked object; it stays matched only.
+        self.selected_ids = [
+            o["id"] for o in matched
+            if o.get("visible", True) and not o.get("locked", False)
+        ]
+        return {"count": len(self.selected_ids), "matched": len(matched)}
 
     def _create_layer(self, params: Dict) -> Dict:
         """Create a layer."""

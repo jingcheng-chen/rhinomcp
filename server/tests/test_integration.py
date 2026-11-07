@@ -1661,3 +1661,169 @@ class TestGetContext:
         assert tool.annotations.read_only_hint is True
         assert tool.annotations.destructive_hint is False
         assert tool.annotations.open_world_hint is False
+
+
+@pytest.fixture
+def filter_server():
+    """A fresh seeded document on its own port, so filter tests see exactly
+    the five objects they seed and nothing earlier tests left behind."""
+    server = MockRhinoServer(port=19975)
+    server.start()
+    time.sleep(0.1)
+
+    yield server
+
+    server.stop()
+
+
+class _FilterDocument:
+    """Five objects over two layers, one hidden and one locked:
+
+    ===========  ======  =======  ===========
+    name         type    layer    state
+    ===========  ======  =======  ===========
+    box_default  BOX     Default  normal
+    box_walls    BOX     Walls    normal
+    curve_walls  CURVE   Walls    hidden
+    sphere_lock  SPHERE  Default  locked
+    curve_red    CURVE   Default  normal, red
+    ===========  ======  =======  ===========
+    """
+
+    def _connect(self, monkeypatch, server):
+        import rhinomcp.tools.get_objects as get_mod
+        import rhinomcp.tools.select_objects as select_mod
+        from rhinomcp.server import RhinoConnection
+
+        conn = RhinoConnection(host="127.0.0.1", port=server.port)
+        for module in (get_mod, select_mod):
+            monkeypatch.setattr(module, "get_rhino_connection", lambda: conn)
+        return conn
+
+    def _seed(self, server, monkeypatch):
+        conn = self._connect(monkeypatch, server)
+        conn.send_command("create_layer", {"name": "Walls"})
+        ids = {}
+
+        def add(name, obj_type, layer, **state):
+            server.current_layer = layer
+            obj = server._create_object({"type": obj_type, "name": name})
+            obj.update(state)
+            ids[name] = obj["id"]
+
+        add("box_default", "BOX", "Default")
+        add("box_walls", "BOX", "Walls")
+        add("curve_walls", "CURVE", "Walls", visible=False)
+        add("sphere_lock", "SPHERE", "Default", locked=True)
+        add("curve_red", "CURVE", "Default", color={"r": 255, "g": 0, "b": 0})
+        server.current_layer = "Default"
+        return conn, ids
+
+    @staticmethod
+    def _selected(server, ids):
+        by_id = {v: k for k, v in ids.items()}
+        return sorted(by_id[i] for i in server.selected_ids)
+
+
+class TestSelectionFilters(_FilterDocument):
+    """select_objects honours ids, layer, type, hidden and locked alone and
+    combined with name and color under the and/or rule, through the tool."""
+
+    async def _select(self, filters, filters_type="and"):
+        import rhinomcp
+
+        result = await rhinomcp.mcp.call_tool(
+            "select_objects", {"filters": filters, "filters_type": filters_type}
+        )
+        return result.content[0].text
+
+    @pytest.mark.asyncio
+    async def test_ids_alone(self, filter_server, monkeypatch):
+        _, ids = self._seed(filter_server, monkeypatch)
+        text = await self._select({"ids": [ids["box_walls"], ids["curve_red"]]})
+        assert text == "Selected 2 objects"
+        assert self._selected(filter_server, ids) == ["box_walls", "curve_red"]
+
+    @pytest.mark.asyncio
+    async def test_layer_alone(self, filter_server, monkeypatch):
+        _, ids = self._seed(filter_server, monkeypatch)
+        await self._select({"layer": "Walls"})
+        # curve_walls is hidden, so it is not a candidate unless asked for.
+        assert self._selected(filter_server, ids) == ["box_walls"]
+
+    @pytest.mark.asyncio
+    async def test_type_as_string_and_as_list(self, filter_server, monkeypatch):
+        _, ids = self._seed(filter_server, monkeypatch)
+        await self._select({"type": "CURVE"})
+        assert self._selected(filter_server, ids) == ["curve_red"]
+        await self._select({"type": ["BOX", "SPHERE"]})
+        assert self._selected(filter_server, ids) == ["box_default", "box_walls"]
+
+    @pytest.mark.asyncio
+    async def test_hidden_true_matches_but_is_not_selectable(
+        self, filter_server, monkeypatch
+    ):
+        _, ids = self._seed(filter_server, monkeypatch)
+        text = await self._select({"hidden": True})
+        assert text == (
+            "Selected 0 objects (1 matched; 1 hidden or locked and Rhino cannot "
+            "select them: show or unlock them first)"
+        )
+        assert self._selected(filter_server, ids) == []
+
+    @pytest.mark.asyncio
+    async def test_locked_true_matches_but_is_not_selectable(
+        self, filter_server, monkeypatch
+    ):
+        _, ids = self._seed(filter_server, monkeypatch)
+        text = await self._select({"locked": True})
+        assert text.startswith("Selected 0 objects (1 matched; 1 hidden or locked")
+
+    @pytest.mark.asyncio
+    async def test_hidden_false_and_locked_false(self, filter_server, monkeypatch):
+        _, ids = self._seed(filter_server, monkeypatch)
+        normal = ["box_default", "box_walls", "curve_red"]
+        await self._select({"hidden": False})
+        assert self._selected(filter_server, ids) == normal
+        await self._select({"locked": False})
+        assert self._selected(filter_server, ids) == normal
+
+    @pytest.mark.asyncio
+    async def test_and_combines_new_and_existing_filters(
+        self, filter_server, monkeypatch
+    ):
+        _, ids = self._seed(filter_server, monkeypatch)
+        await self._select({"layer": "Default", "type": "BOX"})
+        assert self._selected(filter_server, ids) == ["box_default"]
+        await self._select({"type": "CURVE", "color": [255, 0, 0], "locked": False})
+        assert self._selected(filter_server, ids) == ["curve_red"]
+        await self._select(
+            {"ids": [ids["box_default"], ids["box_walls"]], "name": ["box_walls"]}
+        )
+        assert self._selected(filter_server, ids) == ["box_walls"]
+
+    @pytest.mark.asyncio
+    async def test_or_combines_new_and_existing_filters(
+        self, filter_server, monkeypatch
+    ):
+        _, ids = self._seed(filter_server, monkeypatch)
+        await self._select({"layer": "Walls", "name": ["box_default"]}, "or")
+        assert self._selected(filter_server, ids) == ["box_default", "box_walls"]
+        await self._select(
+            {"ids": [ids["curve_red"]], "type": "BOX", "color": [9, 9, 9]}, "or"
+        )
+        assert self._selected(filter_server, ids) == [
+            "box_default", "box_walls", "curve_red",
+        ]
+
+    @pytest.mark.asyncio
+    async def test_empty_and_name_filters_skip_hidden_and_locked(
+        self, filter_server, monkeypatch
+    ):
+        _, ids = self._seed(filter_server, monkeypatch)
+        text = await self._select({"name": ["box_default", "sphere_lock"]})
+        assert text == "Selected 1 objects"
+        await self._select({})
+        assert self._selected(filter_server, ids) == [
+            "box_default", "box_walls", "curve_red",
+        ]
