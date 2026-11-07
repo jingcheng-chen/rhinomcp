@@ -25,8 +25,9 @@ def get_context(ctx: Context) -> Dict[str, Any]:
     - current_layer (full path) and layer_count
     - object_count and objects_by_type (top 8 types by count, descending)
     - selection_count and selected_ids (first 20)
-    - viewport: name, projection ("perspective" or "parallel"), display_mode,
-      camera_location and camera_target as [x, y, z]
+    - viewport: name (also as viewport_name), projection ("perspective" or
+      "parallel"), display_mode, camera_location and camera_target as
+      [x, y, z], camera_up and lens_length
     - scene_bounding_box {min, max}, null when the document is empty
     - grasshopper_definition_count (open Grasshopper definitions)
 

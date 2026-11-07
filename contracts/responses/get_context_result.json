@@ -28,12 +28,16 @@
     },
     "viewport": {
       "type": "object",
+      "description": "The viewport state set_camera, zoom_to and capture_viewport report, plus name (the same value as viewport_name)",
       "properties": {
         "name": { "type": "string" },
+        "viewport_name": { "type": "string" },
         "projection": { "enum": ["perspective", "parallel"] },
         "display_mode": { "type": "string" },
         "camera_location": { "$ref": "../common/definitions.json#/$defs/point3d" },
-        "camera_target": { "$ref": "../common/definitions.json#/$defs/point3d" }
+        "camera_target": { "$ref": "../common/definitions.json#/$defs/point3d" },
+        "camera_up": { "$ref": "../common/definitions.json#/$defs/vector3d" },
+        "lens_length": { "type": "number", "description": "35 mm equivalent lens length in millimetres" }
       },
       "required": ["name", "projection", "display_mode", "camera_location", "camera_target"],
       "additionalProperties": false

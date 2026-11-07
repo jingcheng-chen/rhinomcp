@@ -73,6 +73,20 @@ def test_overview_names_get_context_as_the_first_call():
     assert "Call get_context before the first edit" in content
 
 
+@pytest.mark.parametrize("topic", ["overview", "verification"])
+def test_grounding_and_metadata_sentences_match_across_topics(topic):
+    # One wording on every topic that names them, so the entry points agree.
+    content = " ".join(modeling_guidance(topic)["content"].split())
+    assert "Call get_context before the first edit" in content
+    assert "Read the capture_viewport metadata before trusting a picture." in content
+
+
+def test_verification_grounds_first_in_its_opening_paragraph():
+    content = modeling_guidance("verification")["content"]
+    opening = content.split("\n\n")[1]
+    assert "Call get_context before the first edit" in " ".join(opening.split())
+
+
 def test_verification_reads_capture_metadata_before_trusting_the_picture():
     content = modeling_guidance("verification")["content"]
     for field in (

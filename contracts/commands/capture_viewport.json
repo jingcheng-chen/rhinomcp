@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "capture_viewport.json",
   "title": "CaptureViewport Command",
-  "description": "Capture a viewport screenshot for visual analysis, with metadata. Any temporary display mode, camera or framing is restored after capture.",
+  "description": "Capture a viewport screenshot for visual analysis, with metadata. Any temporary display mode, camera or framing is restored after capture. An explicit camera (camera_location, camera_target, lens_length) and framing (frame_object_ids, frame_bbox, zoom_to_fit true) are refused together with invalid_argument.",
   "type": "object",
   "properties": {
     "viewport": {
@@ -42,7 +42,7 @@
     "zoom_to_fit": {
       "type": "boolean",
       "default": false,
-      "description": "Fit visible objects to the requested image dimensions; restore the original viewport camera and projection after capture"
+      "description": "Fit visible objects to the requested image dimensions; restore the original viewport camera and projection after capture. true cannot be combined with camera_location, camera_target or lens_length"
     },
     "display_mode": {
       "type": "string",
@@ -51,16 +51,16 @@
     },
     "camera_location": {
       "$ref": "../common/definitions.json#/$defs/point3d",
-      "description": "Temporary camera location [x, y, z]. Cannot be combined with frame_object_ids or frame_bbox"
+      "description": "Temporary camera location [x, y, z]. Cannot be combined with frame_object_ids, frame_bbox or zoom_to_fit"
     },
     "camera_target": {
       "$ref": "../common/definitions.json#/$defs/point3d",
-      "description": "Temporary camera target [x, y, z]. Cannot be combined with frame_object_ids or frame_bbox"
+      "description": "Temporary camera target [x, y, z]. Cannot be combined with frame_object_ids, frame_bbox or zoom_to_fit"
     },
     "lens_length": {
       "type": "number",
       "exclusiveMinimum": 0,
-      "description": "Temporary 35mm-equivalent lens length in millimetres (perspective views)"
+      "description": "Temporary 35mm-equivalent lens length in millimetres (perspective views). Part of the explicit camera: cannot be combined with frame_object_ids, frame_bbox or zoom_to_fit"
     },
     "frame_object_ids": {
       "type": "array",
@@ -68,7 +68,7 @@
         "$ref": "../common/definitions.json#/$defs/guid"
       },
       "minItems": 1,
-      "description": "Temporarily frame the capture on these objects. Cannot be combined with camera_location or camera_target"
+      "description": "Temporarily frame the capture on these objects. Cannot be combined with camera_location, camera_target or lens_length"
     },
     "frame_bbox": {
       "type": "object",
@@ -85,7 +85,7 @@
         "max"
       ],
       "additionalProperties": false,
-      "description": "Temporarily frame the capture on this world-space box. Cannot be combined with camera_location or camera_target"
+      "description": "Temporarily frame the capture on this world-space box (a degenerate box is padded). Cannot be combined with camera_location, camera_target or lens_length"
     },
     "format": {
       "type": "string",

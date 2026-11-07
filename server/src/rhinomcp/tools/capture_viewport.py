@@ -4,6 +4,7 @@ import base64
 import json
 from typing import Dict, List, Literal, Optional
 from rhinomcp.server import get_rhino_connection, mcp, logger
+from rhinomcp.tools._params import given
 
 # What the text block after the image reports, in this order. The plugin
 # computes every value; the tool only picks them out of its response.
@@ -76,7 +77,9 @@ def capture_viewport(
       lens of a perspective view.
     - frame_object_ids: object ids to frame, or
       frame_bbox: {"min": [x, y, z], "max": [x, y, z]} world box to frame.
-      An explicit camera and a framing target cannot be combined.
+      An explicit camera (camera_location, camera_target or lens_length)
+      cannot be combined with framing (frame_object_ids, frame_bbox or
+      zoom_to_fit=True); the plugin refuses that with invalid_argument.
 
     Display mode, camera, lens and framing are temporary: the viewport is
     restored exactly as it was after the capture.
@@ -108,15 +111,16 @@ def capture_viewport(
             "zoom_to_fit": zoom_to_fit,
             "format": format,
         }
-        optional = {
-            "display_mode": display_mode,
-            "camera_location": camera_location,
-            "camera_target": camera_target,
-            "lens_length": lens_length,
-            "frame_object_ids": frame_object_ids,
-            "frame_bbox": frame_bbox,
-        }
-        params.update({k: v for k, v in optional.items() if v is not None})
+        params.update(
+            given(
+                display_mode=display_mode,
+                camera_location=camera_location,
+                camera_target=camera_target,
+                lens_length=lens_length,
+                frame_object_ids=frame_object_ids,
+                frame_bbox=frame_bbox,
+            )
+        )
 
         result = rhino.send_command("capture_viewport", params)
 

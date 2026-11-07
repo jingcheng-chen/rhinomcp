@@ -37,7 +37,8 @@ public sealed class McpException : InvalidOperationException
         $"Invalid GUID '{text}'",
         "Pass an id exactly as get_objects returns it, for example 12345678-1234-1234-1234-123456789012.");
 
-    public static McpException OutOfRange(string message, string guidance) =>
+    /// <summary>An invalid_argument error, for example a number outside its allowed range.</summary>
+    public static McpException InvalidArgumentError(string message, string guidance) =>
         new McpException(InvalidArgument, message, guidance);
 
     /// <summary>Parse a GUID or throw invalid_argument.</summary>

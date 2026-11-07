@@ -4,6 +4,7 @@ from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
 
 from rhinomcp.server import get_rhino_connection, mcp
+from rhinomcp.tools._params import given
 
 
 @mcp.tool(
@@ -35,14 +36,8 @@ def zoom_to(
     - layer: layer name or full path, when target is "layer"
 
     Returns the viewport's state afterwards (viewport_name, projection,
-    camera_location, camera_target, camera_up, lens_length) plus the
+    display_mode, camera_location, camera_target, camera_up, lens_length) plus the
     bounding_box {min, max} it framed and the object_count inside it.
     """
-    fields = {
-        "target": target,
-        "viewport": viewport,
-        "object_ids": object_ids,
-        "layer": layer,
-    }
-    params = {name: value for name, value in fields.items() if value is not None}
+    params = given(target=target, viewport=viewport, object_ids=object_ids, layer=layer)
     return get_rhino_connection().send_command("zoom_to", params)

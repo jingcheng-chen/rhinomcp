@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using Newtonsoft.Json.Linq;
 using Rhino;
 using Rhino.Geometry;
-using rhinomcp.Serializers;
 
 namespace RhinoMCPPlugin.Functions;
 
@@ -57,13 +56,7 @@ public partial class RhinoMCPFunctions
             ["selection_count"] = selected.Count,
             ["selected_ids"] = selectedIds,
             ["viewport"] = SerializeActiveViewport(doc),
-            ["scene_bounding_box"] = sceneBbox.IsValid
-                ? new JObject
-                {
-                    ["min"] = new JArray { sceneBbox.Min.X, sceneBbox.Min.Y, sceneBbox.Min.Z },
-                    ["max"] = new JArray { sceneBbox.Max.X, sceneBbox.Max.Y, sceneBbox.Max.Z },
-                }
-                : null,
+            ["scene_bounding_box"] = SerializeMinMax(sceneBbox),
             ["grasshopper_definition_count"] = CountGrasshopperDefinitions(),
         };
     }
@@ -71,15 +64,13 @@ public partial class RhinoMCPFunctions
     private static JObject SerializeActiveViewport(RhinoDoc doc)
     {
         var viewport = doc.Views.ActiveView?.ActiveViewport
-            ?? throw new InvalidOperationException("No active viewport");
-        return new JObject
-        {
-            ["name"] = viewport.Name,
-            ["projection"] = viewport.IsParallelProjection ? "parallel" : "perspective",
-            ["display_mode"] = viewport.DisplayMode?.EnglishName ?? "",
-            ["camera_location"] = Serializer.SerializePoint(viewport.CameraLocation),
-            ["camera_target"] = Serializer.SerializePoint(viewport.CameraTarget),
-        };
+            ?? throw new McpException(
+                McpException.NotFound, "No active viewport", "Open a model view in Rhino, then retry.");
+        // The shared viewport state, plus "name", which get_context reported
+        // before the state was shared.
+        var state = ViewportState(viewport);
+        state.AddFirst(new JProperty("name", viewport.Name));
+        return state;
     }
 
     // Grasshopper is only asked when its plugin is already loaded, so reading the

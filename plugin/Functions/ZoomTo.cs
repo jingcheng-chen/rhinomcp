@@ -28,22 +28,16 @@ public partial class RhinoMCPFunctions
                 "Nothing to zoom to: the target covers no visible objects",
                 "Create or show objects first, or pick another target.");
 
-        // A point or a flat object has a degenerate box, which ZoomBoundingBox
-        // cannot frame; pad it so the camera has something to fit.
-        var framed = bbox;
-        if (framed.Diagonal.Length < RhinoMath.SqrtEpsilon)
-            framed.Inflate(1.0);
+        // Degenerate boxes (a point, a flat object) are padded so the camera
+        // has something to fit; capture_viewport framing uses the same rule.
+        var framed = PadForFraming(bbox);
 
         var viewport = view.ActiveViewport;
         viewport.ZoomBoundingBox(framed);
         view.Redraw();
 
-        var state = CameraState(viewport);
-        state["bounding_box"] = new JObject
-        {
-            ["min"] = new JArray(bbox.Min.X, bbox.Min.Y, bbox.Min.Z),
-            ["max"] = new JArray(bbox.Max.X, bbox.Max.Y, bbox.Max.Z),
-        };
+        var state = ViewportState(viewport);
+        state["bounding_box"] = SerializeMinMax(bbox);
         state["object_count"] = covered.Count;
         return state;
     }
@@ -53,7 +47,7 @@ public partial class RhinoMCPFunctions
         string target = castToString(parameters["target"]);
         foreach (var kind in new[] { "object_ids", "layer" })
         {
-            if (target == kind && !HasValue(parameters, kind))
+            if (target == kind && !IsGiven(parameters, kind))
                 throw new McpException(
                     McpException.InvalidArgument,
                     $"target '{kind}' needs {kind}",
@@ -104,15 +98,5 @@ public partial class RhinoMCPFunctions
                     $"Unknown zoom target '{target}'",
                     "Pass target 'all', 'selection', 'object_ids' or 'layer'.");
         }
-    }
-
-    // Present and non-empty: a missing key, null, "" and [] all count as absent.
-    private static bool HasValue(JObject parameters, string name)
-    {
-        var token = parameters[name];
-        if (token == null || token.Type == JTokenType.Null) return false;
-        if (token.Type == JTokenType.String) return token.ToString().Length > 0;
-        if (token.Type == JTokenType.Array) return token.HasValues;
-        return true;
     }
 }

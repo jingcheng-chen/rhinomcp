@@ -43,7 +43,8 @@ and parameters with update advice instead of letting them be ignored.
   default, or `jpeg`). Size defaults are unchanged. Requires plugin 0.5.0.
 - New `set_camera` tool (location, target, up, lens length, perspective or
   parallel projection) and `zoom_to` tool (all objects, the selection, object
-  ids or a layer). Camera changes leave no undo record. Require plugin 0.5.0.
+  ids or a layer). Both change the view, create no undo record and are
+  annotated not read-only. Require plugin 0.5.0.
 - `select_objects` filters gain `ids`, `layer`, `type`, `hidden` and `locked`,
   combined with the existing name, color and custom-attribute filters under the
   same and/or rule. The result says how many matched objects Rhino could not
@@ -65,12 +66,16 @@ and parameters with update advice instead of letting them be ignored.
 - Error replies carry `code` and `guidance`. Unknown objects and layers return
   `not_found`; malformed GUIDs and out-of-range material index, pipe radius and
   curve degree return `invalid_argument`.
-- `get_context`, `set_camera` and `zoom_to` commands. All three are read-only
-  on the document and create no undo record.
+- `get_context`, `set_camera` and `zoom_to` commands. `get_context` only
+  reads; `set_camera` and `zoom_to` change the view, create no undo record and
+  are annotated not read-only.
 - `capture_viewport` applies display mode, camera, lens and framing only for
-  the capture and restores the viewport afterwards. An explicit camera combined
-  with a framing target, or an unknown display mode, is refused with
-  `invalid_argument`; unknown frame ids with `not_found`. JPEG output.
+  the capture and restores the viewport afterwards. An explicit camera
+  (`camera_location`, `camera_target` or `lens_length`) combined with framing
+  (`frame_object_ids`, `frame_bbox` or `zoom_to_fit`), or an unknown display
+  mode, is refused with `invalid_argument`; unknown frame ids with
+  `not_found`. A degenerate framing box is padded as `zoom_to` pads it. JPEG
+  output.
 - `select_objects` and `get_objects` honour the new filters; an unknown id or
   layer in a filter is refused with `not_found`.
 - Several Rhino instances can run a bridge at the same time. `mcpstart` takes
@@ -112,7 +117,10 @@ and parameters with update advice instead of letting them be ignored.
 ### Deferred
 
 - Document open/save/close, multi-instance targeting from the server,
-  `set_layer_material`, per-turn undo grouping, Rhino 9 / Grasshopper 2.
+  `set_layer_material`, per-turn undo grouping, Rhino 9 / Grasshopper 2,
+  coercion notes on success responses, coding the remaining error sites, the
+  30-item caps in `get_document_summary`, and the in-Rhino chat panel,
+  `ask_user` tool and Claude Desktop connector bundle.
 
 ## 0.4.1.1 — unreleased (prepared 2026-09-13)
 

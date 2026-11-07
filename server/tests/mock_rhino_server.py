@@ -438,11 +438,12 @@ class MockRhinoServer:
         )
 
     def _viewport_state(self, name: str) -> Dict[str, Any]:
-        """The reply both camera commands share, as CameraState in SetCamera.cs."""
+        """The viewport state the plugin's shared ViewportState helper reports."""
         view = self.viewports[name]
         return {
             "viewport_name": name,
             "projection": view["projection"],
+            "display_mode": view["display_mode"],
             "camera_location": list(view["camera_location"]),
             "camera_target": list(view["camera_target"]),
             "camera_up": list(view["camera_up"]),
@@ -557,8 +558,6 @@ class MockRhinoServer:
 
         selected = [i for i in self.selected_ids if i in self.objects]
         bbox = self._scene_bounding_box()
-        active = self.viewports[self.active_viewport]
-
         return {
             "document_name": "mock.3dm",
             "document_path": "/mock/mock.3dm",
@@ -571,11 +570,7 @@ class MockRhinoServer:
             "objects_by_type": dict(top_types),
             "selection_count": len(selected),
             "selected_ids": selected[:20],
-            "viewport": {
-                "name": self.active_viewport,
-                **{key: active[key] for key in (
-                    "projection", "display_mode", "camera_location", "camera_target")},
-            },
+            "viewport": {"name": self.active_viewport, **self._viewport_state(self.active_viewport)},
             "scene_bounding_box": bbox,
             "grasshopper_definition_count": 0,
         }
@@ -1441,18 +1436,23 @@ class MockRhinoServer:
                      "Artistic", "Pen", "Arctic", "Raytraced")
     # Same sentences as plugin/McpException.cs.
     CAMERA_AND_FRAMING_MESSAGE = (
-        "An explicit camera (camera_location, camera_target) cannot be combined with "
-        "a framing target (frame_object_ids, frame_bbox)"
+        "An explicit camera (camera_location, camera_target, lens_length) cannot be "
+        "combined with framing (frame_object_ids, frame_bbox, zoom_to_fit)"
     )
     CAMERA_AND_FRAMING_GUIDANCE = (
-        "Pass camera_location and camera_target to look from a known point, or "
-        "frame_object_ids or frame_bbox to frame geometry, not both."
+        "Pass camera_location, camera_target or lens_length to look from a known "
+        "point, or frame_object_ids, frame_bbox or zoom_to_fit to frame geometry, "
+        "not both."
     )
 
     def _check_capture_params(self, params: Dict) -> None:
         """The refusals CaptureViewport.cs makes before touching any view."""
-        has_camera = any(params.get(k) is not None for k in ("camera_location", "camera_target"))
-        has_frame = any(params.get(k) is not None for k in ("frame_object_ids", "frame_bbox"))
+        has_camera = any(
+            params.get(k) is not None for k in ("camera_location", "camera_target", "lens_length")
+        )
+        has_frame = bool(params.get("zoom_to_fit")) or any(
+            params.get(k) is not None for k in ("frame_object_ids", "frame_bbox")
+        )
         if has_camera and has_frame:
             raise MockRhinoError("invalid_argument", self.CAMERA_AND_FRAMING_MESSAGE,
                                  self.CAMERA_AND_FRAMING_GUIDANCE)

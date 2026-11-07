@@ -10,7 +10,6 @@ using Rhino;
 using Rhino.DocObjects;
 using Rhino.Display;
 using Rhino.Geometry;
-using rhinomcp.Serializers;
 
 namespace RhinoMCPPlugin.Functions;
 
@@ -97,19 +96,31 @@ public partial class RhinoMCPFunctions
             if (request.Frame.HasValue)
             {
                 // Same fit as zoom_to_fit, on a copy of the view state, aimed at
-                // the requested box; it takes precedence over zoom_to_fit.
+                // the requested box (padded when degenerate); it takes precedence
+                // over zoom_to_fit.
+                var framed = PadForFraming(request.Frame.Value);
                 FitCaptureProjection(viewport, width, height,
-                    fitted => fitted.DollyExtents(request.Frame.Value, 1.1));
+                    fitted => fitted.DollyExtents(framed, 1.1));
             }
             else if (zoomToFit && activeCount > 0)
             {
                 // ZoomExtents fits the on-screen aspect ratio. CaptureToBitmap uses
                 // the requested aspect instead, which can crop a previously fitted
                 // model. Fit a temporary projection to the output dimensions first.
+                // A degenerate union (one point, or everything in one plane) is
+                // fitted as a padded box, since DollyExtents fails on it.
                 var visibleGeometry = VisibleObjects(doc, viewport).Select(obj => obj.Geometry).ToArray();
-                if (visibleGeometry.Length > 0)
-                    FitCaptureProjection(viewport, width, height,
-                        fitted => fitted.DollyExtents(visibleGeometry, 1.1));
+                var visibleBox = BoundingBox.Empty;
+                foreach (var geometry in visibleGeometry)
+                    visibleBox.Union(geometry.GetBoundingBox(true));
+                if (visibleBox.IsValid)
+                {
+                    var framed = PadForFraming(visibleBox);
+                    bool degenerate = framed.Diagonal != visibleBox.Diagonal;
+                    FitCaptureProjection(viewport, width, height, fitted => degenerate
+                        ? fitted.DollyExtents(framed, 1.1)
+                        : fitted.DollyExtents(visibleGeometry, 1.1));
+                }
             }
 
             string base64Data = CaptureViewToPngBase64(
@@ -130,9 +141,8 @@ public partial class RhinoMCPFunctions
                 sceneBbox.Union(obj.Geometry.GetBoundingBox(true));
             int visibleCount = VisibleObjects(doc, viewport)
                 .Count(obj => viewport.IsVisible(obj.Geometry.GetBoundingBox(true)));
-            var up = viewport.CameraUp;
 
-            return new JObject
+            var result = new JObject
             {
                 ["image_data"] = base64Data,
                 ["mime_type"] = request.Jpeg ? "image/jpeg" : "image/png",
@@ -144,22 +154,17 @@ public partial class RhinoMCPFunctions
                 ["show_axes"] = showAxes,
                 ["show_cplane_axes"] = showCplaneAxes,
                 ["object_count"] = activeCount,
-                ["display_mode"] = viewport.DisplayMode?.EnglishName ?? "",
-                ["projection"] = viewport.IsParallelProjection ? "parallel" : "perspective",
-                ["camera_location"] = Serializer.SerializePoint(viewport.CameraLocation),
-                ["camera_target"] = Serializer.SerializePoint(viewport.CameraTarget),
-                ["camera_up"] = new JArray { Math.Round(up.X, 4), Math.Round(up.Y, 4), Math.Round(up.Z, 4) },
-                ["lens_length"] = Math.Round(viewport.Camera35mmLensLength, 2),
-                ["scene_bounding_box"] = sceneBbox.IsValid
-                    ? new JObject
-                    {
-                        ["min"] = Serializer.SerializePoint(sceneBbox.Min),
-                        ["max"] = Serializer.SerializePoint(sceneBbox.Max),
-                    }
-                    : null,
+                ["scene_bounding_box"] = SerializeMinMax(sceneBbox),
                 ["visible_object_count"] = visibleCount,
                 ["total_object_count"] = activeCount
             };
+            foreach (var field in ViewportState(viewport).Properties())
+            {
+                // viewport_name keeps the name captured before any reprojection.
+                if (field.Name != "viewport_name")
+                    result[field.Name] = field.Value;
+            }
+            return result;
         }
         finally
         {
@@ -197,16 +202,18 @@ public partial class RhinoMCPFunctions
 
         string format = parameters["format"]?.ToString()?.ToLowerInvariant() ?? "png";
         if (format != "png" && format != "jpeg")
-            throw McpException.OutOfRange($"Unknown image format '{format}'", "Pass format \"png\" or \"jpeg\".");
+            throw McpException.InvalidArgumentError($"Unknown image format '{format}'", "Pass format \"png\" or \"jpeg\".");
         request.Jpeg = format == "jpeg";
 
         var frameIds = parameters["frame_object_ids"] as JArray;
         var frameBbox = parameters["frame_bbox"] as JObject;
-        bool hasCamera = parameters["camera_location"] is JArray || parameters["camera_target"] is JArray;
-        if (hasCamera && (frameIds != null || frameBbox != null))
+        bool zoomToFit = parameters["zoom_to_fit"]?.ToObject<bool>() ?? false;
+        bool hasLens = parameters["lens_length"] != null && parameters["lens_length"].Type != JTokenType.Null;
+        bool hasCamera = parameters["camera_location"] is JArray || parameters["camera_target"] is JArray || hasLens;
+        if (hasCamera && (frameIds != null || frameBbox != null || zoomToFit))
             throw new McpException(McpException.InvalidArgument,
-                "An explicit camera (camera_location, camera_target) cannot be combined with a framing target (frame_object_ids, frame_bbox)",
-                "Pass camera_location and camera_target to look from a known point, or frame_object_ids or frame_bbox to frame geometry, not both.");
+                "An explicit camera (camera_location, camera_target, lens_length) cannot be combined with framing (frame_object_ids, frame_bbox, zoom_to_fit)",
+                "Pass camera_location, camera_target or lens_length to look from a known point, or frame_object_ids, frame_bbox or zoom_to_fit to frame geometry, not both.");
 
         string modeName = parameters["display_mode"]?.ToString();
         if (modeName != null)
@@ -227,14 +234,14 @@ public partial class RhinoMCPFunctions
             request.CameraTarget = castToPoint3d(parameters["camera_target"]);
         if (request.CameraLocation.HasValue && request.CameraTarget.HasValue
             && request.CameraLocation.Value.DistanceTo(request.CameraTarget.Value) < RhinoMath.ZeroTolerance)
-            throw McpException.OutOfRange("camera_location and camera_target are the same point",
+            throw McpException.InvalidArgumentError("camera_location and camera_target are the same point",
                 "Place the camera away from its target, for example 100 units back along the view direction.");
 
-        if (parameters["lens_length"] != null && parameters["lens_length"].Type != JTokenType.Null)
+        if (hasLens)
         {
             double lens = parameters["lens_length"].ToObject<double>();
             if (lens <= 0)
-                throw McpException.OutOfRange($"lens_length must be positive, got {lens}",
+                throw McpException.InvalidArgumentError($"lens_length must be positive, got {lens}",
                     "Pass a 35mm-equivalent lens length in millimetres, for example 50.");
             request.LensLength = lens;
         }
@@ -254,12 +261,12 @@ public partial class RhinoMCPFunctions
         {
             var box = new BoundingBox(castToPoint3d(frameBbox["min"]), castToPoint3d(frameBbox["max"]));
             if (!box.IsValid)
-                throw McpException.OutOfRange("frame_bbox min must not exceed max on any axis",
+                throw McpException.InvalidArgumentError("frame_bbox min must not exceed max on any axis",
                     "Pass frame_bbox as {\"min\": [x, y, z], \"max\": [x, y, z]} with min <= max.");
             request.Frame = box;
         }
         if (request.Frame.HasValue && !request.Frame.Value.IsValid)
-            throw McpException.OutOfRange("The framed objects have no bounding box",
+            throw McpException.InvalidArgumentError("The framed objects have no bounding box",
                 "Frame objects with geometry, or pass frame_bbox instead.");
 
         return request;

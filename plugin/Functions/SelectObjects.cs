@@ -77,7 +77,6 @@ public partial class RhinoMCPFunctions
         }
 
         bool IsHidden(RhinoObject obj) => obj.IsHidden || !doc.Layers[obj.Attributes.LayerIndex].IsVisible;
-        bool IsLocked(RhinoObject obj) => obj.IsLocked || doc.Layers[obj.Attributes.LayerIndex].IsLocked;
 
         // One check per present built-in key; each custom attribute is one more.
         var checks = new List<Func<RhinoObject, bool>>();
@@ -90,7 +89,7 @@ public partial class RhinoMCPFunctions
         if (layer != null) checks.Add(obj => obj.Attributes.LayerIndex == layer.Index);
         if (types != null) checks.Add(obj => types.Contains(GetNormalizedType(obj)));
         if (hidden.HasValue) checks.Add(obj => IsHidden(obj) == hidden.Value);
-        if (locked.HasValue) checks.Add(obj => IsLocked(obj) == locked.Value);
+        if (locked.HasValue) checks.Add(obj => IsObjectOrLayerLocked(doc, obj) == locked.Value);
         foreach (var customAttribute in customAttributes)
         {
             var key = customAttribute.Key;
