@@ -31,7 +31,8 @@ def get_objects(
     Query objects in the Rhino document with filtering and pagination.
 
     Use this tool to retrieve specific subsets of objects after first calling
-    get_document_summary to understand the model composition.
+    get_context (or get_document_summary for per-layer counts) to understand
+    the model composition.
 
     Parameters:
     - offset: Number of objects to skip (default: 0)
