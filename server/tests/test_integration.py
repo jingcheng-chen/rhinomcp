@@ -853,7 +853,7 @@ class TestAdvancedGeometry:
         result = conn.send_command("capture_viewport", {"viewport": "perspective", "width": 100, "height": 100})
         # image_data must be valid base64 the wrapper can decode.
         base64.b64decode(result["image_data"])
-        assert result["viewport_name"] == "perspective"
+        assert result["viewport_name"] == "Perspective"
 
 
 class TestPerceptionPassthrough:
@@ -1661,3 +1661,83 @@ class TestGetContext:
         assert tool.annotations.read_only_hint is True
         assert tool.annotations.destructive_hint is False
         assert tool.annotations.open_world_hint is False
+
+
+@pytest.fixture
+def capture_server():
+    """A fresh document on its own port, so capture metadata counts only what a
+    test seeds."""
+    server = MockRhinoServer(port=19980)
+    server.start()
+    time.sleep(0.1)
+
+    yield server
+
+    server.stop()
+
+
+class TestCaptureViewportMetadata:
+    """capture_viewport answers a content list: the image, then a text block
+    with a JSON object saying what the image shows."""
+
+    METADATA_KEYS = {
+        "viewport_name", "display_mode", "projection", "width", "height",
+        "camera_location", "camera_target", "camera_up", "lens_length",
+        "scene_bounding_box", "visible_object_count", "total_object_count",
+    }
+
+    def _connect(self, monkeypatch, port=19980):
+        from rhinomcp.server import RhinoConnection
+        import rhinomcp.tools.capture_viewport as capture_mod
+
+        conn = RhinoConnection(host="127.0.0.1", port=port)
+        monkeypatch.setattr(capture_mod, "get_rhino_connection", lambda: conn)
+        return conn
+
+    async def _capture(self, **arguments):
+        import rhinomcp
+
+        return await rhinomcp.mcp.call_tool("capture_viewport", arguments)
+
+    @pytest.mark.asyncio
+    async def test_default_capture_is_png_then_metadata(self, capture_server, monkeypatch):
+        import base64
+
+        self._connect(monkeypatch)
+        capture_server._create_object({"type": "BOX", "name": "A"})
+        capture_server._create_object({"type": "SPHERE", "name": "B"})
+
+        result = await self._capture()
+
+        image, text = result.content
+        assert image.type == "image"
+        assert image.mime_type == "image/png"
+        assert base64.b64decode(image.data).startswith(b"\x89PNG\r\n\x1a\n")
+        assert text.type == "text"
+        metadata = json.loads(text.text)
+        assert set(metadata) == self.METADATA_KEYS
+        assert metadata == {
+            "viewport_name": "Perspective",
+            "display_mode": "Shaded",
+            "projection": "perspective",
+            "width": 800,
+            "height": 600,
+            "camera_location": [100.0, -100.0, 100.0],
+            "camera_target": [0.0, 0.0, 0.0],
+            "camera_up": [0.0, 0.0, 1.0],
+            "lens_length": 50.0,
+            "scene_bounding_box": {"min": [-1, -1, -1], "max": [1, 1, 1]},
+            "visible_object_count": 2,
+            "total_object_count": 2,
+        }
+
+    @pytest.mark.asyncio
+    async def test_empty_document_has_null_bounding_box(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+
+        result = await self._capture()
+
+        metadata = json.loads(result.content[1].text)
+        assert metadata["scene_bounding_box"] is None
+        assert metadata["visible_object_count"] == 0
+        assert metadata["total_object_count"] == 0

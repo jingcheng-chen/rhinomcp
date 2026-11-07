@@ -400,6 +400,16 @@ class MockRhinoServer:
         "camera_target": [0.0, 0.0, 0.0],
     }
 
+    def _scene_bounding_box(self) -> Optional[Dict]:
+        """Union of every object's box as {min, max}, None for an empty document."""
+        if not self.objects:
+            return None
+        boxes = [o["bounding_box"] for o in self.objects.values()]
+        return {
+            "min": [min(b[0][axis] for b in boxes) for axis in range(3)],
+            "max": [max(b[1][axis] for b in boxes) for axis in range(3)],
+        }
+
     def _get_context(self, params: Dict) -> Dict:
         """Bounded grounding snapshot, mirroring GetContext.cs: top 8 types by
         count, first 20 selected ids, no hierarchy or per-layer counts."""
@@ -410,13 +420,7 @@ class MockRhinoServer:
         top_types = sorted(type_counts.items(), key=lambda kv: kv[1], reverse=True)[:8]
 
         selected = [i for i in self.selected_ids if i in self.objects]
-        bbox = None
-        if self.objects:
-            boxes = [o["bounding_box"] for o in self.objects.values()]
-            bbox = {
-                "min": [min(b[0][axis] for b in boxes) for axis in range(3)],
-                "max": [max(b[1][axis] for b in boxes) for axis in range(3)],
-            }
+        bbox = self._scene_bounding_box()
 
         return {
             "document_name": "mock.3dm",
@@ -1220,12 +1224,32 @@ class MockRhinoServer:
         png_b64 = (
             "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgAAIAAAUAAeImBZsAAAAASUVORK5CYII="
         )
+        viewport = dict(self.ACTIVE_VIEWPORT)
+        target = params.get("viewport", "active")
+        if target.lower() not in ("active", "perspective"):
+            # A named standard view: the plugin renders it in parallel projection.
+            viewport.update(name=target.capitalize(), projection="parallel")
+        visible = sum(1 for o in self.objects.values() if o.get("visible", True))
         return {
             "image_data": png_b64,
             "mime_type": "image/png",
-            "viewport_name": params.get("viewport", "active"),
+            "viewport_name": viewport["name"],
+            "viewport_target": target,
             "width": params.get("width", 800),
             "height": params.get("height", 600),
+            "show_grid": params.get("show_grid", True),
+            "show_axes": params.get("show_axes", True),
+            "show_cplane_axes": params.get("show_cplane_axes", False),
+            "object_count": len(self.objects),
+            "display_mode": viewport["display_mode"],
+            "projection": viewport["projection"],
+            "camera_location": viewport["camera_location"],
+            "camera_target": viewport["camera_target"],
+            "camera_up": [0.0, 0.0, 1.0],
+            "lens_length": 50.0,
+            "scene_bounding_box": self._scene_bounding_box(),
+            "visible_object_count": visible,
+            "total_object_count": len(self.objects),
         }
 
     def _make_result_object(self, name: str, type_name: str = "BREP") -> str:

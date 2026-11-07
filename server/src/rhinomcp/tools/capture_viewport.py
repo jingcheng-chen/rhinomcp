@@ -1,7 +1,25 @@
 from mcp.server.mcpserver import Context, Image
-from mcp.types import ToolAnnotations
+from mcp.types import TextContent, ToolAnnotations
 import base64
+import json
 from rhinomcp.server import get_rhino_connection, mcp, logger
+
+# What the text block after the image reports, in this order. The plugin
+# computes every value; the tool only picks them out of its response.
+METADATA_FIELDS = (
+    "viewport_name",
+    "display_mode",
+    "projection",
+    "width",
+    "height",
+    "camera_location",
+    "camera_target",
+    "camera_up",
+    "lens_length",
+    "scene_bounding_box",
+    "visible_object_count",
+    "total_object_count",
+)
 
 
 # Camera fitting and standard-view projection are temporary; the plugin restores
@@ -24,7 +42,7 @@ def capture_viewport(
     show_axes: bool = True,
     show_cplane_axes: bool = False,
     zoom_to_fit: bool = False,
-) -> Image:
+) -> list[Image | TextContent]:
     """
     Capture a screenshot of a Rhino viewport for visual analysis.
 
@@ -88,8 +106,11 @@ def capture_viewport(
             f"({result.get('width', width)}x{result.get('height', height)})"
         )
 
-        # Return MCP Image object for Claude to analyze
-        return Image(data=image_data, format="png")
+        metadata = {key: result.get(key) for key in METADATA_FIELDS}
+        return [
+            Image(data=image_data, format="png"),
+            TextContent(type="text", text=json.dumps(metadata, indent=2)),
+        ]
 
     except Exception as e:
         logger.error(f"Error capturing viewport: {str(e)}")
