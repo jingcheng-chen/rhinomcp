@@ -236,6 +236,22 @@ The server reads the plugin's version when it connects and warns in its log when
 A tool that needs a newer plugin fails with an update instruction instead of silently doing
 something else, and `describe_capabilities` reports both versions.
 
+### Claude Code plugin (optional)
+
+This repository is also a Claude Code plugin marketplace. The `rhinomcp` plugin adds three agents
+(`rhino-modeler`, `rhino-inspector` and `grasshopper-builder`) and two commands: `/scene`
+summarizes the open document and `/snapshot [display mode]` captures the viewport and reports what
+it shows.
+
+```bash
+claude plugin marketplace add jingcheng-chen/rhinomcp
+claude plugin install rhinomcp@rhinomcp
+```
+
+Inside a Claude Code session the same steps are `/plugin marketplace add jingcheng-chen/rhinomcp`
+and `/plugin install rhinomcp@rhinomcp`. The plugin does not start the MCP server: configure it
+as `rhino` as described in step 2 above, since the agents call tools named `mcp__rhino__*`.
+
 ## Usage
 
 With the bridge running and your client connected, you'll see the RhinoMCP tools. From there, just
