@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "zoom_to_result.json",
+  "title": "ZoomTo Response",
+  "description": "The viewport's camera after framing, the box it framed and how many objects that box covers",
+  "type": "object",
+  "properties": {
+    "viewport_name": { "type": "string" },
+    "projection": { "enum": ["perspective", "parallel"] },
+    "camera_location": { "$ref": "../common/definitions.json#/$defs/point3d" },
+    "camera_target": { "$ref": "../common/definitions.json#/$defs/point3d" },
+    "camera_up": { "$ref": "../common/definitions.json#/$defs/vector3d" },
+    "lens_length": { "type": "number", "description": "35 mm equivalent lens length in millimetres" },
+    "bounding_box": {
+      "type": "object",
+      "properties": {
+        "min": { "$ref": "../common/definitions.json#/$defs/point3d" },
+        "max": { "$ref": "../common/definitions.json#/$defs/point3d" }
+      },
+      "required": ["min", "max"],
+      "additionalProperties": false
+    },
+    "object_count": { "type": "integer", "minimum": 0 }
+  },
+  "required": ["viewport_name", "projection", "camera_location", "camera_target", "camera_up", "lens_length", "bounding_box", "object_count"],
+  "additionalProperties": false
+}

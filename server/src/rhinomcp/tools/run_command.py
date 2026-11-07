@@ -6,10 +6,22 @@ from rhinomcp import get_rhino_connection, mcp, logger
 
 
 def _enabled() -> bool:
-    return os.getenv("RHINO_MCP_ENABLE_RUN_COMMAND", "1").lower() not in ("0", "false", "no")
+    return os.getenv("RHINO_MCP_ENABLE_RUN_COMMAND", "1").lower() not in (
+        "0",
+        "false",
+        "no",
+    )
 
 
-@mcp.tool(annotations=ToolAnnotations(destructive_hint=True, open_world_hint=True))
+@mcp.tool(
+    title="Run Rhino command",
+    annotations=ToolAnnotations(
+        title="Run Rhino command",
+        read_only_hint=False,
+        destructive_hint=True,
+        open_world_hint=False,
+    ),
+)
 def run_command(ctx: Context, command: str, echo: bool = False) -> str:
     """
     Execute a Rhino command string and return whatever the command window prints.
@@ -38,8 +50,10 @@ def run_command(ctx: Context, command: str, echo: bool = False) -> str:
     untrusted clients.
     """
     if not _enabled():
-        return ("Error running Rhino command: disabled. Set "
-                "RHINO_MCP_ENABLE_RUN_COMMAND=1 to enable.")
+        return (
+            "Error running Rhino command: disabled. Set "
+            "RHINO_MCP_ENABLE_RUN_COMMAND=1 to enable."
+        )
     try:
         rhino = get_rhino_connection()
         result = rhino.send_command("run_command", {"command": command, "echo": echo})
@@ -54,4 +68,4 @@ def run_command(ctx: Context, command: str, echo: bool = False) -> str:
         return "Command failed: no output captured."
     except Exception as e:
         logger.error(f"Error running Rhino command: {str(e)}")
-        return f"Error running Rhino command: {str(e)}"
+        raise

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "get_context.json",
+  "title": "GetContext Command",
+  "description": "Read a bounded snapshot of the active document and active viewport: units, tolerances, current layer, counts, selection, camera, scene bounds and open Grasshopper definitions",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}

@@ -1,9 +1,18 @@
 from mcp.server.mcpserver import Context
+from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 from typing import List, Optional
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Boolean union",
+    annotations=ToolAnnotations(
+        title="Boolean union",
+        read_only_hint=False,
+        destructive_hint=True,
+        open_world_hint=False,
+    ),
+)
 def boolean_union(
     ctx: Context,
     object_ids: List[str],
@@ -44,7 +53,15 @@ def boolean_union(
         raise
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Boolean difference",
+    annotations=ToolAnnotations(
+        title="Boolean difference",
+        read_only_hint=False,
+        destructive_hint=True,
+        open_world_hint=False,
+    ),
+)
 def boolean_difference(
     ctx: Context,
     base_id: str,
@@ -88,7 +105,15 @@ def boolean_difference(
         raise
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Boolean intersection",
+    annotations=ToolAnnotations(
+        title="Boolean intersection",
+        read_only_hint=False,
+        destructive_hint=True,
+        open_world_hint=False,
+    ),
+)
 def boolean_intersection(
     ctx: Context,
     object_ids: List[str],

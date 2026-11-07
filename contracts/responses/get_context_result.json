@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "get_context_result.json",
+  "title": "GetContext Response",
+  "description": "Bounded grounding snapshot of the active document and active viewport. No layer hierarchy and no per-layer counts; use get_document_summary for those.",
+  "type": "object",
+  "properties": {
+    "document_name": { "type": ["string", "null"], "description": "File name, null when the document is untitled" },
+    "document_path": { "type": ["string", "null"], "description": "Full path, null when the document was never saved" },
+    "units": { "type": "string", "description": "Model unit system, e.g. Millimeters" },
+    "absolute_tolerance": { "type": "number" },
+    "angle_tolerance": { "type": "number", "description": "Model angle tolerance in degrees" },
+    "current_layer": { "type": "string", "description": "Full path of the current layer" },
+    "layer_count": { "type": "integer", "minimum": 0, "description": "Number of layers that are not deleted" },
+    "object_count": { "type": "integer", "minimum": 0 },
+    "objects_by_type": {
+      "type": "object",
+      "description": "Top eight object types by count, descending",
+      "additionalProperties": { "type": "integer", "minimum": 0 },
+      "maxProperties": 8
+    },
+    "selection_count": { "type": "integer", "minimum": 0, "description": "Total number of selected objects" },
+    "selected_ids": {
+      "type": "array",
+      "description": "First twenty selected object ids",
+      "items": { "$ref": "../common/definitions.json#/$defs/guid" },
+      "maxItems": 20
+    },
+    "viewport": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "projection": { "enum": ["perspective", "parallel"] },
+        "display_mode": { "type": "string" },
+        "camera_location": { "$ref": "../common/definitions.json#/$defs/point3d" },
+        "camera_target": { "$ref": "../common/definitions.json#/$defs/point3d" }
+      },
+      "required": ["name", "projection", "display_mode", "camera_location", "camera_target"],
+      "additionalProperties": false
+    },
+    "scene_bounding_box": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "min": { "$ref": "../common/definitions.json#/$defs/point3d" },
+            "max": { "$ref": "../common/definitions.json#/$defs/point3d" }
+          },
+          "required": ["min", "max"],
+          "additionalProperties": false
+        },
+        { "type": "null" }
+      ],
+      "description": "Bounds of all objects, null when the document has none"
+    },
+    "grasshopper_definition_count": { "type": "integer", "minimum": 0 }
+  },
+  "required": [
+    "document_name", "document_path", "units", "absolute_tolerance", "angle_tolerance",
+    "current_layer", "layer_count", "object_count", "objects_by_type",
+    "selection_count", "selected_ids", "viewport", "scene_bounding_box",
+    "grasshopper_definition_count"
+  ],
+  "additionalProperties": false
+}

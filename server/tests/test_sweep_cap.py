@@ -47,7 +47,6 @@ def test_sweep_cap_failure_is_reported_without_retry():
     with patch(
         "rhinomcp.tools.advanced_geometry.get_rhino_connection", return_value=connection
     ):
-        result = sweep1(None, "rail-id", ["profile-id"], cap_planar_ends=True)
-    assert result["success"] is False
-    assert "capping failed" in result["message"]
+        with pytest.raises(RuntimeError, match="capping failed"):
+            sweep1(None, "rail-id", ["profile-id"], cap_planar_ends=True)
     connection.send_command.assert_called_once()

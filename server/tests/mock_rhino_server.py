@@ -18,15 +18,36 @@ Or in tests:
 import json
 import socket
 import threading
+import time
 import uuid
 from typing import Dict, Any, Optional
+
+
+class MockRhinoError(Exception):
+    """A handler failure answered with a code and guidance, like the plugin's
+    McpException. Plain exceptions stay uncoded, like every other plugin error."""
+
+    def __init__(self, code: str, message: str, guidance: Optional[str] = None):
+        super().__init__(message)
+        self.code = code
+        self.guidance = guidance
 
 
 class MockRhinoServer:
     """A mock Rhino server for testing MCP commands."""
 
+    # Same sentences the plugin attaches (plugin/McpException.cs).
+    OBJECT_NOT_FOUND_GUIDANCE = (
+        "Call get_objects or get_selected_objects_info to find a valid object "
+        "id or name."
+    )
+    LAYER_NOT_FOUND_GUIDANCE = (
+        "Call get_document_summary to list existing layers, or create_layer to "
+        "make it first."
+    )
+
     def __init__(self, host: str = "127.0.0.1", port: int = 1999,
-                 legacy_plugin: bool = False):
+                 legacy_plugin: bool = False, plugin_version: str = "0.5.0"):
         self.host = host
         self.port = port
         self.server_socket: Optional[socket.socket] = None
@@ -36,9 +57,17 @@ class MockRhinoServer:
         # supports_dry_run, and it drops the flag it doesn't know about instead of
         # previewing, so the boolean handlers mutate the document for real.
         self.legacy_plugin = legacy_plugin
+        # The version describe_capabilities reports. Commands added after it
+        # (COMMANDS_ADDED) are left out of the handler table, the way an older
+        # plugin simply does not have them.
+        self.plugin_version = plugin_version
         self._handler_table: Optional[Dict[str, Any]] = None
         # Command types received, in order, so a test can assert what was sent.
         self.received_commands: list = []
+        # The params each command type last arrived with, for pass-through tests.
+        self.received_params: Dict[str, Dict[str, Any]] = {}
+        # Seconds to wait before answering, so a test can provoke a client timeout.
+        self.response_delay = 0.0
 
         # Mock document state
         self.objects: Dict[str, Dict[str, Any]] = {}
@@ -53,6 +82,18 @@ class MockRhinoServer:
             }
         }
         self.current_layer = "Default"
+        # Ids in selection order, replaced by each select_objects like the
+        # plugin's UnselectAll + Select.
+        self.selected_ids: list = []
+        # View state, which set_camera and zoom_to change. Like the plugin's
+        # views, it is not part of the document and never enters the undo stack.
+        self.viewports: Dict[str, Dict[str, Any]] = {
+            "Perspective": self._viewport("perspective", [100.0, -100.0, 100.0], [0.0, 0.0, 1.0]),
+            "Top": self._viewport("parallel", [0.0, 0.0, 100.0], [0.0, 1.0, 0.0]),
+            "Front": self._viewport("parallel", [0.0, -100.0, 0.0], [0.0, 0.0, 1.0]),
+            "Right": self._viewport("parallel", [100.0, 0.0, 0.0], [0.0, 0.0, 1.0]),
+        }
+        self.active_viewport = "Perspective"
         self.undo_stack: list = []
         self.redo_stack: list = []
 
@@ -162,6 +203,8 @@ class MockRhinoServer:
         try:
             command = json.loads(payload.decode("utf-8"))
             response = self._process_command(command)
+            if self.response_delay:
+                time.sleep(self.response_delay)
         except json.JSONDecodeError as e:
             response = {"status": "error", "message": f"Invalid JSON: {e}"}
 
@@ -192,6 +235,14 @@ class MockRhinoServer:
         "boolean_union", "boolean_difference", "boolean_intersection",
     }
 
+    # Commands newer than the oldest plugin a test may impersonate, with the
+    # plugin version that introduced them.
+    COMMANDS_ADDED = {
+        "get_context": (0, 5, 0),
+        "set_camera": (0, 5, 0),
+        "zoom_to": (0, 5, 0),
+    }
+
     def _handlers(self) -> Dict[str, Any]:
         """The mock's command surface, built once. describe_capabilities reports
         it, the same way the plugin reports its reflected dispatch table."""
@@ -200,6 +251,9 @@ class MockRhinoServer:
 
         self._handler_table = {
             "get_document_summary": self._get_document_summary,
+            "get_context": self._get_context,
+            "set_camera": self._set_camera,
+            "zoom_to": self._zoom_to,
             "get_objects": self._get_objects,
             "create_object": self._create_object,
             "create_objects": self._create_objects,
@@ -233,6 +287,10 @@ class MockRhinoServer:
             "offset_curve": self._offset_curve,
             "pipe": self._pipe,
         }
+        version = tuple(int(p) for p in self.plugin_version.split("-")[0].split("."))
+        for name, added in self.COMMANDS_ADDED.items():
+            if version < added:
+                del self._handler_table[name]
         return self._handler_table
 
     def _process_command(self, command: Dict[str, Any]) -> Dict[str, Any]:
@@ -240,6 +298,7 @@ class MockRhinoServer:
         cmd_type = command.get("type", "")
         params = command.get("params", {})
         self.received_commands.append(cmd_type)
+        self.received_params[cmd_type] = params
 
         handler = self._handlers().get(cmd_type)
         if not handler:
@@ -277,6 +336,11 @@ class MockRhinoServer:
                 if track_health:
                     result["_health"] = self._build_health(before, after)
             return {"status": "success", "result": result}
+        except MockRhinoError as e:
+            response = {"status": "error", "message": str(e), "code": e.code}
+            if e.guidance:
+                response["guidance"] = e.guidance
+            return response
         except Exception as e:
             return {"status": "error", "message": str(e)}
 
@@ -343,6 +407,179 @@ class MockRhinoServer:
             ]
         }
 
+    @staticmethod
+    def _viewport(projection: str, location: list, up: list) -> Dict[str, Any]:
+        return {
+            "projection": projection,
+            "display_mode": "Shaded" if projection == "perspective" else "Wireframe",
+            "camera_location": location,
+            "camera_target": [0.0, 0.0, 0.0],
+            "camera_up": up,
+            "lens_length": 50.0,
+        }
+
+    VIEWPORT_NOT_FOUND_GUIDANCE = (
+        "Omit viewport to use the active one, or pass a viewport name such as "
+        "Perspective, Top, Front or Right."
+    )
+    SET_CAMERA_FIELDS = ("location", "target", "up", "lens_length", "projection")
+
+    def _find_viewport(self, params: Dict) -> str:
+        """Viewport name from params, default active, matched case-insensitively
+        like the plugin's ResolveViewport."""
+        wanted = params.get("viewport")
+        if not wanted:
+            return self.active_viewport
+        for name in self.viewports:
+            if name.lower() == wanted.lower():
+                return name
+        raise MockRhinoError(
+            "not_found", f"Viewport '{wanted}' not found", self.VIEWPORT_NOT_FOUND_GUIDANCE
+        )
+
+    def _viewport_state(self, name: str) -> Dict[str, Any]:
+        """The reply both camera commands share, as CameraState in SetCamera.cs."""
+        view = self.viewports[name]
+        return {
+            "viewport_name": name,
+            "projection": view["projection"],
+            "camera_location": list(view["camera_location"]),
+            "camera_target": list(view["camera_target"]),
+            "camera_up": list(view["camera_up"]),
+            "lens_length": view["lens_length"],
+        }
+
+    def _set_camera(self, params: Dict) -> Dict:
+        """Change the named or active viewport's camera fields that are given."""
+        if not any(params.get(field) is not None for field in self.SET_CAMERA_FIELDS):
+            raise MockRhinoError(
+                "invalid_argument",
+                "set_camera needs at least one of location, target, up, lens_length "
+                "or projection",
+                "Pass the camera fields to change; to frame objects use zoom_to instead.",
+            )
+        name = self._find_viewport(params)
+        view = self.viewports[name]
+        for field, key in (("location", "camera_location"), ("target", "camera_target"),
+                           ("up", "camera_up"), ("lens_length", "lens_length"),
+                           ("projection", "projection")):
+            if params.get(field) is not None:
+                view[key] = params[field]
+        return self._viewport_state(name)
+
+    def _zoom_targets(self, params: Dict) -> list:
+        """The objects a zoom_to target covers, with ZoomTo.cs's refusals."""
+        target = params.get("target")
+        for kind in ("object_ids", "layer"):
+            if target == kind and not params.get(kind):
+                raise MockRhinoError(
+                    "invalid_argument",
+                    f"target '{kind}' needs {kind}",
+                    f"Pass {kind}, or use target 'all' or 'selection'.",
+                )
+        if target == "all":
+            return [o for o in self.objects.values() if o.get("visible", True)]
+        if target == "selection":
+            selected = [self.objects[i] for i in self.selected_ids if i in self.objects]
+            if not selected:
+                raise MockRhinoError(
+                    "invalid_argument",
+                    "Nothing is selected to zoom to",
+                    "Select objects first with select_objects, or use target 'all', "
+                    "'object_ids' or 'layer'.",
+                )
+            return selected
+        if target == "object_ids":
+            for obj_id in params["object_ids"]:
+                if obj_id not in self.objects:
+                    raise MockRhinoError(
+                        "not_found", f"Object not found: {obj_id}",
+                        self.OBJECT_NOT_FOUND_GUIDANCE,
+                    )
+            return [self.objects[i] for i in params["object_ids"]]
+        if target == "layer":
+            layer = params["layer"]
+            if layer not in self.layers:
+                raise MockRhinoError(
+                    "not_found", f"Layer '{layer}' not found", self.LAYER_NOT_FOUND_GUIDANCE
+                )
+            return [o for o in self.objects.values() if o.get("layer") == layer]
+        raise MockRhinoError(
+            "invalid_argument",
+            f"Unknown zoom target '{target}'",
+            "Pass target 'all', 'selection', 'object_ids' or 'layer'.",
+        )
+
+    def _zoom_to(self, params: Dict) -> Dict:
+        """Frame the named or active viewport on the target's bounding box: the
+        camera target moves to the box centre and the view direction is kept."""
+        covered = self._zoom_targets(params)
+        name = self._find_viewport(params)
+        if not covered:
+            raise MockRhinoError(
+                "invalid_argument",
+                "Nothing to zoom to: the target covers no visible objects",
+                "Create or show objects first, or pick another target.",
+            )
+        boxes = [o["bounding_box"] for o in covered]
+        lo = [min(b[0][axis] for b in boxes) for axis in range(3)]
+        hi = [max(b[1][axis] for b in boxes) for axis in range(3)]
+        centre = [(lo[axis] + hi[axis]) / 2 for axis in range(3)]
+
+        view = self.viewports[name]
+        offset = [view["camera_location"][a] - view["camera_target"][a] for a in range(3)]
+        view["camera_target"] = centre
+        view["camera_location"] = [centre[a] + offset[a] for a in range(3)]
+        return {
+            **self._viewport_state(name),
+            "bounding_box": {"min": lo, "max": hi},
+            "object_count": len(covered),
+        }
+
+    def _scene_bounding_box(self) -> Optional[Dict]:
+        """Union of every object's box as {min, max}, None for an empty document."""
+        if not self.objects:
+            return None
+        boxes = [o["bounding_box"] for o in self.objects.values()]
+        return {
+            "min": [min(b[0][axis] for b in boxes) for axis in range(3)],
+            "max": [max(b[1][axis] for b in boxes) for axis in range(3)],
+        }
+
+    def _get_context(self, params: Dict) -> Dict:
+        """Bounded grounding snapshot, mirroring GetContext.cs: top 8 types by
+        count, first 20 selected ids, no hierarchy or per-layer counts."""
+        type_counts: Dict[str, int] = {}
+        for obj in self.objects.values():
+            obj_type = obj.get("type", "UNKNOWN")
+            type_counts[obj_type] = type_counts.get(obj_type, 0) + 1
+        top_types = sorted(type_counts.items(), key=lambda kv: kv[1], reverse=True)[:8]
+
+        selected = [i for i in self.selected_ids if i in self.objects]
+        bbox = self._scene_bounding_box()
+        active = self.viewports[self.active_viewport]
+
+        return {
+            "document_name": "mock.3dm",
+            "document_path": "/mock/mock.3dm",
+            "units": "Millimeters",
+            "absolute_tolerance": 0.001,
+            "angle_tolerance": 1.0,
+            "current_layer": self.current_layer,
+            "layer_count": len(self.layers),
+            "object_count": len(self.objects),
+            "objects_by_type": dict(top_types),
+            "selection_count": len(selected),
+            "selected_ids": selected[:20],
+            "viewport": {
+                "name": self.active_viewport,
+                **{key: active[key] for key in (
+                    "projection", "display_mode", "camera_location", "camera_target")},
+            },
+            "scene_bounding_box": bbox,
+            "grasshopper_definition_count": 0,
+        }
+
     def _get_objects(self, params: Dict) -> Dict:
         """Return objects with filtering and pagination."""
         offset = params.get("offset", 0)
@@ -350,8 +587,26 @@ class MockRhinoServer:
         layer_filter = params.get("layer_filter")
         type_filter = params.get("type_filter")
 
-        # Filter objects
+        ids = params.get("ids")
+        selected_only = params.get("selected_only", False)
+        include_hidden = params.get("include_hidden", False)
+        include_locked = params.get("include_locked", True)
+        if layer_filter:
+            self._require_layer(layer_filter)
+
+        # Filter objects. Like the plugin's default enumerator, locked objects
+        # are listed and hidden ones are not unless asked for.
         filtered = list(self.objects.values())
+        if not include_hidden:
+            filtered = [o for o in filtered if o.get("visible", True)]
+        if not include_locked:
+            filtered = [o for o in filtered if not o.get("locked", False)]
+        if selected_only:
+            selected = set(self.selected_ids)
+            filtered = [o for o in filtered if o["id"] in selected]
+        if ids is not None:
+            wanted = {i.lower() for i in ids}
+            filtered = [o for o in filtered if o["id"].lower() in wanted]
         if layer_filter:
             filtered = [o for o in filtered if o.get("layer") == layer_filter]
         if type_filter:
@@ -367,6 +622,14 @@ class MockRhinoServer:
             "limit": limit,
             "has_more": offset + len(paged) < total
         }
+
+    def _require_layer(self, name: str):
+        """not_found with the plugin's guidance unless the layer exists. Mock
+        layers are flat, so a name is also its full path."""
+        if name.lower() not in {n.lower() for n in self.layers}:
+            raise MockRhinoError(
+                "not_found", f"Layer '{name}' not found", self.LAYER_NOT_FOUND_GUIDANCE
+            )
 
     def _create_object(self, params: Dict) -> Dict:
         """Create a mock object."""
@@ -438,7 +701,11 @@ class MockRhinoServer:
                 if obj["name"] == name:
                     return obj
 
-        raise Exception(f"Object not found")
+        raise MockRhinoError(
+            "not_found",
+            f"Object not found: {obj_id or name}",
+            self.OBJECT_NOT_FOUND_GUIDANCE,
+        )
 
     def _object_attributes_payload(self, obj: Dict) -> Dict:
         """Return the compact attribute payload used by the real plugin."""
@@ -794,39 +1061,84 @@ class MockRhinoServer:
         if filters_type not in ("and", "or"):
             raise Exception(f"Invalid filters_type '{filters_type}': expected 'and' or 'or'.")
 
-        if not filters:
-            return {"count": len(self.objects)}
-
         name_values = filters.get("name")
         color = filters.get("color")
-        custom = {k: v for k, v in filters.items() if k not in ("name", "color")}
+        ids = filters.get("ids")
+        layer = filters.get("layer")
+        types = filters.get("type")
+        if isinstance(types, str):
+            types = [types]
+        hidden = filters.get("hidden")
+        locked = filters.get("locked")
+        # Refused before the selection changes, like the plugin.
+        if layer is not None:
+            self._require_layer(layer)
+        for obj_id in ids or []:
+            if obj_id.lower() not in {i.lower() for i in self.objects}:
+                raise MockRhinoError(
+                    "not_found", f"Object not found: {obj_id}",
+                    self.OBJECT_NOT_FOUND_GUIDANCE,
+                )
+        custom = {
+            k: v for k, v in filters.items()
+            if k not in ("name", "color", "ids", "layer", "type", "hidden", "locked")
+        }
 
         def color_matches(o):
             c = o.get("color", {})
             return [c.get("r"), c.get("g"), c.get("b")] == color
 
-        count = 0
+        # One predicate per present built-in key, like the plugin.
+        checks = []
+        if name_values is not None:
+            checks.append(lambda o: o.get("name") in name_values)
+        if color is not None:
+            checks.append(color_matches)
+        if ids is not None:
+            wanted = {i.lower() for i in ids}
+            checks.append(lambda o: o["id"].lower() in wanted)
+        if layer is not None:
+            checks.append(lambda o: o.get("layer", "").lower() == layer.lower())
+        if types is not None:
+            wanted_types = {t.upper() for t in types}
+            checks.append(lambda o: o.get("type", "").upper() in wanted_types)
+        if hidden is not None:
+            checks.append(lambda o: (not o.get("visible", True)) == hidden)
+        if locked is not None:
+            checks.append(lambda o: bool(o.get("locked", False)) == locked)
+
+        # Candidates, like the plugin's ObjectEnumeratorSettings: normal objects,
+        # plus hidden or locked ones only when the filter asks for them.
+        def candidate(o):
+            if not o.get("visible", True):
+                return hidden is True
+            if o.get("locked", False):
+                return locked is True
+            return True
+
+        matched = []
         for obj in self.objects.values():
-            if filters_type == "and":
+            if not candidate(obj):
+                continue
+            if not filters:
                 ok = True
-                if name_values is not None and obj.get("name") not in name_values:
-                    ok = False
-                if ok and color is not None and not color_matches(obj):
-                    ok = False
+            elif filters_type == "and":
+                ok = all(check(obj) for check in checks)
                 # Custom attribute filtering is not modeled in the mock document.
                 # Treat unknown attrs as not-matching to keep AND strict.
                 if ok and custom:
                     ok = False
             else:
-                ok = False
-                if name_values is not None and obj.get("name") in name_values:
-                    ok = True
-                if not ok and color is not None and color_matches(obj):
-                    ok = True
+                ok = any(check(obj) for check in checks)
                 # custom attrs not modeled — OR ignores them silently
             if ok:
-                count += 1
-        return {"count": count}
+                matched.append(obj)
+        # Rhino cannot select a hidden or locked object; it stays matched only.
+        self.selected_ids = [
+            o["id"] for o in matched
+            if o.get("visible", True) and not o.get("locked", False)
+        ]
+        return {"count": len(self.selected_ids), "matched": len(matched)}
 
     def _create_layer(self, params: Dict) -> Dict:
         """Create a layer."""
@@ -853,7 +1165,9 @@ class MockRhinoServer:
         if name and name in self.layers:
             layer = self.layers.pop(name)
             return {"name": name, "deleted": True}
-        raise Exception(f"Layer '{name}' not found")
+        raise MockRhinoError(
+            "not_found", f"Layer '{name}' not found", self.LAYER_NOT_FOUND_GUIDANCE
+        )
 
     def _get_or_set_current_layer(self, params: Dict) -> Dict:
         """Get or set current layer."""
@@ -861,7 +1175,11 @@ class MockRhinoServer:
             if params["name"] in self.layers:
                 self.current_layer = params["name"]
             else:
-                raise Exception(f"Layer '{params['name']}' not found")
+                raise MockRhinoError(
+                    "not_found",
+                    f"Layer '{params['name']}' not found",
+                    self.LAYER_NOT_FOUND_GUIDANCE,
+                )
 
         return self.layers.get(self.current_layer, {"name": self.current_layer})
 
@@ -1108,20 +1426,108 @@ class MockRhinoServer:
             }
         return {"success": True, "output": "Mock C# ran.\n"}
 
+    # Precomputed 1x1 images (a transparent PNG and a white JPEG).
+    TINY_PNG_B64 = (
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgAAIAAAUAAeImBZsAAAAASUVORK5CYII="
+    )
+    TINY_JPEG_B64 = (
+        "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERX"
+        "RTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAAB//EABQQAQAA"
+        "AAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AQH//2Q=="
+    )
+
+    # Rhino 8's built-in display modes, in the order the plugin lists them.
+    DISPLAY_MODES = ("Wireframe", "Shaded", "Rendered", "Ghosted", "X-Ray", "Technical",
+                     "Artistic", "Pen", "Arctic", "Raytraced")
+    # Same sentences as plugin/McpException.cs.
+    CAMERA_AND_FRAMING_MESSAGE = (
+        "An explicit camera (camera_location, camera_target) cannot be combined with "
+        "a framing target (frame_object_ids, frame_bbox)"
+    )
+    CAMERA_AND_FRAMING_GUIDANCE = (
+        "Pass camera_location and camera_target to look from a known point, or "
+        "frame_object_ids or frame_bbox to frame geometry, not both."
+    )
+
+    def _check_capture_params(self, params: Dict) -> None:
+        """The refusals CaptureViewport.cs makes before touching any view."""
+        has_camera = any(params.get(k) is not None for k in ("camera_location", "camera_target"))
+        has_frame = any(params.get(k) is not None for k in ("frame_object_ids", "frame_bbox"))
+        if has_camera and has_frame:
+            raise MockRhinoError("invalid_argument", self.CAMERA_AND_FRAMING_MESSAGE,
+                                 self.CAMERA_AND_FRAMING_GUIDANCE)
+        mode = params.get("display_mode")
+        if mode is not None:
+            match = next((m for m in self.DISPLAY_MODES if m.lower() == mode.lower()), None)
+            if match is None:
+                raise MockRhinoError(
+                    "invalid_argument", f"Display mode '{mode}' not found",
+                    "Use one of the available display modes: "
+                    + ", ".join(self.DISPLAY_MODES) + ".")
+            params["display_mode"] = match
+        for object_id in params.get("frame_object_ids") or []:
+            if object_id not in self.objects:
+                raise MockRhinoError("not_found", f"Object not found: {object_id}",
+                                     self.OBJECT_NOT_FOUND_GUIDANCE)
+
     def _capture_viewport(self, params: Dict) -> Dict:
-        """Mock viewport capture. Returns a 1x1 transparent PNG so callers
-        that decode base64 image_data succeed without dragging in real image
-        data. The wrapper logs viewport_name/width/height — surface them."""
-        # 1x1 transparent PNG (precomputed)
-        png_b64 = (
-            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgAAIAAAUAAeImBZsAAAAASUVORK5CYII="
-        )
+        """Mock viewport capture. Returns a 1x1 PNG or JPEG (by format) so
+        callers that decode base64 image_data succeed without dragging in real
+        image data, plus the metadata fields CaptureViewport.cs reports."""
+        self._check_capture_params(params)
+        image_format = params.get("format", "png")
+        image_b64 = self.TINY_JPEG_B64 if image_format == "jpeg" else self.TINY_PNG_B64
+        target = params.get("viewport", "active")
+        name = self.active_viewport if target.lower() == "active" else next(
+            (n for n in self.viewports if n.lower() == target.lower()), None)
+        if name is None:
+            # A standard view the document lacks: the plugin temporarily
+            # reprojects the active view, in parallel projection.
+            name = target.capitalize()
+            viewport = {**self.viewports[self.active_viewport], "projection": "parallel"}
+        else:
+            viewport = dict(self.viewports[name])
+        viewport["name"] = name
+        # Temporary view state for this capture only: echoed into the metadata,
+        # never written back to self.viewports, as the plugin restores it.
+        if params.get("display_mode"):
+            viewport["display_mode"] = params["display_mode"]
+        for key in ("camera_location", "camera_target"):
+            if params.get(key) is not None:
+                viewport[key] = params[key]
+        frame = params.get("frame_bbox")
+        if params.get("frame_object_ids"):
+            boxes = [self.objects[i]["bounding_box"] for i in params["frame_object_ids"]]
+            frame = {"min": [min(b[0][a] for b in boxes) for a in range(3)],
+                     "max": [max(b[1][a] for b in boxes) for a in range(3)]}
+        if frame:
+            # Look at the middle of the box from the same direction as before.
+            center = [(lo + hi) / 2 for lo, hi in zip(frame["min"], frame["max"])]
+            offset = [loc - tgt for loc, tgt in
+                      zip(viewport["camera_location"], viewport["camera_target"])]
+            viewport["camera_target"] = center
+            viewport["camera_location"] = [c + o for c, o in zip(center, offset)]
+        visible = sum(1 for o in self.objects.values() if o.get("visible", True))
         return {
-            "image_data": png_b64,
-            "mime_type": "image/png",
-            "viewport_name": params.get("viewport", "active"),
+            "image_data": image_b64,
+            "mime_type": f"image/{image_format}",
+            "viewport_name": viewport["name"],
+            "viewport_target": target,
             "width": params.get("width", 800),
             "height": params.get("height", 600),
+            "show_grid": params.get("show_grid", True),
+            "show_axes": params.get("show_axes", True),
+            "show_cplane_axes": params.get("show_cplane_axes", False),
+            "object_count": len(self.objects),
+            "display_mode": viewport["display_mode"],
+            "projection": viewport["projection"],
+            "camera_location": viewport["camera_location"],
+            "camera_target": viewport["camera_target"],
+            "camera_up": list(viewport["camera_up"]),
+            "lens_length": params.get("lens_length", viewport["lens_length"]),
+            "scene_bounding_box": self._scene_bounding_box(),
+            "visible_object_count": visible,
+            "total_object_count": len(self.objects),
         }
 
     def _make_result_object(self, name: str, type_name: str = "BREP") -> str:
@@ -1202,7 +1608,7 @@ class MockRhinoServer:
             commands.append(entry)
 
         return {
-            "version": "0.0.0-mock",
+            "version": self.plugin_version,
             "command_count": len(commands),
             "commands": commands,
             "perception": {

@@ -1,6 +1,7 @@
 """Grasshopper batch graph construction tools."""
 
 from typing import Any, Dict, List, Optional
+from mcp.types import ToolAnnotations
 
 from mcp.server.mcpserver import Context
 
@@ -8,7 +9,15 @@ from rhinomcp.server import mcp
 from rhinomcp.tools._grasshopper_common import JsonValue, send_grasshopper_command
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Build Grasshopper graph",
+    annotations=ToolAnnotations(
+        title="Build Grasshopper graph",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_build_graph(
     ctx: Context,
     components: List[Dict[str, Any]],

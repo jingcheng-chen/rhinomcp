@@ -32,7 +32,11 @@
       "properties": {
         "layer": { "type": "string" },
         "type": { "type": "string" },
-        "bbox": { "$ref": "../common/definitions.json#/$defs/boundingBox" }
+        "bbox": { "$ref": "../common/definitions.json#/$defs/boundingBox" },
+        "id_count": { "type": "integer", "minimum": 0, "description": "Number of distinct ids the listing was restricted to" },
+        "selected_only": { "type": "boolean" },
+        "include_hidden": { "type": "boolean" },
+        "include_locked": { "type": "boolean" }
       }
     }
   },

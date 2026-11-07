@@ -25,7 +25,10 @@ public partial class RhinoMCPFunctions
 
         Layer layer = null;
         if (hasName) layer = doc.Layers.FindName(name);
-        if (hasGuid) layer = doc.Layers.FindId(Guid.Parse(guid));
+        if (hasGuid) layer = doc.Layers.FindId(McpException.ParseGuid(guid));
+
+        if ((hasName || hasGuid) && (layer == null || layer.IsDeleted))
+            throw McpException.LayerNotFound(hasGuid ? guid : name);
 
         if (layer != null) doc.Layers.SetCurrentLayerIndex(layer.Index, true);
         else layer = doc.Layers.CurrentLayer;

@@ -1,6 +1,7 @@
 """Grasshopper solution control tools."""
 
 from typing import Any, Dict, List, Optional
+from mcp.types import ToolAnnotations
 
 from mcp.server.mcpserver import Context
 
@@ -8,7 +9,15 @@ from rhinomcp.server import mcp
 from rhinomcp.tools._grasshopper_common import send_grasshopper_command
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Run Grasshopper solution",
+    annotations=ToolAnnotations(
+        title="Run Grasshopper solution",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_run_solution(
     ctx: Context,
     expire_all: bool = False,
@@ -17,7 +26,15 @@ def gh_run_solution(
     return send_grasshopper_command("gh_run_solution", {"expire_all": expire_all})
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Expire Grasshopper solution",
+    annotations=ToolAnnotations(
+        title="Expire Grasshopper solution",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_expire_solution(
     ctx: Context,
     instance_id: Optional[str] = None,

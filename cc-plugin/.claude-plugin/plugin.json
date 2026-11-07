@@ -1,0 +1,12 @@
+{
+  "name": "rhinomcp",
+  "version": "0.5.0",
+  "description": "Agents and commands for driving Rhino 3D and Grasshopper through the RhinoMCP server: a modeler, a read-only inspector, a Grasshopper builder, and /scene and /snapshot.",
+  "author": {
+    "name": "Jingcheng Chen"
+  },
+  "homepage": "https://github.com/jingcheng-chen/rhinomcp",
+  "repository": "https://github.com/jingcheng-chen/rhinomcp",
+  "license": "MIT",
+  "keywords": ["rhino", "rhino3d", "grasshopper", "mcp", "cad", "3d-modeling"]
+}

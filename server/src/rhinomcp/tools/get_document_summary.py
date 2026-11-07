@@ -4,7 +4,15 @@ import json
 from rhinomcp import get_rhino_connection, mcp, logger
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Get document summary",
+    annotations=ToolAnnotations(
+        title="Get document summary",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def get_document_summary(ctx: Context) -> str:
     """
     Get a lightweight summary of the current Rhino document.
@@ -26,4 +34,4 @@ def get_document_summary(ctx: Context) -> str:
         return json.dumps(result, indent=2)
     except Exception as e:
         logger.error(f"Error getting document summary from Rhino: {str(e)}")
-        return f"Error getting document summary: {str(e)}"
+        raise

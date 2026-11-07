@@ -106,6 +106,7 @@ READONLY_RETRY_COMMANDS = {
     "section_profile",
     "get_selected_objects_info",
     "get_document_summary",
+    "get_context",
     "get_objects",
     "capture_viewport",
     "get_commands",
@@ -135,14 +136,41 @@ CAPABILITIES_COMMAND = "describe_capabilities"
 # error, so the server checks the plugin actually connected before sending.
 #
 # When you add a parameter to an existing command, register it here with the
-# plugin version that introduces it and the value that means "not used".
+# plugin version that introduces it and the value that means "not used". A
+# dotted name ("filters.ids") reaches a key inside an object parameter.
 PARAMS_SINCE: Dict[str, Dict[str, tuple]] = {
     "sweep1": {"cap_planar_ends": ("0.4.0", False)},
+    "select_objects": {
+        # An older plugin reads these as custom user-string attributes.
+        "filters.ids": ("0.5.0", None),
+        "filters.layer": ("0.5.0", None),
+        "filters.type": ("0.5.0", None),
+        "filters.hidden": ("0.5.0", None),
+        "filters.locked": ("0.5.0", None),
+    },
+    "get_objects": {
+        "ids": ("0.5.0", None),
+        "selected_only": ("0.5.0", False),
+        "include_hidden": ("0.5.0", False),
+        "include_locked": ("0.5.0", True),
+    },
+    "capture_viewport": {
+        "display_mode": ("0.5.0", None),
+        "camera_location": ("0.5.0", None),
+        "camera_target": ("0.5.0", None),
+        "lens_length": ("0.5.0", None),
+        "frame_object_ids": ("0.5.0", None),
+        "frame_bbox": ("0.5.0", None),
+        "format": ("0.5.0", "png"),
+    },
 }
 # Commands added after describe_capabilities (0.3.2) existed, so a plugin too
 # old to report its command table is still refused with the right advice.
 COMMANDS_SINCE: Dict[str, str] = {
     "create_planar_region": "0.4.0",
+    "get_context": "0.5.0",
+    "set_camera": "0.5.0",
+    "zoom_to": "0.5.0",
 }
 PLUGIN_UPDATE_ADVICE = (
     "Update rhinomcp in Rhino's Package Manager (Tools > Package Manager > "
@@ -212,13 +240,57 @@ def unsupported_command_message(command_type: str, plugin_version: str, since) -
     added = f", which was added in plugin {since}" if since else ""
     return (
         f"The connected rhinomcp plugin ({plugin_version}) does not support "
-        f"'{command_type}'{added}; this server is {server_version() or 'unknown'}. "
-        f"{PLUGIN_UPDATE_ADVICE}"
+        f"'{command_type}'{added}; this server is {server_version() or 'unknown'}."
     )
 
 
-class UnsupportedCommandError(Exception):
+ERROR_CODES = (
+    "invalid_argument",
+    "not_found",
+    "unsupported",
+    "rhino_error",
+    "timeout",
+    "internal",
+)
+
+
+def _param_value(params: Dict[str, Any], name: str):
+    """The value at a PARAMS_SINCE name; a dotted name walks into objects."""
+    value: Any = params
+    for part in name.split("."):
+        if not isinstance(value, dict):
+            return None
+        value = value.get(part)
+    return value
+
+
+class RhinoError(Exception):
+    """A failure with an optional machine-readable code and one line of guidance.
+
+    Its text is what the client sees: ``code: message`` and the guidance on the
+    next line, or the bare message when there is no code.
+    """
+
+    def __init__(self, message: str, code: str | None = None, guidance=None):
+        self.message = message
+        self.code = code
+        self.guidance = guidance
+        super().__init__(format_error(message, code, guidance))
+
+
+def format_error(message: str, code: str | None = None, guidance=None) -> str:
+    """``code: message`` plus guidance on its own line; bare message if uncoded."""
+    if not code:
+        return message
+    text = f"{code}: {message}"
+    return f"{text}\n{guidance}" if guidance else text
+
+
+class UnsupportedCommandError(RhinoError):
     """The connected plugin cannot run this command; the socket itself is fine."""
+
+    def __init__(self, message: str, guidance: str | None = None):
+        super().__init__(message, "unsupported", guidance or PLUGIN_UPDATE_ADVICE)
 
 
 class TransientRhinoConnectionError(ConnectionError):
@@ -426,7 +498,7 @@ class RhinoConnection:
                 )
 
         for name, (introduced, unused) in PARAMS_SINCE.get(command_type, {}).items():
-            value = params.get(name)
+            value = _param_value(params, name)
             if value is None or value == unused:
                 continue
             if capabilities is None:
@@ -440,11 +512,11 @@ class RhinoConnection:
                 parse_version(capabilities.get("version")) if capabilities else None
             )
             if plugin is None or plugin < parse_version(introduced):
-                raise Exception(
+                raise UnsupportedCommandError(
                     f"'{command_type}' parameter '{name}' needs plugin {introduced}; "
                     f"the connected rhinomcp plugin ({version_text}) would silently "
-                    f"ignore it. The command was not sent. {PLUGIN_UPDATE_ADVICE} "
-                    f"Or call without {name}."
+                    "ignore it. The command was not sent.",
+                    f"{PLUGIN_UPDATE_ADVICE} Or call without {name}.",
                 )
 
         if params.get("dry_run"):
@@ -595,7 +667,14 @@ class RhinoConnection:
                             COMMANDS_SINCE.get(command_type),
                         )
                     )
-                raise Exception(message)
+                # The plugin answered, so the socket is healthy: surface its
+                # error (coded or not) as-is instead of as a transport failure.
+                code = response.get("code")
+                raise RhinoError(
+                    message,
+                    code if code in ERROR_CODES else None,
+                    response.get("guidance"),
+                )
 
             result = _normalize_negative_zero(response.get("result", {}))
 
@@ -658,8 +737,11 @@ class RhinoConnection:
             # Don't try to reconnect here - let the get_rhino_connection handle reconnection
             # Just invalidate the current socket so it will be recreated next time
             self.disconnect()
-            raise Exception(
-                "Timeout waiting for Rhino response - try simplifying your request"
+            raise RhinoError(
+                f"Timeout waiting for Rhino response to '{command_type}'.",
+                "timeout",
+                "Rhino may still be busy: check the document before retrying, "
+                "or split the request into smaller steps.",
             )
         except (ConnectionError, BrokenPipeError, ConnectionResetError) as e:
             logger.error(f"Socket connection error: {str(e)}")
@@ -689,8 +771,9 @@ class RhinoConnection:
             # Pre/post-flight validation failures — local, not a transport
             # issue. Propagate.
             raise
-        except UnsupportedCommandError:
-            # The plugin answered; the socket is healthy. Propagate as-is.
+        except RhinoError:
+            # The plugin answered (or the server refused before sending); the
+            # socket is healthy. Propagate as-is.
             raise
         except Exception as e:
             logger.error(f"Error communicating with Rhino: {str(e)}")

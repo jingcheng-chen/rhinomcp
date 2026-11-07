@@ -590,11 +590,18 @@ namespace RhinoMCPPlugin
             catch (Exception e)
             {
                 RhinoApp.WriteLine($"Error in handler: {e.Message}");
-                return new JObject
+                var error = new JObject
                 {
                     ["status"] = "error",
                     ["message"] = e.Message
                 };
+                if (e is McpException coded)
+                {
+                    error["code"] = coded.Code;
+                    if (!string.IsNullOrEmpty(coded.Guidance))
+                        error["guidance"] = coded.Guidance;
+                }
+                return error;
             }
             finally
             {
@@ -605,4 +612,4 @@ namespace RhinoMCPPlugin
             }
         }
     }
-}
+}

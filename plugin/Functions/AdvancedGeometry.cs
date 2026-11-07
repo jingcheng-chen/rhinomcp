@@ -377,7 +377,9 @@ public partial class RhinoMCPFunctions
             throw new ArgumentException("Pipe requires a curve_id");
 
         if (radius <= 0)
-            throw new ArgumentException("Pipe radius must be positive");
+            throw McpException.OutOfRange(
+                $"Pipe radius must be positive, got {radius}",
+                "Pass a radius greater than zero in model units.");
 
         var obj = doc.Objects.Find(new Guid(curveId));
         if (obj == null)

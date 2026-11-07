@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "zoom_to.json",
+  "title": "ZoomTo Command",
+  "description": "Frame a viewport on all objects, the selection, given object ids or a layer. Changes the view only: no document undo record is created.",
+  "type": "object",
+  "properties": {
+    "viewport": { "type": "string", "minLength": 1, "description": "Viewport name. Defaults to the active viewport." },
+    "target": { "enum": ["all", "selection", "object_ids", "layer"] },
+    "object_ids": { "$ref": "../common/definitions.json#/$defs/guidArray", "description": "Objects to frame; required when target is object_ids" },
+    "layer": { "type": "string", "minLength": 1, "description": "Layer name or full path; required when target is layer" }
+  },
+  "required": ["target"],
+  "allOf": [
+    { "if": { "properties": { "target": { "const": "object_ids" } } }, "then": { "required": ["object_ids"] } },
+    { "if": { "properties": { "target": { "const": "layer" } } }, "then": { "required": ["layer"] } }
+  ],
+  "additionalProperties": false,
+  "examples": [
+    { "target": "all" },
+    { "viewport": "Top", "target": "selection" },
+    { "target": "object_ids", "object_ids": ["12345678-1234-1234-1234-123456789012"] },
+    { "target": "layer", "layer": "Legs" }
+  ]
+}

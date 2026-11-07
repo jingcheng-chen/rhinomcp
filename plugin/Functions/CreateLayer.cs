@@ -42,8 +42,10 @@ public partial class RhinoMCPFunctions
             }
 
             if (matches.Count == 0)
-                throw new InvalidOperationException(
-                    $"Parent layer '{parent}' was not found. Use an existing layer name or exact full path (for example, 'Assembly::Left').");
+                throw new McpException(
+                    McpException.NotFound,
+                    $"Parent layer '{parent}' was not found",
+                    "Use an existing layer name or exact full path (for example, 'Assembly::Left').");
 
             if (matches.Count > 1)
                 throw new InvalidOperationException(

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "capture_viewport.json",
   "title": "CaptureViewport Command",
-  "description": "Capture a viewport screenshot for visual analysis",
+  "description": "Capture a viewport screenshot for visual analysis, with metadata. Any temporary display mode, camera or framing is restored after capture.",
   "type": "object",
   "properties": {
     "viewport": {
@@ -43,6 +43,58 @@
       "type": "boolean",
       "default": false,
       "description": "Fit visible objects to the requested image dimensions; restore the original viewport camera and projection after capture"
+    },
+    "display_mode": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Display mode name for this capture only, for example Shaded, Wireframe, Rendered, Ghosted, Technical, Arctic. Default: the viewport's current mode"
+    },
+    "camera_location": {
+      "$ref": "../common/definitions.json#/$defs/point3d",
+      "description": "Temporary camera location [x, y, z]. Cannot be combined with frame_object_ids or frame_bbox"
+    },
+    "camera_target": {
+      "$ref": "../common/definitions.json#/$defs/point3d",
+      "description": "Temporary camera target [x, y, z]. Cannot be combined with frame_object_ids or frame_bbox"
+    },
+    "lens_length": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Temporary 35mm-equivalent lens length in millimetres (perspective views)"
+    },
+    "frame_object_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/definitions.json#/$defs/guid"
+      },
+      "minItems": 1,
+      "description": "Temporarily frame the capture on these objects. Cannot be combined with camera_location or camera_target"
+    },
+    "frame_bbox": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "$ref": "../common/definitions.json#/$defs/point3d"
+        },
+        "max": {
+          "$ref": "../common/definitions.json#/$defs/point3d"
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "additionalProperties": false,
+      "description": "Temporarily frame the capture on this world-space box. Cannot be combined with camera_location or camera_target"
+    },
+    "format": {
+      "type": "string",
+      "enum": [
+        "png",
+        "jpeg"
+      ],
+      "default": "png",
+      "description": "Image encoding; jpeg is smaller"
     }
   },
   "additionalProperties": false

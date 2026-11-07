@@ -9,7 +9,15 @@ from rhinomcp.server import mcp
 from rhinomcp.tools._grasshopper_common import send_grasshopper_command
 
 
-@mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
+@mcp.tool(
+    title="Get Grasshopper graph",
+    annotations=ToolAnnotations(
+        title="Get Grasshopper graph",
+        read_only_hint=True,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def gh_get_graph(
     ctx: Context,
     graph_id: str,
@@ -27,7 +35,15 @@ def gh_get_graph(
     )
 
 
-@mcp.tool(annotations=ToolAnnotations(destructive_hint=True))
+@mcp.tool(
+    title="Clear Grasshopper graph",
+    annotations=ToolAnnotations(
+        title="Clear Grasshopper graph",
+        read_only_hint=False,
+        destructive_hint=True,
+        open_world_hint=False,
+    ),
+)
 def gh_clear_graph(
     ctx: Context,
     graph_id: str,

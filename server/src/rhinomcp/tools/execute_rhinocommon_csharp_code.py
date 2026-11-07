@@ -10,7 +10,15 @@ def _enabled() -> bool:
     return os.getenv("RHINO_MCP_ENABLE_CSHARP", "1").lower() not in ("0", "false", "no")
 
 
-@mcp.tool(annotations=ToolAnnotations(destructive_hint=True, open_world_hint=True))
+@mcp.tool(
+    title="Run RhinoCommon C# code",
+    annotations=ToolAnnotations(
+        title="Run RhinoCommon C# code",
+        read_only_hint=False,
+        destructive_hint=True,
+        open_world_hint=False,
+    ),
+)
 def execute_rhinocommon_csharp_code(
     ctx: Context,
     code: str,
@@ -91,7 +99,7 @@ def execute_rhinocommon_csharp_code(
         return {
             "success": False,
             "message": "execute_rhinocommon_csharp_code is disabled. "
-                       "Set RHINO_MCP_ENABLE_CSHARP=1 to enable.",
+            "Set RHINO_MCP_ENABLE_CSHARP=1 to enable.",
         }
     try:
         logger.info("Executing RhinoCommon C# code")
@@ -100,4 +108,4 @@ def execute_rhinocommon_csharp_code(
 
     except Exception as e:
         logger.error(f"Error executing C# code: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise

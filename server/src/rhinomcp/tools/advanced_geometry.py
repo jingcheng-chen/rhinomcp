@@ -10,11 +10,20 @@ These tools provide a simple, hallucination-free interface for:
 """
 
 from mcp.server.mcpserver import Context
+from mcp.types import ToolAnnotations
 from rhinomcp.server import get_rhino_connection, mcp, logger
 from typing import List, Optional, Dict, Any
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Loft curves",
+    annotations=ToolAnnotations(
+        title="Loft curves",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def loft(
     ctx: Context,
     curve_ids: List[str],
@@ -58,14 +67,22 @@ def loft(
         return {
             "success": True,
             "result_ids": result.get("result_ids", []),
-            "message": result.get("message", "Loft created successfully")
+            "message": result.get("message", "Loft created successfully"),
         }
     except Exception as e:
         logger.error(f"Error in loft: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Extrude curve",
+    annotations=ToolAnnotations(
+        title="Extrude curve",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def extrude_curve(
     ctx: Context,
     curve_id: str,
@@ -107,14 +124,22 @@ def extrude_curve(
         return {
             "success": True,
             "result_id": result.get("result_id"),
-            "message": result.get("message", "Extrusion created successfully")
+            "message": result.get("message", "Extrusion created successfully"),
         }
     except Exception as e:
         logger.error(f"Error in extrude_curve: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Sweep along rail",
+    annotations=ToolAnnotations(
+        title="Sweep along rail",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def sweep1(
     ctx: Context,
     rail_id: str,
@@ -146,7 +171,10 @@ def sweep1(
     """
     try:
         if not profile_ids:
-            return {"success": False, "message": "Sweep requires at least 1 profile curve"}
+            return {
+                "success": False,
+                "message": "Sweep requires at least 1 profile curve",
+            }
 
         rhino = get_rhino_connection()
         params = {
@@ -162,14 +190,22 @@ def sweep1(
         return {
             "success": True,
             "result_ids": result.get("result_ids", []),
-            "message": result.get("message", "Sweep created successfully")
+            "message": result.get("message", "Sweep created successfully"),
         }
     except Exception as e:
         logger.error(f"Error in sweep1: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Offset curve",
+    annotations=ToolAnnotations(
+        title="Offset curve",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def offset_curve(
     ctx: Context,
     curve_id: str,
@@ -212,14 +248,22 @@ def offset_curve(
         return {
             "success": True,
             "result_ids": result.get("result_ids", []),
-            "message": result.get("message", "Offset created successfully")
+            "message": result.get("message", "Offset created successfully"),
         }
     except Exception as e:
         logger.error(f"Error in offset_curve: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Pipe curve",
+    annotations=ToolAnnotations(
+        title="Pipe curve",
+        read_only_hint=False,
+        destructive_hint=False,
+        open_world_hint=False,
+    ),
+)
 def pipe(
     ctx: Context,
     curve_id: str,
@@ -264,8 +308,8 @@ def pipe(
         return {
             "success": True,
             "result_ids": result.get("result_ids", []),
-            "message": result.get("message", "Pipe created successfully")
+            "message": result.get("message", "Pipe created successfully"),
         }
     except Exception as e:
         logger.error(f"Error in pipe: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise
