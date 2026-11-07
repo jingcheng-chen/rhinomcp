@@ -212,13 +212,47 @@ def unsupported_command_message(command_type: str, plugin_version: str, since) -
     added = f", which was added in plugin {since}" if since else ""
     return (
         f"The connected rhinomcp plugin ({plugin_version}) does not support "
-        f"'{command_type}'{added}; this server is {server_version() or 'unknown'}. "
-        f"{PLUGIN_UPDATE_ADVICE}"
+        f"'{command_type}'{added}; this server is {server_version() or 'unknown'}."
     )
 
 
-class UnsupportedCommandError(Exception):
+ERROR_CODES = (
+    "invalid_argument",
+    "not_found",
+    "unsupported",
+    "rhino_error",
+    "timeout",
+    "internal",
+)
+
+
+class RhinoError(Exception):
+    """A failure with an optional machine-readable code and one line of guidance.
+
+    Its text is what the client sees: ``code: message`` and the guidance on the
+    next line, or the bare message when there is no code.
+    """
+
+    def __init__(self, message: str, code: str | None = None, guidance=None):
+        self.message = message
+        self.code = code
+        self.guidance = guidance
+        super().__init__(format_error(message, code, guidance))
+
+
+def format_error(message: str, code: str | None = None, guidance=None) -> str:
+    """``code: message`` plus guidance on its own line; bare message if uncoded."""
+    if not code:
+        return message
+    text = f"{code}: {message}"
+    return f"{text}\n{guidance}" if guidance else text
+
+
+class UnsupportedCommandError(RhinoError):
     """The connected plugin cannot run this command; the socket itself is fine."""
+
+    def __init__(self, message: str, guidance: str | None = None):
+        super().__init__(message, "unsupported", guidance or PLUGIN_UPDATE_ADVICE)
 
 
 class TransientRhinoConnectionError(ConnectionError):
@@ -595,7 +629,14 @@ class RhinoConnection:
                             COMMANDS_SINCE.get(command_type),
                         )
                     )
-                raise Exception(message)
+                # The plugin answered, so the socket is healthy: surface its
+                # error (coded or not) as-is instead of as a transport failure.
+                code = response.get("code")
+                raise RhinoError(
+                    message,
+                    code if code in ERROR_CODES else None,
+                    response.get("guidance"),
+                )
 
             result = _normalize_negative_zero(response.get("result", {}))
 
@@ -689,8 +730,9 @@ class RhinoConnection:
             # Pre/post-flight validation failures — local, not a transport
             # issue. Propagate.
             raise
-        except UnsupportedCommandError:
-            # The plugin answered; the socket is healthy. Propagate as-is.
+        except RhinoError:
+            # The plugin answered (or the server refused before sending); the
+            # socket is healthy. Propagate as-is.
             raise
         except Exception as e:
             logger.error(f"Error communicating with Rhino: {str(e)}")

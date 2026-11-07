@@ -53,5 +53,5 @@ def modify_objects(
             return f"Partial success: Modified {success_count}/{total} objects. {failure_count} failed: {error_details}"
     except Exception as e:
         logger.error(f"Error modifying objects: {str(e)}")
-        return f"Error modifying objects: {str(e)}"
+        raise
 

@@ -22,8 +22,28 @@ import uuid
 from typing import Dict, Any, Optional
 
 
+class MockRhinoError(Exception):
+    """A handler failure answered with a code and guidance, like the plugin's
+    McpException. Plain exceptions stay uncoded, like every other plugin error."""
+
+    def __init__(self, code: str, message: str, guidance: Optional[str] = None):
+        super().__init__(message)
+        self.code = code
+        self.guidance = guidance
+
+
 class MockRhinoServer:
     """A mock Rhino server for testing MCP commands."""
+
+    # Same sentences the plugin attaches (plugin/McpException.cs).
+    OBJECT_NOT_FOUND_GUIDANCE = (
+        "Call get_objects or get_selected_objects_info to find a valid object "
+        "id or name."
+    )
+    LAYER_NOT_FOUND_GUIDANCE = (
+        "Call get_document_summary to list existing layers, or create_layer to "
+        "make it first."
+    )
 
     def __init__(self, host: str = "127.0.0.1", port: int = 1999,
                  legacy_plugin: bool = False):
@@ -277,6 +297,11 @@ class MockRhinoServer:
                 if track_health:
                     result["_health"] = self._build_health(before, after)
             return {"status": "success", "result": result}
+        except MockRhinoError as e:
+            response = {"status": "error", "message": str(e), "code": e.code}
+            if e.guidance:
+                response["guidance"] = e.guidance
+            return response
         except Exception as e:
             return {"status": "error", "message": str(e)}
 
@@ -438,7 +463,11 @@ class MockRhinoServer:
                 if obj["name"] == name:
                     return obj
 
-        raise Exception(f"Object not found")
+        raise MockRhinoError(
+            "not_found",
+            f"Object not found: {obj_id or name}",
+            self.OBJECT_NOT_FOUND_GUIDANCE,
+        )
 
     def _object_attributes_payload(self, obj: Dict) -> Dict:
         """Return the compact attribute payload used by the real plugin."""
@@ -853,7 +882,9 @@ class MockRhinoServer:
         if name and name in self.layers:
             layer = self.layers.pop(name)
             return {"name": name, "deleted": True}
-        raise Exception(f"Layer '{name}' not found")
+        raise MockRhinoError(
+            "not_found", f"Layer '{name}' not found", self.LAYER_NOT_FOUND_GUIDANCE
+        )
 
     def _get_or_set_current_layer(self, params: Dict) -> Dict:
         """Get or set current layer."""
@@ -861,7 +892,11 @@ class MockRhinoServer:
             if params["name"] in self.layers:
                 self.current_layer = params["name"]
             else:
-                raise Exception(f"Layer '{params['name']}' not found")
+                raise MockRhinoError(
+                    "not_found",
+                    f"Layer '{params['name']}' not found",
+                    self.LAYER_NOT_FOUND_GUIDANCE,
+                )
 
         return self.layers.get(self.current_layer, {"name": self.current_layer})
 

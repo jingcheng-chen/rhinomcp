@@ -113,7 +113,7 @@ def search_rhinoscript_functions(ctx: Context, query: str, limit: int = 10) -> L
         return results
     except Exception as e:
         logger.error(f"Error searching functions: {str(e)}")
-        return [{"error": str(e)}]
+        raise
 
 
 @mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
@@ -181,7 +181,7 @@ def get_rhinoscript_docs(
 
     except Exception as e:
         logger.error(f"Error getting docs: {str(e)}")
-        return {"success": False, "error": str(e)}
+        raise
 
 
 @mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
@@ -220,7 +220,7 @@ def list_rhinoscript_modules(ctx: Context) -> Dict[str, Any]:
 
     except Exception as e:
         logger.error(f"Error listing modules: {str(e)}")
-        return {"error": str(e)}
+        raise
 
 
 @mcp.tool(annotations=ToolAnnotations(read_only_hint=True))
@@ -264,4 +264,4 @@ def get_module_functions(ctx: Context, module_name: str) -> Dict[str, Any]:
 
     except Exception as e:
         logger.error(f"Error getting module functions: {str(e)}")
-        return {"error": str(e)}
+        raise

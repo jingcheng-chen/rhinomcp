@@ -54,4 +54,4 @@ def run_command(ctx: Context, command: str, echo: bool = False) -> str:
         return "Command failed: no output captured."
     except Exception as e:
         logger.error(f"Error running Rhino command: {str(e)}")
-        return f"Error running Rhino command: {str(e)}"
+        raise

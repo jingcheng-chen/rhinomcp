@@ -26,4 +26,4 @@ def get_document_summary(ctx: Context) -> str:
         return json.dumps(result, indent=2)
     except Exception as e:
         logger.error(f"Error getting document summary from Rhino: {str(e)}")
-        return f"Error getting document summary: {str(e)}"
+        raise

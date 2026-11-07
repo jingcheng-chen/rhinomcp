@@ -84,4 +84,4 @@ def capture_viewport(
 
     except Exception as e:
         logger.error(f"Error capturing viewport: {str(e)}")
-        raise Exception(f"Error capturing viewport: {str(e)}")
+        raise

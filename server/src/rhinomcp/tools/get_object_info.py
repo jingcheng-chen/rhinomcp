@@ -40,6 +40,4 @@ def get_object_info(ctx: Context, id: str = None, name: str = None) -> Dict[str,
 
     except Exception as e:
         logger.error(f"Error getting object info from Rhino: {str(e)}")
-        return {
-            "error": str(e)
-        }
+        raise

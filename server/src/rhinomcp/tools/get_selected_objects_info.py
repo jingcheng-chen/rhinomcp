@@ -16,5 +16,5 @@ def get_selected_objects_info(ctx: Context, include_attributes: bool = False) ->
         return json.dumps(result, indent=2)
     except Exception as e:
         logger.error(f"Error getting selected objects from Rhino: {str(e)}")
-        return f"Error getting selected objects: {str(e)}"
+        raise
 

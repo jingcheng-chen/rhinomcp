@@ -28,4 +28,4 @@ def get_commands(ctx: Context, filter: str = "", loaded_only: bool = True) -> st
         return json.dumps(result, indent=2)
     except Exception as e:
         logger.error(f"Error listing Rhino commands: {str(e)}")
-        return f"Error listing Rhino commands: {str(e)}"
+        raise

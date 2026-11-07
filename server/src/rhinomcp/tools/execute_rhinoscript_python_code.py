@@ -87,4 +87,4 @@ def execute_rhinoscript_python_code(
         return rhino.send_command("execute_rhinoscript_python_code", {"code": code})
     except Exception as e:
         logger.error(f"Error executing code: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise

@@ -55,5 +55,5 @@ def select_objects(
         return f"Selected {result['count']} objects"
     except Exception as e:
         logger.error(f"Error selecting objects: {str(e)}")
-        return f"Error selecting objects: {str(e)}"
+        raise
 

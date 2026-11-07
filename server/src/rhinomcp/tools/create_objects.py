@@ -96,5 +96,5 @@ def create_objects(
             return f"Partial success: Created {success_count}/{total} objects. {failure_count} failed: {error_details}"
     except Exception as e:
         logger.error(f"Error creating objects: {str(e)}")
-        return f"Error creating objects: {str(e)}"
+        raise
 

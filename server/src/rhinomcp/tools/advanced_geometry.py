@@ -62,7 +62,7 @@ def loft(
         }
     except Exception as e:
         logger.error(f"Error in loft: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise
 
 
 @mcp.tool()
@@ -111,7 +111,7 @@ def extrude_curve(
         }
     except Exception as e:
         logger.error(f"Error in extrude_curve: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise
 
 
 @mcp.tool()
@@ -166,7 +166,7 @@ def sweep1(
         }
     except Exception as e:
         logger.error(f"Error in sweep1: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise
 
 
 @mcp.tool()
@@ -216,7 +216,7 @@ def offset_curve(
         }
     except Exception as e:
         logger.error(f"Error in offset_curve: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise
 
 
 @mcp.tool()
@@ -268,4 +268,4 @@ def pipe(
         }
     except Exception as e:
         logger.error(f"Error in pipe: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise

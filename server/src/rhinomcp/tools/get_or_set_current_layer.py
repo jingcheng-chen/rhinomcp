@@ -41,5 +41,5 @@ def get_or_set_current_layer(
         return f"Current layer: {result['name']}"
     except Exception as e:
         logger.error(f"Error getting or setting current layer: {str(e)}")
-        return f"Error getting or setting current layer: {str(e)}"
+        raise
  

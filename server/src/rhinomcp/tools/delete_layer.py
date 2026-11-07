@@ -39,8 +39,8 @@ def delete_layer(
         # Create the layer
         result = rhino.send_command("delete_layer", command_params)
 
-        return result["message"]
+        return result.get("message") or f"Layer {result.get('name', name)} deleted"
     except Exception as e:
         logger.error(f"Error deleting layer: {str(e)}")
-        return f"Error deleting layer: {str(e)}"
+        raise
  

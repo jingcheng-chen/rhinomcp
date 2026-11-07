@@ -55,7 +55,7 @@ def project_curve(
         }
     except Exception as e:
         logger.error(f"Error in project_curve: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise
 
 
 @mcp.tool()
@@ -99,7 +99,7 @@ def intersect_curves(
         }
     except Exception as e:
         logger.error(f"Error in intersect_curves: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise
 
 
 @mcp.tool()
@@ -148,4 +148,4 @@ def split_curve(
         }
     except Exception as e:
         logger.error(f"Error in split_curve: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise

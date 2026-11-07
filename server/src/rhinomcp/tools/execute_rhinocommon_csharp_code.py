@@ -100,4 +100,4 @@ def execute_rhinocommon_csharp_code(
 
     except Exception as e:
         logger.error(f"Error executing C# code: {str(e)}")
-        return {"success": False, "message": str(e)}
+        raise
