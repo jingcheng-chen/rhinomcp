@@ -3,6 +3,7 @@ from mcp.types import ToolAnnotations
 from rhinomcp import get_rhino_connection, mcp, logger
 from typing import Dict, Any
 
+
 @mcp.tool(
     title="Get object info",
     annotations=ToolAnnotations(
@@ -32,7 +33,7 @@ def get_object_info(ctx: Context, id: str = None, name: str = None) -> Dict[str,
         - "bounding_box": The bounding box of the object
         - "geometry": The geometry info of the object
         - "attributes": A dictionary containing all custom user attributes of the object
-    
+
     Parameters:
     - id: The id of the object to get information about
     - name: The name of the object to get information about

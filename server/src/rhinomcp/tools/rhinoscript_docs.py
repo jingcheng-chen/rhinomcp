@@ -20,7 +20,11 @@ def _score_match(query_terms: List[str], text: str) -> int:
         if term in text_lower:
             score += 1
             # Bonus for exact word match
-            if f" {term} " in f" {text_lower} " or text_lower.startswith(term) or text_lower.endswith(term):
+            if (
+                f" {term} " in f" {text_lower} "
+                or text_lower.startswith(term)
+                or text_lower.endswith(term)
+            ):
                 score += 1
     return score
 
@@ -42,17 +46,19 @@ def _search_functions(query: str, limit: int = 10) -> List[Dict[str, Any]]:
             score = _score_match(query_terms, searchable)
 
             # Also check signature for parameter names
-            signature = func.get('Signature', '')
+            signature = func.get("Signature", "")
             score += _score_match(query_terms, signature.lower())
 
             if score > 0:
-                results.append({
-                    "name": func["Name"],
-                    "signature": func.get("Signature", func["Name"] + "()"),
-                    "description": func.get("Description", "")[:300],
-                    "module": module["ModuleName"],
-                    "_score": score
-                })
+                results.append(
+                    {
+                        "name": func["Name"],
+                        "signature": func.get("Signature", func["Name"] + "()"),
+                        "description": func.get("Description", "")[:300],
+                        "module": module["ModuleName"],
+                        "_score": score,
+                    }
+                )
 
     # Sort by score descending, then by name
     results.sort(key=lambda x: (-x["_score"], x["name"]))
@@ -90,7 +96,9 @@ def _get_function_details(function_name: str) -> Optional[Dict[str, Any]]:
         open_world_hint=False,
     ),
 )
-def search_rhinoscript_functions(ctx: Context, query: str, limit: int = 10) -> List[Dict[str, Any]]:
+def search_rhinoscript_functions(
+    ctx: Context, query: str, limit: int = 10
+) -> List[Dict[str, Any]]:
     """
     Search RhinoScript functions by keyword or description.
 
@@ -114,10 +122,12 @@ def search_rhinoscript_functions(ctx: Context, query: str, limit: int = 10) -> L
     try:
         results = _search_functions(query, limit)
         if not results:
-            return [{
-                "message": f"No functions found matching '{query}'. Try different keywords.",
-                "suggestion": "Try broader terms like 'curve', 'surface', 'mesh', 'transform', etc."
-            }]
+            return [
+                {
+                    "message": f"No functions found matching '{query}'. Try different keywords.",
+                    "suggestion": "Try broader terms like 'curve', 'surface', 'mesh', 'transform', etc.",
+                }
+            ]
         return results
     except Exception as e:
         logger.error(f"Error searching functions: {str(e)}")
@@ -134,10 +144,7 @@ def search_rhinoscript_functions(ctx: Context, query: str, limit: int = 10) -> L
     ),
 )
 def get_rhinoscript_docs(
-    ctx: Context,
-    topic: str,
-    include_examples: bool = True,
-    max_functions: int = 5
+    ctx: Context, topic: str, include_examples: bool = True, max_functions: int = 5
 ) -> Dict[str, Any]:
     """
     Get comprehensive RhinoScript documentation for a topic.
@@ -171,8 +178,10 @@ def get_rhinoscript_docs(
             return {
                 "success": False,
                 "message": f"No functions found for topic '{topic}'",
-                "suggestion": "Try different keywords. Available modules: " +
-                    ", ".join(sorted(set(m["ModuleName"] for m in rhinoscriptsyntax_json)))
+                "suggestion": "Try different keywords. Available modules: "
+                + ", ".join(
+                    sorted(set(m["ModuleName"] for m in rhinoscriptsyntax_json))
+                ),
             }
 
         # Get full documentation for each function
@@ -192,7 +201,7 @@ def get_rhinoscript_docs(
             "usage_reminder": (
                 "Use these EXACT function signatures when writing code. "
                 "Import with: import rhinoscriptsyntax as rs"
-            )
+            ),
         }
 
     except Exception as e:
@@ -227,11 +236,13 @@ def list_rhinoscript_modules(ctx: Context) -> Dict[str, Any]:
             # Get first few function names as examples
             example_funcs = [f["Name"] for f in module["functions"][:5]]
 
-            modules.append({
-                "module": module_name,
-                "function_count": func_count,
-                "example_functions": example_funcs
-            })
+            modules.append(
+                {
+                    "module": module_name,
+                    "function_count": func_count,
+                    "example_functions": example_funcs,
+                }
+            )
 
         # Sort by module name
         modules.sort(key=lambda x: x["module"])
@@ -239,7 +250,7 @@ def list_rhinoscript_modules(ctx: Context) -> Dict[str, Any]:
         return {
             "total_modules": len(modules),
             "total_functions": sum(m["function_count"] for m in modules),
-            "modules": modules
+            "modules": modules,
         }
 
     except Exception as e:
@@ -275,23 +286,25 @@ def get_module_functions(ctx: Context, module_name: str) -> Dict[str, Any]:
             if module["ModuleName"].lower() == module_name_lower:
                 functions = []
                 for func in module["functions"]:
-                    functions.append({
-                        "name": func["Name"],
-                        "signature": func.get("Signature", func["Name"] + "()"),
-                        "description": func.get("Description", "")[:150]
-                    })
+                    functions.append(
+                        {
+                            "name": func["Name"],
+                            "signature": func.get("Signature", func["Name"] + "()"),
+                            "description": func.get("Description", "")[:150],
+                        }
+                    )
 
                 return {
                     "module": module["ModuleName"],
                     "function_count": len(functions),
-                    "functions": functions
+                    "functions": functions,
                 }
 
         # Module not found
         available = sorted(set(m["ModuleName"] for m in rhinoscriptsyntax_json))
         return {
             "error": f"Module '{module_name}' not found",
-            "available_modules": available
+            "available_modules": available,
         }
 
     except Exception as e:

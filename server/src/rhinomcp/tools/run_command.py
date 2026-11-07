@@ -6,7 +6,11 @@ from rhinomcp import get_rhino_connection, mcp, logger
 
 
 def _enabled() -> bool:
-    return os.getenv("RHINO_MCP_ENABLE_RUN_COMMAND", "1").lower() not in ("0", "false", "no")
+    return os.getenv("RHINO_MCP_ENABLE_RUN_COMMAND", "1").lower() not in (
+        "0",
+        "false",
+        "no",
+    )
 
 
 @mcp.tool(
@@ -46,8 +50,10 @@ def run_command(ctx: Context, command: str, echo: bool = False) -> str:
     untrusted clients.
     """
     if not _enabled():
-        return ("Error running Rhino command: disabled. Set "
-                "RHINO_MCP_ENABLE_RUN_COMMAND=1 to enable.")
+        return (
+            "Error running Rhino command: disabled. Set "
+            "RHINO_MCP_ENABLE_RUN_COMMAND=1 to enable."
+        )
     try:
         rhino = get_rhino_connection()
         result = rhino.send_command("run_command", {"command": command, "echo": echo})

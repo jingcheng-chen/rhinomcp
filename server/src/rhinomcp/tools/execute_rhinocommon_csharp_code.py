@@ -99,7 +99,7 @@ def execute_rhinocommon_csharp_code(
         return {
             "success": False,
             "message": "execute_rhinocommon_csharp_code is disabled. "
-                       "Set RHINO_MCP_ENABLE_CSHARP=1 to enable.",
+            "Set RHINO_MCP_ENABLE_CSHARP=1 to enable.",
         }
     try:
         logger.info("Executing RhinoCommon C# code")

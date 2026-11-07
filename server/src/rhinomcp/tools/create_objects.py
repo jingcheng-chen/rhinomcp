@@ -13,13 +13,10 @@ from typing import Any, List, Dict
         open_world_hint=False,
     ),
 )
-def create_objects(
-    ctx: Context,
-    objects: List[Dict[str, Any]]
-) -> str:
+def create_objects(ctx: Context, objects: List[Dict[str, Any]]) -> str:
     """
     Create multiple objects at once in the Rhino document.
-    
+
     Parameters:
     - objects: A list of dictionaries, each containing the parameters for a single object
 
@@ -34,7 +31,7 @@ def create_objects(
 
     Returns:
     A message indicating the created objects.
-    
+
     Examples of params:
     [
         {
@@ -106,4 +103,3 @@ def create_objects(
     except Exception as e:
         logger.error(f"Error creating objects: {str(e)}")
         raise
-

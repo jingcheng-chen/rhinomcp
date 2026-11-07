@@ -14,15 +14,13 @@ from typing import Any, List, Dict, Optional
     ),
 )
 def modify_objects(
-    ctx: Context,
-    objects: List[Dict[str, Any]],
-    all: Optional[bool] = None
+    ctx: Context, objects: List[Dict[str, Any]], all: Optional[bool] = None
 ) -> str:
     """
     Modify multiple existing objects at once in the Rhino document.
-    
+
     Parameters:
-    - objects: A List of objects, each containing the parameters for a single object modification 
+    - objects: A List of objects, each containing the parameters for a single object modification
     - all: Optional boolean to modify all objects, if true, only one object is required in the objects dictionary
 
     Each object can have the following parameters:
@@ -63,4 +61,3 @@ def modify_objects(
     except Exception as e:
         logger.error(f"Error modifying objects: {str(e)}")
         raise
-

@@ -7,7 +7,11 @@ from typing import Any, Dict
 
 
 def _enabled() -> bool:
-    return os.getenv("RHINO_MCP_ENABLE_RHINOSCRIPT", "1").lower() not in ("0", "false", "no")
+    return os.getenv("RHINO_MCP_ENABLE_RHINOSCRIPT", "1").lower() not in (
+        "0",
+        "false",
+        "no",
+    )
 
 
 @mcp.tool(
@@ -88,7 +92,7 @@ def execute_rhinoscript_python_code(
         return {
             "success": False,
             "message": "execute_rhinoscript_python_code is disabled. "
-                       "Set RHINO_MCP_ENABLE_RHINOSCRIPT=1 to enable.",
+            "Set RHINO_MCP_ENABLE_RHINOSCRIPT=1 to enable.",
         }
     try:
         rhino = get_rhino_connection()

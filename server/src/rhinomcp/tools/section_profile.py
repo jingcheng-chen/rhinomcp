@@ -89,7 +89,12 @@ def section_profile(
         if profile.get("axis") not in ("X", "Y", "Z"):
             raise ValueError("section_profile profile axis must be 'X', 'Y', or 'Z'.")
         count = profile.get("count")
-        if isinstance(count, bool) or not isinstance(count, int) or count < 2 or count > 100:
+        if (
+            isinstance(count, bool)
+            or not isinstance(count, int)
+            or count < 2
+            or count > 100
+        ):
             raise ValueError(
                 "section_profile profile count must be an integer in [2, 100]."
             )

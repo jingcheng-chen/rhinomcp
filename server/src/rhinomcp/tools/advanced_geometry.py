@@ -67,7 +67,7 @@ def loft(
         return {
             "success": True,
             "result_ids": result.get("result_ids", []),
-            "message": result.get("message", "Loft created successfully")
+            "message": result.get("message", "Loft created successfully"),
         }
     except Exception as e:
         logger.error(f"Error in loft: {str(e)}")
@@ -124,7 +124,7 @@ def extrude_curve(
         return {
             "success": True,
             "result_id": result.get("result_id"),
-            "message": result.get("message", "Extrusion created successfully")
+            "message": result.get("message", "Extrusion created successfully"),
         }
     except Exception as e:
         logger.error(f"Error in extrude_curve: {str(e)}")
@@ -171,7 +171,10 @@ def sweep1(
     """
     try:
         if not profile_ids:
-            return {"success": False, "message": "Sweep requires at least 1 profile curve"}
+            return {
+                "success": False,
+                "message": "Sweep requires at least 1 profile curve",
+            }
 
         rhino = get_rhino_connection()
         params = {
@@ -187,7 +190,7 @@ def sweep1(
         return {
             "success": True,
             "result_ids": result.get("result_ids", []),
-            "message": result.get("message", "Sweep created successfully")
+            "message": result.get("message", "Sweep created successfully"),
         }
     except Exception as e:
         logger.error(f"Error in sweep1: {str(e)}")
@@ -245,7 +248,7 @@ def offset_curve(
         return {
             "success": True,
             "result_ids": result.get("result_ids", []),
-            "message": result.get("message", "Offset created successfully")
+            "message": result.get("message", "Offset created successfully"),
         }
     except Exception as e:
         logger.error(f"Error in offset_curve: {str(e)}")
@@ -305,7 +308,7 @@ def pipe(
         return {
             "success": True,
             "result_ids": result.get("result_ids", []),
-            "message": result.get("message", "Pipe created successfully")
+            "message": result.get("message", "Pipe created successfully"),
         }
     except Exception as e:
         logger.error(f"Error in pipe: {str(e)}")

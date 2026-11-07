@@ -60,7 +60,7 @@ def project_curve(
         return {
             "success": True,
             "result_ids": result.get("result_ids", []),
-            "message": result.get("message", "Curve projected successfully")
+            "message": result.get("message", "Curve projected successfully"),
         }
     except Exception as e:
         logger.error(f"Error in project_curve: {str(e)}")
@@ -112,7 +112,7 @@ def intersect_curves(
             "point_ids": result.get("point_ids", []),
             "curve_ids": result.get("curve_ids", []),
             "points": result.get("points", []),
-            "message": result.get("message", "Intersections found")
+            "message": result.get("message", "Intersections found"),
         }
     except Exception as e:
         logger.error(f"Error in intersect_curves: {str(e)}")
@@ -151,7 +151,10 @@ def split_curve(
     """
     try:
         if not parameters and not point_ids:
-            return {"success": False, "message": "Either parameters or point_ids must be provided"}
+            return {
+                "success": False,
+                "message": "Either parameters or point_ids must be provided",
+            }
 
         rhino = get_rhino_connection()
         params = {
@@ -169,7 +172,7 @@ def split_curve(
         return {
             "success": True,
             "result_ids": result.get("result_ids", []),
-            "message": result.get("message", "Curve split successfully")
+            "message": result.get("message", "Curve split successfully"),
         }
     except Exception as e:
         logger.error(f"Error in split_curve: {str(e)}")
