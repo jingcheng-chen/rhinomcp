@@ -26,6 +26,7 @@
             "section_profile",
             "get_selected_objects_info",
             "get_document_summary",
+            "get_context",
             "get_objects",
             "select_objects",
             "create_layer",

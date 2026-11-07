@@ -106,6 +106,7 @@ READONLY_RETRY_COMMANDS = {
     "section_profile",
     "get_selected_objects_info",
     "get_document_summary",
+    "get_context",
     "get_objects",
     "capture_viewport",
     "get_commands",
@@ -143,6 +144,7 @@ PARAMS_SINCE: Dict[str, Dict[str, tuple]] = {
 # old to report its command table is still refused with the right advice.
 COMMANDS_SINCE: Dict[str, str] = {
     "create_planar_region": "0.4.0",
+    "get_context": "0.5.0",
 }
 PLUGIN_UPDATE_ADVICE = (
     "Update rhinomcp in Rhino's Package Manager (Tools > Package Manager > "

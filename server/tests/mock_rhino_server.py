@@ -26,7 +26,7 @@ class MockRhinoServer:
     """A mock Rhino server for testing MCP commands."""
 
     def __init__(self, host: str = "127.0.0.1", port: int = 1999,
-                 legacy_plugin: bool = False):
+                 legacy_plugin: bool = False, plugin_version: str = "0.5.0"):
         self.host = host
         self.port = port
         self.server_socket: Optional[socket.socket] = None
@@ -36,6 +36,10 @@ class MockRhinoServer:
         # supports_dry_run, and it drops the flag it doesn't know about instead of
         # previewing, so the boolean handlers mutate the document for real.
         self.legacy_plugin = legacy_plugin
+        # The version describe_capabilities reports. Commands added after it
+        # (COMMANDS_ADDED) are left out of the handler table, the way an older
+        # plugin simply does not have them.
+        self.plugin_version = plugin_version
         self._handler_table: Optional[Dict[str, Any]] = None
         # Command types received, in order, so a test can assert what was sent.
         self.received_commands: list = []
@@ -53,6 +57,9 @@ class MockRhinoServer:
             }
         }
         self.current_layer = "Default"
+        # Ids in selection order, replaced by each select_objects like the
+        # plugin's UnselectAll + Select.
+        self.selected_ids: list = []
         self.undo_stack: list = []
         self.redo_stack: list = []
 
@@ -192,6 +199,12 @@ class MockRhinoServer:
         "boolean_union", "boolean_difference", "boolean_intersection",
     }
 
+    # Commands newer than the oldest plugin a test may impersonate, with the
+    # plugin version that introduced them.
+    COMMANDS_ADDED = {
+        "get_context": (0, 5, 0),
+    }
+
     def _handlers(self) -> Dict[str, Any]:
         """The mock's command surface, built once. describe_capabilities reports
         it, the same way the plugin reports its reflected dispatch table."""
@@ -200,6 +213,7 @@ class MockRhinoServer:
 
         self._handler_table = {
             "get_document_summary": self._get_document_summary,
+            "get_context": self._get_context,
             "get_objects": self._get_objects,
             "create_object": self._create_object,
             "create_objects": self._create_objects,
@@ -233,6 +247,10 @@ class MockRhinoServer:
             "offset_curve": self._offset_curve,
             "pipe": self._pipe,
         }
+        version = tuple(int(p) for p in self.plugin_version.split("-")[0].split("."))
+        for name, added in self.COMMANDS_ADDED.items():
+            if version < added:
+                del self._handler_table[name]
         return self._handler_table
 
     def _process_command(self, command: Dict[str, Any]) -> Dict[str, Any]:
@@ -341,6 +359,50 @@ class MockRhinoServer:
                  "object_count": layer_counts.get(layer["name"], 0), "children": []}
                 for layer in self.layers.values()
             ]
+        }
+
+    # The mock's fixed active viewport. The real plugin reads doc.Views.ActiveView.
+    ACTIVE_VIEWPORT = {
+        "name": "Perspective",
+        "projection": "perspective",
+        "display_mode": "Shaded",
+        "camera_location": [100.0, -100.0, 100.0],
+        "camera_target": [0.0, 0.0, 0.0],
+    }
+
+    def _get_context(self, params: Dict) -> Dict:
+        """Bounded grounding snapshot, mirroring GetContext.cs: top 8 types by
+        count, first 20 selected ids, no hierarchy or per-layer counts."""
+        type_counts: Dict[str, int] = {}
+        for obj in self.objects.values():
+            obj_type = obj.get("type", "UNKNOWN")
+            type_counts[obj_type] = type_counts.get(obj_type, 0) + 1
+        top_types = sorted(type_counts.items(), key=lambda kv: kv[1], reverse=True)[:8]
+
+        selected = [i for i in self.selected_ids if i in self.objects]
+        bbox = None
+        if self.objects:
+            boxes = [o["bounding_box"] for o in self.objects.values()]
+            bbox = {
+                "min": [min(b[0][axis] for b in boxes) for axis in range(3)],
+                "max": [max(b[1][axis] for b in boxes) for axis in range(3)],
+            }
+
+        return {
+            "document_name": "mock.3dm",
+            "document_path": "/mock/mock.3dm",
+            "units": "Millimeters",
+            "absolute_tolerance": 0.001,
+            "angle_tolerance": 1.0,
+            "current_layer": self.current_layer,
+            "layer_count": len(self.layers),
+            "object_count": len(self.objects),
+            "objects_by_type": dict(top_types),
+            "selection_count": len(selected),
+            "selected_ids": selected[:20],
+            "viewport": dict(self.ACTIVE_VIEWPORT),
+            "scene_bounding_box": bbox,
+            "grasshopper_definition_count": 0,
         }
 
     def _get_objects(self, params: Dict) -> Dict:
@@ -795,6 +857,7 @@ class MockRhinoServer:
             raise Exception(f"Invalid filters_type '{filters_type}': expected 'and' or 'or'.")
 
         if not filters:
+            self.selected_ids = list(self.objects)
             return {"count": len(self.objects)}
 
         name_values = filters.get("name")
@@ -805,7 +868,7 @@ class MockRhinoServer:
             c = o.get("color", {})
             return [c.get("r"), c.get("g"), c.get("b")] == color
 
-        count = 0
+        matched = []
         for obj in self.objects.values():
             if filters_type == "and":
                 ok = True
@@ -825,8 +888,9 @@ class MockRhinoServer:
                     ok = True
                 # custom attrs not modeled — OR ignores them silently
             if ok:
-                count += 1
-        return {"count": count}
+                matched.append(obj["id"])
+        self.selected_ids = matched
+        return {"count": len(matched)}
 
     def _create_layer(self, params: Dict) -> Dict:
         """Create a layer."""
@@ -1202,7 +1266,7 @@ class MockRhinoServer:
             commands.append(entry)
 
         return {
-            "version": "0.0.0-mock",
+            "version": self.plugin_version,
             "command_count": len(commands),
             "commands": commands,
             "perception": {
