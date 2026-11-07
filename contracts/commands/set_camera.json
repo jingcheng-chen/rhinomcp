@@ -10,7 +10,7 @@
     "target": { "$ref": "../common/definitions.json#/$defs/point3d", "description": "Camera target [x, y, z]" },
     "up": { "$ref": "../common/definitions.json#/$defs/vector3d", "description": "Camera up vector [x, y, z]" },
     "lens_length": { "type": "number", "exclusiveMinimum": 0, "description": "35 mm equivalent lens length in millimetres" },
-    "projection": { "enum": ["perspective", "parallel"] }
+    "projection": { "type": "string", "enum": ["perspective", "parallel"], "description": "Camera projection: perspective or parallel (orthographic). Lower case." }
   },
   "anyOf": [
     { "required": ["location"] },

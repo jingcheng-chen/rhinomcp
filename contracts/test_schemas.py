@@ -1429,6 +1429,8 @@ def test_camera_schemas():
         ("commands/set_camera.json", {}, False, "no parameters"),
         ("commands/set_camera.json", {"viewport": "Top"}, False, "viewport alone changes nothing"),
         ("commands/set_camera.json", {"projection": "fisheye"}, False, "unknown projection"),
+        ("commands/set_camera.json", {"projection": "Perspective"}, False, "projection in the wrong case"),
+        ("commands/set_camera.json", {"projection": 1}, False, "projection not a string"),
         ("commands/set_camera.json", {"lens_length": 0}, False, "zero lens length"),
         ("commands/set_camera.json", {"location": [1, 2]}, False, "two-component location"),
         ("commands/set_camera.json", {"location": [1, 2, 3], "fov": 40}, False, "unknown field"),
