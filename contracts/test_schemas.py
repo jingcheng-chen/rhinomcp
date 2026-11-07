@@ -198,6 +198,10 @@ def test_selection_and_listing_filter_schemas():
         ("commands/get_objects.json", {
             "selected_only": True, "layer_filter": "Walls", "type_filter": "CURVE",
             "include_hidden": False, "include_locked": True, "ids": [guid]}),
+        ("responses/get_objects_result.json", {
+            "objects": [], "total_matching": 0, "offset": 0, "limit": 50, "has_more": False,
+            "filters": {"layer": "Walls", "id_count": 2, "selected_only": True,
+                        "include_hidden": True, "include_locked": False}}),
     ]
     invalid = [
         ("commands/select_objects.json", {"filters": {"ids": "not-a-list"}}, "select ids not an array"),
