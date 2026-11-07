@@ -76,7 +76,9 @@ def capture_viewport(
       lens of a perspective view.
     - frame_object_ids: object ids to frame, or
       frame_bbox: {"min": [x, y, z], "max": [x, y, z]} world box to frame.
-      An explicit camera and a framing target cannot be combined.
+      An explicit camera (camera_location, camera_target or lens_length)
+      cannot be combined with framing (frame_object_ids, frame_bbox or
+      zoom_to_fit=True); the plugin refuses that with invalid_argument.
 
     Display mode, camera, lens and framing are temporary: the viewport is
     restored exactly as it was after the capture.

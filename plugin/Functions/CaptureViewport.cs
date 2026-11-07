@@ -97,19 +97,31 @@ public partial class RhinoMCPFunctions
             if (request.Frame.HasValue)
             {
                 // Same fit as zoom_to_fit, on a copy of the view state, aimed at
-                // the requested box; it takes precedence over zoom_to_fit.
+                // the requested box (padded when degenerate); it takes precedence
+                // over zoom_to_fit.
+                var framed = PadForFraming(request.Frame.Value);
                 FitCaptureProjection(viewport, width, height,
-                    fitted => fitted.DollyExtents(request.Frame.Value, 1.1));
+                    fitted => fitted.DollyExtents(framed, 1.1));
             }
             else if (zoomToFit && activeCount > 0)
             {
                 // ZoomExtents fits the on-screen aspect ratio. CaptureToBitmap uses
                 // the requested aspect instead, which can crop a previously fitted
                 // model. Fit a temporary projection to the output dimensions first.
+                // A degenerate union (one point, or everything in one plane) is
+                // fitted as a padded box, since DollyExtents fails on it.
                 var visibleGeometry = VisibleObjects(doc, viewport).Select(obj => obj.Geometry).ToArray();
-                if (visibleGeometry.Length > 0)
-                    FitCaptureProjection(viewport, width, height,
-                        fitted => fitted.DollyExtents(visibleGeometry, 1.1));
+                var visibleBox = BoundingBox.Empty;
+                foreach (var geometry in visibleGeometry)
+                    visibleBox.Union(geometry.GetBoundingBox(true));
+                if (visibleBox.IsValid)
+                {
+                    var framed = PadForFraming(visibleBox);
+                    bool degenerate = framed.Diagonal != visibleBox.Diagonal;
+                    FitCaptureProjection(viewport, width, height, fitted => degenerate
+                        ? fitted.DollyExtents(framed, 1.1)
+                        : fitted.DollyExtents(visibleGeometry, 1.1));
+                }
             }
 
             string base64Data = CaptureViewToPngBase64(
@@ -202,11 +214,13 @@ public partial class RhinoMCPFunctions
 
         var frameIds = parameters["frame_object_ids"] as JArray;
         var frameBbox = parameters["frame_bbox"] as JObject;
-        bool hasCamera = parameters["camera_location"] is JArray || parameters["camera_target"] is JArray;
-        if (hasCamera && (frameIds != null || frameBbox != null))
+        bool zoomToFit = parameters["zoom_to_fit"]?.ToObject<bool>() ?? false;
+        bool hasLens = parameters["lens_length"] != null && parameters["lens_length"].Type != JTokenType.Null;
+        bool hasCamera = parameters["camera_location"] is JArray || parameters["camera_target"] is JArray || hasLens;
+        if (hasCamera && (frameIds != null || frameBbox != null || zoomToFit))
             throw new McpException(McpException.InvalidArgument,
-                "An explicit camera (camera_location, camera_target) cannot be combined with a framing target (frame_object_ids, frame_bbox)",
-                "Pass camera_location and camera_target to look from a known point, or frame_object_ids or frame_bbox to frame geometry, not both.");
+                "An explicit camera (camera_location, camera_target, lens_length) cannot be combined with framing (frame_object_ids, frame_bbox, zoom_to_fit)",
+                "Pass camera_location, camera_target or lens_length to look from a known point, or frame_object_ids, frame_bbox or zoom_to_fit to frame geometry, not both.");
 
         string modeName = parameters["display_mode"]?.ToString();
         if (modeName != null)
@@ -230,7 +244,7 @@ public partial class RhinoMCPFunctions
             throw McpException.OutOfRange("camera_location and camera_target are the same point",
                 "Place the camera away from its target, for example 100 units back along the view direction.");
 
-        if (parameters["lens_length"] != null && parameters["lens_length"].Type != JTokenType.Null)
+        if (hasLens)
         {
             double lens = parameters["lens_length"].ToObject<double>();
             if (lens <= 0)

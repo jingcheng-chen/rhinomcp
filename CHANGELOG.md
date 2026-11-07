@@ -68,9 +68,12 @@ and parameters with update advice instead of letting them be ignored.
 - `get_context`, `set_camera` and `zoom_to` commands. All three are read-only
   on the document and create no undo record.
 - `capture_viewport` applies display mode, camera, lens and framing only for
-  the capture and restores the viewport afterwards. An explicit camera combined
-  with a framing target, or an unknown display mode, is refused with
-  `invalid_argument`; unknown frame ids with `not_found`. JPEG output.
+  the capture and restores the viewport afterwards. An explicit camera
+  (`camera_location`, `camera_target` or `lens_length`) combined with framing
+  (`frame_object_ids`, `frame_bbox` or `zoom_to_fit`), or an unknown display
+  mode, is refused with `invalid_argument`; unknown frame ids with
+  `not_found`. A degenerate framing box is padded as `zoom_to` pads it. JPEG
+  output.
 - `select_objects` and `get_objects` honour the new filters; an unknown id or
   layer in a filter is refused with `not_found`.
 - Several Rhino instances can run a bridge at the same time. `mcpstart` takes

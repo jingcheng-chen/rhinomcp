@@ -1441,18 +1441,23 @@ class MockRhinoServer:
                      "Artistic", "Pen", "Arctic", "Raytraced")
     # Same sentences as plugin/McpException.cs.
     CAMERA_AND_FRAMING_MESSAGE = (
-        "An explicit camera (camera_location, camera_target) cannot be combined with "
-        "a framing target (frame_object_ids, frame_bbox)"
+        "An explicit camera (camera_location, camera_target, lens_length) cannot be "
+        "combined with framing (frame_object_ids, frame_bbox, zoom_to_fit)"
     )
     CAMERA_AND_FRAMING_GUIDANCE = (
-        "Pass camera_location and camera_target to look from a known point, or "
-        "frame_object_ids or frame_bbox to frame geometry, not both."
+        "Pass camera_location, camera_target or lens_length to look from a known "
+        "point, or frame_object_ids, frame_bbox or zoom_to_fit to frame geometry, "
+        "not both."
     )
 
     def _check_capture_params(self, params: Dict) -> None:
         """The refusals CaptureViewport.cs makes before touching any view."""
-        has_camera = any(params.get(k) is not None for k in ("camera_location", "camera_target"))
-        has_frame = any(params.get(k) is not None for k in ("frame_object_ids", "frame_bbox"))
+        has_camera = any(
+            params.get(k) is not None for k in ("camera_location", "camera_target", "lens_length")
+        )
+        has_frame = bool(params.get("zoom_to_fit")) or any(
+            params.get(k) is not None for k in ("frame_object_ids", "frame_bbox")
+        )
         if has_camera and has_frame:
             raise MockRhinoError("invalid_argument", self.CAMERA_AND_FRAMING_MESSAGE,
                                  self.CAMERA_AND_FRAMING_GUIDANCE)

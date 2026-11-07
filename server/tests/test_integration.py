@@ -2196,18 +2196,28 @@ class TestCaptureViewportMetadata:
         self._connect(monkeypatch)
         box = capture_server._create_object({"type": "BOX", "name": "A"})
 
-        for camera in ({"camera_location": [9, 9, 9]}, {"camera_target": [0, 0, 0]}):
+        for camera in ({"camera_location": [9, 9, 9]}, {"camera_target": [0, 0, 0]},
+                       {"lens_length": 35}):
             for framing in ({"frame_object_ids": [box["id"]]},
-                            {"frame_bbox": {"min": [0, 0, 0], "max": [1, 1, 1]}}):
+                            {"frame_bbox": {"min": [0, 0, 0], "max": [1, 1, 1]}},
+                            {"zoom_to_fit": True}):
                 text = await self._refusal(**camera, **framing)
                 assert text == (
                     "invalid_argument: An explicit camera (camera_location, "
-                    "camera_target) cannot be combined with a framing target "
-                    "(frame_object_ids, frame_bbox)\n"
-                    "Pass camera_location and camera_target to look from a known "
-                    "point, or frame_object_ids or frame_bbox to frame geometry, "
-                    "not both."
+                    "camera_target, lens_length) cannot be combined with framing "
+                    "(frame_object_ids, frame_bbox, zoom_to_fit)\n"
+                    "Pass camera_location, camera_target or lens_length to look "
+                    "from a known point, or frame_object_ids, frame_bbox or "
+                    "zoom_to_fit to frame geometry, not both."
                 )
+
+    @pytest.mark.asyncio
+    async def test_camera_with_zoom_to_fit_off_is_not_refused(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+
+        result = await self._capture(camera_location=[9, 9, 9], lens_length=35, zoom_to_fit=False)
+
+        assert result.content[0].type == "image"
 
     @pytest.mark.asyncio
     async def test_unknown_display_mode_lists_the_available_modes(

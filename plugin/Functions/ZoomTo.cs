@@ -28,11 +28,9 @@ public partial class RhinoMCPFunctions
                 "Nothing to zoom to: the target covers no visible objects",
                 "Create or show objects first, or pick another target.");
 
-        // A point or a flat object has a degenerate box, which ZoomBoundingBox
-        // cannot frame; pad it so the camera has something to fit.
-        var framed = bbox;
-        if (framed.Diagonal.Length < RhinoMath.SqrtEpsilon)
-            framed.Inflate(1.0);
+        // Degenerate boxes (a point, a flat object) are padded so the camera
+        // has something to fit; capture_viewport framing uses the same rule.
+        var framed = PadForFraming(bbox);
 
         var viewport = view.ActiveViewport;
         viewport.ZoomBoundingBox(framed);
