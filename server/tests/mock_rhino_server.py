@@ -238,6 +238,7 @@ class MockRhinoServer:
     COMMANDS_ADDED = {
         "get_context": (0, 5, 0),
         "set_camera": (0, 5, 0),
+        "zoom_to": (0, 5, 0),
     }
 
     def _handlers(self) -> Dict[str, Any]:
@@ -250,6 +251,7 @@ class MockRhinoServer:
             "get_document_summary": self._get_document_summary,
             "get_context": self._get_context,
             "set_camera": self._set_camera,
+            "zoom_to": self._zoom_to,
             "get_objects": self._get_objects,
             "create_object": self._create_object,
             "create_objects": self._create_objects,
@@ -461,6 +463,75 @@ class MockRhinoServer:
             if params.get(field) is not None:
                 view[key] = params[field]
         return self._viewport_state(name)
+
+    def _zoom_targets(self, params: Dict) -> list:
+        """The objects a zoom_to target covers, with ZoomTo.cs's refusals."""
+        target = params.get("target")
+        for kind in ("object_ids", "layer"):
+            if target == kind and not params.get(kind):
+                raise MockRhinoError(
+                    "invalid_argument",
+                    f"target '{kind}' needs {kind}",
+                    f"Pass {kind}, or use target 'all' or 'selection'.",
+                )
+        if target == "all":
+            return [o for o in self.objects.values() if o.get("visible", True)]
+        if target == "selection":
+            selected = [self.objects[i] for i in self.selected_ids if i in self.objects]
+            if not selected:
+                raise MockRhinoError(
+                    "invalid_argument",
+                    "Nothing is selected to zoom to",
+                    "Select objects first with select_objects, or use target 'all', "
+                    "'object_ids' or 'layer'.",
+                )
+            return selected
+        if target == "object_ids":
+            for obj_id in params["object_ids"]:
+                if obj_id not in self.objects:
+                    raise MockRhinoError(
+                        "not_found", f"Object not found: {obj_id}",
+                        self.OBJECT_NOT_FOUND_GUIDANCE,
+                    )
+            return [self.objects[i] for i in params["object_ids"]]
+        if target == "layer":
+            layer = params["layer"]
+            if layer not in self.layers:
+                raise MockRhinoError(
+                    "not_found", f"Layer '{layer}' not found", self.LAYER_NOT_FOUND_GUIDANCE
+                )
+            return [o for o in self.objects.values() if o.get("layer") == layer]
+        raise MockRhinoError(
+            "invalid_argument",
+            f"Unknown zoom target '{target}'",
+            "Pass target 'all', 'selection', 'object_ids' or 'layer'.",
+        )
+
+    def _zoom_to(self, params: Dict) -> Dict:
+        """Frame the named or active viewport on the target's bounding box: the
+        camera target moves to the box centre and the view direction is kept."""
+        covered = self._zoom_targets(params)
+        name = self._find_viewport(params)
+        if not covered:
+            raise MockRhinoError(
+                "invalid_argument",
+                "Nothing to zoom to: the target covers no visible objects",
+                "Create or show objects first, or pick another target.",
+            )
+        boxes = [o["bounding_box"] for o in covered]
+        lo = [min(b[0][axis] for b in boxes) for axis in range(3)]
+        hi = [max(b[1][axis] for b in boxes) for axis in range(3)]
+        centre = [(lo[axis] + hi[axis]) / 2 for axis in range(3)]
+
+        view = self.viewports[name]
+        offset = [view["camera_location"][a] - view["camera_target"][a] for a in range(3)]
+        view["camera_target"] = centre
+        view["camera_location"] = [centre[a] + offset[a] for a in range(3)]
+        return {
+            **self._viewport_state(name),
+            "bounding_box": {"min": lo, "max": hi},
+            "object_count": len(covered),
+        }
 
     def _get_context(self, params: Dict) -> Dict:
         """Bounded grounding snapshot, mirroring GetContext.cs: top 8 types by

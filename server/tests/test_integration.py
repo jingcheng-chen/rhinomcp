@@ -1789,3 +1789,177 @@ class TestCameraTools:
         assert tool.annotations.read_only_hint is False
         assert tool.annotations.destructive_hint is False
         assert tool.annotations.open_world_hint is False
+
+    # zoom_to
+
+    def _zoom_tools(self, monkeypatch):
+        import rhinomcp.tools.zoom_to as zoom_to_mod
+        import rhinomcp.tools.select_objects as select_mod
+
+        conn = self._tools(monkeypatch)
+        for mod in (zoom_to_mod, select_mod):
+            monkeypatch.setattr(mod, "get_rhino_connection", lambda: conn)
+        return conn
+
+    def _box(self, server, name, lo, hi, layer=None):
+        """An object with a known bounding box, straight into the mock document."""
+        created = server._create_object({"type": "BOX", "name": name})
+        server.objects[created["id"]]["bounding_box"] = [lo, hi]
+        if layer:
+            server.objects[created["id"]]["layer"] = layer
+        return created["id"]
+
+    def _two_boxes(self, server):
+        a = self._box(server, "a", [0, 0, 0], [2, 2, 2])
+        b = self._box(server, "b", [8, 10, 4], [10, 20, 6])
+        return a, b
+
+    def test_zoom_to_all_frames_every_object(self, camera_server, monkeypatch):
+        from rhinomcp.tools.zoom_to import zoom_to
+
+        self._zoom_tools(monkeypatch)
+        self._two_boxes(camera_server)
+        undo_before = list(camera_server.undo_stack)
+
+        state = zoom_to(ctx=None, target="all")
+
+        assert state["viewport_name"] == "Perspective"
+        assert state["bounding_box"] == {"min": [0, 0, 0], "max": [10, 20, 6]}
+        assert state["object_count"] == 2
+        assert state["camera_target"] == [5.0, 10.0, 3.0]
+        assert set(state) >= {"projection", "camera_location", "camera_up", "lens_length"}
+        assert camera_server.undo_stack == undo_before
+
+    def test_zoom_to_selection_in_a_named_viewport(self, camera_server, monkeypatch):
+        from rhinomcp.tools.select_objects import select_objects
+        from rhinomcp.tools.zoom_to import zoom_to
+
+        self._zoom_tools(monkeypatch)
+        self._two_boxes(camera_server)
+        select_objects(ctx=None, filters={"name": ["b"]})
+
+        state = zoom_to(ctx=None, target="selection", viewport="Top")
+
+        assert state["viewport_name"] == "Top"
+        assert state["projection"] == "parallel"
+        assert state["bounding_box"] == {"min": [8, 10, 4], "max": [10, 20, 6]}
+        assert state["object_count"] == 1
+        assert state["camera_target"] == [9.0, 15.0, 5.0]
+
+    def test_zoom_to_object_ids(self, camera_server, monkeypatch):
+        from rhinomcp.tools.zoom_to import zoom_to
+
+        self._zoom_tools(monkeypatch)
+        a, _ = self._two_boxes(camera_server)
+        c = self._box(camera_server, "c", [-4, 0, 0], [0, 1, 1])
+
+        state = zoom_to(ctx=None, target="object_ids", object_ids=[a, c])
+
+        assert state["bounding_box"] == {"min": [-4, 0, 0], "max": [2, 2, 2]}
+        assert state["object_count"] == 2
+
+    def test_zoom_to_layer(self, camera_server, monkeypatch):
+        from rhinomcp.tools.zoom_to import zoom_to
+
+        conn = self._zoom_tools(monkeypatch)
+        conn.send_command("create_layer", {"name": "Legs"})
+        self._box(camera_server, "seat", [0, 0, 0], [2, 2, 2])
+        self._box(camera_server, "leg1", [0, 0, -10], [1, 1, 0], layer="Legs")
+        self._box(camera_server, "leg2", [5, 5, -10], [6, 6, 0], layer="Legs")
+
+        state = zoom_to(ctx=None, target="layer", layer="Legs")
+
+        assert state["bounding_box"] == {"min": [0, 0, -10], "max": [6, 6, 0]}
+        assert state["object_count"] == 2
+
+    @pytest.mark.asyncio
+    async def test_zoom_to_unknown_object_ids_is_refused(self, camera_server, monkeypatch):
+        self._zoom_tools(monkeypatch)
+        a, _ = self._two_boxes(camera_server)
+        text = await self._refusal(
+            "zoom_to", {"target": "object_ids", "object_ids": [a, self.MISSING_ID]}
+        )
+        assert text == (
+            f"not_found: Object not found: {self.MISSING_ID}\n"
+            "Call get_objects or get_selected_objects_info to find a valid object "
+            "id or name."
+        )
+
+    @pytest.mark.asyncio
+    async def test_zoom_to_unknown_layer_is_refused(self, camera_server, monkeypatch):
+        self._zoom_tools(monkeypatch)
+        text = await self._refusal("zoom_to", {"target": "layer", "layer": "NoSuchLayer"})
+        assert text == (
+            "not_found: Layer 'NoSuchLayer' not found\n"
+            "Call get_document_summary to list existing layers, or create_layer to "
+            "make it first."
+        )
+
+    @pytest.mark.asyncio
+    async def test_zoom_to_empty_selection_is_refused(self, camera_server, monkeypatch):
+        self._zoom_tools(monkeypatch)
+        self._two_boxes(camera_server)
+        text = await self._refusal("zoom_to", {"target": "selection"})
+        assert text == (
+            "invalid_argument: Nothing is selected to zoom to\n"
+            "Select objects first with select_objects, or use target 'all', "
+            "'object_ids' or 'layer'."
+        )
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("target", ["object_ids", "layer"])
+    async def test_zoom_to_without_its_companion_field_is_refused(
+        self, camera_server, monkeypatch, target
+    ):
+        self._zoom_tools(monkeypatch)
+        text = await self._refusal("zoom_to", {"target": target})
+        assert text == (
+            f"invalid_argument: target '{target}' needs {target}\n"
+            f"Pass {target}, or use target 'all' or 'selection'."
+        )
+
+    @pytest.mark.asyncio
+    async def test_zoom_to_unknown_viewport_is_refused(self, camera_server, monkeypatch):
+        self._zoom_tools(monkeypatch)
+        self._two_boxes(camera_server)
+        text = await self._refusal("zoom_to", {"target": "all", "viewport": "Nowhere"})
+        assert text == (
+            "not_found: Viewport 'Nowhere' not found\n"
+            "Omit viewport to use the active one, or pass a viewport name such as "
+            "Perspective, Top, Front or Right."
+        )
+
+    @pytest.mark.asyncio
+    async def test_zoom_to_is_annotated_as_a_view_change(self):
+        import rhinomcp
+
+        tool = next(t for t in await rhinomcp.mcp.list_tools() if t.name == "zoom_to")
+        assert tool.annotations.title == "Zoom to"
+        assert tool.annotations.read_only_hint is False
+        assert tool.annotations.destructive_hint is False
+        assert tool.annotations.open_world_hint is False
+
+    @pytest.mark.parametrize("command,params", [
+        ("set_camera", {"lens_length": 50}),
+        ("zoom_to", {"target": "all"}),
+    ])
+    def test_a_0_4_1_plugin_refuses_camera_commands_with_advice(self, command, params):
+        from rhinomcp.server import RhinoConnection
+
+        server = MockRhinoServer(port=19986, plugin_version="0.4.1")
+        server.start()
+        time.sleep(0.1)
+        try:
+            conn = RhinoConnection(host="127.0.0.1", port=19986)
+            with pytest.raises(Exception) as info:
+                conn.send_command(command, params)
+            conn.disconnect()
+        finally:
+            server.stop()
+
+        assert info.value.code == "unsupported"
+        assert str(info.value).startswith(
+            "unsupported: The connected rhinomcp plugin (0.4.1) does not support "
+            f"'{command}', which was added in plugin 0.5.0;"
+        )
+        assert command not in server.received_commands

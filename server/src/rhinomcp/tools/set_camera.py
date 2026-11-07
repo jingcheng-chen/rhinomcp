@@ -7,12 +7,13 @@ from rhinomcp.server import get_rhino_connection, mcp
 
 
 @mcp.tool(
+    title="Set camera",
     annotations=ToolAnnotations(
         title="Set camera",
         read_only_hint=False,
         destructive_hint=False,
         open_world_hint=False,
-    )
+    ),
 )
 def set_camera(
     ctx: Context,
