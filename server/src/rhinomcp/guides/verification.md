@@ -15,10 +15,22 @@ locked objects. Do not confuse a filtered object list with the entire document.
 Compare the actual count with the requested final count while preserving unrelated
 user objects. Check layers and intended names separately from shape.
 
-Use screenshots to inspect appearance and clearly label the view. Auto-fitted views
-can hide a wrong translation or scale. Pictures do not replace numeric world-pose
-checks, topology or a saved-file audit. Preserve the user's camera and display setup
-when changing views for inspection.
+Use screenshots to inspect appearance and clearly label the view. Read the
+capture_viewport metadata before trusting the picture. The text block after the
+image reports viewport_name, display_mode, projection, camera_location,
+camera_target, camera_up, lens_length, scene_bounding_box, visible_object_count
+and total_object_count. Compare visible_object_count and the bounding box against
+what you expect to see; zero visible objects, or a box far from the work, means
+the picture shows something else. Pass frame_object_ids to inspect one part
+without computing a camera. A capture never moves the user's view: display mode,
+camera and framing are restored afterwards. Auto-fitted views can hide a wrong
+translation or scale. Pictures do not replace numeric world-pose checks, topology
+or a saved-file audit. Preserve the user's camera and display setup when changing
+views with set_camera or zoom_to for inspection.
+
+Errors read `code: message` with a guidance line below. Act on the guidance,
+for example by checking an id or a layer name that came back not_found, instead
+of retrying the same call blindly.
 
 For deliverables, verify the saved model when practical rather than accepting only
 the live viewport. Report passing checks, failures and unmeasured requirements
