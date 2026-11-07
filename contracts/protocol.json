@@ -115,6 +115,15 @@
         "message": {
           "type": "string",
           "description": "Error message"
+        },
+        "code": {
+          "type": "string",
+          "enum": ["invalid_argument", "not_found", "unsupported", "rhino_error", "timeout", "internal"],
+          "description": "Optional machine-readable failure class. Errors without a code remain valid."
+        },
+        "guidance": {
+          "type": "string",
+          "description": "Optional single sentence saying what to try instead."
         }
       },
       "required": ["status", "message"]
