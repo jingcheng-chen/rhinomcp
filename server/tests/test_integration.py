@@ -1901,3 +1901,61 @@ class TestListingFilters(_FilterDocument):
             ids=[ids["sphere_lock"], ids["box_default"]],
         )
         assert names == ["box_default"]
+
+
+class TestFilterRefusals(_FilterDocument):
+    """An unknown layer in either tool, or an unknown id in a selection
+    filter, is refused with not_found and guidance, and selects nothing."""
+
+    MISSING_ID = "00000000-0000-0000-0000-00000000dead"
+
+    @pytest.mark.asyncio
+    async def test_select_unknown_layer(self, filter_server, monkeypatch):
+        import rhinomcp
+        from mcp.server.mcpserver.exceptions import ToolError
+
+        conn, ids = self._seed(filter_server, monkeypatch)
+        conn.send_command("select_objects", {"filters": {"name": ["box_default"]}})
+        with pytest.raises(ToolError) as info:
+            await rhinomcp.mcp.call_tool(
+                "select_objects", {"filters": {"layer": "NoSuchLayer"}}
+            )
+        assert str(info.value) == (
+            "Error executing tool select_objects: "
+            "not_found: Layer 'NoSuchLayer' not found\n"
+            f"{filter_server.LAYER_NOT_FOUND_GUIDANCE}"
+        )
+        # Refused before touching the selection.
+        assert self._selected(filter_server, ids) == ["box_default"]
+
+    @pytest.mark.asyncio
+    async def test_select_unknown_id(self, filter_server, monkeypatch):
+        import rhinomcp
+        from mcp.server.mcpserver.exceptions import ToolError
+
+        _, ids = self._seed(filter_server, monkeypatch)
+        with pytest.raises(ToolError) as info:
+            await rhinomcp.mcp.call_tool(
+                "select_objects",
+                {"filters": {"ids": [ids["box_walls"], self.MISSING_ID]},
+                 "filters_type": "or"},
+            )
+        assert str(info.value) == (
+            "Error executing tool select_objects: "
+            f"not_found: Object not found: {self.MISSING_ID}\n"
+            f"{filter_server.OBJECT_NOT_FOUND_GUIDANCE}"
+        )
+
+    @pytest.mark.asyncio
+    async def test_list_unknown_layer(self, filter_server, monkeypatch):
+        import rhinomcp
+        from mcp.server.mcpserver.exceptions import ToolError
+
+        self._seed(filter_server, monkeypatch)
+        with pytest.raises(ToolError) as info:
+            await rhinomcp.mcp.call_tool("get_objects", {"layer_filter": "NoSuchLayer"})
+        assert str(info.value) == (
+            "Error executing tool get_objects: "
+            "not_found: Layer 'NoSuchLayer' not found\n"
+            f"{filter_server.LAYER_NOT_FOUND_GUIDANCE}"
+        )

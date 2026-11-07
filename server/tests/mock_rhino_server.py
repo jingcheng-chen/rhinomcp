@@ -446,6 +446,8 @@ class MockRhinoServer:
         selected_only = params.get("selected_only", False)
         include_hidden = params.get("include_hidden", False)
         include_locked = params.get("include_locked", True)
+        if layer_filter:
+            self._require_layer(layer_filter)
 
         # Filter objects. Like the plugin's default enumerator, locked objects
         # are listed and hidden ones are not unless asked for.
@@ -475,6 +477,14 @@ class MockRhinoServer:
             "limit": limit,
             "has_more": offset + len(paged) < total
         }
+
+    def _require_layer(self, name: str):
+        """not_found with the plugin's guidance unless the layer exists. Mock
+        layers are flat, so a name is also its full path."""
+        if name.lower() not in {n.lower() for n in self.layers}:
+            raise MockRhinoError(
+                "not_found", f"Layer '{name}' not found", self.LAYER_NOT_FOUND_GUIDANCE
+            )
 
     def _create_object(self, params: Dict) -> Dict:
         """Create a mock object."""
@@ -915,6 +925,15 @@ class MockRhinoServer:
             types = [types]
         hidden = filters.get("hidden")
         locked = filters.get("locked")
+        # Refused before the selection changes, like the plugin.
+        if layer is not None:
+            self._require_layer(layer)
+        for obj_id in ids or []:
+            if obj_id.lower() not in {i.lower() for i in self.objects}:
+                raise MockRhinoError(
+                    "not_found", f"Object not found: {obj_id}",
+                    self.OBJECT_NOT_FOUND_GUIDANCE,
+                )
         custom = {
             k: v for k, v in filters.items()
             if k not in ("name", "color", "ids", "layer", "type", "hidden", "locked")
