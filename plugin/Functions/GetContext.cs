@@ -71,7 +71,8 @@ public partial class RhinoMCPFunctions
     private static JObject SerializeActiveViewport(RhinoDoc doc)
     {
         var viewport = doc.Views.ActiveView?.ActiveViewport
-            ?? throw new InvalidOperationException("No active viewport");
+            ?? throw new McpException(
+                McpException.NotFound, "No active viewport", "Open a model view in Rhino, then retry.");
         return new JObject
         {
             ["name"] = viewport.Name,

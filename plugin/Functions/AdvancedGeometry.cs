@@ -381,7 +381,7 @@ public partial class RhinoMCPFunctions
                 $"Pipe radius must be positive, got {radius}",
                 "Pass a radius greater than zero in model units.");
 
-        var obj = doc.Objects.Find(new Guid(curveId));
+        var obj = doc.Objects.Find(McpException.ParseGuid(curveId));
         if (obj == null)
             throw new InvalidOperationException($"Object with ID {curveId} not found");
 
