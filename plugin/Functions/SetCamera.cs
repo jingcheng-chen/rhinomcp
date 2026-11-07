@@ -81,7 +81,7 @@ public partial class RhinoMCPFunctions
         {
             double lens = castToDouble(parameters["lens_length"]);
             if (!(lens > 0))
-                throw McpException.OutOfRange(
+                throw McpException.InvalidArgumentError(
                     $"lens_length must be positive, got {lens}",
                     "Pass a 35 mm equivalent lens length in millimetres, for example 50.");
             viewport.Camera35mmLensLength = lens;

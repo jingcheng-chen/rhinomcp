@@ -73,7 +73,7 @@ public partial class RhinoMCPFunctions
         {
             var materialIndex = parameters["material_index"]!.ToObject<int>();
             if (materialIndex < -1 || materialIndex >= doc.Materials.Count)
-                throw McpException.OutOfRange(
+                throw McpException.InvalidArgumentError(
                     $"Material index {materialIndex} is outside the document material table",
                     $"Use -1 for the layer material or an index from 0 to {doc.Materials.Count - 1}.");
 

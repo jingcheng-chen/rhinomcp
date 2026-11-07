@@ -202,7 +202,7 @@ public partial class RhinoMCPFunctions
 
         string format = parameters["format"]?.ToString()?.ToLowerInvariant() ?? "png";
         if (format != "png" && format != "jpeg")
-            throw McpException.OutOfRange($"Unknown image format '{format}'", "Pass format \"png\" or \"jpeg\".");
+            throw McpException.InvalidArgumentError($"Unknown image format '{format}'", "Pass format \"png\" or \"jpeg\".");
         request.Jpeg = format == "jpeg";
 
         var frameIds = parameters["frame_object_ids"] as JArray;
@@ -234,14 +234,14 @@ public partial class RhinoMCPFunctions
             request.CameraTarget = castToPoint3d(parameters["camera_target"]);
         if (request.CameraLocation.HasValue && request.CameraTarget.HasValue
             && request.CameraLocation.Value.DistanceTo(request.CameraTarget.Value) < RhinoMath.ZeroTolerance)
-            throw McpException.OutOfRange("camera_location and camera_target are the same point",
+            throw McpException.InvalidArgumentError("camera_location and camera_target are the same point",
                 "Place the camera away from its target, for example 100 units back along the view direction.");
 
         if (hasLens)
         {
             double lens = parameters["lens_length"].ToObject<double>();
             if (lens <= 0)
-                throw McpException.OutOfRange($"lens_length must be positive, got {lens}",
+                throw McpException.InvalidArgumentError($"lens_length must be positive, got {lens}",
                     "Pass a 35mm-equivalent lens length in millimetres, for example 50.");
             request.LensLength = lens;
         }
@@ -261,12 +261,12 @@ public partial class RhinoMCPFunctions
         {
             var box = new BoundingBox(castToPoint3d(frameBbox["min"]), castToPoint3d(frameBbox["max"]));
             if (!box.IsValid)
-                throw McpException.OutOfRange("frame_bbox min must not exceed max on any axis",
+                throw McpException.InvalidArgumentError("frame_bbox min must not exceed max on any axis",
                     "Pass frame_bbox as {\"min\": [x, y, z], \"max\": [x, y, z]} with min <= max.");
             request.Frame = box;
         }
         if (request.Frame.HasValue && !request.Frame.Value.IsValid)
-            throw McpException.OutOfRange("The framed objects have no bounding box",
+            throw McpException.InvalidArgumentError("The framed objects have no bounding box",
                 "Frame objects with geometry, or pass frame_bbox instead.");
 
         return request;
