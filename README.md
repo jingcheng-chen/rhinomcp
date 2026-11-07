@@ -280,6 +280,8 @@ pattern with cylinders that have different heights."_
 | `get_context`                                                                                                 | Bounded snapshot: units, layer, selection, camera      |
 | `get_document_summary`                                                                                        | Overview of the current document                       |
 | `capture_viewport`                                                                                            | Screenshot the viewport for visual feedback            |
+| `set_camera`                                                                                                  | Set camera location, target, up, lens, projection      |
+| `zoom_to`                                                                                                     | Frame all, the selection, object ids or a layer        |
 | `run_command`                                                                                                 | Run any native Rhino command                           |
 | `execute_rhinoscript_python_code`                                                                             | Execute RhinoScript-Python                             |
 | `execute_rhinocommon_csharp_code`                                                                             | Execute RhinoCommon C#                                 |

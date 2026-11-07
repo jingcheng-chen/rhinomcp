@@ -83,6 +83,15 @@ class MockRhinoServer:
         # Ids in selection order, replaced by each select_objects like the
         # plugin's UnselectAll + Select.
         self.selected_ids: list = []
+        # View state, which set_camera and zoom_to change. Like the plugin's
+        # views, it is not part of the document and never enters the undo stack.
+        self.viewports: Dict[str, Dict[str, Any]] = {
+            "Perspective": self._viewport("perspective", [100.0, -100.0, 100.0], [0.0, 0.0, 1.0]),
+            "Top": self._viewport("parallel", [0.0, 0.0, 100.0], [0.0, 1.0, 0.0]),
+            "Front": self._viewport("parallel", [0.0, -100.0, 0.0], [0.0, 0.0, 1.0]),
+            "Right": self._viewport("parallel", [100.0, 0.0, 0.0], [0.0, 0.0, 1.0]),
+        }
+        self.active_viewport = "Perspective"
         self.undo_stack: list = []
         self.redo_stack: list = []
 
@@ -228,6 +237,8 @@ class MockRhinoServer:
     # plugin version that introduced them.
     COMMANDS_ADDED = {
         "get_context": (0, 5, 0),
+        "set_camera": (0, 5, 0),
+        "zoom_to": (0, 5, 0),
     }
 
     def _handlers(self) -> Dict[str, Any]:
@@ -239,6 +250,8 @@ class MockRhinoServer:
         self._handler_table = {
             "get_document_summary": self._get_document_summary,
             "get_context": self._get_context,
+            "set_camera": self._set_camera,
+            "zoom_to": self._zoom_to,
             "get_objects": self._get_objects,
             "create_object": self._create_object,
             "create_objects": self._create_objects,
@@ -391,14 +404,134 @@ class MockRhinoServer:
             ]
         }
 
-    # The mock's fixed active viewport. The real plugin reads doc.Views.ActiveView.
-    ACTIVE_VIEWPORT = {
-        "name": "Perspective",
-        "projection": "perspective",
-        "display_mode": "Shaded",
-        "camera_location": [100.0, -100.0, 100.0],
-        "camera_target": [0.0, 0.0, 0.0],
-    }
+    @staticmethod
+    def _viewport(projection: str, location: list, up: list) -> Dict[str, Any]:
+        return {
+            "projection": projection,
+            "display_mode": "Shaded" if projection == "perspective" else "Wireframe",
+            "camera_location": location,
+            "camera_target": [0.0, 0.0, 0.0],
+            "camera_up": up,
+            "lens_length": 50.0,
+        }
+
+    VIEWPORT_NOT_FOUND_GUIDANCE = (
+        "Omit viewport to use the active one, or pass a viewport name such as "
+        "Perspective, Top, Front or Right."
+    )
+    SET_CAMERA_FIELDS = ("location", "target", "up", "lens_length", "projection")
+
+    def _find_viewport(self, params: Dict) -> str:
+        """Viewport name from params, default active, matched case-insensitively
+        like the plugin's ResolveViewport."""
+        wanted = params.get("viewport")
+        if not wanted:
+            return self.active_viewport
+        for name in self.viewports:
+            if name.lower() == wanted.lower():
+                return name
+        raise MockRhinoError(
+            "not_found", f"Viewport '{wanted}' not found", self.VIEWPORT_NOT_FOUND_GUIDANCE
+        )
+
+    def _viewport_state(self, name: str) -> Dict[str, Any]:
+        """The reply both camera commands share, as CameraState in SetCamera.cs."""
+        view = self.viewports[name]
+        return {
+            "viewport_name": name,
+            "projection": view["projection"],
+            "camera_location": list(view["camera_location"]),
+            "camera_target": list(view["camera_target"]),
+            "camera_up": list(view["camera_up"]),
+            "lens_length": view["lens_length"],
+        }
+
+    def _set_camera(self, params: Dict) -> Dict:
+        """Change the named or active viewport's camera fields that are given."""
+        if not any(params.get(field) is not None for field in self.SET_CAMERA_FIELDS):
+            raise MockRhinoError(
+                "invalid_argument",
+                "set_camera needs at least one of location, target, up, lens_length "
+                "or projection",
+                "Pass the camera fields to change; to frame objects use zoom_to instead.",
+            )
+        name = self._find_viewport(params)
+        view = self.viewports[name]
+        for field, key in (("location", "camera_location"), ("target", "camera_target"),
+                           ("up", "camera_up"), ("lens_length", "lens_length"),
+                           ("projection", "projection")):
+            if params.get(field) is not None:
+                view[key] = params[field]
+        return self._viewport_state(name)
+
+    def _zoom_targets(self, params: Dict) -> list:
+        """The objects a zoom_to target covers, with ZoomTo.cs's refusals."""
+        target = params.get("target")
+        for kind in ("object_ids", "layer"):
+            if target == kind and not params.get(kind):
+                raise MockRhinoError(
+                    "invalid_argument",
+                    f"target '{kind}' needs {kind}",
+                    f"Pass {kind}, or use target 'all' or 'selection'.",
+                )
+        if target == "all":
+            return [o for o in self.objects.values() if o.get("visible", True)]
+        if target == "selection":
+            selected = [self.objects[i] for i in self.selected_ids if i in self.objects]
+            if not selected:
+                raise MockRhinoError(
+                    "invalid_argument",
+                    "Nothing is selected to zoom to",
+                    "Select objects first with select_objects, or use target 'all', "
+                    "'object_ids' or 'layer'.",
+                )
+            return selected
+        if target == "object_ids":
+            for obj_id in params["object_ids"]:
+                if obj_id not in self.objects:
+                    raise MockRhinoError(
+                        "not_found", f"Object not found: {obj_id}",
+                        self.OBJECT_NOT_FOUND_GUIDANCE,
+                    )
+            return [self.objects[i] for i in params["object_ids"]]
+        if target == "layer":
+            layer = params["layer"]
+            if layer not in self.layers:
+                raise MockRhinoError(
+                    "not_found", f"Layer '{layer}' not found", self.LAYER_NOT_FOUND_GUIDANCE
+                )
+            return [o for o in self.objects.values() if o.get("layer") == layer]
+        raise MockRhinoError(
+            "invalid_argument",
+            f"Unknown zoom target '{target}'",
+            "Pass target 'all', 'selection', 'object_ids' or 'layer'.",
+        )
+
+    def _zoom_to(self, params: Dict) -> Dict:
+        """Frame the named or active viewport on the target's bounding box: the
+        camera target moves to the box centre and the view direction is kept."""
+        covered = self._zoom_targets(params)
+        name = self._find_viewport(params)
+        if not covered:
+            raise MockRhinoError(
+                "invalid_argument",
+                "Nothing to zoom to: the target covers no visible objects",
+                "Create or show objects first, or pick another target.",
+            )
+        boxes = [o["bounding_box"] for o in covered]
+        lo = [min(b[0][axis] for b in boxes) for axis in range(3)]
+        hi = [max(b[1][axis] for b in boxes) for axis in range(3)]
+        centre = [(lo[axis] + hi[axis]) / 2 for axis in range(3)]
+
+        view = self.viewports[name]
+        offset = [view["camera_location"][a] - view["camera_target"][a] for a in range(3)]
+        view["camera_target"] = centre
+        view["camera_location"] = [centre[a] + offset[a] for a in range(3)]
+        return {
+            **self._viewport_state(name),
+            "bounding_box": {"min": lo, "max": hi},
+            "object_count": len(covered),
+        }
 
     def _get_context(self, params: Dict) -> Dict:
         """Bounded grounding snapshot, mirroring GetContext.cs: top 8 types by
@@ -410,6 +543,7 @@ class MockRhinoServer:
         top_types = sorted(type_counts.items(), key=lambda kv: kv[1], reverse=True)[:8]
 
         selected = [i for i in self.selected_ids if i in self.objects]
+        active = self.viewports[self.active_viewport]
         bbox = None
         if self.objects:
             boxes = [o["bounding_box"] for o in self.objects.values()]
@@ -430,7 +564,11 @@ class MockRhinoServer:
             "objects_by_type": dict(top_types),
             "selection_count": len(selected),
             "selected_ids": selected[:20],
-            "viewport": dict(self.ACTIVE_VIEWPORT),
+            "viewport": {
+                "name": self.active_viewport,
+                **{key: active[key] for key in (
+                    "projection", "display_mode", "camera_location", "camera_target")},
+            },
             "scene_bounding_box": bbox,
             "grasshopper_definition_count": 0,
         }
