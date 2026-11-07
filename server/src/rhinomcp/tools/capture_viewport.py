@@ -2,6 +2,7 @@ from mcp.server.mcpserver import Context, Image
 from mcp.types import TextContent, ToolAnnotations
 import base64
 import json
+from typing import Literal
 from rhinomcp.server import get_rhino_connection, mcp, logger
 
 # What the text block after the image reports, in this order. The plugin
@@ -42,6 +43,7 @@ def capture_viewport(
     show_axes: bool = True,
     show_cplane_axes: bool = False,
     zoom_to_fit: bool = False,
+    format: Literal["png", "jpeg"] = "png",
 ) -> list[Image | TextContent]:
     """
     Capture a screenshot of a Rhino viewport for visual analysis.
@@ -94,6 +96,7 @@ def capture_viewport(
             "show_axes": show_axes,
             "show_cplane_axes": show_cplane_axes,
             "zoom_to_fit": zoom_to_fit,
+            "format": format,
         }
 
         result = rhino.send_command("capture_viewport", params)
@@ -108,7 +111,8 @@ def capture_viewport(
 
         metadata = {key: result.get(key) for key in METADATA_FIELDS}
         return [
-            Image(data=image_data, format="png"),
+            # The plugin's mime_type says what it actually encoded.
+            Image(data=image_data, format=result.get("mime_type", "image/png").split("/")[-1]),
             TextContent(type="text", text=json.dumps(metadata, indent=2)),
         ]
 

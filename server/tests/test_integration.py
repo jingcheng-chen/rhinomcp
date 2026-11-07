@@ -1741,3 +1741,16 @@ class TestCaptureViewportMetadata:
         assert metadata["scene_bounding_box"] is None
         assert metadata["visible_object_count"] == 0
         assert metadata["total_object_count"] == 0
+
+    @pytest.mark.asyncio
+    async def test_jpeg_format_returns_jpeg_image(self, capture_server, monkeypatch):
+        import base64
+
+        self._connect(monkeypatch)
+
+        result = await self._capture(format="jpeg")
+
+        image = result.content[0]
+        assert image.mime_type == "image/jpeg"
+        assert base64.b64decode(image.data).startswith(b"\xff\xd8\xff")
+        assert capture_server.received_params["capture_viewport"]["format"] == "jpeg"

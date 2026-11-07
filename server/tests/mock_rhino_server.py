@@ -64,6 +64,8 @@ class MockRhinoServer:
         self._handler_table: Optional[Dict[str, Any]] = None
         # Command types received, in order, so a test can assert what was sent.
         self.received_commands: list = []
+        # The params each command type last arrived with, for pass-through tests.
+        self.received_params: Dict[str, Dict[str, Any]] = {}
         # Seconds to wait before answering, so a test can provoke a client timeout.
         self.response_delay = 0.0
 
@@ -283,6 +285,7 @@ class MockRhinoServer:
         cmd_type = command.get("type", "")
         params = command.get("params", {})
         self.received_commands.append(cmd_type)
+        self.received_params[cmd_type] = params
 
         handler = self._handlers().get(cmd_type)
         if not handler:
@@ -1216,14 +1219,22 @@ class MockRhinoServer:
             }
         return {"success": True, "output": "Mock C# ran.\n"}
 
+    # Precomputed 1x1 images (a transparent PNG and a white JPEG).
+    TINY_PNG_B64 = (
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgAAIAAAUAAeImBZsAAAAASUVORK5CYII="
+    )
+    TINY_JPEG_B64 = (
+        "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERX"
+        "RTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAAB//EABQQAQAA"
+        "AAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AQH//2Q=="
+    )
+
     def _capture_viewport(self, params: Dict) -> Dict:
-        """Mock viewport capture. Returns a 1x1 transparent PNG so callers
-        that decode base64 image_data succeed without dragging in real image
-        data. The wrapper logs viewport_name/width/height — surface them."""
-        # 1x1 transparent PNG (precomputed)
-        png_b64 = (
-            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgAAIAAAUAAeImBZsAAAAASUVORK5CYII="
-        )
+        """Mock viewport capture. Returns a 1x1 PNG or JPEG (by format) so
+        callers that decode base64 image_data succeed without dragging in real
+        image data, plus the metadata fields CaptureViewport.cs reports."""
+        image_format = params.get("format", "png")
+        image_b64 = self.TINY_JPEG_B64 if image_format == "jpeg" else self.TINY_PNG_B64
         viewport = dict(self.ACTIVE_VIEWPORT)
         target = params.get("viewport", "active")
         if target.lower() not in ("active", "perspective"):
@@ -1231,8 +1242,8 @@ class MockRhinoServer:
             viewport.update(name=target.capitalize(), projection="parallel")
         visible = sum(1 for o in self.objects.values() if o.get("visible", True))
         return {
-            "image_data": png_b64,
-            "mime_type": "image/png",
+            "image_data": image_b64,
+            "mime_type": f"image/{image_format}",
             "viewport_name": viewport["name"],
             "viewport_target": target,
             "width": params.get("width", 800),
