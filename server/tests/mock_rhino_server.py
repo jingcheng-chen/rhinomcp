@@ -442,8 +442,24 @@ class MockRhinoServer:
         layer_filter = params.get("layer_filter")
         type_filter = params.get("type_filter")
 
-        # Filter objects
+        ids = params.get("ids")
+        selected_only = params.get("selected_only", False)
+        include_hidden = params.get("include_hidden", False)
+        include_locked = params.get("include_locked", True)
+
+        # Filter objects. Like the plugin's default enumerator, locked objects
+        # are listed and hidden ones are not unless asked for.
         filtered = list(self.objects.values())
+        if not include_hidden:
+            filtered = [o for o in filtered if o.get("visible", True)]
+        if not include_locked:
+            filtered = [o for o in filtered if not o.get("locked", False)]
+        if selected_only:
+            selected = set(self.selected_ids)
+            filtered = [o for o in filtered if o["id"] in selected]
+        if ids is not None:
+            wanted = {i.lower() for i in ids}
+            filtered = [o for o in filtered if o["id"].lower() in wanted]
         if layer_filter:
             filtered = [o for o in filtered if o.get("layer") == layer_filter]
         if type_filter:

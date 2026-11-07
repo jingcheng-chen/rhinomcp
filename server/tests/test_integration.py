@@ -1827,3 +1827,77 @@ class TestSelectionFilters(_FilterDocument):
         assert self._selected(filter_server, ids) == [
             "box_default", "box_walls", "curve_red",
         ]
+
+
+class TestListingFilters(_FilterDocument):
+    """get_objects lists by ids, the current selection, and optionally hidden
+    or locked objects; the defaults list what they listed before 0.5.0."""
+
+    async def _list(self, **arguments):
+        import rhinomcp
+
+        result = await rhinomcp.mcp.call_tool("get_objects", arguments)
+        listing = json.loads(result.content[0].text)
+        names = sorted(o["name"] for o in listing["objects"])
+        assert listing["total_matching"] == len(names)
+        return names
+
+    @pytest.mark.asyncio
+    async def test_defaults_list_locked_but_not_hidden(self, filter_server, monkeypatch):
+        self._seed(filter_server, monkeypatch)
+        assert await self._list() == [
+            "box_default", "box_walls", "curve_red", "sphere_lock",
+        ]
+
+    @pytest.mark.asyncio
+    async def test_include_hidden(self, filter_server, monkeypatch):
+        self._seed(filter_server, monkeypatch)
+        assert await self._list(include_hidden=True) == [
+            "box_default", "box_walls", "curve_red", "curve_walls", "sphere_lock",
+        ]
+
+    @pytest.mark.asyncio
+    async def test_exclude_locked(self, filter_server, monkeypatch):
+        self._seed(filter_server, monkeypatch)
+        assert await self._list(include_locked=False) == [
+            "box_default", "box_walls", "curve_red",
+        ]
+
+    @pytest.mark.asyncio
+    async def test_ids_restrict_and_unknown_ids_are_absent(
+        self, filter_server, monkeypatch
+    ):
+        _, ids = self._seed(filter_server, monkeypatch)
+        missing = "00000000-0000-0000-0000-00000000dead"
+        names = await self._list(ids=[ids["box_walls"], ids["curve_walls"], missing])
+        # curve_walls is hidden, so ids alone do not bring it in.
+        assert names == ["box_walls"]
+        names = await self._list(
+            ids=[ids["box_walls"], ids["curve_walls"]], include_hidden=True
+        )
+        assert names == ["box_walls", "curve_walls"]
+
+    @pytest.mark.asyncio
+    async def test_selected_only(self, filter_server, monkeypatch):
+        conn, ids = self._seed(filter_server, monkeypatch)
+        conn.send_command(
+            "select_objects", {"filters": {"name": ["box_walls", "curve_red"]}}
+        )
+        assert await self._list(selected_only=True) == ["box_walls", "curve_red"]
+        assert await self._list(selected_only=True, type_filter="curve") == ["curve_red"]
+
+    @pytest.mark.asyncio
+    async def test_selected_only_with_nothing_selected(self, filter_server, monkeypatch):
+        self._seed(filter_server, monkeypatch)
+        assert await self._list(selected_only=True) == []
+
+    @pytest.mark.asyncio
+    async def test_combined_with_layer_filter(self, filter_server, monkeypatch):
+        _, ids = self._seed(filter_server, monkeypatch)
+        names = await self._list(layer_filter="Walls", include_hidden=True)
+        assert names == ["box_walls", "curve_walls"]
+        names = await self._list(
+            layer_filter="Default", include_locked=False,
+            ids=[ids["sphere_lock"], ids["box_default"]],
+        )
+        assert names == ["box_default"]
