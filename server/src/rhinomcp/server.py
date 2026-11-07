@@ -139,6 +139,15 @@ CAPABILITIES_COMMAND = "describe_capabilities"
 # plugin version that introduces it and the value that means "not used".
 PARAMS_SINCE: Dict[str, Dict[str, tuple]] = {
     "sweep1": {"cap_planar_ends": ("0.4.0", False)},
+    "capture_viewport": {
+        "display_mode": ("0.5.0", None),
+        "camera_location": ("0.5.0", None),
+        "camera_target": ("0.5.0", None),
+        "lens_length": ("0.5.0", None),
+        "frame_object_ids": ("0.5.0", None),
+        "frame_bbox": ("0.5.0", None),
+        "format": ("0.5.0", "png"),
+    },
 }
 # Commands added after describe_capabilities (0.3.2) existed, so a plugin too
 # old to report its command table is still refused with the right advice.

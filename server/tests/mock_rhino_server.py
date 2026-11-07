@@ -1240,6 +1240,25 @@ class MockRhinoServer:
         if target.lower() not in ("active", "perspective"):
             # A named standard view: the plugin renders it in parallel projection.
             viewport.update(name=target.capitalize(), projection="parallel")
+        # Temporary view state for this capture only: echoed into the metadata,
+        # never written back to ACTIVE_VIEWPORT, as the plugin restores it.
+        if params.get("display_mode"):
+            viewport["display_mode"] = params["display_mode"]
+        for key in ("camera_location", "camera_target"):
+            if params.get(key) is not None:
+                viewport[key] = params[key]
+        frame = params.get("frame_bbox")
+        if params.get("frame_object_ids"):
+            boxes = [self.objects[i]["bounding_box"] for i in params["frame_object_ids"]]
+            frame = {"min": [min(b[0][a] for b in boxes) for a in range(3)],
+                     "max": [max(b[1][a] for b in boxes) for a in range(3)]}
+        if frame:
+            # Look at the middle of the box from the same direction as before.
+            center = [(lo + hi) / 2 for lo, hi in zip(frame["min"], frame["max"])]
+            offset = [loc - tgt for loc, tgt in
+                      zip(viewport["camera_location"], viewport["camera_target"])]
+            viewport["camera_target"] = center
+            viewport["camera_location"] = [c + o for c, o in zip(center, offset)]
         visible = sum(1 for o in self.objects.values() if o.get("visible", True))
         return {
             "image_data": image_b64,
@@ -1257,7 +1276,7 @@ class MockRhinoServer:
             "camera_location": viewport["camera_location"],
             "camera_target": viewport["camera_target"],
             "camera_up": [0.0, 0.0, 1.0],
-            "lens_length": 50.0,
+            "lens_length": params.get("lens_length", 50.0),
             "scene_bounding_box": self._scene_bounding_box(),
             "visible_object_count": visible,
             "total_object_count": len(self.objects),

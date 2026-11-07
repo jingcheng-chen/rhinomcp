@@ -1754,3 +1754,53 @@ class TestCaptureViewportMetadata:
         assert image.mime_type == "image/jpeg"
         assert base64.b64decode(image.data).startswith(b"\xff\xd8\xff")
         assert capture_server.received_params["capture_viewport"]["format"] == "jpeg"
+
+    @pytest.mark.asyncio
+    async def test_display_mode_and_camera_reach_the_plugin(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+
+        result = await self._capture(
+            display_mode="Wireframe",
+            camera_location=[10, -20, 30],
+            camera_target=[1, 2, 3],
+            lens_length=35,
+        )
+
+        sent = capture_server.received_params["capture_viewport"]
+        assert sent["display_mode"] == "Wireframe"
+        assert sent["camera_location"] == [10, -20, 30]
+        assert sent["camera_target"] == [1, 2, 3]
+        assert sent["lens_length"] == 35
+        assert "frame_object_ids" not in sent and "frame_bbox" not in sent
+        metadata = json.loads(result.content[1].text)
+        assert metadata["display_mode"] == "Wireframe"
+        assert metadata["camera_location"] == [10, -20, 30]
+        assert metadata["camera_target"] == [1, 2, 3]
+        assert metadata["lens_length"] == 35
+
+    @pytest.mark.asyncio
+    async def test_framing_targets_reach_the_plugin(self, capture_server, monkeypatch):
+        self._connect(monkeypatch)
+        box = capture_server._create_object({"type": "BOX", "name": "A"})
+
+        await self._capture(frame_object_ids=[box["id"]])
+        assert capture_server.received_params["capture_viewport"]["frame_object_ids"] == [box["id"]]
+
+        bbox = {"min": [0, 0, 0], "max": [5, 5, 5]}
+        result = await self._capture(frame_bbox=bbox)
+        assert capture_server.received_params["capture_viewport"]["frame_bbox"] == bbox
+        # Framing looks at the middle of the box.
+        assert json.loads(result.content[1].text)["camera_target"] == [2.5, 2.5, 2.5]
+
+    @pytest.mark.asyncio
+    async def test_temporary_camera_leaves_the_viewport_as_it_was(
+        self, capture_server, monkeypatch
+    ):
+        conn = self._connect(monkeypatch)
+        before = conn.send_command("get_context")["viewport"]
+
+        await self._capture(display_mode="Wireframe", camera_location=[9, 9, 9],
+                            camera_target=[1, 1, 1])
+        await self._capture(frame_bbox={"min": [0, 0, 0], "max": [2, 2, 2]})
+
+        assert conn.send_command("get_context")["viewport"] == before

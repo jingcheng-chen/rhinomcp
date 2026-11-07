@@ -2,7 +2,7 @@ from mcp.server.mcpserver import Context, Image
 from mcp.types import TextContent, ToolAnnotations
 import base64
 import json
-from typing import Literal
+from typing import Dict, List, Literal, Optional
 from rhinomcp.server import get_rhino_connection, mcp, logger
 
 # What the text block after the image reports, in this order. The plugin
@@ -44,6 +44,12 @@ def capture_viewport(
     show_cplane_axes: bool = False,
     zoom_to_fit: bool = False,
     format: Literal["png", "jpeg"] = "png",
+    display_mode: Optional[str] = None,
+    camera_location: Optional[List[float]] = None,
+    camera_target: Optional[List[float]] = None,
+    lens_length: Optional[float] = None,
+    frame_object_ids: Optional[List[str]] = None,
+    frame_bbox: Optional[Dict[str, List[float]]] = None,
 ) -> list[Image | TextContent]:
     """
     Capture a screenshot of a Rhino viewport for visual analysis.
@@ -98,6 +104,15 @@ def capture_viewport(
             "zoom_to_fit": zoom_to_fit,
             "format": format,
         }
+        optional = {
+            "display_mode": display_mode,
+            "camera_location": camera_location,
+            "camera_target": camera_target,
+            "lens_length": lens_length,
+            "frame_object_ids": frame_object_ids,
+            "frame_bbox": frame_bbox,
+        }
+        params.update({k: v for k, v in optional.items() if v is not None})
 
         result = rhino.send_command("capture_viewport", params)
 
