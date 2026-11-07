@@ -780,6 +780,17 @@ class TestLayers:
 
         assert result["deleted"] is True
 
+    def test_deleting_a_deleted_layer_is_not_found(self, mock_server):
+        """A layer already deleted counts as missing, as in get_or_set_current_layer."""
+        from rhinomcp.server import get_rhino_connection
+
+        conn = get_rhino_connection()
+
+        conn.send_command("create_layer", {"name": "DeletedTwice"})
+        conn.send_command("delete_layer", {"name": "DeletedTwice"})
+        with pytest.raises(Exception, match=r"^not_found: Layer 'DeletedTwice' not found"):
+            conn.send_command("delete_layer", {"name": "DeletedTwice"})
+
 
 class TestDocumentInfo:
     """Integration tests for document summary."""

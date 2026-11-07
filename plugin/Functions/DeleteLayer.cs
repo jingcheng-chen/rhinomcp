@@ -27,7 +27,7 @@ public partial class RhinoMCPFunctions
         if (hasName) layer = doc.Layers.FindName(name);
         if (hasGuid) layer = doc.Layers.FindId(McpException.ParseGuid(guid));
 
-        if (layer == null) throw McpException.LayerNotFound(hasGuid ? guid : name);
+        if (layer == null || layer.IsDeleted) throw McpException.LayerNotFound(hasGuid ? guid : name);
 
         name = layer.Name;
         doc.Layers.Delete(layer.Index, true);
