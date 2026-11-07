@@ -1,0 +1,15 @@
+{
+  "name": "rhinomcp",
+  "owner": {
+    "name": "Jingcheng Chen"
+  },
+  "description": "Claude Code plugins for RhinoMCP, the MCP bridge between AI agents and Rhino 3D.",
+  "plugins": [
+    {
+      "name": "rhinomcp",
+      "source": "./cc-plugin",
+      "description": "Rhino modeler, inspector and Grasshopper builder agents plus /scene and /snapshot commands for the RhinoMCP server.",
+      "version": "0.5.0"
+    }
+  ]
+}
