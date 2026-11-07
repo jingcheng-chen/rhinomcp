@@ -134,6 +134,13 @@ def test_capture_metadata_used_in_summary_is_verified(tmp_path):
     assert facts["metadata_evidence"]["token"] in {"3 visible", "100", "50", "30"}
 
 
+def test_numbers_match_whole_tokens_only():
+    assert m7.mentions("10", "bounds (0, 10, 5)")
+    assert not m7.mentions("10", "bounds to (100, 50, 30)")
+    assert not m7.mentions("10", "at 10.5 mm")
+    assert m7.mentions("scene_bounding_box", "the scene_bounding_box matches")
+
+
 def test_capture_metadata_used_in_later_tool_argument(tmp_path):
     facts = m7.trace_facts(
         write(

@@ -1,0 +1,154 @@
+{
+  "runs": [
+    {
+      "id": "workflow-baseline-20261107-200903-180003fb-box-v2",
+      "family": "primitives",
+      "cohort": "released-0.5.0-native",
+      "run": "experiments/runs/workflow-baseline-20261107-200903-180003fb/task-1"
+    },
+    {
+      "id": "workflow-baseline-20261107-200903-180003fb-through-hole-v2",
+      "family": "subtractive-solids",
+      "cohort": "released-0.5.0-native",
+      "run": "experiments/runs/workflow-baseline-20261107-200903-180003fb/task-2"
+    },
+    {
+      "id": "workflow-baseline-20261107-200903-180003fb-posed-prism-v2",
+      "family": "posed-solids",
+      "cohort": "released-0.5.0-native",
+      "run": "experiments/runs/workflow-baseline-20261107-200903-180003fb/task-3"
+    },
+    {
+      "id": "workflow-baseline-20261107-200903-180003fb-trimmed-offset-v2",
+      "family": "trimmed-patches",
+      "cohort": "released-0.5.0-native",
+      "run": "experiments/runs/workflow-baseline-20261107-200903-180003fb/task-4"
+    },
+    {
+      "id": "workflow-baseline-20261107-200903-180003fb-panel-raised-v2",
+      "family": "curved-panels",
+      "cohort": "released-0.5.0-native",
+      "run": "experiments/runs/workflow-baseline-20261107-200903-180003fb/task-5"
+    },
+    {
+      "id": "workflow-baseline-20261107-201322-020c79c7-edit_existing-v1",
+      "family": "editing-existing",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-201322-020c79c7/task-1"
+    },
+    {
+      "id": "workflow-baseline-20261107-201322-020c79c7-table_assembly-v1",
+      "family": "small-assemblies",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-201322-020c79c7/task-2"
+    },
+    {
+      "id": "workflow-baseline-20261107-201322-020c79c7-inspect_document-v1",
+      "family": "document-inspection",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-201322-020c79c7/task-3"
+    },
+    {
+      "id": "workflow-baseline-20261107-201322-020c79c7-recover_intermediate-v1",
+      "family": "recovery",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-201322-020c79c7/task-4"
+    },
+    {
+      "id": "workflow-baseline-20261107-201636-67a6ac14-edit_existing-v1",
+      "family": "editing-existing",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-201636-67a6ac14/task-1"
+    },
+    {
+      "id": "workflow-baseline-20261107-201636-67a6ac14-table_assembly-v1",
+      "family": "small-assemblies",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-201636-67a6ac14/task-2"
+    },
+    {
+      "id": "workflow-baseline-20261107-201636-67a6ac14-inspect_document-v1",
+      "family": "document-inspection",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-201636-67a6ac14/task-3"
+    },
+    {
+      "id": "workflow-baseline-20261107-201636-67a6ac14-recover_intermediate-v1",
+      "family": "recovery",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-201636-67a6ac14/task-4"
+    },
+    {
+      "id": "workflow-baseline-20261107-202054-9f00d829-edit_existing-v1",
+      "family": "editing-existing",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-202054-9f00d829/task-1"
+    },
+    {
+      "id": "workflow-baseline-20261107-202054-9f00d829-table_assembly-v1",
+      "family": "small-assemblies",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-202054-9f00d829/task-2"
+    },
+    {
+      "id": "workflow-baseline-20261107-202054-9f00d829-inspect_document-v1",
+      "family": "document-inspection",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-202054-9f00d829/task-3"
+    },
+    {
+      "id": "workflow-baseline-20261107-202054-9f00d829-recover_intermediate-v1",
+      "family": "recovery",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-202054-9f00d829/task-4"
+    },
+    {
+      "id": "workflow-baseline-20261107-202423-93c63146-join-closed-network-v1",
+      "family": "curve-network-joining",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-202423-93c63146/task-1"
+    },
+    {
+      "id": "workflow-baseline-20261107-202423-93c63146-join-two-components-v1",
+      "family": "curve-network-joining",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-202423-93c63146/task-2"
+    },
+    {
+      "id": "workflow-baseline-20261107-202423-93c63146-projection-vertical-v1",
+      "family": "directional-curve-projection",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-202423-93c63146/task-3"
+    },
+    {
+      "id": "workflow-baseline-20261107-202423-93c63146-projection-oblique-v1",
+      "family": "directional-curve-projection",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-202423-93c63146/task-4"
+    },
+    {
+      "id": "workflow-baseline-20261107-202938-fbe91c82-join-closed-network-v1",
+      "family": "curve-network-joining",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-202938-fbe91c82/task-1"
+    },
+    {
+      "id": "workflow-baseline-20261107-202938-fbe91c82-join-two-components-v1",
+      "family": "curve-network-joining",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-202938-fbe91c82/task-2"
+    },
+    {
+      "id": "workflow-baseline-20261107-202938-fbe91c82-projection-vertical-v1",
+      "family": "directional-curve-projection",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-202938-fbe91c82/task-3"
+    },
+    {
+      "id": "workflow-baseline-20261107-202938-fbe91c82-projection-oblique-v1",
+      "family": "directional-curve-projection",
+      "cohort": "released-0.5.0-full",
+      "run": "experiments/runs/workflow-baseline-20261107-202938-fbe91c82/task-4"
+    }
+  ]
+}

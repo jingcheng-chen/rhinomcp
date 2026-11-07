@@ -9,6 +9,7 @@ override the metadata heuristic with quoted evidence. No Rhino access.
 import argparse
 import json
 from pathlib import Path
+import re
 
 from experiments.workflow.audit import audit
 from experiments.workflow.flaws import READS, canonical, sha, trace
@@ -100,6 +101,15 @@ def metadata_tokens(metadata):
     return tokens
 
 
+def mentions(token, text):
+    """Numbers must stand alone: 10 inside 100 or 10.5 is not a use of 10."""
+    if re.fullmatch(r"-?[\d.]+", token):
+        return (
+            re.search(r"(?<![\d.])" + re.escape(token) + r"(?![\d.])", text) is not None
+        )
+    return token in text
+
+
 def trace_facts(path):
     """Grounding and capture facts from one run's Codex/Claude event trace."""
     rows, _, messages = trace(path / "modeler/events.jsonl", path / "calls.jsonl")
@@ -132,7 +142,7 @@ def trace_facts(path):
                 canonical(r["arguments"]) for r in ordered if r["line"] > done
             ]
             for text in later_text:
-                hit = next((t for t in tokens if t in text), None)
+                hit = next((t for t in tokens if mentions(t, text)), None)
                 if hit:
                     metadata_read = True
                     evidence = {"token": hit, "text": text[:300]}
