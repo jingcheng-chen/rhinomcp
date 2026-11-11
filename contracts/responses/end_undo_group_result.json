@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "end_undo_group_result.json",
+  "title": "EndUndoGroup Response",
+  "description": "ended=true: the group just ended and is now one undo step. ended=false: no group was open; last_group says why the previous one ended without end_undo_group, if it did.",
+  "type": "object",
+  "properties": {
+    "ended": { "type": "boolean" },
+    "name": { "type": "string", "minLength": 1 },
+    "end_reason": { "const": "requested" },
+    "command_count": { "type": "integer", "minimum": 0, "description": "Mutating commands that ran inside the group" },
+    "duration_seconds": { "type": "number", "minimum": 0 },
+    "last_group": {
+      "type": "object",
+      "description": "The previous group, when the plugin ended it on its own",
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "end_reason": {
+          "enum": ["client_disconnected", "idle_timeout", "document_closed", "document_changed", "record_ended_elsewhere"]
+        },
+        "command_count": { "type": "integer", "minimum": 0 },
+        "duration_seconds": { "type": "number", "minimum": 0 }
+      },
+      "required": ["name", "end_reason", "command_count", "duration_seconds"],
+      "additionalProperties": false
+    },
+    "message": { "type": "string" }
+  },
+  "required": ["ended", "message"],
+  "if": { "properties": { "ended": { "const": true } } },
+  "then": {
+    "required": ["name", "end_reason", "command_count", "duration_seconds"],
+    "properties": { "last_group": false }
+  },
+  "else": {
+    "properties": { "name": false, "end_reason": false, "command_count": false, "duration_seconds": false }
+  },
+  "additionalProperties": false
+}

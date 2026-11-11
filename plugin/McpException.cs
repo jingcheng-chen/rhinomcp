@@ -12,6 +12,7 @@ public sealed class McpException : InvalidOperationException
 {
     public const string InvalidArgument = "invalid_argument";
     public const string NotFound = "not_found";
+    public const string RhinoError = "rhino_error";
 
     public string Code { get; }
     public string Guidance { get; }

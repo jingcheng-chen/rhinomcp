@@ -11,6 +11,7 @@ public partial class RhinoMCPFunctions
     [McpCommand("undo", ReadOnly = true)]
     public JObject Undo(JObject parameters)
     {
+        RefuseInsideUndoGroup("undo");
         var doc = RhinoDoc.ActiveDoc;
 
         // Get number of undo steps (default 1)
@@ -50,6 +51,7 @@ public partial class RhinoMCPFunctions
     [McpCommand("redo", ReadOnly = true)]
     public JObject Redo(JObject parameters)
     {
+        RefuseInsideUndoGroup("redo");
         var doc = RhinoDoc.ActiveDoc;
 
         // Get number of redo steps (default 1)

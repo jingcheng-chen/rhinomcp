@@ -16,7 +16,9 @@ public sealed class McpCommandAttribute : Attribute
 
     /// <summary>
     /// If true, the dispatcher does not wrap the handler in a Rhino undo record.
-    /// Use for purely introspective commands (get_*, undo, redo, capture_viewport).
+    /// Use for purely introspective commands (get_*, capture_viewport) and for
+    /// commands that act on undo records themselves (undo, redo, begin_undo_group,
+    /// end_undo_group).
     /// Settable so call sites can use named-argument syntax: [McpCommand("foo", ReadOnly = true)].
     /// </summary>
     public bool ReadOnly { get; set; }

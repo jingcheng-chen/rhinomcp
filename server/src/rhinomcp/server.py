@@ -171,6 +171,8 @@ COMMANDS_SINCE: Dict[str, str] = {
     "get_context": "0.5.0",
     "set_camera": "0.5.0",
     "zoom_to": "0.5.0",
+    "begin_undo_group": "0.6.0",
+    "end_undo_group": "0.6.0",
 }
 PLUGIN_UPDATE_ADVICE = (
     "Update rhinomcp in Rhino's Package Manager (Tools > Package Manager > "

@@ -9,7 +9,7 @@
       "name": "rhinomcp",
       "source": "./cc-plugin",
       "description": "Rhino modeler, inspector and Grasshopper builder agents plus /scene and /snapshot commands for the RhinoMCP server.",
-      "version": "0.5.1"
+      "version": "0.6.0"
     }
   ]
 }

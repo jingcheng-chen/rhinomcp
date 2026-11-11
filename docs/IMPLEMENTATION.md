@@ -103,6 +103,7 @@ rhinomcp/
 |           +-- execute_rhinocommon_csharp_code.py
 |           +-- run_command.py
 |           +-- undo.py
+|           +-- undo_group.py
 |           +-- grasshopper_document.py
 |           +-- grasshopper_catalog.py
 |           +-- grasshopper_components.py
@@ -458,6 +459,9 @@ public JObject GetDocumentSummary(JObject parameters)
 
 `ReadOnly = true` tells the dispatcher not to create a Rhino undo record.
 Mutating commands are wrapped in `doc.BeginUndoRecord($"MCP: {cmdType}")`.
+While an undo group is open (`begin_undo_group`), Rhino declines that record
+(serial 0) and the command's changes land in the group's record; the dispatcher
+ends only records Rhino actually opened.
 
 To add a command, the implementation must stay in sync across:
 
@@ -482,7 +486,7 @@ commands and 25 Grasshopper commands.
 | Selection                     | `select_objects`                                                                                                                                      |
 | Layers                        | `create_layer`, `delete_layer`, `get_or_set_current_layer`                                                                                            |
 | Scripting and commands        | `run_command`, `get_commands`, `describe_capabilities`, `execute_rhinoscript_python_code`, `execute_rhinocommon_csharp_code`                          |
-| Undo                          | `undo`, `redo`                                                                                                                                        |
+| Undo                          | `undo`, `redo`, `begin_undo_group`, `end_undo_group`                                                                                                  |
 | Booleans                      | `boolean_union`, `boolean_difference`, `boolean_intersection`                                                                                         |
 | Curves and generated geometry | `loft`, `extrude_curve`, `sweep1`, `offset_curve`, `pipe`, `project_curve`, `intersect_curves`, `split_curve`                                         |
 

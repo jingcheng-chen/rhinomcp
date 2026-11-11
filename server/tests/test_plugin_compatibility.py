@@ -181,6 +181,30 @@ class TestUnsupportedCommands:
 
         assert sent_types(mock_sock) == ["describe_capabilities"]
 
+    @pytest.mark.parametrize(
+        "command, params",
+        [("begin_undo_group", {"name": "Turn"}), ("end_undo_group", {})],
+    )
+    @patch("socket.socket")
+    def test_a_0_5_1_plugin_refuses_undo_group_commands(
+        self, mock_socket_class, command, params
+    ):
+        """An old plugin answers an unknown command with a bare error, so an
+        agent would never learn that its edits are not grouped."""
+        conn, mock_sock = connected(
+            mock_socket_class, capabilities(ADVERTISED, "0.5.1")
+        )
+
+        with pytest.raises(
+            Exception,
+            match=rf"^unsupported: The connected rhinomcp plugin \(0\.5\.1\) "
+            rf"does not support '{command}', which was added in plugin 0\.6\.0;"
+            r".*\nUpdate rhinomcp in Rhino's Package Manager",
+        ):
+            conn.send_command(command, params)
+
+        assert sent_types(mock_sock) == ["describe_capabilities"]
+
     @patch("socket.socket")
     def test_capabilities_are_read_once_per_connection(self, mock_socket_class):
         conn, mock_sock = connected(
