@@ -1146,6 +1146,7 @@ def test_protocol_envelope():
         "create_layer", "delete_layer", "get_or_set_current_layer",
         "execute_rhinoscript_python_code", "execute_rhinocommon_csharp_code",
         "capture_viewport", "set_camera", "zoom_to", "undo", "redo",
+        "begin_undo_group", "end_undo_group",
         "boolean_union", "boolean_difference", "boolean_intersection",
         "loft", "extrude_curve", "create_planar_region", "sweep1", "offset_curve", "pipe",
         "project_curve", "intersect_curves", "split_curve",
@@ -1486,6 +1487,83 @@ def test_camera_schemas():
     return all_passed
 
 
+def test_undo_group_schemas():
+    """begin_undo_group and end_undo_group: params with examples, and both results."""
+    print("\n=== Testing undo group commands ===")
+    all_passed = True
+
+    command_cases = [
+        ("commands/begin_undo_group.json", {"name": "Build chair frame"}, True, "name only"),
+        ("commands/begin_undo_group.json", {"name": "Turn", "idle_timeout_seconds": 600}, True, "idle timeout"),
+        ("commands/begin_undo_group.json", {"name": "Turn", "idle_timeout_seconds": 3600}, True, "longest idle timeout"),
+        ("commands/begin_undo_group.json", {}, False, "missing name"),
+        ("commands/begin_undo_group.json", {"name": ""}, False, "empty name"),
+        ("commands/begin_undo_group.json", {"name": "   "}, False, "blank name"),
+        ("commands/begin_undo_group.json", {"name": 3}, False, "name not a string"),
+        ("commands/begin_undo_group.json", {"name": "Turn", "idle_timeout_seconds": 0}, False, "zero idle timeout"),
+        ("commands/begin_undo_group.json", {"name": "Turn", "idle_timeout_seconds": 3601}, False, "idle timeout over an hour"),
+        ("commands/begin_undo_group.json", {"name": "Turn", "idle_timeout_seconds": 1.5}, False, "fractional idle timeout"),
+        ("commands/begin_undo_group.json", {"name": "Turn", "nested": True}, False, "unknown field"),
+        ("commands/end_undo_group.json", {}, True, "no parameters"),
+        ("commands/end_undo_group.json", {"name": "Turn"}, False, "unknown field"),
+    ]
+    for path, example, should_pass, label in command_cases:
+        ok = not list(Draft202012Validator(load_schema_with_refs(path)).iter_errors(example))
+        if ok == should_pass:
+            print(f"  {'PASS' if should_pass else 'CORRECTLY REJECTED'}: {path} {label}")
+        else:
+            print(f"  FAIL: {path} {label} ({'rejected' if should_pass else 'accepted'})")
+            all_passed = False
+
+    begun = {
+        "name": "Build chair frame",
+        "undo_description": "MCP: Build chair frame",
+        "document_name": "chair.3dm",
+        "idle_timeout_seconds": 120,
+        "message": "Undo group 'Build chair frame' is open.",
+    }
+    ended = {
+        "ended": True,
+        "name": "Build chair frame",
+        "end_reason": "requested",
+        "command_count": 7,
+        "duration_seconds": 42.3,
+        "message": "Undo group 'Build chair frame' ended.",
+    }
+    auto = {"name": "Turn", "end_reason": "idle_timeout", "command_count": 2, "duration_seconds": 130.0}
+    result_cases = [
+        ("responses/begin_undo_group_result.json", begun, True, "open group"),
+        ("responses/begin_undo_group_result.json", {**begun, "document_name": None}, True, "unsaved document"),
+        ("responses/begin_undo_group_result.json",
+         {k: v for k, v in begun.items() if k != "undo_description"}, False, "missing undo_description"),
+        ("responses/begin_undo_group_result.json", {**begun, "idle_timeout_seconds": 0}, False, "zero idle timeout"),
+        ("responses/end_undo_group_result.json", ended, True, "ended on request"),
+        ("responses/end_undo_group_result.json", {"ended": False, "message": "No undo group is open."}, True, "none open"),
+        ("responses/end_undo_group_result.json",
+         {"ended": False, "message": "No undo group is open.", "last_group": auto}, True, "none open, last one idled out"),
+        ("responses/end_undo_group_result.json",
+         {k: v for k, v in ended.items() if k != "command_count"}, False, "ended without command_count"),
+        ("responses/end_undo_group_result.json", {**ended, "end_reason": "idle_timeout"}, False, "ended reports an automatic reason"),
+        ("responses/end_undo_group_result.json", {**ended, "last_group": auto}, False, "ended with last_group"),
+        ("responses/end_undo_group_result.json",
+         {"ended": False, "message": "m", "name": "Turn"}, False, "none open with a name"),
+        ("responses/end_undo_group_result.json",
+         {"ended": False, "message": "m", "last_group": {**auto, "end_reason": "requested"}}, False, "last_group ended on request"),
+        ("responses/end_undo_group_result.json",
+         {"ended": False, "message": "m", "last_group": {**auto, "end_reason": "crashed"}}, False, "unknown end reason"),
+        ("responses/end_undo_group_result.json", {"ended": True, "message": "m"}, False, "ended without the group"),
+    ]
+    for path, example, should_pass, label in result_cases:
+        ok = not list(Draft202012Validator(load_schema_with_refs(path)).iter_errors(example))
+        if ok == should_pass:
+            print(f"  {'PASS' if should_pass else 'CORRECTLY REJECTED'}: {path} {label}")
+        else:
+            print(f"  FAIL: {path} {label} ({'rejected' if should_pass else 'accepted'})")
+            all_passed = False
+
+    return all_passed
+
+
 def main():
     """Run all tests."""
     print("RhinoMCP Schema Validation Tests")
@@ -1509,6 +1587,7 @@ def main():
     results.append(("get_context", test_get_context_schema()))
     results.append(("capture_viewport", test_capture_viewport_schema()))
     results.append(("camera commands", test_camera_schemas()))
+    results.append(("undo group commands", test_undo_group_schemas()))
     test_sweep_planar_cap_schema()
     results.append(("sweep planar caps", True))
 

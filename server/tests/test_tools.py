@@ -1110,6 +1110,66 @@ class TestUndoRedoTools:
         assert "Redid 1" in result
 
 
+class TestUndoGroupTools:
+    """begin_undo_group and end_undo_group pass their arguments through."""
+
+    BEGUN = {
+        "name": "Build chair frame",
+        "undo_description": "MCP: Build chair frame",
+        "document_name": None,
+        "idle_timeout_seconds": 120,
+        "message": "Undo group 'Build chair frame' is open.",
+    }
+
+    @patch('rhinomcp.tools.undo_group.get_rhino_connection')
+    def test_begin_leaves_the_default_timeout_to_the_plugin(self, mock_get_conn):
+        from rhinomcp.tools.undo_group import begin_undo_group
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = self.BEGUN
+        mock_get_conn.return_value = mock_conn
+
+        result = begin_undo_group(ctx=None, name="Build chair frame")
+
+        mock_conn.send_command.assert_called_once_with(
+            "begin_undo_group", {"name": "Build chair frame"}
+        )
+        assert result == self.BEGUN
+
+    @patch('rhinomcp.tools.undo_group.get_rhino_connection')
+    def test_begin_sends_an_explicit_timeout(self, mock_get_conn):
+        from rhinomcp.tools.undo_group import begin_undo_group
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {**self.BEGUN, "idle_timeout_seconds": 600}
+        mock_get_conn.return_value = mock_conn
+
+        begin_undo_group(ctx=None, name="Turn", idle_timeout_seconds=600)
+
+        mock_conn.send_command.assert_called_once_with(
+            "begin_undo_group", {"name": "Turn", "idle_timeout_seconds": 600}
+        )
+
+    @patch('rhinomcp.tools.undo_group.get_rhino_connection')
+    def test_end_sends_no_parameters(self, mock_get_conn):
+        from rhinomcp.tools.undo_group import end_undo_group
+
+        ended = {
+            "ended": True,
+            "name": "Turn",
+            "end_reason": "requested",
+            "command_count": 3,
+            "duration_seconds": 12.5,
+            "message": "Undo group 'Turn' ended.",
+        }
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = ended
+        mock_get_conn.return_value = mock_conn
+
+        assert end_undo_group(ctx=None) == ended
+        mock_conn.send_command.assert_called_once_with("end_undo_group", {})
+
+
 class TestExecuteRhinoscriptTool:
     """Tests for execute_rhinoscript_python_code tool."""
 

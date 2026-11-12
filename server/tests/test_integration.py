@@ -2581,3 +2581,162 @@ class TestCameraTools:
             f"'{command}', which was added in plugin 0.5.0;"
         )
         assert command not in server.received_commands
+
+
+@pytest.fixture
+def undo_group_server():
+    """A 0.6.0 plugin with an empty undo stack, on its own port."""
+    server = MockRhinoServer(port=19974, plugin_version="0.6.0")
+    server.start()
+    time.sleep(0.1)
+
+    yield server
+
+    server.stop()
+
+
+class TestUndoGroups:
+    """Changes made between begin_undo_group and end_undo_group revert with one
+    undo. Groups do not nest, undo is refused inside one, and a group ends with
+    the client that began it."""
+
+    PORT = 19974
+    BOX = {"type": "BOX", "params": {"width": 1, "length": 1, "height": 1}}
+
+    def _connection(self):
+        from rhinomcp.server import RhinoConnection
+
+        return RhinoConnection(host="127.0.0.1", port=self.PORT)
+
+    def _tools(self, monkeypatch):
+        import rhinomcp.tools.undo as undo_mod
+        import rhinomcp.tools.undo_group as undo_group_mod
+
+        conn = self._connection()
+        for mod in (undo_mod, undo_group_mod):
+            monkeypatch.setattr(mod, "get_rhino_connection", lambda: conn)
+        return conn
+
+    async def _refusal(self, tool, args):
+        """The tool error text after the SDK's own 'Error executing tool' prefix."""
+        import rhinomcp
+        from mcp.server.mcpserver.exceptions import ToolError
+
+        with pytest.raises(ToolError) as info:
+            await rhinomcp.mcp.call_tool(tool, args)
+        prefix = f"Error executing tool {tool}: "
+        text = str(info.value)
+        assert text.startswith(prefix)
+        return text[len(prefix):]
+
+    def test_one_undo_reverts_every_change_in_the_group(
+        self, undo_group_server, monkeypatch
+    ):
+        from rhinomcp.tools.undo import undo
+        from rhinomcp.tools.undo_group import begin_undo_group, end_undo_group
+
+        conn = self._tools(monkeypatch)
+        begun = begin_undo_group(ctx=None, name="Build three boxes")
+        for i in range(3):
+            conn.send_command("create_object", {**self.BOX, "name": f"Box{i}"})
+        ended = end_undo_group(ctx=None)
+
+        assert begun["undo_description"] == "MCP: Build three boxes"
+        assert begun["idle_timeout_seconds"] == 120
+        assert ended["ended"] is True
+        assert ended["end_reason"] == "requested"
+        assert ended["command_count"] == 3
+        assert undo(ctx=None, steps=1) == "Undid 1 operation(s)"
+        assert undo(ctx=None, steps=1) == "Nothing to undo"
+        conn.disconnect()
+
+    @pytest.mark.asyncio
+    async def test_groups_do_not_nest(self, undo_group_server, monkeypatch):
+        conn = self._tools(monkeypatch)
+        await self._call("begin_undo_group", {"name": "Outer"})
+
+        text = await self._refusal("begin_undo_group", {"name": "Inner"})
+
+        assert text == (
+            "invalid_argument: Undo group 'Outer' is already open\n"
+            "Undo groups do not nest: call end_undo_group, then begin the next group."
+        )
+        assert undo_group_server.undo_group["name"] == "Outer"
+        conn.disconnect()
+
+    @pytest.mark.asyncio
+    async def test_undo_and_redo_are_refused_inside_a_group(
+        self, undo_group_server, monkeypatch
+    ):
+        conn = self._tools(monkeypatch)
+        await self._call("begin_undo_group", {"name": "Turn"})
+        conn.send_command("create_object", {**self.BOX, "name": "Kept"})
+
+        for tool in ("undo", "redo"):
+            text = await self._refusal(tool, {"steps": 1})
+            assert text.startswith(
+                f"invalid_argument: {tool} is not available while undo group "
+                "'Turn' is open\n"
+            )
+        await self._call("end_undo_group", {})
+        assert [entry[:2] for entry in undo_group_server.undo_stack] == [("group", "Turn")]
+        conn.disconnect()
+
+    def test_end_without_an_open_group_reports_ended_false(self, undo_group_server):
+        conn = self._connection()
+
+        result = conn.send_command("end_undo_group", {})
+
+        assert result == {"ended": False, "message": "No undo group is open."}
+        conn.disconnect()
+
+    def test_the_group_ends_when_its_client_disconnects(self, undo_group_server):
+        first = self._connection()
+        first.send_command("begin_undo_group", {"name": "Turn"})
+        first.send_command("create_object", {**self.BOX, "name": "Orphan"})
+        first.disconnect()
+        deadline = time.monotonic() + 2
+        while undo_group_server.undo_group and time.monotonic() < deadline:
+            time.sleep(0.02)
+
+        second = self._connection()
+        result = second.send_command("end_undo_group", {})
+        undone = second.send_command("undo", {"steps": 2})
+        second.disconnect()
+
+        assert result["ended"] is False
+        assert result["last_group"]["name"] == "Turn"
+        assert result["last_group"]["end_reason"] == "client_disconnected"
+        assert result["last_group"]["command_count"] == 1
+        assert undone["undone_steps"] == 1
+
+    def test_only_the_client_that_began_a_group_can_end_it(self, undo_group_server):
+        from rhinomcp.server import RhinoError
+
+        owner, other = self._connection(), self._connection()
+        owner.send_command("begin_undo_group", {"name": "Turn"})
+
+        with pytest.raises(RhinoError) as info:
+            other.send_command("end_undo_group", {})
+        ended = owner.send_command("end_undo_group", {})
+        owner.disconnect()
+        other.disconnect()
+
+        assert info.value.code == "invalid_argument"
+        assert "was begun by another client" in info.value.message
+        assert ended["ended"] is True
+
+    @pytest.mark.parametrize("tool", ["begin_undo_group", "end_undo_group"])
+    @pytest.mark.asyncio
+    async def test_annotations_mark_state_change_without_destruction(self, tool):
+        import rhinomcp
+
+        listed = next(t for t in await rhinomcp.mcp.list_tools() if t.name == tool)
+        assert listed.annotations.read_only_hint is False
+        assert listed.annotations.destructive_hint is False
+        assert listed.annotations.open_world_hint is False
+
+    async def _call(self, tool, args):
+        import rhinomcp
+
+        return await rhinomcp.mcp.call_tool(tool, args)

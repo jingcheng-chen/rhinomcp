@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "begin_undo_group.json",
+  "title": "BeginUndoGroup Command",
+  "description": "Open one undo record that collects every change to the active document until end_undo_group, so one Undo reverts them all. Groups do not nest. The plugin ends the group when the client that began it disconnects, when no command arrives for idle_timeout_seconds, and when the document closes or another document becomes active.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "description": "Short name for the change. Rhino lists the undo step as 'MCP: <name>', using the first line, cut to 80 characters."
+    },
+    "idle_timeout_seconds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3600,
+      "default": 120,
+      "description": "End the group when no command from any client arrives for this many seconds."
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false,
+  "examples": [
+    { "name": "Build chair frame" },
+    { "name": "Agent turn: extrude the selected curves", "idle_timeout_seconds": 600 }
+  ]
+}

@@ -39,6 +39,8 @@
             "zoom_to",
             "undo",
             "redo",
+            "begin_undo_group",
+            "end_undo_group",
             "boolean_union",
             "boolean_difference",
             "boolean_intersection",

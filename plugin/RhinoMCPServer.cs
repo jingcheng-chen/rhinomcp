@@ -363,6 +363,9 @@ namespace RhinoMCPPlugin
             finally
             {
                 clients.TryRemove(connection.Id, out _);
+                // An undo group this client began must not outlive it, or every
+                // later edit would join that group's undo step.
+                RhinoApp.InvokeOnUiThread(new Action(() => handler.ClientDisconnected(connection.Id)));
                 try
                 {
                     client.Close();
@@ -429,7 +432,7 @@ namespace RhinoMCPPlugin
                 connection.RecordCommand(command["type"]?.ToString());
                 try
                 {
-                    JObject response = ExecuteCommand(command);
+                    JObject response = ExecuteCommand(command, connection);
                     string responseJson = JsonConvert.SerializeObject(response);
 
                     try
@@ -481,8 +484,14 @@ namespace RhinoMCPPlugin
             stream.Write(message, 0, message.Length);
         }
 
-        private JObject ExecuteCommand(JObject command)
+        private JObject ExecuteCommand(JObject command, ClientConnection connection)
         {
+            // Handlers that act per client (undo groups) read the caller here.
+            // Restored rather than cleared: capture_viewport calls RhinoApp.Wait,
+            // which can run another client's queued command inside this one.
+            var previousClient = this.handler.CurrentClient;
+            this.handler.CurrentClient = connection;
+            this.handler.KeepUndoGroupAlive();
             try
             {
                 string cmdType = command["type"]?.ToString();
@@ -508,6 +517,11 @@ namespace RhinoMCPPlugin
                     ["status"] = "error",
                     ["message"] = e.Message
                 };
+            }
+            finally
+            {
+                this.handler.KeepUndoGroupAlive();
+                this.handler.CurrentClient = previousClient;
             }
         }
 
@@ -562,6 +576,9 @@ namespace RhinoMCPPlugin
             uint record = 0;
             if (needsUndo)
             {
+                // Inside an open undo group Rhino declines this record (returns
+                // 0) and the command's changes land in the group's record.
+                this.handler.NoteMutatingCommandForUndoGroup(doc);
                 record = doc.BeginUndoRecord($"MCP: {cmdType}");
             }
 
@@ -605,7 +622,10 @@ namespace RhinoMCPPlugin
             }
             finally
             {
-                if (needsUndo)
+                // 0 means Rhino declined the record because another one (an undo
+                // group's, or a running Rhino command's) is collecting changes.
+                // That record is not ours to end.
+                if (record != 0)
                 {
                     doc.EndUndoRecord(record);
                 }

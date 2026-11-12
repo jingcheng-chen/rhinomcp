@@ -264,6 +264,27 @@ For Grasshopper, you only need Rhino open with `mcpstart` running. The assistant
 the Grasshopper document itself, then build the definition. For example: _"create a point attractor
 pattern with cylinders that have different heights."_
 
+<details>
+<summary>One undo step for a multi-step change</summary>
+
+Rhino records one undo step per tool call, so taking back an agent's work can take many presses of
+Undo. Between `begin_undo_group` and `end_undo_group`, every change to the document is one undo step,
+listed as `MCP: <name>`. An agent can call the two tools around a multi-step edit. A host that knows
+where an agent turn starts and ends can send the same commands over the bridge itself, each as one
+length-prefixed frame (see `contracts/README.md`), on a connection it keeps open for the whole turn:
+
+```json
+{"type": "begin_undo_group", "params": {"name": "Agent turn: build the chair"}}
+{"type": "end_undo_group", "params": {}}
+```
+
+Groups do not nest. While one is open, `undo` and `redo` are refused, and edits the user makes in
+Rhino or another client makes join the group. The plugin ends a group by itself when the client that
+began it disconnects, after `idle_timeout_seconds` (default 120) without any command, or when the
+document is closed or another document becomes active.
+
+</details>
+
 ## Example prompts
 
 > Create 6×6×6 boxes on a 10-unit grid from the origin, sizes ramping from 1 to 5,
@@ -305,6 +326,7 @@ pattern with cylinders that have different heights."_
 | `search_rhinoscript_functions` / `get_rhinoscript_docs` / `list_rhinoscript_modules` / `get_module_functions` | RhinoScript API docs lookup                            |
 | `get_commands`                                                                                                | List available commands                                |
 | `undo` / `redo`                                                                                               | Undo and redo                                          |
+| `begin_undo_group` / `end_undo_group`                                                                         | Make several edits one undo step                       |
 
 </details>
 

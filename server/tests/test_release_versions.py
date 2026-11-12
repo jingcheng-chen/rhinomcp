@@ -33,9 +33,9 @@ def release_versions():
 
 
 def test_every_release_file_names_the_same_version():
-    assert set(release_versions().values()) == {"0.5.1"}, release_versions()
+    assert set(release_versions().values()) == {"0.6.0"}, release_versions()
 
 
 def test_the_changelog_opens_with_the_release_version():
     changelog = (ROOT / "CHANGELOG.md").read_text()
-    assert re.search(r"^## (\S+)", changelog, re.M).group(1) == "0.5.1"
+    assert re.search(r"^## (\S+)", changelog, re.M).group(1) == "0.6.0"

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "end_undo_group.json",
+  "title": "EndUndoGroup Command",
+  "description": "End the undo group this client began. With no group open it reports ended=false instead of failing.",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false,
+  "examples": [
+    {}
+  ]
+}
