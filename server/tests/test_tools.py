@@ -214,6 +214,75 @@ class TestCreateObjectsTool:
         assert call_args[0][0] == "create_objects"
         assert "2" in result
 
+    @patch('rhinomcp.tools.create_objects.get_rhino_connection')
+    def test_items_sharing_a_name_are_all_sent(self, mock_get_conn):
+        """Issue #84: three posts named alike must not collapse to one."""
+        from rhinomcp.tools.create_objects import create_objects
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "success_count": 3, "failure_count": 0, "total": 3, "errors": [],
+        }
+        mock_get_conn.return_value = mock_conn
+        post = {"type": "BOX", "name": "Post", "params": {"width": 1, "length": 1, "height": 1}}
+
+        create_objects(ctx=None, objects=[post, post, post])
+
+        sent = mock_conn.send_command.call_args[0][1]
+        assert list(sent) == ["object_0", "object_1", "object_2"]
+        assert all(item["name"] == "Post" for item in sent.values())
+
+    @patch('rhinomcp.tools.create_objects.get_rhino_connection')
+    def test_errors_name_the_item_and_its_position(self, mock_get_conn):
+        from rhinomcp.tools.create_objects import create_objects
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "success_count": 1, "failure_count": 1, "total": 2,
+            "errors": [{"name": "object_1", "error": "Invalid object type"}],
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = create_objects(ctx=None, objects=[
+            {"type": "BOX", "name": "Post", "params": {}},
+            {"type": "NOPE", "name": "Post", "params": {}},
+        ])
+
+        assert "item 1 'Post': Invalid object type" in result
+
+
+class TestDeleteAllTool:
+    """delete_object(all=True) reports what Rhino left in place (issue #89)."""
+
+    @patch('rhinomcp.tools.delete_object.get_rhino_connection')
+    def test_skipped_locked_objects_are_reported(self, mock_get_conn):
+        from rhinomcp.tools.delete_object import delete_object
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {
+            "deleted": True, "count": 8, "scope": "all", "skipped_count": 2,
+        }
+        mock_get_conn.return_value = mock_conn
+
+        result = delete_object(ctx=None, all=True)
+
+        assert result["count"] == 8
+        assert result["skipped_count"] == 2
+        assert "2 locked object(s)" in result["message"]
+
+    @patch('rhinomcp.tools.delete_object.get_rhino_connection')
+    def test_a_clean_delete_has_no_skipped_count(self, mock_get_conn):
+        from rhinomcp.tools.delete_object import delete_object
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"deleted": True, "count": 3, "scope": "all"}
+        mock_get_conn.return_value = mock_conn
+
+        result = delete_object(ctx=None, all=True)
+
+        assert "skipped_count" not in result
+        assert result["message"] == "Deleted all objects (3)."
+
 
 class TestModifyObjectTool:
     """Tests for modify_object tool."""

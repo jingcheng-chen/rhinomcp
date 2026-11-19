@@ -138,7 +138,7 @@ public partial class RhinoMCPFunctions
                 ["instance_id"] = param.InstanceGuid.ToString(),
                 ["name"] = param.Name,
                 ["nickname"] = param.NickName,
-                ["type"] = param.TypeName,
+                ["type"] = SafeParamTypeName(param),
                 ["position"] = PivotToJson(param),
                 ["source_count"] = param.SourceCount,
                 ["recipient_count"] = param.Recipients.Count

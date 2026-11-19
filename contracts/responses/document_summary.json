@@ -29,7 +29,12 @@
     },
     "objects_by_layer": {
       "type": "object",
-      "description": "Count of objects grouped by layer name",
+      "description": "Count of objects grouped by short layer name. Nested layers that share a short name are summed; use objects_by_layer_path to tell them apart.",
+      "additionalProperties": { "type": "integer" }
+    },
+    "objects_by_layer_path": {
+      "type": "object",
+      "description": "Count of objects grouped by full layer path (Parent::Child)",
       "additionalProperties": { "type": "integer" }
     },
     "model_bounding_box": {

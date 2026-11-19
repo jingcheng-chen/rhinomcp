@@ -647,6 +647,40 @@ public partial class RhinoMCPFunctions
         return item is IGH_Goo goo ? goo.TypeName : item?.GetType().Name ?? "Null";
     }
 
+    /// <summary>
+    /// A parameter's TypeName without tripping Grasshopper. GH_Param&lt;T&gt;.TypeName
+    /// instantiates T, and for an abstract or interface T (IGH_Goo, as on the
+    /// placeholder Grasshopper puts in for a missing plugin's component)
+    /// Grasshopper opens a modal "Grasshopper breakpoint" dialog before it
+    /// throws, which blocks Rhino's UI thread and with it every MCP command
+    /// (issue #93). Such a parameter reports its data type's name instead.
+    /// </summary>
+    internal static string SafeParamTypeName(IGH_Param param)
+    {
+        if (param == null) return "Unknown";
+        try
+        {
+            Type dataType = param.Type;
+            bool cannotInstantiate = dataType != null && (dataType.IsInterface || dataType.IsAbstract);
+            if (cannotInstantiate && !OverridesTypeName(param))
+                return dataType.Name;
+            return param.TypeName;
+        }
+        catch (Exception)
+        {
+            return param.Type?.Name ?? "Unknown";
+        }
+    }
+
+    // True when a class below GH_Param<T> supplies its own TypeName, which then
+    // does not instantiate T (Param_GenericObject reports "Generic Data").
+    private static bool OverridesTypeName(IGH_Param param)
+    {
+        var declaring = param.GetType().GetProperty("TypeName", BindingFlags.Public | BindingFlags.Instance)?.DeclaringType;
+        return declaring != null
+            && !(declaring.IsGenericType && declaring.GetGenericTypeDefinition() == typeof(GH_Param<>));
+    }
+
     private static JObject BuildGrasshopperDiagnostics(IEnumerable<IGH_DocumentObject> objects)
     {
         var objectList = objects?
@@ -737,7 +771,7 @@ public partial class RhinoMCPFunctions
             ["index"] = index,
             ["name"] = param.Name,
             ["nickname"] = param.NickName,
-            ["type"] = param.TypeName,
+            ["type"] = SafeParamTypeName(param),
             ["access"] = param.Access.ToString(),
             ["has_data"] = ParamHasData(param),
             ["data_count"] = param.VolatileData.DataCount,

@@ -65,12 +65,24 @@ public partial class RhinoMCPFunctions
             typeCountsJson[kvp.Key] = kvp.Value;
         }
 
-        // Build layer counts JSON using layer names
-        var layerCountsJson = new JObject();
+        // Layer counts keyed by full path, and by short name for older clients.
+        // Short names repeat in nested trees (2D::Ground Floor::Walls and
+        // 3D::First Floor::Walls are both "Walls"); keyed by name alone each
+        // entry overwrote the last and the smallest count won (issue #91). The
+        // short-name field now sums such layers.
+        var layerPathCountsJson = new JObject();
+        var layerNameCounts = new Dictionary<string, int>();
         foreach (var kvp in layerCounts.OrderByDescending(x => x.Value))
         {
-            string layerName = doc.Layers[kvp.Key].Name;
-            layerCountsJson[layerName] = kvp.Value;
+            var layer = doc.Layers[kvp.Key];
+            layerPathCountsJson[layer.FullPath ?? layer.Name] = kvp.Value;
+            layerNameCounts.TryGetValue(layer.Name, out int sum);
+            layerNameCounts[layer.Name] = sum + kvp.Value;
+        }
+        var layerCountsJson = new JObject();
+        foreach (var kvp in layerNameCounts.OrderByDescending(x => x.Value))
+        {
+            layerCountsJson[kvp.Key] = kvp.Value;
         }
 
         // Build layer hierarchy
@@ -82,6 +94,7 @@ public partial class RhinoMCPFunctions
             ["object_count"] = objectCount,
             ["objects_by_type"] = typeCountsJson,
             ["objects_by_layer"] = layerCountsJson,
+            ["objects_by_layer_path"] = layerPathCountsJson,
             ["model_bounding_box"] = modelBbox.IsValid ? Serializer.SerializeBBox(modelBbox) : null,
             ["layer_count"] = doc.Layers.Count,
             ["layer_hierarchy"] = layerHierarchy

@@ -24,11 +24,12 @@ public partial class RhinoMCPFunctions
             filtered = filtered
                 .OrderByDescending(p => p.Desc.Name.Equals(query, StringComparison.OrdinalIgnoreCase))
                 .ThenByDescending(p => p.Desc.NickName?.Equals(query, StringComparison.OrdinalIgnoreCase) == true)
+                .ThenBy(p => IsOutdatedProxy(p))
                 .ThenBy(p => p.Desc.Name);
         }
         else
         {
-            filtered = filtered.OrderBy(p => p.Desc.Category).ThenBy(p => p.Desc.Name);
+            filtered = filtered.OrderBy(p => p.Desc.Category).ThenBy(p => p.Desc.Name).ThenBy(p => IsOutdatedProxy(p));
         }
 
         var components = new JArray(filtered.Take(limit).Select(p => ComponentProxyToJson(p)));
@@ -236,7 +237,7 @@ public partial class RhinoMCPFunctions
             else if (instance is IGH_Param param)
             {
                 result["is_parameter"] = true;
-                result["type_name"] = param.TypeName;
+                result["type_name"] = SafeParamTypeName(param);
                 result["inputs"] = new JArray();
                 result["outputs"] = new JArray { ParamToJson(param, 0, includeSources: false) };
                 result["input_count"] = 0;
@@ -268,6 +269,10 @@ public partial class RhinoMCPFunctions
         return filtered;
     }
 
+    // Obsolete, or hidden from the toolbar: kept for old definitions, not for new work.
+    private static bool IsOutdatedProxy(IGH_ObjectProxy proxy) =>
+        proxy.Obsolete || proxy.Exposure == GH_Exposure.hidden;
+
     private static JObject ComponentProxyToJson(IGH_ObjectProxy proxy, bool includeDescription = true)
     {
         var result = new JObject
@@ -276,7 +281,12 @@ public partial class RhinoMCPFunctions
             ["nickname"] = proxy.Desc.NickName,
             ["category"] = proxy.Desc.Category,
             ["subcategory"] = proxy.Desc.SubCategory,
-            ["guid"] = proxy.Guid.ToString()
+            ["guid"] = proxy.Guid.ToString(),
+            // Grasshopper keeps superseded versions loadable for old files. They
+            // share a name with the current one and can compute differently
+            // (issue #90), so say which is which.
+            ["obsolete"] = proxy.Obsolete,
+            ["hidden"] = proxy.Exposure == GH_Exposure.hidden,
         };
         if (includeDescription)
         {
@@ -330,6 +340,8 @@ public partial class RhinoMCPFunctions
         var direct = Instances.ComponentServer.FindObjectByName(componentName, true, true);
         if (direct != null) return CacheAndReturn(direct);
 
+        // Prefer the current component when an obsolete one shares its name.
+        proxies = proxies.OrderBy(p => IsOutdatedProxy(p)).ToList();
         return CacheAndReturn(
             proxies.FirstOrDefault(p => p.Desc.Name.Equals(componentName, StringComparison.OrdinalIgnoreCase))
             ?? proxies.FirstOrDefault(p => p.Desc.NickName?.Equals(componentName, StringComparison.OrdinalIgnoreCase) == true)
@@ -354,6 +366,7 @@ public partial class RhinoMCPFunctions
             .OrderByDescending(p => p.Desc.Name.Equals(query, StringComparison.OrdinalIgnoreCase))
             .ThenByDescending(p => p.Desc.NickName?.Equals(query, StringComparison.OrdinalIgnoreCase) == true)
             .ThenByDescending(p => !string.IsNullOrEmpty(alias) && p.Desc.Name.Equals(alias, StringComparison.OrdinalIgnoreCase))
+            .ThenBy(p => IsOutdatedProxy(p))
             .ThenBy(p => p.Desc.Category)
             .ThenBy(p => p.Desc.SubCategory)
             .ThenBy(p => p.Desc.Name);

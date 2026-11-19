@@ -24,7 +24,9 @@ def delete_object(
     Parameters:
     - id: The id of the object to delete
     - name: The name of the object to delete
-    - all: If True, delete every object in the document.
+    - all: If True, delete every object in the document. Only when the user
+      asked to clear the whole model. It is one undo step, so one Undo brings
+      everything back; locked objects stay and are reported as skipped_count.
 
     Exactly one of id, name, or all=True must be provided. Errors propagate
     as MCP tool errors.
@@ -49,14 +51,21 @@ def delete_object(
 
     if all:
         count = result.get("count")
-        return {
-            "success": True,
-            "scope": "all",
-            "count": count,
-            "message": f"Deleted all objects ({count})."
+        skipped = result.get("skipped_count")
+        message = (
+            f"Deleted all objects ({count})."
             if count is not None
-            else "Deleted all objects.",
-        }
+            else "Deleted all objects."
+        )
+        response = {"success": True, "scope": "all", "count": count}
+        if skipped:
+            response["skipped_count"] = skipped
+            message = (
+                f"Deleted {count} object(s); {skipped} locked object(s) or "
+                "object(s) on locked layers were left in place."
+            )
+        response["message"] = message
+        return response
     return {
         "success": True,
         "id": result.get("id"),

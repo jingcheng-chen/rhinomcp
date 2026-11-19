@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 using Rhino;
 using rhinomcp.Serializers;
@@ -23,15 +24,23 @@ public partial class RhinoMCPFunctions
 
         if (all)
         {
-            int count = CountActiveObjects(doc);
-            doc.Objects.Clear();
+            // Delete object by object, not ObjectTable.Clear(): Clear() bypasses
+            // the undo record the dispatcher opened, so one wrong call wiped the
+            // model with no way back (issue #89). Deleted this way, one Ctrl+Z
+            // (or the undo tool) restores everything.
+            var ids = doc.Objects.Select(o => o.Id).ToList();
+            int deleted = ids.Count == 0 ? 0 : doc.Objects.Delete(ids, true);
             doc.Views.Redraw();
-            return new JObject()
+            var result = new JObject()
             {
                 ["deleted"] = true,
-                ["count"] = count,
+                ["count"] = deleted,
                 ["scope"] = "all",
             };
+            // Locked objects, and objects on locked layers, are not deleted.
+            if (deleted < ids.Count)
+                result["skipped_count"] = ids.Count - deleted;
+            return result;
         }
 
         if (!hasId && !hasName)

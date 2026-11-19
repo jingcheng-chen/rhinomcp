@@ -93,7 +93,7 @@ public partial class RhinoMCPFunctions
             ["name"] = param.Name,
             ["nickname"] = param.NickName,
             ["description"] = param.Description,
-            ["type"] = param.TypeName,
+            ["type"] = SafeParamTypeName(param),
             ["access"] = param.Access.ToString(),
             ["optional"] = param.Optional,
             ["source_count"] = param.SourceCount,
@@ -135,7 +135,7 @@ public partial class RhinoMCPFunctions
         result["instance_id"] = obj.InstanceGuid.ToString();
         result["nickname"] = obj.NickName;
         result["param_name"] = param.Name;
-        result["type_name"] = param.TypeName;
+        result["type_name"] = SafeParamTypeName(param);
         return result;
     }
 

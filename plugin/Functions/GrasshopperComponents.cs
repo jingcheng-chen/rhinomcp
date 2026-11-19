@@ -262,7 +262,7 @@ public partial class RhinoMCPFunctions
         }
         else if (obj is IGH_Param param)
         {
-            result["type_name"] = param.TypeName;
+            result["type_name"] = SafeParamTypeName(param);
             result["source_count"] = param.SourceCount;
             result["recipient_count"] = param.Recipients.Count;
             result["data_count"] = param.VolatileDataCount;

@@ -69,6 +69,31 @@ the new commands with update advice.
   later change landed in that record, the next `undo` answered "Nothing to
   undo", and Rhino declined every new record, an undo group's included. Both
   commands now end that record after each step.
+- `gh_get_canvas_state` and the other Grasshopper readers no longer freeze
+  Rhino on a parameter whose data type is abstract, such as the generic input
+  on the placeholder Grasshopper puts in for a missing plugin's component.
+  Reading its `TypeName` opened a modal "Grasshopper breakpoint" dialog that
+  blocked every MCP command (#93); such a parameter now reports its data
+  type's name.
+- `create_objects` keeps every item when several share a name. The server
+  keyed the batch by name, so seven "Porch post" items made one object while
+  the reply counted one success (#84). Items are now keyed by position;
+  errors name the item and its position.
+- `execute_rhinoscript_python_code` returns `print()` output once. Prints
+  also reach Rhino's command window, so they came back twice (#83).
+- `delete_layer` reports a delete Rhino refuses instead of "deleted": the
+  current layer, or one that still holds objects or sublayers, is refused
+  with `invalid_argument` and says what to do first (#86).
+- `delete_object(all=true)` deletes object by object inside the command's
+  undo record instead of clearing the object table, so one Undo restores the
+  model (#89). Locked objects stay and are counted in `skipped_count`.
+- `get_document_summary` no longer merges nested layers that share a short
+  name, where the smallest count overwrote the rest (#91). The new
+  `objects_by_layer_path` is keyed by full path, and `objects_by_layer` sums
+  same-named layers.
+- Grasshopper search results carry `obsolete` and `hidden` flags, and current
+  components rank ahead of superseded ones with the same name, also when
+  `gh_build_graph` resolves a `component_name` (#90).
 
 ### Behaviour changes
 
