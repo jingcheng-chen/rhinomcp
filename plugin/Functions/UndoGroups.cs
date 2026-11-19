@@ -17,10 +17,18 @@ namespace RhinoMCPPlugin.Functions;
 /// record belongs to the document, not to the connection: changes from other
 /// clients and edits the user makes in Rhino join the group too.
 ///
+/// A group belongs to the client that began it. A client that sends a session
+/// token on the command envelope (the rhinomcp server does, one per process)
+/// owns it by that token, so the group survives the reconnect that follows a
+/// timeout or a dropped socket. A client that sends none owns it by its
+/// connection, and the group ends when that connection closes.
+///
 /// A record left open would fold every later edit into one stale undo step, so
-/// a group also ends when the client that began it disconnects, when no command
-/// arrives for its idle timeout, and when its document closes or another
-/// document becomes active.
+/// a group also ends when its owner sends no command for the idle timeout
+/// (other clients' commands do not count), and when its document closes or
+/// another document becomes active. Any client can end it with force=true.
+/// When a group ends without its owner asking, the owner's next mutating
+/// command carries an _undo_group notice saying so.
 ///
 /// Rhino requires undo records to begin and end on its UI thread. Everything
 /// here runs there: commands already do, and the idle timer and the disconnect
@@ -33,6 +41,7 @@ public partial class RhinoMCPFunctions
     private const int UndoGroupNameCap = 80;
 
     private const string UndoGroupRequested = "requested";
+    private const string UndoGroupForced = "forced";
     private const string UndoGroupClientDisconnected = "client_disconnected";
     private const string UndoGroupIdleTimeout = "idle_timeout";
     private const string UndoGroupDocumentClosed = "document_closed";
@@ -45,21 +54,28 @@ public partial class RhinoMCPFunctions
         public uint DocSerial;
         public uint Record;
         public string Name;
-        // Connection that began the group; 0 for a direct call such as mcptest.
-        public int OwnerId;
+        // Session token of the client that began the group, or null when it sent
+        // none; then the connection id owns it (0 for a direct call, mcptest).
+        public string OwnerSession;
+        public int OwnerConnectionId;
         public string Owner;
         public TimeSpan IdleTimeout;
         public DateTime OpenedAt;
         public DateTime LastCommandAt;
         public int CommandCount;
         public Timer IdleTimer;
+        // Set when the group ends.
+        public string EndReason;
+        public DateTime EndedAt;
+        // The owner has been told the group ended without its asking.
+        public bool OwnerTold;
     }
 
     private UndoGroup _undoGroup;
-    // The last group that ended without end_undo_group, and why, reported to
-    // the next end_undo_group that finds no group open.
-    private JObject _undoGroupEndedUnasked;
-    private string _undoGroupEndedUnaskedBecause;
+    // The last group that ended without its owner's end_undo_group, reported to
+    // the owner's next mutating command and to the next end_undo_group that
+    // finds no group open.
+    private UndoGroup _undoGroupEndedUnasked;
 
     /// <summary>
     /// The connection whose command is running, or null for a direct call
@@ -67,9 +83,15 @@ public partial class RhinoMCPFunctions
     /// </summary>
     internal ClientConnection CurrentClient { get; set; }
 
-    // ReadOnly: the dispatcher must not wrap this command in its own record,
+    /// <summary>
+    /// The session token on the running command's envelope, or null. The
+    /// dispatcher sets it around each command.
+    /// </summary>
+    internal string CurrentSession { get; set; }
+
+    // ManagesUndo: the dispatcher must not wrap this command in its own record,
     // or Rhino would decline the group's record inside it.
-    [McpCommand("begin_undo_group", ReadOnly = true)]
+    [McpCommand("begin_undo_group", ManagesUndo = true)]
     public JObject BeginUndoGroup(JObject parameters)
     {
         string name = UndoGroupName(parameters["name"]);
@@ -83,7 +105,7 @@ public partial class RhinoMCPFunctions
                 $"Undo group '{open.Name}' is already open{OwnerClause(open)}",
                 OwnedByCaller(open)
                     ? "Undo groups do not nest: call end_undo_group, then begin the next group."
-                    : $"Undo groups do not nest. That group ends when its client ends it or disconnects, or after {(int)open.IdleTimeout.TotalSeconds} seconds without commands.");
+                    : $"Undo groups do not nest. That group ends when its client ends it, or after {(int)open.IdleTimeout.TotalSeconds} seconds without commands from that client; end_undo_group with force=true ends it now.");
         }
 
         var doc = RhinoDoc.ActiveDoc ?? throw new McpException(
@@ -114,7 +136,8 @@ public partial class RhinoMCPFunctions
             DocSerial = doc.RuntimeSerialNumber,
             Record = record,
             Name = name,
-            OwnerId = client?.Id ?? 0,
+            OwnerSession = string.IsNullOrEmpty(CurrentSession) ? null : CurrentSession,
+            OwnerConnectionId = client?.Id ?? 0,
             Owner = client?.Description ?? "Rhino",
             IdleTimeout = TimeSpan.FromSeconds(idleSeconds),
             OpenedAt = now,
@@ -125,7 +148,6 @@ public partial class RhinoMCPFunctions
             null, group.IdleTimeout, Timeout.InfiniteTimeSpan);
         _undoGroup = group;
         _undoGroupEndedUnasked = null;
-        _undoGroupEndedUnaskedBecause = null;
         RhinoDoc.CloseDocument += OnUndoGroupDocumentClosing;
         RhinoDoc.ActiveDocumentChanged += OnUndoGroupActiveDocumentChanged;
 
@@ -140,31 +162,36 @@ public partial class RhinoMCPFunctions
         };
     }
 
-    [McpCommand("end_undo_group", ReadOnly = true)]
+    [McpCommand("end_undo_group", ManagesUndo = true)]
     public JObject EndUndoGroup(JObject parameters)
     {
+        bool force = parameters["force"]?.Type == JTokenType.Boolean && parameters["force"].ToObject<bool>();
         var group = LiveUndoGroup();
         if (group == null)
         {
             var none = new JObject { ["ended"] = false, ["message"] = "No undo group is open." };
-            if (_undoGroupEndedUnasked != null)
+            var last = _undoGroupEndedUnasked;
+            if (last != null)
             {
-                none["last_group"] = _undoGroupEndedUnasked.DeepClone();
-                none["message"] = $"No undo group is open. '{_undoGroupEndedUnasked["name"]}' already ended because "
-                    + $"{_undoGroupEndedUnaskedBecause}; changes made after that have their own undo steps.";
+                if (OwnedByCaller(last)) last.OwnerTold = true;
+                none["last_group"] = UndoGroupSummary(last);
+                none["message"] = $"No undo group is open. '{last.Name}' already ended because "
+                    + $"{UndoGroupEndReasonText(last)}; changes made after that have their own undo steps.";
             }
             return none;
         }
 
-        if (!OwnedByCaller(group))
+        bool owned = OwnedByCaller(group);
+        if (!owned && !force)
         {
             throw new McpException(
                 McpException.InvalidArgument,
                 $"Undo group '{group.Name}' was begun by another client ({group.Owner})",
-                $"Only that client can end it. It also ends when that client disconnects, or after {(int)group.IdleTimeout.TotalSeconds} seconds without commands.");
+                $"That client ends it, or it ends after {(int)group.IdleTimeout.TotalSeconds} seconds without commands from that client. "
+                + "If that client is gone, call end_undo_group with force=true.");
         }
 
-        var summary = CloseUndoGroup(group, UndoGroupRequested);
+        var summary = CloseUndoGroup(group, owned ? UndoGroupRequested : UndoGroupForced);
         summary.AddFirst(new JProperty("ended", true));
         summary["message"] = $"Undo group '{group.Name}' ended: one Undo reverts its changes ('MCP: {group.Name}').";
         return summary;
@@ -172,13 +199,14 @@ public partial class RhinoMCPFunctions
 
     /// <summary>
     /// Called by the dispatcher when any command starts and when it finishes, so
-    /// an active client keeps the open group from idling out, including through
-    /// one long command.
+    /// an active owner keeps its open group from idling out, including through
+    /// one long command. Other clients' commands do not keep it alive.
     /// </summary>
     internal void KeepUndoGroupAlive()
     {
-        if (_undoGroup != null)
-            _undoGroup.LastCommandAt = DateTime.UtcNow;
+        var group = _undoGroup;
+        if (group != null && OwnedByCaller(group))
+            group.LastCommandAt = DateTime.UtcNow;
     }
 
     /// <summary>
@@ -194,13 +222,34 @@ public partial class RhinoMCPFunctions
     }
 
     /// <summary>
-    /// Called on Rhino's UI thread after a client's connection closed. Its open
-    /// group ends, or every later edit would join that group's undo step.
+    /// Called by the dispatcher after a mutating command succeeded. If the
+    /// caller's group ended without its asking and the caller has not been told,
+    /// the result says so: this command and the ones before it since the group
+    /// ended have their own undo steps.
+    /// </summary>
+    internal void AttachUndoGroupNotice(JObject result)
+    {
+        var last = _undoGroupEndedUnasked;
+        if (result == null || last == null || last.OwnerTold || !OwnedByCaller(last))
+            return;
+        last.OwnerTold = true;
+        var notice = UndoGroupSummary(last);
+        notice["message"] = $"Undo group '{last.Name}' ended because {UndoGroupEndReasonText(last)}; "
+            + "changes since then, this one included, have their own undo steps. "
+            + "Call begin_undo_group again to group what follows.";
+        result["_undo_group"] = notice;
+    }
+
+    /// <summary>
+    /// Called on Rhino's UI thread after a client's connection closed. A group
+    /// that connection owns ends, or every later edit would join its undo step.
+    /// A group owned by a session token stays open: the same client reconnects
+    /// after a timeout, and the idle timeout ends it if the client is gone.
     /// </summary>
     internal void ClientDisconnected(int connectionId)
     {
         var group = _undoGroup;
-        if (group != null && group.OwnerId == connectionId)
+        if (group != null && group.OwnerSession == null && group.OwnerConnectionId == connectionId)
             CloseUndoGroup(group, UndoGroupClientDisconnected);
     }
 
@@ -213,7 +262,9 @@ public partial class RhinoMCPFunctions
         throw new McpException(
             McpException.InvalidArgument,
             $"{command} is not available while undo group '{group.Name}' is open{OwnerClause(group)}",
-            "Correct the last change with modify_object or delete_object instead. After end_undo_group, one undo reverts the whole group.");
+            OwnedByCaller(group)
+                ? "Correct the last change with modify_object or delete_object instead. After end_undo_group, one undo reverts the whole group."
+                : "Wait for that client to end the group, or call end_undo_group with force=true if that client is gone.");
     }
 
     // The open group, after ending one whose record Rhino no longer has open:
@@ -251,26 +302,27 @@ public partial class RhinoMCPFunctions
             group.Doc.EndUndoRecord(group.Record);
         }
 
-        var summary = new JObject
-        {
-            ["name"] = group.Name,
-            ["end_reason"] = reason,
-            ["command_count"] = group.CommandCount,
-            ["duration_seconds"] = Math.Round((DateTime.UtcNow - group.OpenedAt).TotalSeconds, 1),
-        };
+        group.EndReason = reason;
+        group.EndedAt = DateTime.UtcNow;
         if (reason == UndoGroupRequested)
         {
             RhinoApp.WriteLine($"RhinoMCP: undo group '{group.Name}' ended.");
         }
         else
         {
-            string because = UndoGroupEndReasonText(reason, group);
-            _undoGroupEndedUnasked = (JObject)summary.DeepClone();
-            _undoGroupEndedUnaskedBecause = because;
-            RhinoApp.WriteLine($"RhinoMCP: undo group '{group.Name}' ended because {because}.");
+            _undoGroupEndedUnasked = group;
+            RhinoApp.WriteLine($"RhinoMCP: undo group '{group.Name}' ended because {UndoGroupEndReasonText(group)}.");
         }
-        return summary;
+        return UndoGroupSummary(group);
     }
+
+    private static JObject UndoGroupSummary(UndoGroup group) => new JObject
+    {
+        ["name"] = group.Name,
+        ["end_reason"] = group.EndReason,
+        ["command_count"] = group.CommandCount,
+        ["duration_seconds"] = Math.Round((group.EndedAt - group.OpenedAt).TotalSeconds, 1),
+    };
 
     private void CheckUndoGroupIdle(UndoGroup group)
     {
@@ -298,19 +350,24 @@ public partial class RhinoMCPFunctions
             CloseUndoGroup(group, UndoGroupDocumentChanged);
     }
 
-    private bool OwnedByCaller(UndoGroup group) => group.OwnerId == (CurrentClient?.Id ?? 0);
+    private bool OwnedByCaller(UndoGroup group) =>
+        group.OwnerSession != null
+            ? string.Equals(group.OwnerSession, CurrentSession, StringComparison.Ordinal)
+            : CurrentSession == null && group.OwnerConnectionId == (CurrentClient?.Id ?? 0);
 
     private string OwnerClause(UndoGroup group) =>
         OwnedByCaller(group) ? "" : $" (begun by {group.Owner})";
 
-    private static string UndoGroupEndReasonText(string reason, UndoGroup group)
+    private static string UndoGroupEndReasonText(UndoGroup group)
     {
-        switch (reason)
+        switch (group.EndReason)
         {
+            case UndoGroupForced:
+                return "another client ended it with force=true";
             case UndoGroupClientDisconnected:
                 return "the client that began it disconnected";
             case UndoGroupIdleTimeout:
-                return $"no command arrived for {(int)group.IdleTimeout.TotalSeconds} seconds";
+                return $"no command arrived from its client for {(int)group.IdleTimeout.TotalSeconds} seconds";
             case UndoGroupDocumentClosed:
                 return "its document was closed";
             case UndoGroupDocumentChanged:
@@ -318,7 +375,7 @@ public partial class RhinoMCPFunctions
             case UndoGroupRecordEndedElsewhere:
                 return "Rhino ended its undo record";
             default:
-                return reason;
+                return group.EndReason;
         }
     }
 
@@ -341,14 +398,13 @@ public partial class RhinoMCPFunctions
         var token = parameters["idle_timeout_seconds"];
         if (token == null || token.Type == JTokenType.Null)
             return DefaultUndoGroupIdleSeconds;
-        if (token.Type != JTokenType.Integer
-            || token.ToObject<long>() < 1
-            || token.ToObject<long>() > MaxUndoGroupIdleSeconds)
+        long seconds = token.Type == JTokenType.Integer ? token.ToObject<long>() : 0;
+        if (seconds < 1 || seconds > MaxUndoGroupIdleSeconds)
         {
             throw McpException.InvalidArgumentError(
                 $"idle_timeout_seconds must be a whole number from 1 to {MaxUndoGroupIdleSeconds}, got {token}",
                 $"Leave it out for the default of {DefaultUndoGroupIdleSeconds} seconds.");
         }
-        return token.ToObject<int>();
+        return (int)seconds;
     }
 }

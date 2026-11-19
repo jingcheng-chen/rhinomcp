@@ -7,7 +7,7 @@
   "properties": {
     "ended": { "type": "boolean" },
     "name": { "type": "string", "minLength": 1 },
-    "end_reason": { "const": "requested" },
+    "end_reason": { "enum": ["requested", "forced"], "description": "requested: the caller's own group; forced: another client's group, ended with force=true" },
     "command_count": { "type": "integer", "minimum": 0, "description": "Mutating commands that ran inside the group" },
     "duration_seconds": { "type": "number", "minimum": 0 },
     "last_group": {
@@ -16,7 +16,7 @@
       "properties": {
         "name": { "type": "string", "minLength": 1 },
         "end_reason": {
-          "enum": ["client_disconnected", "idle_timeout", "document_closed", "document_changed", "record_ended_elsewhere"]
+          "enum": ["forced", "client_disconnected", "idle_timeout", "document_closed", "document_changed", "record_ended_elsewhere"]
         },
         "command_count": { "type": "integer", "minimum": 0 },
         "duration_seconds": { "type": "number", "minimum": 0 }

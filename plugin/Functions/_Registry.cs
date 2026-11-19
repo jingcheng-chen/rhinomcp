@@ -16,12 +16,14 @@ public partial class RhinoMCPFunctions
         public readonly Func<JObject, JObject> Handler;
         public readonly bool ReadOnly;
         public readonly bool SupportsDryRun;
+        public readonly bool ManagesUndo;
 
-        public DispatchEntry(Func<JObject, JObject> handler, bool readOnly, bool supportsDryRun)
+        public DispatchEntry(Func<JObject, JObject> handler, bool readOnly, bool supportsDryRun, bool managesUndo)
         {
             Handler = handler;
             ReadOnly = readOnly;
             SupportsDryRun = supportsDryRun;
+            ManagesUndo = managesUndo;
         }
     }
 
@@ -52,7 +54,7 @@ public partial class RhinoMCPFunctions
                 throw new InvalidOperationException(
                     $"Duplicate [McpCommand(\"{attr.Name}\")] on {method.Name}.");
             }
-            table[attr.Name] = new DispatchEntry(handler, attr.ReadOnly, attr.SupportsDryRun);
+            table[attr.Name] = new DispatchEntry(handler, attr.ReadOnly, attr.SupportsDryRun, attr.ManagesUndo);
         }
 
         _dispatchTable = table;

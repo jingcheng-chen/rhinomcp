@@ -11,6 +11,7 @@ import logging
 import os
 import threading
 import time
+import uuid
 from dataclasses import dataclass
 from importlib.metadata import PackageNotFoundError, version as _pkg_version
 from contextlib import asynccontextmanager
@@ -52,7 +53,13 @@ RHINO_PERCEPTION = os.getenv("RHINO_MCP_PERCEPTION", "").lower() in (
 # perception is on. These are cross-cutting, not part of any single command's
 # result contract, so they are stripped before post-flight validation; the
 # full result, these keys included, is still returned to the caller.
-PERCEPTION_RESULT_KEYS = ("_delta", "_health")
+# _undo_group is the same kind of block: the plugin attaches it to the first
+# mutating result after this client's undo group ended without end_undo_group.
+PERCEPTION_RESULT_KEYS = ("_delta", "_health", "_undo_group")
+# Sent on every command envelope so the plugin knows this process across
+# reconnects: an undo group begun before a timeout or a dropped socket stays
+# this client's group after the next connect. Older plugins ignore it.
+CLIENT_SESSION = uuid.uuid4().hex
 RHINO_DEBUG = os.getenv("RHINO_MCP_DEBUG", "").lower() in ("1", "true", "yes")
 RHINO_LOG_LEVEL = os.getenv("RHINO_MCP_LOG_LEVEL", "DEBUG" if RHINO_DEBUG else "INFO")
 # Pre-flight schema validation. Three modes:
@@ -346,6 +353,8 @@ class RhinoConnection:
         # None until read; {} when the plugin definitively has no such command.
         self._capabilities: Dict[str, Any] | None = None
         self._capabilities_lock = threading.Lock()
+        # Envelope session token; None sends none, like a client older than 0.6.0.
+        self.session: str | None = CLIENT_SESSION
 
     def connect(self) -> bool:
         """Connect to the Rhino addon socket server"""
@@ -618,6 +627,8 @@ class RhinoConnection:
             raise ConnectionError(rhino_startup_error_message(self.host, self.port))
 
         command = {"type": command_type, "params": params or {}}
+        if self.session:
+            command["session"] = self.session
         if RHINO_PERCEPTION:
             # Envelope-level flags, kept out of params so they never collide with a
             # command's own parameters or trip params schema validation. The plugin

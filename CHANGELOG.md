@@ -20,6 +20,14 @@ the new commands with update advice.
   `end_undo_group` with no group open returns `ended: false` instead of
   failing, with `last_group` saying why the previous group already ended.
   Both are annotated not read-only and not destructive. Require plugin 0.6.0.
+  `end_undo_group(force=True)` ends a group another client began, for one
+  whose client is gone.
+- Every command envelope carries a `session` token, one per server process,
+  so the plugin knows the client across reconnects: a timeout or dropped
+  socket no longer ends the client's undo group. Older plugins ignore it.
+- `_undo_group`, attached by the plugin to the first change after the
+  client's group ended without `end_undo_group`, is stripped before response
+  validation like `_delta` and `_health`.
 - Version tables: `begin_undo_group` and `end_undo_group` in `COMMANDS_SINCE`.
 
 ### Plugin (`rhinomcp` on Yak)
@@ -28,14 +36,24 @@ the new commands with update advice.
   at most 3600) opens one undo record on the active document;
   `end_undo_group` ends it. While it is open, each command's own record is
   declined by Rhino and its changes land in the group's record.
-- A group never outlives its use: the plugin ends it when the client that
-  began it disconnects, when no command from any client arrives for the idle
-  timeout, and when its document is closed or another document becomes
-  active. A message in the Rhino command line says why.
+- A group belongs to the client that began it: to its envelope `session`
+  token if it sent one, otherwise to its connection.
+- A group never outlives its use: the plugin ends it when no command from its
+  own client arrives for the idle timeout (other clients' commands do not
+  keep it alive), when a client without a session token disconnects, and when
+  its document is closed or another document becomes active. A message in the
+  Rhino command line says why, and the owner's next mutating command carries
+  an `_undo_group` block with the group's name and `end_reason`.
+- `end_undo_group` with `force: true` ends another client's group
+  (`end_reason: "forced"`); without it that is refused.
 - A second `begin_undo_group` while a group is open, and `end_undo_group`
   from a client other than the one that began the group, are refused with
   `invalid_argument`. A record Rhino declines (a command is still running, or
   undo is off) is refused with `rhino_error`.
+- New `ManagesUndo` flag on `[McpCommand]` for commands that handle undo
+  records themselves (`undo`, `redo`, `begin_undo_group`, `end_undo_group`):
+  the dispatcher gives them no record of its own, and unlike `ReadOnly` they
+  are still listed as mutating.
 - The dispatcher ends a command's undo record only when Rhino opened one,
   instead of passing a declined record's serial 0 to `EndUndoRecord`. On
   Rhino 8.37 for macOS `EndUndoRecord(0)` returns false and leaves the open
@@ -57,6 +75,9 @@ the new commands with update advice.
 - Inside an open undo group, `undo` and `redo` are refused with
   `invalid_argument`: the newest record is the group's own, still being
   recorded, so neither could revert a single step.
+- `describe_capabilities` lists `undo` and `redo` with `read_only: false`;
+  they change the document, and were listed as read-only only because the
+  flag also meant "no undo record".
 
 ## 0.5.1 — unreleased (prepared 2026-11-07)
 

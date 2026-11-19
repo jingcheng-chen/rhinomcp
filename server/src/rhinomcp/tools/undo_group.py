@@ -36,9 +36,11 @@ def begin_undo_group(
     - edits the user makes in Rhino, and edits from other MCP clients, join
       the group.
 
-    The plugin also ends the group when this client disconnects, when no
-    command arrives for idle_timeout_seconds, and when the document is closed
-    or another document becomes active.
+    The plugin also ends the group when no command arrives from this client
+    for idle_timeout_seconds, and when the document is closed or another
+    document becomes active. A reconnect after a timeout keeps the group. If
+    the group ends without end_undo_group, the next change's result carries an
+    _undo_group block saying so; begin a new group to group what follows.
 
     Parameters:
     - name: short name for the change, e.g. "Build chair frame". Rhino lists
@@ -62,10 +64,15 @@ def begin_undo_group(
         open_world_hint=False,
     ),
 )
-def end_undo_group(ctx: Context) -> Dict[str, Any]:
+def end_undo_group(ctx: Context, force: bool = False) -> Dict[str, Any]:
     """
     End the undo group begun with begin_undo_group. Its changes become one
     undo step, and later edits get their own steps again.
+
+    Parameters:
+    - force: end a group another client began (end_reason "forced"). Only for
+      a group whose client is gone; without it, ending another client's group
+      is refused.
 
     Returns ended=true with the group's name, command_count and
     duration_seconds. With no group open it returns ended=false instead of
@@ -73,4 +80,5 @@ def end_undo_group(ctx: Context) -> Dict[str, Any]:
     example idle_timeout), and edits made after that have their own undo steps.
     Requires plugin 0.6.0.
     """
-    return get_rhino_connection().send_command("end_undo_group", {})
+    params = {"force": True} if force else {}
+    return get_rhino_connection().send_command("end_undo_group", params)

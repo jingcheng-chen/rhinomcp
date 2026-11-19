@@ -8,7 +8,7 @@ public partial class RhinoMCPFunctions
     /// <summary>
     /// Undo the last operation in the Rhino document.
     /// </summary>
-    [McpCommand("undo", ReadOnly = true)]
+    [McpCommand("undo", ManagesUndo = true)]
     public JObject Undo(JObject parameters)
     {
         RefuseInsideUndoGroup("undo");
@@ -48,7 +48,7 @@ public partial class RhinoMCPFunctions
     /// <summary>
     /// Redo the last undone operation in the Rhino document.
     /// </summary>
-    [McpCommand("redo", ReadOnly = true)]
+    [McpCommand("redo", ManagesUndo = true)]
     public JObject Redo(JObject parameters)
     {
         RefuseInsideUndoGroup("redo");

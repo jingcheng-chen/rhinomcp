@@ -486,11 +486,17 @@ namespace RhinoMCPPlugin
 
         private JObject ExecuteCommand(JObject command, ClientConnection connection)
         {
-            // Handlers that act per client (undo groups) read the caller here.
-            // Restored rather than cleared: capture_viewport calls RhinoApp.Wait,
-            // which can run another client's queued command inside this one.
+            // Handlers that act per client (undo groups) read the caller here: its
+            // connection, and the session token a client may put on the envelope
+            // so it stays the same client across reconnects. Restored rather than
+            // cleared: capture_viewport calls RhinoApp.Wait, which can run another
+            // client's queued command inside this one.
             var previousClient = this.handler.CurrentClient;
+            var previousSession = this.handler.CurrentSession;
             this.handler.CurrentClient = connection;
+            this.handler.CurrentSession = command["session"]?.Type == JTokenType.String
+                ? command["session"].ToString()
+                : null;
             this.handler.KeepUndoGroupAlive();
             try
             {
@@ -522,6 +528,7 @@ namespace RhinoMCPPlugin
             {
                 this.handler.KeepUndoGroupAlive();
                 this.handler.CurrentClient = previousClient;
+                this.handler.CurrentSession = previousSession;
             }
         }
 
@@ -559,7 +566,9 @@ namespace RhinoMCPPlugin
             // A supported dry_run previews its result and touches nothing, so it
             // opens no undo record; needsUndo also gates the perception blocks, so
             // a preview reports no _delta or _health, which is correct.
-            bool needsUndo = !entry.ReadOnly && !(dryRunRequested && entry.SupportsDryRun);
+            // ManagesUndo commands (undo, redo, undo groups) handle undo records
+            // themselves, so they get no record of their own here either.
+            bool needsUndo = !entry.ReadOnly && !entry.ManagesUndo && !(dryRunRequested && entry.SupportsDryRun);
 
             // A change-delta or health report only makes sense for a mutating
             // command, and only when the client asked for it. Snapshot the
@@ -585,6 +594,9 @@ namespace RhinoMCPPlugin
             try
             {
                 JObject result = entry.Handler(parameters);
+                // A caller whose undo group ended without its asking learns it on
+                // its next change, not only at end_undo_group.
+                if (needsUndo) this.handler.AttachUndoGroupNotice(result);
                 if ((wantDelta || wantHealth) && result != null)
                 {
                     var idsAfter = this.handler.SnapshotObjectIds(doc);

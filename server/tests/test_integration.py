@@ -2690,8 +2690,11 @@ class TestUndoGroups:
         assert result == {"ended": False, "message": "No undo group is open."}
         conn.disconnect()
 
-    def test_the_group_ends_when_its_client_disconnects(self, undo_group_server):
+    def test_a_client_without_a_session_loses_its_group_on_disconnect(
+        self, undo_group_server
+    ):
         first = self._connection()
+        first.session = None
         first.send_command("begin_undo_group", {"name": "Turn"})
         first.send_command("create_object", {**self.BOX, "name": "Orphan"})
         first.disconnect()
@@ -2700,6 +2703,7 @@ class TestUndoGroups:
             time.sleep(0.02)
 
         second = self._connection()
+        second.session = None
         result = second.send_command("end_undo_group", {})
         undone = second.send_command("undo", {"steps": 2})
         second.disconnect()
@@ -2714,6 +2718,7 @@ class TestUndoGroups:
         from rhinomcp.server import RhinoError
 
         owner, other = self._connection(), self._connection()
+        other.session = "another-process"
         owner.send_command("begin_undo_group", {"name": "Turn"})
 
         with pytest.raises(RhinoError) as info:
@@ -2725,6 +2730,90 @@ class TestUndoGroups:
         assert info.value.code == "invalid_argument"
         assert "was begun by another client" in info.value.message
         assert ended["ended"] is True
+
+    def test_the_group_survives_a_reconnect_of_the_same_session(
+        self, undo_group_server
+    ):
+        # A timeout makes the server drop its socket and connect again; the
+        # session token keeps the group this client's.
+        conn = self._connection()
+        conn.send_command("begin_undo_group", {"name": "Turn"})
+        conn.send_command("create_object", {**self.BOX, "name": "Before"})
+        conn.disconnect()
+        time.sleep(0.1)
+
+        conn.send_command("create_object", {**self.BOX, "name": "After"})
+        ended = conn.send_command("end_undo_group", {})
+        conn.disconnect()
+
+        assert ended["ended"] is True
+        assert ended["command_count"] == 2
+        assert [e[:2] for e in undo_group_server.undo_stack] == [("group", "Turn")]
+
+    def test_other_clients_commands_do_not_keep_a_group_alive(
+        self, undo_group_server
+    ):
+        owner, other = self._connection(), self._connection()
+        other.session = "another-process"
+        owner.send_command(
+            "begin_undo_group", {"name": "Turn", "idle_timeout_seconds": 1}
+        )
+        other.send_command("get_document_summary", {})
+        time.sleep(0.6)
+        other.send_command("get_document_summary", {})
+        time.sleep(0.6)
+
+        other.send_command("get_document_summary", {})
+        ended = owner.send_command("end_undo_group", {})
+        owner.disconnect()
+        other.disconnect()
+
+        assert undo_group_server.undo_group is None
+        assert ended["ended"] is False
+        assert ended["last_group"]["end_reason"] == "idle_timeout"
+
+    def test_force_ends_another_clients_group_and_its_owner_is_told(
+        self, undo_group_server
+    ):
+        owner, other = self._connection(), self._connection()
+        other.session = "another-process"
+        owner.send_command("begin_undo_group", {"name": "Turn"})
+
+        forced = other.send_command("end_undo_group", {"force": True})
+        created = owner.send_command("create_object", {**self.BOX, "name": "Late"})
+        again = owner.send_command("create_object", {**self.BOX, "name": "Later"})
+        owner.disconnect()
+        other.disconnect()
+
+        assert forced["ended"] is True
+        assert forced["end_reason"] == "forced"
+        assert created["_undo_group"]["name"] == "Turn"
+        assert created["_undo_group"]["end_reason"] == "forced"
+        assert "_undo_group" not in again
+
+    def test_an_out_of_range_idle_timeout_is_refused(self, undo_group_server):
+        from rhinomcp.server import RhinoError
+
+        conn = self._connection()
+        with pytest.raises(RhinoError) as info:
+            conn.send_command(
+                "begin_undo_group", {"name": "Turn", "idle_timeout_seconds": 0}
+            )
+        conn.disconnect()
+
+        assert info.value.code == "invalid_argument"
+        assert undo_group_server.undo_group is None
+
+    def test_capabilities_list_undo_group_commands_as_mutating(self, undo_group_server):
+        conn = self._connection()
+        commands = {
+            c["name"]: c
+            for c in conn.send_command("describe_capabilities", {})["commands"]
+        }
+        conn.disconnect()
+
+        for name in ("begin_undo_group", "end_undo_group", "undo", "redo"):
+            assert commands[name]["read_only"] is False
 
     @pytest.mark.parametrize("tool", ["begin_undo_group", "end_undo_group"])
     @pytest.mark.asyncio

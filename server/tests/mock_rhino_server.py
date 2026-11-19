@@ -203,8 +203,9 @@ class MockRhinoServer:
         except Exception as e:
             print(f"Client handler error: {e}")
         finally:
-            # Like the plugin, a group must not outlive the client that began it.
-            if self.undo_group and self.undo_group["owner"] is client_socket:
+            # Like the plugin, a group a connection owns must not outlive it. A
+            # group owned by a session token survives: its client reconnects.
+            if self.undo_group and self.undo_group["owner"] == ("socket", client_socket):
                 self._close_undo_group("client_disconnected")
             client_socket.close()
 
@@ -214,6 +215,8 @@ class MockRhinoServer:
         try:
             command = json.loads(payload.decode("utf-8"))
             self._client.socket = client_socket
+            session = command.get("session")
+            self._client.session = session if isinstance(session, str) and session else None
             response = self._process_command(command)
             if self.response_delay:
                 time.sleep(self.response_delay)
@@ -238,7 +241,13 @@ class MockRhinoServer:
         "offset_curve", "pipe", "run_command",
         "execute_rhinoscript_python_code", "execute_rhinocommon_csharp_code",
         "undo", "redo", "create_layer", "delete_layer",
+        "begin_undo_group", "end_undo_group",
     }
+
+    # Mutating commands that handle undo records themselves, mirroring the
+    # plugin's [McpCommand(..., ManagesUndo = true)]: no undo-group count, no
+    # _undo_group notice.
+    _MANAGES_UNDO = {"undo", "redo", "begin_undo_group", "end_undo_group"}
 
     # Commands whose handler honors a params-level dry_run preview, mirroring the
     # plugin's [McpCommand(..., SupportsDryRun = true)]. dry_run on anything else
@@ -320,6 +329,14 @@ class MockRhinoServer:
         if not handler:
             return {"status": "error", "message": f"Unknown command: {cmd_type}"}
 
+        # The plugin's idle timer, checked lazily: only the owner's commands keep
+        # a group alive.
+        group = self.undo_group
+        if group and time.monotonic() - group["last_command_at"] >= group["idle_timeout"]:
+            self._close_undo_group("idle_timeout")
+        elif group and group["owner"] == self._caller():
+            group["last_command_at"] = time.monotonic()
+
         if self.legacy_plugin:
             # An old plugin has no notion of dry_run, so it drops the unknown
             # param and runs the command for real.
@@ -344,7 +361,7 @@ class MockRhinoServer:
                 cmd_type in self._MUTATING_COMMANDS
             ) and not is_preview
             before = set(self.objects.keys()) if (track_delta or track_health) else None
-            if self.undo_group and cmd_type in self._MUTATING_COMMANDS - {"undo", "redo"}:
+            if self.undo_group and cmd_type in self._MUTATING_COMMANDS - self._MANAGES_UNDO:
                 self.undo_group["command_count"] += 1
             result = handler(params)
             if isinstance(result, dict) and (track_delta or track_health):
@@ -353,6 +370,19 @@ class MockRhinoServer:
                     result["_delta"] = self._build_delta(before, after)
                 if track_health:
                     result["_health"] = self._build_health(before, after)
+            last = self.undo_group_ended_unasked
+            if (
+                isinstance(result, dict)
+                and cmd_type in self._MUTATING_COMMANDS - self._MANAGES_UNDO
+                and last
+                and not last["told"]
+                and last["owner"] == self._caller()
+            ):
+                last["told"] = True
+                result["_undo_group"] = {
+                    **last["summary"],
+                    "message": f"Undo group '{last['summary']['name']}' ended.",
+                }
             return {"status": "success", "result": result}
         except MockRhinoError as e:
             response = {"status": "error", "message": str(e), "code": e.code}
@@ -1227,12 +1257,21 @@ class MockRhinoServer:
                 "Undo groups do not nest: call end_undo_group, then begin the next group.",
             )
         idle = params.get("idle_timeout_seconds", 120)
+        if isinstance(idle, bool) or not isinstance(idle, int) or not 1 <= idle <= 3600:
+            raise MockRhinoError(
+                "invalid_argument",
+                f"idle_timeout_seconds must be a whole number from 1 to 3600, got {idle}",
+                "Leave it out for the default of 120 seconds.",
+            )
+        now = time.monotonic()
         self.undo_group = {
             "name": name,
-            "owner": getattr(self._client, "socket", None),
+            "owner": self._caller(),
             "actions": [],
             "command_count": 0,
-            "opened_at": time.monotonic(),
+            "opened_at": now,
+            "last_command_at": now,
+            "idle_timeout": idle,
         }
         self.undo_group_ended_unasked = None
         return {
@@ -1247,16 +1286,20 @@ class MockRhinoServer:
         """End the caller's group; report ended=false when none is open."""
         if not self.undo_group:
             result = {"ended": False, "message": "No undo group is open."}
-            if self.undo_group_ended_unasked:
-                result["last_group"] = dict(self.undo_group_ended_unasked)
+            last = self.undo_group_ended_unasked
+            if last:
+                if last["owner"] == self._caller():
+                    last["told"] = True
+                result["last_group"] = dict(last["summary"])
             return result
-        if self.undo_group["owner"] is not getattr(self._client, "socket", None):
+        owned = self.undo_group["owner"] == self._caller()
+        if not owned and not params.get("force"):
             raise MockRhinoError(
                 "invalid_argument",
                 f"Undo group '{self.undo_group['name']}' was begun by another client",
-                "Only that client can end it.",
+                "If that client is gone, call end_undo_group with force=true.",
             )
-        summary = self._close_undo_group("requested")
+        summary = self._close_undo_group("requested" if owned else "forced")
         return {"ended": True, **summary, "message": f"Undo group '{summary['name']}' ended."}
 
     def _close_undo_group(self, reason: str) -> Dict:
@@ -1271,8 +1314,17 @@ class MockRhinoServer:
             "duration_seconds": round(time.monotonic() - group["opened_at"], 1),
         }
         if reason != "requested":
-            self.undo_group_ended_unasked = summary
+            self.undo_group_ended_unasked = {
+                "summary": summary, "owner": group["owner"], "told": False,
+            }
         return summary
+
+    def _caller(self):
+        """Who owns what this command begins: its session token, else its socket."""
+        session = getattr(self._client, "session", None)
+        if session:
+            return ("session", session)
+        return ("socket", getattr(self._client, "socket", None))
 
     def _undo(self, params: Dict) -> Dict:
         """Undo operations."""

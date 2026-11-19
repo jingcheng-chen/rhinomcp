@@ -1169,6 +1169,17 @@ class TestUndoGroupTools:
         assert end_undo_group(ctx=None) == ended
         mock_conn.send_command.assert_called_once_with("end_undo_group", {})
 
+    @patch('rhinomcp.tools.undo_group.get_rhino_connection')
+    def test_end_passes_force_only_when_set(self, mock_get_conn):
+        from rhinomcp.tools.undo_group import end_undo_group
+
+        mock_conn = MagicMock()
+        mock_conn.send_command.return_value = {"ended": False, "message": "No undo group is open."}
+        mock_get_conn.return_value = mock_conn
+
+        end_undo_group(ctx=None, force=True)
+        mock_conn.send_command.assert_called_once_with("end_undo_group", {"force": True})
+
 
 class TestExecuteRhinoscriptTool:
     """Tests for execute_rhinoscript_python_code tool."""

@@ -457,7 +457,11 @@ public JObject GetDocumentSummary(JObject parameters)
 }
 ```
 
-`ReadOnly = true` tells the dispatcher not to create a Rhino undo record.
+`ReadOnly = true` marks a command that does not change the document: the
+dispatcher creates no Rhino undo record and `describe_capabilities` lists it as
+read-only. `ManagesUndo = true` (undo, redo, undo groups) also skips the record,
+for commands that handle undo records themselves, but they stay listed as
+mutating.
 Mutating commands are wrapped in `doc.BeginUndoRecord($"MCP: {cmdType}")`.
 While an undo group is open (`begin_undo_group`), Rhino declines that record
 (serial 0) and the command's changes land in the group's record; the dispatcher

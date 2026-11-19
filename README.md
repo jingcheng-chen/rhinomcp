@@ -271,17 +271,21 @@ Rhino records one undo step per tool call, so taking back an agent's work can ta
 Undo. Between `begin_undo_group` and `end_undo_group`, every change to the document is one undo step,
 listed as `MCP: <name>`. An agent can call the two tools around a multi-step edit. A host that knows
 where an agent turn starts and ends can send the same commands over the bridge itself, each as one
-length-prefixed frame (see `contracts/README.md`), on a connection it keeps open for the whole turn:
+length-prefixed frame (see `contracts/README.md`). Put the same `"session"` string on every envelope
+so the group stays the host's across reconnects; without one the group belongs to the connection and
+ends when it closes:
 
 ```json
-{"type": "begin_undo_group", "params": {"name": "Agent turn: build the chair"}}
-{"type": "end_undo_group", "params": {}}
+{"type": "begin_undo_group", "params": {"name": "Agent turn: build the chair"}, "session": "host-7f3a"}
+{"type": "end_undo_group", "params": {}, "session": "host-7f3a"}
 ```
 
 Groups do not nest. While one is open, `undo` and `redo` are refused, and edits the user makes in
-Rhino or another client makes join the group. The plugin ends a group by itself when the client that
-began it disconnects, after `idle_timeout_seconds` (default 120) without any command, or when the
-document is closed or another document becomes active.
+Rhino or another client makes join the group. The plugin ends a group by itself after
+`idle_timeout_seconds` (default 120) without a command from the client that began it, when a client
+without a session disconnects, or when the document is closed or another document becomes active;
+the owner's next change then carries an `_undo_group` block saying so. `end_undo_group` with
+`force: true` ends a group whose client is gone.
 
 </details>
 
