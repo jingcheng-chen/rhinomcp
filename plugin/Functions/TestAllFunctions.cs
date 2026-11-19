@@ -552,6 +552,82 @@ public partial class RhinoMCPFunctions
             results["redo"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
         }
 
+        // Test: undo groups. mcptest runs inside a Rhino command whose undo
+        // record is open, so Rhino declines the group's record there:
+        // begin_undo_group must refuse with rhino_error and leave the command's
+        // record open. Outside a command the full cycle runs: two changes made
+        // inside a group revert with one undo.
+        try
+        {
+            void ExpectMcpError(Func<JObject> call, string code, string label)
+            {
+                try
+                {
+                    call();
+                }
+                catch (McpException e)
+                {
+                    if (e.Code == code) return;
+                    throw new Exception($"{label}: expected {code}, got {e.Code}: {e.Message}");
+                }
+                throw new Exception($"{label}: expected a {code} error, got none");
+            }
+
+            var none = EndUndoGroup(new JObject());
+            if (none["ended"]?.ToObject<bool>() != false)
+                throw new Exception("end_undo_group with no open group should report ended=false");
+            ExpectMcpError(() => BeginUndoGroup(new JObject { ["name"] = "  " }),
+                McpException.InvalidArgument, "blank name");
+            ExpectMcpError(() => BeginUndoGroup(new JObject { ["name"] = "MCPTest group", ["idle_timeout_seconds"] = 0 }),
+                McpException.InvalidArgument, "zero idle timeout");
+
+            if (doc.UndoRecordingIsActive)
+            {
+                uint commandRecord = doc.CurrentUndoRecordSerialNumber;
+                ExpectMcpError(() => BeginUndoGroup(new JObject { ["name"] = "MCPTest group" }),
+                    McpException.RhinoError, "begin inside a command");
+                if (doc.CurrentUndoRecordSerialNumber != commandRecord)
+                    throw new Exception("a declined begin_undo_group changed the open undo record");
+                results["undo_group"] = new JObject
+                {
+                    ["status"] = "pass",
+                    ["note"] = "Declined inside a command as expected; the full undo cycle cannot be tested from within a command"
+                };
+            }
+            else
+            {
+                BeginUndoGroup(new JObject { ["name"] = "MCPTest group" });
+                Guid first, second;
+                JObject ended;
+                try
+                {
+                    first = doc.Objects.AddPoint(new Point3d(901, 901, 901));
+                    second = doc.Objects.AddPoint(new Point3d(902, 902, 902));
+                    ExpectMcpError(() => BeginUndoGroup(new JObject { ["name"] = "MCPTest nested" }),
+                        McpException.InvalidArgument, "nested begin");
+                    ExpectMcpError(() => Undo(new JObject()), McpException.InvalidArgument, "undo inside a group");
+                    ended = EndUndoGroup(new JObject());
+                }
+                finally
+                {
+                    // A failed check must not leave the record open.
+                    if (_undoGroup != null)
+                        CloseUndoGroup(_undoGroup, UndoGroupRequested);
+                }
+                if (ended["ended"]?.ToObject<bool>() != true || ended["end_reason"]?.ToString() != "requested")
+                    throw new Exception($"end_undo_group did not end the group: {ended}");
+                Undo(new JObject { ["steps"] = 1 });
+                if (doc.Objects.Find(first) != null || doc.Objects.Find(second) != null)
+                    throw new Exception("one undo did not revert both points added inside the group");
+                results["undo_group"] = new JObject { ["status"] = "pass" };
+            }
+            VisualUpdate("Undo group handlers tested");
+        }
+        catch (Exception e)
+        {
+            results["undo_group"] = new JObject { ["status"] = "fail", ["error"] = e.Message };
+        }
+
         // Test 19: DeleteObject
         try
         {

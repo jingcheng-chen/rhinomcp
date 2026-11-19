@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "end_undo_group.json",
+  "title": "EndUndoGroup Command",
+  "description": "End the undo group this client began, or with force=true one another client began. With no group open it reports ended=false instead of failing.",
+  "type": "object",
+  "properties": {
+    "force": {
+      "type": "boolean",
+      "default": false,
+      "description": "End the group even if another client began it. For a group whose client is gone."
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {},
+    { "force": true }
+  ]
+}

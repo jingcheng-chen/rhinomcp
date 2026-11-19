@@ -39,6 +39,8 @@
             "zoom_to",
             "undo",
             "redo",
+            "begin_undo_group",
+            "end_undo_group",
             "boolean_union",
             "boolean_difference",
             "boolean_intersection",
@@ -86,6 +88,10 @@
         "params": {
           "type": "object",
           "description": "Command-specific parameters"
+        },
+        "session": {
+          "type": "string",
+          "description": "Optional token naming the client process, the same across its reconnects. An undo group belongs to the session that began it; without one it belongs to the connection."
         }
       },
       "required": ["type", "params"]

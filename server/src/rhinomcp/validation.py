@@ -181,6 +181,8 @@ def validate_response(command_type: str, response: Dict[str, Any], raise_on_erro
         "get_context": "get_context_result.json",
         "set_camera": "set_camera_result.json",
         "zoom_to": "zoom_to_result.json",
+        "begin_undo_group": "begin_undo_group_result.json",
+        "end_undo_group": "end_undo_group_result.json",
         "get_objects": "get_objects_result.json",
         "delete_object": "delete_result.json",
         "select_objects": "select_result.json",

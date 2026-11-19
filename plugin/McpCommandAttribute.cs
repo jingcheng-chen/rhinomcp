@@ -15,11 +15,21 @@ public sealed class McpCommandAttribute : Attribute
     public string Name { get; }
 
     /// <summary>
-    /// If true, the dispatcher does not wrap the handler in a Rhino undo record.
-    /// Use for purely introspective commands (get_*, undo, redo, capture_viewport).
+    /// If true, the command does not change the document: the dispatcher does not
+    /// wrap it in a Rhino undo record, and describe_capabilities reports it as
+    /// read_only. Use for introspection (get_*, capture_viewport) and view-only
+    /// commands (set_camera, zoom_to).
     /// Settable so call sites can use named-argument syntax: [McpCommand("foo", ReadOnly = true)].
     /// </summary>
     public bool ReadOnly { get; set; }
+
+    /// <summary>
+    /// If true, the command changes the document through undo records it handles
+    /// itself (undo, redo, begin_undo_group, end_undo_group), so the dispatcher
+    /// must not wrap it in a record of its own. Unlike ReadOnly, it is still
+    /// reported as a mutating command.
+    /// </summary>
+    public bool ManagesUndo { get; set; }
 
     /// <summary>
     /// If true, the handler honors a params-level dry_run flag by previewing its
