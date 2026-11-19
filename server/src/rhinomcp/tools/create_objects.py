@@ -77,11 +77,16 @@ def create_objects(ctx: Context, objects: List[Dict[str, Any]]) -> str:
     try:
         # Get the global connection
         rhino = get_rhino_connection()
-        command_params = {}
-        for i, obj in enumerate(objects):
-            # Use name as key if provided, otherwise use index
-            key = obj.get("name", f"object_{i}")
-            command_params[key] = obj
+        # Key every item by its position. Names are not unique (seven parts
+        # can all be "Porch post"), and as keys they collapsed to the last
+        # item (issue #84). The name still travels inside each payload.
+        command_params = {f"object_{i}": obj for i, obj in enumerate(objects)}
+        labels = {
+            f"object_{i}": (
+                f"item {i} '{obj['name']}'" if obj.get("name") else f"item {i}"
+            )
+            for i, obj in enumerate(objects)
+        }
 
         result = rhino.send_command("create_objects", command_params)
 
@@ -94,11 +99,15 @@ def create_objects(ctx: Context, objects: List[Dict[str, Any]]) -> str:
             return f"Successfully created {success_count} object(s)"
         elif success_count == 0:
             errors = result.get("errors", [])
-            error_details = "; ".join([f"{e['name']}: {e['error']}" for e in errors])
+            error_details = "; ".join(
+                f"{labels.get(e['name'], e['name'])}: {e['error']}" for e in errors
+            )
             return f"Failed to create any objects. Errors: {error_details}"
         else:
             errors = result.get("errors", [])
-            error_details = "; ".join([f"{e['name']}: {e['error']}" for e in errors])
+            error_details = "; ".join(
+                f"{labels.get(e['name'], e['name'])}: {e['error']}" for e in errors
+            )
             return f"Partial success: Created {success_count}/{total} objects. {failure_count} failed: {error_details}"
     except Exception as e:
         logger.error(f"Error creating objects: {str(e)}")

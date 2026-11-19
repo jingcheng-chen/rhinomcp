@@ -446,6 +446,7 @@ class MockRhinoServer:
             "object_count": len(self.objects),
             "objects_by_type": type_counts,
             "objects_by_layer": layer_counts,
+            "objects_by_layer_path": dict(layer_counts),
             "model_bounding_box": [[0, 0, 0], [100, 100, 100]] if self.objects else None,
             "layer_count": len(self.layers),
             "layer_hierarchy": [
@@ -1076,7 +1077,10 @@ class MockRhinoServer:
         if all_flag and has_selector:
             raise Exception("delete_object: 'all' cannot be combined with 'id' or 'name'.")
         if all_flag:
+            # Like the plugin since issue #89: one undoable step, not a Clear().
             count = len(self.objects)
+            if count:
+                self._push_undo(("delete_all", list(self.objects)))
             self.objects.clear()
             return {"deleted": True, "count": count, "scope": "all"}
         if not has_selector:
@@ -1203,7 +1207,24 @@ class MockRhinoServer:
         """Delete a layer."""
         name = params.get("name")
         if name and name in self.layers:
-            layer = self.layers.pop(name)
+            # Like Rhino (and the plugin since issue #86): the current layer and
+            # one that still holds objects are refused, not reported deleted.
+            if name == self.current_layer:
+                raise MockRhinoError(
+                    "invalid_argument",
+                    f"Rhino did not delete layer '{name}': it is the current layer",
+                    "Make another layer current with get_or_set_current_layer, "
+                    "then call delete_layer again.",
+                )
+            held = sum(1 for o in self.objects.values() if o.get("layer") == name)
+            if held:
+                raise MockRhinoError(
+                    "invalid_argument",
+                    f"Rhino did not delete layer '{name}': it still holds {held} object(s)",
+                    "Delete the objects or move them to another layer, then call "
+                    "delete_layer again.",
+                )
+            self.layers.pop(name)
             return {"name": name, "deleted": True}
         raise MockRhinoError(
             "not_found", f"Layer '{name}' not found", self.LAYER_NOT_FOUND_GUIDANCE

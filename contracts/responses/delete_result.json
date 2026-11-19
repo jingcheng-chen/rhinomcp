@@ -22,6 +22,11 @@
       "minimum": 0,
       "description": "Number of objects deleted (delete-all)"
     },
+    "skipped_count": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Delete-all only: objects Rhino left in place, such as locked objects or objects on locked layers"
+    },
     "scope": {
       "type": "string",
       "enum": ["all"],

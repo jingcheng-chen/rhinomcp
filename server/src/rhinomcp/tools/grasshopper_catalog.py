@@ -24,7 +24,12 @@ def gh_search_components(
     category: Optional[str] = None,
     limit: int = 50,
 ) -> Dict[str, Any]:
-    """Search the installed Grasshopper component library."""
+    """Search the installed Grasshopper component library.
+
+    Each result carries obsolete and hidden flags. Grasshopper keeps superseded
+    versions that share a name with the current one and can compute different
+    numbers; current components rank first, so prefer a result with both false.
+    """
     params: Dict[str, Any] = {"limit": limit}
     if query:
         params["query"] = query
@@ -51,7 +56,9 @@ def gh_batch_search_components(
 
     The legacy results field keeps the best match for each query. Use matches or
     ambiguous to disambiguate names like "Square" or "Grid" by category,
-    subcategory, nickname, or GUID before creating components.
+    subcategory, nickname, or GUID before creating components. Each match
+    carries obsolete and hidden flags, and current components rank first;
+    avoid an obsolete or hidden match unless the user asks for it.
     """
     return send_grasshopper_command(
         "gh_batch_search_components",

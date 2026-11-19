@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using Rhino;
@@ -52,6 +54,8 @@ public partial class RhinoMCPFunctions
             RhinoApp.CommandWindowCaptureEnabled = previousCapture;
         }
 
+        rhinoLines = WithoutEchoedPrints(rhinoLines, printOutput.ToString());
+
         // Note: print() output is grouped before Rhino command-window lines.
         // Rhino's CommandWindowCaptureEnabled accumulates internally with no per-line
         // callback, so true chronological interleaving with PythonScript.Output is not
@@ -83,5 +87,33 @@ public partial class RhinoMCPFunctions
             response["message"] = "Script execution returned false (no exception raised).";
         }
         return response;
+    }
+
+    /// <summary>
+    /// print() output also reaches Rhino's command window, so it shows up in
+    /// both captures and was returned twice (issue #83). Drop, in order, the
+    /// command-window lines that print() produced; everything else (rs.Command
+    /// output, RhinoApp.WriteLine) stays.
+    /// </summary>
+    internal static string[] WithoutEchoedPrints(string[] rhinoLines, string printOutput)
+    {
+        var printed = printOutput.Split('\n')
+            .Select(l => l.TrimEnd('\r'))
+            .Where(l => l.Length > 0)
+            .ToList();
+        if (printed.Count == 0 || rhinoLines.Length == 0) return rhinoLines;
+
+        var rest = new List<string>(rhinoLines.Length);
+        int next = 0;
+        foreach (var line in rhinoLines)
+        {
+            if (next < printed.Count && line.TrimEnd('\r', '\n') == printed[next])
+            {
+                next++;
+                continue;
+            }
+            rest.Add(line);
+        }
+        return rest.ToArray();
     }
 }

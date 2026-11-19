@@ -780,6 +780,40 @@ class TestLayers:
 
         assert result["deleted"] is True
 
+    def test_deleting_the_current_layer_is_refused(self, mock_server):
+        """Issue #86: a delete Rhino refuses is an error, not 'deleted'."""
+        from rhinomcp.server import RhinoError, get_rhino_connection
+
+        conn = get_rhino_connection()
+        conn.send_command("create_layer", {"name": "CurrentToDelete"})
+        conn.send_command("get_or_set_current_layer", {"name": "CurrentToDelete"})
+
+        with pytest.raises(RhinoError) as info:
+            conn.send_command("delete_layer", {"name": "CurrentToDelete"})
+        conn.send_command("get_or_set_current_layer", {"name": "Default"})
+
+        assert info.value.code == "invalid_argument"
+        assert "it is the current layer" in info.value.message
+        assert "CurrentToDelete" in mock_server.layers
+
+    def test_deleting_a_layer_that_holds_objects_is_refused(self, mock_server):
+        from rhinomcp.server import RhinoError, get_rhino_connection
+
+        conn = get_rhino_connection()
+        conn.send_command("create_layer", {"name": "Occupied"})
+        conn.send_command("get_or_set_current_layer", {"name": "Occupied"})
+        conn.send_command("create_object", {
+            "type": "POINT", "params": {"x": 0, "y": 0, "z": 0},
+        })
+        conn.send_command("get_or_set_current_layer", {"name": "Default"})
+
+        with pytest.raises(RhinoError) as info:
+            conn.send_command("delete_layer", {"name": "Occupied"})
+
+        assert info.value.code == "invalid_argument"
+        assert "still holds 1 object(s)" in info.value.message
+        assert "Occupied" in mock_server.layers
+
     def test_deleting_a_deleted_layer_is_not_found(self, mock_server):
         """A layer already deleted counts as missing, as in get_or_set_current_layer."""
         from rhinomcp.server import get_rhino_connection
