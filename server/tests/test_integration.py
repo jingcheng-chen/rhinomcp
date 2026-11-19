@@ -1052,6 +1052,104 @@ class TestWireProtocol:
         assert "objects" in third["result"]
 
 
+    def _read_bare(self, sock, count):
+        """Read `count` bare JSON objects off a legacy connection."""
+        decoder = json.JSONDecoder()
+        text = ""
+        replies = []
+        while len(replies) < count:
+            chunk = sock.recv(65536)
+            assert chunk, "connection closed before all replies arrived"
+            text += chunk.decode("utf-8")
+            while text.strip():
+                try:
+                    obj, end = decoder.raw_decode(text.lstrip())
+                except json.JSONDecodeError:
+                    break
+                replies.append(obj)
+                text = text.lstrip()[end:]
+        return replies
+
+    def test_legacy_malformed_object_gets_error_and_connection_survives(self, mock_server):
+        """A complete-but-invalid bare object used to stay in the buffer
+        forever, so every later command on that connection was lost. Now the
+        bad object gets an error and the next command is still answered."""
+        good = json.dumps({"type": "get_document_summary", "params": {}})
+        sock = socket.create_connection(("127.0.0.1", 19999), timeout=5)
+        try:
+            sock.sendall(b'{"type": oops}' + good.encode("utf-8"))
+            first, second = self._read_bare(sock, 2)
+        finally:
+            sock.close()
+
+        assert first["status"] == "error"
+        assert "Invalid JSON" in first["message"]
+        assert second["status"] == "success"
+        assert "object_count" in second["result"]
+
+    def test_legacy_pipelined_objects_all_answered(self, mock_server):
+        """Two bare objects in one write both run, in order."""
+        cmd1 = json.dumps({"type": "get_document_summary", "params": {}})
+        cmd2 = json.dumps({"type": "get_objects", "params": {"note": "}{ in a string"}})
+        sock = socket.create_connection(("127.0.0.1", 19999), timeout=5)
+        try:
+            sock.sendall((cmd1 + "\n" + cmd2).encode("utf-8"))
+            first, second = self._read_bare(sock, 2)
+        finally:
+            sock.close()
+
+        assert "object_count" in first["result"]
+        assert "objects" in second["result"]
+
+    def test_legacy_oversized_message_dropped(self, mock_server, monkeypatch):
+        """A legacy client can no longer grow the buffer without bound: past
+        the size limit it gets an error and the connection is closed."""
+        monkeypatch.setattr(mock_server, "MAX_FRAME_SIZE", 1024)
+        sock = socket.create_connection(("127.0.0.1", 19999), timeout=5)
+        try:
+            sock.sendall(b'{"type": "' + b"x" * 4096)
+            (reply,) = self._read_bare(sock, 1)
+            assert reply["status"] == "error"
+            assert "1024 bytes" in reply["message"]
+            assert sock.recv(65536) == b""  # closed by the server
+        finally:
+            sock.close()
+
+    def test_legacy_non_object_dropped(self, mock_server):
+        """Bytes that can't start a JSON object lose the message boundary for
+        good, so the client gets an error and is disconnected."""
+        sock = socket.create_connection(("127.0.0.1", 19999), timeout=5)
+        try:
+            sock.sendall(b"  hello")
+            (reply,) = self._read_bare(sock, 1)
+            assert reply["status"] == "error"
+            assert sock.recv(65536) == b""
+        finally:
+            sock.close()
+
+    def test_deeply_nested_command_refused(self, mock_server):
+        """Commands nested past the depth limit get an error instead of being
+        processed, and the connection stays usable."""
+        params = {}
+        for _ in range(80):
+            params = {"n": params}
+        deep = json.dumps({"type": "get_objects", "params": params}).encode("utf-8")
+        good = json.dumps({"type": "get_objects", "params": {}}).encode("utf-8")
+        wire = len(deep).to_bytes(4, "big") + deep + len(good).to_bytes(4, "big") + good
+
+        sock = socket.create_connection(("127.0.0.1", 19999), timeout=5)
+        try:
+            sock.sendall(wire)
+            first = self._read_frame(sock)
+            second = self._read_frame(sock)
+        finally:
+            sock.close()
+
+        assert first["status"] == "error"
+        assert "depth" in first["message"]
+        assert second["status"] == "success"
+
+
 class TestChangeDeltaPerception:
     """End-to-end: with perception enabled the server forwards include_delta and
     mutating commands come back with a _delta block reporting created/deleted

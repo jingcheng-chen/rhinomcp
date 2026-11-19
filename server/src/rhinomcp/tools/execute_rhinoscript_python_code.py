@@ -81,7 +81,10 @@ def execute_rhinoscript_python_code(
     - output: Any print() output from the script
     - message: Error message if failed
 
-    Any changes made to the document will be undone if the script fails.
+    Document changes the script makes are recorded as one undo step, so a
+    single `undo` reverses them, including after a script that fails partway.
+    They are not rolled back automatically. Files written, network calls and
+    processes started by the script are outside Rhino's undo and stay.
 
     Safety: this tool runs arbitrary Python inside Rhino. Gated by the
     RHINO_MCP_ENABLE_RHINOSCRIPT env var (default on for local dev). Set to

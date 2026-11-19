@@ -90,7 +90,25 @@ AI 智能体，让 Claude、Cursor 等助手只需对话，就能建模、读取
 
 ### 1. 安装 Rhino 插件
 
+**要求：** Rhino 8.20 或更新版本（Windows 或 Mac），并运行在 .NET 8 上。插件只为 .NET 8 编译，而
+Rhino 8.20 是第一个默认使用 .NET 8 的版本；更早的 Rhino 无法加载它。
+
 在 Rhino 中打开 **Tools → Package Manager**，搜索 **`rhinomcp`**，点击 **Install**，然后重启 Rhino。
+
+<details>
+<summary><code>mcpstart</code> 是未知命令</summary>
+
+即使 Rhino 无法加载插件，Package Manager 也会显示已安装，而 Rhino 不会提示原因。如果重启后
+`mcpstart` 仍是未知命令：
+
+1. 查看 **Tools → Options → Plug-ins**（Mac：**Rhino → Settings → Plug-ins**）。如果没有 RhinoMCP
+   或它未加载，继续下面的步骤。
+2. 把 Rhino 8 更新到最新的服务版本（**Help → Check for Updates**）；`SystemInfo` 会显示版本号，
+   必须是 8.20 或更新。
+3. 在 Windows 上运行 **`SetDotNetRuntime`**，选择 **`NETCore`**，然后重启 Rhino。运行在
+   .NET Framework 上的 Rhino 无法加载插件。`SystemInfo` 会显示当前使用的运行时（应为 .NET 8）。
+
+</details>
 
 ### 2. 连接 AI 客户端
 
@@ -287,6 +305,8 @@ Python 服务器与 Rhino 插件之间通过一条**无身份验证的 TCP 回�
 Rhino 内拥有开放的执行面。用于本地智能体场景没有问题，但不要在未加入身份验证的情况下，
 将其暴露到回环接口之外。
 
+完整的威胁模型以及如何报告漏洞，请见 [SECURITY.md](SECURITY.md)。
+
 <details>
 <summary>运维开关（环境变量）</summary>
 
@@ -325,8 +345,13 @@ dotnet restore plugin/rhinomcp.sln
 dotnet build plugin/rhinomcp.sln --configuration Release
 ```
 
-发布插件：以 Release 模式编译，将 `manifest.yml` 复制到 `bin/Release`，然后运行
-`yak build` 和 `yak push rhinomcp_xxxx.yak`。
+要试用自己编译的插件，先在 Package Manager 中卸载已安装的 RhinoMCP，然后把
+`plugin/bin/Release/net8.0/rhinomcp.rhp` 拖进 Rhino 窗口，或在 Rhino 选项的 Plug-ins 页面中安装。
+重启 Rhino 后运行 `mcpstart`。
+
+发布只适用于包的所有者：以 Release 模式编译，将 `manifest.yml` 复制到 `bin/Release`，然后运行
+`yak build` 和 `yak push rhinomcp_xxxx.yak`。在 fork 上运行 `yak push` 会返回 403，因为
+`rhinomcp` 这个包名属于其所有者；编译和使用插件并不需要这一步。
 
 </details>
 

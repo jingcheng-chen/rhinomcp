@@ -94,6 +94,24 @@ the new commands with update advice.
 - Grasshopper search results carry `obsolete` and `hidden` flags, and current
   components rank ahead of superseded ones with the same name, also when
   `gh_build_graph` resolves a `component_name` (#90).
+- The plugin's bridge no longer wedges or grows without bound on a client
+  that sends bare JSON (servers before framing). A complete but invalid
+  object gets an error and later commands on that connection still run; a
+  message over 64 MB, or bytes that can't start a JSON object, get an error
+  and the connection is closed. Every command is parsed with an explicit
+  nesting limit of 64 (#97).
+- The script tools' descriptions no longer claim that a failed script's
+  changes are undone. Document changes are one undo step; files, network
+  calls and processes a script starts are not reversible (#97).
+
+### Documentation
+
+- The README states the requirements: Rhino 8.20 or later, running on
+  .NET 8. It adds a troubleshooting entry for `mcpstart` being an unknown
+  command (#27, #44) and says how to load a plugin you built yourself, and
+  that `yak push` is for the package owner only (#14).
+- New `SECURITY.md`: how to report a vulnerability privately, which versions
+  get fixes, and the threat model (#97, from the audit in #48).
 
 ### Behaviour changes
 
