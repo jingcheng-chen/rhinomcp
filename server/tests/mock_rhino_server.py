@@ -33,6 +33,81 @@ class MockRhinoError(Exception):
         self.guidance = guidance
 
 
+
+def _json_depth(value) -> int:
+    """Container nesting depth, counted like Newtonsoft's MaxDepth: a flat
+    object is 1."""
+    if isinstance(value, dict):
+        return 1 + max((_json_depth(v) for v in value.values()), default=0)
+    if isinstance(value, list):
+        return 1 + max((_json_depth(v) for v in value), default=0)
+    return 0
+
+
+class _LegacyMessageScanner:
+    """Mirrors LegacyMessageScanner in RhinoMCPServer.cs: finds where each bare
+    JSON object ends by balancing braces and brackets outside strings,
+    resuming where the last scan stopped."""
+
+    def __init__(self, max_size: int):
+        self.max_size = max_size
+        self._reset()
+
+    def _reset(self):
+        self.position = 0
+        self.depth = 0
+        self.started = False
+        self.in_string = False
+        self.escaped = False
+
+    def _consume(self, pending: bytearray, count: int):
+        del pending[:count]
+        self._reset()
+
+    def scan(self, pending: bytearray):
+        """Return ("complete", bytes), ("incomplete", None) or ("fatal", message)."""
+        while self.position < len(pending):
+            b = pending[self.position]
+            if not self.started:
+                if b in b" \t\r\n":
+                    self.position += 1
+                    continue
+                if b != ord("{"):
+                    self._consume(pending, len(pending))
+                    return "fatal", (
+                        "Invalid message: each command must be a JSON object "
+                        "starting with '{'"
+                    )
+                self.started = True
+                self.depth = 1
+            elif self.in_string:
+                if self.escaped:
+                    self.escaped = False
+                elif b == ord("\\"):
+                    self.escaped = True
+                elif b == ord('"'):
+                    self.in_string = False
+            elif b == ord('"'):
+                self.in_string = True
+            elif b in b"{[":
+                self.depth += 1
+            elif b in b"}]":
+                self.depth -= 1
+                if self.depth == 0:
+                    length = self.position + 1
+                    payload = bytes(pending[:length])
+                    self._consume(pending, length)
+                    return "complete", payload
+            self.position += 1
+        if len(pending) > self.max_size:
+            self._consume(pending, len(pending))
+            return "fatal", (
+                f"Message exceeds {self.max_size} bytes without a complete "
+                "JSON object"
+            )
+        return "incomplete", None
+
+
 class MockRhinoServer:
     """A mock Rhino server for testing MCP commands."""
 
@@ -151,11 +226,13 @@ class MockRhinoServer:
     # unframed behavior for the whole connection.
     FRAME_HEADER_SIZE = 4
     MAX_FRAME_SIZE = 64 * 1024 * 1024
+    MAX_JSON_DEPTH = 64
     _LEGACY_FIRST_BYTES = b"{ \t\r\n"
 
     def _handle_client(self, client_socket: socket.socket):
         """Handle a client connection, sniffing framed vs legacy protocol."""
         pending = bytearray()
+        scanner = _LegacyMessageScanner(self.MAX_FRAME_SIZE)
         framed: Optional[bool] = None
         try:
             while self.running:
@@ -191,15 +268,18 @@ class MockRhinoServer:
                         del pending[: self.FRAME_HEADER_SIZE + frame_length]
                         self._respond(client_socket, payload, framed=True)
                 else:
-                    # Legacy: try the whole accumulation, wait for more on
-                    # incomplete JSON.
-                    try:
-                        json.loads(pending.decode("utf-8"))
-                    except (json.JSONDecodeError, UnicodeDecodeError):
-                        continue
-                    payload = bytes(pending)
-                    pending.clear()
-                    self._respond(client_socket, payload, framed=False)
+                    # Legacy: bare JSON objects. The scanner finds where each
+                    # one ends; a complete-but-invalid object gets an error and
+                    # the connection goes on, a lost boundary drops it.
+                    while True:
+                        state, payload = scanner.scan(pending)
+                        if state == "complete":
+                            self._respond(client_socket, payload, framed=False)
+                            continue
+                        break
+                    if state == "fatal":
+                        self._send_error(client_socket, payload, framed=False)
+                        break
         except Exception as e:
             print(f"Client handler error: {e}")
         finally:
@@ -217,12 +297,23 @@ class MockRhinoServer:
             self._client.socket = client_socket
             session = command.get("session")
             self._client.session = session if isinstance(session, str) and session else None
+            if not isinstance(command, dict):
+                raise ValueError("a command must be a JSON object")
+            if _json_depth(command) > self.MAX_JSON_DEPTH:
+                raise ValueError(
+                    f"nesting exceeds the maximum depth of {self.MAX_JSON_DEPTH}"
+                )
             response = self._process_command(command)
             if self.response_delay:
                 time.sleep(self.response_delay)
-        except json.JSONDecodeError as e:
+        except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as e:
             response = {"status": "error", "message": f"Invalid JSON: {e}"}
+        self._write(client_socket, response, framed)
 
+    def _send_error(self, client_socket: socket.socket, message: str, framed: bool):
+        self._write(client_socket, {"status": "error", "message": message}, framed)
+
+    def _write(self, client_socket: socket.socket, response: dict, framed: bool):
         body = json.dumps(response).encode("utf-8")
         if framed:
             client_socket.sendall(

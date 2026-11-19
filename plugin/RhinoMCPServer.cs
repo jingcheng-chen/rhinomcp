@@ -33,6 +33,10 @@ namespace RhinoMCPPlugin
         // open with ('{' or whitespace), so the sniff is unambiguous.
         private const int FrameHeaderSize = 4;
         private const int MaxFrameSize = 64 * 1024 * 1024;
+        // Nesting limit for every incoming command, set explicitly rather than
+        // left to the Newtonsoft default. 64 levels is far beyond any contract
+        // (gh_build_graph, the deepest, nests under ten).
+        private const int MaxJsonDepth = 64;
 
         private enum ClientProtocol
         {
@@ -240,6 +244,7 @@ namespace RhinoMCPPlugin
 
             byte[] buffer = new byte[8192];
             var pending = new List<byte>();
+            var legacyScanner = new LegacyMessageScanner();
             ClientProtocol protocol = ClientProtocol.Undecided;
 
             try
@@ -280,7 +285,7 @@ namespace RhinoMCPPlugin
                                     JObject framedCommand;
                                     try
                                     {
-                                        framedCommand = JObject.Parse(framedJson);
+                                        framedCommand = ParseCommand(framedJson);
                                     }
                                     catch (JsonException ex)
                                     {
@@ -288,27 +293,8 @@ namespace RhinoMCPPlugin
                                         // matched) but the payload isn't valid
                                         // JSON. Framing already located the next
                                         // frame, so answer this one with an error
-                                        // and keep the connection instead of
-                                        // dropping every command queued behind it.
-                                        // Routed through the UI thread like every
-                                        // other write so responses stay
-                                        // single-writer and in send order.
-                                        string detail = ex.Message;
-                                        RhinoApp.InvokeOnUiThread(new Action(() =>
-                                        {
-                                            try
-                                            {
-                                                WriteMessage(stream, new JObject
-                                                {
-                                                    ["status"] = "error",
-                                                    ["message"] = $"Invalid JSON in framed message: {detail}"
-                                                }.ToString(), framed: true);
-                                            }
-                                            catch
-                                            {
-                                                RhinoApp.WriteLine("Failed to send error response - client disconnected");
-                                            }
-                                        }));
+                                        // and keep the connection.
+                                        SendError(stream, $"Invalid JSON in framed message: {ex.Message}", framed: true);
                                         continue;
                                     }
                                     DispatchCommand(framedCommand, stream, framed: true, connection);
@@ -316,19 +302,45 @@ namespace RhinoMCPPlugin
                             }
                             else
                             {
-                                // Legacy client: bare JSON, no framing. Keep
-                                // the original semantics: try to parse the
-                                // whole accumulation, wait for more on failure.
-                                string incompleteData = Encoding.UTF8.GetString(pending.ToArray());
-                                try
+                                // Legacy client: bare JSON objects, no header.
+                                // The scanner finds where each object ends, so a
+                                // message that hasn't fully arrived is told
+                                // apart from one that is complete but invalid,
+                                // and the buffer can't grow past MaxFrameSize.
+                                string fatalError = null;
+                                while (true)
                                 {
-                                    JObject command = JObject.Parse(incompleteData);
-                                    pending.Clear();
-                                    DispatchCommand(command, stream, framed: false, connection);
+                                    LegacyScan scan = legacyScanner.Scan(pending, out string legacyJson, out fatalError);
+                                    if (scan != LegacyScan.Complete) break;
+
+                                    JObject legacyCommand;
+                                    try
+                                    {
+                                        legacyCommand = ParseCommand(legacyJson);
+                                    }
+                                    catch (JsonException ex)
+                                    {
+                                        // Complete but invalid: its bytes are
+                                        // already consumed, so answer it and go
+                                        // on with whatever follows.
+                                        SendError(stream, $"Invalid JSON: {ex.Message}", framed: false);
+                                        continue;
+                                    }
+                                    DispatchCommand(legacyCommand, stream, framed: false, connection);
                                 }
-                                catch (JsonException)
+
+                                if (fatalError != null)
                                 {
-                                    // Incomplete JSON data, wait for more
+                                    // No way to find where the next message
+                                    // starts. Answer, give the UI thread a moment
+                                    // to write that answer, then drop the client.
+                                    RhinoApp.WriteLine($"Dropping client: {fatalError}");
+                                    using (var written = new ManualResetEventSlim(false))
+                                    {
+                                        SendError(stream, fatalError, framed: false, written);
+                                        written.Wait(TimeSpan.FromSeconds(2));
+                                    }
+                                    break;
                                 }
                             }
                         }
@@ -420,6 +432,135 @@ namespace RhinoMCPPlugin
                 pending.GetRange(FrameHeaderSize, frameLength).ToArray());
             pending.RemoveRange(0, FrameHeaderSize + frameLength);
             return true;
+        }
+
+        // Parses one command with an explicit nesting limit. Same rules as
+        // JObject.Parse otherwise: one JSON object, nothing after it but
+        // comments.
+        private static JObject ParseCommand(string json)
+        {
+            using (var reader = new JsonTextReader(new System.IO.StringReader(json)) { MaxDepth = MaxJsonDepth })
+            {
+                JObject command = JObject.Load(reader);
+                while (reader.Read())
+                {
+                    // Trailing content other than comments throws here.
+                }
+                return command;
+            }
+        }
+
+        // Writes an error reply through the UI thread like every other write, so
+        // responses stay single-writer and in send order. `written` is set once
+        // the write has been attempted.
+        private static void SendError(NetworkStream stream, string message, bool framed, ManualResetEventSlim written = null)
+        {
+            RhinoApp.InvokeOnUiThread(new Action(() =>
+            {
+                try
+                {
+                    WriteMessage(stream, new JObject
+                    {
+                        ["status"] = "error",
+                        ["message"] = message
+                    }.ToString(), framed);
+                }
+                catch
+                {
+                    RhinoApp.WriteLine("Failed to send error response - client disconnected");
+                }
+                finally
+                {
+                    written?.Set();
+                }
+            }));
+        }
+
+        private enum LegacyScan
+        {
+            Incomplete,
+            Complete,
+            Fatal
+        }
+
+        // Finds message boundaries in a legacy (unframed) byte stream: a message
+        // is one JSON object, and it ends where the braces and brackets opened
+        // outside strings balance again. Scanning resumes where it stopped, so
+        // each byte is looked at once however the message arrives. Multi-byte
+        // UTF-8 sequences never contain an ASCII byte, so scanning bytes is
+        // safe. Only boundaries are found here; ParseCommand judges validity.
+        private sealed class LegacyMessageScanner
+        {
+            private int position;
+            private int depth;
+            private bool started;
+            private bool inString;
+            private bool escaped;
+
+            public LegacyScan Scan(List<byte> pending, out string json, out string fatalError)
+            {
+                json = null;
+                fatalError = null;
+                for (; position < pending.Count; position++)
+                {
+                    byte b = pending[position];
+                    if (!started)
+                    {
+                        if (b == (byte)' ' || b == (byte)'\t' || b == (byte)'\r' || b == (byte)'\n') continue;
+                        if (b != (byte)'{')
+                        {
+                            fatalError = "Invalid message: each command must be a JSON object starting with '{'";
+                            Consume(pending, pending.Count);
+                            return LegacyScan.Fatal;
+                        }
+                        started = true;
+                        depth = 1;
+                        continue;
+                    }
+
+                    if (inString)
+                    {
+                        if (escaped) escaped = false;
+                        else if (b == (byte)'\\') escaped = true;
+                        else if (b == (byte)'"') inString = false;
+                        continue;
+                    }
+
+                    if (b == (byte)'"')
+                    {
+                        inString = true;
+                    }
+                    else if (b == (byte)'{' || b == (byte)'[')
+                    {
+                        depth++;
+                    }
+                    else if ((b == (byte)'}' || b == (byte)']') && --depth == 0)
+                    {
+                        int length = position + 1;
+                        json = Encoding.UTF8.GetString(pending.GetRange(0, length).ToArray());
+                        Consume(pending, length);
+                        return LegacyScan.Complete;
+                    }
+                }
+
+                if (pending.Count > MaxFrameSize)
+                {
+                    fatalError = $"Message exceeds {MaxFrameSize} bytes without a complete JSON object";
+                    Consume(pending, pending.Count);
+                    return LegacyScan.Fatal;
+                }
+                return LegacyScan.Incomplete;
+            }
+
+            private void Consume(List<byte> pending, int count)
+            {
+                pending.RemoveRange(0, count);
+                position = 0;
+                depth = 0;
+                started = false;
+                inString = false;
+                escaped = false;
+            }
         }
 
         private void DispatchCommand(JObject command, NetworkStream stream, bool framed, ClientConnection connection)

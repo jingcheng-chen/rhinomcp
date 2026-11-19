@@ -94,7 +94,27 @@ Three steps: install the Rhino plugin, connect your AI client, then start the br
 
 ### 1. Install the Rhino plugin
 
+**Requirements:** Rhino 8.20 or later (Windows or Mac), running on .NET 8. The plugin is built only
+for .NET 8 and Rhino 8.20 is the first release that uses it by default; older Rhino versions can't
+load it.
+
 In Rhino, open **Tools → Package Manager**, search for **`rhinomcp`**, and click **Install**. Restart Rhino.
+
+<details>
+<summary><code>mcpstart</code> is an unknown command</summary>
+
+Package Manager installs the package even when Rhino can't load the plugin inside it, and Rhino
+doesn't say why. If `mcpstart` is unknown after a restart:
+
+1. Check **Tools → Options → Plug-ins** (Mac: **Rhino → Settings → Plug-ins**). If RhinoMCP is
+   missing or not loaded, continue below.
+2. Update Rhino 8 to the latest service release (**Help → Check for Updates**); `SystemInfo` shows
+   your version, which must be 8.20 or later.
+3. On Windows, run **`SetDotNetRuntime`**, choose **`NETCore`**, and restart Rhino. Rhino running on
+   .NET Framework can't load the plugin. `SystemInfo` shows the runtime in use (it should say
+   .NET 8).
+
+</details>
 
 ### 2. Connect your AI client
 
@@ -375,6 +395,8 @@ The Python server and the Rhino plugin talk over an unauthenticated TCP loopback
 fine for local agent use. Do not expose it beyond the loopback interface without adding
 authentication.
 
+See [SECURITY.md](SECURITY.md) for the full threat model and how to report a vulnerability.
+
 <details>
 <summary>Operator switches (environment variables)</summary>
 
@@ -413,8 +435,14 @@ dotnet restore plugin/rhinomcp.sln
 dotnet build plugin/rhinomcp.sln --configuration Release
 ```
 
-To publish the plugin: build in Release, copy `manifest.yml` into `bin/Release`, then run
-`yak build` and `yak push rhinomcp_xxxx.yak`.
+To try a plugin you built yourself, first uninstall the RhinoMCP package in Package Manager, then
+drag `plugin/bin/Release/net8.0/rhinomcp.rhp` into a Rhino window, or install it
+from the Plug-ins page in Rhino's options. Restart Rhino and run `mcpstart`.
+
+Publishing is only for the package owner: build in Release, copy `manifest.yml` into
+`bin/Release`, then run `yak build` and `yak push rhinomcp_xxxx.yak`. On a fork, `yak push` fails
+with 403 because the `rhinomcp` package name belongs to its owner; you don't need it to build or
+use the plugin.
 
 </details>
 
