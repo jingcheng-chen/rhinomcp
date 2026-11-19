@@ -2585,8 +2585,8 @@ class TestCameraTools:
 
 @pytest.fixture
 def undo_group_server():
-    """A 0.6.0 plugin with an empty undo stack, on its own port."""
-    server = MockRhinoServer(port=19974, plugin_version="0.6.0")
+    """A 0.5.2 plugin with an empty undo stack, on its own port."""
+    server = MockRhinoServer(port=19974, plugin_version="0.5.2")
     server.start()
     time.sleep(0.1)
 

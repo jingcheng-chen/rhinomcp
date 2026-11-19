@@ -198,7 +198,7 @@ class TestUnsupportedCommands:
         with pytest.raises(
             Exception,
             match=rf"^unsupported: The connected rhinomcp plugin \(0\.5\.1\) "
-            rf"does not support '{command}', which was added in plugin 0\.6\.0;"
+            rf"does not support '{command}', which was added in plugin 0\.5\.2;"
             r".*\nUpdate rhinomcp in Rhino's Package Manager",
         ):
             conn.send_command(command, params)

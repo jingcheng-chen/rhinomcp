@@ -49,7 +49,7 @@ def begin_undo_group(
       command (default 120, at most 3600).
 
     Returns name, undo_description, document_name, idle_timeout_seconds and a
-    message. Requires plugin 0.6.0.
+    message. Requires plugin 0.5.2.
     """
     params = given(name=name, idle_timeout_seconds=idle_timeout_seconds)
     return get_rhino_connection().send_command("begin_undo_group", params)
@@ -78,7 +78,7 @@ def end_undo_group(ctx: Context, force: bool = False) -> Dict[str, Any]:
     duration_seconds. With no group open it returns ended=false instead of
     failing; last_group then says why the previous group already ended (for
     example idle_timeout), and edits made after that have their own undo steps.
-    Requires plugin 0.6.0.
+    Requires plugin 0.5.2.
     """
     params = {"force": True} if force else {}
     return get_rhino_connection().send_command("end_undo_group", params)

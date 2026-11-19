@@ -178,8 +178,8 @@ COMMANDS_SINCE: Dict[str, str] = {
     "get_context": "0.5.0",
     "set_camera": "0.5.0",
     "zoom_to": "0.5.0",
-    "begin_undo_group": "0.6.0",
-    "end_undo_group": "0.6.0",
+    "begin_undo_group": "0.5.2",
+    "end_undo_group": "0.5.2",
 }
 PLUGIN_UPDATE_ADVICE = (
     "Update rhinomcp in Rhino's Package Manager (Tools > Package Manager > "
@@ -353,7 +353,7 @@ class RhinoConnection:
         # None until read; {} when the plugin definitively has no such command.
         self._capabilities: Dict[str, Any] | None = None
         self._capabilities_lock = threading.Lock()
-        # Envelope session token; None sends none, like a client older than 0.6.0.
+        # Envelope session token; None sends none, like a client older than 0.5.2.
         self.session: str | None = CLIENT_SESSION
 
     def connect(self) -> bool:

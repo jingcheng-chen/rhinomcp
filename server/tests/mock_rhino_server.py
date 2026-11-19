@@ -262,8 +262,8 @@ class MockRhinoServer:
         "get_context": (0, 5, 0),
         "set_camera": (0, 5, 0),
         "zoom_to": (0, 5, 0),
-        "begin_undo_group": (0, 6, 0),
-        "end_undo_group": (0, 6, 0),
+        "begin_undo_group": (0, 5, 2),
+        "end_undo_group": (0, 5, 2),
     }
 
     def _handlers(self) -> Dict[str, Any]:

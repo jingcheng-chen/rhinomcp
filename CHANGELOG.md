@@ -4,13 +4,13 @@ Server and plugin share one version. Update them together: the server sends
 commands the matching plugin understands, and an older plugin silently ignores
 parameters it does not know.
 
-## 0.6.0 — unreleased (prepared 2026-11-12)
+## 0.5.2 — unreleased (prepared 2026-11-12)
 
 Undo groups: one Undo can take back a whole multi-step change instead of one
 tool call at a time. 0.5.0 deferred per-turn undo grouping because stdio MCP
 has no turn boundary; here the client that knows the boundary marks it, either
 a host around each agent turn or an agent around one multi-step edit.
-Everything is additive; against a plugin older than 0.6.0 the server refuses
+Everything is additive; against a plugin older than 0.5.2 the server refuses
 the new commands with update advice.
 
 ### Server (`rhinomcp` on PyPI)
@@ -19,7 +19,7 @@ the new commands with update advice.
   change to the document is one undo step, listed by Rhino as `MCP: <name>`.
   `end_undo_group` with no group open returns `ended: false` instead of
   failing, with `last_group` saying why the previous group already ended.
-  Both are annotated not read-only and not destructive. Require plugin 0.6.0.
+  Both are annotated not read-only and not destructive. Require plugin 0.5.2.
   `end_undo_group(force=True)` ends a group another client began, for one
   whose client is gone.
 - Every command envelope carries a `session` token, one per server process,
